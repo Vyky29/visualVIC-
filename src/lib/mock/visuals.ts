@@ -1,5 +1,6 @@
 import type { VisualAsset } from "@/lib/types/routine";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
+import { coreImageUrl } from "@/lib/cards/core-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 
 const base = "https://images.unsplash.com";
@@ -22,6 +23,12 @@ export const mockVisualLibrary: VisualAsset[] = [
     label: "Getting dressed & undressed",
     category: "self-care",
     thumbnailUrl: gettingDressUndressImageUrl("socks-on"),
+  },
+  {
+    id: "v-core",
+    label: "Core actions",
+    category: "home",
+    thumbnailUrl: coreImageUrl("listen"),
   },
   {
     id: "v-shower",

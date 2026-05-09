@@ -3,9 +3,10 @@
  * (transition feedback — not a generic cover).
  */
 
+import { coreBackCardUrl } from "@/lib/cards/core-cards";
 import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undress-cards";
 
-const CORE_FALLBACK = "/cards/core/1_backcard1.png";
+const CORE_FALLBACK = coreBackCardUrl();
 
 export function resolveCategoryBackCardUrl(imageUrl?: string): string {
   if (!imageUrl) return CORE_FALLBACK;
@@ -27,7 +28,7 @@ export function resolveCategoryBackCardUrl(imageUrl?: string): string {
     return gettingDressUndressBackCardUrl();
   }
   if (path.includes("/cards/core/")) {
-    return "/cards/core/1_backcard1.png";
+    return coreBackCardUrl();
   }
 
   return CORE_FALLBACK;

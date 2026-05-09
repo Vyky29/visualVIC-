@@ -2,10 +2,10 @@ import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { resolveRoutineById } from "@/lib/mock/routines";
 
-const FocusMode = dynamic(
+const FocusModeWithProfileRoutine = dynamic(
   () =>
-    import("@/components/schedule/FocusMode").then((m) => ({
-      default: m.FocusMode,
+    import("@/components/schedule/FocusModeWithProfileRoutine").then((m) => ({
+      default: m.FocusModeWithProfileRoutine,
     })),
   {
     loading: () => (
@@ -23,5 +23,10 @@ export default async function FocusPage({ params }: Props) {
   const routine = resolveRoutineById(id);
   if (!routine) notFound();
 
-  return <FocusMode routine={routine} exitHref={`/player/${id}`} />;
+  return (
+    <FocusModeWithProfileRoutine
+      routine={routine}
+      exitHref={`/player/${id}`}
+    />
+  );
 }

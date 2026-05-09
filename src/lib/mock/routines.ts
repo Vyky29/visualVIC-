@@ -3,10 +3,11 @@ import {
   BRUSHING_TEETH_SEQUENCE,
   brushingTeethImageUrl,
 } from "@/lib/cards/brushing-teeth-cards";
+import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
 import {
-  GETTING_DRESS_UNDRESS_SEQUENCE,
-  gettingDressUndressImageUrl,
-} from "@/lib/cards/getting-dress-undress-cards";
+  buildGettingDressedRoutineSteps,
+  buildGettingUndressedRoutineSteps,
+} from "@/lib/cards/getting-dress-undress-registry";
 import { mockTemplates } from "@/lib/mock/templates";
 
 /** Thumbnail-friendly Unsplash params — lighter on mobile / 5G than w=900 */
@@ -55,14 +56,28 @@ export const mockRoutines: Routine[] = [
     })),
   },
   {
-    id: "getting-dressed-undressed",
-    name: "Getting Dressed & Undressed",
-    description: "Clear, repeatable steps — PixtoLearn visual cards",
+    id: "getting-dressed",
+    name: "Getting Dressed",
+    description: "PixtoLearn clothing cards — steps filter by profile sex",
     tags: ["self-care"],
-    steps: GETTING_DRESS_UNDRESS_SEQUENCE.map((s) => ({
+    steps: buildGettingDressedRoutineSteps(),
+  },
+  {
+    id: "getting-undressed",
+    name: "Getting Undressed",
+    description: "PixtoLearn clothing cards — steps filter by profile sex",
+    tags: ["self-care"],
+    steps: buildGettingUndressedRoutineSteps(),
+  },
+  {
+    id: "core-everyday",
+    name: "Core actions",
+    description: "PixtoLearn core visual cards — communication & daily steps",
+    tags: ["home", "communication"],
+    steps: CORE_SEQUENCE.map((s) => ({
       id: s.id,
       title: s.title,
-      imageUrl: gettingDressUndressImageUrl(s.slug),
+      imageUrl: coreImageUrl(s.slug),
     })),
   },
   {

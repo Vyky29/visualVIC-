@@ -89,26 +89,3 @@ export function gettingDressUndressImageUrl(slug: string): string {
 export function gettingDressUndressBackCardUrl(): string {
   return `${GETTING_DRESS_UNDRESS_PUBLIC_DIR}/${GETTING_DRESS_UNDRESS_BACK_CARD_FILE}`;
 }
-
-/**
- * Live routine order — basename without .png must exist in the folder above.
- * Uses semantic + numbered filenames as listed on disk.
- */
-export const GETTING_DRESS_UNDRESS_SEQUENCE = [
-  { id: "gd-socks-on", slug: "socks-on", title: "Put socks on" },
-  { id: "gd-pants-on", slug: "pants-on", title: "Put pants on" },
-  { id: "gd-tshirt-on", slug: "tshirt-on", title: "Put t-shirt on" },
-  { id: "gd-shirt-on", slug: "shirt-on", title: "Put shirt on" },
-  { id: "gd-vest-on", slug: "vest-on", title: "Put vest on" },
-  { id: "gd-trousers-on", slug: "trousers-on", title: "Put trousers on" },
-  { id: "gd-shoes-on", slug: "shoes-on", title: "Put shoes on" },
-  { id: "gd-trainers", slug: "trainers", title: "Put trainers on" },
-  { id: "gd-hat", slug: "hat", title: "Hat" },
-  { id: "gd-hat-off", slug: "22_hatoff", title: "Take hat off" },
-  { id: "gd-shoes-off", slug: "shoes-off", title: "Take shoes off" },
-  { id: "gd-vest-off", slug: "vest-off", title: "Take vest off" },
-  { id: "gd-shirt-off", slug: "14_shirtoff", title: "Take shirt off" },
-  { id: "gd-tshirt-off", slug: "tshirt-off", title: "Take t-shirt off" },
-  { id: "gd-trousers-off", slug: "trousers-off", title: "Take trousers off" },
-  { id: "gd-pants-off", slug: "pants-off", title: "Take pants off" },
-] as const;

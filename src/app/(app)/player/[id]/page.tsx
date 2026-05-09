@@ -4,11 +4,13 @@ import { Header } from "@/components/navigation/Header";
 import { mockRoutines, resolveRoutineById } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 
-const SchedulePlayer = dynamic(
+const SchedulePlayerWithProfileRoutine = dynamic(
   () =>
-    import("@/components/schedule/SchedulePlayer").then((m) => ({
-      default: m.SchedulePlayer,
-    })),
+    import("@/components/schedule/SchedulePlayerWithProfileRoutine").then(
+      (m) => ({
+        default: m.SchedulePlayerWithProfileRoutine,
+      }),
+    ),
   {
     loading: () => (
       <div className="px-5 py-14 text-center text-[14px] text-ink-subtle">
@@ -28,7 +30,7 @@ export default async function PlayerDetailPage({ params }: Props) {
   return (
     <div className="pb-6">
       <Header title={routine.name} backHref="/player" />
-      <SchedulePlayer routine={routine} backHref="/player" />
+      <SchedulePlayerWithProfileRoutine routine={routine} backHref="/player" />
     </div>
   );
 }
