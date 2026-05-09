@@ -22,7 +22,19 @@ export type VisualAsset = {
   thumbnailUrl: string;
 };
 
+/** For clothing / routine filtering — optional, user may skip. */
+export type ChildSex = "male" | "female" | "unspecified";
+
 export type UserProfile = {
+  /** Child name (shown on Home; can be interpolated into routines later). */
   displayName: string;
   avatarUrl?: string;
+  sex?: ChildSex;
+  /** Child height in centimetres — optional metadata for future visuals. */
+  heightCm?: number;
+  /**
+   * Zoom of the uploaded photo inside the avatar frame (1 = default).
+   * Local-only; does not generate new art.
+   */
+  avatarFrameScale?: number;
 };

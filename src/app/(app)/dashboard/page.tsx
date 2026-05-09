@@ -62,9 +62,23 @@ function HomeRoutinePreviewMedia({
   );
 }
 
+function profileSubtitle(profile: {
+  sex?: string;
+  heightCm?: number;
+} | null): string {
+  if (!profile) return "Foto, nombre y datos · solo en este dispositivo";
+  const parts: string[] = [];
+  if (profile.sex === "male") parts.push("Niño");
+  else if (profile.sex === "female") parts.push("Niña");
+  if (profile.heightCm != null) parts.push(`${profile.heightCm} cm`);
+  if (parts.length === 0) return "Foto y nombre · solo en este dispositivo";
+  return `${parts.join(" · ")} · local`;
+}
+
 export default function DashboardPage() {
   const { profile } = useProfile();
   const primary = mockRoutines[0];
+  const frameScale = profile?.avatarFrameScale ?? 1;
 
   return (
     <div>
@@ -84,13 +98,21 @@ export default function DashboardPage() {
           <Card className="flex items-center gap-4 border border-ink/5 bg-white/95 p-4 transition hover:shadow-soft">
             <div className="relative h-[60px] w-[60px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted ring-1 ring-ink/8">
               {profile?.avatarUrl ? (
-                <Image
-                  src={profile.avatarUrl}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                <div
+                  className="relative h-full w-full"
+                  style={{
+                    transform: `scale(${frameScale})`,
+                    transformOrigin: "center center",
+                  }}
+                >
+                  <Image
+                    src={profile.avatarUrl}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
               ) : (
                 <div className="flex h-full items-center justify-center text-[11px] font-medium text-ink-faint">
                   Add
@@ -102,7 +124,7 @@ export default function DashboardPage() {
                 {profile?.displayName ?? "Your profile"}
               </p>
               <p className="text-[13px] text-ink-subtle">
-                Photo & name · local preview
+                {profileSubtitle(profile)}
               </p>
             </div>
             <span className="text-ink-faint" aria-hidden>

@@ -8,11 +8,20 @@ import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 import { useProfile } from "@/contexts/ProfileContext";
+import type { ChildSex } from "@/lib/types/routine";
+import { cn } from "@/lib/utils/cn";
 
 export default function ProfileOnboardingPage() {
   const router = useRouter();
   const { profile, setProfile } = useProfile();
   const [name, setName] = useState(profile?.displayName ?? "");
+  const [sex, setSex] = useState<ChildSex>(profile?.sex ?? "unspecified");
+  const [heightCmRaw, setHeightCmRaw] = useState(
+    profile?.heightCm != null ? String(profile.heightCm) : "",
+  );
+  const [avatarFrameScale, setAvatarFrameScale] = useState(
+    profile?.avatarFrameScale ?? 1,
+  );
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
     profile?.avatarUrl,
   );
@@ -22,6 +31,10 @@ export default function ProfileOnboardingPage() {
     if (!profile) return;
     setName((n) => n || profile.displayName);
     if (profile.avatarUrl) setAvatarPreview(profile.avatarUrl);
+    if (profile.sex) setSex(profile.sex);
+    if (profile.heightCm != null) setHeightCmRaw(String(profile.heightCm));
+    if (profile.avatarFrameScale != null)
+      setAvatarFrameScale(profile.avatarFrameScale);
   }, [profile]);
 
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -34,9 +47,21 @@ export default function ProfileOnboardingPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const displayName = name.trim() || "My profile";
+    const h = heightCmRaw.trim();
+    let heightCm: number | undefined;
+    if (h !== "") {
+      const n = Math.round(Number(h));
+      heightCm = Number.isFinite(n)
+        ? Math.min(220, Math.max(40, n))
+        : undefined;
+    }
     setProfile({
       displayName,
       avatarUrl: avatarPreview,
+      sex,
+      heightCm,
+      avatarFrameScale:
+        Math.abs(avatarFrameScale - 1) < 0.02 ? undefined : avatarFrameScale,
     });
     router.push("/dashboard");
   }
@@ -46,10 +71,10 @@ export default function ProfileOnboardingPage() {
       <Header title="Profile" backHref="/menu" />
       <MobileScreen className="space-y-8 px-6 pb-14 pt-6">
         <div className="space-y-2 text-center">
-          <p className="text-[22px] font-semibold text-ink">One profile</p>
+          <p className="text-[22px] font-semibold text-ink">Perfil del niño</p>
           <p className="text-[15px] leading-relaxed text-ink-subtle">
-            Name and photo stay on this device for now — enough to make Home
-            feel personal.
+            Nombre, sexo y altura ayudan a personalizar rutinas (p. ej. ropa).
+            La foto y los datos se guardan solo en este dispositivo.
           </p>
         </div>
 
@@ -58,19 +83,29 @@ export default function ProfileOnboardingPage() {
             type="button"
             onClick={() => fileRef.current?.click()}
             className="group relative flex h-[7.5rem] w-[7.5rem] items-center justify-center overflow-hidden rounded-[2rem] bg-canvas-muted ring-2 ring-sage/30 ring-offset-[6px] ring-offset-cream transition hover:ring-sage"
-            aria-label="Choose avatar image"
+            aria-label="Elegir foto del niño"
           >
             {avatarPreview ? (
-              <Image
-                src={avatarPreview}
-                alt=""
-                fill
-                className="object-cover"
-                unoptimized
-              />
+              <div className="absolute inset-0 overflow-hidden">
+                <div
+                  className="relative h-full w-full"
+                  style={{
+                    transform: `scale(${avatarFrameScale})`,
+                    transformOrigin: "center center",
+                  }}
+                >
+                  <Image
+                    src={avatarPreview}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              </div>
             ) : (
               <span className="text-[14px] font-medium text-ink-subtle">
-                Tap to add
+                Toca para añadir foto
               </span>
             )}
             <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/50 to-transparent py-8 opacity-0 transition group-hover:opacity-100" />
@@ -83,20 +118,87 @@ export default function ProfileOnboardingPage() {
             onChange={onFile}
           />
 
+          {avatarPreview ? (
+            <label className="flex w-full flex-col gap-2 px-1 text-left">
+              <span className="text-[13px] font-medium text-ink-subtle">
+                Encuadre de la foto
+              </span>
+              <input
+                type="range"
+                min={0.85}
+                max={1.2}
+                step={0.01}
+                value={avatarFrameScale}
+                onChange={(e) =>
+                  setAvatarFrameScale(Number(e.target.value))
+                }
+                className="w-full accent-sage"
+              />
+              <p className="text-[12px] leading-relaxed text-ink-faint">
+                Solo acerca o aleja la imagen dentro del recuadro. Convertir la
+                foto a un avatar 2D infantil automático requerirá un paso extra
+                (diseño o servicio) en una versión futura.
+              </p>
+            </label>
+          ) : null}
+
           <form className="w-full space-y-5 px-1" onSubmit={handleSubmit}>
             <label className="block space-y-2 text-left">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Display name
+                Nombre del niño
               </span>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
+                placeholder="Ej. Leo"
                 className="w-full rounded-2xl border border-ink/10 bg-canvas px-4 py-3.5 text-[17px] outline-none transition-shadow focus:border-sage focus:shadow-[0_0_0_3px_rgba(184,205,191,0.4)]"
               />
             </label>
+
+            <div className="space-y-2 text-left">
+              <span className="text-[13px] font-medium text-ink-subtle">
+                Sexo (para rutinas de ropa)
+              </span>
+              <div className="grid grid-cols-3 gap-2">
+                {(
+                  [
+                    ["male", "Niño"],
+                    ["female", "Niña"],
+                    ["unspecified", "Sin decir"],
+                  ] as const
+                ).map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setSex(value)}
+                    className={cn(
+                      "min-h-touch rounded-2xl border px-2 text-[14px] font-medium transition",
+                      sex === value
+                        ? "border-sage bg-sage-mist/80 text-ink ring-2 ring-sage/40"
+                        : "border-ink/10 bg-canvas text-ink-subtle active:bg-canvas-muted",
+                    )}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <label className="block space-y-2 text-left">
+              <span className="text-[13px] font-medium text-ink-subtle">
+                Altura (cm), opcional
+              </span>
+              <input
+                inputMode="numeric"
+                value={heightCmRaw}
+                onChange={(e) => setHeightCmRaw(e.target.value.replace(/[^\d]/g, ""))}
+                placeholder="Ej. 115"
+                className="w-full rounded-2xl border border-ink/10 bg-canvas px-4 py-3.5 text-[17px] outline-none transition-shadow focus:border-sage focus:shadow-[0_0_0_3px_rgba(184,205,191,0.4)]"
+              />
+            </label>
+
             <Button type="submit" className="min-h-touch w-full text-[16px]">
-              Save & go to home
+              Guardar e ir al inicio
             </Button>
           </form>
         </Card>
