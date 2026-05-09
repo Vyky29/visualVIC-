@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply min-h-dvh overflow-x-hidden bg-canvas text-ink antialiased;
+}
+
+::selection {
+  @apply bg-sage-soft/40 text-ink;
+}
