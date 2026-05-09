@@ -1,6 +1,8 @@
 import type { VisualAsset } from "@/lib/types/routine";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
 import { coreImageUrl } from "@/lib/cards/core-cards";
+import { climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 
 const base = "https://images.unsplash.com";
@@ -34,7 +36,13 @@ export const mockVisualLibrary: VisualAsset[] = [
     id: "v-shower",
     label: "Shower",
     category: "self-care",
-    thumbnailUrl: `${base}/photo-1558618666-fcd25c85cd64?w=400&q=80`,
+    thumbnailUrl: showerImageUrl("shower"),
+  },
+  {
+    id: "v-climbing",
+    label: "Climbing",
+    category: "activity",
+    thumbnailUrl: climbingImageUrl("climbing-wall"),
   },
   {
     id: "v-swim",

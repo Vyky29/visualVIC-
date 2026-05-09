@@ -13,6 +13,8 @@ export type Routine = {
   steps: RoutineStep[];
   /** Tags for future adaptive / expert systems */
   tags?: string[];
+  /** Home grid / Continue tile preview when different from `steps[0].imageUrl` */
+  homePreviewImageUrl?: string;
 };
 
 export type VisualAsset = {

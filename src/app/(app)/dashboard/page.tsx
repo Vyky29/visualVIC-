@@ -149,7 +149,9 @@ export default function DashboardPage() {
             <Card className="overflow-hidden border-0 bg-gradient-to-br from-sage-mist via-cream to-cream p-0 shadow-soft ring-1 ring-sage/20 transition hover:shadow-[0_12px_40px_-16px_rgba(28,36,32,0.18)]">
               <div className="flex gap-4 p-4">
                 <HomeRoutinePreviewMedia
-                  imageUrl={primary.steps[0]?.imageUrl}
+                  imageUrl={
+                    primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl
+                  }
                   frameClassName="aspect-[10/13] w-[4.25rem] shrink-0 rounded-2xl bg-white shadow-card"
                   sizes="96px"
                   priority
@@ -188,11 +190,11 @@ export default function DashboardPage() {
                     routineTileHoverAccentClass(r),
                   )}
                 >
-                  <HomeRoutinePreviewMedia
-                    imageUrl={r.steps[0]?.imageUrl}
-                    frameClassName="aspect-[5/4] w-full"
-                    sizes="(max-width: 512px) 45vw, 240px"
-                  />
+                <HomeRoutinePreviewMedia
+                  imageUrl={r.homePreviewImageUrl ?? r.steps[0]?.imageUrl}
+                  frameClassName="aspect-[5/4] w-full"
+                  sizes="(max-width: 512px) 45vw, 240px"
+                />
                   <div className="px-3 py-3">
                     <p className="line-clamp-2 text-[14px] font-semibold leading-snug text-ink">
                       {r.name}

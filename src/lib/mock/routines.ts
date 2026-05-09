@@ -4,6 +4,9 @@ import {
   brushingTeethImageUrl,
 } from "@/lib/cards/brushing-teeth-cards";
 import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
+import { CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import {
   buildGettingDressedRoutineSteps,
   buildGettingUndressedRoutineSteps,
@@ -60,6 +63,7 @@ export const mockRoutines: Routine[] = [
     name: "Getting Dressed",
     description: "PixtoLearn clothing cards — steps filter by profile sex",
     tags: ["self-care"],
+    homePreviewImageUrl: gettingDressUndressImageUrl("tshirt-on"),
     steps: buildGettingDressedRoutineSteps(),
   },
   {
@@ -67,6 +71,7 @@ export const mockRoutines: Routine[] = [
     name: "Getting Undressed",
     description: "PixtoLearn clothing cards — steps filter by profile sex",
     tags: ["self-care"],
+    homePreviewImageUrl: gettingDressUndressImageUrl("trousers-off"),
     steps: buildGettingUndressedRoutineSteps(),
   },
   {
@@ -83,30 +88,24 @@ export const mockRoutines: Routine[] = [
   {
     id: "shower-routine",
     name: "Shower Routine",
-    description: "Predictable wash flow",
+    description: "PixtoLearn shower visual cards — predictable wash flow",
     tags: ["self-care"],
-    steps: [
-      {
-        id: "sr1",
-        title: "Set comfortable water temperature",
-        imageUrl: unsplash("photo-1558618666-fcd25c85cd64"),
-      },
-      {
-        id: "sr2",
-        title: "Shampoo hair",
-        imageUrl: unsplash("photo-1519823554368-69bcd4d7e7f7"),
-      },
-      {
-        id: "sr3",
-        title: "Wash body",
-        imageUrl: unsplash("photo-1560750588-73207b17efdb"),
-      },
-      {
-        id: "sr4",
-        title: "Dry off & moisturise",
-        imageUrl: unsplash("photo-1620916566398-39f1143ab7be"),
-      },
-    ],
+    steps: SHOWER_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: showerImageUrl(s.slug),
+    })),
+  },
+  {
+    id: "climbing-routine",
+    name: "Climbing",
+    description: "PixtoLearn climbing visual cards — gear, rope and wall",
+    tags: ["activity"],
+    steps: CLIMBING_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: climbingImageUrl(s.slug),
+    })),
   },
   {
     id: "swimming-routine",
