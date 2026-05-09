@@ -3,6 +3,10 @@ import {
   BRUSHING_TEETH_SEQUENCE,
   brushingTeethImageUrl,
 } from "@/lib/cards/brushing-teeth-cards";
+import {
+  GETTING_DRESS_UNDRESS_SEQUENCE,
+  gettingDressUndressImageUrl,
+} from "@/lib/cards/getting-dress-undress-cards";
 import { mockTemplates } from "@/lib/mock/templates";
 
 /** Thumbnail-friendly Unsplash params — lighter on mobile / 5G than w=900 */
@@ -48,6 +52,17 @@ export const mockRoutines: Routine[] = [
       id: s.id,
       title: s.title,
       imageUrl: brushingTeethImageUrl(s.slug),
+    })),
+  },
+  {
+    id: "getting-dressed-undressed",
+    name: "Getting Dressed & Undressed",
+    description: "Clear, repeatable steps — PixtoLearn visual cards",
+    tags: ["self-care"],
+    steps: GETTING_DRESS_UNDRESS_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: gettingDressUndressImageUrl(s.slug),
     })),
   },
   {
