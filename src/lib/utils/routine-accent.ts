@@ -95,7 +95,7 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     scheduleCompact:
       "ml-0.5 border-l-[3px] border-dashed border-[#4a8fa8]/50 pl-3 ring-1 ring-[#4a8fa8]/28 ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)] group-hover:ring-[#4a8fa8]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)]",
   },
   default: {
     home: "ring-2 ring-[#7d9b87]/75 ring-offset-2 ring-offset-canvas",
