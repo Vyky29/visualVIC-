@@ -8,12 +8,28 @@ import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
 import { SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
 import { CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { SWIMMING_SEQUENCE, swimmingImageUrl } from "@/lib/cards/swimming-cards";
+import {
+  AT_THE_AIRPORT_SEQUENCE,
+  atTheAirportImageUrl,
+} from "@/lib/cards/at-the-airport-cards";
+import {
+  AT_THE_HOTEL_SEQUENCE,
+  atTheHotelImageUrl,
+} from "@/lib/cards/at-the-hotel-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 
 const SEP = "::";
 
 /** Namespace prefix in `pickId` (before `::`). */
-export type PickablePackId = "bt" | "shower" | "core" | "climb" | "swim" | "dress";
+export type PickablePackId =
+  | "bt"
+  | "shower"
+  | "core"
+  | "climb"
+  | "swim"
+  | "dress"
+  | "airport"
+  | "hotel";
 
 export function pickablePackFromPickId(pickId: string): PickablePackId | null {
   const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
@@ -23,7 +39,9 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "core" ||
     ns === "climb" ||
     ns === "swim" ||
-    ns === "dress"
+    ns === "dress" ||
+    ns === "airport" ||
+    ns === "hotel"
   ) {
     return ns as PickablePackId;
   }
@@ -82,6 +100,22 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("swim", s.slug),
       label: s.title,
       imageUrl: swimmingImageUrl(s.slug),
+      category: "activity",
+    });
+  }
+  for (const s of AT_THE_AIRPORT_SEQUENCE) {
+    out.push({
+      pickId: pid("airport", s.slug),
+      label: s.title,
+      imageUrl: atTheAirportImageUrl(s.slug),
+      category: "activity",
+    });
+  }
+  for (const s of AT_THE_HOTEL_SEQUENCE) {
+    out.push({
+      pickId: pid("hotel", s.slug),
+      label: s.title,
+      imageUrl: atTheHotelImageUrl(s.slug),
       category: "activity",
     });
   }

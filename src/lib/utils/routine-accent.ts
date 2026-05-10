@@ -8,6 +8,8 @@ export type RoutineVisualTone =
   | "dress"
   | "core"
   | "swimming"
+  | "airport"
+  | "hotel"
   /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
   | "custom"
   | "default";
@@ -143,6 +145,36 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)]",
   },
+  airport: {
+    home: "ring-2 ring-[#5a7d9a]/88 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#5a7d9a]/88 ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#5a7d9a]/85 shadow-[0_8px_32px_-12px_rgba(90,125,154,0.32)]",
+    scheduleNext:
+      "ring-2 ring-[#5a7d9a]/78 shadow-[0_6px_22px_-12px_rgba(90,125,154,0.26)]",
+    scheduleFocus:
+      "ring-2 ring-[#5a7d9a]/88 shadow-[0_8px_32px_-12px_rgba(90,125,154,0.36)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#5a7d9a]/50 pl-3 ring-1 ring-[#5a7d9a]/28 ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_36px_-12px_rgba(90,125,154,0.35)]",
+  },
+  hotel: {
+    home: "ring-2 ring-[#a67c52]/88 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#a67c52]/88 ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#a67c52]/85 shadow-[0_8px_32px_-12px_rgba(166,124,82,0.32)]",
+    scheduleNext:
+      "ring-2 ring-[#a67c52]/78 shadow-[0_6px_22px_-12px_rgba(166,124,82,0.26)]",
+    scheduleFocus:
+      "ring-2 ring-[#a67c52]/88 shadow-[0_8px_32px_-12px_rgba(166,124,82,0.36)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#a67c52]/50 pl-3 ring-1 ring-[#a67c52]/28 ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_36px_-12px_rgba(166,124,82,0.35)]",
+  },
   default: {
     home: "ring-2 ring-[#7d9b87]/75 ring-offset-2 ring-offset-canvas",
     homeDashboard:
@@ -177,6 +209,8 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (u.includes("/climbing/")) return "climbing";
   if (u.includes("/cards/core/")) return "core";
   if (u.includes("/cards/swimming/")) return "swimming";
+  if (u.includes("at%20the%20airport")) return "airport";
+  if (u.includes("at%20the%20hotel")) return "hotel";
   return "default";
 }
 
@@ -197,6 +231,8 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
   let d = 0;
   let co = 0;
   let sw = 0;
+  let ap = 0;
+  let ho = 0;
   for (const st of r.steps) {
     const t = stepCardVisualTone(st);
     if (t === "brushing") b++;
@@ -205,6 +241,8 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     else if (t === "climbing") cl++;
     else if (t === "core") co++;
     else if (t === "swimming") sw++;
+    else if (t === "airport") ap++;
+    else if (t === "hotel") ho++;
   }
   const ranked: [RoutineVisualTone, number][] = [
     ["brushing", b],
@@ -213,8 +251,10 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     ["climbing", cl],
     ["core", co],
     ["swimming", sw],
+    ["airport", ap],
+    ["hotel", ho],
   ];
-  const max = Math.max(b, s, d, cl, co, sw);
+  const max = Math.max(b, s, d, cl, co, sw, ap, ho);
   if (max <= 0) return null;
   const top = ranked.filter(([, n]) => n === max).map(([k]) => k);
   const priority: RoutineVisualTone[] = [
@@ -224,6 +264,8 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     "climbing",
     "core",
     "swimming",
+    "airport",
+    "hotel",
   ];
   for (const p of priority) {
     if (top.includes(p)) return p;
@@ -366,6 +408,26 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
       nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#4a8fa8] ring-2 ring-[#4a8fa8]/35",
       nowLabel:
         "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3d7a8f]",
+    },
+    airport: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e9eef5] to-[#dce6f2] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#5a7d9a]/38 transition active:scale-[0.99]",
+      progressFill: "bg-[#5a7d9a]",
+      counterPill:
+        "rounded-full bg-[#e9eef5]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#5a7d9a]/30",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#5a7d9a] ring-2 ring-[#5a7d9a]/32",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4a6580]",
+    },
+    hotel: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#f7f0e8] to-[#ede3d6] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#a67c52]/38 transition active:scale-[0.99]",
+      progressFill: "bg-[#a67c52]",
+      counterPill:
+        "rounded-full bg-[#f7f0e8]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#a67c52]/30",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#a67c52] ring-2 ring-[#a67c52]/32",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a6644]",
     },
     custom: {
       focusCta:
