@@ -92,7 +92,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <Header title="Home" logoSrc="/brand/pixtolearn-logo.png" />
+      <Header title="Home" />
       <div className="space-y-8 px-4 pb-8 pt-4">
         <Link href="/onboarding/profile">
           <Card className="flex items-center gap-4 border border-ink/5 bg-white/95 p-4 transition hover:shadow-soft">
