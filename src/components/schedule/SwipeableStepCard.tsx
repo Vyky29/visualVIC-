@@ -439,6 +439,10 @@ export function SwipeableStepCard({
       className={cn(
         "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300 touch-pan-y",
         hasGeneratedPixto ? "overflow-visible" : "overflow-hidden shadow-card",
+        /** Schedule HTML cards: ring sits flush on the white shell (no canvas “air” from ring-offset). */
+        hasGeneratedPixto &&
+          (variant === "hero" || variant === "next") &&
+          "ring-offset-0",
         variant === "focus" && "outline-none focus:outline-none",
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
@@ -481,11 +485,15 @@ export function SwipeableStepCard({
               : "relative flex h-full min-h-0 w-full flex-1 flex-col min-w-0 overflow-hidden bg-transparent"
             : cn(
                 "relative w-full overflow-hidden bg-transparent",
-                /* Hero NOW / Next — same footprint as bundled PNG cards (incl. generated HTML cards). */
+                /* Generated: native 744×1054 slot (like before). Bundled PNG: catalog aspects. */
                 variant === "hero" && isNow
-                  ? "aspect-[48/65]"
+                  ? hasGeneratedPixto
+                    ? "aspect-[744/1054]"
+                    : "aspect-[48/65]"
                   : variant === "next"
-                    ? "aspect-[510/676]"
+                    ? hasGeneratedPixto
+                      ? "aspect-[744/1054]"
+                      : "aspect-[510/676]"
                     : "aspect-[10/13]",
               ),
         )}
