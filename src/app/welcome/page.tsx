@@ -37,9 +37,9 @@ const steps = [
 
 export default function WelcomePage() {
   return (
-    <MobileScreen className="relative flex min-h-dvh flex-col gap-10 bg-white pb-24 pt-[max(1.5rem,env(safe-area-inset-top))]">
-      <div className="relative space-y-5 text-center">
-        <div className="mx-auto w-full max-w-md px-1">
+    <MobileScreen className="grid h-dvh max-h-dvh grid-rows-[auto_minmax(0,1fr)_auto] gap-2 overflow-hidden bg-white px-4 !pb-[max(0.35rem,env(safe-area-inset-bottom))] !pt-[max(0.35rem,env(safe-area-inset-top))]">
+      <header className="min-h-0 shrink-0 space-y-1.5 text-center">
+        <div className="mx-auto w-full max-w-md">
           <img
             src={BRAND_WORDMARK_LOGO_SRC}
             alt="PixtoLearn"
@@ -47,33 +47,33 @@ export default function WelcomePage() {
             height={180}
             decoding="async"
             fetchPriority="high"
-            className="mx-auto block h-auto w-full max-h-[9.5rem] max-w-full object-contain object-center sm:max-h-[11rem]"
+            className="mx-auto block h-[clamp(2.5rem,11dvh,4.25rem)] w-auto max-w-full object-contain object-center [@media(max-height:640px)]:h-[clamp(2.25rem,9dvh,3.5rem)]"
           />
         </div>
-        <h1 className="text-balance text-[34px] font-semibold leading-[1.12] tracking-tight text-ink">
+        <h1 className="text-balance px-0.5 text-[clamp(1.05rem,4.2vw,1.45rem)] font-semibold leading-[1.15] tracking-tight text-ink [@media(max-height:640px)]:text-[clamp(0.95rem,3.8vw,1.2rem)]">
           Visual schedules that feel steady on the phone
         </h1>
-        <p className="mx-auto max-w-sm text-[16px] leading-relaxed text-ink-subtle">
+        <p className="mx-auto line-clamp-2 max-w-sm text-[12px] leading-snug text-ink-subtle sm:text-[13px]">
           One calm column — routines, steps, and Focus Mode — built for clarity,
           not clutter.
         </p>
-      </div>
+      </header>
 
-      <div className="relative space-y-3 px-1">
+      <div className="flex min-h-0 flex-col justify-center gap-1.5 overflow-hidden py-0.5">
         {steps.map((step) => (
           <div
             key={step.n}
-            className="overflow-hidden rounded-[1.35rem] border border-ink/[0.06] bg-white shadow-soft"
+            className="shrink-0 overflow-hidden rounded-xl border border-ink/[0.06] bg-white shadow-soft"
           >
             <div
-              className="h-1 w-full bg-gradient-to-r opacity-95"
+              className="h-0.5 w-full opacity-95"
               style={{
                 backgroundImage: `linear-gradient(to right, ${step.from}, ${step.to})`,
               }}
             />
-            <div className="flex gap-4 p-4 pr-5">
+            <div className="flex gap-2.5 px-2.5 py-2">
               <div
-                className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-2xl text-[17px] font-bold text-white"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[13px] font-bold text-white"
                 style={{
                   backgroundColor: step.from,
                   boxShadow: step.badgeShadow,
@@ -81,11 +81,11 @@ export default function WelcomePage() {
               >
                 {step.n}
               </div>
-              <div className="min-w-0 flex-1 space-y-1 text-left">
-                <p className="text-[16px] font-semibold leading-tight text-ink">
+              <div className="min-w-0 flex-1 space-y-0.5 text-left">
+                <p className="text-[13px] font-semibold leading-tight text-ink sm:text-[14px]">
                   {step.title}
                 </p>
-                <p className="text-[14px] leading-snug text-ink-subtle">
+                <p className="line-clamp-2 text-[11px] leading-snug text-ink-subtle sm:text-[12px]">
                   {step.body}
                 </p>
               </div>
@@ -94,19 +94,24 @@ export default function WelcomePage() {
         ))}
       </div>
 
-      <div className="relative flex flex-col gap-3">
-        <Link href="/dashboard" className="w-full">
-          <Button className="min-h-touch w-full text-[16px]">Enter home</Button>
+      <footer className="shrink-0 space-y-1.5 pt-0.5">
+        <Link href="/dashboard" className="block w-full">
+          <Button className="min-h-[42px] w-full py-2 text-[14px]">
+            Enter home
+          </Button>
         </Link>
-        <Link href="/auth" className="w-full">
-          <Button variant="secondary" className="min-h-touch w-full text-[16px]">
+        <Link href="/auth" className="block w-full">
+          <Button
+            variant="secondary"
+            className="min-h-[42px] w-full py-2 text-[14px]"
+          >
             Preview sign-in layout
           </Button>
         </Link>
-        <p className="text-center text-[12px] leading-relaxed text-ink-faint">
+        <p className="line-clamp-2 text-center text-[10px] leading-tight text-ink-faint sm:text-[11px]">
           No backend or AI in this build — layout and flow only.
         </p>
-      </div>
+      </footer>
     </MobileScreen>
   );
 }
