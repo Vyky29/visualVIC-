@@ -18,7 +18,7 @@ const items: NavItem[] = [
   { href: "/saved", label: "Saved", icon: "✦" },
   {
     href: "/menu",
-    label: "More",
+    label: "Menu",
     icon: "⋯",
     groupPrefixes: [
       "/menu",

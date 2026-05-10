@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
@@ -43,16 +42,16 @@ export function Header({
         {logoSrc ? (
           <>
             <h1 className="sr-only">{title}</h1>
-            <div className="relative h-9 w-44 max-w-[min(100%,11rem)] shrink-0">
-              <Image
-                src={logoSrc}
-                alt=""
-                fill
-                className="object-contain object-center"
-                priority
-                sizes="176px"
-              />
-            </div>
+            {/* Native img: avoids next/image optimizer edge cases on some hosts/CDNs */}
+            <img
+              src={logoSrc}
+              alt=""
+              width={176}
+              height={36}
+              className="h-9 w-auto max-w-[min(100%,11rem)] object-contain object-center"
+              decoding="async"
+              fetchPriority="high"
+            />
           </>
         ) : (
           <h1 className="truncate text-center text-[17px] font-semibold tracking-tight text-ink">
