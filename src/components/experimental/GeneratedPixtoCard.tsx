@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -31,17 +32,10 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
 /** Company mark — design px (corner glyph, scales with card width). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 128, h: 128 } as const;
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 108, h: 108 } as const;
 
-/** Tinted halo from category colour (transparent PNG mark). */
-function categoryMarkGlowFilter(hex: string): string {
-  const h = hex.trim();
-  return [
-    `drop-shadow(0 0 1px ${h})`,
-    `drop-shadow(0 0 4px ${h}aa)`,
-    `drop-shadow(0 1px 3px ${h}88)`,
-  ].join(" ");
-}
+/** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
+const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
 
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
@@ -112,6 +106,17 @@ export function GeneratedPixtoCard({
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
 
+  const [markSrc, setMarkSrc] = useState(iconUrl ?? "");
+  useEffect(() => {
+    setMarkSrc(iconUrl ?? "");
+  }, [iconUrl]);
+
+  const onMarkError = useCallback(() => {
+    setMarkSrc((prev) =>
+      prev && prev !== PACK_MARK_FALLBACK_SRC ? PACK_MARK_FALLBACK_SRC : prev,
+    );
+  }, []);
+
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
@@ -131,28 +136,28 @@ export function GeneratedPixtoCard({
         gridTemplateRows: `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`,
       }}
     >
-      {iconUrl ? (
+      {markSrc ? (
         <div
           className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center bg-transparent"
           style={{
             width: markSize,
             height: markSize,
-            transform: "translate(-10px, 5px)",
+            transform: "translate(-16px, 5px)",
           }}
           aria-hidden
         >
           <Image
-            src={iconUrl}
+            src={markSrc}
             alt=""
             fill
             className="object-contain p-0"
-            sizes="128px"
-            style={{ filter: categoryMarkGlowFilter(categoryColour) }}
+            sizes="108px"
+            onError={onMarkError}
             unoptimized={
-              iconUrl.startsWith("/") ||
-              iconUrl.includes("/cards/") ||
-              /\.jpe?g$/i.test(iconUrl) ||
-              /\.png$/i.test(iconUrl)
+              markSrc.startsWith("/") ||
+              markSrc.includes("/cards/") ||
+              /\.jpe?g$/i.test(markSrc) ||
+              /\.png$/i.test(markSrc)
             }
           />
         </div>
@@ -208,11 +213,12 @@ export function GeneratedPixtoCard({
           className={cn(
             "line-clamp-5 w-full text-center font-semibold lowercase leading-snug tracking-tight text-ink hyphens-none break-words",
             isDense
-              ? "text-[17px] sm:text-[19px]"
+              ? "text-[19px] sm:text-[21px]"
               : focusPresentation
-                ? /* Slot is 390×refH with inner scale — keep type clearly readable vs schedule. */
-                  "text-[32px] sm:text-[38px]"
-                : "text-[19px] sm:text-[21px]",
+                ? /* Match schedule bump, scaled for focus slot. */
+                  "text-[36px] sm:text-[42px]"
+                : /* Schedule NOW/NEXT — closer to bundled brushing title strip at same slot. */
+                  "text-[24px] sm:text-[28px]",
           )}
         >
           {title}
@@ -230,8 +236,8 @@ export function GeneratedPixtoCard({
           className={cn(
             "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
             focusPresentation
-              ? "text-[22px] sm:text-[27px] tracking-[0.06em]"
-              : "text-[14px] sm:text-[16px]",
+              ? "text-[26px] sm:text-[31px] tracking-[0.06em]"
+              : "text-[17px] sm:text-[20px]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",

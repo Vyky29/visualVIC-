@@ -3,14 +3,17 @@ import type { RoutineStep } from "@/lib/types/routine";
 import {
   AT_THE_AIRPORT_SEQUENCE,
   atTheAirportImageUrl,
+  atTheAirportPackMarkUrl,
 } from "@/lib/cards/at-the-airport-cards";
 import {
   AT_THE_HOTEL_SEQUENCE,
   atTheHotelImageUrl,
+  atTheHotelPackMarkUrl,
 } from "@/lib/cards/at-the-hotel-cards";
 
-/** Transparent mark — `public/brand/logo1x1.png`. */
-export const GENERATED_PIXTO_DEMO_LOGO_URL = "/brand/logo1x1.png";
+/** Fallback coloured mark if pack `pixtolearn-mark.png` is missing — `public/brand/pixtolearn-logo.png`. */
+export const GENERATED_PIXTO_COLOUR_MARK_FALLBACK_URL =
+  "/brand/pixtolearn-logo.png" as const;
 
 /** Airport category accent — ribbon + schedule chrome. */
 export const GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR = "#F9DD9E" as const;
@@ -29,7 +32,7 @@ export const AIRPORT_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     title: lc(s.title),
     category: lc("At the airport"),
     categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
+    iconUrl: atTheAirportPackMarkUrl(),
   }));
 
 /** Every hotel step PNG (order from {@link AT_THE_HOTEL_SEQUENCE}). */
@@ -39,7 +42,7 @@ export const HOTEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     title: lc(s.title),
     category: lc("At the hotel"),
     categoryColour: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
+    iconUrl: atTheHotelPackMarkUrl(),
   }));
 
 /** Full demo sequence (airport → hotel) for `/generated-card-demo` only. */
