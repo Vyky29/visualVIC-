@@ -20,6 +20,11 @@ import {
   buildMorningModularRoutineSteps,
 } from "@/lib/mock/mixed-demo-routine-steps";
 import { mockTemplates } from "@/lib/mock/templates";
+import {
+  AIRPORT_GENERATED_CARD_PROPS,
+  HOTEL_GENERATED_CARD_PROPS,
+  routineStepsFromGeneratedCardProps,
+} from "@/lib/experimental/generated-pixto-demo-routine";
 
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
@@ -132,6 +137,30 @@ export const mockRoutines: Routine[] = [
       title: s.title,
       imageUrl: swimmingImageUrl(s.slug),
     })),
+  },
+  {
+    id: "at-the-airport",
+    name: "At the airport",
+    description:
+      "Visual steps for check-in, security, gate, seatbelt and flight — PixtoLearn cards",
+    tags: ["home"],
+    homePreviewImageUrl: AIRPORT_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "at-the-airport",
+      AIRPORT_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "at-the-hotel",
+    name: "At the hotel",
+    description:
+      "Arrival, front desk and room — PixtoLearn visual cards for hotel routines",
+    tags: ["home"],
+    homePreviewImageUrl: HOTEL_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "at-the-hotel",
+      HOTEL_GENERATED_CARD_PROPS,
+    ),
   },
 ];
 

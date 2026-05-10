@@ -13,6 +13,7 @@ import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-card";
 import { PixtoFocusCardScale } from "@/components/schedule/PixtoFocusCardScale";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
+import { GeneratedPixtoFocusScale } from "@/components/experimental/GeneratedPixtoFocusScale";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
@@ -221,7 +222,22 @@ export function FocusMode({ routine, exitHref }: Props) {
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 flex min-h-0 w-full flex-col"
             >
-              {isPixtoLearnBundledCardUrl(nowStep.imageUrl) ? (
+              {nowStep.generatedPixto ? (
+                <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
+                  <GeneratedPixtoFocusScale>
+                    <SwipeableStepCard
+                      step={nowStep}
+                      status={stepStatus(nowStep)}
+                      variant="focus"
+                      onSwipeComplete={() => {}}
+                      completionBackImageUrl={resolveCategoryBackCardUrl(
+                        nowStep.imageUrl,
+                      )}
+                      accentRings={accentRings}
+                    />
+                  </GeneratedPixtoFocusScale>
+                </div>
+              ) : isPixtoLearnBundledCardUrl(nowStep.imageUrl) ? (
                 <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
                   <PixtoFocusCardScale>
                     <SwipeableStepCard

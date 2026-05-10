@@ -23,6 +23,8 @@ const STOCK_PACK_IDS = new Set<string>([
   "shower-routine",
   "climbing-routine",
   "swimming-routine",
+  "at-the-airport",
+  "at-the-hotel",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -146,34 +148,34 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
       "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)]",
   },
   airport: {
-    home: "ring-2 ring-[#5a7d9a]/88 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#d4a017]/88 ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#5a7d9a]/88 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#d4a017]/88 ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#5a7d9a]/85 shadow-[0_8px_32px_-12px_rgba(90,125,154,0.32)]",
+      "ring-2 ring-[#F9DD9E]/92 shadow-[0_8px_32px_-12px_rgba(212,160,23,0.38)]",
     scheduleNext:
-      "ring-2 ring-[#5a7d9a]/78 shadow-[0_6px_22px_-12px_rgba(90,125,154,0.26)]",
+      "ring-2 ring-[#f5d88a]/85 shadow-[0_6px_22px_-12px_rgba(212,160,23,0.28)]",
     scheduleFocus:
-      "ring-2 ring-[#5a7d9a]/88 shadow-[0_8px_32px_-12px_rgba(90,125,154,0.36)]",
+      "ring-2 ring-[#F9DD9E]/90 shadow-[0_8px_32px_-12px_rgba(249,221,158,0.45)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#5a7d9a]/50 pl-3 ring-1 ring-[#5a7d9a]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#d4a017]/55 pl-3 ring-1 ring-[#F9DD9E]/40 ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(90,125,154,0.35)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(212,160,23,0.38)]",
   },
   hotel: {
-    home: "ring-2 ring-[#a67c52]/88 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#8C1E2E]/90 ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#a67c52]/88 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#8C1E2E]/90 ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#a67c52]/85 shadow-[0_8px_32px_-12px_rgba(166,124,82,0.32)]",
+      "ring-2 ring-[#8C1E2E]/88 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.35)]",
     scheduleNext:
-      "ring-2 ring-[#a67c52]/78 shadow-[0_6px_22px_-12px_rgba(166,124,82,0.26)]",
+      "ring-2 ring-[#a53b4d]/82 shadow-[0_6px_22px_-12px_rgba(140,30,46,0.28)]",
     scheduleFocus:
-      "ring-2 ring-[#a67c52]/88 shadow-[0_8px_32px_-12px_rgba(166,124,82,0.36)]",
+      "ring-2 ring-[#8C1E2E]/90 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.4)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#a67c52]/50 pl-3 ring-1 ring-[#a67c52]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#8C1E2E]/55 pl-3 ring-1 ring-[#8C1E2E]/30 ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(166,124,82,0.35)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(140,30,46,0.38)]",
   },
   default: {
     home: "ring-2 ring-[#7d9b87]/75 ring-offset-2 ring-offset-canvas",
@@ -196,6 +198,11 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
  * Category tone from a **single step** image URL — outlines on Now / Next / Focus / compact.
  */
 export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
+  if (step.generatedPixto) {
+    const c = step.generatedPixto.category.toLowerCase();
+    if (c.includes("hotel")) return "hotel";
+    return "airport";
+  }
   const u = step.imageUrl ?? "";
   if (u.includes("/brushing-teeth/")) return "brushing";
   if (u.includes("/shower/")) return "shower";
@@ -282,6 +289,9 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 
   const id = r.id.trim().toLowerCase();
 
+  if (id === "at-the-airport") return "airport";
+  if (id === "at-the-hotel") return "hotel";
+
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
   if (id.includes("swim")) return "swimming";
@@ -326,6 +336,8 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   ) {
     return "dress";
   }
+  if (id === "at-the-airport") return "airport";
+  if (id === "at-the-hotel") return "hotel";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);
@@ -411,23 +423,23 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
     },
     airport: {
       focusCta:
-        "min-h-touch w-full bg-gradient-to-b from-[#e9eef5] to-[#dce6f2] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#5a7d9a]/38 transition active:scale-[0.99]",
-      progressFill: "bg-[#5a7d9a]",
+        "min-h-touch w-full bg-gradient-to-b from-[#fff9ed] to-[#F9DD9E]/75 text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#d4a017]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#d4a017]",
       counterPill:
-        "rounded-full bg-[#e9eef5]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#5a7d9a]/30",
-      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#5a7d9a] ring-2 ring-[#5a7d9a]/32",
+        "rounded-full bg-[#fff9ed]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#F9DD9E]/45",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#d4a017] ring-2 ring-[#F9DD9E]/45",
       nowLabel:
-        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4a6580]",
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9a7208]",
     },
     hotel: {
       focusCta:
-        "min-h-touch w-full bg-gradient-to-b from-[#f7f0e8] to-[#ede3d6] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#a67c52]/38 transition active:scale-[0.99]",
-      progressFill: "bg-[#a67c52]",
+        "min-h-touch w-full bg-gradient-to-b from-[#fdeef0] to-[#f8d5da] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#8C1E2E]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#8C1E2E]",
       counterPill:
-        "rounded-full bg-[#f7f0e8]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#a67c52]/30",
-      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#a67c52] ring-2 ring-[#a67c52]/32",
+        "rounded-full bg-[#fdeef0]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#8C1E2E]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#8C1E2E] ring-2 ring-[#8C1E2E]/35",
       nowLabel:
-        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a6644]",
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8C1E2E]",
     },
     custom: {
       focusCta:

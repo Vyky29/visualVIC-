@@ -27,6 +27,10 @@ import {
   PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
   PIXTO_FOCUS_CARD_REF_WIDTH_PX,
 } from "@/lib/constants/pixto-focus-card";
+import {
+  GeneratedPixtoCard,
+  GENERATED_PIXTO_CARD_SIZE,
+} from "@/components/experimental/GeneratedPixtoCard";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
 
@@ -78,8 +82,11 @@ export function SwipeableStepCard({
 }: Props) {
   const rings = useMemo(
     () => stepCardAccentRings(step, accentRings),
-    [step.id, step.imageUrl, accentRings],
+    [step.id, step.imageUrl, step.generatedPixto, accentRings],
   );
+
+  const hasGeneratedPixto = Boolean(step.generatedPixto);
+  const gp = step.generatedPixto;
   const controls = useAnimation();
   const flipControls = useAnimation();
   const lastTouchTapRef = useRef<{ time: number; x: number; y: number } | null>(
@@ -312,10 +319,13 @@ export function SwipeableStepCard({
     !completionAnimating;
 
   if (variant === "compact") {
-    const compactPixto = isPixtoLearnBundledCardUrl(step.imageUrl);
+    const compactPixto =
+      isPixtoLearnBundledCardUrl(step.imageUrl) && !hasGeneratedPixto;
     return (
       <div
-        aria-label={compactPixto ? `Done: ${step.title}` : undefined}
+        aria-label={
+          compactPixto || hasGeneratedPixto ? `Done: ${step.title}` : undefined
+        }
         className={cn(
           "flex items-center gap-3 rounded-2xl bg-cream/55 px-3 py-2.5 shadow-none",
           "opacity-[0.48] saturate-[0.28]",
@@ -323,7 +333,19 @@ export function SwipeableStepCard({
         )}
       >
         <div className="relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
-          {step.imageUrl ? (
+          {gp ? (
+            <Image
+              src={gp.illustrationUrl}
+              alt=""
+              fill
+              unoptimized={
+                gp.illustrationUrl.startsWith("/") ||
+                gp.illustrationUrl.includes("/cards/")
+              }
+              className="object-cover object-center brightness-[0.92] grayscale"
+              sizes="52px"
+            />
+          ) : step.imageUrl ? (
             <Image
               src={step.imageUrl}
               alt=""
@@ -343,8 +365,8 @@ export function SwipeableStepCard({
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
             Done
           </p>
-          {!compactPixto ? (
-            <p className="truncate text-[14px] font-semibold text-ink/80">
+          {!compactPixto || hasGeneratedPixto ? (
+            <p className="truncate text-[14px] font-semibold lowercase text-ink/80">
               {step.title}
             </p>
           ) : null}
@@ -362,9 +384,15 @@ export function SwipeableStepCard({
   const heroFlip =
     variant === "hero" && Boolean(completionBackImageUrl) && isNow;
 
-  const nextPixto = variant === "next" && isPixtoLearnBundledCardUrl(step.imageUrl);
-  const stepPixtoBundled = isPixtoLearnBundledCardUrl(step.imageUrl);
+  const stepPixtoBundled =
+    isPixtoLearnBundledCardUrl(step.imageUrl) && !hasGeneratedPixto;
+  const nextPixto =
+    variant === "next" && (stepPixtoBundled || hasGeneratedPixto);
   const focusPixto = variant === "focus" && stepPixtoBundled;
+  const focusGenerated = variant === "focus" && hasGeneratedPixto;
+  const scheduleGeneratedPixto =
+    hasGeneratedPixto &&
+    (variant === "hero" || variant === "next" || variant === "focus");
   const backPixtoBundled = isPixtoLearnBundledCardUrl(completionBackImageUrl);
   /** Schedule NOW card −6px vs 96% width — only on faces without Pixto bleed wrapper. */
   const heroNowImageScaleClass =
@@ -413,11 +441,13 @@ export function SwipeableStepCard({
       className={cn(
         "relative touch-manipulation overflow-hidden rounded-[1.35rem] shadow-card transition-shadow duration-300 touch-pan-y",
         variant === "focus" && "outline-none focus:outline-none",
-        ((variant === "hero" && isNow) || focusPixto) &&
+        ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
             "mx-auto max-w-full",
-            focusPixto ? rings.scheduleFocus : rings.scheduleNow,
-            focusPixto
+            focusPixto || focusGenerated
+              ? rings.scheduleFocus
+              : rings.scheduleNow,
+            focusPixto || focusGenerated
               ? "h-full min-h-0 w-full"
               : /* ~10px wider than Next at cap — smaller than old 96% for more scroll room */
                 "w-[max(0px,min(100%,13.625rem)-4px)]",
@@ -429,6 +459,7 @@ export function SwipeableStepCard({
           ),
         variant === "focus" &&
           !focusPixto &&
+          !focusGenerated &&
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
             "overflow-hidden rounded-2xl sm:rounded-3xl",
@@ -445,16 +476,20 @@ export function SwipeableStepCard({
         className={cn(
           "relative w-full touch-manipulation",
           variant === "focus"
-            ? focusPixto
+            ? focusPixto || focusGenerated
               ? "relative mx-auto h-full min-h-0 w-full max-w-full overflow-hidden bg-transparent"
               : "relative flex h-full min-h-0 w-full flex-1 flex-col min-w-0 overflow-hidden bg-transparent"
             : cn(
                 "relative w-full overflow-hidden bg-transparent",
                 /* Hero NOW: cap 13.625rem −4px, aspect 48/65. Next: 13rem cap, 510/676 — Now slightly larger only. */
                 variant === "hero" && isNow
-                  ? "aspect-[48/65]"
+                  ? hasGeneratedPixto
+                    ? "aspect-[744/1054]"
+                    : "aspect-[48/65]"
                   : variant === "next"
-                    ? "aspect-[510/676]"
+                    ? hasGeneratedPixto
+                      ? "aspect-[744/1054]"
+                      : "aspect-[510/676]"
                     : "aspect-[10/13]",
               ),
         )}
@@ -467,7 +502,11 @@ export function SwipeableStepCard({
             ? {
                 aspectRatio: `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`,
               }
-            : undefined
+            : variant === "focus" && focusGenerated
+              ? {
+                  aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
+                }
+              : undefined
         }
       >
         {heroFlip ? (
@@ -490,7 +529,24 @@ export function SwipeableStepCard({
                   "[-webkit-backface-visibility:hidden]",
                 )}
               >
-                {step.imageUrl ? (
+                {gp ? (
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                      isFinished && "brightness-[0.9] grayscale",
+                    )}
+                  >
+                    <GeneratedPixtoCard
+                      illustrationUrl={gp.illustrationUrl}
+                      title={gp.title}
+                      category={gp.category}
+                      categoryColour={gp.categoryColour}
+                      iconUrl={gp.iconUrl}
+                      cardType={gp.cardType}
+                      className="h-full w-full max-w-none"
+                    />
+                  </div>
+                ) : step.imageUrl ? (
                   stepPixtoBundled ? (
                     <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
                       <div
@@ -587,7 +643,24 @@ export function SwipeableStepCard({
           </div>
         ) : (
           <>
-            {variant === "focus" && !step.imageUrl ? (
+            {scheduleGeneratedPixto && gp ? (
+              <div
+                className={cn(
+                  "absolute inset-0 flex items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                  isFinished && "brightness-[0.9] grayscale",
+                )}
+              >
+                <GeneratedPixtoCard
+                  illustrationUrl={gp.illustrationUrl}
+                  title={gp.title}
+                  category={gp.category}
+                  categoryColour={gp.categoryColour}
+                  iconUrl={gp.iconUrl}
+                  cardType={gp.cardType}
+                  className="h-full w-full max-w-none"
+                />
+              </div>
+            ) : variant === "focus" && !step.imageUrl ? (
               <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-cream/35">
                 Visual
               </div>
@@ -655,7 +728,7 @@ export function SwipeableStepCard({
                     </div>
                   </div>
                 </div>
-              ) : variant === "focus" && !focusPixto ? (
+              ) : variant === "focus" && !focusPixto && !focusGenerated ? (
                 <div className="relative min-h-0 flex-1 overflow-hidden">
                   <Image
                     src={step.imageUrl}
