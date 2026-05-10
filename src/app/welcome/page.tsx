@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { MobileScreen } from "@/components/layout/MobileScreen";
+import { PixtoLearnLockup } from "@/components/brand/PixtoLearnLockup";
 import {
   BRAND_ICON_AMBER,
   BRAND_ICON_PINK,
   BRAND_ICON_TEAL,
-  BRAND_WORDMARK_LOGO_SRC,
 } from "@/lib/constants/brand";
 
 const steps = [
@@ -39,17 +39,10 @@ export default function WelcomePage() {
   return (
     <MobileScreen className="grid h-dvh max-h-dvh grid-rows-[auto_minmax(0,1fr)_auto] gap-2 overflow-hidden bg-white px-4 !pb-[max(0.35rem,env(safe-area-inset-bottom))] !pt-[max(0.35rem,env(safe-area-inset-top))]">
       <header className="min-h-0 shrink-0 space-y-1.5 text-center">
-        <div className="mx-auto w-full max-w-md">
-          <img
-            src={BRAND_WORDMARK_LOGO_SRC}
-            alt="PixtoLearn"
-            width={560}
-            height={180}
-            decoding="async"
-            fetchPriority="high"
-            className="mx-auto block h-[clamp(2.5rem,11dvh,4.25rem)] w-auto max-w-full object-contain object-center [@media(max-height:640px)]:h-[clamp(2.25rem,9dvh,3.5rem)]"
-          />
-        </div>
+        <PixtoLearnLockup
+          variant="hero"
+          className="mx-auto [@media(max-height:640px)]:scale-[0.92]"
+        />
         <h1 className="text-balance px-0.5 text-[clamp(1.05rem,4.2vw,1.45rem)] font-semibold leading-[1.15] tracking-tight text-ink [@media(max-height:640px)]:text-[clamp(0.95rem,3.8vw,1.2rem)]">
           Visual schedules that feel steady on the phone
         </h1>

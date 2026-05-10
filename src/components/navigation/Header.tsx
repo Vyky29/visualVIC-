@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { PixtoLearnLockup } from "@/components/brand/PixtoLearnLockup";
 import { cn } from "@/lib/utils/cn";
 
 type Props = {
   title: string;
-  /** Public URL — use `BRAND_LOGO_SRC` from `@/lib/constants/brand`. Boxed so wide PNGs never steal taps. */
-  logoSrc?: string;
+  /** Tri-icon + PixToLearn wordmark (To in brand amber). */
+  brandLockup?: boolean;
   backHref?: string;
   rightSlot?: ReactNode;
   className?: string;
@@ -15,7 +16,7 @@ type Props = {
 
 export function Header({
   title,
-  logoSrc,
+  brandLockup,
   backHref,
   rightSlot,
   className,
@@ -39,19 +40,13 @@ export function Header({
         <span className="min-w-touch" />
       )}
       <div className="flex min-w-0 flex-1 justify-center">
-        {logoSrc ? (
+        {brandLockup ? (
           <>
             <h1 className="sr-only">{title}</h1>
-            <div className="flex h-9 max-w-[min(11rem,calc(100vw-5.5rem))] shrink-0 items-center justify-center overflow-hidden">
-              <img
-                src={logoSrc}
-                alt="PixtoLearn"
-                width={176}
-                height={36}
-                className="max-h-full max-w-full object-contain object-center"
-                decoding="async"
-              />
-            </div>
+            <PixtoLearnLockup
+              variant="header"
+              className="min-w-0 max-w-[min(17.5rem,calc(100vw-5.75rem))]"
+            />
           </>
         ) : (
           <h1 className="truncate text-center text-[17px] font-semibold tracking-tight text-ink">

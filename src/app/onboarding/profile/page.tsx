@@ -9,7 +9,6 @@ import { Header } from "@/components/navigation/Header";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { ChildSex } from "@/lib/types/routine";
-import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { cn } from "@/lib/utils/cn";
 
 export default function ProfileOnboardingPage() {
@@ -69,7 +68,7 @@ export default function ProfileOnboardingPage() {
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
-      <Header title="Profile" backHref="/menu" logoSrc={BRAND_LOGO_SRC} />
+      <Header title="Profile" backHref="/menu" brandLockup />
       <MobileScreen className="space-y-8 px-6 pb-14 pt-6">
         <div className="space-y-2 text-center">
           <p className="text-[22px] font-semibold text-ink">Child profile</p>

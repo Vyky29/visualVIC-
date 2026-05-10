@@ -10,7 +10,6 @@ import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
 } from "@/lib/library/library-selection-draft";
-import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { cn } from "@/lib/utils/cn";
 
 const groups = ["self-care", "home", "activity"] as const;
@@ -91,7 +90,7 @@ export function LibraryPageClient() {
     >
       <Header
         title="Visual library"
-        logoSrc={BRAND_LOGO_SRC}
+        brandLockup
         rightSlot={
           <Button
             type="button"
