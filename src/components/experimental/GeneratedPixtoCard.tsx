@@ -31,7 +31,17 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
 /** Company mark — design px (corner glyph). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 176, h: 176 } as const;
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 166, h: 166 } as const;
+
+/** Tinted halo from category colour (raster mark, no filled “logo box”). */
+function categoryMarkGlowFilter(hex: string): string {
+  const h = hex.trim();
+  return [
+    `drop-shadow(0 0 1px ${h})`,
+    `drop-shadow(0 0 3px ${h}99)`,
+    `drop-shadow(0 1px 2px ${h}66)`,
+  ].join(" ");
+}
 
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
@@ -112,8 +122,8 @@ export function GeneratedPixtoCard({
       data-card-type={cardType ?? "default"}
       className={cn(
         "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
-        "bg-white shadow-card touch-manipulation",
-        suppressNeutralRing ? "ring-0" : "ring-1 ring-ink/[0.08]",
+        "bg-white touch-manipulation",
+        suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
         className,
       )}
       style={{
@@ -123,11 +133,10 @@ export function GeneratedPixtoCard({
     >
       {iconUrl ? (
         <div
-          className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center overflow-hidden bg-white"
+          className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center bg-transparent"
           style={{
             width: markSize,
             height: markSize,
-            borderRadius: "0.35rem",
             transform: "translate(-10px, 5px)",
           }}
           aria-hidden
@@ -136,8 +145,9 @@ export function GeneratedPixtoCard({
             src={iconUrl}
             alt=""
             fill
-            className="object-contain p-1"
-            sizes="176px"
+            className="object-contain p-0"
+            sizes="166px"
+            style={{ filter: categoryMarkGlowFilter(categoryColour) }}
             unoptimized={
               iconUrl.startsWith("/") ||
               iconUrl.includes("/cards/") ||
@@ -193,13 +203,15 @@ export function GeneratedPixtoCard({
         )}
       >
         <h2
+          lang="en"
           className={cn(
-            "line-clamp-3 w-full text-balance text-center font-semibold lowercase leading-tight tracking-tight text-ink",
+            "line-clamp-5 w-full text-center font-semibold lowercase leading-snug tracking-tight text-ink hyphens-none break-words",
             isDense
-              ? "text-[19px] sm:text-[21px]"
+              ? "text-[17px] sm:text-[19px]"
               : focusPresentation
-                ? "text-[26px] sm:text-[30px]"
-                : "text-[21px] sm:text-[24px]",
+                ? /* Design-px card is larger in Focus; scale() shrinks type — overshoot vs schedule NOW/NEXT (19/21). */
+                  "text-[28px] sm:text-[33px]"
+                : "text-[19px] sm:text-[21px]",
           )}
         >
           {title}
@@ -217,7 +229,7 @@ export function GeneratedPixtoCard({
           className={cn(
             "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
             focusPresentation
-              ? "text-[17px] sm:text-[20px]"
+              ? "text-[19px] sm:text-[23px] tracking-[0.06em]"
               : "text-[14px] sm:text-[16px]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"

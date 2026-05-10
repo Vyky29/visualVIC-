@@ -439,8 +439,8 @@ export function SwipeableStepCard({
                 : undefined
       }
       className={cn(
-        "relative touch-manipulation rounded-[1.35rem] shadow-card transition-shadow duration-300 touch-pan-y",
-        hasGeneratedPixto ? "overflow-visible" : "overflow-hidden",
+        "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300 touch-pan-y",
+        hasGeneratedPixto ? "overflow-visible" : "overflow-hidden shadow-card",
         variant === "focus" && "outline-none focus:outline-none",
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
