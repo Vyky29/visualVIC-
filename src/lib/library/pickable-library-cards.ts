@@ -12,6 +12,24 @@ import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-regist
 
 const SEP = "::";
 
+/** Namespace prefix in `pickId` (before `::`). */
+export type PickablePackId = "bt" | "shower" | "core" | "climb" | "swim" | "dress";
+
+export function pickablePackFromPickId(pickId: string): PickablePackId | null {
+  const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
+  if (
+    ns === "bt" ||
+    ns === "shower" ||
+    ns === "core" ||
+    ns === "climb" ||
+    ns === "swim" ||
+    ns === "dress"
+  ) {
+    return ns as PickablePackId;
+  }
+  return null;
+}
+
 export type PickableLibraryCard = {
   pickId: string;
   label: string;

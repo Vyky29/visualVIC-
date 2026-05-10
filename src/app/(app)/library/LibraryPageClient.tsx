@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { Header } from "@/components/navigation/Header";
 import { Button } from "@/components/ui/Button";
-import { PICKABLE_LIBRARY_CARDS } from "@/lib/library/pickable-library-cards";
+import {
+  PICKABLE_LIBRARY_CARDS,
+  pickablePackFromPickId,
+  type PickablePackId,
+} from "@/lib/library/pickable-library-cards";
 import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
@@ -18,12 +22,21 @@ import {
 
 const groups = ["self-care", "home", "activity"] as const;
 
-/** Soft footer tint per library section (matches pack hues loosely). */
-const libraryCategoryRibbonClass: Record<(typeof groups)[number], string> = {
-  "self-care": "border-t border-sage/20 bg-sage-mist/90 text-ink",
-  home: "border-t border-accent/25 bg-accent-soft/30 text-ink",
-  activity: "border-t border-[#c9a84a]/25 bg-[#faf6ea] text-ink",
+/** Soft ribete tint per Pixto pack (from `pickId` namespace, not browse section). */
+const libraryPackRibbonClass: Record<PickablePackId, string> = {
+  bt: "border-t border-sage/22 bg-sage-mist text-ink",
+  shower: "border-t border-[#143d66]/28 bg-[#e4edf5] text-ink",
+  dress: "border-t border-[#6B4E9E]/28 bg-[#ede9f4] text-ink",
+  core: "border-t border-accent/30 bg-accent-soft/40 text-ink",
+  climb: "border-t border-[#d4a53a]/35 bg-[#faf6ea] text-ink",
+  swim: "border-t border-[#4a8fa8]/30 bg-[#e8f3f6] text-ink",
 };
+
+function libraryRibbonClassForPickId(pickId: string): string {
+  const pack = pickablePackFromPickId(pickId);
+  if (pack) return libraryPackRibbonClass[pack];
+  return "border-t border-ink/10 bg-canvas-muted text-ink";
+}
 
 function cardImageUnoptimized(src: string): boolean {
   return src.startsWith("/cards/") || src.includes("/cards/");
@@ -138,7 +151,7 @@ export function LibraryPageClient() {
                       type="button"
                       onClick={() => togglePick(v.pickId)}
                       className={cn(
-                        "overflow-hidden rounded-xl border border-ink/5 bg-cream text-left shadow-card transition active:scale-[0.99] sm:rounded-2xl",
+                        "flex w-full flex-col overflow-hidden rounded-xl border border-ink/5 bg-cream p-0 text-left shadow-card transition active:scale-[0.99] sm:rounded-2xl",
                         selected
                           ? "ring-2 ring-sage/50"
                           : "hover:shadow-soft",
@@ -146,7 +159,7 @@ export function LibraryPageClient() {
                     >
                       <div
                         className={cn(
-                          "relative aspect-square overflow-hidden",
+                          "relative aspect-square w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
                           pixto ? "bg-white" : "bg-canvas-muted",
                         )}
                       >
@@ -176,16 +189,16 @@ export function LibraryPageClient() {
                           </div>
                         ) : null}
                         {selected ? (
-                          <div className="pointer-events-none absolute inset-0 rounded-xl ring-2 ring-inset ring-sage/70 sm:rounded-2xl" />
+                          <div className="pointer-events-none absolute inset-0 rounded-t-xl ring-2 ring-inset ring-sage/70 sm:rounded-t-2xl" />
                         ) : null}
                       </div>
                       <div
                         className={cn(
-                          "px-1.5 py-1.5 sm:px-2 sm:py-2",
-                          libraryCategoryRibbonClass[cat],
+                          "isolate w-full shrink-0 rounded-b-xl px-1.5 py-1.5 sm:rounded-b-2xl sm:px-2 sm:py-2",
+                          libraryRibbonClassForPickId(v.pickId),
                         )}
                       >
-                        <p className="line-clamp-2 text-left text-[10px] font-semibold leading-tight sm:text-[11px]">
+                        <p className="line-clamp-2 text-center text-[10px] font-semibold leading-tight sm:text-[11px]">
                           {v.label}
                         </p>
                       </div>
