@@ -8,12 +8,16 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import {
-  LibraryPackGlyph,
-  libraryPackGlyphColorClass,
-} from "@/components/library/LibraryPackGlyph";
 import { Header } from "@/components/navigation/Header";
 import { Button } from "@/components/ui/Button";
+import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
+import { climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { coreImageUrl } from "@/lib/cards/core-cards";
+import { atTheAirportPackMarkUrl } from "@/lib/cards/at-the-airport-cards";
+import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
+import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
@@ -51,6 +55,18 @@ const PACK_LABEL: Record<PickablePackId, string> = {
   hotel: "At the hotel",
   climb: "Climbing",
   swim: "Swimming",
+};
+
+/** Thumbnail in each pack accordion header (same assets as the tiles). */
+const PACK_HEADER_ICON: Record<PickablePackId, string> = {
+  bt: brushingTeethImageUrl("toothbrush"),
+  shower: showerImageUrl("shower"),
+  dress: GETTING_DRESS_REGISTRY[0]?.imageUrl ?? "",
+  core: coreImageUrl("wash-hands"),
+  airport: atTheAirportPackMarkUrl(),
+  hotel: atTheHotelPackMarkUrl(),
+  climb: climbingImageUrl("climbing-wall"),
+  swim: swimmingImageUrl("changing-room"),
 };
 
 /** Ring tint around the pack icon — sole colour cue per category. */
@@ -315,6 +331,8 @@ export function LibraryPageClient() {
                   const open = isAccordionOpen(accordionKey);
                   const ringClass = libraryPackIconRingClass[pack];
                   const count = cards.length;
+                  const iconSrc = PACK_HEADER_ICON[pack];
+                  const iconUnopt = cardImageUnoptimized(iconSrc);
 
                   return (
                     <div
@@ -339,20 +357,27 @@ export function LibraryPageClient() {
                               ringClass,
                             )}
                           >
-                            <LibraryPackGlyph
-                              pack={pack}
-                              className={libraryPackGlyphColorClass[pack]}
-                            />
+                            {iconSrc ? (
+                              <Image
+                                src={iconSrc}
+                                alt=""
+                                width={40}
+                                height={40}
+                                unoptimized={iconUnopt}
+                                className="h-8 w-8 object-contain sm:h-9 sm:w-9"
+                              />
+                            ) : null}
                           </span>
                           <span className="flex min-w-0 flex-1 items-baseline gap-2">
                             <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
                               {PACK_LABEL[pack]}
                             </span>
                             <span
-                              className="shrink-0 text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
-                              aria-label={`${count} cards`}
+                              className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
+                              aria-label={`${count} ${count === 1 ? "step" : "steps"}`}
                             >
-                              {count}
+                              {count}{" "}
+                              {count === 1 ? "step" : "steps"}
                             </span>
                           </span>
                         </button>

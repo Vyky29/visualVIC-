@@ -141,28 +141,13 @@ const titleTypography = (
   );
 
 /**
- * NOW/NEXT title band is split into 3 grid rows; type must fit one row each
- * (with comfortable leading so wrapped glyphs never overlap).
+ * NOW/NEXT title band — same point size for 1, 2 or 3 logical lines (schedule large).
+ * Leading ≥ ~1.12 keeps ascenders/descenders from touching when lines sit in adjacent grid rows.
  */
-function titleTypographyScheduleBand(n: 1 | 2 | 3): string {
-  if (n === 1) {
-    return cn(
-      titleTypographyBase,
-      "text-[72px] sm:text-[84px] leading-[1.08]",
-    );
-  }
-  if (n === 2) {
-    return cn(
-      titleTypographyBase,
-      /* Second row can wrap (e.g. “safety” / “instructions”) — room for 2 lines in one band. */
-      "text-[42px] sm:text-[50px] leading-[1.2]",
-    );
-  }
-  return cn(
-    titleTypographyBase,
-    "text-[32px] sm:text-[40px] leading-[1.24]",
-  );
-}
+const scheduleTitleBandTypography = cn(
+  titleTypographyBase,
+  "text-[72px] sm:text-[84px] leading-[1.14]",
+);
 
 function TitleBand({
   title,
@@ -209,16 +194,15 @@ function TitleBand({
   const row2Two = n === 2 ? safeLines[1] : "";
   const row2Three =
     n >= 3 ? safeLines.slice(2).join(" ") : "";
-  const bandTypo = titleTypographyScheduleBand(n);
+  const bandTypo = scheduleTitleBandTypography;
 
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
       {/*
-        White title band = 3 equal rows (grid-rows-3).
-        1 line → rows 2–3 merged, centred in that band (one grid row is too short for the large type without clipping).
-        2 lines → rows 2–3 as one stack: no gap between lines, block sits on the ribete.
-        3 lines → one line per row, full vertical thirds.
-        Per-row type size + leading so lines never stack on each other in a short row.
+        Always 3 CSS grid rows (equal thirds of the white band above the ribete).
+        · 1 logical line → empty row 1; text in a single cell spanning rows 2–3 (centred).
+        · 2 logical lines → empty row 1; rows 2–3 one flex column, lines close but leading prevents overlap.
+        · 3 logical lines → one string per row 1 / 2 / 3; same leading so rows never “mount”.
       */}
       <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
         {n === 1 ? (
@@ -230,7 +214,9 @@ function TitleBand({
                 bandTypo,
               )}
             >
-              <span className="block w-full max-w-full">{safeLines[0]}</span>
+              <span className="block w-full max-w-full leading-[1.14]">
+                {safeLines[0]}
+              </span>
             </div>
           </>
         ) : n === 2 ? (
@@ -238,14 +224,14 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end overflow-hidden px-0.5 pb-0 text-center",
+                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 pb-0 text-center",
                 bandTypo,
               )}
             >
-              <span className="block w-full max-w-full leading-none">
+              <span className="block w-full max-w-full shrink-0 leading-[1.14]">
                 {row1Two}
               </span>
-              <span className="block w-full max-w-full leading-none">
+              <span className="block w-full max-w-full shrink-0 leading-[1.14]">
                 {row2Two}
               </span>
             </div>
@@ -253,13 +239,13 @@ function TitleBand({
         ) : (
           <>
             <div className="col-start-1 row-start-1 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center">
-              <span className={bandTypo}>{row0}</span>
+              <span className={cn(bandTypo, "leading-[1.14]")}>{row0}</span>
             </div>
             <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center">
-              <span className={bandTypo}>{row1Two}</span>
+              <span className={cn(bandTypo, "leading-[1.14]")}>{row1Two}</span>
             </div>
             <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0 text-center">
-              <span className={bandTypo}>{row2Three}</span>
+              <span className={cn(bandTypo, "leading-[1.14]")}>{row2Three}</span>
             </div>
           </>
         )}
@@ -298,8 +284,9 @@ export function GeneratedPixtoCard({
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — 3× type + taller title/ribbon rows. */
   const scheduleLargeType = !focusPresentation && !isDense;
+  /** Slightly more middle row so two/three lines at full schedule size still fit. */
   const gridTemplateRows = scheduleLargeType
-    ? `${ROW_FR_TOP * 0.72}fr ${ROW_FR_TITLE * 2.55}fr ${ROW_FR_CATEGORY * 1.42}fr`
+    ? `${ROW_FR_TOP * 0.62}fr ${ROW_FR_TITLE * 2.95}fr ${ROW_FR_CATEGORY * 1.34}fr`
     : `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`;
 
   return (
