@@ -8,30 +8,54 @@ import { cn } from "@/lib/utils/cn";
  * Does not replace designer full-bleed PNG cards used elsewhere.
  */
 
-/** Digital card frame (design px). */
+/** Digital card frame (design px) — PixtoLearn spec. */
 export const GENERATED_PIXTO_CARD_SIZE = { w: 744, h: 1054 } as const;
 
-/**
- * Illustration canvas (wireframe “yellow block”) — image is clipped to this
- * frame only; it does not run edge-to-edge to the top of the card.
- */
+/** Illustration canvas (“yellow block”), px — centred horizontally. */
 export const GENERATED_PIXTO_ILLUSTRATION_FRAME = { w: 531, h: 648 } as const;
+
+/** White title band height (design px). */
+export const GENERATED_PIXTO_TITLE_ZONE_H = 166 as const;
+
+/** Bottom category strip height (design px). */
+export const GENERATED_PIXTO_CATEGORY_BAND_H = 94 as const;
+
+/** Top layout block (green + yellow): 1054 − 166 − 94. */
+export const GENERATED_PIXTO_TOP_LAYOUT_H =
+  GENERATED_PIXTO_CARD_SIZE.h -
+  GENERATED_PIXTO_TITLE_ZONE_H -
+  GENERATED_PIXTO_CATEGORY_BAND_H; // 794
+
+/** Vertical space above yellow inside the top block: 794 − 648. */
+export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
+  GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
+
+/** Company mark (“brown square”) — design px. */
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 82, h: 82 } as const;
 
 const ILLUSTRATION_FRAME_ASPECT =
   `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}` as const;
 
-/** Share of card width used by the illustration frame (531 / 744). */
 const ILLUSTRATION_WIDTH_FRAC =
   GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w;
+
+const ROW_FR_TOP = GENERATED_PIXTO_TOP_LAYOUT_H;
+const ROW_FR_TITLE = GENERATED_PIXTO_TITLE_ZONE_H;
+const ROW_FR_CATEGORY = GENERATED_PIXTO_CATEGORY_BAND_H;
+
+const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
+const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
 
 export type GeneratedPixtoCardProps = {
   illustrationUrl: string;
   title: string;
   category: string;
   categoryColour: string;
-  /** Company / brand mark — top-right of the illustration shell (wireframe brown square). */
+  /** Company / brand mark — top-right of yellow block (wireframe brown square). */
   iconUrl?: string;
   cardType?: string;
+  /** e.g. Focus preview: `h-full w-full max-w-none` on design 744×1054 slot */
+  className?: string;
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
@@ -43,77 +67,101 @@ export function GeneratedPixtoCard({
   categoryColour,
   iconUrl,
   cardType,
+  className,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
 
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
+  const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
 
   return (
     <article
       data-generated-pixto-card
       data-card-type={cardType ?? "default"}
       className={cn(
-        "grid w-full max-w-[min(100%,17.75rem)] grid-rows-[minmax(0,1fr)_auto_auto] overflow-hidden rounded-[1.35rem]",
+        "grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
         "bg-white shadow-card ring-1 ring-ink/[0.08]",
         "touch-manipulation",
+        className,
       )}
-      style={{ aspectRatio: CARD_ASPECT }}
+      style={{
+        aspectRatio: CARD_ASPECT,
+        gridTemplateRows: `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`,
+      }}
     >
-      {/* Illustration shell — top margin so art does not touch the card top; company mark top-right */}
+      {/* Top block 794px @ design — green margins + 531×648 yellow; company mark 82×82 top-right of yellow */}
       <div className="relative min-h-0 bg-gradient-to-b from-canvas-muted/80 to-canvas-muted">
-        {iconUrl ? (
+        <div className="flex h-full min-h-0 w-full flex-col">
           <div
-            className="absolute right-2 top-2 z-20 flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-ink/10 sm:right-2.5 sm:top-2.5 sm:h-10 sm:w-10"
+            className="min-h-0 shrink-0"
+            style={{ flex: `${FR_TOP_SPACER} 1 0` }}
             aria-hidden
-          >
-            <Image
-              src={iconUrl}
-              alt=""
-              width={40}
-              height={40}
-              className="object-contain p-1"
-              unoptimized={
-                iconUrl.startsWith("/") || iconUrl.includes("/cards/")
-              }
-            />
-          </div>
-        ) : null}
-
-        <div className="flex h-full min-h-0 flex-col items-center pt-3 sm:pt-4">
+          />
           <div
-            className="relative shrink-0"
-            style={{
-              width: `min(${illustrationWidthPct}, 100%)`,
-              aspectRatio: ILLUSTRATION_FRAME_ASPECT,
-            }}
+            className="relative flex w-full min-h-0 shrink-0 items-start justify-center"
+            style={{ flex: `${FR_ILLUSTRATION} 1 0` }}
           >
-            <Image
-              src={illustrationUrl}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 72vw, 240px"
-              className="object-contain object-center select-none"
-              unoptimized={
-                illustrationUrl.startsWith("/") ||
-                illustrationUrl.includes("/cards/")
-              }
-              draggable={false}
-            />
+            {iconUrl ? (
+              <div
+                className="absolute z-20 flex items-center justify-center overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-ink/10"
+                style={{
+                  width: markSize,
+                  height: markSize,
+                  right: `calc((100% - min(${illustrationWidthPct}, 100%)) / 2)`,
+                  top: 0,
+                  transform: "translateY(-50%)",
+                }}
+                aria-hidden
+              >
+                <Image
+                  src={iconUrl}
+                  alt=""
+                  fill
+                  className="object-contain p-1.5"
+                  sizes="82px"
+                  unoptimized={
+                    iconUrl.startsWith("/") || iconUrl.includes("/cards/")
+                  }
+                />
+              </div>
+            ) : null}
+            <div className="flex h-full w-full min-h-0 items-center justify-center">
+              <div
+                className="relative min-h-0"
+                style={{
+                  width: `min(${illustrationWidthPct}, 100%)`,
+                  aspectRatio: ILLUSTRATION_FRAME_ASPECT,
+                  maxHeight: "100%",
+                }}
+              >
+                <Image
+                  src={illustrationUrl}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 72vw, 240px"
+                  className="object-contain object-center select-none"
+                  unoptimized={
+                    illustrationUrl.startsWith("/") ||
+                    illustrationUrl.includes("/cards/")
+                  }
+                  draggable={false}
+                />
+              </div>
+            </div>
           </div>
-          <div className="min-h-0 w-full flex-1" aria-hidden />
         </div>
       </div>
 
       <div
         className={cn(
-          "flex shrink-0 flex-col items-center justify-center border-t border-ink/[0.06] bg-white px-4",
-          isDense ? "py-2.5" : "py-3.5 sm:py-4",
+          "flex min-h-0 shrink-0 flex-col items-center justify-center overflow-hidden border-t border-ink/[0.06] bg-white px-4",
+          isDense ? "py-1" : "py-2",
         )}
       >
         <h2
           className={cn(
-            "text-balance text-center font-semibold leading-snug tracking-tight text-ink",
-            isDense ? "text-[15px]" : "text-[16px] sm:text-[17px]",
+            "line-clamp-3 w-full text-balance text-center font-semibold leading-snug tracking-tight text-ink",
+            isDense ? "text-[14px]" : "text-[15px] sm:text-[16px]",
           )}
         >
           {title}
@@ -121,14 +169,14 @@ export function GeneratedPixtoCard({
       </div>
 
       <div
-        className="flex shrink-0 items-center justify-center px-4 py-2.5 sm:py-3"
+        className="flex min-h-0 shrink-0 items-center justify-center overflow-hidden px-3"
         style={{
           backgroundColor: categoryColour,
           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
         }}
       >
         <span
-          className="text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]"
+          className="line-clamp-2 text-center text-[10px] font-semibold uppercase leading-tight tracking-[0.16em] text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] sm:text-[11px]"
           style={{ textShadow: "0 1px 2px rgba(0,0,0,0.2)" }}
         >
           {category}
