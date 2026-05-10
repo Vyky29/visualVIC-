@@ -11,7 +11,7 @@ import {
   atTheHotelPackMarkUrl,
 } from "@/lib/cards/at-the-hotel-cards";
 
-/** Fallback coloured mark if pack `pixtolearn-mark.png` is missing — `public/brand/pixtolearn-logo.png`. */
+/** Fallback if a pack logo fails to load — `public/brand/pixtolearn-logo.png`. */
 export const GENERATED_PIXTO_COLOUR_MARK_FALLBACK_URL =
   "/brand/pixtolearn-logo.png" as const;
 

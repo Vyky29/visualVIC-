@@ -142,7 +142,7 @@ export function GeneratedPixtoCard({
           style={{
             width: markSize,
             height: markSize,
-            transform: "translate(-16px, 5px)",
+            transform: "translate(-22px, 2px)",
           }}
           aria-hidden
         >

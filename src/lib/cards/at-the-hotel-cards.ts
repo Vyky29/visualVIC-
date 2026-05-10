@@ -8,11 +8,11 @@ const AT_HOTEL_DIR_SEG = encodeURIComponent("at the hotel");
 export const AT_THE_HOTEL_PUBLIC_DIR = `/cards/${AT_HOTEL_DIR_SEG}`;
 
 /**
- * Coloured corner mark for generated HTML cards — place PNG at
- * `public/cards/at the hotel/pixtolearn-mark.png`.
+ * Coloured corner mark for generated HTML cards —
+ * `public/cards/at the hotel/logo-hotel.png` (white matting is fine).
  */
 export function atTheHotelPackMarkUrl(): string {
-  return `${AT_THE_HOTEL_PUBLIC_DIR}/pixtolearn-mark.png`;
+  return `${AT_THE_HOTEL_PUBLIC_DIR}/logo-hotel.png`;
 }
 
 /** Category flip / completion back — `public/cards/at the hotel/backcard-hotel.png`. */

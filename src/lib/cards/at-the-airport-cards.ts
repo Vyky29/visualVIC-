@@ -8,11 +8,11 @@ const AT_AIRPORT_DIR_SEG = encodeURIComponent("at the airport");
 export const AT_THE_AIRPORT_PUBLIC_DIR = `/cards/${AT_AIRPORT_DIR_SEG}`;
 
 /**
- * Coloured corner mark for generated HTML cards — place PNG (or SVG via PNG) at
- * `public/cards/at the airport/pixtolearn-mark.png`.
+ * Coloured corner mark for generated HTML cards —
+ * `public/cards/at the airport/logo-airport.png` (white matting is fine).
  */
 export function atTheAirportPackMarkUrl(): string {
-  return `${AT_THE_AIRPORT_PUBLIC_DIR}/pixtolearn-mark.png`;
+  return `${AT_THE_AIRPORT_PUBLIC_DIR}/logo-airport.png`;
 }
 
 /** Category flip / completion back — `public/cards/at the airport/backcard-airport.png`. */
