@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import type { Routine } from "@/lib/types/routine";
 import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-card";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { Button } from "@/components/ui/Button";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
+import { routineAccentRings } from "@/lib/utils/routine-accent";
 
 type Props = {
   routine: Routine;
@@ -16,6 +18,7 @@ type Props = {
 
 export function SchedulePlayer({ routine, backHref }: Props) {
   const router = useRouter();
+  const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
   const {
     nowStep,
     finishedSteps,
@@ -142,6 +145,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
               completionBackImageUrl={resolveCategoryBackCardUrl(
                 nowStep.imageUrl,
               )}
+              accentRings={accentRings}
             />
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
               Double tap to focus
@@ -180,6 +184,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
                   completionBackImageUrl={resolveCategoryBackCardUrl(
                     step.imageUrl,
                   )}
+                  accentRings={accentRings}
                 />
                 </motion.div>
               ))}
@@ -217,6 +222,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
                   completionBackImageUrl={resolveCategoryBackCardUrl(
                     step.imageUrl,
                   )}
+                  accentRings={accentRings}
                 />
               ))}
             </div>

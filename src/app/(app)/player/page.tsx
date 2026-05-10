@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/Card";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
+import { cn } from "@/lib/utils/cn";
+import { routineHomeRoutineCardClass } from "@/lib/utils/routine-accent";
 
 export default function PlayerIndexPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
@@ -35,8 +37,13 @@ export default function PlayerIndexPage() {
           {combined.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
             return (
-              <li key={r.id}>
-                <Card className="overflow-hidden p-0">
+              <li key={r.id} className="group">
+                <Card
+                  className={cn(
+                    "overflow-hidden p-0 shadow-card transition-shadow duration-200",
+                    routineHomeRoutineCardClass(r),
+                  )}
+                >
                   <Link
                     href={`/player/${r.id}`}
                     className="flex gap-4 p-4 transition hover:bg-white/60"

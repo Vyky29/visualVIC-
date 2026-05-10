@@ -14,7 +14,7 @@ import {
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { cn } from "@/lib/utils/cn";
-import { routineTileHoverAccentClass } from "@/lib/utils/routine-accent";
+import { routineHomeRoutineCardClass } from "@/lib/utils/routine-accent";
 
 /**
  * PixtoLearn assets carry a title strip in the PNG. We crop the bottom by letting
@@ -188,8 +188,7 @@ export default function DashboardPage() {
                 <Card
                   className={cn(
                     "overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
-                    "ring-1 ring-ink/[0.08] group-hover:ring-2",
-                    routineTileHoverAccentClass(r),
+                    routineHomeRoutineCardClass(r),
                   )}
                 >
                 <HomeRoutinePreviewMedia

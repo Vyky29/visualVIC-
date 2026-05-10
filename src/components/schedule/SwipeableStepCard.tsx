@@ -10,6 +10,10 @@ import {
   type CSSProperties,
 } from "react";
 import type { RoutineStep } from "@/lib/types/routine";
+import {
+  DEFAULT_ROUTINE_ACCENT_RINGS,
+  type RoutineAccentRings,
+} from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -33,6 +37,8 @@ type Props = {
   onDoubleTapOpenFocus?: () => void;
   /** Category back card shown during swipe-to-complete flip (Schedule hero). */
   completionBackImageUrl?: string;
+  /** Outline / ring colors aligned with routine category (Schedule + Focus). */
+  accentRings?: RoutineAccentRings;
 };
 
 const DOUBLE_TAP_MS = 300;
@@ -63,6 +69,7 @@ export function SwipeableStepCard({
   variant = "hero",
   onDoubleTapOpenFocus,
   completionBackImageUrl,
+  accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
 }: Props) {
   const controls = useAnimation();
   const flipControls = useAnimation();
@@ -302,8 +309,8 @@ export function SwipeableStepCard({
         aria-label={compactPixto ? `Done: ${step.title}` : undefined}
         className={cn(
           "flex items-center gap-3 rounded-2xl bg-cream/55 px-3 py-2.5 shadow-none",
-          "ml-0.5 border-l-[3px] border-dashed border-ink/15 pl-3 opacity-[0.48] saturate-[0.28]",
-          "ring-1 ring-ink/[0.06] ring-offset-2 ring-offset-cream",
+          "opacity-[0.48] saturate-[0.28]",
+          accentRings.scheduleCompact,
         )}
       >
         <div className="relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
@@ -398,18 +405,23 @@ export function SwipeableStepCard({
         variant === "focus" && "outline-none focus:outline-none",
         ((variant === "hero" && isNow) || focusPixto) &&
           cn(
-            "mx-auto max-w-full ring-2 ring-sage/80 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.2)]",
+            "mx-auto max-w-full",
+            focusPixto ? accentRings.scheduleFocus : accentRings.scheduleNow,
             focusPixto
               ? "h-full min-h-0 w-full"
               : "w-[calc(96%-6px)]",
           ),
         variant === "next" &&
-          "mx-auto w-[max(0px,min(100%,13rem)-4px)] ring-2 ring-sage/75 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]",
+          cn(
+            "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
+            accentRings.scheduleNext,
+          ),
         variant === "focus" &&
           !focusPixto &&
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
-            "overflow-hidden rounded-2xl ring-2 ring-sage/80 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.2)] sm:rounded-3xl",
+            "overflow-hidden rounded-2xl sm:rounded-3xl",
+            accentRings.scheduleFocus,
           ),
         variant !== "hero" &&
           variant !== "next" &&

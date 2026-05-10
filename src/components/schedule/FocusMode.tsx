@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import type { Routine } from "@/lib/types/routine";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-card";
@@ -10,6 +16,7 @@ import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
+import { routineAccentRings } from "@/lib/utils/routine-accent";
 
 type Props = {
   routine: Routine;
@@ -166,6 +173,8 @@ export function FocusMode({ routine, exitHref }: Props) {
     goPrevious,
   } = useRoutinePlayback(routine, { syncSession: true });
 
+  const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
+
   const [sheet, setSheet] = useState<"support" | "options" | null>(null);
 
   const exit = useCallback(() => router.push(exitHref), [router, exitHref]);
@@ -223,6 +232,7 @@ export function FocusMode({ routine, exitHref }: Props) {
                       completionBackImageUrl={resolveCategoryBackCardUrl(
                         nowStep.imageUrl,
                       )}
+                      accentRings={accentRings}
                     />
                   </PixtoFocusCardScale>
                 </div>
@@ -236,6 +246,7 @@ export function FocusMode({ routine, exitHref }: Props) {
                     completionBackImageUrl={resolveCategoryBackCardUrl(
                       nowStep.imageUrl,
                     )}
+                    accentRings={accentRings}
                   />
                 </div>
               )}
