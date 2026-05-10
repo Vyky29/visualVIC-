@@ -29,6 +29,7 @@ const items: NavItem[] = [
       "/auth",
       "/onboarding",
       "/library/routine-new",
+      "/generated-card-demo",
     ],
   },
 ];
