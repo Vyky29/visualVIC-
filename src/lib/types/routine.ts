@@ -13,7 +13,7 @@ export type Routine = {
   steps: RoutineStep[];
   /** Tags for future adaptive / expert systems */
   tags?: string[];
-  /** Home grid / Continue tile preview when different from `steps[0].imageUrl` */
+  /** Home / Schedule Player list preview when different from `steps[0].imageUrl` */
   homePreviewImageUrl?: string;
 };
 

@@ -20,42 +20,45 @@ export default function PlayerIndexPage() {
           Finished and swipe to complete.
         </p>
         <ul className="flex flex-col gap-3">
-          {combined.map((r) => (
-            <li key={r.id}>
-              <Card className="overflow-hidden p-0">
-                <Link
-                  href={`/player/${r.id}`}
-                  className="flex gap-4 p-4 transition hover:bg-white/60"
-                >
-                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted">
-                    {r.steps[0]?.imageUrl ? (
-                      <Image
-                        src={r.steps[0].imageUrl}
-                        alt=""
-                        fill
-                        className="object-cover"
-                        sizes="72px"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                      {r.kind}
-                    </p>
-                    <p className="truncate text-[17px] font-semibold text-ink">
-                      {r.name}
-                    </p>
-                    <p className="text-[13px] text-ink-subtle">
-                      {r.steps.length} steps
-                    </p>
-                  </div>
-                  <span className="self-center text-ink-faint" aria-hidden>
-                    →
-                  </span>
-                </Link>
-              </Card>
-            </li>
-          ))}
+          {combined.map((r) => {
+            const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+            return (
+              <li key={r.id}>
+                <Card className="overflow-hidden p-0">
+                  <Link
+                    href={`/player/${r.id}`}
+                    className="flex gap-4 p-4 transition hover:bg-white/60"
+                  >
+                    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted">
+                      {previewUrl ? (
+                        <Image
+                          src={previewUrl}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="72px"
+                        />
+                      ) : null}
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+                        {r.kind}
+                      </p>
+                      <p className="truncate text-[17px] font-semibold text-ink">
+                        {r.name}
+                      </p>
+                      <p className="text-[13px] text-ink-subtle">
+                        {r.steps.length} steps
+                      </p>
+                    </div>
+                    <span className="self-center text-ink-faint" aria-hidden>
+                      →
+                    </span>
+                  </Link>
+                </Card>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
