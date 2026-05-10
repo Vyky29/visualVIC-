@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
 import { mockRoutines } from "@/lib/mock/routines";
@@ -10,6 +11,7 @@ import {
   isPixtoLearnBundledCardUrl,
   pixtoBundledCardObjectPositionTopClass,
 } from "@/lib/utils/visual-card-url";
+import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { cn } from "@/lib/utils/cn";
 import { routineTileHoverAccentClass } from "@/lib/utils/routine-accent";
@@ -78,9 +80,14 @@ function profileSubtitle(profile: {
 
 export default function DashboardPage() {
   const { profile } = useProfile();
+  const { routines: customRoutines, hydrated: customHydrated } =
+    useCustomRoutines();
   const primary = mockRoutines[0];
-  /** Same set as Schedule Player index — templates were missing from Home grid. */
-  const dashboardRoutines = [...mockRoutines, ...mockTemplates];
+  /** Same set as Schedule Player index — includes locally saved custom routines first. */
+  const dashboardRoutines = useMemo(() => {
+    const base = [...mockRoutines, ...mockTemplates];
+    return customHydrated ? [...customRoutines, ...base] : base;
+  }, [customRoutines, customHydrated]);
   const frameScale = profile?.avatarFrameScale ?? 1;
 
   return (

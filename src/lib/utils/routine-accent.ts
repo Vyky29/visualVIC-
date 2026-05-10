@@ -8,6 +8,9 @@ export function routineTileHoverAccentClass(r: Routine): string {
   const id = r.id.toLowerCase();
   const t = (r.tags ?? []).join(" ").toLowerCase();
 
+  if (id.startsWith("custom-")) {
+    return "group-hover:ring-sage/55 group-hover:shadow-[0_0_36px_-12px_rgba(125,155,135,0.35)]";
+  }
   if (id.includes("brush") || id.includes("teeth")) {
     return "group-hover:ring-[#91C24C]/80 group-hover:shadow-[0_0_40px_-10px_rgba(145,194,76,0.42)]";
   }

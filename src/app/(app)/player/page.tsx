@@ -1,15 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useMemo } from "react";
 import { Header } from "@/components/navigation/Header";
 import { Card } from "@/components/ui/Card";
+import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 
 export default function PlayerIndexPage() {
-  const combined = [
-    ...mockRoutines.map((r) => ({ ...r, kind: "Routine" as const })),
-    ...mockTemplates.map((r) => ({ ...r, kind: "Template" as const })),
-  ];
+  const { routines: customRoutines, hydrated: customHydrated } =
+    useCustomRoutines();
+  const combined = useMemo(
+    () => [
+      ...(customHydrated
+        ? customRoutines.map((r) => ({ ...r, kind: "Routine" as const }))
+        : []),
+      ...mockRoutines.map((r) => ({ ...r, kind: "Routine" as const })),
+      ...mockTemplates.map((r) => ({ ...r, kind: "Template" as const })),
+    ],
+    [customHydrated, customRoutines],
+  );
 
   return (
     <div>
