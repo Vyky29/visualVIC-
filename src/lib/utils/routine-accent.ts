@@ -7,7 +7,24 @@ export type RoutineVisualTone =
   | "dress"
   | "core"
   | "swimming"
+  /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
+  | "custom"
   | "default";
+
+/** Rutinas “de serie”: un solo pack PixtoLearn (colores por categoría). */
+const STOCK_PACK_IDS = new Set<string>([
+  "brushing-teeth",
+  "getting-dressed",
+  "getting-undressed",
+  "core-everyday",
+  "shower-routine",
+  "climbing-routine",
+  "swimming-routine",
+]);
+
+export function isStockPackRoutine(r: Routine): boolean {
+  return STOCK_PACK_IDS.has(r.id);
+}
 
 export type RoutineAccentRings = {
   home: string;
@@ -84,6 +101,19 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(74,101,114,0.35)]",
   },
+  custom: {
+    home: "ring-2 ring-ink ring-offset-2 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-ink/90 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.22)]",
+    scheduleNext:
+      "ring-2 ring-ink/82 shadow-[0_6px_22px_-12px_rgba(28,36,32,0.18)]",
+    scheduleFocus:
+      "ring-2 ring-ink/92 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.24)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-ink/35 pl-3 ring-1 ring-ink/15 ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_28px_-10px_rgba(28,36,32,0.22)]",
+  },
   swimming: {
     home: "ring-2 ring-[#4a8fa8]/88 ring-offset-2 ring-offset-canvas",
     scheduleNow:
@@ -157,9 +187,9 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
  * Visual category for outlines / accents — from routine id, tags, or step image paths.
  */
 export function routineVisualTone(r: Routine): RoutineVisualTone {
-  const id = r.id.toLowerCase();
+  if (!isStockPackRoutine(r)) return "custom";
 
-  if (id.startsWith("custom-")) return "default";
+  const id = r.id.toLowerCase();
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -190,11 +220,17 @@ export const DEFAULT_ROUTINE_ACCENT_RINGS: RoutineAccentRings =
   PALETTE.default;
 
 /**
- * Home grid tile: colored outline + hover glow (no second ring — base ring stays).
+ * Home grid (`/dashboard`) and Schedule Player index (`/player`):
+ * catalog packs keep category color; modular demos, templates, and custom saves use black (`custom`).
  */
 export function routineHomeRoutineCardClass(r: Routine): string {
   const p = routineAccentRings(r);
   return `${p.home} ${p.hoverGlow}`;
+}
+
+/** Explicit alias for the vertical routine list on `/player` — same styling as {@link routineHomeRoutineCardClass}. */
+export function routineSchedulePlayerIndexCardClass(r: Routine): string {
+  return routineHomeRoutineCardClass(r);
 }
 
 /**

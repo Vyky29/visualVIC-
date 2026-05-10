@@ -9,7 +9,7 @@ import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import { cn } from "@/lib/utils/cn";
-import { routineHomeRoutineCardClass } from "@/lib/utils/routine-accent";
+import { routineSchedulePlayerIndexCardClass } from "@/lib/utils/routine-accent";
 
 export default function PlayerIndexPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
@@ -39,9 +39,10 @@ export default function PlayerIndexPage() {
             return (
               <li key={r.id} className="group">
                 <Card
+                  omitInsetRing
                   className={cn(
                     "overflow-hidden p-0 shadow-card transition-shadow duration-200",
-                    routineHomeRoutineCardClass(r),
+                    routineSchedulePlayerIndexCardClass(r),
                   )}
                 >
                   <Link

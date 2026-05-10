@@ -178,35 +178,48 @@ export default function DashboardPage() {
           <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
             Routines
           </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {dashboardRoutines.map((r) => (
-              <Link
-                key={r.id}
-                href={`/player/${r.id}`}
-                className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-              >
-                <Card
-                  className={cn(
-                    "overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
-                    routineHomeRoutineCardClass(r),
-                  )}
+          <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
+            {dashboardRoutines.map((r) => {
+              const previewUrl =
+                r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+              return (
+                <Link
+                  key={r.id}
+                  href={`/player/${r.id}`}
+                  className="group flex h-full min-h-0 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
                 >
-                <HomeRoutinePreviewMedia
-                  imageUrl={r.homePreviewImageUrl ?? r.steps[0]?.imageUrl}
-                  frameClassName="aspect-[5/4] w-full"
-                  sizes="(max-width: 512px) 45vw, 240px"
-                />
-                  <div className="px-3 py-3">
-                    <p className="line-clamp-2 text-[14px] font-semibold leading-snug text-ink">
-                      {r.name}
-                    </p>
-                    <p className="mt-1 text-[11px] text-ink-subtle">
-                      {r.steps.length} steps
-                    </p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
+                  <Card
+                    omitInsetRing
+                    className={cn(
+                      "flex h-full min-h-[17.5rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
+                      routineHomeRoutineCardClass(r),
+                    )}
+                  >
+                    <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
+                      {previewUrl ? (
+                        <HomeRoutinePreviewMedia
+                          imageUrl={previewUrl}
+                          frameClassName="h-full w-full"
+                          sizes="(max-width: 512px) 45vw, 240px"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center px-2 text-center text-[11px] text-ink-faint">
+                          No preview
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-1 flex-col justify-end px-3 pb-3 pt-2">
+                      <p className="line-clamp-2 min-h-[2.5rem] text-[14px] font-semibold leading-snug text-ink">
+                        {r.name}
+                      </p>
+                      <p className="mt-1 text-[11px] text-ink-subtle">
+                        {r.steps.length} steps
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </section>
 

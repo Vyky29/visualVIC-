@@ -117,7 +117,7 @@ export function LibraryPageClient() {
               <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
                 {cat.replace("-", " ")}
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                 {items.map((v) => {
                   const selected = selectedSet.has(v.pickId);
                   const unopt = cardImageUnoptimized(v.imageUrl);
@@ -127,7 +127,7 @@ export function LibraryPageClient() {
                       type="button"
                       onClick={() => togglePick(v.pickId)}
                       className={cn(
-                        "overflow-hidden rounded-[1.35rem] border border-ink/5 bg-cream text-left shadow-card transition active:scale-[0.99]",
+                        "overflow-hidden rounded-xl border border-ink/5 bg-cream text-left shadow-card transition active:scale-[0.99] sm:rounded-2xl",
                         selected
                           ? "ring-2 ring-sage/50"
                           : "hover:shadow-soft",
@@ -139,23 +139,23 @@ export function LibraryPageClient() {
                           alt=""
                           fill
                           className="object-cover"
-                          sizes="(max-width: 512px) 50vw, 256px"
+                          sizes="(max-width: 512px) 23vw, 120px"
                           unoptimized={unopt}
                         />
                         {selected ? (
                           <div
-                            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-sage text-[15px] font-bold text-cream shadow-card ring-2 ring-white/90"
+                            className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-sage text-[12px] font-bold text-cream shadow-card ring-1 ring-white/90 sm:right-1.5 sm:top-1.5 sm:h-7 sm:w-7 sm:text-[13px]"
                             aria-hidden
                           >
                             ✓
                           </div>
                         ) : null}
                         {selected ? (
-                          <div className="pointer-events-none absolute inset-0 rounded-[1.35rem] ring-2 ring-inset ring-sage/70" />
+                          <div className="pointer-events-none absolute inset-0 rounded-xl ring-2 ring-inset ring-sage/70 sm:rounded-2xl" />
                         ) : null}
                       </div>
-                      <div className="px-3 py-3">
-                        <p className="text-[15px] font-semibold leading-snug text-ink">
+                      <div className="px-1.5 py-1.5 sm:px-2 sm:py-2">
+                        <p className="line-clamp-2 text-left text-[10px] font-semibold leading-tight text-ink sm:text-[11px]">
                           {v.label}
                         </p>
                       </div>

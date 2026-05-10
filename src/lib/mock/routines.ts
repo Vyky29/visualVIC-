@@ -39,8 +39,8 @@ export const mockRoutines: Routine[] = [
       "Modular demo — core cues plus dress layers (socks, shoes, jacket, cap)",
     tags: ["morning", "home", "self-care"],
     homePreviewImageUrl:
-      getDressRegistryCardBySlug("jacket-on")?.imageUrl ??
-      gettingDressUndressImageUrl("tshirt-on"),
+      getDressRegistryCardBySlug("trainers-on")?.imageUrl ??
+      coreImageUrl("walk"),
     steps: buildGettingReadyOutSteps(),
   },
   {
