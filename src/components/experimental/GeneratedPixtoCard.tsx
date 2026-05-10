@@ -31,7 +31,7 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
 /** Company mark — design px (corner glyph). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 176, h: 176 } as const;
 
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
@@ -81,6 +81,10 @@ export type GeneratedPixtoCardProps = {
   cardType?: string;
   /** e.g. Focus preview: `h-full w-full max-w-none` on design 744×1054 slot */
   className?: string;
+  /** Larger title / ribbon type when the shell is scaled down (Focus mode). */
+  focusPresentation?: boolean;
+  /** Hide neutral ink ring — parent supplies category ring (Schedule Player). */
+  suppressNeutralRing?: boolean;
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
@@ -93,6 +97,8 @@ export function GeneratedPixtoCard({
   iconUrl,
   cardType,
   className,
+  focusPresentation = false,
+  suppressNeutralRing = false,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
 
@@ -106,8 +112,8 @@ export function GeneratedPixtoCard({
       data-card-type={cardType ?? "default"}
       className={cn(
         "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
-        "bg-white shadow-card ring-1 ring-ink/[0.08]",
-        "touch-manipulation",
+        "bg-white shadow-card touch-manipulation",
+        suppressNeutralRing ? "ring-0" : "ring-1 ring-ink/[0.08]",
         className,
       )}
       style={{
@@ -122,7 +128,7 @@ export function GeneratedPixtoCard({
             width: markSize,
             height: markSize,
             borderRadius: "0.35rem",
-            transform: "translate(-5px, 5px)",
+            transform: "translate(-10px, 5px)",
           }}
           aria-hidden
         >
@@ -131,7 +137,7 @@ export function GeneratedPixtoCard({
             alt=""
             fill
             className="object-contain p-1"
-            sizes="88px"
+            sizes="176px"
             unoptimized={
               iconUrl.startsWith("/") ||
               iconUrl.includes("/cards/") ||
@@ -189,7 +195,11 @@ export function GeneratedPixtoCard({
         <h2
           className={cn(
             "line-clamp-3 w-full text-balance text-center font-semibold lowercase leading-tight tracking-tight text-ink",
-            isDense ? "text-[19px] sm:text-[21px]" : "text-[21px] sm:text-[24px]",
+            isDense
+              ? "text-[19px] sm:text-[21px]"
+              : focusPresentation
+                ? "text-[26px] sm:text-[30px]"
+                : "text-[21px] sm:text-[24px]",
           )}
         >
           {title}
@@ -205,7 +215,10 @@ export function GeneratedPixtoCard({
       >
         <span
           className={cn(
-            "line-clamp-2 text-center text-[14px] font-semibold lowercase leading-snug tracking-[0.08em] sm:text-[16px]",
+            "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
+            focusPresentation
+              ? "text-[17px] sm:text-[20px]"
+              : "text-[14px] sm:text-[16px]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",

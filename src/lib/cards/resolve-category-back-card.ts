@@ -10,12 +10,22 @@ import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undres
 
 const CORE_FALLBACK = coreBackCardUrl();
 
-export function resolveCategoryBackCardUrl(imageUrl?: string): string {
+export function resolveCategoryBackCardUrl(
+  imageUrl?: string,
+): string | undefined {
   if (!imageUrl) return CORE_FALLBACK;
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
     return CORE_FALLBACK;
   }
   const path = imageUrl.split("?")[0] ?? imageUrl;
+
+  /** HTML generated cards — no PNG flip back; avoids wrong core back + ring clipping. */
+  if (
+    path.includes("at%20the%20airport") ||
+    path.includes("at%20the%20hotel")
+  ) {
+    return undefined;
+  }
 
   if (path.includes("/cards/brushing-teeth/")) {
     return "/cards/brushing-teeth/backcard3.png";

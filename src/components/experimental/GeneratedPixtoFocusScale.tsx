@@ -34,21 +34,32 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
     return () => ro.disconnect();
   }, []);
 
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+
   return (
     <div
       ref={outerRef}
-      className="relative flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center px-2"
+      className="relative flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center"
     >
+      {/* Layout box = scaled footprint so flex centering matches the painted card (no 744px overflow). */}
       <div
-        className="mx-auto flex shrink-0 self-center will-change-transform"
+        className="relative mx-auto shrink-0 will-change-transform"
         style={{
-          width: GENERATED_PIXTO_CARD_SIZE.w,
-          height: GENERATED_PIXTO_CARD_SIZE.h,
-          transform: `scale(${scale})`,
-          transformOrigin: "center center",
+          width: slotW,
+          height: slotH,
         }}
       >
-        <div className="relative h-full min-h-0 w-full min-w-0">{children}</div>
+        <div
+          className="absolute left-0 top-0 origin-top-left"
+          style={{
+            width: GENERATED_PIXTO_CARD_SIZE.w,
+            height: GENERATED_PIXTO_CARD_SIZE.h,
+            transform: `scale(${scale})`,
+          }}
+        >
+          <div className="relative h-full min-h-0 w-full min-w-0">{children}</div>
+        </div>
       </div>
     </div>
   );

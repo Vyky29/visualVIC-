@@ -439,7 +439,8 @@ export function SwipeableStepCard({
                 : undefined
       }
       className={cn(
-        "relative touch-manipulation overflow-hidden rounded-[1.35rem] shadow-card transition-shadow duration-300 touch-pan-y",
+        "relative touch-manipulation rounded-[1.35rem] shadow-card transition-shadow duration-300 touch-pan-y",
+        hasGeneratedPixto ? "overflow-visible" : "overflow-hidden",
         variant === "focus" && "outline-none focus:outline-none",
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
@@ -475,6 +476,7 @@ export function SwipeableStepCard({
       <div
         className={cn(
           "relative w-full touch-manipulation",
+          hasGeneratedPixto && "overflow-hidden rounded-[1.35rem]",
           variant === "focus"
             ? focusPixto || focusGenerated
               ? "relative mx-auto h-full min-h-0 w-full max-w-full overflow-hidden bg-transparent"
@@ -543,6 +545,7 @@ export function SwipeableStepCard({
                       categoryColour={gp.categoryColour}
                       iconUrl={gp.iconUrl}
                       cardType={gp.cardType}
+                      suppressNeutralRing
                       className="h-full w-full max-w-none"
                     />
                   </div>
@@ -657,6 +660,8 @@ export function SwipeableStepCard({
                   categoryColour={gp.categoryColour}
                   iconUrl={gp.iconUrl}
                   cardType={gp.cardType}
+                  focusPresentation={variant === "focus"}
+                  suppressNeutralRing
                   className="h-full w-full max-w-none"
                 />
               </div>
