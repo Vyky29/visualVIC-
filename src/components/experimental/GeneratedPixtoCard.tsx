@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -93,6 +93,137 @@ export type GeneratedPixtoCardProps = {
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
 
+const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
+
+/**
+ * Schedule title lines at the large type size: at most three words per line;
+ * exactly four words → two lines of two (not 3+1).
+ */
+function splitTitleScheduleLines(raw: string): string[] {
+  const words = raw.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return raw.trim() ? [raw.trim()] : [];
+  if (words.length <= SCHEDULE_TITLE_MAX_WORDS_PER_LINE) {
+    return [words.join(" ")];
+  }
+  if (words.length === 4) {
+    return [`${words[0]} ${words[1]}`, `${words[2]} ${words[3]}`];
+  }
+  const lines: string[] = [];
+  let i = 0;
+  while (i < words.length) {
+    const take = Math.min(
+      SCHEDULE_TITLE_MAX_WORDS_PER_LINE,
+      words.length - i,
+    );
+    lines.push(words.slice(i, i + take).join(" "));
+    i += take;
+  }
+  return lines;
+}
+
+const titleTypography = (
+  isDense: boolean,
+  focusPresentation: boolean,
+  scheduleLargeType: boolean,
+) =>
+  cn(
+    "w-full text-center font-semibold lowercase tracking-tight text-ink hyphens-none break-words",
+    isDense
+      ? "text-[19px] sm:text-[21px] leading-snug"
+      : focusPresentation
+        ? "text-[36px] sm:text-[42px] leading-snug"
+        : scheduleLargeType
+          ? "text-[72px] sm:text-[84px] leading-[1.05]"
+          : "text-[36px] sm:text-[42px] leading-snug",
+  );
+
+function TitleBand({
+  title,
+  isDense,
+  focusPresentation,
+  scheduleLargeType,
+}: {
+  title: string;
+  isDense: boolean;
+  focusPresentation: boolean;
+  scheduleLargeType: boolean;
+}) {
+  const typo = titleTypography(
+    isDense,
+    focusPresentation,
+    scheduleLargeType,
+  );
+
+  const scheduleLines = useMemo(
+    () => splitTitleScheduleLines(title),
+    [title],
+  );
+
+  if (isDense || focusPresentation || !scheduleLargeType) {
+    return (
+      <div
+        className={cn(
+          "relative flex min-h-0 shrink-0 flex-col items-center justify-center overflow-hidden border-t border-ink/[0.06] bg-white px-4",
+          isDense ? "py-1" : "py-2",
+        )}
+      >
+        <h2 lang="en" className={cn("relative z-10 line-clamp-5", typo)}>
+          {title}
+        </h2>
+      </div>
+    );
+  }
+
+  const safeLines =
+    scheduleLines.length > 0 ? scheduleLines : title ? [title] : [""];
+  const n = Math.min(safeLines.length, 3);
+  const row0 = n >= 3 ? safeLines[0] : "";
+  const row1 =
+    n === 1 ? safeLines[0] : n === 2 ? safeLines[0] : n >= 3 ? safeLines[1] : "";
+  const row2 =
+    n === 1
+      ? ""
+      : n === 2
+        ? safeLines[1]
+        : n >= 3
+          ? safeLines.slice(2).join(" ")
+          : "";
+
+  return (
+    <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
+      <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
+        {n === 1 ? (
+          <div className="col-start-1 row-span-3 row-start-1 flex items-center justify-center text-center">
+            <span className={typo}>{safeLines[0]}</span>
+          </div>
+        ) : n === 2 ? (
+          <>
+            <div className="col-start-1 row-start-1" aria-hidden />
+            <div className="col-start-1 row-start-2 flex items-end justify-center pb-0.5 text-center">
+              <span className={typo}>{row1}</span>
+            </div>
+            <div className="col-start-1 row-start-3 flex items-start justify-center pt-0.5 text-center">
+              <span className={typo}>{row2}</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="col-start-1 row-start-1 flex items-end justify-center pb-0.5 text-center">
+              <span className={typo}>{row0}</span>
+            </div>
+            <div className="col-start-1 row-start-2 flex items-center justify-center text-center">
+              <span className={typo}>{row1}</span>
+            </div>
+            <div className="col-start-1 row-start-3 flex items-start justify-center pt-0.5 text-center">
+              <span className={typo}>{row2}</span>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function GeneratedPixtoCard({
   illustrationUrl,
   title,
@@ -148,7 +279,7 @@ export function GeneratedPixtoCard({
           style={{
             width: markSize,
             height: markSize,
-            transform: "translate(-28px, -4px)",
+            transform: "translate(-40px, -4px)",
           }}
           aria-hidden
         >
@@ -208,28 +339,12 @@ export function GeneratedPixtoCard({
         </div>
       </div>
 
-      <div
-        className={cn(
-          "flex min-h-0 shrink-0 flex-col items-center justify-center overflow-hidden border-t border-ink/[0.06] bg-white px-4",
-          isDense ? "py-1" : "py-2",
-        )}
-      >
-        <h2
-          lang="en"
-          className={cn(
-            "line-clamp-5 w-full text-center font-semibold lowercase leading-snug tracking-tight text-ink hyphens-none break-words",
-            isDense
-              ? "text-[19px] sm:text-[21px]"
-              : focusPresentation
-                ? /* Focus slot — keep readable without 3× (screen space). */
-                  "text-[36px] sm:text-[42px]"
-                : /* Schedule NOW/NEXT — 3× prior schedule sizes (was 24/28). */
-                  "text-[72px] sm:text-[84px] leading-[1.05]",
-          )}
-        >
-          {title}
-        </h2>
-      </div>
+      <TitleBand
+        title={title}
+        isDense={isDense}
+        focusPresentation={focusPresentation}
+        scheduleLargeType={scheduleLargeType}
+      />
 
       <div
         className="flex min-h-0 shrink-0 items-center justify-center overflow-hidden px-3"
@@ -245,8 +360,8 @@ export function GeneratedPixtoCard({
               ? "text-[26px] sm:text-[31px] tracking-[0.06em]"
               : isDense
                 ? "text-[14px] sm:text-[16px]"
-                : /* Schedule NOW/NEXT — 3× prior ribbon (was 17/20). */
-                  "text-[51px] sm:text-[60px] tracking-[0.04em]",
+                : /* Schedule NOW/NEXT — coloured category ribete. */
+                  "text-[58px] sm:text-[68px] tracking-[0.04em]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
