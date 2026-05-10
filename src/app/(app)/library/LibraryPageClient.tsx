@@ -157,9 +157,13 @@ export function LibraryPageClient() {
                           : "hover:shadow-soft",
                       )}
                     >
+                      {/*
+                        Slightly taller than square: more illustration above the ribete,
+                        less “chopped” art. Height still derives from column width.
+                      */}
                       <div
                         className={cn(
-                          "relative aspect-square w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
+                          "relative aspect-[5/6] w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
                           pixto ? "bg-white" : "bg-canvas-muted",
                         )}
                       >
@@ -174,7 +178,8 @@ export function LibraryPageClient() {
                             pixto
                               ? cn(
                                   pixtoBundledCardObjectPositionTopClass,
-                                  "!h-[132%] !max-h-none w-full",
+                                  /* Slightly less zoom than Home — more drawing, title strip still mostly out of frame */
+                                  "!h-[120%] !max-h-none w-full",
                                 )
                               : "object-center",
                           )}
@@ -194,11 +199,13 @@ export function LibraryPageClient() {
                       </div>
                       <div
                         className={cn(
-                          "isolate w-full shrink-0 rounded-b-xl px-1.5 py-1.5 sm:rounded-b-2xl sm:px-2 sm:py-2",
+                          "isolate flex w-full shrink-0 flex-col justify-center rounded-b-xl px-1.5 pb-2 pt-1.5 sm:rounded-b-2xl sm:px-2 sm:pb-2.5 sm:pt-2",
+                          /* Fixed band so every tile in the row lines up; room for 2 lines without clipping */
+                          "min-h-[3.35rem] sm:min-h-[3.5rem]",
                           libraryRibbonClassForPickId(v.pickId),
                         )}
                       >
-                        <p className="line-clamp-2 text-center text-[10px] font-semibold leading-tight sm:text-[11px]">
+                        <p className="line-clamp-2 text-balance text-center text-[10px] font-semibold leading-snug sm:text-[11px]">
                           {v.label}
                         </p>
                       </div>

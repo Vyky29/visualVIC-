@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -12,6 +13,7 @@ import {
 import type { RoutineStep } from "@/lib/types/routine";
 import {
   DEFAULT_ROUTINE_ACCENT_RINGS,
+  stepCardAccentRings,
   type RoutineAccentRings,
 } from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
@@ -37,7 +39,10 @@ type Props = {
   onDoubleTapOpenFocus?: () => void;
   /** Category back card shown during swipe-to-complete flip (Schedule hero). */
   completionBackImageUrl?: string;
-  /** Outline / ring colors aligned with routine category (Schedule + Focus). */
+  /**
+   * Fallback ring palette when the step `imageUrl` is not a known Pixto path
+   * (e.g. remote photo). Otherwise outlines follow **this step’s** card category.
+   */
   accentRings?: RoutineAccentRings;
 };
 
@@ -71,6 +76,10 @@ export function SwipeableStepCard({
   completionBackImageUrl,
   accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
 }: Props) {
+  const rings = useMemo(
+    () => stepCardAccentRings(step, accentRings),
+    [step.id, step.imageUrl, accentRings],
+  );
   const controls = useAnimation();
   const flipControls = useAnimation();
   const lastTouchTapRef = useRef<{ time: number; x: number; y: number } | null>(
@@ -310,7 +319,7 @@ export function SwipeableStepCard({
         className={cn(
           "flex items-center gap-3 rounded-2xl bg-cream/55 px-3 py-2.5 shadow-none",
           "opacity-[0.48] saturate-[0.28]",
-          accentRings.scheduleCompact,
+          rings.scheduleCompact,
         )}
       >
         <div className="relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
@@ -319,6 +328,7 @@ export function SwipeableStepCard({
               src={step.imageUrl}
               alt=""
               fill
+              unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
               className={cn(
                 "object-contain brightness-[0.92] grayscale",
                 compactPixto
@@ -406,22 +416,23 @@ export function SwipeableStepCard({
         ((variant === "hero" && isNow) || focusPixto) &&
           cn(
             "mx-auto max-w-full",
-            focusPixto ? accentRings.scheduleFocus : accentRings.scheduleNow,
+            focusPixto ? rings.scheduleFocus : rings.scheduleNow,
             focusPixto
               ? "h-full min-h-0 w-full"
-              : "w-[calc(96%-6px)]",
+              : /* ~10px wider than Next at cap — smaller than old 96% for more scroll room */
+                "w-[max(0px,min(100%,13.625rem)-4px)]",
           ),
         variant === "next" &&
           cn(
             "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
-            accentRings.scheduleNext,
+            rings.scheduleNext,
           ),
         variant === "focus" &&
           !focusPixto &&
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
             "overflow-hidden rounded-2xl sm:rounded-3xl",
-            accentRings.scheduleFocus,
+            rings.scheduleFocus,
           ),
         variant !== "hero" &&
           variant !== "next" &&
@@ -439,7 +450,7 @@ export function SwipeableStepCard({
               : "relative flex h-full min-h-0 w-full flex-1 flex-col min-w-0 overflow-hidden bg-transparent"
             : cn(
                 "relative w-full overflow-hidden bg-transparent",
-                /* Hero NOW: ~96% width −6px with matched height → 48/65. Next: min(100%,13rem)−4px at cap → 510/676. */
+                /* Hero NOW: cap 13.625rem −4px, aspect 48/65. Next: 13rem cap, 510/676 — Now slightly larger only. */
                 variant === "hero" && isNow
                   ? "aspect-[48/65]"
                   : variant === "next"
@@ -492,6 +503,7 @@ export function SwipeableStepCard({
                           src={step.imageUrl}
                           alt=""
                           fill
+                          unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
                           className={cn(
                             "object-cover transition-[filter] select-none",
                             pixtoBundledCardObjectPositionClass,
@@ -508,6 +520,7 @@ export function SwipeableStepCard({
                       src={step.imageUrl}
                       alt=""
                       fill
+                      unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
                       className={cn(
                         "object-cover transition-[filter] select-none",
                         "object-center",
@@ -539,6 +552,9 @@ export function SwipeableStepCard({
                           src={completionBackImageUrl}
                           alt=""
                           fill
+                          unoptimized={isPixtoLearnBundledCardUrl(
+                            completionBackImageUrl,
+                          )}
                           className={cn(
                             "object-cover select-none",
                             pixtoBundledCardObjectPositionClass,
@@ -553,6 +569,9 @@ export function SwipeableStepCard({
                       src={completionBackImageUrl}
                       alt=""
                       fill
+                      unoptimized={isPixtoLearnBundledCardUrl(
+                        completionBackImageUrl,
+                      )}
                       className={cn(
                         "object-cover select-none",
                         "object-center",
@@ -612,6 +631,7 @@ export function SwipeableStepCard({
                           src={step.imageUrl}
                           alt={variant === "focus" ? step.title : ""}
                           fill
+                          unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
                           className={cn(
                             "object-cover transition-[filter] select-none",
                             variant === "next"
@@ -641,6 +661,7 @@ export function SwipeableStepCard({
                     src={step.imageUrl}
                     alt={step.title}
                     fill
+                    unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
                     className={cn(
                       "object-cover transition-[filter] select-none",
                       "object-center",
@@ -657,6 +678,7 @@ export function SwipeableStepCard({
                   src={step.imageUrl}
                   alt=""
                   fill
+                  unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
                   className={cn(
                     "object-cover transition-[filter] select-none",
                     "object-center",

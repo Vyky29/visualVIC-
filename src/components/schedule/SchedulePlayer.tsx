@@ -9,7 +9,11 @@ import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-ca
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { Button } from "@/components/ui/Button";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
-import { routineAccentRings } from "@/lib/utils/routine-accent";
+import {
+  routineAccentRings,
+  routineSchedulePlayerChrome,
+} from "@/lib/utils/routine-accent";
+import { cn } from "@/lib/utils/cn";
 
 type Props = {
   routine: Routine;
@@ -19,6 +23,10 @@ type Props = {
 export function SchedulePlayer({ routine, backHref }: Props) {
   const router = useRouter();
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
+  const scheduleChrome = useMemo(
+    () => routineSchedulePlayerChrome(routine),
+    [routine],
+  );
   const {
     nowStep,
     finishedSteps,
@@ -51,7 +59,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
               {routine.name}
             </h2>
           </div>
-          <span className="rounded-full bg-sage-mist/90 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-sage/25">
+          <span className={scheduleChrome.counterPill}>
             {completedCount}/{totalSteps}
           </span>
         </div>
@@ -63,23 +71,29 @@ export function SchedulePlayer({ routine, backHref }: Props) {
           aria-valuemax={totalSteps}
         >
           <motion.div
-            className="h-full rounded-full bg-sage"
+            className={cn(
+              "h-full rounded-full",
+              scheduleChrome.progressFill,
+            )}
             initial={false}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
-        <p className="text-[13px] leading-relaxed text-ink-subtle">
-          Overview: what&apos;s done, what&apos;s{" "}
-          <strong className="font-medium text-ink">Now</strong>, and what comes
-          next. Use{" "}
-          <strong className="font-medium text-ink">Open Focus Mode</strong> or
-          double-tap the step picture — swipe the Now card right when a step is
-          finished.
-        </p>
       </header>
 
       <div className="flex flex-col gap-3">
+        {nowStep && !isComplete ? (
+          <Button
+            type="button"
+            variant="secondary"
+            className={cn(scheduleChrome.focusCta)}
+            onClick={openFocus}
+          >
+            Open Focus Mode
+          </Button>
+        ) : null}
+
         <div className="flex gap-2">
           <Button
             type="button"
@@ -99,17 +113,6 @@ export function SchedulePlayer({ routine, backHref }: Props) {
           </Button>
         </div>
 
-        {nowStep && !isComplete ? (
-          <Button
-            type="button"
-            variant="secondary"
-            className="min-h-touch w-full bg-gradient-to-b from-sage-mist to-sage-mist/70 text-[15px] font-semibold text-ink shadow-card ring-1 ring-sage/35 transition active:scale-[0.99]"
-            onClick={openFocus}
-          >
-            Open Focus Mode
-          </Button>
-        ) : null}
-
         {showFirstThen ? (
           <div className="flex justify-center px-1">
             <Link
@@ -128,13 +131,11 @@ export function SchedulePlayer({ routine, backHref }: Props) {
             initial={{ opacity: 0.92, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="relative space-y-3"
+            className="relative space-y-3 pt-1"
           >
             <div className="flex items-center gap-2 px-1">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-sage ring-2 ring-sage/35" />
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage">
-                Now
-              </h3>
+              <span className={scheduleChrome.nowDot} />
+              <h3 className={scheduleChrome.nowLabel}>Now</h3>
             </div>
             <SwipeableStepCard
               step={nowStep}
@@ -207,10 +208,6 @@ export function SchedulePlayer({ routine, backHref }: Props) {
                 {completedCount} done
               </span>
             </div>
-            <p className="px-1 text-[12px] leading-relaxed text-ink-faint">
-              These steps are finished — they stay on screen but fade back so the
-              path forward stays clear.
-            </p>
             <div className="flex flex-col gap-2.5">
               {finishedSteps.map((step) => (
                 <SwipeableStepCard

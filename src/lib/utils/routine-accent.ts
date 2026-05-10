@@ -1,4 +1,5 @@
-import type { Routine } from "@/lib/types/routine";
+import type { Routine, RoutineStep } from "@/lib/types/routine";
+import { GETTING_DRESS_ROUTINE_IDS } from "@/lib/cards/getting-dress-undress-registry";
 
 export type RoutineVisualTone =
   | "brushing"
@@ -159,6 +160,36 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
 };
 
+/**
+ * Category tone from a **single step** image URL — outlines on Now / Next / Focus / compact.
+ */
+export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
+  const u = step.imageUrl ?? "";
+  if (u.includes("/brushing-teeth/")) return "brushing";
+  if (u.includes("/shower/")) return "shower";
+  if (
+    u.includes("/cards/getting-dress") ||
+    u.includes("getting-dress-%26-undress") ||
+    u.includes("getting-dress-&-undress")
+  ) {
+    return "dress";
+  }
+  if (u.includes("/climbing/")) return "climbing";
+  if (u.includes("/cards/core/")) return "core";
+  if (u.includes("/cards/swimming/")) return "swimming";
+  return "default";
+}
+
+/** Ring palette for this step; uses URL category, else `fallback` (e.g. routine-level). */
+export function stepCardAccentRings(
+  step: RoutineStep,
+  fallback: RoutineAccentRings,
+): RoutineAccentRings {
+  const t = stepCardVisualTone(step);
+  if (t !== "default") return PALETTE[t];
+  return fallback;
+}
+
 function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
   let b = 0;
   let s = 0;
@@ -167,13 +198,13 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
   let co = 0;
   let sw = 0;
   for (const st of r.steps) {
-    const u = st.imageUrl ?? "";
-    if (u.includes("/brushing-teeth/")) b++;
-    else if (u.includes("/shower/")) s++;
-    else if (u.includes("/climbing/")) cl++;
-    else if (u.includes("getting-dress") || u.includes("undress")) d++;
-    else if (u.includes("/cards/core/")) co++;
-    else if (u.includes("/cards/swimming/")) sw++;
+    const t = stepCardVisualTone(st);
+    if (t === "brushing") b++;
+    else if (t === "shower") s++;
+    else if (t === "dress") d++;
+    else if (t === "climbing") cl++;
+    else if (t === "core") co++;
+    else if (t === "swimming") sw++;
   }
   const ranked: [RoutineVisualTone, number][] = [
     ["brushing", b],
@@ -201,12 +232,45 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
 }
 
 /**
- * Visual category for outlines / accents — from routine id, tags, or step image paths.
+ * Tone for **Home** and **Schedule Player index** tiles: catalog packs keep colour;
+ * everything else (`custom`) uses black rings to mark “not a single stock pack”.
  */
 export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (!isStockPackRoutine(r)) return "custom";
 
-  const id = r.id.toLowerCase();
+  const id = r.id.trim().toLowerCase();
+
+  if (id.includes("brush") || id.includes("teeth")) return "brushing";
+  if (id.includes("shower")) return "shower";
+  if (id.includes("swim")) return "swimming";
+  if (id.includes("climb")) return "climbing";
+  if (
+    id.includes("dress") ||
+    id.includes("undress") ||
+    id === "getting-dressed" ||
+    id === "getting-undressed"
+  ) {
+    return "dress";
+  }
+  if (id.includes("core")) return "core";
+
+  const fromSteps = dominantToneFromSteps(r);
+  if (fromSteps) return fromSteps;
+
+  return "default";
+}
+
+/**
+ * Tone while **playing** a routine (Now / Next / Focus / step cards): follows
+ * content (id hints + dominant step imagery), so e.g. `demo-climbing-preparation` is yellow climbing, not list black.
+ */
+export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
+  const id = r.id.trim().toLowerCase();
+
+  /** Stock dress packs — must win before `includes("swim")` / dominant mix (e.g. trunks, swimsuit slugs). */
+  if ((GETTING_DRESS_ROUTINE_IDS as readonly string[]).includes(id)) {
+    return "dress";
+  }
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -229,7 +293,106 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 }
 
 export function routineAccentRings(r: Routine): RoutineAccentRings {
-  return PALETTE[routineVisualTone(r)];
+  return PALETTE[routinePlaybackVisualTone(r)];
+}
+
+/** Schedule Player header chrome (progress, counter, Focus CTA, “Now” label). */
+export type RoutineSchedulePlayerChrome = {
+  focusCta: string;
+  progressFill: string;
+  counterPill: string;
+  nowDot: string;
+  nowLabel: string;
+};
+
+const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChrome> =
+  {
+    brushing: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-sage-mist to-sage-mist/70 text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#91C24C]/40 transition active:scale-[0.99]",
+      progressFill: "bg-[#91C24C]",
+      counterPill:
+        "rounded-full bg-sage-mist/90 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#91C24C]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#91C24C] ring-2 ring-[#91C24C]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6a8f3a]",
+    },
+    shower: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e8eef5] to-[#d6e3f0] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#143d66]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#143d66]",
+      counterPill:
+        "rounded-full bg-[#e8eef5]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#143d66]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#143d66] ring-2 ring-[#143d66]/30",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#143d66]",
+    },
+    climbing: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#faf6ea] to-[#f3ecd8] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#E9AE2E]/45 transition active:scale-[0.99]",
+      progressFill: "bg-[#E9AE2E]",
+      counterPill:
+        "rounded-full bg-[#faf6ea]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#E9AE2E]/40",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#E9AE2E] ring-2 ring-[#E9AE2E]/40",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9a7820]",
+    },
+    dress: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#f2edf8] to-[#e8e0f2] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#6B4E9E]/38 transition active:scale-[0.99]",
+      progressFill: "bg-[#6B4E9E]",
+      counterPill:
+        "rounded-full bg-[#f0ebf7]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#6B4E9E]/30",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#6B4E9E] ring-2 ring-[#6B4E9E]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#5c4488]",
+    },
+    core: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e9eef1] to-[#dce4ea] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#4a6572]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#4a6572]",
+      counterPill:
+        "rounded-full bg-[#e9eef1]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#4a6572]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#4a6572] ring-2 ring-[#4a6572]/30",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4a6572]",
+    },
+    swimming: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e8f4f7] to-[#d9ecf2] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#4a8fa8]/40 transition active:scale-[0.99]",
+      progressFill: "bg-[#4a8fa8]",
+      counterPill:
+        "rounded-full bg-[#e8f4f7]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#4a8fa8]/32",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#4a8fa8] ring-2 ring-[#4a8fa8]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3d7a8f]",
+    },
+    custom: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-canvas-muted to-canvas-muted/70 text-[15px] font-semibold text-ink shadow-card ring-1 ring-ink/22 transition active:scale-[0.99]",
+      progressFill: "bg-ink/75",
+      counterPill:
+        "rounded-full bg-canvas-muted/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-ink/15",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-ink/70 ring-2 ring-ink/20",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-subtle",
+    },
+    default: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-sage-mist to-sage-mist/70 text-[15px] font-semibold text-ink shadow-card ring-1 ring-sage/35 transition active:scale-[0.99]",
+      progressFill: "bg-sage",
+      counterPill:
+        "rounded-full bg-sage-mist/90 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-sage/25",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-sage ring-2 ring-sage/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-sage",
+    },
+  };
+
+export function routineSchedulePlayerChrome(
+  r: Routine,
+): RoutineSchedulePlayerChrome {
+  return SCHEDULE_PLAYER_CHROME[routinePlaybackVisualTone(r)];
 }
 
 /** Sage fallback when `SwipeableStepCard` is used outside a routine context. */
@@ -237,17 +400,16 @@ export const DEFAULT_ROUTINE_ACCENT_RINGS: RoutineAccentRings =
   PALETTE.default;
 
 /**
- * Schedule Player index (`/player`) and other list tiles:
- * catalog packs keep category color; modular demos / templates / custom use black (`custom`).
+ * Schedule Player index (`/player`) list tiles — uses {@link routineVisualTone} (black for non-catalog).
  */
 export function routineHomeRoutineCardClass(r: Routine): string {
-  const p = routineAccentRings(r);
+  const p = PALETTE[routineVisualTone(r)];
   return `${p.home} ${p.hoverGlow}`;
 }
 
 /** Dashboard Home “Routines” 2×2 grid — slimmer ring than {@link routineHomeRoutineCardClass}. */
 export function routineDashboardHomeGridTileClass(r: Routine): string {
-  const p = routineAccentRings(r);
+  const p = PALETTE[routineVisualTone(r)];
   return `${p.homeDashboard} ${p.hoverGlow}`;
 }
 
@@ -257,9 +419,9 @@ export function routineSchedulePlayerIndexCardClass(r: Routine): string {
 }
 
 /**
- * @deprecated Use {@link routineHomeRoutineCardClass} + {@link routineAccentRings} for schedule/focus.
- * Kept as alias for hover-only glow on tiles that already set their own ring.
+ * @deprecated Prefer {@link routineHomeRoutineCardClass} + {@link routineAccentRings}.
+ * Hover glow from {@link routinePlaybackVisualTone} for in-flow tiles.
  */
 export function routineTileHoverAccentClass(r: Routine): string {
-  return routineAccentRings(r).hoverGlow;
+  return PALETTE[routinePlaybackVisualTone(r)].hoverGlow;
 }
