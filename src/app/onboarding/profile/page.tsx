@@ -68,7 +68,7 @@ export default function ProfileOnboardingPage() {
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
-      <Header title="Profile" backHref="/menu" brandLockup />
+      <Header title="Profile" backHref="/menu" />
       <MobileScreen className="space-y-8 px-6 pb-14 pt-6">
         <div className="space-y-2 text-center">
           <p className="text-[22px] font-semibold text-ink">Child profile</p>

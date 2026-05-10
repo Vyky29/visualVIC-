@@ -51,7 +51,7 @@ const sections: {
 export default function MenuPage() {
   return (
     <div className="min-h-dvh bg-white">
-      <Header title="Menu" brandLockup />
+      <Header title="Menu" />
       <div className="space-y-8 px-4 pb-8 pt-2">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           Visual prototype — every link is navigable; no authentication or

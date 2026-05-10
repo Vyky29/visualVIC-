@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PixtoLearnLockup } from "@/components/brand/PixtoLearnLockup";
+import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import { cn } from "@/lib/utils/cn";
 
 type Props = {
   title: string;
-  /** Tri-icon + PixToLearn wordmark (To in brand amber). */
-  brandLockup?: boolean;
   backHref?: string;
   rightSlot?: ReactNode;
   className?: string;
@@ -16,7 +14,6 @@ type Props = {
 
 export function Header({
   title,
-  brandLockup,
   backHref,
   rightSlot,
   className,
@@ -39,20 +36,13 @@ export function Header({
       ) : (
         <span className="min-w-touch" />
       )}
-      <div className="flex min-w-0 flex-1 justify-center">
-        {brandLockup ? (
-          <>
-            <h1 className="sr-only">{title}</h1>
-            <PixtoLearnLockup
-              variant="header"
-              className="min-w-0 max-w-[min(17.5rem,calc(100vw-5.75rem))]"
-            />
-          </>
-        ) : (
-          <h1 className="truncate text-center text-[17px] font-semibold tracking-tight text-ink">
+      <div className="flex min-w-0 flex-1 justify-center px-1">
+        <div className="flex min-w-0 max-w-[min(100%,calc(100vw-5.75rem))] items-center justify-center gap-2.5">
+          <PixtoLearnIconMark />
+          <h1 className="min-w-0 truncate text-center text-[17px] font-semibold tracking-tight text-ink">
             {title}
           </h1>
-        )}
+        </div>
       </div>
       <div className="flex min-w-touch shrink-0 justify-end">{rightSlot}</div>
     </header>

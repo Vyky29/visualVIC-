@@ -100,8 +100,7 @@ export function LibraryPageClient() {
       )}
     >
       <Header
-        title="Visual library"
-        brandLockup
+        title="Library"
         rightSlot={
           <Button
             type="button"
