@@ -14,7 +14,7 @@ import {
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { cn } from "@/lib/utils/cn";
-import { routineHomeRoutineCardClass } from "@/lib/utils/routine-accent";
+import { routineDashboardHomeGridTileClass } from "@/lib/utils/routine-accent";
 
 /**
  * PixtoLearn assets carry a title strip in the PNG. We crop the bottom by letting
@@ -191,8 +191,8 @@ export default function DashboardPage() {
                   <Card
                     omitInsetRing
                     className={cn(
-                      "flex h-full min-h-[17.5rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
-                      routineHomeRoutineCardClass(r),
+                      "flex h-full min-h-[15.75rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
+                      routineDashboardHomeGridTileClass(r),
                     )}
                   >
                     <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
@@ -208,11 +208,11 @@ export default function DashboardPage() {
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-1 flex-col justify-end px-3 pb-3 pt-2">
-                      <p className="line-clamp-2 min-h-[2.5rem] text-[14px] font-semibold leading-snug text-ink">
+                    <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
+                      <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
                         {r.name}
                       </p>
-                      <p className="mt-1 text-[11px] text-ink-subtle">
+                      <p className="mt-0.5 text-[10px] text-ink-subtle">
                         {r.steps.length} steps
                       </p>
                     </div>

@@ -28,6 +28,8 @@ export function isStockPackRoutine(r: Routine): boolean {
 
 export type RoutineAccentRings = {
   home: string;
+  /** Dashboard Home “Routines” grid — same hues, thinner ring than `home`. */
+  homeDashboard: string;
   scheduleNow: string;
   scheduleNext: string;
   scheduleFocus: string;
@@ -38,6 +40,8 @@ export type RoutineAccentRings = {
 const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   brushing: {
     home: "ring-2 ring-[#91C24C]/90 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#91C24C]/90 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#91C24C]/85 shadow-[0_8px_32px_-12px_rgba(145,194,76,0.38)]",
     scheduleNext:
@@ -51,6 +55,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   shower: {
     home: "ring-2 ring-[#143d66]/92 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#143d66]/92 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#143d66]/88 shadow-[0_8px_32px_-12px_rgba(20,61,102,0.38)]",
     scheduleNext:
@@ -64,6 +70,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   climbing: {
     home: "ring-2 ring-[#E9AE2E]/95 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#E9AE2E]/95 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#E9AE2E]/88 shadow-[0_8px_32px_-12px_rgba(233,174,46,0.42)]",
     scheduleNext:
@@ -77,6 +85,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   dress: {
     home: "ring-2 ring-[#6B4E9E]/90 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#6B4E9E]/90 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#6B4E9E]/85 shadow-[0_8px_32px_-12px_rgba(107,78,158,0.35)]",
     scheduleNext:
@@ -90,6 +100,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   core: {
     home: "ring-2 ring-[#4a6572]/88 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#4a6572]/88 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#4a6572]/85 shadow-[0_8px_32px_-12px_rgba(74,101,114,0.32)]",
     scheduleNext:
@@ -103,6 +115,7 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   custom: {
     home: "ring-2 ring-ink ring-offset-2 ring-offset-canvas",
+    homeDashboard: "ring-1 ring-ink ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-ink/90 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.22)]",
     scheduleNext:
@@ -116,6 +129,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   swimming: {
     home: "ring-2 ring-[#4a8fa8]/88 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#4a8fa8]/88 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#4a8fa8]/85 shadow-[0_8px_32px_-12px_rgba(74,143,168,0.32)]",
     scheduleNext:
@@ -129,6 +144,8 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
   default: {
     home: "ring-2 ring-[#7d9b87]/75 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#7d9b87]/75 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-sage/80 shadow-[0_8px_32px_-12px_rgba(28,36,32,0.2)]",
     scheduleNext:
@@ -220,12 +237,18 @@ export const DEFAULT_ROUTINE_ACCENT_RINGS: RoutineAccentRings =
   PALETTE.default;
 
 /**
- * Home grid (`/dashboard`) and Schedule Player index (`/player`):
- * catalog packs keep category color; modular demos, templates, and custom saves use black (`custom`).
+ * Schedule Player index (`/player`) and other list tiles:
+ * catalog packs keep category color; modular demos / templates / custom use black (`custom`).
  */
 export function routineHomeRoutineCardClass(r: Routine): string {
   const p = routineAccentRings(r);
   return `${p.home} ${p.hoverGlow}`;
+}
+
+/** Dashboard Home “Routines” 2×2 grid — slimmer ring than {@link routineHomeRoutineCardClass}. */
+export function routineDashboardHomeGridTileClass(r: Routine): string {
+  const p = routineAccentRings(r);
+  return `${p.homeDashboard} ${p.hoverGlow}`;
 }
 
 /** Explicit alias for the vertical routine list on `/player` — same styling as {@link routineHomeRoutineCardClass}. */
