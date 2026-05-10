@@ -1,9 +1,21 @@
+/** Payload for HTML/CSS `GeneratedPixtoCard` inside Schedule / Focus. */
+export type GeneratedPixtoRoutineStepData = {
+  illustrationUrl: string;
+  title: string;
+  category: string;
+  categoryColour: string;
+  iconUrl?: string;
+  cardType?: string;
+};
+
 export type RoutineStep = {
   id: string;
   title: string;
   /** Placeholder image — V1 mock URLs or local paths */
   imageUrl?: string;
   durationHintSec?: number;
+  /** When set, `SwipeableStepCard` renders `GeneratedPixtoCard` instead of a flat PNG step. */
+  generatedPixto?: GeneratedPixtoRoutineStepData;
 };
 
 export type Routine = {

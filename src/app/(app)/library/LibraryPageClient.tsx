@@ -30,8 +30,8 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   core: "border-t border-accent/30 bg-accent-soft/40 text-ink",
   climb: "border-t border-[#d4a53a]/35 bg-[#faf6ea] text-ink",
   swim: "border-t border-[#4a8fa8]/30 bg-[#e8f3f6] text-ink",
-  airport: "border-t border-[#5a7d9a]/30 bg-[#e9eef5] text-ink",
-  hotel: "border-t border-[#a67c52]/30 bg-[#f7f0e8] text-ink",
+  airport: "border-t border-[#e0b030]/40 bg-[#F9DD9E]/95 text-ink",
+  hotel: "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink",
 };
 
 function libraryRibbonClassForPickId(pickId: string): string {

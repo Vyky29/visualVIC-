@@ -108,7 +108,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("airport", s.slug),
       label: s.title,
       imageUrl: atTheAirportImageUrl(s.slug),
-      category: "activity",
+      category: "home",
     });
   }
   for (const s of AT_THE_HOTEL_SEQUENCE) {
@@ -116,7 +116,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("hotel", s.slug),
       label: s.title,
       imageUrl: atTheHotelImageUrl(s.slug),
-      category: "activity",
+      category: "home",
     });
   }
   for (const card of GETTING_DRESS_REGISTRY) {

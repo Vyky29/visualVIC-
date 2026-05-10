@@ -44,11 +44,6 @@ const sections: {
         label: "Profile setup",
         hint: "Name & avatar preview",
       },
-      {
-        href: "/generated-card-demo",
-        label: "Generated Pixto card (demo)",
-        hint: "AI illustration shell · HTML/CSS only",
-      },
     ],
   },
 ];
