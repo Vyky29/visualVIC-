@@ -1,5 +1,6 @@
 import type { Routine } from "@/lib/types/routine";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 
 const unsplash = (photoPath: string) =>
   `https://images.unsplash.com/${photoPath}?w=720&q=75&auto=format&fit=crop`;
@@ -11,6 +12,7 @@ export const mockTemplates: Routine[] = [
     name: "First / Then — brushing",
     description: "Two-step clarity",
     tags: ["first-then"],
+    homePreviewImageUrl: brushingTeethImageUrl("put-toothpaste"),
     steps: [
       {
         id: "t1",
@@ -28,6 +30,8 @@ export const mockTemplates: Routine[] = [
     id: "tpl-morning-mini",
     name: "Mini morning",
     description: "Three gentle steps",
+    tags: ["morning"],
+    homePreviewImageUrl: unsplash("photo-1570172619643-d175fbde04da"),
     steps: [
       {
         id: "m1",
@@ -37,7 +41,7 @@ export const mockTemplates: Routine[] = [
       {
         id: "m2",
         title: "Get dressed",
-        imageUrl: unsplash("photo-1523381210438-271e8be1f52b"),
+        imageUrl: gettingDressUndressImageUrl("tshirt-on"),
       },
       {
         id: "m3",

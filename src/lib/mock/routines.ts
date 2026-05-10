@@ -6,6 +6,7 @@ import {
 import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
 import { CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
+import { SWIMMING_SEQUENCE, swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import {
   buildGettingDressedRoutineSteps,
@@ -110,30 +111,14 @@ export const mockRoutines: Routine[] = [
   {
     id: "swimming-routine",
     name: "Swimming Routine",
-    description: "Pool visit flow",
+    description: "PixtoLearn swimming visual cards — pool visit flow",
     tags: ["activity"],
-    steps: [
-      {
-        id: "sw1",
-        title: "Change into swimwear",
-        imageUrl: unsplash("photo-1530549387789-4c1017266635"),
-      },
-      {
-        id: "sw2",
-        title: "Quick rinse shower",
-        imageUrl: unsplash("photo-1576610618956-51f697615843"),
-      },
-      {
-        id: "sw3",
-        title: "Swim session",
-        imageUrl: unsplash("photo-1571902943202-507ec2618e8f"),
-      },
-      {
-        id: "sw4",
-        title: "Shower after pool",
-        imageUrl: unsplash("photo-1558618666-fcd25c85cd64"),
-      },
-    ],
+    homePreviewImageUrl: swimmingImageUrl("pool"),
+    steps: SWIMMING_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: swimmingImageUrl(s.slug),
+    })),
   },
 ];
 

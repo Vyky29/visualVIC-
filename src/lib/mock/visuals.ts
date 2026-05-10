@@ -3,6 +3,7 @@ import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
 import { coreImageUrl } from "@/lib/cards/core-cards";
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 
 const base = "https://images.unsplash.com";
@@ -48,7 +49,7 @@ export const mockVisualLibrary: VisualAsset[] = [
     id: "v-swim",
     label: "Swimming",
     category: "activity",
-    thumbnailUrl: `${base}/photo-1571902943202-507ec2618e8f?w=400&q=80`,
+    thumbnailUrl: swimmingImageUrl("pool"),
   },
   {
     id: "v-hands",

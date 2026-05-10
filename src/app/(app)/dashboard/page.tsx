@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
 import { mockRoutines } from "@/lib/mock/routines";
+import { mockTemplates } from "@/lib/mock/templates";
 import {
   isPixtoLearnBundledCardUrl,
   pixtoBundledCardObjectPositionTopClass,
@@ -78,6 +79,8 @@ function profileSubtitle(profile: {
 export default function DashboardPage() {
   const { profile } = useProfile();
   const primary = mockRoutines[0];
+  /** Same set as Schedule Player index — templates were missing from Home grid. */
+  const dashboardRoutines = [...mockRoutines, ...mockTemplates];
   const frameScale = profile?.avatarFrameScale ?? 1;
 
   return (
@@ -177,7 +180,7 @@ export default function DashboardPage() {
             Routines
           </h2>
           <div className="grid grid-cols-2 gap-3">
-            {mockRoutines.map((r) => (
+            {dashboardRoutines.map((r) => (
               <Link
                 key={r.id}
                 href={`/player/${r.id}`}
