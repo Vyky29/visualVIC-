@@ -7,6 +7,11 @@ const AT_HOTEL_DIR_SEG = encodeURIComponent("at the hotel");
 
 export const AT_THE_HOTEL_PUBLIC_DIR = `/cards/${AT_HOTEL_DIR_SEG}`;
 
+/** Category flip / completion back — `public/cards/at the hotel/backcard-hotel.png`. */
+export function atTheHotelBackCardUrl(): string {
+  return `${AT_THE_HOTEL_PUBLIC_DIR}/backcard-hotel.png`;
+}
+
 /** Every shipped hotel step PNG (exact casing for Linux hosts). */
 export const AT_THE_HOTEL_CARD_FILES = [
   "arrive-at-the-hotel.PNG",

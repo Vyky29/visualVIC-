@@ -27,10 +27,8 @@ import {
   PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
   PIXTO_FOCUS_CARD_REF_WIDTH_PX,
 } from "@/lib/constants/pixto-focus-card";
-import {
-  GeneratedPixtoCard,
-  GENERATED_PIXTO_CARD_SIZE,
-} from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoCard } from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
 
@@ -483,15 +481,11 @@ export function SwipeableStepCard({
               : "relative flex h-full min-h-0 w-full flex-1 flex-col min-w-0 overflow-hidden bg-transparent"
             : cn(
                 "relative w-full overflow-hidden bg-transparent",
-                /* Hero NOW: cap 13.625rem −4px, aspect 48/65. Next: 13rem cap, 510/676 — Now slightly larger only. */
+                /* Hero NOW / Next — same footprint as bundled PNG cards (incl. generated HTML cards). */
                 variant === "hero" && isNow
-                  ? hasGeneratedPixto
-                    ? "aspect-[744/1054]"
-                    : "aspect-[48/65]"
+                  ? "aspect-[48/65]"
                   : variant === "next"
-                    ? hasGeneratedPixto
-                      ? "aspect-[744/1054]"
-                      : "aspect-[510/676]"
+                    ? "aspect-[510/676]"
                     : "aspect-[10/13]",
               ),
         )}
@@ -500,15 +494,11 @@ export function SwipeableStepCard({
         onPointerUp={imageInteractive ? focusImagePointerUp : undefined}
         onPointerCancel={imageInteractive ? focusImagePointerCancel : undefined}
         style={
-          variant === "focus" && focusPixto
+          variant === "focus" && (focusPixto || focusGenerated)
             ? {
                 aspectRatio: `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`,
               }
-            : variant === "focus" && focusGenerated
-              ? {
-                  aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-                }
-              : undefined
+            : undefined
         }
       >
         {heroFlip ? (
@@ -534,20 +524,22 @@ export function SwipeableStepCard({
                 {gp ? (
                   <div
                     className={cn(
-                      "absolute inset-0 flex items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
-                    <GeneratedPixtoCard
-                      illustrationUrl={gp.illustrationUrl}
-                      title={gp.title}
-                      category={gp.category}
-                      categoryColour={gp.categoryColour}
-                      iconUrl={gp.iconUrl}
-                      cardType={gp.cardType}
-                      suppressNeutralRing
-                      className="h-full w-full max-w-none"
-                    />
+                    <GeneratedPixtoSlotScale>
+                      <GeneratedPixtoCard
+                        illustrationUrl={gp.illustrationUrl}
+                        title={gp.title}
+                        category={gp.category}
+                        categoryColour={gp.categoryColour}
+                        iconUrl={gp.iconUrl}
+                        cardType={gp.cardType}
+                        suppressNeutralRing
+                        className="h-full w-full max-w-none"
+                      />
+                    </GeneratedPixtoSlotScale>
                   </div>
                 ) : step.imageUrl ? (
                   stepPixtoBundled ? (
@@ -649,21 +641,23 @@ export function SwipeableStepCard({
             {scheduleGeneratedPixto && gp ? (
               <div
                 className={cn(
-                  "absolute inset-0 flex items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >
-                <GeneratedPixtoCard
-                  illustrationUrl={gp.illustrationUrl}
-                  title={gp.title}
-                  category={gp.category}
-                  categoryColour={gp.categoryColour}
-                  iconUrl={gp.iconUrl}
-                  cardType={gp.cardType}
-                  focusPresentation={variant === "focus"}
-                  suppressNeutralRing
-                  className="h-full w-full max-w-none"
-                />
+                <GeneratedPixtoSlotScale>
+                  <GeneratedPixtoCard
+                    illustrationUrl={gp.illustrationUrl}
+                    title={gp.title}
+                    category={gp.category}
+                    categoryColour={gp.categoryColour}
+                    iconUrl={gp.iconUrl}
+                    cardType={gp.cardType}
+                    focusPresentation={variant === "focus"}
+                    suppressNeutralRing
+                    className="h-full w-full max-w-none"
+                  />
+                </GeneratedPixtoSlotScale>
               </div>
             ) : variant === "focus" && !step.imageUrl ? (
               <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-cream/35">

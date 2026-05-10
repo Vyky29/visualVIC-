@@ -30,16 +30,16 @@ export const GENERATED_PIXTO_TOP_LAYOUT_H =
 export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
-/** Company mark — design px (corner glyph). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 166, h: 166 } as const;
+/** Company mark — design px (corner glyph, scales with card width). */
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 148, h: 148 } as const;
 
-/** Tinted halo from category colour (raster mark, no filled “logo box”). */
+/** Tinted halo from category colour (transparent PNG mark). */
 function categoryMarkGlowFilter(hex: string): string {
   const h = hex.trim();
   return [
     `drop-shadow(0 0 1px ${h})`,
-    `drop-shadow(0 0 3px ${h}99)`,
-    `drop-shadow(0 1px 2px ${h}66)`,
+    `drop-shadow(0 0 4px ${h}aa)`,
+    `drop-shadow(0 1px 3px ${h}88)`,
   ].join(" ");
 }
 
@@ -146,12 +146,13 @@ export function GeneratedPixtoCard({
             alt=""
             fill
             className="object-contain p-0"
-            sizes="166px"
+            sizes="148px"
             style={{ filter: categoryMarkGlowFilter(categoryColour) }}
             unoptimized={
               iconUrl.startsWith("/") ||
               iconUrl.includes("/cards/") ||
-              /\.jpe?g$/i.test(iconUrl)
+              /\.jpe?g$/i.test(iconUrl) ||
+              /\.png$/i.test(iconUrl)
             }
           />
         </div>

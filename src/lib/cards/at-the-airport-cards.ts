@@ -7,6 +7,11 @@ const AT_AIRPORT_DIR_SEG = encodeURIComponent("at the airport");
 
 export const AT_THE_AIRPORT_PUBLIC_DIR = `/cards/${AT_AIRPORT_DIR_SEG}`;
 
+/** Category flip / completion back — `public/cards/at the airport/backcard-airport.png`. */
+export function atTheAirportBackCardUrl(): string {
+  return `${AT_THE_AIRPORT_PUBLIC_DIR}/backcard-airport.png`;
+}
+
 /** Every shipped airport step PNG (exact casing for Linux hosts). */
 export const AT_THE_AIRPORT_CARD_FILES = [
   "board-the-plane.PNG",

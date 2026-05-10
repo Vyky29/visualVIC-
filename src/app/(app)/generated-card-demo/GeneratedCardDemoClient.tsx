@@ -6,6 +6,7 @@ import { Header } from "@/components/navigation/Header";
 import { Button } from "@/components/ui/Button";
 import { GeneratedPixtoCard } from "@/components/experimental/GeneratedPixtoCard";
 import { GeneratedPixtoFocusScale } from "@/components/experimental/GeneratedPixtoFocusScale";
+import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
   GENERATED_PIXTO_DEMO_ROUTINE_STEPS,
@@ -273,10 +274,12 @@ export function GeneratedCardDemoClient() {
 
             <div className="flex min-h-0 flex-1 flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <GeneratedPixtoFocusScale>
-                <GeneratedPixtoCard
-                  {...active}
-                  className="h-full w-full max-w-none rounded-[1.35rem]"
-                />
+                <GeneratedPixtoSlotScale>
+                  <GeneratedPixtoCard
+                    {...active}
+                    className="h-full w-full max-w-none rounded-[1.35rem]"
+                  />
+                </GeneratedPixtoSlotScale>
               </GeneratedPixtoFocusScale>
             </div>
 

@@ -7,6 +7,8 @@ import { climbingBackCardUrl } from "@/lib/cards/climbing-cards";
 import { coreBackCardUrl } from "@/lib/cards/core-cards";
 import { showerBackCardUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undress-cards";
+import { atTheAirportBackCardUrl } from "@/lib/cards/at-the-airport-cards";
+import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
 
 const CORE_FALLBACK = coreBackCardUrl();
 
@@ -19,12 +21,11 @@ export function resolveCategoryBackCardUrl(
   }
   const path = imageUrl.split("?")[0] ?? imageUrl;
 
-  /** HTML generated cards — no PNG flip back; avoids wrong core back + ring clipping. */
-  if (
-    path.includes("at%20the%20airport") ||
-    path.includes("at%20the%20hotel")
-  ) {
-    return undefined;
+  if (path.includes("at%20the%20airport")) {
+    return atTheAirportBackCardUrl();
+  }
+  if (path.includes("at%20the%20hotel")) {
+    return atTheHotelBackCardUrl();
   }
 
   if (path.includes("/cards/brushing-teeth/")) {

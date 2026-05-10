@@ -1,8 +1,16 @@
 import type { GeneratedPixtoCardProps } from "@/components/experimental/GeneratedPixtoCard";
 import type { RoutineStep } from "@/lib/types/routine";
+import {
+  AT_THE_AIRPORT_SEQUENCE,
+  atTheAirportImageUrl,
+} from "@/lib/cards/at-the-airport-cards";
+import {
+  AT_THE_HOTEL_SEQUENCE,
+  atTheHotelImageUrl,
+} from "@/lib/cards/at-the-hotel-cards";
 
-/** Black 1×1 mark (`public/brand/logo1x1.JPEG`). */
-export const GENERATED_PIXTO_DEMO_LOGO_URL = "/brand/logo1x1.JPEG";
+/** Transparent mark — `public/brand/logo1x1.png`. */
+export const GENERATED_PIXTO_DEMO_LOGO_URL = "/brand/logo1x1.png";
 
 /** Airport category accent — ribbon + schedule chrome. */
 export const GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR = "#F9DD9E" as const;
@@ -10,76 +18,29 @@ export const GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR = "#F9DD9E" as const;
 /** Hotel category accent — ribbon + schedule chrome. */
 export const GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR = "#8C1E2E" as const;
 
-const AIR = "/cards/at%20the%20airport";
-const HOT = "/cards/at%20the%20hotel";
-
 function lc(s: string): string {
   return s.toLowerCase();
 }
 
-/** Airport-only generated card props (retouched illustration PNGs). */
-export const AIRPORT_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] = [
-  {
-    illustrationUrl: `${AIR}/checkin-at-the-ariline-counter.PNG`,
-    title: lc("Check in at the airline counter"),
+/** Every airport step PNG (order from {@link AT_THE_AIRPORT_SEQUENCE}). */
+export const AIRPORT_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  AT_THE_AIRPORT_SEQUENCE.map((s) => ({
+    illustrationUrl: atTheAirportImageUrl(s.slug),
+    title: lc(s.title),
     category: lc("At the airport"),
     categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
     iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${AIR}/go-through-security.PNG`,
-    title: lc("Go through security"),
-    category: lc("At the airport"),
-    categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${AIR}/find-your-gate.PNG`,
-    title: lc("Find your gate"),
-    category: lc("At the airport"),
-    categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${AIR}/fasten-your-seatbelt.PNG`,
-    title: lc("Fasten your seatbelt"),
-    category: lc("At the airport"),
-    categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${AIR}/flying-time.PNG`,
-    title: lc("Flying time"),
-    category: lc("At the airport"),
-    categoryColour: GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-];
+  }));
 
-/** Hotel-only generated card props. */
-export const HOTEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] = [
-  {
-    illustrationUrl: `${HOT}/arrive-at-the-hotel.PNG`,
-    title: lc("Arrive at the hotel"),
+/** Every hotel step PNG (order from {@link AT_THE_HOTEL_SEQUENCE}). */
+export const HOTEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  AT_THE_HOTEL_SEQUENCE.map((s) => ({
+    illustrationUrl: atTheHotelImageUrl(s.slug),
+    title: lc(s.title),
     category: lc("At the hotel"),
     categoryColour: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
     iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${HOT}/check-in-at-front-desk.PNG`,
-    title: lc("Check in at the front desk"),
-    category: lc("At the hotel"),
-    categoryColour: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-  {
-    illustrationUrl: `${HOT}/enter-your-room.PNG`,
-    title: lc("Enter your room"),
-    category: lc("At the hotel"),
-    categoryColour: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-    iconUrl: GENERATED_PIXTO_DEMO_LOGO_URL,
-  },
-];
+  }));
 
 /** Full demo sequence (airport → hotel) for `/generated-card-demo` only. */
 export const GENERATED_PIXTO_DEMO_ROUTINE_STEPS: GeneratedPixtoCardProps[] = [
