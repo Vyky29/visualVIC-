@@ -23,7 +23,7 @@ export function Header({
   return (
     <header
       className={cn(
-        "sticky top-0 z-10 flex min-h-[52px] items-center gap-3 border-b border-ink/5 bg-canvas/90 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md",
+        "sticky top-0 z-10 flex min-h-[52px] items-center gap-3 overflow-hidden border-b border-ink/5 bg-canvas/90 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md",
         className,
       )}
     >
@@ -42,16 +42,20 @@ export function Header({
         {logoSrc ? (
           <>
             <h1 className="sr-only">{title}</h1>
-            {/* Native img: avoids next/image optimizer edge cases on some hosts/CDNs */}
-            <img
-              src={logoSrc}
-              alt=""
-              width={176}
-              height={36}
-              className="h-9 w-auto max-w-[min(100%,11rem)] object-contain object-center"
-              decoding="async"
-              fetchPriority="high"
-            />
+            {/*
+              Wide PNG + h-* w-auto can compute a huge intrinsic width and overflow
+              the header, covering the whole app and stealing all pointer events.
+            */}
+            <div className="flex h-9 max-w-[min(11rem,calc(100vw-5.5rem))] shrink-0 items-center justify-center overflow-hidden">
+              <img
+                src={logoSrc}
+                alt=""
+                width={176}
+                height={36}
+                className="max-h-full max-w-full object-contain object-center"
+                decoding="async"
+              />
+            </div>
           </>
         ) : (
           <h1 className="truncate text-center text-[17px] font-semibold tracking-tight text-ink">
