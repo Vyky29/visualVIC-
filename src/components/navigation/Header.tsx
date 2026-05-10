@@ -37,9 +37,9 @@ export function Header({
         <span className="min-w-touch" />
       )}
       <div className="flex min-w-0 flex-1 justify-center px-1">
-        <div className="flex min-w-0 max-w-[min(100%,calc(100vw-5.75rem))] items-center justify-center gap-2.5">
-          <PixtoLearnIconMark />
-          <h1 className="min-w-0 truncate text-center text-[17px] font-semibold tracking-tight text-ink">
+        <div className="flex min-w-0 max-w-[min(100%,calc(100vw-6.25rem))] items-center justify-center gap-3">
+          <PixtoLearnIconMark className="h-10 w-10 p-1.5 sm:h-11 sm:w-11 sm:p-2" />
+          <h1 className="min-w-0 truncate text-center text-[19px] font-semibold tracking-tight text-ink sm:text-[20px]">
             {title}
           </h1>
         </div>

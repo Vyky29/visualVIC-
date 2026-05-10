@@ -178,44 +178,48 @@ function TitleBand({
     scheduleLines.length > 0 ? scheduleLines : title ? [title] : [""];
   const n = Math.min(safeLines.length, 3);
   const row0 = n >= 3 ? safeLines[0] : "";
-  const row1 =
-    n === 1 ? safeLines[0] : n === 2 ? safeLines[0] : n >= 3 ? safeLines[1] : "";
-  const row2 =
-    n === 1
-      ? ""
-      : n === 2
-        ? safeLines[1]
-        : n >= 3
-          ? safeLines.slice(2).join(" ")
-          : "";
+  const row1Two = n === 2 ? safeLines[0] : n >= 3 ? safeLines[1] : "";
+  const row2Two = n === 2 ? safeLines[1] : "";
+  const row2Three =
+    n >= 3 ? safeLines.slice(2).join(" ") : "";
 
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
+      {/*
+        White title band = 3 equal rows (grid-rows-3).
+        1 line → row 2 only (centre band).
+        2 lines → row 2 + row 3, second line flush toward the coloured ribete.
+        3 lines → one line per row, full vertical thirds.
+      */}
       <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
         {n === 1 ? (
-          <div className="col-start-1 row-span-3 row-start-1 flex items-center justify-center text-center">
-            <span className={typo}>{safeLines[0]}</span>
-          </div>
+          <>
+            <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+            <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center px-0.5 text-center">
+              <span className={typo}>{safeLines[0]}</span>
+            </div>
+            <div className="col-start-1 row-start-3 min-h-0" aria-hidden />
+          </>
         ) : n === 2 ? (
           <>
-            <div className="col-start-1 row-start-1" aria-hidden />
-            <div className="col-start-1 row-start-2 flex items-end justify-center pb-0.5 text-center">
-              <span className={typo}>{row1}</span>
+            <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+            <div className="col-start-1 row-start-2 flex min-h-0 items-end justify-center px-0.5 pb-0.5 text-center">
+              <span className={typo}>{row1Two}</span>
             </div>
-            <div className="col-start-1 row-start-3 flex items-start justify-center pt-0.5 text-center">
-              <span className={typo}>{row2}</span>
+            <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center px-0.5 pb-0 text-center">
+              <span className={typo}>{row2Two}</span>
             </div>
           </>
         ) : (
           <>
-            <div className="col-start-1 row-start-1 flex items-end justify-center pb-0.5 text-center">
+            <div className="col-start-1 row-start-1 flex min-h-0 items-end justify-center px-0.5 pb-0.5 text-center">
               <span className={typo}>{row0}</span>
             </div>
-            <div className="col-start-1 row-start-2 flex items-center justify-center text-center">
-              <span className={typo}>{row1}</span>
+            <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center px-0.5 text-center">
+              <span className={typo}>{row1Two}</span>
             </div>
-            <div className="col-start-1 row-start-3 flex items-start justify-center pt-0.5 text-center">
-              <span className={typo}>{row2}</span>
+            <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center px-0.5 pb-0 text-center">
+              <span className={typo}>{row2Three}</span>
             </div>
           </>
         )}

@@ -1,22 +1,19 @@
 "use client";
 
+/**
+ * Library UX is designed for phone + iPad (touch). Hover “peek” on accordion
+ * rows only applies when the device reports fine pointer + hover (e.g. desktop).
+ */
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
+import {
+  LibraryPackGlyph,
+  libraryPackGlyphColorClass,
+} from "@/components/library/LibraryPackGlyph";
 import { Header } from "@/components/navigation/Header";
 import { Button } from "@/components/ui/Button";
-import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
-import { climbingImageUrl } from "@/lib/cards/climbing-cards";
-import { coreImageUrl } from "@/lib/cards/core-cards";
-import {
-  atTheAirportPackMarkUrl,
-} from "@/lib/cards/at-the-airport-cards";
-import {
-  atTheHotelPackMarkUrl,
-} from "@/lib/cards/at-the-hotel-cards";
-import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
-import { showerImageUrl } from "@/lib/cards/shower-cards";
-import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
@@ -27,6 +24,7 @@ import {
   type PickableLibraryCard,
   type PickablePackId,
 } from "@/lib/library/pickable-library-cards";
+import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -53,18 +51,6 @@ const PACK_LABEL: Record<PickablePackId, string> = {
   hotel: "At the hotel",
   climb: "Climbing",
   swim: "Swimming",
-};
-
-/** Small header icon per pack (only accent differs from uniform header chrome). */
-const PACK_HEADER_ICON: Record<PickablePackId, string> = {
-  bt: brushingTeethImageUrl("toothbrush"),
-  shower: showerImageUrl("shower"),
-  dress: GETTING_DRESS_REGISTRY[0]?.imageUrl ?? "",
-  core: coreImageUrl("wash-hands"),
-  airport: atTheAirportPackMarkUrl(),
-  hotel: atTheHotelPackMarkUrl(),
-  climb: climbingImageUrl("climbing-wall"),
-  swim: swimmingImageUrl("changing-room"),
 };
 
 /** Ring tint around the pack icon — sole colour cue per category. */
@@ -196,24 +182,36 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
 
 export function LibraryPageClient() {
   const router = useRouter();
+  const prefersFineHover = usePrefersFineHover();
   const [orderedPickIds, setOrderedPickIds] = useState<string[]>([]);
-  const [hoverAccordionKey, setHoverAccordionKey] = useState<string | null>(
-    null,
-  );
-  const [pinnedAccordionKeys, setPinnedAccordionKeys] = useState<Set<string>>(
+  /** Pinned open (touch + desktop) until corner closes. */
+  const [openAccordionKeys, setOpenAccordionKeys] = useState<Set<string>>(
     () => new Set(),
   );
+  /** Desktop / fine-pointer only: peek while pointer is over the row. */
+  const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
 
   const grouped = useMemo(() => groupByCategoryAndPack(), []);
 
   const isAccordionOpen = useCallback(
     (key: string) =>
-      hoverAccordionKey === key || pinnedAccordionKeys.has(key),
-    [hoverAccordionKey, pinnedAccordionKeys],
+      openAccordionKeys.has(key) ||
+      (prefersFineHover && hoverPeekKey === key),
+    [openAccordionKeys, prefersFineHover, hoverPeekKey],
   );
 
-  const toggleAccordionPin = useCallback((key: string) => {
-    setPinnedAccordionKeys((prev) => {
+  const openAccordion = useCallback((key: string) => {
+    setOpenAccordionKeys((prev) => {
+      if (prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.add(key);
+      return next;
+    });
+  }, []);
+
+  const toggleAccordionCorner = useCallback((key: string) => {
+    setHoverPeekKey(null);
+    setOpenAccordionKeys((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -276,26 +274,27 @@ export function LibraryPageClient() {
           "pb-[calc(11rem+env(safe-area-inset-bottom))]",
       )}
     >
-      <Header
-        title="Library"
-        rightSlot={
-          <Button
-            type="button"
-            variant="secondary"
-            className="!min-h-10 shrink-0 !px-3 !py-2 text-[13px]"
-            onClick={() => router.push("/library/routine-new")}
-          >
-            New routine
-          </Button>
-        }
-      />
+      <Header title="Library" />
       <div className="space-y-8 px-4 pb-10 pt-3">
-        <p className="px-1 text-[15px] leading-relaxed text-ink-subtle">
-          Tap cards to select them in order (like photos). Hover a routine row to
-          peek its cards; tap the row to keep it open. Use{" "}
-          <span className="font-semibold text-ink">New routine</span> (top right)
-          to name and save without picking here first.
-        </p>
+        <div className="space-y-4">
+          <p className="px-1 text-center text-[15px] leading-relaxed text-ink-subtle">
+            Tap cards to select them in order (like photos). Tap a routine row to
+            open it; it stays open until you tap the{" "}
+            <span className="font-semibold text-ink">chevron on the right</span>.
+            Use <span className="font-semibold text-ink">New routine</span> below
+            to name and save without picking cards here first.
+          </p>
+          <div className="flex justify-center px-1">
+            <Button
+              type="button"
+              variant="secondary"
+              className="!min-h-11 w-full max-w-sm !px-4 !py-2.5 text-[14px] sm:text-[15px]"
+              onClick={() => router.push("/library/routine-new")}
+            >
+              New routine
+            </Button>
+          </div>
+        </div>
 
         {groups.map((cat) => {
           const inner = grouped.get(cat);
@@ -314,49 +313,58 @@ export function LibraryPageClient() {
                   if (cards.length === 0) return null;
                   const accordionKey = `${cat}::${pack}`;
                   const open = isAccordionOpen(accordionKey);
-                  const iconSrc = PACK_HEADER_ICON[pack];
                   const ringClass = libraryPackIconRingClass[pack];
-                  const iconUnopt = cardImageUnoptimized(iconSrc);
+                  const count = cards.length;
 
                   return (
                     <div
                       key={accordionKey}
                       className="overflow-hidden rounded-2xl border border-ink/8 bg-cream/40"
-                      onMouseEnter={() => setHoverAccordionKey(accordionKey)}
-                      onMouseLeave={() => setHoverAccordionKey(null)}
+                      onMouseEnter={() => {
+                        if (prefersFineHover) setHoverPeekKey(accordionKey);
+                      }}
+                      onMouseLeave={() => {
+                        if (prefersFineHover) setHoverPeekKey(null);
+                      }}
                     >
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordionPin(accordionKey)}
-                        className="flex h-[52px] w-full items-center gap-3 border-b border-ink/6 bg-canvas-muted px-3 py-2 text-left transition hover:bg-canvas-muted/90 sm:h-14 sm:px-4"
-                      >
-                        <span
-                          className={cn(
-                            "flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-11 sm:w-11",
-                            ringClass,
-                          )}
+                      <div className="flex h-[52px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-14">
+                        <button
+                          type="button"
+                          onClick={() => openAccordion(accordionKey)}
+                          className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2 text-left transition hover:bg-canvas-muted/90 sm:px-4"
                         >
-                          {iconSrc ? (
-                            <Image
-                              src={iconSrc}
-                              alt=""
-                              width={40}
-                              height={40}
-                              unoptimized={iconUnopt}
-                              className="h-8 w-8 object-contain sm:h-9 sm:w-9"
+                          <span
+                            className={cn(
+                              "flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-11 sm:w-11",
+                              ringClass,
+                            )}
+                          >
+                            <LibraryPackGlyph
+                              pack={pack}
+                              className={libraryPackGlyphColorClass[pack]}
                             />
-                          ) : null}
-                        </span>
-                        <span className="min-w-0 flex-1 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
-                          {PACK_LABEL[pack]}
-                        </span>
-                        <span
-                          className="shrink-0 text-[12px] text-ink-subtle"
-                          aria-hidden
+                          </span>
+                          <span className="flex min-w-0 flex-1 items-baseline gap-2">
+                            <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
+                              {PACK_LABEL[pack]}
+                            </span>
+                            <span
+                              className="shrink-0 text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
+                              aria-label={`${count} cards`}
+                            >
+                              {count}
+                            </span>
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => toggleAccordionCorner(accordionKey)}
+                          className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
+                          aria-label={open ? "Close" : "Open"}
                         >
-                          {open ? "▾" : "▸"}
-                        </span>
-                      </button>
+                          <span aria-hidden>{open ? "▾" : "▸"}</span>
+                        </button>
+                      </div>
                       <div
                         className={cn(
                           "grid transition-[grid-template-rows] duration-300 ease-out",
