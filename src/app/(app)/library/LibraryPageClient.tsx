@@ -11,8 +11,19 @@ import {
   writeLibrarySelectionDraft,
 } from "@/lib/library/library-selection-draft";
 import { cn } from "@/lib/utils/cn";
+import {
+  isPixtoLearnBundledCardUrl,
+  pixtoBundledCardObjectPositionTopClass,
+} from "@/lib/utils/visual-card-url";
 
 const groups = ["self-care", "home", "activity"] as const;
+
+/** Soft footer tint per library section (matches pack hues loosely). */
+const libraryCategoryRibbonClass: Record<(typeof groups)[number], string> = {
+  "self-care": "border-t border-sage/20 bg-sage-mist/90 text-ink",
+  home: "border-t border-accent/25 bg-accent-soft/30 text-ink",
+  activity: "border-t border-[#c9a84a]/25 bg-[#faf6ea] text-ink",
+};
 
 function cardImageUnoptimized(src: string): boolean {
   return src.startsWith("/cards/") || src.includes("/cards/");
@@ -121,6 +132,7 @@ export function LibraryPageClient() {
                 {items.map((v) => {
                   const selected = selectedSet.has(v.pickId);
                   const unopt = cardImageUnoptimized(v.imageUrl);
+                  const pixto = isPixtoLearnBundledCardUrl(v.imageUrl);
                   return (
                     <button
                       key={v.pickId}
@@ -133,14 +145,28 @@ export function LibraryPageClient() {
                           : "hover:shadow-soft",
                       )}
                     >
-                      <div className="relative aspect-square bg-canvas-muted">
+                      <div
+                        className={cn(
+                          "relative aspect-square overflow-hidden",
+                          pixto ? "bg-white" : "bg-canvas-muted",
+                        )}
+                      >
                         <Image
                           src={v.imageUrl}
                           alt=""
                           fill
-                          className="object-cover"
                           sizes="(max-width: 512px) 23vw, 120px"
                           unoptimized={unopt}
+                          className={cn(
+                            "object-cover",
+                            pixto
+                              ? cn(
+                                  pixtoBundledCardObjectPositionTopClass,
+                                  "!h-[132%] !max-h-none w-full",
+                                )
+                              : "object-center",
+                          )}
+                          style={pixto ? { top: 0, bottom: "auto" } : undefined}
                         />
                         {selected ? (
                           <div
@@ -154,8 +180,13 @@ export function LibraryPageClient() {
                           <div className="pointer-events-none absolute inset-0 rounded-xl ring-2 ring-inset ring-sage/70 sm:rounded-2xl" />
                         ) : null}
                       </div>
-                      <div className="px-1.5 py-1.5 sm:px-2 sm:py-2">
-                        <p className="line-clamp-2 text-left text-[10px] font-semibold leading-tight text-ink sm:text-[11px]">
+                      <div
+                        className={cn(
+                          "px-1.5 py-1.5 sm:px-2 sm:py-2",
+                          libraryCategoryRibbonClass[cat],
+                        )}
+                      >
+                        <p className="line-clamp-2 text-left text-[10px] font-semibold leading-tight sm:text-[11px]">
                           {v.label}
                         </p>
                       </div>
