@@ -1,17 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
 type Props = {
   title: string;
+  /** Centered brand image instead of title (title kept for screen readers). */
+  logoSrc?: string;
   backHref?: string;
   rightSlot?: ReactNode;
   className?: string;
 };
 
-export function Header({ title, backHref, rightSlot, className }: Props) {
+export function Header({
+  title,
+  logoSrc,
+  backHref,
+  rightSlot,
+  className,
+}: Props) {
   return (
     <header
       className={cn(
@@ -30,10 +39,28 @@ export function Header({ title, backHref, rightSlot, className }: Props) {
       ) : (
         <span className="min-w-touch" />
       )}
-      <h1 className="flex-1 truncate text-center text-[17px] font-semibold tracking-tight text-ink">
-        {title}
-      </h1>
-      <div className="flex min-w-touch justify-end">{rightSlot}</div>
+      <div className="flex min-w-0 flex-1 justify-center">
+        {logoSrc ? (
+          <>
+            <h1 className="sr-only">{title}</h1>
+            <div className="relative h-9 w-44 max-w-[min(100%,11rem)] shrink-0">
+              <Image
+                src={logoSrc}
+                alt=""
+                fill
+                className="object-contain object-center"
+                priority
+                sizes="176px"
+              />
+            </div>
+          </>
+        ) : (
+          <h1 className="truncate text-center text-[17px] font-semibold tracking-tight text-ink">
+            {title}
+          </h1>
+        )}
+      </div>
+      <div className="flex min-w-touch shrink-0 justify-end">{rightSlot}</div>
     </header>
   );
 }

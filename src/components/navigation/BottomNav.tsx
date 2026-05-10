@@ -28,6 +28,7 @@ const items: NavItem[] = [
       "/welcome",
       "/auth",
       "/onboarding",
+      "/library/routine-new",
     ],
   },
 ];

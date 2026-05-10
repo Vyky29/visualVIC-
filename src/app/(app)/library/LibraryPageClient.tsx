@@ -14,9 +14,12 @@ import { cn } from "@/lib/utils/cn";
 
 const groups = ["self-care", "home", "activity"] as const;
 
+function cardImageUnoptimized(src: string): boolean {
+  return src.startsWith("/cards/") || src.includes("/cards/");
+}
+
 export function LibraryPageClient() {
   const router = useRouter();
-  const [selectMode, setSelectMode] = useState(false);
   /** Distinct pick ids, order = tap order */
   const [orderedPickIds, setOrderedPickIds] = useState<string[]>([]);
 
@@ -37,12 +40,14 @@ export function LibraryPageClient() {
     });
   }, []);
 
-  const clearSelection = useCallback(() => setOrderedPickIds([]), []);
+  const clearSelection = useCallback(() => {
+    setOrderedPickIds([]);
+    clearLibrarySelectionDraft();
+  }, []);
 
   const createRoutine = useCallback(() => {
     if (orderedPickIds.length === 0) return;
     writeLibrarySelectionDraft(orderedPickIds);
-    setSelectMode(false);
     setOrderedPickIds([]);
     router.push("/library/routine-new");
   }, [orderedPickIds, router]);
@@ -53,8 +58,13 @@ export function LibraryPageClient() {
   );
 
   const bottomBar =
-    selectMode && orderedPickIds.length > 0 ? (
-      <div className="fixed bottom-0 left-1/2 z-20 w-full max-w-lg -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md">
+    orderedPickIds.length > 0 ? (
+      <div
+        className="fixed left-1/2 z-30 w-full max-w-lg -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md"
+        style={{
+          bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+        }}
+      >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-[14px] font-medium text-ink">
             {orderedPickIds.length} selected
@@ -74,38 +84,28 @@ export function LibraryPageClient() {
   return (
     <div
       className={cn(
-        selectMode && orderedPickIds.length > 0 && "pb-24",
+        orderedPickIds.length > 0 &&
+          "pb-[calc(11rem+env(safe-area-inset-bottom))]",
       )}
     >
       <Header
         title="Visual library"
         rightSlot={
-          <button
+          <Button
             type="button"
-            onClick={() => {
-              if (selectMode) {
-                setSelectMode(false);
-                setOrderedPickIds([]);
-                clearLibrarySelectionDraft();
-              } else {
-                setSelectMode(true);
-              }
-            }}
-            className="min-h-touch min-w-touch rounded-2xl px-2 text-[13px] font-medium text-sage active:bg-sage/10 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-sage/5"
+            variant="secondary"
+            className="!min-h-10 shrink-0 !px-3 !py-2 text-[13px]"
+            onClick={() => router.push("/library/routine-new")}
           >
-            {selectMode ? "Done" : "Select"}
-          </button>
+            New routine
+          </Button>
         }
       />
       <div className="space-y-8 px-4 pb-10 pt-3">
         <p className="px-1 text-[15px] leading-relaxed text-ink-subtle">
-          Tap-ready imagery for routines — calm palette, large thumbnails,
-          nothing noisy.
-          {selectMode ? (
-            <span className="mt-2 block text-[13px] text-sage">
-              Select mode: tap cards in order, then Create routine.
-            </span>
-          ) : null}
+          Tap cards to select them in order (like photos). Use{" "}
+          <span className="font-semibold text-ink">New routine</span> (top right)
+          to name and save without picking here first.
         </p>
 
         {groups.map((cat) => {
@@ -119,8 +119,19 @@ export function LibraryPageClient() {
               <div className="grid grid-cols-2 gap-3">
                 {items.map((v) => {
                   const selected = selectedSet.has(v.pickId);
-                  const inner = (
-                    <>
+                  const unopt = cardImageUnoptimized(v.imageUrl);
+                  return (
+                    <button
+                      key={v.pickId}
+                      type="button"
+                      onClick={() => togglePick(v.pickId)}
+                      className={cn(
+                        "overflow-hidden rounded-[1.35rem] border border-ink/5 bg-cream text-left shadow-card transition active:scale-[0.99]",
+                        selected
+                          ? "ring-2 ring-sage/50"
+                          : "hover:shadow-soft",
+                      )}
+                    >
                       <div className="relative aspect-square bg-canvas-muted">
                         <Image
                           src={v.imageUrl}
@@ -128,8 +139,9 @@ export function LibraryPageClient() {
                           fill
                           className="object-cover"
                           sizes="(max-width: 512px) 50vw, 256px"
+                          unoptimized={unopt}
                         />
-                        {selectMode && selected ? (
+                        {selected ? (
                           <div
                             className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-sage text-[15px] font-bold text-cream shadow-card ring-2 ring-white/90"
                             aria-hidden
@@ -137,7 +149,7 @@ export function LibraryPageClient() {
                             ✓
                           </div>
                         ) : null}
-                        {selectMode && selected ? (
+                        {selected ? (
                           <div className="pointer-events-none absolute inset-0 rounded-[1.35rem] ring-2 ring-inset ring-sage/70" />
                         ) : null}
                       </div>
@@ -146,41 +158,13 @@ export function LibraryPageClient() {
                           {v.label}
                         </p>
                       </div>
-                    </>
-                  );
-
-                  if (selectMode) {
-                    return (
-                      <button
-                        key={v.pickId}
-                        type="button"
-                        onClick={() => togglePick(v.pickId)}
-                        className={cn(
-                          "overflow-hidden rounded-[1.35rem] border border-ink/5 bg-cream text-left shadow-card transition active:scale-[0.99]",
-                          selected
-                            ? "ring-2 ring-sage/50"
-                            : "hover:shadow-soft",
-                        )}
-                      >
-                        {inner}
-                      </button>
-                    );
-                  }
-
-                  return (
-                    <article
-                      key={v.pickId}
-                      className="overflow-hidden rounded-[1.35rem] border border-ink/5 bg-cream shadow-card transition hover:shadow-soft"
-                    >
-                      {inner}
-                    </article>
+                    </button>
                   );
                 })}
               </div>
             </section>
           );
         })}
-
       </div>
       {bottomBar}
     </div>

@@ -89,9 +89,18 @@ export function RoutineNewClient() {
   const empty = hydrated && rows.length === 0;
 
   return (
-    <div className="pb-8">
+    <div className="pb-28">
       <Header title="New routine" backHref="/library" />
-      <div className="space-y-5 px-4 pt-3">
+      <div className="border-b border-ink/5 px-4 py-3">
+        <p className="text-[18px] font-semibold leading-tight text-ink">
+          New routine
+        </p>
+        <p className="mt-1 text-[13px] leading-relaxed text-ink-subtle">
+          Pon nombre, ordena los pasos y guarda en este dispositivo. Si entras
+          aquí sin elegir cartas en Library, primero ve a Library → Select.
+        </p>
+      </div>
+      <div className="space-y-5 px-4 pt-4">
         {empty ? (
           <Card className="border border-ink/5 p-4 text-[14px] text-ink-subtle">
             No cards selected. Go to{" "}
@@ -131,6 +140,10 @@ export function RoutineNewClient() {
                       fill
                       className="object-cover"
                       sizes="64px"
+                      unoptimized={
+                        row.imageUrl.startsWith("/cards/") ||
+                        row.imageUrl.includes("/cards/")
+                      }
                     />
                   </div>
                   <div className="min-w-0 flex-1">
