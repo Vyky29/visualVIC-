@@ -199,10 +199,10 @@ function TitleBand({
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
       {/*
-        Always 3 CSS grid rows (equal thirds of the white band above the ribete).
-        · 1 logical line → empty row 1; text in a single cell spanning rows 2–3 (centred).
-        · 2 logical lines → empty row 1; rows 2–3 one flex column, lines close but leading prevents overlap.
-        · 3 logical lines → one string per row 1 / 2 / 3; same leading so rows never “mount”.
+        Always 3 equal grid rows above the ribete (design “thirds”).
+        · 1 line → row 1 empty; text only in row 2, baseline toward row 3 (same band as first line of 2-line titles).
+        · 2 lines → row 1 empty; line 1 in row 2 (items-end); line 2 in row 3 (items-end, ribete) — not one merged block (avoids “foto 2” centred stack).
+        · 3 lines → one line per row 1 / 2 / 3.
       */}
       <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
         {n === 1 ? (
@@ -210,7 +210,7 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 row-span-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center",
+                "col-start-1 row-start-2 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center",
                 bandTypo,
               )}
             >
@@ -218,20 +218,28 @@ function TitleBand({
                 {safeLines[0]}
               </span>
             </div>
+            <div className="col-start-1 row-start-3 min-h-0" aria-hidden />
           </>
         ) : n === 2 ? (
           <>
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 pb-0 text-center",
+                "col-start-1 row-start-2 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center",
                 bandTypo,
               )}
             >
-              <span className="block w-full max-w-full shrink-0 leading-[1.14]">
+              <span className="block w-full max-w-full leading-[1.14]">
                 {row1Two}
               </span>
-              <span className="block w-full max-w-full shrink-0 leading-[1.14]">
+            </div>
+            <div
+              className={cn(
+                "col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0 text-center",
+                bandTypo,
+              )}
+            >
+              <span className="block w-full max-w-full leading-[1.14]">
                 {row2Two}
               </span>
             </div>
