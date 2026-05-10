@@ -11,42 +11,55 @@ import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-c
 import {
   buildGettingDressedRoutineSteps,
   buildGettingUndressedRoutineSteps,
+  getDressRegistryCardBySlug,
 } from "@/lib/cards/getting-dress-undress-registry";
+import {
+  buildBedtimeEveningSteps,
+  buildClimbingPrepSteps,
+  buildGettingReadyOutSteps,
+  buildMorningModularRoutineSteps,
+} from "@/lib/mock/mixed-demo-routine-steps";
 import { mockTemplates } from "@/lib/mock/templates";
-
-/** Thumbnail-friendly Unsplash params — lighter on mobile / 5G than w=900 */
-const unsplash = (photoPath: string) =>
-  `https://images.unsplash.com/${photoPath}?w=720&q=75&auto=format&fit=crop`;
 
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
   {
     id: "morning-routine",
     name: "Morning Routine",
-    description: "A gentle start",
-    tags: ["morning"],
-    steps: [
-      {
-        id: "mr1",
-        title: "Wake up & stretch",
-        imageUrl: unsplash("photo-1506905925346-21bda4d32df4"),
-      },
-      {
-        id: "mr2",
-        title: "Wash face",
-        imageUrl: unsplash("photo-1570172619643-d175fbde04da"),
-      },
-      {
-        id: "mr3",
-        title: "Breakfast",
-        imageUrl: unsplash("photo-1525351484163-7529414344d8"),
-      },
-      {
-        id: "mr4",
-        title: "Get dressed",
-        imageUrl: unsplash("photo-1523381210438-271e8be1f52b"),
-      },
-    ],
+    description:
+      "Modular demo — core, brushing, shower & dress cards from PixtoLearn libraries",
+    tags: ["morning", "self-care", "home"],
+    homePreviewImageUrl: coreImageUrl("eat"),
+    steps: buildMorningModularRoutineSteps(),
+  },
+  {
+    id: "demo-getting-ready-to-go-out",
+    name: "Getting Ready to Go Out",
+    description:
+      "Modular demo — core cues plus dress layers (socks, shoes, jacket, cap)",
+    tags: ["morning", "home", "self-care"],
+    homePreviewImageUrl:
+      getDressRegistryCardBySlug("jacket-on")?.imageUrl ??
+      gettingDressUndressImageUrl("tshirt-on"),
+    steps: buildGettingReadyOutSteps(),
+  },
+  {
+    id: "demo-climbing-preparation",
+    name: "Climbing Preparation",
+    description:
+      "Modular demo — choose, comfortable clothes, then helmet, harness, shoes & wall",
+    tags: ["activity", "home"],
+    homePreviewImageUrl: climbingImageUrl("climbing-wall"),
+    steps: buildClimbingPrepSteps(),
+  },
+  {
+    id: "demo-bedtime-evening",
+    name: "Bedtime / Evening Routine",
+    description:
+      "Modular demo — toilet, shower, teeth, undress & quiet wind-down",
+    tags: ["self-care", "home"],
+    homePreviewImageUrl: showerImageUrl("shower"),
+    steps: buildBedtimeEveningSteps(),
   },
   {
     id: "brushing-teeth",

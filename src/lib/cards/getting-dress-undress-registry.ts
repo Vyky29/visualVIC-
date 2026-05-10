@@ -687,10 +687,6 @@ export function filterGettingDressRoutineByProfileSex(
   routine: Routine,
   sex: ChildSex | undefined,
 ): Routine {
-  const sid = routine.id;
-  if (sid !== "getting-dressed" && sid !== "getting-undressed") {
-    return routine;
-  }
   const s: ChildSex = sex ?? "unspecified";
   const steps = routine.steps.filter((step) => {
     const slug = parseDressSlugFromStepId(step.id);

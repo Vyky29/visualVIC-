@@ -38,12 +38,13 @@ const steps = [
 export default function WelcomePage() {
   return (
     <MobileScreen className="grid h-dvh max-h-dvh grid-rows-[auto_minmax(0,1fr)_auto] gap-2 overflow-hidden bg-white px-4 !pb-[max(0.35rem,env(safe-area-inset-bottom))] !pt-[max(0.35rem,env(safe-area-inset-top))]">
-      <header className="min-h-0 shrink-0 space-y-1.5 text-center">
+      <header className="min-h-0 shrink-0 space-y-2.5 text-center">
         <PixtoLearnLockup
           variant="hero"
-          className="mx-auto [@media(max-height:640px)]:scale-[0.92]"
+          layout="stacked"
+          className="mx-auto w-full max-w-sm [@media(max-height:640px)]:gap-2"
         />
-        <h1 className="text-balance px-0.5 text-[clamp(1.05rem,4.2vw,1.45rem)] font-semibold leading-[1.15] tracking-tight text-ink [@media(max-height:640px)]:text-[clamp(0.95rem,3.8vw,1.2rem)]">
+        <h1 className="text-balance px-1 text-[clamp(1.05rem,4.2vw,1.45rem)] font-semibold leading-[1.15] tracking-tight text-ink [@media(max-height:640px)]:text-[clamp(0.95rem,3.8vw,1.2rem)]">
           Visual schedules that feel steady on the phone
         </h1>
         <p className="mx-auto line-clamp-2 max-w-sm text-[12px] leading-snug text-ink-subtle sm:text-[13px]">
