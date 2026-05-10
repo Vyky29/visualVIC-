@@ -32,7 +32,7 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
 /** Company mark — design px (corner glyph, scales with card width). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 108, h: 108 } as const;
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
 
 /** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
@@ -121,6 +121,12 @@ export function GeneratedPixtoCard({
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
 
+  /** Schedule NOW/NEXT (not Focus, not dense tile) — 3× type + taller title/ribbon rows. */
+  const scheduleLargeType = !focusPresentation && !isDense;
+  const gridTemplateRows = scheduleLargeType
+    ? `${ROW_FR_TOP * 0.72}fr ${ROW_FR_TITLE * 2.55}fr ${ROW_FR_CATEGORY * 1.42}fr`
+    : `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`;
+
   return (
     <article
       data-generated-pixto-card
@@ -133,7 +139,7 @@ export function GeneratedPixtoCard({
       )}
       style={{
         aspectRatio: CARD_ASPECT,
-        gridTemplateRows: `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`,
+        gridTemplateRows,
       }}
     >
       {markSrc ? (
@@ -142,7 +148,7 @@ export function GeneratedPixtoCard({
           style={{
             width: markSize,
             height: markSize,
-            transform: "translate(-22px, 2px)",
+            transform: "translate(-28px, -4px)",
           }}
           aria-hidden
         >
@@ -151,7 +157,7 @@ export function GeneratedPixtoCard({
             alt=""
             fill
             className="object-contain p-0"
-            sizes="108px"
+            sizes="88px"
             onError={onMarkError}
             unoptimized={
               markSrc.startsWith("/") ||
@@ -215,10 +221,10 @@ export function GeneratedPixtoCard({
             isDense
               ? "text-[19px] sm:text-[21px]"
               : focusPresentation
-                ? /* Match schedule bump, scaled for focus slot. */
+                ? /* Focus slot — keep readable without 3× (screen space). */
                   "text-[36px] sm:text-[42px]"
-                : /* Schedule NOW/NEXT — closer to bundled brushing title strip at same slot. */
-                  "text-[24px] sm:text-[28px]",
+                : /* Schedule NOW/NEXT — 3× prior schedule sizes (was 24/28). */
+                  "text-[72px] sm:text-[84px] leading-[1.05]",
           )}
         >
           {title}
@@ -237,7 +243,10 @@ export function GeneratedPixtoCard({
             "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
             focusPresentation
               ? "text-[26px] sm:text-[31px] tracking-[0.06em]"
-              : "text-[17px] sm:text-[20px]",
+              : isDense
+                ? "text-[14px] sm:text-[16px]"
+                : /* Schedule NOW/NEXT — 3× prior ribbon (was 17/20). */
+                  "text-[51px] sm:text-[60px] tracking-[0.04em]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",

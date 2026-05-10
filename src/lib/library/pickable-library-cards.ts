@@ -1,5 +1,8 @@
-import type { VisualAsset } from "@/lib/types/routine";
-import type { RoutineStep } from "@/lib/types/routine";
+import type {
+  GeneratedPixtoRoutineStepData,
+  RoutineStep,
+  VisualAsset,
+} from "@/lib/types/routine";
 import {
   BRUSHING_TEETH_SEQUENCE,
   brushingTeethImageUrl,
@@ -20,14 +23,9 @@ import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-regist
 import {
   AIRPORT_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
-  routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
 const SEP = "::";
-
-/** Library tile: full generated HTML card pack (not raw PNG steps). */
-export const GENPACK_AT_AIRPORT_PICK_ID = "genpack::at-the-airport" as const;
-export const GENPACK_AT_HOTEL_PICK_ID = "genpack::at-the-hotel" as const;
 
 /** Namespace prefix in `pickId` (before `::`). */
 export type PickablePackId =
@@ -36,7 +34,9 @@ export type PickablePackId =
   | "core"
   | "climb"
   | "swim"
-  | "dress";
+  | "dress"
+  | "airport"
+  | "hotel";
 
 export function pickablePackFromPickId(pickId: string): PickablePackId | null {
   const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
@@ -46,7 +46,9 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "core" ||
     ns === "climb" ||
     ns === "swim" ||
-    ns === "dress"
+    ns === "dress" ||
+    ns === "airport" ||
+    ns === "hotel"
   ) {
     return ns as PickablePackId;
   }
@@ -58,6 +60,8 @@ export type PickableLibraryCard = {
   label: string;
   imageUrl: string;
   category: VisualAsset["category"];
+  /** When set, new routine saves HTML shell step (airport / hotel), not flat PNG only. */
+  generatedPixto?: GeneratedPixtoRoutineStepData;
 };
 
 function pid(ns: string, slug: string): string {
@@ -109,18 +113,44 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     });
   }
 
-  /** HTML shell cards + titles/ribbons — one tap adds the full sequence. */
-  out.push({
-    pickId: GENPACK_AT_AIRPORT_PICK_ID,
-    label: "At the airport (all steps)",
-    imageUrl: atTheAirportImageUrl(AT_THE_AIRPORT_SEQUENCE[0].slug),
-    category: "home",
+  AT_THE_AIRPORT_SEQUENCE.forEach((s, i) => {
+    const gp = AIRPORT_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("airport", s.slug),
+      label: s.title,
+      imageUrl: atTheAirportImageUrl(s.slug),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+          }
+        : undefined,
+    });
   });
-  out.push({
-    pickId: GENPACK_AT_HOTEL_PICK_ID,
-    label: "At the hotel (all steps)",
-    imageUrl: atTheHotelImageUrl(AT_THE_HOTEL_SEQUENCE[0].slug),
-    category: "home",
+
+  AT_THE_HOTEL_SEQUENCE.forEach((s, i) => {
+    const gp = HOTEL_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("hotel", s.slug),
+      label: s.title,
+      imageUrl: atTheHotelImageUrl(s.slug),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+          }
+        : undefined,
+    });
   });
 
   for (const card of GETTING_DRESS_REGISTRY) {
@@ -148,44 +178,26 @@ export function getPickableLibraryCard(
   return pickableById.get(pickId);
 }
 
-export function isGeneratedPackPickId(pickId: string): boolean {
-  return (
-    pickId === GENPACK_AT_AIRPORT_PICK_ID || pickId === GENPACK_AT_HOTEL_PICK_ID
-  );
+export function packNsFromPickId(pickId: string): string {
+  return pickId.split(SEP)[0]?.toLowerCase() ?? "";
 }
 
-/**
- * Steps for Library → new routine (PNG picks = one step each;
- * genpack picks = full sequence with `generatedPixto`).
- */
 export function routineStepsFromLibraryPick(
   pickId: string,
   rowIndex: number,
 ): RoutineStep[] {
-  const prefix = `lib-${rowIndex}-${pickId.replace(/[^a-zA-Z0-9]+/g, "-")}`;
-  if (pickId === GENPACK_AT_AIRPORT_PICK_ID) {
-    return routineStepsFromGeneratedCardProps(
-      prefix,
-      AIRPORT_GENERATED_CARD_PROPS,
-    );
-  }
-  if (pickId === GENPACK_AT_HOTEL_PICK_ID) {
-    return routineStepsFromGeneratedCardProps(
-      prefix,
-      HOTEL_GENERATED_CARD_PROPS,
-    );
-  }
-
   const card = getPickableLibraryCard(pickId);
   if (!card) return [];
   const safe = pickId.replace(/[^a-zA-Z0-9]+/g, "-");
-  return [
-    {
-      id: `lib-step-${rowIndex}-${safe}`,
-      title: card.label,
-      imageUrl: card.imageUrl,
-    },
-  ];
+  const base: RoutineStep = {
+    id: `lib-step-${rowIndex}-${safe}`,
+    title: card.label,
+    imageUrl: card.imageUrl,
+  };
+  if (card.generatedPixto) {
+    base.generatedPixto = card.generatedPixto;
+  }
+  return [base];
 }
 
 /** @deprecated Use {@link routineStepsFromLibraryPick} */
