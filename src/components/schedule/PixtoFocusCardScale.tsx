@@ -10,8 +10,8 @@ import {
 type Props = { children: ReactNode };
 
 /**
- * Contenedor con tamaño de diseño fijo; escala todo el contenido como un solo bloque
- * para caber en el hueco disponible (viewport / safe area).
+ * Fixed design-size container; scales all content as one block to fit the
+ * available slot (viewport / safe area).
  */
 export function PixtoFocusCardScale({ children }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);

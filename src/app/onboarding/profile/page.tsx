@@ -9,6 +9,7 @@ import { Header } from "@/components/navigation/Header";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { ChildSex } from "@/lib/types/routine";
+import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { cn } from "@/lib/utils/cn";
 
 export default function ProfileOnboardingPage() {
@@ -68,13 +69,14 @@ export default function ProfileOnboardingPage() {
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
-      <Header title="Profile" backHref="/menu" />
+      <Header title="Profile" backHref="/menu" logoSrc={BRAND_LOGO_SRC} />
       <MobileScreen className="space-y-8 px-6 pb-14 pt-6">
         <div className="space-y-2 text-center">
-          <p className="text-[22px] font-semibold text-ink">Perfil del niño</p>
+          <p className="text-[22px] font-semibold text-ink">Child profile</p>
           <p className="text-[15px] leading-relaxed text-ink-subtle">
-            Nombre, sexo y altura ayudan a personalizar rutinas (p. ej. ropa).
-            La foto y los datos se guardan solo en este dispositivo.
+            Name, gender, and height help personalize routines (for example
+            clothing).
+            The photo and details are saved only on this device.
           </p>
         </div>
 
@@ -83,7 +85,7 @@ export default function ProfileOnboardingPage() {
             type="button"
             onClick={() => fileRef.current?.click()}
             className="group relative flex h-[7.5rem] w-[7.5rem] items-center justify-center overflow-hidden rounded-[2rem] bg-canvas-muted ring-2 ring-sage/30 ring-offset-[6px] ring-offset-cream transition hover:ring-sage"
-            aria-label="Elegir foto del niño"
+            aria-label="Choose child photo"
           >
             {avatarPreview ? (
               <div className="absolute inset-0 overflow-hidden">
@@ -105,7 +107,7 @@ export default function ProfileOnboardingPage() {
               </div>
             ) : (
               <span className="text-[14px] font-medium text-ink-subtle">
-                Toca para añadir foto
+                Tap to add photo
               </span>
             )}
             <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/50 to-transparent py-8 opacity-0 transition group-hover:opacity-100" />
@@ -121,7 +123,7 @@ export default function ProfileOnboardingPage() {
           {avatarPreview ? (
             <label className="flex w-full flex-col gap-2 px-1 text-left">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Encuadre de la foto
+                Photo framing
               </span>
               <input
                 type="range"
@@ -135,9 +137,9 @@ export default function ProfileOnboardingPage() {
                 className="w-full accent-sage"
               />
               <p className="text-[12px] leading-relaxed text-ink-faint">
-                Solo acerca o aleja la imagen dentro del recuadro. Convertir la
-                foto a un avatar 2D infantil automático requerirá un paso extra
-                (diseño o servicio) en una versión futura.
+                Zoom in or out within the frame. Turning the photo into an
+                automatic 2D child avatar would need an extra step (design or
+                service) in a future version.
               </p>
             </label>
           ) : null}
@@ -145,26 +147,26 @@ export default function ProfileOnboardingPage() {
           <form className="w-full space-y-5 px-1" onSubmit={handleSubmit}>
             <label className="block space-y-2 text-left">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Nombre del niño
+                Child name
               </span>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ej. Leo"
+                placeholder="e.g. Leo"
                 className="w-full rounded-2xl border border-ink/10 bg-canvas px-4 py-3.5 text-[17px] outline-none transition-shadow focus:border-sage focus:shadow-[0_0_0_3px_rgba(184,205,191,0.4)]"
               />
             </label>
 
             <div className="space-y-2 text-left">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Sexo (para rutinas de ropa)
+                Gender (for clothing routines)
               </span>
               <div className="grid grid-cols-3 gap-2">
                 {(
                   [
-                    ["male", "Niño"],
-                    ["female", "Niña"],
-                    ["unspecified", "Sin decir"],
+                    ["male", "Boy"],
+                    ["female", "Girl"],
+                    ["unspecified", "Prefer not to say"],
                   ] as const
                 ).map(([value, label]) => (
                   <button
@@ -186,19 +188,19 @@ export default function ProfileOnboardingPage() {
 
             <label className="block space-y-2 text-left">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Altura (cm), opcional
+                Height (cm), optional
               </span>
               <input
                 inputMode="numeric"
                 value={heightCmRaw}
                 onChange={(e) => setHeightCmRaw(e.target.value.replace(/[^\d]/g, ""))}
-                placeholder="Ej. 115"
+                placeholder="e.g. 115"
                 className="w-full rounded-2xl border border-ink/10 bg-canvas px-4 py-3.5 text-[17px] outline-none transition-shadow focus:border-sage focus:shadow-[0_0_0_3px_rgba(184,205,191,0.4)]"
               />
             </label>
 
             <Button type="submit" className="min-h-touch w-full text-[16px]">
-              Guardar e ir al inicio
+              Save and go home
             </Button>
           </form>
         </Card>

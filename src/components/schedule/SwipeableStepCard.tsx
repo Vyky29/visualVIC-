@@ -44,7 +44,7 @@ const TAP_CANCEL_SLOP = 14;
 const PIXTO_SCHEDULE_NOW_BLEED_SCALE_CLASS =
   "origin-center scale-x-[1.086] scale-y-[1.082]";
 
-/** Margen Focus Pixto (solo PNG); 0 = la imagen llega al borde del rectángulo 400×643.2. */
+/** Pixto Focus margin (PNG only); 0 = image reaches the 400×643.2 design rectangle edge. */
 const FOCUS_PIXTO_PNG_INSET_PX = 0;
 
 const easeCalm = [0.22, 1, 0.36, 1] as const;

@@ -69,12 +69,14 @@ function profileSubtitle(profile: {
   sex?: string;
   heightCm?: number;
 } | null): string {
-  if (!profile) return "Foto, nombre y datos · solo en este dispositivo";
+  if (!profile)
+    return "Photo, name, and details · stored on this device only";
   const parts: string[] = [];
-  if (profile.sex === "male") parts.push("Niño");
-  else if (profile.sex === "female") parts.push("Niña");
+  if (profile.sex === "male") parts.push("Boy");
+  else if (profile.sex === "female") parts.push("Girl");
   if (profile.heightCm != null) parts.push(`${profile.heightCm} cm`);
-  if (parts.length === 0) return "Foto y nombre · solo en este dispositivo";
+  if (parts.length === 0)
+    return "Photo and name · stored on this device only";
   return `${parts.join(" · ")} · local`;
 }
 
@@ -92,7 +94,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <Header title="Home" logoSrc="/brand/pixtolearn-logo.png" />
+      <Header title="Home" />
       <div className="space-y-8 px-4 pb-8 pt-4">
         <Link href="/onboarding/profile">
           <Card className="flex items-center gap-4 border border-ink/5 bg-white/95 p-4 transition hover:shadow-soft">

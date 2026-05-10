@@ -96,8 +96,9 @@ export function RoutineNewClient() {
           New routine
         </p>
         <p className="mt-1 text-[13px] leading-relaxed text-ink-subtle">
-          Pon nombre, ordena los pasos y guarda en este dispositivo. Si entras
-          aquí sin elegir cartas en Library, primero ve a Library → Select.
+          Name the routine, reorder the steps, and save on this device. If you
+          opened this without picking cards, go to Library, tap the cards you
+          want, then tap Create routine in the header.
         </p>
       </div>
       <div className="space-y-5 px-4 pt-4">

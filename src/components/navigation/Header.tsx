@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/cn";
 
 type Props = {
   title: string;
-  /** Public URL, e.g. `/brand/pixtolearn-logo.png` — boxed so wide PNGs never steal taps. */
+  /** Public URL — use `BRAND_LOGO_SRC` from `@/lib/constants/brand`. Boxed so wide PNGs never steal taps. */
   logoSrc?: string;
   backHref?: string;
   rightSlot?: ReactNode;
@@ -45,7 +45,7 @@ export function Header({
             <div className="flex h-9 max-w-[min(11rem,calc(100vw-5.5rem))] shrink-0 items-center justify-center overflow-hidden">
               <img
                 src={logoSrc}
-                alt=""
+                alt="PixtoLearn"
                 width={176}
                 height={36}
                 className="max-h-full max-w-full object-contain object-center"

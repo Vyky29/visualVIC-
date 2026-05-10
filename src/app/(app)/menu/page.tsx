@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Header } from "@/components/navigation/Header";
+import { BRAND_LOGO_SRC } from "@/lib/constants/brand";
 import { Card } from "@/components/ui/Card";
 
 const sections: {
@@ -51,7 +52,7 @@ const sections: {
 export default function MenuPage() {
   return (
     <div>
-      <Header title="More" />
+      <Header title="Menu" logoSrc={BRAND_LOGO_SRC} />
       <div className="space-y-8 px-4 pb-8 pt-2">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           Visual prototype — every link is navigable; no authentication or

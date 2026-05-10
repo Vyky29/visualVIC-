@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   description:
     "Structured visual sequencing for calm, predictable daily routines.",
   applicationName: "PixtoLearn Routines",
+  icons: {
+    icon: "/brand/pixtolearn-logo.png",
+    apple: "/brand/pixtolearn-logo.png",
+  },
 };
 
 export const viewport: Viewport = {

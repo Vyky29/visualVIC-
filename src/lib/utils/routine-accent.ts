@@ -1,8 +1,8 @@
 import type { Routine } from "@/lib/types/routine";
 
 /**
- * Acento visual para tiles de rutina en Home (hover: anillo + halo).
- * Basado en `tags` e `id` hasta que exista categoría explícita en el modelo.
+ * Visual accent for routine tiles on Home (hover: ring + glow).
+ * Based on `tags` and `id` until the model has an explicit category.
  */
 export function routineTileHoverAccentClass(r: Routine): string {
   const id = r.id.toLowerCase();

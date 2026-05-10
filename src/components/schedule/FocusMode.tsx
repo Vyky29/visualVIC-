@@ -307,7 +307,7 @@ export function FocusMode({ routine, exitHref }: Props) {
         </motion.div>
       ) : null}
 
-      {/* Corner tap zones — invisibles; anterior / saltar / hojas (también con tarjeta Pixto). */}
+      {/* Corner tap zones — invisible; back / skip / sheets (also with Pixto card). */}
       {!isComplete && nowStep ? (
       <div
         className={cn(

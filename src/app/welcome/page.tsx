@@ -1,11 +1,37 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { MobileScreen } from "@/components/layout/MobileScreen";
+import { BRAND_WORDMARK_LOGO_SRC } from "@/lib/constants/brand";
+import { cn } from "@/lib/utils/cn";
+
+const steps = [
+  {
+    n: 1,
+    title: "Schedule Player",
+    body: "Finished steps fade back; Now stays obvious.",
+    bar: "from-fuchsia-500 to-fuchsia-400",
+    badge: "bg-fuchsia-500 shadow-[0_8px_24px_-6px_rgba(192,38,211,0.55)]",
+  },
+  {
+    n: 2,
+    title: "Focus Mode",
+    body: "One fullscreen card when noise needs to drop away.",
+    bar: "from-amber-400 to-amber-300",
+    badge:
+      "bg-amber-400 text-ink shadow-[0_8px_24px_-6px_rgba(251,191,36,0.55)]",
+  },
+  {
+    n: 3,
+    title: "Library & builder",
+    body: "Mock visuals today; your assets tomorrow.",
+    bar: "from-teal-500 to-teal-400",
+    badge: "bg-teal-500 shadow-[0_8px_24px_-6px_rgba(20,184,166,0.45)]",
+  },
+] as const;
 
 export default function WelcomePage() {
   return (
-    <MobileScreen className="relative flex flex-col justify-center gap-12 overflow-hidden pb-20 pt-[max(2.5rem,env(safe-area-inset-top))]">
+    <MobileScreen className="relative flex min-h-dvh flex-col gap-10 overflow-x-clip pb-24 pt-[max(1.5rem,env(safe-area-inset-top))]">
       <div
         className="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-sage-mist/80 blur-3xl"
         aria-hidden
@@ -16,8 +42,20 @@ export default function WelcomePage() {
       />
 
       <div className="relative space-y-5 text-center">
+        <div className="mx-auto w-full max-w-md px-1">
+          {/* Plain <img>: avoids Next/Image layout quirks; path is always /public */}
+          <img
+            src={BRAND_WORDMARK_LOGO_SRC}
+            alt="PixtoLearn"
+            width={560}
+            height={180}
+            decoding="async"
+            fetchPriority="high"
+            className="mx-auto block h-auto w-full max-h-[9.5rem] max-w-full object-contain object-center sm:max-h-[11rem]"
+          />
+        </div>
         <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-ink-faint">
-          PixtoLearn Routines
+          Routines
         </p>
         <h1 className="text-balance text-[34px] font-semibold leading-[1.12] tracking-tight text-ink">
           Visual schedules that feel steady on the phone
@@ -28,37 +66,39 @@ export default function WelcomePage() {
         </p>
       </div>
 
-      <Card className="relative space-y-4 border-0 bg-white/85 shadow-soft ring-1 ring-ink/5 backdrop-blur-sm">
-        <ul className="space-y-4 text-[14px] leading-snug text-ink-subtle">
-          <li className="flex gap-4 text-left">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-mist text-[12px] font-semibold text-ink">
-              1
-            </span>
-            <span>
-              <strong className="font-medium text-ink">Schedule Player</strong>{" "}
-              — finished steps fade back; Now stays obvious.
-            </span>
-          </li>
-          <li className="flex gap-4 text-left">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-mist text-[12px] font-semibold text-ink">
-              2
-            </span>
-            <span>
-              <strong className="font-medium text-ink">Focus Mode</strong> —
-              one fullscreen card when noise needs to drop away.
-            </span>
-          </li>
-          <li className="flex gap-4 text-left">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-mist text-[12px] font-semibold text-ink">
-              3
-            </span>
-            <span>
-              <strong className="font-medium text-ink">Library & builder</strong>{" "}
-              — mock visuals today; your assets tomorrow.
-            </span>
-          </li>
-        </ul>
-      </Card>
+      <div className="relative space-y-3 px-1">
+        {steps.map((step) => (
+          <div
+            key={step.n}
+            className="overflow-hidden rounded-[1.35rem] bg-white/90 shadow-soft ring-1 ring-ink/[0.06] backdrop-blur-sm"
+          >
+            <div
+              className={cn(
+                "h-1 w-full bg-gradient-to-r opacity-95",
+                step.bar,
+              )}
+            />
+            <div className="flex gap-4 p-4 pr-5">
+              <div
+                className={cn(
+                  "flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-2xl text-[17px] font-bold text-white",
+                  step.badge,
+                )}
+              >
+                {step.n}
+              </div>
+              <div className="min-w-0 flex-1 space-y-1 text-left">
+                <p className="text-[16px] font-semibold leading-tight text-ink">
+                  {step.title}
+                </p>
+                <p className="text-[14px] leading-snug text-ink-subtle">
+                  {step.body}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <div className="relative flex flex-col gap-3">
         <Link href="/dashboard" className="w-full">
