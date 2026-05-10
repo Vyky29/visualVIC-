@@ -20,7 +20,7 @@ export const GENERATED_PIXTO_TITLE_ZONE_H = 166 as const;
 /** Bottom category strip height (design px). */
 export const GENERATED_PIXTO_CATEGORY_BAND_H = 94 as const;
 
-/** Top layout block (green + yellow): 1054 − 166 − 94. */
+/** Top layout block (illustration shell): 1054 − 166 − 94. */
 export const GENERATED_PIXTO_TOP_LAYOUT_H =
   GENERATED_PIXTO_CARD_SIZE.h -
   GENERATED_PIXTO_TITLE_ZONE_H -
@@ -72,14 +72,15 @@ export function GeneratedPixtoCard({
   const isDense = cardType === "dense";
 
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
-  const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
+  /** Slightly smaller than design 82px so the mark reads as a corner glyph, not a control. */
+  const markSize = `calc(100% * 64 / ${GENERATED_PIXTO_CARD_SIZE.w})`;
 
   return (
     <article
       data-generated-pixto-card
       data-card-type={cardType ?? "default"}
       className={cn(
-        "grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
+        "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
         "bg-white shadow-card ring-1 ring-ink/[0.08]",
         "touch-manipulation",
         className,
@@ -89,8 +90,33 @@ export function GeneratedPixtoCard({
         gridTemplateRows: `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`,
       }}
     >
-      {/* Top block 794px @ design — green margins + 531×648 yellow; company mark 82×82 top-right of yellow */}
-      <div className="relative min-h-0 bg-gradient-to-b from-canvas-muted/80 to-canvas-muted">
+      {iconUrl ? (
+        <div
+          className="pointer-events-none absolute right-1 top-1 z-30 flex items-center justify-center overflow-hidden bg-white sm:right-1.5 sm:top-1.5"
+          style={{
+            width: markSize,
+            height: markSize,
+            borderRadius: "0.35rem",
+          }}
+          aria-hidden
+        >
+          <Image
+            src={iconUrl}
+            alt=""
+            fill
+            className="object-contain p-1"
+            sizes="64px"
+            unoptimized={
+              iconUrl.startsWith("/") ||
+              iconUrl.includes("/cards/") ||
+              /\.jpe?g$/i.test(iconUrl)
+            }
+          />
+        </div>
+      ) : null}
+
+      {/* Top block 794px @ design — white field + 531×648 illustration frame */}
+      <div className="relative min-h-0 bg-white">
         <div className="flex h-full min-h-0 w-full flex-col">
           <div
             className="min-h-0 shrink-0"
@@ -101,30 +127,6 @@ export function GeneratedPixtoCard({
             className="relative flex w-full min-h-0 shrink-0 items-start justify-center"
             style={{ flex: `${FR_ILLUSTRATION} 1 0` }}
           >
-            {iconUrl ? (
-              <div
-                className="absolute z-20 flex items-center justify-center overflow-hidden rounded-xl bg-white shadow-md ring-1 ring-ink/10"
-                style={{
-                  width: markSize,
-                  height: markSize,
-                  right: `calc((100% - min(${illustrationWidthPct}, 100%)) / 2)`,
-                  top: 0,
-                  transform: "translateY(-50%)",
-                }}
-                aria-hidden
-              >
-                <Image
-                  src={iconUrl}
-                  alt=""
-                  fill
-                  className="object-contain p-1.5"
-                  sizes="82px"
-                  unoptimized={
-                    iconUrl.startsWith("/") || iconUrl.includes("/cards/")
-                  }
-                />
-              </div>
-            ) : null}
             <div className="flex h-full w-full min-h-0 items-center justify-center">
               <div
                 className="relative min-h-0"
@@ -160,8 +162,8 @@ export function GeneratedPixtoCard({
       >
         <h2
           className={cn(
-            "line-clamp-3 w-full text-balance text-center font-semibold leading-snug tracking-tight text-ink",
-            isDense ? "text-[14px]" : "text-[15px] sm:text-[16px]",
+            "line-clamp-3 w-full text-balance text-center font-semibold leading-tight tracking-tight text-ink",
+            isDense ? "text-[19px] sm:text-[21px]" : "text-[21px] sm:text-[24px]",
           )}
         >
           {title}
@@ -176,7 +178,7 @@ export function GeneratedPixtoCard({
         }}
       >
         <span
-          className="line-clamp-2 text-center text-[10px] font-semibold uppercase leading-tight tracking-[0.16em] text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] sm:text-[11px]"
+          className="line-clamp-2 text-center text-[14px] font-semibold uppercase leading-snug tracking-[0.12em] text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] sm:text-[16px]"
           style={{ textShadow: "0 1px 2px rgba(0,0,0,0.2)" }}
         >
           {category}
