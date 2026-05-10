@@ -69,20 +69,15 @@ export function CustomRoutinesProvider({ children }: { children: ReactNode }) {
     } catch {
       /* quota / private mode */
     }
-    window.dispatchEvent(new Event("pixtolearn-custom-routines-changed"));
   }, [routines, hydrated]);
 
+  /** Other browser tabs only (`storage` does not fire in the tab that wrote). */
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setRoutines(loadFromStorage());
     };
-    const onCustom = () => setRoutines(loadFromStorage());
     window.addEventListener("storage", onStorage);
-    window.addEventListener("pixtolearn-custom-routines-changed", onCustom);
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("pixtolearn-custom-routines-changed", onCustom);
-    };
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   const addRoutine = useCallback((routine: Routine) => {
