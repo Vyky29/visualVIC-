@@ -31,7 +31,7 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
 /** Company mark — design px (corner glyph, scales with card width). */
-export const GENERATED_PIXTO_COMPANY_MARK = { w: 148, h: 148 } as const;
+export const GENERATED_PIXTO_COMPANY_MARK = { w: 128, h: 128 } as const;
 
 /** Tinted halo from category colour (transparent PNG mark). */
 function categoryMarkGlowFilter(hex: string): string {
@@ -146,7 +146,7 @@ export function GeneratedPixtoCard({
             alt=""
             fill
             className="object-contain p-0"
-            sizes="148px"
+            sizes="128px"
             style={{ filter: categoryMarkGlowFilter(categoryColour) }}
             unoptimized={
               iconUrl.startsWith("/") ||
@@ -210,8 +210,8 @@ export function GeneratedPixtoCard({
             isDense
               ? "text-[17px] sm:text-[19px]"
               : focusPresentation
-                ? /* Design-px card is larger in Focus; scale() shrinks type — overshoot vs schedule NOW/NEXT (19/21). */
-                  "text-[28px] sm:text-[33px]"
+                ? /* Slot is 390×refH with inner scale — keep type clearly readable vs schedule. */
+                  "text-[32px] sm:text-[38px]"
                 : "text-[19px] sm:text-[21px]",
           )}
         >
@@ -230,7 +230,7 @@ export function GeneratedPixtoCard({
           className={cn(
             "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
             focusPresentation
-              ? "text-[19px] sm:text-[23px] tracking-[0.06em]"
+              ? "text-[22px] sm:text-[27px] tracking-[0.06em]"
               : "text-[14px] sm:text-[16px]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"

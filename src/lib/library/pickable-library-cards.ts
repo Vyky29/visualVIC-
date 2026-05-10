@@ -17,8 +17,17 @@ import {
   atTheHotelImageUrl,
 } from "@/lib/cards/at-the-hotel-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
+import {
+  AIRPORT_GENERATED_CARD_PROPS,
+  HOTEL_GENERATED_CARD_PROPS,
+  routineStepsFromGeneratedCardProps,
+} from "@/lib/experimental/generated-pixto-demo-routine";
 
 const SEP = "::";
+
+/** Library tile: full generated HTML card pack (not raw PNG steps). */
+export const GENPACK_AT_AIRPORT_PICK_ID = "genpack::at-the-airport" as const;
+export const GENPACK_AT_HOTEL_PICK_ID = "genpack::at-the-hotel" as const;
 
 /** Namespace prefix in `pickId` (before `::`). */
 export type PickablePackId =
@@ -27,9 +36,7 @@ export type PickablePackId =
   | "core"
   | "climb"
   | "swim"
-  | "dress"
-  | "airport"
-  | "hotel";
+  | "dress";
 
 export function pickablePackFromPickId(pickId: string): PickablePackId | null {
   const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
@@ -39,9 +46,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "core" ||
     ns === "climb" ||
     ns === "swim" ||
-    ns === "dress" ||
-    ns === "airport" ||
-    ns === "hotel"
+    ns === "dress"
   ) {
     return ns as PickablePackId;
   }
@@ -59,7 +64,7 @@ function pid(ns: string, slug: string): string {
   return `${ns}${SEP}${slug}`;
 }
 
-/** All Pixto cards users can add to a custom routine (V1 — local PNG registries only). */
+/** All Pixto cards users can add to a custom routine (V1 — local registries). */
 export function buildPickableLibraryCards(): PickableLibraryCard[] {
   const out: PickableLibraryCard[] = [];
 
@@ -103,22 +108,21 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "activity",
     });
   }
-  for (const s of AT_THE_AIRPORT_SEQUENCE) {
-    out.push({
-      pickId: pid("airport", s.slug),
-      label: s.title,
-      imageUrl: atTheAirportImageUrl(s.slug),
-      category: "home",
-    });
-  }
-  for (const s of AT_THE_HOTEL_SEQUENCE) {
-    out.push({
-      pickId: pid("hotel", s.slug),
-      label: s.title,
-      imageUrl: atTheHotelImageUrl(s.slug),
-      category: "home",
-    });
-  }
+
+  /** HTML shell cards + titles/ribbons — one tap adds the full sequence. */
+  out.push({
+    pickId: GENPACK_AT_AIRPORT_PICK_ID,
+    label: "At the airport (all steps)",
+    imageUrl: atTheAirportImageUrl(AT_THE_AIRPORT_SEQUENCE[0].slug),
+    category: "home",
+  });
+  out.push({
+    pickId: GENPACK_AT_HOTEL_PICK_ID,
+    label: "At the hotel (all steps)",
+    imageUrl: atTheHotelImageUrl(AT_THE_HOTEL_SEQUENCE[0].slug),
+    category: "home",
+  });
+
   for (const card of GETTING_DRESS_REGISTRY) {
     out.push({
       pickId: pid("dress", card.slug),
@@ -144,17 +148,51 @@ export function getPickableLibraryCard(
   return pickableById.get(pickId);
 }
 
-/** Build a routine step for storage / playback (stable id from pick + index). */
+export function isGeneratedPackPickId(pickId: string): boolean {
+  return (
+    pickId === GENPACK_AT_AIRPORT_PICK_ID || pickId === GENPACK_AT_HOTEL_PICK_ID
+  );
+}
+
+/**
+ * Steps for Library → new routine (PNG picks = one step each;
+ * genpack picks = full sequence with `generatedPixto`).
+ */
+export function routineStepsFromLibraryPick(
+  pickId: string,
+  rowIndex: number,
+): RoutineStep[] {
+  const prefix = `lib-${rowIndex}-${pickId.replace(/[^a-zA-Z0-9]+/g, "-")}`;
+  if (pickId === GENPACK_AT_AIRPORT_PICK_ID) {
+    return routineStepsFromGeneratedCardProps(
+      prefix,
+      AIRPORT_GENERATED_CARD_PROPS,
+    );
+  }
+  if (pickId === GENPACK_AT_HOTEL_PICK_ID) {
+    return routineStepsFromGeneratedCardProps(
+      prefix,
+      HOTEL_GENERATED_CARD_PROPS,
+    );
+  }
+
+  const card = getPickableLibraryCard(pickId);
+  if (!card) return [];
+  const safe = pickId.replace(/[^a-zA-Z0-9]+/g, "-");
+  return [
+    {
+      id: `lib-step-${rowIndex}-${safe}`,
+      title: card.label,
+      imageUrl: card.imageUrl,
+    },
+  ];
+}
+
+/** @deprecated Use {@link routineStepsFromLibraryPick} */
 export function routineStepFromPickId(
   pickId: string,
   index: number,
 ): RoutineStep | null {
-  const card = getPickableLibraryCard(pickId);
-  if (!card) return null;
-  const safe = pickId.replace(/[^a-zA-Z0-9]+/g, "-");
-  return {
-    id: `lib-step-${index}-${safe}`,
-    title: card.label,
-    imageUrl: card.imageUrl,
-  };
+  const steps = routineStepsFromLibraryPick(pickId, index);
+  return steps[0] ?? null;
 }

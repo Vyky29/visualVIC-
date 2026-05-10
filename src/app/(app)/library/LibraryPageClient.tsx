@@ -6,6 +6,8 @@ import { useCallback, useMemo, useState } from "react";
 import { Header } from "@/components/navigation/Header";
 import { Button } from "@/components/ui/Button";
 import {
+  GENPACK_AT_AIRPORT_PICK_ID,
+  GENPACK_AT_HOTEL_PICK_ID,
   PICKABLE_LIBRARY_CARDS,
   pickablePackFromPickId,
   type PickablePackId,
@@ -30,11 +32,15 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   core: "border-t border-accent/30 bg-accent-soft/40 text-ink",
   climb: "border-t border-[#d4a53a]/35 bg-[#faf6ea] text-ink",
   swim: "border-t border-[#4a8fa8]/30 bg-[#e8f3f6] text-ink",
-  airport: "border-t border-[#e0b030]/40 bg-[#F9DD9E]/95 text-ink",
-  hotel: "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink",
 };
 
 function libraryRibbonClassForPickId(pickId: string): string {
+  if (pickId === GENPACK_AT_AIRPORT_PICK_ID) {
+    return "border-t border-[#e0b030]/40 bg-[#F9DD9E]/95 text-ink";
+  }
+  if (pickId === GENPACK_AT_HOTEL_PICK_ID) {
+    return "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink";
+  }
   const pack = pickablePackFromPickId(pickId);
   if (pack) return libraryPackRibbonClass[pack];
   return "border-t border-ink/10 bg-canvas-muted text-ink";

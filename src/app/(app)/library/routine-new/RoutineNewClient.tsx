@@ -14,7 +14,8 @@ import {
 } from "@/lib/library/library-selection-draft";
 import {
   getPickableLibraryCard,
-  routineStepFromPickId,
+  isGeneratedPackPickId,
+  routineStepsFromLibraryPick,
 } from "@/lib/library/pickable-library-cards";
 import type { Routine } from "@/lib/types/routine";
 
@@ -69,9 +70,9 @@ export function RoutineNewClient() {
 
   const save = useCallback(() => {
     if (!canSave) return;
-    const steps = rows
-      .map((row, i) => routineStepFromPickId(row.pickId, i))
-      .filter(Boolean) as NonNullable<ReturnType<typeof routineStepFromPickId>>[];
+    const steps = rows.flatMap((row, i) =>
+      routineStepsFromLibraryPick(row.pickId, i),
+    );
     const id = `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
     const routine: Routine = {
       id,
@@ -151,7 +152,11 @@ export function RoutineNewClient() {
                     <p className="truncate text-[15px] font-semibold text-ink">
                       {row.label}
                     </p>
-                    <p className="text-[11px] text-ink-faint">Step {index + 1}</p>
+                    <p className="text-[11px] text-ink-faint">
+                      {isGeneratedPackPickId(row.pickId)
+                        ? `Visual pack · saves as full sequence`
+                        : `Step ${index + 1}`}
+                    </p>
                   </div>
                   <div className="flex shrink-0 flex-col gap-1 self-center">
                     <button
