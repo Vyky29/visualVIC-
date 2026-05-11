@@ -25,8 +25,25 @@ import {
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
+const CHECKIN_TEST_CARD =
+  AIRPORT_GENERATED_CARD_PROPS.find(
+    (card) => card.title === "check in at the airline counter",
+  ) ?? AIRPORT_GENERATED_CARD_PROPS[1] ?? AIRPORT_GENERATED_CARD_PROPS[0];
+
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
+  {
+    id: "demo-prueba-checkin",
+    name: "PRUEBA",
+    description: "Single airport card to review the updated illustration sizing.",
+    tags: ["home"],
+    homePreviewImageUrl: CHECKIN_TEST_CARD?.illustrationUrl,
+    steps: CHECKIN_TEST_CARD
+      ? routineStepsFromGeneratedCardProps("demo-prueba-checkin", [
+          CHECKIN_TEST_CARD,
+        ])
+      : [],
+  },
   {
     id: "morning-routine",
     name: "Morning Routine",
