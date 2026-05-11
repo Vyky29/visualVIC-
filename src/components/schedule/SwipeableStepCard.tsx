@@ -653,7 +653,13 @@ export function SwipeableStepCard({
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >
-                <GeneratedPixtoSlotScale>
+                {variant === "focus" ? (
+                  /**
+                   * Focus should read like the stretched Pixto PNG cards: fill the
+                   * full focus slot (no native-aspect “air” under the ribbon).
+                   * Generated airport / hotel cards tolerate this vertical stretch
+                   * better because the category mark is separate from the art.
+                   */
                   <GeneratedPixtoCard
                     illustrationUrl={gp.illustrationUrl}
                     title={gp.title}
@@ -661,11 +667,25 @@ export function SwipeableStepCard({
                     categoryColour={gp.categoryColour}
                     iconUrl={gp.iconUrl}
                     cardType={gp.cardType}
-                    focusPresentation={variant === "focus"}
+                    focusPresentation
                     suppressNeutralRing
                     className="h-full w-full max-w-none"
                   />
-                </GeneratedPixtoSlotScale>
+                ) : (
+                  <GeneratedPixtoSlotScale>
+                    <GeneratedPixtoCard
+                      illustrationUrl={gp.illustrationUrl}
+                      title={gp.title}
+                      category={gp.category}
+                      categoryColour={gp.categoryColour}
+                      iconUrl={gp.iconUrl}
+                      cardType={gp.cardType}
+                      focusPresentation={focusGenerated}
+                      suppressNeutralRing
+                      className="h-full w-full max-w-none"
+                    />
+                  </GeneratedPixtoSlotScale>
+                )}
               </div>
             ) : variant === "focus" && !step.imageUrl ? (
               <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-cream/35">
