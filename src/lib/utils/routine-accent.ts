@@ -104,9 +104,9 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
       "group-hover:shadow-[0_0_40px_-10px_rgba(107,78,158,0.38)]",
   },
   core: {
-    home: "ring-2 ring-[#4a6572]/88 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#6b8f9e]/92 ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#4a6572]/88 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#6b8f9e]/92 ring-offset-1 ring-offset-canvas",
     scheduleNow:
       "ring-2 ring-[#4a6572]/85 shadow-[0_8px_32px_-12px_rgba(74,101,114,0.32)]",
     scheduleNext:
@@ -116,7 +116,7 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     scheduleCompact:
       "ml-0.5 border-l-[3px] border-dashed border-[#4a6572]/50 pl-3 ring-1 ring-[#4a6572]/25 ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(74,101,114,0.35)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(107,143,158,0.35)]",
   },
   custom: {
     home: "ring-2 ring-ink ring-offset-2 ring-offset-canvas",
@@ -148,9 +148,9 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
       "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)]",
   },
   airport: {
-    home: "ring-2 ring-[#d4a017]/88 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#e0b030]/95 ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#d4a017]/88 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#e0b030]/95 ring-offset-1 ring-offset-canvas",
     /** Schedule: no ring-offset — matches other packs so the ring hugs the card shell (HTML cards looked “gappy”). */
     scheduleNow:
       "ring-2 ring-[#F9DD9E]/95 shadow-[0_8px_32px_-12px_rgba(212,160,23,0.38)]",
@@ -161,7 +161,7 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     scheduleCompact:
       "ml-0.5 border-l-[3px] border-dashed border-[#d4a017]/55 pl-3 ring-1 ring-[#F9DD9E]/40 ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(212,160,23,0.38)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(224,176,48,0.38)]",
   },
   hotel: {
     home: "ring-2 ring-[#8C1E2E]/90 ring-offset-2 ring-offset-canvas",

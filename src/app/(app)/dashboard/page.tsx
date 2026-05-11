@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
 import { mockRoutines } from "@/lib/mock/routines";
@@ -13,8 +13,75 @@ import {
 } from "@/lib/utils/visual-card-url";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useProfile } from "@/contexts/ProfileContext";
+import type { Routine } from "@/lib/types/routine";
 import { cn } from "@/lib/utils/cn";
-import { routineDashboardHomeGridTileClass } from "@/lib/utils/routine-accent";
+import {
+  isStockPackRoutine,
+  routineDashboardHomeGridTileClass,
+} from "@/lib/utils/routine-accent";
+import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
+
+const groups = ["self-care", "home", "activity"] as const;
+
+function dashboardCategoryForRoutine(
+  routine: Routine,
+): (typeof groups)[number] | null {
+  const tags = routine.tags ?? [];
+  if (tags.includes("self-care")) return "self-care";
+  if (tags.includes("home")) return "home";
+  if (tags.includes("activity")) return "activity";
+  return null;
+}
+
+function categoryTitle(cat: (typeof groups)[number]): string {
+  return cat.replace("-", " ");
+}
+
+function DashboardRoutineTile({
+  routine,
+}: {
+  routine: Routine;
+}) {
+  const previewUrl = routine.homePreviewImageUrl ?? routine.steps[0]?.imageUrl;
+
+  return (
+    <Link
+      key={routine.id}
+      href={`/player/${routine.id}`}
+      className="group flex h-full min-h-0 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+    >
+      <Card
+        omitInsetRing
+        className={cn(
+          "flex h-full min-h-[15.75rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
+          routineDashboardHomeGridTileClass(routine),
+        )}
+      >
+        <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
+          {previewUrl ? (
+            <HomeRoutinePreviewMedia
+              imageUrl={previewUrl}
+              frameClassName="h-full w-full"
+              sizes="(max-width: 512px) 45vw, 240px"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center px-2 text-center text-[11px] text-ink-faint">
+              No preview
+            </div>
+          )}
+        </div>
+        <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
+          <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
+            {routine.name}
+          </p>
+          <p className="mt-0.5 text-[10px] text-ink-subtle">
+            {routine.steps.length} steps
+          </p>
+        </div>
+      </Card>
+    </Link>
+  );
+}
 
 /**
  * PixtoLearn assets carry a title strip in the PNG. We crop the bottom by letting
@@ -84,13 +151,58 @@ export default function DashboardPage() {
   const { profile } = useProfile();
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
+  const prefersFineHover = usePrefersFineHover();
   const primary = mockRoutines[0];
   /** Same set as Schedule Player index — includes locally saved custom routines first. */
   const dashboardRoutines = useMemo(() => {
     const base = [...mockRoutines, ...mockTemplates];
     return customHydrated ? [...customRoutines, ...base] : base;
   }, [customRoutines, customHydrated]);
+  const featuredRoutines = useMemo(
+    () => dashboardRoutines.filter((r) => !isStockPackRoutine(r)),
+    [dashboardRoutines],
+  );
+  const groupedPackRoutines = useMemo(() => {
+    const out = new Map<(typeof groups)[number], Routine[]>();
+    for (const g of groups) out.set(g, []);
+    for (const r of dashboardRoutines) {
+      if (!isStockPackRoutine(r)) continue;
+      const category = dashboardCategoryForRoutine(r);
+      if (!category) continue;
+      out.get(category)?.push(r);
+    }
+    return out;
+  }, [dashboardRoutines]);
+  const [openCategoryKeys, setOpenCategoryKeys] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
   const frameScale = profile?.avatarFrameScale ?? 1;
+
+  const isAccordionOpen = useCallback(
+    (key: string) =>
+      openCategoryKeys.has(key) || (prefersFineHover && hoverPeekKey === key),
+    [openCategoryKeys, prefersFineHover, hoverPeekKey],
+  );
+
+  const openAccordion = useCallback((key: string) => {
+    setOpenCategoryKeys((prev) => {
+      if (prev.has(key)) return prev;
+      const next = new Set(prev);
+      next.add(key);
+      return next;
+    });
+  }, []);
+
+  const toggleAccordionCorner = useCallback((key: string) => {
+    setHoverPeekKey(null);
+    setOpenCategoryKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
 
   return (
     <div>
@@ -178,46 +290,73 @@ export default function DashboardPage() {
           <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
             Routines
           </h2>
-          <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
-            {dashboardRoutines.map((r) => {
-              const previewUrl =
-                r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+          {featuredRoutines.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
+              {featuredRoutines.map((r) => (
+                <DashboardRoutineTile key={r.id} routine={r} />
+              ))}
+            </div>
+          ) : null}
+
+          <div className="space-y-2">
+            {groups.map((cat) => {
+              const routines = groupedPackRoutines.get(cat) ?? [];
+              if (routines.length === 0) return null;
+              const accordionKey = `home::${cat}`;
+              const open = isAccordionOpen(accordionKey);
+
               return (
-                <Link
-                  key={r.id}
-                  href={`/player/${r.id}`}
-                  className="group flex h-full min-h-0 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+                <div
+                  key={accordionKey}
+                  className="overflow-hidden rounded-2xl border border-ink/8 bg-cream/40"
+                  onMouseEnter={() => {
+                    if (prefersFineHover) setHoverPeekKey(accordionKey);
+                  }}
+                  onMouseLeave={() => {
+                    if (prefersFineHover) setHoverPeekKey(null);
+                  }}
                 >
-                  <Card
-                    omitInsetRing
+                  <div className="flex h-[56px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-[58px]">
+                    <button
+                      type="button"
+                      onClick={() => openAccordion(accordionKey)}
+                      className="flex min-w-0 flex-1 items-center gap-3 px-4 py-2.5 text-left transition hover:bg-canvas-muted/90"
+                    >
+                      <span className="min-w-0 flex-1 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
+                        {categoryTitle(cat)}
+                      </span>
+                      <span className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]">
+                        {routines.length}{" "}
+                        {routines.length === 1 ? "routine" : "routines"}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordionCorner(accordionKey)}
+                      className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
+                      aria-label={open ? "Close" : "Open"}
+                    >
+                      <span aria-hidden>{open ? "▾" : "▸"}</span>
+                    </button>
+                  </div>
+                  <div
                     className={cn(
-                      "flex h-full min-h-[15.75rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
-                      routineDashboardHomeGridTileClass(r),
+                      "grid transition-[grid-template-rows] duration-300 ease-out",
+                      open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
                     )}
                   >
-                    <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
-                      {previewUrl ? (
-                        <HomeRoutinePreviewMedia
-                          imageUrl={previewUrl}
-                          frameClassName="h-full w-full"
-                          sizes="(max-width: 512px) 45vw, 240px"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center px-2 text-center text-[11px] text-ink-faint">
-                          No preview
-                        </div>
-                      )}
+                    <div className="min-h-0 overflow-hidden">
+                      <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                        {routines.map((routine) => (
+                          <DashboardRoutineTile
+                            key={routine.id}
+                            routine={routine}
+                          />
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
-                      <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
-                        {r.name}
-                      </p>
-                      <p className="mt-0.5 text-[10px] text-ink-subtle">
-                        {r.steps.length} steps
-                      </p>
-                    </div>
-                  </Card>
-                </Link>
+                  </div>
+                </div>
               );
             })}
           </div>
