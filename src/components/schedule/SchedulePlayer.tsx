@@ -20,6 +20,52 @@ type Props = {
   backHref: string;
 };
 
+function FocusButtonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+      <path
+        d="M3.75 12c1.8-3.62 4.93-5.43 8.25-5.43S18.45 8.38 20.25 12c-1.8 3.62-4.93 5.43-8.25 5.43S5.55 15.62 3.75 12Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="2.35" fill="currentColor" />
+    </svg>
+  );
+}
+
+function ResetButtonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+      <path
+        d="M8.1 8.35h7.15M7.4 11.8h5.9M8.1 15.25h4.4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14.9 4.75h-5.8a3.35 3.35 0 0 0-3.35 3.35v7.8a3.35 3.35 0 0 0 3.35 3.35h5.8a3.35 3.35 0 0 0 3.35-3.35V8.1l-3.35-3.35Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CloseButtonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+      <path
+        d="M7 7 17 17M17 7 7 17"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function SchedulePlayer({ routine, backHref }: Props) {
   const router = useRouter();
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
@@ -86,33 +132,40 @@ export function SchedulePlayer({ routine, backHref }: Props) {
       </header>
 
       <div className="flex flex-col gap-3">
-        {nowStep && !isComplete ? (
+        <div className="flex items-stretch gap-2">
+          {nowStep && !isComplete ? (
+            <Button
+              type="button"
+              variant="secondary"
+              className={cn(
+                scheduleChrome.focusCta,
+                "min-w-0 flex-[1.45] gap-2.5 px-4 w-auto",
+              )}
+              onClick={openFocus}
+            >
+              <FocusButtonIcon />
+              <span className="truncate">Open Focus Mode</span>
+            </Button>
+          ) : null}
           <Button
             type="button"
             variant="secondary"
-            className={cn(scheduleChrome.focusCta)}
-            onClick={openFocus}
-          >
-            Open Focus Mode
-          </Button>
-        ) : null}
-
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            className="min-h-touch flex-1"
+            className="min-h-touch min-w-0 flex-[1.05] gap-2 px-4"
             onClick={reset}
           >
-            Reset
+            <ResetButtonIcon />
+            <span>Reset</span>
           </Button>
           <Button
             type="button"
             variant="ghost"
-            className="min-h-touch px-4"
+            className="min-h-touch shrink-0 gap-2 px-4"
             onClick={() => router.push(backHref)}
           >
-            Close
+            <span className="text-[#C84C57]">
+              <CloseButtonIcon />
+            </span>
+            <span>Close</span>
           </Button>
         </div>
 

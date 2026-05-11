@@ -14,6 +14,7 @@ import type { RoutineStep } from "@/lib/types/routine";
 import {
   DEFAULT_ROUTINE_ACCENT_RINGS,
   stepCardAccentRings,
+  stepCardVisualTone,
   type RoutineAccentRings,
 } from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
@@ -67,6 +68,23 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   right: FOCUS_PIXTO_PNG_INSET_PX,
   bottom: FOCUS_PIXTO_PNG_INSET_PX,
   left: FOCUS_PIXTO_PNG_INSET_PX,
+};
+
+const STEP_OUTLINE_HEX: Record<
+  ReturnType<typeof stepCardVisualTone>,
+  string
+> = {
+  brushing: "#91C24C",
+  shower: "#143d66",
+  climbing: "#E9AE2E",
+  dress: "#6B4E9E",
+  core: "#6b8f9e",
+  swimming: "#4a8fa8",
+  airport: "#F9DD9E",
+  hotel: "#8C1E2E",
+  finish: "#9aa3a8",
+  custom: "#1c2420",
+  default: "#7d9b87",
 };
 
 export function SwipeableStepCard({
@@ -421,6 +439,17 @@ export function SwipeableStepCard({
           boxShadow: `0 0 0 2px ${gp.categoryColour}, 0 8px 32px -12px rgba(28,36,32,0.24)`,
         }
       : undefined;
+  const nextOutlineStyle =
+    variant === "next"
+      ? (() => {
+          const tone = stepCardVisualTone(step);
+          const stroke = STEP_OUTLINE_HEX[tone];
+          return {
+            boxShadow: `0 0 0 2px ${stroke}, 0 6px 22px -12px rgba(28,36,32,0.16)`,
+          } satisfies CSSProperties;
+        })()
+      : undefined;
+  const cardStyle = nextOutlineStyle ?? focusGeneratedBorderStyle;
 
   return (
     <motion.div
@@ -486,7 +515,7 @@ export function SwipeableStepCard({
           "ring-1 ring-ink/8",
         !isNow && !isFinished && !isNext && variant !== "focus" && "opacity-80",
       )}
-      style={focusGeneratedBorderStyle}
+      style={cardStyle}
     >
       <div
         className={cn(
