@@ -128,10 +128,10 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "swimming-routine",
-    name: "Swimming Routine",
+    name: "Swimming",
     description: "PixtoLearn swimming visual cards — pool visit flow",
     tags: ["activity"],
-    homePreviewImageUrl: swimmingImageUrl("pool"),
+    homePreviewImageUrl: swimmingImageUrl("goggles-on"),
     steps: SWIMMING_SEQUENCE.map((s) => ({
       id: s.id,
       title: s.title,

@@ -79,7 +79,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   climb: climbingImageUrl("climbing-wall"),
-  swim: swimmingImageUrl("changing-room"),
+  swim: swimmingImageUrl("goggles-on"),
 };
 
 /** Ring tint around the pack icon — sole colour cue per category. */
