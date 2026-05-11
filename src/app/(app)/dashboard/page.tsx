@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
+import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
+import { climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { coreImageUrl } from "@/lib/cards/core-cards";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import {
@@ -22,6 +25,20 @@ import {
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 const groups = ["self-care", "home", "activity"] as const;
+type DashboardCategory = (typeof groups)[number];
+
+const HOME_CATEGORY_HEADER_ICON: Record<DashboardCategory, string> = {
+  "self-care": brushingTeethImageUrl("toothbrush"),
+  home: coreImageUrl("wash-hands"),
+  activity: climbingImageUrl("climbing-wall"),
+};
+
+const HOME_CATEGORY_HEADER_RING_CLASS: Record<DashboardCategory, string> = {
+  "self-care": "ring-[#91C24C]/80",
+  home: "ring-[#6b8f9e]/75",
+  activity: "ring-[#E9AE2E]/85",
+};
+
 const HIDE_FROM_HOME_FEATURED_IDS = new Set([
   "demo-climbing-preparation",
   "tpl-morning-mini",
@@ -29,7 +46,7 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
 
 function dashboardCategoryForRoutine(
   routine: Routine,
-): (typeof groups)[number] | null {
+): DashboardCategory | null {
   const tags = routine.tags ?? [];
   if (tags.includes("self-care")) return "self-care";
   if (tags.includes("home")) return "home";
@@ -37,8 +54,52 @@ function dashboardCategoryForRoutine(
   return null;
 }
 
-function categoryTitle(cat: (typeof groups)[number]): string {
+function categoryTitle(cat: DashboardCategory): string {
   return cat.replace("-", " ");
+}
+
+function SectionHeader({
+  title,
+  iconSrc,
+  ringClass,
+  action,
+}: {
+  title: string;
+  iconSrc: string;
+  ringClass: string;
+  action?: React.ReactNode;
+}) {
+  const pixto = isPixtoLearnBundledCardUrl(iconSrc);
+
+  return (
+    <div className="flex items-center justify-between gap-3 px-1">
+      <div className="flex min-w-0 items-center gap-3">
+        <span
+          className={cn(
+            "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-11 sm:w-11",
+            ringClass,
+          )}
+        >
+          <Image
+            src={iconSrc}
+            alt=""
+            fill
+            unoptimized
+            className={cn(
+              pixto
+                ? "object-cover object-top scale-[1.22]"
+                : "object-cover object-center",
+            )}
+            style={pixto ? { top: "-4%", bottom: "auto" } : undefined}
+          />
+        </span>
+        <h2 className="min-w-0 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
+          {title}
+        </h2>
+      </div>
+      {action ? <div className="shrink-0">{action}</div> : null}
+    </div>
+  );
 }
 
 function DashboardRoutineTile({
@@ -186,6 +247,8 @@ export default function DashboardPage() {
   );
   const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
   const frameScale = profile?.avatarFrameScale ?? 1;
+  const scheduleHeaderIcon =
+    primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl ?? coreImageUrl("eat");
 
   const isAccordionOpen = useCallback(
     (key: string) =>
@@ -256,17 +319,19 @@ export default function DashboardPage() {
         </Link>
 
         <section className="space-y-3">
-          <div className="flex items-baseline justify-between px-1">
-            <h2 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-              Schedule Player
-            </h2>
-            <Link
-              href="/player"
-              className="text-[13px] font-medium text-sage underline-offset-4 hover:underline"
-            >
-              All routines
-            </Link>
-          </div>
+          <SectionHeader
+            title="Schedule Player"
+            iconSrc={scheduleHeaderIcon}
+            ringClass="ring-sage/65"
+            action={
+              <Link
+                href="/player"
+                className="text-[13px] font-medium text-sage underline-offset-4 hover:underline"
+              >
+                All routines
+              </Link>
+            }
+          />
           <Link href={`/player/${primary.id}`}>
             <Card className="overflow-hidden border-0 bg-gradient-to-br from-sage-mist via-cream to-cream p-0 shadow-soft ring-1 ring-sage/20 transition hover:shadow-[0_12px_40px_-16px_rgba(28,36,32,0.18)]">
               <div className="flex gap-4 p-4">
@@ -295,9 +360,11 @@ export default function DashboardPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-            Routines
-          </h2>
+          <SectionHeader
+            title="Routines"
+            iconSrc={coreImageUrl("walk")}
+            ringClass="ring-[#6b8f9e]/75"
+          />
           {featuredRoutines.length > 0 ? (
             <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
               {featuredRoutines.map((r) => (
@@ -312,6 +379,8 @@ export default function DashboardPage() {
               if (routines.length === 0) return null;
               const accordionKey = `home::${cat}`;
               const open = isAccordionOpen(accordionKey);
+              const iconSrc = HOME_CATEGORY_HEADER_ICON[cat];
+              const ringClass = HOME_CATEGORY_HEADER_RING_CLASS[cat];
 
               return (
                 <div
@@ -328,8 +397,23 @@ export default function DashboardPage() {
                     <button
                       type="button"
                       onClick={() => openAccordion(accordionKey)}
-                      className="flex min-w-0 flex-1 items-center gap-3 px-4 py-2.5 text-left transition hover:bg-canvas-muted/90"
+                      className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left transition hover:bg-canvas-muted/90 sm:px-4"
                     >
+                      <span
+                        className={cn(
+                          "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-11 sm:w-11",
+                          ringClass,
+                        )}
+                      >
+                        <Image
+                          src={iconSrc}
+                          alt=""
+                          fill
+                          unoptimized
+                          className="object-cover object-top scale-[1.22]"
+                          style={{ top: "-4%", bottom: "auto" }}
+                        />
+                      </span>
                       <span className="min-w-0 flex-1 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
                         {categoryTitle(cat)}
                       </span>

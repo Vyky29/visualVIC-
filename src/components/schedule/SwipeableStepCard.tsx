@@ -254,15 +254,17 @@ export function SwipeableStepCard({
         rotateY: 180,
         transition: { duration: 0.42, ease: easeCalm },
       });
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((r) =>
+        setTimeout(r, variant === "focus" ? 40 : 100),
+      );
     } else {
       await new Promise((r) => setTimeout(r, 50));
     }
 
     await controls.start({
-      opacity: 0.64,
-      y: 12,
-      scale: 0.98,
+      opacity: variant === "focus" ? 0 : 0.64,
+      y: variant === "focus" ? 0 : 12,
+      scale: variant === "focus" ? 1 : 0.98,
       transition: { duration: 0.26, ease: easeCalm },
     });
 
@@ -272,6 +274,7 @@ export function SwipeableStepCard({
     flipControls,
     completionBackImageUrl,
     onSwipeComplete,
+    variant,
   ]);
 
   const handleDragEnd = useCallback(

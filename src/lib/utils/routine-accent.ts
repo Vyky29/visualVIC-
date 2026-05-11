@@ -195,6 +195,19 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   },
 };
 
+function safeLowerDecoded(value: string | undefined | null): string {
+  if (!value) return "";
+  try {
+    return decodeURIComponent(value).toLowerCase();
+  } catch {
+    return value.toLowerCase();
+  }
+}
+
+function includesAny(haystack: string, needles: readonly string[]): boolean {
+  return needles.some((needle) => haystack.includes(needle));
+}
+
 /**
  * Category tone from a **single step** image URL — outlines on Now / Next / Focus / compact.
  */
@@ -204,21 +217,142 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
     if (c.includes("hotel")) return "hotel";
     return "airport";
   }
-  const u = step.imageUrl ?? "";
-  if (u.includes("/brushing-teeth/")) return "brushing";
-  if (u.includes("/shower/")) return "shower";
+  const u = safeLowerDecoded(step.imageUrl);
+  const id = step.id.trim().toLowerCase();
+  const title = step.title.trim().toLowerCase();
+  const haystack = `${u} ${id} ${title}`;
+
   if (
-    u.includes("/cards/getting-dress") ||
-    u.includes("getting-dress-%26-undress") ||
-    u.includes("getting-dress-&-undress")
+    includesAny(haystack, [
+      "/brushing-teeth/",
+      "toothbrush",
+      "toothpaste",
+      "top-teeth",
+      "bottom-teeth",
+      "brush-top-teeth",
+      "brush-bottom-teeth",
+      "brush tongue",
+      "brush-tongue",
+      "teeth",
+      "mouth",
+      "tongue",
+      "rinse-mouth",
+      "spit-out-water",
+    ])
+  ) {
+    return "brushing";
+  }
+  if (
+    includesAny(haystack, [
+      "/shower/",
+      "shower",
+      "shampoo",
+      "conditioner",
+      "sponge",
+      "comb",
+      "hair-dryer",
+      "massage-hair",
+      "wet-hair",
+      "wash-body",
+      "wash-hair",
+      "dry-body",
+      "dry-hair",
+      "rinse-body",
+      "rinse-hair",
+      "hydratate-body",
+      "body-lotion",
+      "brush-hair",
+    ])
+  ) {
+    return "shower";
+  }
+  if (
+    includesAny(haystack, [
+      "/cards/getting-dress",
+      "getting-dress-&-undress",
+      "getting-dress-undress",
+      "dress",
+      "undress",
+      "tshirt",
+      "shirt",
+      "trousers",
+      "pants",
+      "shoes",
+      "socks",
+      "jacket",
+      "jumper",
+      "hat",
+      "scarf",
+      "shorts",
+      "trainers",
+      "bra",
+      "knickers",
+      "vest",
+      "gloves",
+    ])
   ) {
     return "dress";
   }
-  if (u.includes("/climbing/")) return "climbing";
-  if (u.includes("/cards/core/")) return "core";
-  if (u.includes("/cards/swimming/")) return "swimming";
-  if (u.includes("at%20the%20airport")) return "airport";
-  if (u.includes("at%20the%20hotel")) return "hotel";
+  if (
+    includesAny(haystack, [
+      "/climbing/",
+      "climb",
+      "carabiner",
+      "harness",
+      "helmet",
+      "grigri",
+      "rope",
+      "boulder",
+      "magnesium",
+      "hold",
+      "knot",
+    ])
+  ) {
+    return "climbing";
+  }
+  if (
+    includesAny(haystack, [
+      "/cards/core/",
+      "wash-hands",
+      "wash hands",
+      "toilet",
+      "eat",
+      "drink",
+      "walk",
+      "listen",
+      "quiet",
+      "speak",
+      "stand",
+      "sit-down",
+      "sit down",
+      "stop",
+      "wait",
+      "look",
+    ])
+  ) {
+    return "core";
+  }
+  if (
+    includesAny(haystack, [
+      "/cards/swimming/",
+      "swim",
+      "pool",
+      "goggles",
+      "googles",
+      "flip-flops",
+      "sinkers",
+      "changing-room",
+      "swimming-costume",
+      "blow-bubbles",
+      "kick-legs",
+      "float",
+      "splash",
+    ])
+  ) {
+    return "swimming";
+  }
+  if (includesAny(haystack, ["at the airport", "airport"])) return "airport";
+  if (includesAny(haystack, ["at the hotel", "hotel"])) return "hotel";
   return "default";
 }
 
