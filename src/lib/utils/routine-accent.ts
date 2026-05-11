@@ -108,13 +108,13 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     homeDashboard:
       "ring-1 ring-[#6b8f9e]/92 ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#4a6572]/85 shadow-[0_8px_32px_-12px_rgba(74,101,114,0.32)]",
+      "ring-2 ring-[#6b8f9e]/90 shadow-[0_8px_32px_-12px_rgba(107,143,158,0.36)]",
     scheduleNext:
-      "ring-2 ring-[#4a6572]/78 shadow-[0_6px_22px_-12px_rgba(74,101,114,0.26)]",
+      "ring-2 ring-[#6b8f9e]/82 shadow-[0_6px_22px_-12px_rgba(107,143,158,0.3)]",
     scheduleFocus:
-      "ring-2 ring-[#4a6572]/88 shadow-[0_8px_32px_-12px_rgba(74,101,114,0.36)]",
+      "ring-2 ring-[#6b8f9e]/92 shadow-[0_8px_32px_-12px_rgba(107,143,158,0.4)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#4a6572]/50 pl-3 ring-1 ring-[#4a6572]/25 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#6b8f9e]/55 pl-3 ring-1 ring-[#6b8f9e]/28 ring-offset-2 ring-offset-cream",
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(107,143,158,0.35)]",
   },

@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { Routine } from "@/lib/types/routine";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
-import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-card";
+import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
 import { PixtoFocusCardScale } from "@/components/schedule/PixtoFocusCardScale";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
 import { GeneratedPixtoFocusScale } from "@/components/experimental/GeneratedPixtoFocusScale";
@@ -233,8 +233,8 @@ export function FocusMode({ routine, exitHref }: Props) {
                       status={stepStatus(nowStep)}
                       variant="focus"
                       onSwipeComplete={completeCurrent}
-                      completionBackImageUrl={resolveCategoryBackCardUrl(
-                        nowStep.imageUrl,
+                      completionBackImageUrl={resolveCategoryBackCardUrlForStep(
+                        nowStep,
                       )}
                       accentRings={accentRings}
                     />
@@ -248,8 +248,8 @@ export function FocusMode({ routine, exitHref }: Props) {
                       status={stepStatus(nowStep)}
                       variant="focus"
                       onSwipeComplete={completeCurrent}
-                      completionBackImageUrl={resolveCategoryBackCardUrl(
-                        nowStep.imageUrl,
+                      completionBackImageUrl={resolveCategoryBackCardUrlForStep(
+                        nowStep,
                       )}
                       accentRings={accentRings}
                     />
@@ -262,8 +262,8 @@ export function FocusMode({ routine, exitHref }: Props) {
                     status={stepStatus(nowStep)}
                     variant="focus"
                     onSwipeComplete={completeCurrent}
-                    completionBackImageUrl={resolveCategoryBackCardUrl(
-                      nowStep.imageUrl,
+                    completionBackImageUrl={resolveCategoryBackCardUrlForStep(
+                      nowStep,
                     )}
                     accentRings={accentRings}
                   />

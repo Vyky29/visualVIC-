@@ -3,12 +3,14 @@
  * (transition feedback — not a generic cover).
  */
 
+import type { RoutineStep } from "@/lib/types/routine";
 import { climbingBackCardUrl } from "@/lib/cards/climbing-cards";
 import { coreBackCardUrl } from "@/lib/cards/core-cards";
 import { showerBackCardUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { atTheAirportBackCardUrl } from "@/lib/cards/at-the-airport-cards";
 import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
+import { stepCardVisualTone } from "@/lib/utils/routine-accent";
 
 const CORE_FALLBACK = coreBackCardUrl();
 
@@ -45,4 +47,30 @@ export function resolveCategoryBackCardUrl(
   }
 
   return CORE_FALLBACK;
+}
+
+export function resolveCategoryBackCardUrlForStep(
+  step?: RoutineStep | null,
+): string | undefined {
+  if (!step) return CORE_FALLBACK;
+  switch (stepCardVisualTone(step)) {
+    case "brushing":
+      return "/cards/brushing-teeth/backcard3.png";
+    case "shower":
+      return showerBackCardUrl();
+    case "climbing":
+      return climbingBackCardUrl();
+    case "dress":
+      return gettingDressUndressBackCardUrl();
+    case "airport":
+      return atTheAirportBackCardUrl();
+    case "hotel":
+      return atTheHotelBackCardUrl();
+    case "core":
+    case "swimming":
+    case "custom":
+    case "default":
+    default:
+      return resolveCategoryBackCardUrl(step.imageUrl);
+  }
 }

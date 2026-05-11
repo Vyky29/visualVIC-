@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import type { Routine } from "@/lib/types/routine";
-import { resolveCategoryBackCardUrl } from "@/lib/cards/resolve-category-back-card";
+import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { Button } from "@/components/ui/Button";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
@@ -146,9 +146,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
               variant="hero"
               onSwipeComplete={() => completeCurrent()}
               onDoubleTapOpenFocus={openFocus}
-              completionBackImageUrl={resolveCategoryBackCardUrl(
-                nowStep.imageUrl,
-              )}
+              completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
               accentRings={accentRings}
             />
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
@@ -185,9 +183,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
                   status={stepStatus(step)}
                   variant="next"
                   onSwipeComplete={() => {}}
-                  completionBackImageUrl={resolveCategoryBackCardUrl(
-                    step.imageUrl,
-                  )}
+                  completionBackImageUrl={resolveCategoryBackCardUrlForStep(step)}
                   accentRings={accentRings}
                 />
                 </motion.div>
@@ -219,9 +215,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
                   status={stepStatus(step)}
                   variant="compact"
                   onSwipeComplete={() => {}}
-                  completionBackImageUrl={resolveCategoryBackCardUrl(
-                    step.imageUrl,
-                  )}
+                  completionBackImageUrl={resolveCategoryBackCardUrlForStep(step)}
                   accentRings={accentRings}
                 />
               ))}
