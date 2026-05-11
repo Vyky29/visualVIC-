@@ -287,6 +287,10 @@ export function GeneratedPixtoCard({
   }, []);
 
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
+  const scheduleIllustrationWidthPct = `${Math.min(
+    ILLUSTRATION_WIDTH_FRAC * 100 * 1.12,
+    80,
+  ).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
 
@@ -355,7 +359,7 @@ export function GeneratedPixtoCard({
               <div
                 className="relative min-h-0"
                 style={{
-                  width: `min(${illustrationWidthPct}, 100%)`,
+                  width: `min(${scheduleLargeType ? scheduleIllustrationWidthPct : illustrationWidthPct}, 100%)`,
                   aspectRatio: ILLUSTRATION_FRAME_ASPECT,
                   maxHeight: "100%",
                 }}

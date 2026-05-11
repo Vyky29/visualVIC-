@@ -51,7 +51,12 @@ function categoryTitle(cat: DashboardCategory): string {
 
 function ScheduleSectionIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-[18px] w-[18px]"
+      aria-hidden
+    >
       <rect
         x="4.25"
         y="5"
@@ -431,7 +436,7 @@ export default function DashboardPage() {
           </Card>
         </Link>
 
-        <section className="space-y-3">
+        <section className="space-y-4">
           <SectionHeader
             title="Schedule Player"
             icon={<ScheduleSectionIcon />}
@@ -446,7 +451,7 @@ export default function DashboardPage() {
               </Link>
             }
           />
-          <Link href={`/player/${primary.id}`}>
+          <Link href={`/player/${primary.id}`} className="block">
             <Card className="overflow-hidden border-0 bg-gradient-to-br from-sage-mist via-cream to-cream p-0 shadow-soft ring-1 ring-sage/20 transition hover:shadow-[0_12px_40px_-16px_rgba(28,36,32,0.18)]">
               <div className="flex gap-4 p-4">
                 <HomeRoutinePreviewMedia
