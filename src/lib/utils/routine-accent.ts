@@ -45,34 +45,34 @@ export type RoutineAccentRings = {
 
 const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
   brushing: {
-    home: "ring-2 ring-[#91C24C]/90 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#D4E1C2] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#91C24C]/90 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#D4E1C2] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#91C24C]/85 shadow-[0_8px_32px_-12px_rgba(145,194,76,0.38)]",
+      "ring-2 ring-[#D4E1C2] shadow-[0_8px_32px_-12px_rgba(212,225,194,0.42)]",
     scheduleNext:
-      "ring-2 ring-[#91C24C]/78 shadow-[0_6px_22px_-12px_rgba(145,194,76,0.32)]",
+      "ring-2 ring-[#D4E1C2] shadow-[0_6px_22px_-12px_rgba(212,225,194,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#91C24C]/88 shadow-[0_8px_32px_-12px_rgba(145,194,76,0.42)]",
+      "ring-2 ring-[#D4E1C2] shadow-[0_8px_32px_-12px_rgba(212,225,194,0.46)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#91C24C]/55 pl-3 ring-1 ring-[#91C24C]/22 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#D4E1C2] pl-3 ring-1 ring-[#D4E1C2] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_40px_-10px_rgba(145,194,76,0.45)]",
+      "group-hover:shadow-[0_0_40px_-10px_rgba(212,225,194,0.55)]",
   },
   shower: {
-    home: "ring-2 ring-[#143d66]/92 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#A6C1F4] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#143d66]/92 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#A6C1F4] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#143d66]/88 shadow-[0_8px_32px_-12px_rgba(20,61,102,0.38)]",
+      "ring-2 ring-[#A6C1F4] shadow-[0_8px_32px_-12px_rgba(166,193,244,0.42)]",
     scheduleNext:
-      "ring-2 ring-[#143d66]/82 shadow-[0_6px_22px_-12px_rgba(20,61,102,0.3)]",
+      "ring-2 ring-[#A6C1F4] shadow-[0_6px_22px_-12px_rgba(166,193,244,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#143d66]/90 shadow-[0_8px_32px_-12px_rgba(20,61,102,0.42)]",
+      "ring-2 ring-[#A6C1F4] shadow-[0_8px_32px_-12px_rgba(166,193,244,0.46)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#143d66]/55 pl-3 ring-1 ring-[#143d66]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#A6C1F4] pl-3 ring-1 ring-[#A6C1F4] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_40px_-10px_rgba(20,61,102,0.38)]",
+      "group-hover:shadow-[0_0_40px_-10px_rgba(166,193,244,0.55)]",
   },
   climbing: {
     home: "ring-2 ring-[#E9AE2E]/95 ring-offset-2 ring-offset-canvas",
@@ -90,34 +90,34 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
       "group-hover:shadow-[0_0_40px_-10px_rgba(233,174,46,0.42)]",
   },
   dress: {
-    home: "ring-2 ring-[#6B4E9E]/90 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#A194BE] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#6B4E9E]/90 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#A194BE] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#6B4E9E]/85 shadow-[0_8px_32px_-12px_rgba(107,78,158,0.35)]",
+      "ring-2 ring-[#A194BE] shadow-[0_8px_32px_-12px_rgba(161,148,190,0.4)]",
     scheduleNext:
-      "ring-2 ring-[#6B4E9E]/78 shadow-[0_6px_22px_-12px_rgba(107,78,158,0.28)]",
+      "ring-2 ring-[#A194BE] shadow-[0_6px_22px_-12px_rgba(161,148,190,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#6B4E9E]/88 shadow-[0_8px_32px_-12px_rgba(107,78,158,0.4)]",
+      "ring-2 ring-[#A194BE] shadow-[0_8px_32px_-12px_rgba(161,148,190,0.44)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#6B4E9E]/55 pl-3 ring-1 ring-[#6B4E9E]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#A194BE] pl-3 ring-1 ring-[#A194BE] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_40px_-10px_rgba(107,78,158,0.38)]",
+      "group-hover:shadow-[0_0_40px_-10px_rgba(161,148,190,0.5)]",
   },
   core: {
-    home: "ring-2 ring-[#6b8f9e]/92 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#CBCBC9] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#6b8f9e]/92 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#CBCBC9] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#6b8f9e]/90 shadow-[0_8px_32px_-12px_rgba(107,143,158,0.36)]",
+      "ring-2 ring-[#CBCBC9] shadow-[0_8px_32px_-12px_rgba(203,203,201,0.42)]",
     scheduleNext:
-      "ring-2 ring-[#6b8f9e]/82 shadow-[0_6px_22px_-12px_rgba(107,143,158,0.3)]",
+      "ring-2 ring-[#CBCBC9] shadow-[0_6px_22px_-12px_rgba(203,203,201,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#6b8f9e]/92 shadow-[0_8px_32px_-12px_rgba(107,143,158,0.4)]",
+      "ring-2 ring-[#CBCBC9] shadow-[0_8px_32px_-12px_rgba(203,203,201,0.46)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#6b8f9e]/55 pl-3 ring-1 ring-[#6b8f9e]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#CBCBC9] pl-3 ring-1 ring-[#CBCBC9] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(107,143,158,0.35)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(203,203,201,0.5)]",
   },
   custom: {
     home: "ring-2 ring-ink ring-offset-2 ring-offset-canvas",
@@ -134,50 +134,50 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
       "group-hover:shadow-[0_0_28px_-10px_rgba(28,36,32,0.22)]",
   },
   swimming: {
-    home: "ring-2 ring-[#4a8fa8]/88 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#B8E3F4] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#4a8fa8]/88 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#B8E3F4] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#4a8fa8]/85 shadow-[0_8px_32px_-12px_rgba(74,143,168,0.32)]",
+      "ring-2 ring-[#B8E3F4] shadow-[0_8px_32px_-12px_rgba(184,227,244,0.42)]",
     scheduleNext:
-      "ring-2 ring-[#4a8fa8]/78 shadow-[0_6px_22px_-12px_rgba(74,143,168,0.26)]",
+      "ring-2 ring-[#B8E3F4] shadow-[0_6px_22px_-12px_rgba(184,227,244,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#4a8fa8]/88 shadow-[0_8px_32px_-12px_rgba(74,143,168,0.36)]",
+      "ring-2 ring-[#B8E3F4] shadow-[0_8px_32px_-12px_rgba(184,227,244,0.46)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#4a8fa8]/50 pl-3 ring-1 ring-[#4a8fa8]/28 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#B8E3F4] pl-3 ring-1 ring-[#B8E3F4] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(74,143,168,0.35)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(184,227,244,0.5)]",
   },
   airport: {
-    home: "ring-2 ring-[#e0b030]/95 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#F9DD9F] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#e0b030]/95 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#F9DD9F] ring-offset-1 ring-offset-canvas",
     /** Schedule: no ring-offset — matches other packs so the ring hugs the card shell (HTML cards looked “gappy”). */
     scheduleNow:
-      "ring-2 ring-[#F9DD9E]/95 shadow-[0_8px_32px_-12px_rgba(212,160,23,0.38)]",
+      "ring-2 ring-[#F9DD9F] shadow-[0_8px_32px_-12px_rgba(249,221,159,0.44)]",
     scheduleNext:
-      "ring-2 ring-[#f5d88a]/90 shadow-[0_6px_22px_-12px_rgba(212,160,23,0.28)]",
+      "ring-2 ring-[#F9DD9F] shadow-[0_6px_22px_-12px_rgba(249,221,159,0.36)]",
     scheduleFocus:
-      "ring-2 ring-[#F9DD9E]/92 shadow-[0_8px_32px_-12px_rgba(249,221,158,0.45)]",
+      "ring-2 ring-[#F9DD9F] shadow-[0_8px_32px_-12px_rgba(249,221,159,0.48)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#d4a017]/55 pl-3 ring-1 ring-[#F9DD9E]/40 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#F9DD9F] pl-3 ring-1 ring-[#F9DD9F] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(224,176,48,0.38)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(249,221,159,0.52)]",
   },
   hotel: {
-    home: "ring-2 ring-[#8C1E2E]/90 ring-offset-2 ring-offset-canvas",
+    home: "ring-2 ring-[#EBA29C] ring-offset-2 ring-offset-canvas",
     homeDashboard:
-      "ring-1 ring-[#8C1E2E]/90 ring-offset-1 ring-offset-canvas",
+      "ring-1 ring-[#EBA29C] ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#8C1E2E]/90 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.35)]",
+      "ring-2 ring-[#EBA29C] shadow-[0_8px_32px_-12px_rgba(235,162,156,0.42)]",
     scheduleNext:
-      "ring-2 ring-[#a53b4d]/85 shadow-[0_6px_22px_-12px_rgba(140,30,46,0.28)]",
+      "ring-2 ring-[#EBA29C] shadow-[0_6px_22px_-12px_rgba(235,162,156,0.34)]",
     scheduleFocus:
-      "ring-2 ring-[#8C1E2E]/92 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.4)]",
+      "ring-2 ring-[#EBA29C] shadow-[0_8px_32px_-12px_rgba(235,162,156,0.46)]",
     scheduleCompact:
-      "ml-0.5 border-l-[3px] border-dashed border-[#8C1E2E]/55 pl-3 ring-1 ring-[#8C1E2E]/30 ring-offset-2 ring-offset-cream",
+      "ml-0.5 border-l-[3px] border-dashed border-[#EBA29C] pl-3 ring-1 ring-[#EBA29C] ring-offset-2 ring-offset-cream",
     hoverGlow:
-      "group-hover:shadow-[0_0_36px_-12px_rgba(140,30,46,0.38)]",
+      "group-hover:shadow-[0_0_36px_-12px_rgba(235,162,156,0.52)]",
   },
   finish: {
     home: "ring-2 ring-[#9aa3a8]/88 ring-offset-2 ring-offset-canvas",

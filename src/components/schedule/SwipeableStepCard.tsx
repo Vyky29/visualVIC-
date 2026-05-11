@@ -74,14 +74,14 @@ const STEP_OUTLINE_HEX: Record<
   ReturnType<typeof stepCardVisualTone>,
   string
 > = {
-  brushing: "#91C24C",
-  shower: "#143d66",
+  brushing: "#D4E1C2",
+  shower: "#A6C1F4",
   climbing: "#E9AE2E",
-  dress: "#6B4E9E",
-  core: "#6b8f9e",
-  swimming: "#4a8fa8",
-  airport: "#F9DD9E",
-  hotel: "#8C1E2E",
+  dress: "#A194BE",
+  core: "#CBCBC9",
+  swimming: "#B8E3F4",
+  airport: "#F9DD9F",
+  hotel: "#EBA29C",
   finish: "#9aa3a8",
   custom: "#1c2420",
   default: "#7d9b87",
@@ -434,9 +434,9 @@ export function SwipeableStepCard({
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
   const focusGeneratedBorderStyle =
-    focusGenerated && gp?.categoryColour
+    focusGenerated
       ? {
-          boxShadow: `0 0 0 2px ${gp.categoryColour}, 0 8px 32px -12px rgba(28,36,32,0.24)`,
+          boxShadow: `0 0 0 2px ${STEP_OUTLINE_HEX[stepCardVisualTone(step)]}, 0 8px 32px -12px rgba(28,36,32,0.24)`,
         }
       : undefined;
   const nextOutlineStyle =

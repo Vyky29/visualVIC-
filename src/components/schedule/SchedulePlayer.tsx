@@ -144,7 +144,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
               onClick={openFocus}
             >
               <FocusButtonIcon />
-              <span className="truncate">Open Focus Mode</span>
+              <span className="truncate">Focus Mode</span>
             </Button>
           ) : null}
           <Button

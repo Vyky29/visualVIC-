@@ -9,7 +9,60 @@ import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import { cn } from "@/lib/utils/cn";
-import { routineSchedulePlayerIndexCardClass } from "@/lib/utils/routine-accent";
+import {
+  routineSchedulePlayerIndexCardClass,
+  routineVisualTone,
+  stepCardVisualTone,
+  type RoutineVisualTone,
+} from "@/lib/utils/routine-accent";
+import type { Routine } from "@/lib/types/routine";
+
+const TONE_LABEL: Partial<Record<RoutineVisualTone, string>> = {
+  brushing: "Brushing teeth",
+  shower: "Shower",
+  climbing: "Climbing",
+  dress: "Dressing",
+  core: "Core",
+  swimming: "Swimming",
+  airport: "Airport",
+  hotel: "Hotel",
+};
+
+const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
+  brushing: "border-[#91C24C]/30 bg-sage-mist/85 text-[#6a8f3a]",
+  shower: "border-[#143d66]/20 bg-[#e8eef5]/95 text-[#143d66]",
+  climbing: "border-[#E9AE2E]/28 bg-[#faf6ea]/95 text-[#9a7820]",
+  dress: "border-[#6B4E9E]/24 bg-[#f0ebf7]/95 text-[#5c4488]",
+  core: "border-[#6b8f9e]/24 bg-[#e9eef1]/95 text-[#4a6572]",
+  swimming: "border-[#4a8fa8]/24 bg-[#e8f4f7]/95 text-[#3d7a8f]",
+  airport: "border-[#d4a017]/26 bg-[#fff9ed]/95 text-[#9a7208]",
+  hotel: "border-[#8C1E2E]/24 bg-[#fdeef0]/95 text-[#8C1E2E]",
+  finish: "border-[#9aa3a8]/24 bg-[#eef1f2]/95 text-[#7c858b]",
+  custom: "border-ink/12 bg-canvas-muted text-ink-subtle",
+  default: "border-sage/18 bg-sage-mist/70 text-sage",
+};
+
+function formatListLabel(labels: string[]): string {
+  if (labels.length === 0) return "";
+  if (labels.length === 1) return labels[0];
+  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
+  return `${labels.slice(0, -1).join(", ")} and ${labels.at(-1)}`;
+}
+
+function templateCardsSummary(routine: Routine): string {
+  const labels: string[] = [];
+  const seen = new Set<string>();
+
+  for (const step of routine.steps) {
+    const tone = stepCardVisualTone(step);
+    const label = TONE_LABEL[tone];
+    if (!label || seen.has(label)) continue;
+    seen.add(label);
+    labels.push(label);
+  }
+
+  return labels.length > 0 ? formatListLabel(labels) : routine.name;
+}
 
 export default function PlayerIndexPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
@@ -36,6 +89,10 @@ export default function PlayerIndexPage() {
         <ul className="flex flex-col gap-3">
           {combined.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+            const tone = routineVisualTone(r);
+            const kindLabel = r.kind === "Template" ? "First & Then" : r.kind;
+            const title =
+              r.kind === "Template" ? templateCardsSummary(r) : r.name;
             return (
               <li key={r.id} className="group">
                 <Card
@@ -62,14 +119,19 @@ export default function PlayerIndexPage() {
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                        {r.kind}
+                        {kindLabel}
                       </p>
                       <p className="truncate text-[17px] font-semibold text-ink">
-                        {r.name}
+                        {title}
                       </p>
-                      <p className="text-[13px] text-ink-subtle">
+                      <span
+                        className={cn(
+                          "inline-flex w-fit items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-none",
+                          STEP_CHIP_CLASS[tone],
+                        )}
+                      >
                         {r.steps.length} steps
-                      </p>
+                      </span>
                     </div>
                     <span className="self-center text-ink-faint" aria-hidden>
                       →
