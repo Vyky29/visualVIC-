@@ -15,7 +15,10 @@ import { climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { coreImageUrl } from "@/lib/cards/core-cards";
 import { atTheAirportPackMarkUrl } from "@/lib/cards/at-the-airport-cards";
 import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
-import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
+import {
+  GETTING_DRESS_REGISTRY,
+  getDressRegistryCardBySlug,
+} from "@/lib/cards/getting-dress-undress-registry";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import {
@@ -37,19 +40,25 @@ import {
 
 const groups = ["self-care", "home", "activity"] as const;
 
-const PACK_ORDER_BY_CATEGORY: Record<
+type LibrarySectionId =
+  | Exclude<PickablePackId, "dress">
+  | "dress-on"
+  | "dress-off";
+
+const SECTION_ORDER_BY_CATEGORY: Record<
   (typeof groups)[number],
-  readonly PickablePackId[]
+  readonly LibrarySectionId[]
 > = {
-  "self-care": ["bt", "shower", "dress"],
+  "self-care": ["bt", "shower", "dress-on", "dress-off"],
   home: ["core", "airport", "hotel"],
   activity: ["climb", "swim"],
 };
 
-const PACK_LABEL: Record<PickablePackId, string> = {
+const SECTION_LABEL: Record<LibrarySectionId, string> = {
   bt: "Brushing teeth",
   shower: "Shower",
-  dress: "Dressing & undressing",
+  "dress-on": "Dressing",
+  "dress-off": "Undressing",
   core: "Core",
   airport: "At the airport",
   hotel: "At the hotel",
@@ -58,10 +67,17 @@ const PACK_LABEL: Record<PickablePackId, string> = {
 };
 
 /** Thumbnail in each pack accordion header (same assets as the tiles). */
-const PACK_HEADER_ICON: Record<PickablePackId, string> = {
+const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   bt: brushingTeethImageUrl("toothbrush"),
   shower: showerImageUrl("shower"),
-  dress: GETTING_DRESS_REGISTRY[0]?.imageUrl ?? "",
+  "dress-on":
+    GETTING_DRESS_REGISTRY.find((card) => card.actionType === "on")?.imageUrl ??
+    GETTING_DRESS_REGISTRY[0]?.imageUrl ??
+    "",
+  "dress-off":
+    GETTING_DRESS_REGISTRY.find((card) => card.actionType === "off")?.imageUrl ??
+    GETTING_DRESS_REGISTRY[0]?.imageUrl ??
+    "",
   core: coreImageUrl("wash-hands"),
   airport: atTheAirportPackMarkUrl(),
   hotel: atTheHotelPackMarkUrl(),
@@ -70,10 +86,11 @@ const PACK_HEADER_ICON: Record<PickablePackId, string> = {
 };
 
 /** Ring tint around the pack icon — sole colour cue per category. */
-const libraryPackIconRingClass: Record<PickablePackId, string> = {
+const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   bt: "ring-[#91C24C]/80",
   shower: "ring-[#143d66]/60",
-  dress: "ring-[#6B4E9E]/70",
+  "dress-on": "ring-[#6B4E9E]/70",
+  "dress-off": "ring-[#6B4E9E]/70",
   core: "ring-accent/70",
   airport: "ring-[#e0b030]/90",
   hotel: "ring-[#8C1E2E]/70",
@@ -103,26 +120,38 @@ function cardImageUnoptimized(src: string): boolean {
   return src.startsWith("/cards/") || src.includes("/cards/");
 }
 
-function groupByCategoryAndPack(): Map<
+function librarySectionFromCard(
+  c: PickableLibraryCard,
+): LibrarySectionId | null {
+  const pack = pickablePackFromPickId(c.pickId);
+  if (!pack) return null;
+  if (pack !== "dress") return pack;
+
+  const slug = c.pickId.split("::")[1] ?? "";
+  const dress = getDressRegistryCardBySlug(slug);
+  return dress?.actionType === "off" ? "dress-off" : "dress-on";
+}
+
+function groupByCategoryAndSection(): Map<
   (typeof groups)[number],
-  Map<PickablePackId, PickableLibraryCard[]>
+  Map<LibrarySectionId, PickableLibraryCard[]>
 > {
   const out = new Map<
     (typeof groups)[number],
-    Map<PickablePackId, PickableLibraryCard[]>
+    Map<LibrarySectionId, PickableLibraryCard[]>
   >();
   for (const g of groups) {
-    const inner = new Map<PickablePackId, PickableLibraryCard[]>();
-    for (const p of PACK_ORDER_BY_CATEGORY[g]) inner.set(p, []);
+    const inner = new Map<LibrarySectionId, PickableLibraryCard[]>();
+    for (const p of SECTION_ORDER_BY_CATEGORY[g]) inner.set(p, []);
     out.set(g, inner);
   }
   for (const c of PICKABLE_LIBRARY_CARDS) {
-    const pack = pickablePackFromPickId(c.pickId);
-    if (!pack) continue;
+    const section = librarySectionFromCard(c);
+    if (!section) continue;
     const cat = c.category as (typeof groups)[number];
     const inner = out.get(cat);
     if (!inner) continue;
-    const list = inner.get(pack);
+    const list = inner.get(section);
     if (list) list.push(c);
   }
   return out;
@@ -183,12 +212,12 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
       </div>
       <div
         className={cn(
-          "isolate flex w-full shrink-0 flex-col justify-center rounded-b-xl px-1.5 pb-2 pt-1.5 sm:rounded-b-2xl sm:px-2 sm:pb-2.5 sm:pt-2",
-          "min-h-[3.35rem] sm:min-h-[3.5rem]",
+          "isolate flex w-full shrink-0 flex-col justify-center rounded-b-xl px-1.5 pb-1.5 pt-1 sm:rounded-b-2xl sm:px-2 sm:pb-1.5 sm:pt-1",
+          "min-h-[2.75rem] sm:min-h-[2.95rem]",
           libraryRibbonClassForPickId(v.pickId),
         )}
       >
-        <p className="line-clamp-2 text-balance text-center text-[10px] font-semibold leading-snug sm:text-[11px]">
+        <p className="line-clamp-2 text-balance text-center text-[10px] font-semibold leading-[1.06] sm:text-[11px] sm:leading-[1.08]">
           {v.label}
         </p>
       </div>
@@ -207,7 +236,7 @@ export function LibraryPageClient() {
   /** Desktop / fine-pointer only: peek while pointer is over the row. */
   const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
 
-  const grouped = useMemo(() => groupByCategoryAndPack(), []);
+  const grouped = useMemo(() => groupByCategoryAndSection(), []);
 
   const isAccordionOpen = useCallback(
     (key: string) =>
@@ -324,14 +353,14 @@ export function LibraryPageClient() {
                 {cat.replace("-", " ")}
               </h2>
               <div className="space-y-2">
-                {PACK_ORDER_BY_CATEGORY[cat].map((pack) => {
-                  const cards = inner.get(pack) ?? [];
+                {SECTION_ORDER_BY_CATEGORY[cat].map((section) => {
+                  const cards = inner.get(section) ?? [];
                   if (cards.length === 0) return null;
-                  const accordionKey = `${cat}::${pack}`;
+                  const accordionKey = `${cat}::${section}`;
                   const open = isAccordionOpen(accordionKey);
-                  const ringClass = libraryPackIconRingClass[pack];
+                  const ringClass = libraryPackIconRingClass[section];
                   const count = cards.length;
-                  const iconSrc = PACK_HEADER_ICON[pack];
+                  const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
 
                   return (
@@ -345,15 +374,15 @@ export function LibraryPageClient() {
                         if (prefersFineHover) setHoverPeekKey(null);
                       }}
                     >
-                      <div className="flex h-[52px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-14">
+                      <div className="flex h-[58px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-[60px]">
                         <button
                           type="button"
                           onClick={() => openAccordion(accordionKey)}
-                          className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2 text-left transition hover:bg-canvas-muted/90 sm:px-4"
+                          className="flex min-w-0 flex-1 items-center gap-3.5 px-3 py-2.5 text-left transition hover:bg-canvas-muted/90 sm:px-4"
                         >
                           <span
                             className={cn(
-                              "flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-11 sm:w-11",
+                              "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-12 sm:w-12",
                               ringClass,
                             )}
                           >
@@ -364,13 +393,13 @@ export function LibraryPageClient() {
                                 width={40}
                                 height={40}
                                 unoptimized={iconUnopt}
-                                className="h-8 w-8 object-contain sm:h-9 sm:w-9"
+                                className="h-[2.125rem] w-[2.125rem] object-contain sm:h-[2.375rem] sm:w-[2.375rem]"
                               />
                             ) : null}
                           </span>
                           <span className="flex min-w-0 flex-1 items-baseline gap-2">
                             <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
-                              {PACK_LABEL[pack]}
+                              {SECTION_LABEL[section]}
                             </span>
                             <span
                               className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"

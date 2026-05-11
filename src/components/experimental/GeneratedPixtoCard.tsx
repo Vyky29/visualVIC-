@@ -392,7 +392,7 @@ export function GeneratedPixtoCard({
               : isDense
                 ? "text-[14px] sm:text-[16px]"
                 : /* Schedule NOW/NEXT — coloured category ribete. */
-                  "text-[58px] sm:text-[68px] tracking-[0.04em]",
+                  "text-[60px] sm:text-[70px] tracking-[0.04em]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
