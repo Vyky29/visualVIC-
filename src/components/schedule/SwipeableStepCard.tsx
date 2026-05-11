@@ -436,14 +436,9 @@ export function SwipeableStepCard({
       : variant === "next"
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
-  const focusGeneratedBorderStyle =
-    focusGenerated
-      ? {
-          boxShadow: `0 0 0 2px ${STEP_OUTLINE_HEX[stepCardVisualTone(step)]}, 0 8px 32px -12px rgba(28,36,32,0.24)`,
-        }
-      : undefined;
+  const focusGeneratedBorderStyle = undefined;
   const nextOutlineStyle =
-    variant === "next"
+    variant === "next" && !hasGeneratedPixto
       ? (() => {
           const tone = stepCardVisualTone(step);
           const stroke = STEP_OUTLINE_HEX[tone];
@@ -499,6 +494,8 @@ export function SwipeableStepCard({
             "mx-auto max-w-full",
             focusPixto
               ? rings.scheduleFocus
+              : hasGeneratedPixto
+                ? ""
               : focusGenerated
                 ? ""
                 : rings.scheduleNow,
@@ -510,7 +507,7 @@ export function SwipeableStepCard({
         variant === "next" &&
           cn(
             "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
-            rings.scheduleNext,
+            hasGeneratedPixto ? "" : rings.scheduleNext,
           ),
         variant === "focus" &&
           !focusPixto &&
