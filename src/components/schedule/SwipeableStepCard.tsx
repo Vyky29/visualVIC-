@@ -584,17 +584,19 @@ export function SwipeableStepCard({
                     )}
                   >
                     {variant === "focus" ? (
-                      <GeneratedPixtoCard
-                        illustrationUrl={gp.illustrationUrl}
-                        title={gp.title}
-                        category={gp.category}
-                        categoryColour={gp.categoryColour}
-                        iconUrl={gp.iconUrl}
-                        cardType={gp.cardType}
-                        focusPresentation
-                        suppressNeutralRing
-                        className="h-full w-full max-w-none"
-                      />
+                      <GeneratedPixtoSlotScale>
+                        <GeneratedPixtoCard
+                          illustrationUrl={gp.illustrationUrl}
+                          title={gp.title}
+                          category={gp.category}
+                          categoryColour={gp.categoryColour}
+                          iconUrl={gp.iconUrl}
+                          cardType={gp.cardType}
+                          focusPresentation
+                          suppressNeutralRing
+                          className="h-full w-full max-w-none"
+                        />
+                      </GeneratedPixtoSlotScale>
                     ) : (
                       <GeneratedPixtoSlotScale>
                         <GeneratedPixtoCard
@@ -761,23 +763,19 @@ export function SwipeableStepCard({
                 )}
               >
                 {variant === "focus" ? (
-                  /**
-                   * Focus should read like the stretched Pixto PNG cards: fill the
-                   * full focus slot (no native-aspect “air” under the ribbon).
-                   * Generated airport / hotel cards tolerate this vertical stretch
-                   * better because the category mark is separate from the art.
-                   */
-                  <GeneratedPixtoCard
-                    illustrationUrl={gp.illustrationUrl}
-                    title={gp.title}
-                    category={gp.category}
-                    categoryColour={gp.categoryColour}
-                    iconUrl={gp.iconUrl}
-                    cardType={gp.cardType}
-                    focusPresentation
-                    suppressNeutralRing
-                    className="h-full w-full max-w-none"
-                  />
+                  <GeneratedPixtoSlotScale>
+                    <GeneratedPixtoCard
+                      illustrationUrl={gp.illustrationUrl}
+                      title={gp.title}
+                      category={gp.category}
+                      categoryColour={gp.categoryColour}
+                      iconUrl={gp.iconUrl}
+                      cardType={gp.cardType}
+                      focusPresentation
+                      suppressNeutralRing
+                      className="h-full w-full max-w-none"
+                    />
+                  </GeneratedPixtoSlotScale>
                 ) : (
                   <GeneratedPixtoSlotScale>
                     <GeneratedPixtoCard

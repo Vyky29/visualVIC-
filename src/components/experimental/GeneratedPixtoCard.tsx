@@ -342,12 +342,9 @@ export function GeneratedPixtoCard({
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
 
-  /** Schedule NOW/NEXT (not Focus, not dense tile) — 3× type + taller title/ribbon rows. */
+  /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !isDense;
-  /** Slightly more middle row so two/three lines at full schedule size still fit. */
-  const gridTemplateRows = scheduleLargeType
-    ? `${ROW_FR_TOP * 0.62}fr ${ROW_FR_TITLE * 2.95}fr ${ROW_FR_CATEGORY * 1.34}fr`
-    : `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`;
+  const gridTemplateRows = `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`;
 
   return (
     <article
