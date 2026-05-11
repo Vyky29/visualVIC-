@@ -10,6 +10,7 @@ export type RoutineVisualTone =
   | "swimming"
   | "airport"
   | "hotel"
+  | "finish"
   /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
   | "custom"
   | "default";
@@ -178,6 +179,21 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(140,30,46,0.38)]",
   },
+  finish: {
+    home: "ring-2 ring-[#9aa3a8]/88 ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#9aa3a8]/88 ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#9aa3a8]/90 shadow-[0_8px_32px_-12px_rgba(111,121,128,0.28)]",
+    scheduleNext:
+      "ring-2 ring-[#9aa3a8]/84 shadow-[0_6px_22px_-12px_rgba(111,121,128,0.22)]",
+    scheduleFocus:
+      "ring-2 ring-[#9aa3a8]/92 shadow-[0_8px_32px_-12px_rgba(111,121,128,0.3)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#9aa3a8]/55 pl-3 ring-1 ring-[#9aa3a8]/28 ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_32px_-12px_rgba(111,121,128,0.26)]",
+  },
   default: {
     home: "ring-2 ring-[#7d9b87]/75 ring-offset-2 ring-offset-canvas",
     homeDashboard:
@@ -208,6 +224,17 @@ function includesAny(haystack: string, needles: readonly string[]): boolean {
   return needles.some((needle) => haystack.includes(needle));
 }
 
+function isFinishLikeStepData(step: RoutineStep, haystack: string): boolean {
+  const id = step.id.trim().toLowerCase();
+  const title = step.title.trim().toLowerCase();
+  return (
+    id === "__playback-finish__" ||
+    id === "core-finish" ||
+    title === "finish" ||
+    includesAny(haystack, ["/cards/core/finish.png", " core finish "])
+  );
+}
+
 /**
  * Category tone from a **single step** image URL — outlines on Now / Next / Focus / compact.
  */
@@ -221,6 +248,8 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   const id = step.id.trim().toLowerCase();
   const title = step.title.trim().toLowerCase();
   const haystack = `${u} ${id} ${title}`;
+
+  if (isFinishLikeStepData(step, haystack)) return "finish";
 
   // Mixed demo routines are composed from stock-pack steps; their ids are the
   // most reliable source for category tone and should win before looser text
@@ -567,6 +596,17 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
       nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#4a8fa8] ring-2 ring-[#4a8fa8]/35",
       nowLabel:
         "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#3d7a8f]",
+    },
+    finish: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#eef1f2] to-[#e2e7ea] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#9aa3a8]/40 transition active:scale-[0.99]",
+      progressFill: "bg-[#9aa3a8]",
+      counterPill:
+        "rounded-full bg-[#eef1f2]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#9aa3a8]/32",
+      nowDot:
+        "h-2 w-2 shrink-0 rounded-full bg-[#9aa3a8] ring-2 ring-[#9aa3a8]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7c858b]",
     },
     airport: {
       focusCta:

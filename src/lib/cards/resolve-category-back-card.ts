@@ -54,6 +54,8 @@ export function resolveCategoryBackCardUrlForStep(
 ): string | undefined {
   if (!step) return CORE_FALLBACK;
   switch (stepCardVisualTone(step)) {
+    case "finish":
+      return undefined;
     case "brushing":
       return "/cards/brushing-teeth/backcard3.png";
     case "shower":
