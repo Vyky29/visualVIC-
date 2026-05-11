@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils/cn";
 const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
-const TITLE_TEXT_SIZE_CLASS = "text-[26px]";
-const TITLE_LINE_HEIGHT_CLASS = "leading-[0.93]";
+const TITLE_TEXT_SIZE_CLASS = "text-[21px]";
+const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 
 type CardGeometry = {
   titleH: number;
@@ -120,30 +120,19 @@ function SampleLogo({
 
 function PreviewTitleBand({
   lines,
-  airy = false,
 }: {
   lines: [string] | [string, string] | [string, string, string];
-  airy?: boolean;
 }) {
-  const stackClass =
-    lines.length === 1
-      ? "gap-0"
-      : airy
-        ? lines.length === 2
-          ? "gap-[0.08em]"
-          : "gap-[0.05em]"
-        : lines.length === 2
-          ? "gap-[0.01em]"
-          : "gap-0";
+  const compactWordSpacing = lines.length > 1 ? "-0.08em" : "0";
 
   return (
     <div
       className={cn(
         "flex h-full min-h-0 w-full flex-col items-center justify-center text-center font-semibold lowercase tracking-tight text-ink",
-        stackClass,
         TITLE_TEXT_SIZE_CLASS,
         TITLE_LINE_HEIGHT_CLASS,
       )}
+      style={{ wordSpacing: compactWordSpacing }}
     >
       {lines.map((line, index) => (
         <span key={`${line}-${index}`} className="block w-full">
@@ -217,12 +206,10 @@ function HotelPreviewCard({
   lines,
   logoSize,
   geometry,
-  airyTitle = false,
 }: {
   lines: [string] | [string, string] | [string, string, string];
   logoSize: number;
   geometry: CardGeometry;
-  airyTitle?: boolean;
 }) {
   return (
     <article
@@ -246,8 +233,8 @@ function HotelPreviewCard({
         <SampleLogo size={logoSize} />
       </div>
 
-      <div className="border-y border-ink/[0.06] bg-white px-4 py-2">
-        <PreviewTitleBand lines={lines} airy={airyTitle} />
+      <div className="border-y border-ink/[0.06] bg-white px-4 py-1">
+        <PreviewTitleBand lines={lines} />
       </div>
 
       <div
@@ -319,7 +306,6 @@ export function GeneratedCardDemoClient() {
               lines={["arrive at", "the hotel"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
-              airyTitle
             />
           </DiagnosticPanel>
 
@@ -331,7 +317,6 @@ export function GeneratedCardDemoClient() {
               lines={["receive", "your room", "key"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
-              airyTitle
             />
           </DiagnosticPanel>
         </div>
