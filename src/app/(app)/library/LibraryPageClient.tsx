@@ -445,7 +445,7 @@ export function LibraryPageClient() {
                         >
                           <span
                             className={cn(
-                              "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm outline outline-1 outline-white/95 ring-[2.5px] ring-inset sm:h-12 sm:w-12",
+                              "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2.5px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-12 sm:w-12",
                               ringClass,
                             )}
                           >
