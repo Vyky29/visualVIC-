@@ -24,6 +24,11 @@ const sections: {
         label: "First & Then",
         hint: "Two-card strip",
       },
+      {
+        href: "/generated-card-demo",
+        label: "Generated card demo",
+        hint: "Card geometry, title bands, Focus preview",
+      },
     ],
   },
   {

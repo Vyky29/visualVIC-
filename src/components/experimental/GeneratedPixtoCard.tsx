@@ -209,14 +209,16 @@ const titleTypography = (
           : "text-[36px] sm:text-[42px] leading-snug",
   );
 
-/**
- * NOW/NEXT title band — same point size for 1, 2 or 3 logical lines (schedule large).
- * Leading ≥ ~1.12 keeps ascenders/descenders from touching when lines sit in adjacent grid rows.
- */
-const scheduleTitleBandTypography = cn(
-  titleTypographyBase,
-  "text-[72px] sm:text-[84px] leading-[1.14]",
-);
+function scheduleTitleBandTypography(lineCount: 1 | 2 | 3): string {
+  return cn(
+    titleTypographyBase,
+    lineCount === 1
+      ? "text-[72px] sm:text-[84px] leading-[1.14]"
+      : lineCount === 2
+        ? "text-[48px] sm:text-[56px] leading-[1.1]"
+        : "text-[40px] sm:text-[46px] leading-[1.08]",
+  );
+}
 
 const focusTitleBandTypography = cn(
   titleTypographyBase,
@@ -318,14 +320,20 @@ function TitleBand({
     n >= 3 ? safeLines.slice(2).join(" ") : "";
   const bandTypo = focusPresentation
     ? focusTitleBandTypography
-    : scheduleTitleBandTypography;
-  const bandLineLeading = focusPresentation ? "leading-[1.08]" : "leading-[1.14]";
+    : scheduleTitleBandTypography(n);
+  const bandLineLeading = focusPresentation
+    ? "leading-[1.08]"
+    : n === 1
+      ? "leading-[1.14]"
+      : n === 2
+        ? "leading-[1.1]"
+        : "leading-[1.08]";
 
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-0.5">
       {/*
         3 equal grid rows (design thirds). Row 1 often empty for 1–2 logical lines.
-        · 2 lines: ONE cell row-span-2 + flex-col justify-end — lines stay touching (no empty “middle third” between two grid rows).
+        · 2 lines: ONE cell row-span-2 + flex-col justify-center — lines stay touching without the first line clipping off the top edge.
         · 1 line: same row-span-2 + justify-end + padding-bottom: 1lh — sits where the first line of a pair would be (above a phantom second line).
         · 3 lines: one string per grid row 1 / 2 / 3.
       */}
@@ -349,7 +357,7 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 pb-[0.14em] text-center",
+                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-center gap-0 overflow-hidden px-0.5 text-center",
                 bandTypo,
               )}
             >
