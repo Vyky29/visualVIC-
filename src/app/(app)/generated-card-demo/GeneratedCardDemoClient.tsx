@@ -14,25 +14,18 @@ import {
   GENERATED_PIXTO_TOP_LAYOUT_H,
   GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION,
 } from "@/components/experimental/GeneratedPixtoCard";
-import { GeneratedPixtoFocusScale } from "@/components/experimental/GeneratedPixtoFocusScale";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
   GENERATED_PIXTO_DEMO_ROUTINE_STEPS,
 } from "@/lib/experimental/generated-pixto-demo-routine";
-import {
-  PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
-  PIXTO_FOCUS_CARD_REF_WIDTH_PX,
-} from "@/lib/constants/pixto-focus-card";
 import { cn } from "@/lib/utils/cn";
 
 const DOUBLE_TAP_MS = 300;
 const TAP_PAIR_MAX_DIST = 48;
 const TAP_CANCEL_SLOP = 14;
-const IPHONE_16_PRO_VIEWPORT = { w: 402, h: 874 } as const;
 
 const ROUTINE = GENERATED_PIXTO_DEMO_ROUTINE_STEPS;
-const DIAGNOSTIC_SAMPLE = ROUTINE[1] ?? ROUTINE[0];
 
 function DiagnosticPanel({
   title,
@@ -58,11 +51,13 @@ function DiagnosticPanel({
 
 function DiagnosticCardFrame({
   children,
+  logoSize,
   topClassName = "bg-[#d5d5d5]",
   ribbonClassName = "bg-[#c9c9c9]",
   className,
 }: {
   children: ReactNode;
+  logoSize?: number;
   topClassName?: string;
   ribbonClassName?: string;
   className?: string;
@@ -78,7 +73,21 @@ function DiagnosticCardFrame({
         gridTemplateRows: `${GENERATED_PIXTO_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
       }}
     >
-      <div className={topClassName} />
+      <div className={cn("relative", topClassName)}>
+        {logoSize ? (
+          <div
+            className="absolute right-[6%] top-[4%] rounded-[0.8rem] border border-dashed border-ink/15 bg-white/75"
+            style={{
+              width: `${(logoSize / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+              aspectRatio: "1 / 1",
+            }}
+          >
+            <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold text-ink/70">
+              {logoSize}
+            </div>
+          </div>
+        ) : null}
+      </div>
       <div className="border-y border-ink/[0.06] bg-white px-4 py-2">{children}</div>
       <div className={ribbonClassName} />
     </article>
@@ -86,28 +95,40 @@ function DiagnosticCardFrame({
 }
 
 function DiagnosticTitleBand({
-  mode,
+  lines,
+  textSizeClassName,
 }: {
-  mode: "single" | "double" | "triple";
+  lines: [string] | [string, string] | [string, string, string];
+  textSizeClassName: string;
 }) {
+  const row1 = lines[0] ?? "";
+  const row2 = lines[1] ?? "";
+  const row3 = lines[2] ?? "";
+  const lineCount = lines.length;
+
   return (
-    <div className="grid h-full min-h-0 w-full grid-rows-3 text-center text-[18px] font-semibold lowercase tracking-tight text-ink">
-      {mode === "single" ? (
+    <div
+      className={cn(
+        "grid h-full min-h-0 w-full grid-rows-3 text-center font-semibold lowercase tracking-tight text-ink",
+        textSizeClassName,
+      )}
+    >
+      {lineCount === 1 ? (
         <>
           <div aria-hidden />
-          <div className="row-span-2 flex items-center justify-center">one line</div>
+          <div className="row-span-2 flex items-center justify-center">{row1}</div>
         </>
-      ) : mode === "double" ? (
+      ) : lineCount === 2 ? (
         <>
           <div aria-hidden />
-          <div className="flex items-center justify-center">line one</div>
-          <div className="flex items-center justify-center">line two</div>
+          <div className="flex items-center justify-center">{row1}</div>
+          <div className="flex items-center justify-center">{row2}</div>
         </>
       ) : (
         <>
-          <div className="flex items-center justify-center">line one</div>
-          <div className="flex items-center justify-center">line two</div>
-          <div className="flex items-center justify-center">line three</div>
+          <div className="flex items-center justify-center">{row1}</div>
+          <div className="flex items-center justify-center">{row2}</div>
+          <div className="flex items-center justify-center">{row3}</div>
         </>
       )}
     </div>
@@ -182,42 +203,6 @@ function OriginalCardMeasurements() {
         <MeasurementPill>ribbon {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_CATEGORY_BAND_H}</MeasurementPill>
       </div>
     </article>
-  );
-}
-
-function FocusViewportPreview() {
-  if (!DIAGNOSTIC_SAMPLE) return null;
-
-  return (
-    <div
-      className="mx-auto overflow-hidden rounded-[2rem] border border-ink/[0.08] bg-[#060807] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
-      style={{
-        width: `min(100%, ${IPHONE_16_PRO_VIEWPORT.w}px)`,
-        aspectRatio: `${IPHONE_16_PRO_VIEWPORT.w} / ${IPHONE_16_PRO_VIEWPORT.h}`,
-      }}
-    >
-      <div className="flex h-full min-h-0 flex-col px-3 py-3 text-cream">
-        <div className="rounded-full bg-white/10 px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-cream/90">
-          viewport {IPHONE_16_PRO_VIEWPORT.w} x {IPHONE_16_PRO_VIEWPORT.h}
-        </div>
-        <div className="flex min-h-0 flex-1 flex-col py-3">
-          <div className="rounded-full bg-white/8 px-3 py-1 text-center text-[11px] text-cream/70">
-            current focus box {PIXTO_FOCUS_CARD_REF_WIDTH_PX} x{" "}
-            {PIXTO_FOCUS_CARD_REF_HEIGHT_PX.toFixed(1)}
-          </div>
-          <div className="flex min-h-0 flex-1 items-center justify-center pt-3">
-            <GeneratedPixtoFocusScale>
-              <GeneratedPixtoCard
-                {...DIAGNOSTIC_SAMPLE}
-                focusPresentation
-                suppressNeutralRing
-                className="h-full w-full max-w-none"
-              />
-            </GeneratedPixtoFocusScale>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -364,9 +349,8 @@ export function GeneratedCardDemoClient() {
           Card geometry study
         </h2>
         <p className="px-1 text-[13px] leading-relaxed text-ink-subtle">
-          Original card at design size, three white-area text layouts, and a final
-          viewport sample using the current Focus Mode behavior inside an iPhone 16
-          Pro-sized frame.
+          The white area stays fixed at the original size in every sample card. Only
+          the text sizing and logo size change.
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
           <DiagnosticPanel
@@ -378,54 +362,50 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="White area · 1 line"
-            hint="Grey shell with the same white area size and one centered line."
+            hint="Original card size, fixed white area, one line centered."
           >
-            <DiagnosticCardFrame>
-              <DiagnosticTitleBand mode="single" />
+            <DiagnosticCardFrame logoSize={88}>
+              <DiagnosticTitleBand
+                lines={["ready for takeoff"]}
+                textSizeClassName="text-[28px] leading-[1.05]"
+              />
             </DiagnosticCardFrame>
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="White area · 2 lines"
-            hint="The white area split into three rows: middle row and bottom row used."
+            hint="Same white area height; text split across the middle and bottom rows."
           >
-            <DiagnosticCardFrame>
-              <DiagnosticTitleBand mode="double" />
+            <DiagnosticCardFrame logoSize={88}>
+              <DiagnosticTitleBand
+                lines={["check in at", "the airline counter"]}
+                textSizeClassName="text-[21px] leading-[1.02]"
+              />
             </DiagnosticCardFrame>
           </DiagnosticPanel>
 
           <DiagnosticPanel
-            title="White area · 3 lines"
-            hint="Three text rows inside the same original white area height."
+            title="White area · 3 lines · logo 88"
+            hint="Three rows of text with the logo at 88 x 88."
           >
-            <DiagnosticCardFrame>
-              <DiagnosticTitleBand mode="triple" />
+            <DiagnosticCardFrame logoSize={88}>
+              <DiagnosticTitleBand
+                lines={["listen to", "the safety", "instructions"]}
+                textSizeClassName="text-[19px] leading-[1.02]"
+              />
             </DiagnosticCardFrame>
           </DiagnosticPanel>
 
           <DiagnosticPanel
-            title="Focus mode · current"
-            hint="Current generated card rendered the way Focus Mode behaves today."
+            title="White area · 3 lines · logo 82"
+            hint="Same 3-line layout, but with the logo at 82 x 82 to compare."
           >
-            <div className="mx-auto flex w-full max-w-[17.75rem] items-center justify-center rounded-[1.5rem] bg-[#060807] p-3">
-              <div className="flex min-h-[28rem] w-full items-center justify-center">
-                <GeneratedPixtoFocusScale>
-                  <GeneratedPixtoCard
-                    {...DIAGNOSTIC_SAMPLE}
-                    focusPresentation
-                    suppressNeutralRing
-                    className="h-full w-full max-w-none"
-                  />
-                </GeneratedPixtoFocusScale>
-              </div>
-            </div>
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Viewport 402 x 874"
-            hint="Reference frame for comparing the current Focus Mode layout against an iPhone 16 Pro viewport."
-          >
-            <FocusViewportPreview />
+            <DiagnosticCardFrame logoSize={82}>
+              <DiagnosticTitleBand
+                lines={["listen to", "the safety", "instructions"]}
+                textSizeClassName="text-[19px] leading-[1.02]"
+              />
+            </DiagnosticCardFrame>
           </DiagnosticPanel>
         </div>
       </section>
