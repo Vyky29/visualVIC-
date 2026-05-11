@@ -213,11 +213,12 @@ function HotelPreviewCard({
 }) {
   return (
     <article
-      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] bg-white ring-2 ring-ink/[0.1]"
+      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] bg-white"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        boxShadow: `inset 0 0 0 1.5px ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
+        border: `3px solid ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
+        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
       }}
     >
       <div className="relative bg-white">
