@@ -159,23 +159,25 @@ const SECTION_OBJECT_SLUGS: Partial<Record<LibrarySectionId, readonly string[]>>
   swim: ["changing-room", "swimming-costume", "pool", "sinkers"],
 };
 
+function isObjectCardForSection(
+  section: LibrarySectionId,
+  card: PickableLibraryCard,
+): boolean {
+  const slug = card.pickId.split("::")[1] ?? "";
+
+  if (section === "dress-on" || section === "dress-off") {
+    return getDressRegistryCardBySlug(slug)?.itemType === "object";
+  }
+
+  const objectSlugs = new Set(SECTION_OBJECT_SLUGS[section] ?? []);
+  return objectSlugs.has(slug);
+}
+
 function objectCountForSection(
   section: LibrarySectionId,
   cards: readonly PickableLibraryCard[],
 ): number {
-  if (section === "dress-on" || section === "dress-off") {
-    return cards.filter((c) => {
-      const slug = c.pickId.split("::")[1] ?? "";
-      return getDressRegistryCardBySlug(slug)?.itemType === "object";
-    }).length;
-  }
-
-  const objectSlugs = new Set(SECTION_OBJECT_SLUGS[section] ?? []);
-  if (objectSlugs.size === 0) return 0;
-  return cards.filter((c) => {
-    const slug = c.pickId.split("::")[1] ?? "";
-    return objectSlugs.has(slug);
-  }).length;
+  return cards.filter((c) => isObjectCardForSection(section, c)).length;
 }
 
 function groupByCategoryAndSection(): Map<
@@ -412,8 +414,14 @@ export function LibraryPageClient() {
                   const accordionKey = `${cat}::${section}`;
                   const open = isAccordionOpen(accordionKey);
                   const ringClass = libraryPackIconRingClass[section];
-                  const count = cards.length;
                   const objectCount = objectCountForSection(section, cards);
+                  const stepCount = cards.length - objectCount;
+                  const objectCards = cards.filter((c) =>
+                    isObjectCardForSection(section, c),
+                  );
+                  const stepCards = cards.filter(
+                    (c) => !isObjectCardForSection(section, c),
+                  );
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
                   const cropHeaderIcon = true;
@@ -437,7 +445,7 @@ export function LibraryPageClient() {
                         >
                           <span
                             className={cn(
-                              "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-12 sm:w-12",
+                              "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm outline outline-1 outline-white/95 ring-[2.5px] ring-inset sm:h-12 sm:w-12",
                               ringClass,
                             )}
                           >
@@ -455,7 +463,7 @@ export function LibraryPageClient() {
                                 style={
                                   cropHeaderIcon
                                     ? {
-                                        top: "4%",
+                                        top: "-6%",
                                         bottom: "auto",
                                       }
                                     : undefined
@@ -469,10 +477,10 @@ export function LibraryPageClient() {
                             </span>
                             <span
                               className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
-                              aria-label={`${count} ${count === 1 ? "step" : "steps"}`}
+                              aria-label={`${stepCount} ${stepCount === 1 ? "step" : "steps"}`}
                             >
-                              {count}{" "}
-                              {count === 1 ? "step" : "steps"}
+                              {stepCount}{" "}
+                              {stepCount === 1 ? "step" : "steps"}
                             </span>
                             <span
                               className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
@@ -499,15 +507,41 @@ export function LibraryPageClient() {
                         )}
                       >
                         <div className="min-h-0 overflow-hidden">
-                          <div className="grid grid-cols-4 gap-1.5 px-2 pb-3 pt-2 sm:gap-2 sm:px-3 sm:pb-4 sm:pt-3">
-                            {cards.map((v) => (
-                              <LibraryPickTile
-                                key={v.pickId}
-                                v={v}
-                                selected={selectedSet.has(v.pickId)}
-                                onToggle={togglePick}
-                              />
-                            ))}
+                          <div className="space-y-3 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
+                            {objectCards.length > 0 ? (
+                              <section className="space-y-1.5">
+                                <p className="px-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+                                  Objects
+                                </p>
+                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                  {objectCards.map((v) => (
+                                    <LibraryPickTile
+                                      key={v.pickId}
+                                      v={v}
+                                      selected={selectedSet.has(v.pickId)}
+                                      onToggle={togglePick}
+                                    />
+                                  ))}
+                                </div>
+                              </section>
+                            ) : null}
+                            {stepCards.length > 0 ? (
+                              <section className="space-y-1.5">
+                                <p className="px-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+                                  Steps
+                                </p>
+                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                  {stepCards.map((v) => (
+                                    <LibraryPickTile
+                                      key={v.pickId}
+                                      v={v}
+                                      selected={selectedSet.has(v.pickId)}
+                                      onToggle={togglePick}
+                                    />
+                                  ))}
+                                </div>
+                              </section>
+                            ) : null}
                           </div>
                         </div>
                       </div>
