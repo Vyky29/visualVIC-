@@ -39,7 +39,7 @@ type Props = {
   variant?: TimelineVariant;
   /** Double-tap (touch / pen) on image only — hero + now. Single tap does nothing. */
   onDoubleTapOpenFocus?: () => void;
-  /** Category back card shown during swipe-to-complete flip (Schedule hero). */
+  /** Category back card shown during swipe-to-complete flip (Schedule hero / focus). */
   completionBackImageUrl?: string;
   /**
    * Fallback ring palette when the step `imageUrl` is not a known Pixto path
@@ -280,7 +280,7 @@ export function SwipeableStepCard({
       const v = 64;
       try {
         if (info.offset.x > h || info.offset.y < -v) {
-          if (variant === "hero" && status === "now") {
+          if ((variant === "hero" || variant === "focus") && status === "now") {
             await runSwipeCompleteFeedback();
           } else {
             await controls.start({
@@ -313,7 +313,6 @@ export function SwipeableStepCard({
   const dragEnabled =
     isNow &&
     variant !== "compact" &&
-    variant !== "focus" &&
     !completionAnimating;
 
   if (variant === "compact") {
@@ -379,8 +378,10 @@ export function SwipeableStepCard({
   const imageInteractive =
     Boolean(onDoubleTapOpenFocus) && variant === "hero" && isNow;
 
-  const heroFlip =
-    variant === "hero" && Boolean(completionBackImageUrl) && isNow;
+  const completionFlip =
+    (variant === "hero" || variant === "focus") &&
+    Boolean(completionBackImageUrl) &&
+    isNow;
 
   const stepPixtoBundled =
     isPixtoLearnBundledCardUrl(step.imageUrl) && !hasGeneratedPixto;
@@ -518,7 +519,7 @@ export function SwipeableStepCard({
             : undefined
         }
       >
-        {heroFlip ? (
+        {completionFlip ? (
           <div
             className="absolute inset-0 [perspective:900px]"
             style={{ perspectiveOrigin: "50% 50%" }}
@@ -545,7 +546,7 @@ export function SwipeableStepCard({
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
-                    <GeneratedPixtoSlotScale>
+                    {variant === "focus" ? (
                       <GeneratedPixtoCard
                         illustrationUrl={gp.illustrationUrl}
                         title={gp.title}
@@ -553,36 +554,91 @@ export function SwipeableStepCard({
                         categoryColour={gp.categoryColour}
                         iconUrl={gp.iconUrl}
                         cardType={gp.cardType}
+                        focusPresentation
                         suppressNeutralRing
                         className="h-full w-full max-w-none"
                       />
-                    </GeneratedPixtoSlotScale>
+                    ) : (
+                      <GeneratedPixtoSlotScale>
+                        <GeneratedPixtoCard
+                          illustrationUrl={gp.illustrationUrl}
+                          title={gp.title}
+                          category={gp.category}
+                          categoryColour={gp.categoryColour}
+                          iconUrl={gp.iconUrl}
+                          cardType={gp.cardType}
+                          suppressNeutralRing
+                          className="h-full w-full max-w-none"
+                        />
+                      </GeneratedPixtoSlotScale>
+                    )}
                   </div>
                 ) : step.imageUrl ? (
                   stepPixtoBundled ? (
-                    <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
-                      <div
-                        className={cn(
-                          "absolute inset-0 origin-center",
-                          schedulePixtoBleedScaleClass,
-                        )}
-                      >
-                        <Image
-                          src={step.imageUrl}
-                          alt=""
-                          fill
-                          unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
+                    variant === "focus" ? (
+                      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                        <div
                           className={cn(
-                            "object-cover transition-[filter] select-none",
-                            pixtoBundledCardObjectPositionClass,
-                            isFinished && "brightness-[0.9] grayscale",
+                            "absolute overflow-hidden rounded-[1.35rem]",
+                            FOCUS_PIXTO_PNG_INSET_PX === 0 && "inset-0",
+                            FOCUS_PIXTO_PNG_INSET_PX > 0 && "bg-cream",
                           )}
-                          sizes="(max-width: 512px) 100vw, 512px"
-                          priority={isNow && variant === "hero"}
-                          draggable={false}
-                        />
+                          style={
+                            FOCUS_PIXTO_PNG_INSET_PX > 0
+                              ? focusPixtoPngInsetStyle
+                              : undefined
+                          }
+                        >
+                          <div className="absolute inset-0 origin-center">
+                            <div
+                              className="absolute inset-0 h-full w-full"
+                              style={{
+                                transform: `scaleY(calc(1 + ${FOCUS_PIXTO_PNG_BOTTOM_STRETCH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}))`,
+                                transformOrigin: "top center",
+                              }}
+                            >
+                              <Image
+                                src={step.imageUrl}
+                                alt={step.title}
+                                fill
+                                unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
+                                className={cn(
+                                  "object-cover transition-[filter] select-none object-center",
+                                  isFinished && "brightness-[0.9] grayscale",
+                                )}
+                                sizes="(max-width: 512px) 100vw, 512px"
+                                priority
+                                draggable={false}
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                        <div
+                          className={cn(
+                            "absolute inset-0 origin-center",
+                            schedulePixtoBleedScaleClass,
+                          )}
+                        >
+                          <Image
+                            src={step.imageUrl}
+                            alt=""
+                            fill
+                            unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
+                            className={cn(
+                              "object-cover transition-[filter] select-none",
+                              pixtoBundledCardObjectPositionClass,
+                              isFinished && "brightness-[0.9] grayscale",
+                            )}
+                            sizes="(max-width: 512px) 100vw, 512px"
+                            priority={isNow && variant === "hero"}
+                            draggable={false}
+                          />
+                        </div>
+                      </div>
+                    )
                   ) : (
                     <Image
                       src={step.imageUrl}

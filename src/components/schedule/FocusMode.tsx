@@ -223,13 +223,13 @@ export function FocusMode({ routine, exitHref }: Props) {
               className="absolute inset-0 flex min-h-0 w-full flex-col"
             >
               {nowStep.generatedPixto ? (
-                <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
+                <div className="pointer-events-auto flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
                   <GeneratedPixtoFocusScale>
                     <SwipeableStepCard
                       step={nowStep}
                       status={stepStatus(nowStep)}
                       variant="focus"
-                      onSwipeComplete={() => {}}
+                      onSwipeComplete={completeCurrent}
                       completionBackImageUrl={resolveCategoryBackCardUrl(
                         nowStep.imageUrl,
                       )}
@@ -238,13 +238,13 @@ export function FocusMode({ routine, exitHref }: Props) {
                   </GeneratedPixtoFocusScale>
                 </div>
               ) : isPixtoLearnBundledCardUrl(nowStep.imageUrl) ? (
-                <div className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
+                <div className="pointer-events-auto flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
                   <PixtoFocusCardScale>
                     <SwipeableStepCard
                       step={nowStep}
                       status={stepStatus(nowStep)}
                       variant="focus"
-                      onSwipeComplete={() => {}}
+                      onSwipeComplete={completeCurrent}
                       completionBackImageUrl={resolveCategoryBackCardUrl(
                         nowStep.imageUrl,
                       )}
@@ -253,12 +253,12 @@ export function FocusMode({ routine, exitHref }: Props) {
                   </PixtoFocusCardScale>
                 </div>
               ) : (
-                <div className="absolute inset-0 min-h-0 min-w-0">
+                <div className="pointer-events-auto absolute inset-0 min-h-0 min-w-0">
                   <SwipeableStepCard
                     step={nowStep}
                     status={stepStatus(nowStep)}
                     variant="focus"
-                    onSwipeComplete={() => {}}
+                    onSwipeComplete={completeCurrent}
                     completionBackImageUrl={resolveCategoryBackCardUrl(
                       nowStep.imageUrl,
                     )}
@@ -311,28 +311,6 @@ export function FocusMode({ routine, exitHref }: Props) {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Swipe-to-complete — above card (z-50), below corner zones (z-60) */}
-      {!isComplete && nowStep ? (
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: 0, right: 140 }}
-          dragElastic={0.1}
-          dragMomentum={false}
-          dragSnapToOrigin
-          dragTransition={{ bounceStiffness: 520, bounceDamping: 36 }}
-          onDragEnd={(_, info) => {
-            if (info.offset.x > 40) completeCurrent();
-          }}
-          className={cn(
-            "absolute inset-0 z-[50] flex flex-col touch-none select-none will-change-transform outline-none focus:outline-none",
-            pad,
-          )}
-          style={{ WebkitUserSelect: "none" as const, touchAction: "none" }}
-        >
-          <div className="min-h-0 flex-1" aria-hidden />
-        </motion.div>
-      ) : null}
 
       {/* Corner tap zones — invisible; back / skip / sheets (also with Pixto card). */}
       {!isComplete && nowStep ? (
