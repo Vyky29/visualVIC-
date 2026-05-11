@@ -36,7 +36,7 @@ export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
 
 /** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
-const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = true;
+const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = false;
 
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
