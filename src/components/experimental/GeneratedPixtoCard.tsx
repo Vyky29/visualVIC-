@@ -286,11 +286,10 @@ export function GeneratedPixtoCard({
     );
   }, []);
 
+  // Card geometry should come from the real design block sizes. Each screen
+  // (Schedule / Focus / Home previews) should scale that geometry, not resize
+  // the illustration block ad hoc per context.
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
-  const scheduleIllustrationWidthPct = `${Math.min(
-    ILLUSTRATION_WIDTH_FRAC * 100 * 1.12,
-    80,
-  ).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
 
@@ -359,7 +358,7 @@ export function GeneratedPixtoCard({
               <div
                 className="relative min-h-0"
                 style={{
-                  width: `min(${scheduleLargeType ? scheduleIllustrationWidthPct : illustrationWidthPct}, 100%)`,
+                  width: `min(${illustrationWidthPct}, 100%)`,
                   aspectRatio: ILLUSTRATION_FRAME_ASPECT,
                   maxHeight: "100%",
                 }}
