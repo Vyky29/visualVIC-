@@ -407,6 +407,9 @@ export function GeneratedPixtoCard({
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
+  const illustrationObjectClass = focusPresentation
+    ? "object-cover object-center"
+    : "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !isDense;
@@ -487,7 +490,7 @@ export function GeneratedPixtoCard({
                   alt=""
                   fill
                   sizes="(max-width: 640px) 72vw, 240px"
-                  className="object-contain object-center select-none"
+                  className={cn(illustrationObjectClass, "select-none")}
                   unoptimized={
                     illustrationUrl.startsWith("/") ||
                     illustrationUrl.includes("/cards/")
