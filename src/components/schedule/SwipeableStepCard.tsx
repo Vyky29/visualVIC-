@@ -538,9 +538,14 @@ export function SwipeableStepCard({
             >
               <div
                 className={cn(
-                  "absolute inset-0 [backface-visibility:hidden]",
+                  "absolute inset-0 overflow-hidden rounded-[1.35rem] bg-white [backface-visibility:hidden]",
                   "[-webkit-backface-visibility:hidden]",
                 )}
+                style={{
+                  transform: "translateZ(1px)",
+                  transformStyle: "preserve-3d",
+                  WebkitTransformStyle: "preserve-3d",
+                }}
               >
                 {gp ? (
                   <div
@@ -667,9 +672,14 @@ export function SwipeableStepCard({
               </div>
               <div
                 className={cn(
-                  "absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden]",
+                  "absolute inset-0 overflow-hidden rounded-[1.35rem] bg-white [backface-visibility:hidden]",
                   "[-webkit-backface-visibility:hidden]",
                 )}
+                style={{
+                  transform: "rotateY(180deg) translateZ(1px)",
+                  transformStyle: "preserve-3d",
+                  WebkitTransformStyle: "preserve-3d",
+                }}
               >
                 {completionBackImageUrl ? (
                   backPixtoBundled ? (

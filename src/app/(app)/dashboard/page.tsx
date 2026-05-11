@@ -5,9 +5,6 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
-import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
-import { climbingImageUrl } from "@/lib/cards/climbing-cards";
-import { coreImageUrl } from "@/lib/cards/core-cards";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import {
@@ -26,12 +23,6 @@ import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 const groups = ["self-care", "home", "activity"] as const;
 type DashboardCategory = (typeof groups)[number];
-
-const HOME_CATEGORY_HEADER_ICON: Record<DashboardCategory, string> = {
-  "self-care": brushingTeethImageUrl("toothbrush"),
-  home: coreImageUrl("wash-hands"),
-  activity: climbingImageUrl("climbing-wall"),
-};
 
 const HOME_CATEGORY_HEADER_RING_CLASS: Record<DashboardCategory, string> = {
   "self-care": "ring-[#91C24C]/80",
@@ -120,6 +111,71 @@ function RoutinesSectionIcon() {
     </svg>
   );
 }
+
+function SelfCareSectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <path
+        d="M12 6.25c.86-1.46 2.08-2.25 3.7-2.25 2.22 0 3.8 1.63 3.8 3.93 0 4.4-4.54 7.27-7.5 9.82-2.96-2.55-7.5-5.42-7.5-9.82C4.5 5.63 6.08 4 8.3 4c1.62 0 2.84.79 3.7 2.25Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.1 10.35h5.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function HomeSectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <path
+        d="M5.25 10.4 12 5l6.75 5.4v7.1a1.5 1.5 0 0 1-1.5 1.5h-2.9v-4.65a1.2 1.2 0 0 0-1.2-1.2h-2.3a1.2 1.2 0 0 0-1.2 1.2V19H6.75a1.5 1.5 0 0 1-1.5-1.5v-7.1Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ActivitySectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <circle cx="14.9" cy="5.4" r="1.9" fill="currentColor" />
+      <path
+        d="m10.2 19.25 2.1-5 2.3 1.75 1.55 3.25M11.1 8.55l2.8 1.4 2.95-.9M8.1 13.15l2.55-2.75 1.15-2.35M8.35 19.1l2.55-3.15"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const HOME_CATEGORY_HEADER_ICON: Record<
+  DashboardCategory,
+  { icon: React.ReactNode; iconClassName: string }
+> = {
+  "self-care": {
+    icon: <SelfCareSectionIcon />,
+    iconClassName: "text-[#7fb23c]",
+  },
+  home: {
+    icon: <HomeSectionIcon />,
+    iconClassName: "text-[#5f8392]",
+  },
+  activity: {
+    icon: <ActivitySectionIcon />,
+    iconClassName: "text-[#cf9a1b]",
+  },
+};
 
 function SectionHeader({
   title,
@@ -438,7 +494,7 @@ export default function DashboardPage() {
               if (routines.length === 0) return null;
               const accordionKey = `home::${cat}`;
               const open = isAccordionOpen(accordionKey);
-              const iconSrc = HOME_CATEGORY_HEADER_ICON[cat];
+              const iconDef = HOME_CATEGORY_HEADER_ICON[cat];
               const ringClass = HOME_CATEGORY_HEADER_RING_CLASS[cat];
 
               return (
@@ -464,14 +520,14 @@ export default function DashboardPage() {
                           ringClass,
                         )}
                       >
-                        <Image
-                          src={iconSrc}
-                          alt=""
-                          fill
-                          unoptimized
-                          className="object-cover object-top scale-[1.22]"
-                          style={{ top: "-4%", bottom: "auto" }}
-                        />
+                        <span
+                          className={cn(
+                            "flex h-full w-full items-center justify-center",
+                            iconDef.iconClassName,
+                          )}
+                        >
+                          {iconDef.icon}
+                        </span>
                       </span>
                       <span className="min-w-0 flex-1 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
                         {categoryTitle(cat)}
