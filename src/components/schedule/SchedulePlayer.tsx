@@ -37,7 +37,10 @@ export function SchedulePlayer({ routine, backHref }: Props) {
     stepStatus,
     completedCount,
     totalSteps,
-  } = useRoutinePlayback(routine, { syncSession: true });
+  } = useRoutinePlayback(routine, {
+    syncSession: true,
+    appendFinishStep: true,
+  });
 
   const progress =
     totalSteps === 0 ? 0 : Math.round((completedCount / totalSteps) * 100);

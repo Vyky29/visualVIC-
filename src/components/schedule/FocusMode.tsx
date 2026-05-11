@@ -172,7 +172,10 @@ export function FocusMode({ routine, exitHref }: Props) {
     reset,
     stepStatus,
     goPrevious,
-  } = useRoutinePlayback(routine, { syncSession: true });
+  } = useRoutinePlayback(routine, {
+    syncSession: true,
+    appendFinishStep: true,
+  });
 
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 

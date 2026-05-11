@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { coreImageUrl } from "@/lib/cards/core-cards";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 
 export type PlaybackStatus = "idle" | "now" | "next" | "finished";
@@ -45,15 +46,37 @@ function saveSnapshot(key: string, snapshot: PlaybackSnapshot) {
   sessionStorage.setItem(key, JSON.stringify(snapshot));
 }
 
+const PLAYBACK_FINISH_STEP: RoutineStep = {
+  id: "__playback-finish__",
+  title: "Finish",
+  imageUrl: coreImageUrl("finish"),
+};
+
+function isFinishLikeStep(step: RoutineStep): boolean {
+  const id = step.id.trim().toLowerCase();
+  const title = step.title.trim().toLowerCase();
+  const imageUrl = (step.imageUrl ?? "").toLowerCase();
+  return (
+    id === PLAYBACK_FINISH_STEP.id ||
+    id === "core-finish" ||
+    title === "finish" ||
+    imageUrl.endsWith("/cards/core/finish.png")
+  );
+}
+
 export function useRoutinePlayback(
   routine: Routine,
-  options?: { syncSession?: boolean },
+  options?: { syncSession?: boolean; appendFinishStep?: boolean },
 ) {
   const storageKey = options?.syncSession
     ? `pixtolearn.playback.${routine.id}`
     : null;
 
-  const steps = routine.steps;
+  const steps = useMemo(() => {
+    if (!options?.appendFinishStep) return routine.steps;
+    if (routine.steps.some(isFinishLikeStep)) return routine.steps;
+    return [...routine.steps, { ...PLAYBACK_FINISH_STEP }];
+  }, [routine.steps, options?.appendFinishStep]);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [skippedIds, setSkippedIds] = useState<Set<string>>(new Set());
   const [hydrated, setHydrated] = useState(!storageKey);
