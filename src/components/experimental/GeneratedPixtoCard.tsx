@@ -151,7 +151,7 @@ const scheduleTitleBandTypography = cn(
 
 const focusTitleBandTypography = cn(
   titleTypographyBase,
-  "text-[36px] sm:text-[42px] leading-[1.1]",
+  "text-[31px] sm:text-[36px] leading-[1.08]",
 );
 
 function TitleBand({
@@ -202,9 +202,10 @@ function TitleBand({
   const bandTypo = focusPresentation
     ? focusTitleBandTypography
     : scheduleTitleBandTypography;
+  const bandLineLeading = focusPresentation ? "leading-[1.08]" : "leading-[1.14]";
 
   return (
-    <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
+    <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-0.5">
       {/*
         3 equal grid rows (design thirds). Row 1 often empty for 1–2 logical lines.
         · 2 lines: ONE cell row-span-2 + flex-col justify-end — lines stay touching (no empty “middle third” between two grid rows).
@@ -221,7 +222,7 @@ function TitleBand({
                 bandTypo,
               )}
             >
-              <span className="block w-full max-w-full leading-[1.08]">
+              <span className={cn("block w-full max-w-full", bandLineLeading)}>
                 {safeLines[0]}
               </span>
             </div>
@@ -235,10 +236,10 @@ function TitleBand({
                 bandTypo,
               )}
             >
-              <span className="block w-full max-w-full leading-[1.08]">
+              <span className={cn("block w-full max-w-full", bandLineLeading)}>
                 {row1Two}
               </span>
-              <span className="block w-full max-w-full leading-[1.08]">
+              <span className={cn("block w-full max-w-full", bandLineLeading)}>
                 {row2Two}
               </span>
             </div>
@@ -246,13 +247,13 @@ function TitleBand({
         ) : (
           <>
             <div className="col-start-1 row-start-1 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center">
-              <span className={cn(bandTypo, "leading-[1.14]")}>{row0}</span>
+              <span className={cn(bandTypo, bandLineLeading)}>{row0}</span>
             </div>
             <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center">
-              <span className={cn(bandTypo, "leading-[1.14]")}>{row1Two}</span>
+              <span className={cn(bandTypo, bandLineLeading)}>{row1Two}</span>
             </div>
             <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-[0.14em] text-center">
-              <span className={cn(bandTypo, "leading-[1.14]")}>{row2Three}</span>
+              <span className={cn(bandTypo, bandLineLeading)}>{row2Three}</span>
             </div>
           </>
         )}
