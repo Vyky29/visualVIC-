@@ -23,7 +23,32 @@ const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[27px]";
-const TITLE_LINE_HEIGHT_CLASS = "leading-[0.9]";
+const TITLE_LINE_HEIGHT_CLASS = "leading-[0.93]";
+
+type CardGeometry = {
+  titleH: number;
+  illustrationH: number;
+  topLayoutH: number;
+  topGapH: number;
+};
+
+const ORIGINAL_GEOMETRY: CardGeometry = {
+  titleH: GENERATED_PIXTO_TITLE_ZONE_H,
+  illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+  topLayoutH: GENERATED_PIXTO_TOP_LAYOUT_H,
+  topGapH: GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION,
+};
+
+const EXPANDED_GEOMETRY: CardGeometry = {
+  titleH: 172,
+  illustrationH: 652,
+  topLayoutH: GENERATED_PIXTO_CARD_SIZE.h - 172 - GENERATED_PIXTO_CATEGORY_BAND_H,
+  topGapH:
+    GENERATED_PIXTO_CARD_SIZE.h -
+    172 -
+    GENERATED_PIXTO_CATEGORY_BAND_H -
+    652,
+};
 
 function DiagnosticPanel({
   title,
@@ -95,29 +120,33 @@ function SampleLogo({
 
 function PreviewTitleBand({
   lines,
+  airy = false,
 }: {
   lines: [string] | [string, string] | [string, string, string];
+  airy?: boolean;
 }) {
-  const lineOffsetClass =
+  const stackClass =
     lines.length === 1
-      ? ""
-      : lines.length === 2
-        ? "-mt-[0.18em]"
-        : "-mt-[0.24em]";
+      ? "gap-0"
+      : airy
+        ? lines.length === 2
+          ? "gap-[0.08em]"
+          : "gap-[0.05em]"
+        : lines.length === 2
+          ? "gap-[0.01em]"
+          : "gap-0";
 
   return (
     <div
       className={cn(
         "flex h-full min-h-0 w-full flex-col items-center justify-center text-center font-semibold lowercase tracking-tight text-ink",
+        stackClass,
         TITLE_TEXT_SIZE_CLASS,
         TITLE_LINE_HEIGHT_CLASS,
       )}
     >
       {lines.map((line, index) => (
-        <span
-          key={`${line}-${index}`}
-          className={cn("block w-full", index > 0 && lineOffsetClass)}
-        >
+        <span key={`${line}-${index}`} className="block w-full">
           {line}
         </span>
       ))}
@@ -125,22 +154,26 @@ function PreviewTitleBand({
   );
 }
 
-function OriginalCardMeasurements() {
+function OriginalCardMeasurements({
+  geometry,
+}: {
+  geometry: CardGeometry;
+}) {
   return (
     <article
-      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] ring-1 ring-ink/[0.08]"
+      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] ring-2 ring-ink/[0.1]"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${GENERATED_PIXTO_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
       }}
     >
       <div className="relative bg-[#d9eefc]">
         <div
           className="absolute left-1/2 -translate-x-1/2 rounded-[1rem] border border-dashed border-ink/15 bg-[#f9e39c]"
           style={{
-            top: `${(GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_TOP_LAYOUT_H) * 100}%`,
+            top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
             width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
+            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
           }}
         />
         <div
@@ -154,14 +187,13 @@ function OriginalCardMeasurements() {
           card {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_CARD_SIZE.h}
         </MeasurementPill>
         <MeasurementPill className="absolute left-3 top-12">
-          top block {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_TOP_LAYOUT_H}
+          top block {GENERATED_PIXTO_CARD_SIZE.w} x {geometry.topLayoutH}
         </MeasurementPill>
         <MeasurementPill className="absolute left-3 top-[23%]">
-          top gap {GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION} h
+          top gap {geometry.topGapH} h
         </MeasurementPill>
         <MeasurementPill className="absolute left-1/2 top-[42%] -translate-x-1/2">
-          illustration {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x{" "}
-          {GENERATED_PIXTO_ILLUSTRATION_FRAME.h}
+          illustration {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {geometry.illustrationH}
         </MeasurementPill>
         <MeasurementPill className="absolute right-3 top-3">
           logo {GENERATED_PIXTO_COMPANY_MARK.w} x {GENERATED_PIXTO_COMPANY_MARK.h}
@@ -169,7 +201,7 @@ function OriginalCardMeasurements() {
       </div>
       <div className="relative flex items-center justify-center border-y border-ink/[0.06] bg-[#fff5c7]">
         <MeasurementPill>
-          white area {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_TITLE_ZONE_H}
+          white area {GENERATED_PIXTO_CARD_SIZE.w} x {geometry.titleH}
         </MeasurementPill>
       </div>
       <div className="relative flex items-center justify-center bg-[#d9c7ff]">
@@ -184,26 +216,30 @@ function OriginalCardMeasurements() {
 function HotelPreviewCard({
   lines,
   logoSize,
+  geometry,
+  airyTitle = false,
 }: {
   lines: [string] | [string, string] | [string, string, string];
   logoSize: number;
+  geometry: CardGeometry;
+  airyTitle?: boolean;
 }) {
   return (
     <article
-      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] bg-white ring-1 ring-ink/[0.08]"
+      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] bg-white ring-2 ring-ink/[0.1]"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${GENERATED_PIXTO_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        boxShadow: `inset 0 0 0 1px ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
+        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        boxShadow: `inset 0 0 0 1.5px ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
       }}
     >
       <div className="relative bg-white">
         <div
           className="absolute left-1/2 -translate-x-1/2 rounded-[1rem]"
           style={{
-            top: `${(GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_TOP_LAYOUT_H) * 100}%`,
+            top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
             width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
+            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
             backgroundColor: HOTEL_LIGHT_BLOCK_COLOUR,
           }}
         />
@@ -211,7 +247,7 @@ function HotelPreviewCard({
       </div>
 
       <div className="border-y border-ink/[0.06] bg-white px-4 py-2">
-        <PreviewTitleBand lines={lines} />
+        <PreviewTitleBand lines={lines} airy={airyTitle} />
       </div>
 
       <div
@@ -240,8 +276,8 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — original geometry card plus four hotel-style cards with the same original
-          dimensions.
+          — original card, expanded original card, and three hotel-style cards using
+          the expanded geometry.
         </p>
       </div>
 
@@ -251,31 +287,52 @@ export function GeneratedCardDemoClient() {
         </h2>
         <div className="grid gap-4 lg:grid-cols-2">
           <DiagnosticPanel
-            title="Original card"
+            title="Original card 1"
             hint="Original Figma geometry with the block sizes marked."
           >
-            <OriginalCardMeasurements />
+            <OriginalCardMeasurements geometry={ORIGINAL_GEOMETRY} />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Original card 2"
+            hint="Expanded white area to 172 and illustration block to 652, keeping the rest aligned to original 1."
+          >
+            <OriginalCardMeasurements geometry={EXPANDED_GEOMETRY} />
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="Hotel look · 1 line"
-            hint="Original size, white area fixed, one title line and ribbon at the same text size."
+            hint="Uses original card 2 geometry with the same text size and logo at 85 x 85."
           >
-            <HotelPreviewCard lines={["breakfast time"]} logoSize={85} />
+            <HotelPreviewCard
+              lines={["breakfast time"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+            />
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="Hotel look · 2 lines"
-            hint="Same white area, but the two lines are packed together without touching the ribbon."
+            hint="Expanded white area with a bit more breathing room between the two lines."
           >
-            <HotelPreviewCard lines={["arrive at", "the hotel"]} logoSize={85} />
+            <HotelPreviewCard
+              lines={["arrive at", "the hotel"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              airyTitle
+            />
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="Hotel look · 3 lines"
-            hint="Same white area, three lines at the same size, logo at 85 x 85."
+            hint="Expanded white area with the same text size and a little more air for the three lines."
           >
-            <HotelPreviewCard lines={["receive", "your room", "key"]} logoSize={85} />
+            <HotelPreviewCard
+              lines={["receive", "your room", "key"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              airyTitle
+            />
           </DiagnosticPanel>
         </div>
       </section>
