@@ -130,7 +130,19 @@ function librarySectionFromCard(
 }
 
 const SECTION_OBJECT_SLUGS: Partial<Record<LibrarySectionId, readonly string[]>> = {
-  bt: ["toothpaste"],
+  bt: [
+    "bottom-teeth",
+    "check-teeths",
+    "cup",
+    "mouth",
+    "tap",
+    "tongue",
+    "toothbrush",
+    "toothholder",
+    "toothpaste",
+    "top-teeth",
+    "towel",
+  ],
   shower: [
     "shower",
     "sponge",
@@ -156,7 +168,15 @@ const SECTION_OBJECT_SLUGS: Partial<Record<LibrarySectionId, readonly string[]>>
     "holds",
     "boulder-wall",
   ],
-  swim: ["changing-room", "swimming-costume", "pool", "sinkers"],
+  swim: [
+    "changing-room",
+    "flip-flops",
+    "googles",
+    "pool",
+    "sinkers",
+    "swim-cap",
+    "swimming-costume",
+  ],
 };
 
 function isObjectCardForSection(

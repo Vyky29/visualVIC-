@@ -4,18 +4,29 @@ import type {
   VisualAsset,
 } from "@/lib/types/routine";
 import {
+  BRUSHING_TEETH_CARD_FILES,
   BRUSHING_TEETH_SEQUENCE,
   brushingTeethImageUrl,
 } from "@/lib/cards/brushing-teeth-cards";
-import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
-import { SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
-import { CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
-import { SWIMMING_SEQUENCE, swimmingImageUrl } from "@/lib/cards/swimming-cards";
+import { CORE_CARD_FILES, CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
+import { SHOWER_CARD_FILES, SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
 import {
+  CLIMBING_CARD_FILES,
+  CLIMBING_SEQUENCE,
+  climbingImageUrl,
+} from "@/lib/cards/climbing-cards";
+import {
+  SWIMMING_CARD_FILES,
+  SWIMMING_SEQUENCE,
+  swimmingImageUrl,
+} from "@/lib/cards/swimming-cards";
+import {
+  AT_THE_AIRPORT_CARD_FILES,
   AT_THE_AIRPORT_SEQUENCE,
   atTheAirportImageUrl,
 } from "@/lib/cards/at-the-airport-cards";
 import {
+  AT_THE_HOTEL_CARD_FILES,
   AT_THE_HOTEL_SEQUENCE,
   atTheHotelImageUrl,
 } from "@/lib/cards/at-the-hotel-cards";
@@ -68,9 +79,59 @@ function pid(ns: string, slug: string): string {
   return `${ns}${SEP}${slug}`;
 }
 
+function stemOf(file: string): string {
+  return file.replace(/\.(png|PNG)$/i, "");
+}
+
+function titleFromSlug(slug: string): string {
+  const words = slug
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function titleMapFromSequence(
+  items: readonly { slug: string; title: string }[],
+): Map<string, string> {
+  return new Map(items.map((item) => [item.slug, item.title] as const));
+}
+
+function appendExtraCardsFromFiles(params: {
+  out: PickableLibraryCard[];
+  ns: PickablePackId;
+  files: readonly string[];
+  category: VisualAsset["category"];
+  imageUrlForSlug: (slug: string) => string;
+  titleMap: ReadonlyMap<string, string>;
+}): void {
+  const { out, ns, files, category, imageUrlForSlug, titleMap } = params;
+  for (const file of files) {
+    const slug = stemOf(file);
+    if (slug.startsWith("backcard") || slug.startsWith("logo-")) continue;
+    if (titleMap.has(slug)) continue;
+    out.push({
+      pickId: pid(ns, slug),
+      label: titleFromSlug(slug),
+      imageUrl: imageUrlForSlug(slug),
+      category,
+    });
+  }
+}
+
 /** All Pixto cards users can add to a custom routine (V1 — local registries). */
 export function buildPickableLibraryCards(): PickableLibraryCard[] {
   const out: PickableLibraryCard[] = [];
+  const brushingTitleMap = titleMapFromSequence(BRUSHING_TEETH_SEQUENCE);
+  const coreTitleMap = titleMapFromSequence(CORE_SEQUENCE);
+  const showerTitleMap = titleMapFromSequence(SHOWER_SEQUENCE);
+  const climbTitleMap = titleMapFromSequence(CLIMBING_SEQUENCE);
+  const swimTitleMap = titleMapFromSequence(SWIMMING_SEQUENCE);
+  const airportTitleMap = titleMapFromSequence(AT_THE_AIRPORT_SEQUENCE);
+  const hotelTitleMap = titleMapFromSequence(AT_THE_HOTEL_SEQUENCE);
 
   for (const s of BRUSHING_TEETH_SEQUENCE) {
     out.push({
@@ -80,6 +141,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "self-care",
     });
   }
+  appendExtraCardsFromFiles({
+    out,
+    ns: "bt",
+    files: BRUSHING_TEETH_CARD_FILES,
+    category: "self-care",
+    imageUrlForSlug: brushingTeethImageUrl,
+    titleMap: brushingTitleMap,
+  });
   for (const s of CORE_SEQUENCE) {
     out.push({
       pickId: pid("core", s.slug),
@@ -88,6 +157,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "home",
     });
   }
+  appendExtraCardsFromFiles({
+    out,
+    ns: "core",
+    files: CORE_CARD_FILES,
+    category: "home",
+    imageUrlForSlug: coreImageUrl,
+    titleMap: coreTitleMap,
+  });
   for (const s of SHOWER_SEQUENCE) {
     out.push({
       pickId: pid("shower", s.slug),
@@ -96,6 +173,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "self-care",
     });
   }
+  appendExtraCardsFromFiles({
+    out,
+    ns: "shower",
+    files: SHOWER_CARD_FILES,
+    category: "self-care",
+    imageUrlForSlug: showerImageUrl,
+    titleMap: showerTitleMap,
+  });
   for (const s of CLIMBING_SEQUENCE) {
     out.push({
       pickId: pid("climb", s.slug),
@@ -104,6 +189,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "activity",
     });
   }
+  appendExtraCardsFromFiles({
+    out,
+    ns: "climb",
+    files: CLIMBING_CARD_FILES,
+    category: "activity",
+    imageUrlForSlug: climbingImageUrl,
+    titleMap: climbTitleMap,
+  });
   for (const s of SWIMMING_SEQUENCE) {
     out.push({
       pickId: pid("swim", s.slug),
@@ -112,6 +205,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       category: "activity",
     });
   }
+  appendExtraCardsFromFiles({
+    out,
+    ns: "swim",
+    files: SWIMMING_CARD_FILES,
+    category: "activity",
+    imageUrlForSlug: swimmingImageUrl,
+    titleMap: swimTitleMap,
+  });
 
   AT_THE_AIRPORT_SEQUENCE.forEach((s, i) => {
     const gp = AIRPORT_GENERATED_CARD_PROPS[i];
@@ -132,6 +233,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
         : undefined,
     });
   });
+  appendExtraCardsFromFiles({
+    out,
+    ns: "airport",
+    files: AT_THE_AIRPORT_CARD_FILES,
+    category: "home",
+    imageUrlForSlug: atTheAirportImageUrl,
+    titleMap: airportTitleMap,
+  });
 
   AT_THE_HOTEL_SEQUENCE.forEach((s, i) => {
     const gp = HOTEL_GENERATED_CARD_PROPS[i];
@@ -151,6 +260,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
           }
         : undefined,
     });
+  });
+  appendExtraCardsFromFiles({
+    out,
+    ns: "hotel",
+    files: AT_THE_HOTEL_CARD_FILES,
+    category: "home",
+    imageUrlForSlug: atTheHotelImageUrl,
+    titleMap: hotelTitleMap,
   });
 
   for (const card of GETTING_DRESS_REGISTRY) {
