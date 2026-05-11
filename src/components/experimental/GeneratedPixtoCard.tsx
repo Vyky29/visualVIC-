@@ -84,6 +84,8 @@ export type GeneratedPixtoCardProps = {
   /** Company / brand mark — top-right of yellow block (wireframe brown square). */
   iconUrl?: string;
   cardType?: string;
+  /** Optional Focus-only illustration zoom for one-off visual tests. */
+  focusIllustrationScale?: number;
   /** e.g. Focus preview: `h-full w-full max-w-none` on design 744×1054 slot */
   className?: string;
   /** Larger title / ribbon type when the shell is scaled down (Focus mode). */
@@ -384,6 +386,7 @@ export function GeneratedPixtoCard({
   categoryColour,
   iconUrl,
   cardType,
+  focusIllustrationScale,
   className,
   focusPresentation = false,
   suppressNeutralRing = false,
@@ -407,8 +410,9 @@ export function GeneratedPixtoCard({
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
+  const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
   const illustrationObjectClass = focusPresentation
-    ? "object-cover object-center origin-center scale-y-[1.08]"
+    ? "object-cover object-center origin-center"
     : "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
@@ -478,7 +482,7 @@ export function GeneratedPixtoCard({
           >
             <div className="flex h-full w-full min-h-0 items-center justify-center">
               <div
-                className="relative min-h-0"
+                className="relative min-h-0 overflow-hidden"
                 style={{
                   width: `min(${illustrationWidthPct}, 100%)`,
                   aspectRatio: ILLUSTRATION_FRAME_ASPECT,
@@ -491,6 +495,14 @@ export function GeneratedPixtoCard({
                   fill
                   sizes="(max-width: 640px) 72vw, 240px"
                   className={cn(illustrationObjectClass, "select-none")}
+                  style={
+                    focusPresentation
+                      ? {
+                          transform: `scale(${resolvedFocusIllustrationScale})`,
+                          transformOrigin: "center center",
+                        }
+                      : undefined
+                  }
                   unoptimized={
                     illustrationUrl.startsWith("/") ||
                     illustrationUrl.includes("/cards/")

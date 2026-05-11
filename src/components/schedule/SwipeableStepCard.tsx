@@ -599,6 +599,7 @@ export function SwipeableStepCard({
                         categoryColour={gp.categoryColour}
                         iconUrl={gp.iconUrl}
                         cardType={gp.cardType}
+                        focusIllustrationScale={gp.focusIllustrationScale}
                         focusPresentation
                         suppressNeutralRing
                         className="h-full w-full max-w-none"
@@ -612,6 +613,7 @@ export function SwipeableStepCard({
                           categoryColour={gp.categoryColour}
                           iconUrl={gp.iconUrl}
                           cardType={gp.cardType}
+                          focusIllustrationScale={gp.focusIllustrationScale}
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
                         />
@@ -776,6 +778,7 @@ export function SwipeableStepCard({
                     categoryColour={gp.categoryColour}
                     iconUrl={gp.iconUrl}
                     cardType={gp.cardType}
+                    focusIllustrationScale={gp.focusIllustrationScale}
                     focusPresentation
                     suppressNeutralRing
                     className="h-full w-full max-w-none"
@@ -789,6 +792,7 @@ export function SwipeableStepCard({
                       categoryColour={gp.categoryColour}
                       iconUrl={gp.iconUrl}
                       cardType={gp.cardType}
+                      focusIllustrationScale={gp.focusIllustrationScale}
                       focusPresentation={focusGenerated}
                       suppressNeutralRing
                       className="h-full w-full max-w-none"

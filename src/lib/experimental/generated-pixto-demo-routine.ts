@@ -69,6 +69,7 @@ export function routineStepsFromGeneratedCardProps(
       categoryColour: c.categoryColour,
       iconUrl: c.iconUrl,
       cardType: c.cardType,
+      focusIllustrationScale: c.focusIllustrationScale,
     },
   }));
 }

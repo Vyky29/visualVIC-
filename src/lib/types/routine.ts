@@ -6,6 +6,8 @@ export type GeneratedPixtoRoutineStepData = {
   categoryColour: string;
   iconUrl?: string;
   cardType?: string;
+  /** Optional Focus-only illustration zoom for one-off visual tests. */
+  focusIllustrationScale?: number;
 };
 
 export type RoutineStep = {
