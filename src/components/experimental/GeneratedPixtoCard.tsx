@@ -95,31 +95,97 @@ export type GeneratedPixtoCardProps = {
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
 
 const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
+const SCHEDULE_TITLE_MAX_LINES = 3;
+const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
+
+function estimateScheduleWordVisualWidth(word: string): number {
+  let width = 0;
+  for (const ch of word.toLowerCase()) {
+    if ("iltjfr".includes(ch)) {
+      width += 0.55;
+    } else if ("mw".includes(ch)) {
+      width += 1.35;
+    } else if (" .,:'".includes(ch)) {
+      width += 0.28;
+    } else {
+      width += 1;
+    }
+  }
+  return width;
+}
+
+function estimateScheduleLineVisualWidth(words: string[]): number {
+  if (words.length === 0) return 0;
+  return words.reduce((sum, word) => sum + estimateScheduleWordVisualWidth(word), 0) +
+    Math.max(0, words.length - 1) * 0.42;
+}
+
+function buildScheduleLineLayouts(
+  words: string[],
+  index = 0,
+  current: string[][] = [],
+): string[][][] {
+  if (index >= words.length) {
+    return current.length > 0 ? [current.map((line) => [...line])] : [];
+  }
+  if (current.length >= SCHEDULE_TITLE_MAX_LINES) {
+    return [];
+  }
+
+  const layouts: string[][][] = [];
+  const maxTake = Math.min(SCHEDULE_TITLE_MAX_WORDS_PER_LINE, words.length - index);
+  for (let take = 1; take <= maxTake; take += 1) {
+    current.push(words.slice(index, index + take));
+    layouts.push(...buildScheduleLineLayouts(words, index + take, current));
+    current.pop();
+  }
+  return layouts;
+}
 
 /**
  * Schedule title lines at the large type size: at most three words per line;
- * exactly four words → two lines of two (not 3+1).
+ * prefer the tightest readable 1/2/3-line layout based on visual width.
  */
 function splitTitleScheduleLines(raw: string): string[] {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) return raw.trim() ? [raw.trim()] : [];
-  if (words.length <= SCHEDULE_TITLE_MAX_WORDS_PER_LINE) {
+
+  const candidateLayouts = buildScheduleLineLayouts(words);
+  if (candidateLayouts.length === 0) {
     return [words.join(" ")];
   }
-  if (words.length === 4) {
-    return [`${words[0]} ${words[1]}`, `${words[2]} ${words[3]}`];
-  }
-  const lines: string[] = [];
-  let i = 0;
-  while (i < words.length) {
-    const take = Math.min(
-      SCHEDULE_TITLE_MAX_WORDS_PER_LINE,
-      words.length - i,
+
+  let bestLayout = candidateLayouts[0];
+  let bestScore = Number.POSITIVE_INFINITY;
+
+  for (const layout of candidateLayouts) {
+    const widths = layout.map((line) => estimateScheduleLineVisualWidth(line));
+    const maxWidth = Math.max(...widths);
+    const minWidth = Math.min(...widths);
+    const overflowPenalty = widths.reduce(
+      (sum, width) =>
+        sum + Math.max(0, width - SCHEDULE_TITLE_TARGET_VISUAL_WIDTH),
+      0,
     );
-    lines.push(words.slice(i, i + take).join(" "));
-    i += take;
+    const singleWordPenalty = layout.reduce(
+      (sum, line) => sum + (layout.length > 1 && line.length === 1 ? 1 : 0),
+      0,
+    );
+    const balancePenalty = maxWidth - minWidth;
+    const lineCountPenalty = (layout.length - 1) * 0.18;
+    const score =
+      overflowPenalty * 100 +
+      singleWordPenalty * 8 +
+      balancePenalty +
+      lineCountPenalty;
+
+    if (score < bestScore) {
+      bestScore = score;
+      bestLayout = layout;
+    }
   }
-  return lines;
+
+  return bestLayout.map((line) => line.join(" "));
 }
 
 const titleTypographyBase =
