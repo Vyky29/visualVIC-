@@ -408,7 +408,7 @@ export function GeneratedPixtoCard({
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const illustrationObjectClass = focusPresentation
-    ? "object-cover object-center"
+    ? "object-cover object-center origin-center scale-y-[1.08]"
     : "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
