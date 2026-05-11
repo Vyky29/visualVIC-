@@ -58,19 +58,82 @@ function categoryTitle(cat: DashboardCategory): string {
   return cat.replace("-", " ");
 }
 
+function ScheduleSectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <rect
+        x="4.25"
+        y="5"
+        width="15.5"
+        height="14"
+        rx="3.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M8 9.25h5.75M8 12h8M8 14.75h4.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <circle cx="17" cy="8.75" r="1.3" fill="currentColor" />
+    </svg>
+  );
+}
+
+function RoutinesSectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <rect
+        x="4.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="13.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="4.5"
+        y="13.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M14 15.5h5.5M14 18.5h4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function SectionHeader({
   title,
-  iconSrc,
+  icon,
   ringClass,
+  iconClassName,
   action,
 }: {
   title: string;
-  iconSrc: string;
+  icon: React.ReactNode;
   ringClass: string;
+  iconClassName?: string;
   action?: React.ReactNode;
 }) {
-  const pixto = isPixtoLearnBundledCardUrl(iconSrc);
-
   return (
     <div className="flex items-center justify-between gap-3 px-1">
       <div className="flex min-w-0 items-center gap-3">
@@ -80,18 +143,14 @@ function SectionHeader({
             ringClass,
           )}
         >
-          <Image
-            src={iconSrc}
-            alt=""
-            fill
-            unoptimized
+          <span
             className={cn(
-              pixto
-                ? "object-cover object-top scale-[1.22]"
-                : "object-cover object-center",
+              "flex h-full w-full items-center justify-center text-ink/78",
+              iconClassName,
             )}
-            style={pixto ? { top: "-4%", bottom: "auto" } : undefined}
-          />
+          >
+            {icon}
+          </span>
         </span>
         <h2 className="min-w-0 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
           {title}
@@ -247,8 +306,6 @@ export default function DashboardPage() {
   );
   const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
   const frameScale = profile?.avatarFrameScale ?? 1;
-  const scheduleHeaderIcon =
-    primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl ?? coreImageUrl("eat");
 
   const isAccordionOpen = useCallback(
     (key: string) =>
@@ -321,8 +378,9 @@ export default function DashboardPage() {
         <section className="space-y-3">
           <SectionHeader
             title="Schedule Player"
-            iconSrc={scheduleHeaderIcon}
+            icon={<ScheduleSectionIcon />}
             ringClass="ring-sage/65"
+            iconClassName="text-sage"
             action={
               <Link
                 href="/player"
@@ -362,8 +420,9 @@ export default function DashboardPage() {
         <section className="space-y-3">
           <SectionHeader
             title="Routines"
-            iconSrc={coreImageUrl("walk")}
+            icon={<RoutinesSectionIcon />}
             ringClass="ring-[#6b8f9e]/75"
+            iconClassName="text-[#5f8392]"
           />
           {featuredRoutines.length > 0 ? (
             <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
