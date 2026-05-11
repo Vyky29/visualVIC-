@@ -28,7 +28,10 @@ import {
   PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
   PIXTO_FOCUS_CARD_REF_WIDTH_PX,
 } from "@/lib/constants/pixto-focus-card";
-import { GeneratedPixtoCard } from "@/components/experimental/GeneratedPixtoCard";
+import {
+  GeneratedPixtoCard,
+  GENERATED_PIXTO_CARD_SIZE,
+} from "@/components/experimental/GeneratedPixtoCard";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
@@ -450,6 +453,14 @@ export function SwipeableStepCard({
         })()
       : undefined;
   const cardStyle = nextOutlineStyle ?? focusGeneratedBorderStyle;
+  const focusCardAspectRatio =
+    variant === "focus"
+      ? focusGenerated
+        ? `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`
+        : focusPixto
+          ? `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`
+          : undefined
+      : undefined;
 
   return (
     <motion.div
@@ -544,9 +555,9 @@ export function SwipeableStepCard({
         onPointerUp={imageInteractive ? focusImagePointerUp : undefined}
         onPointerCancel={imageInteractive ? focusImagePointerCancel : undefined}
         style={
-          variant === "focus" && (focusPixto || focusGenerated)
+          focusCardAspectRatio
             ? {
-                aspectRatio: `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`,
+                aspectRatio: focusCardAspectRatio,
               }
             : undefined
         }
@@ -584,19 +595,17 @@ export function SwipeableStepCard({
                     )}
                   >
                     {variant === "focus" ? (
-                      <GeneratedPixtoSlotScale>
-                        <GeneratedPixtoCard
-                          illustrationUrl={gp.illustrationUrl}
-                          title={gp.title}
-                          category={gp.category}
-                          categoryColour={gp.categoryColour}
-                          iconUrl={gp.iconUrl}
-                          cardType={gp.cardType}
-                          focusPresentation
-                          suppressNeutralRing
-                          className="h-full w-full max-w-none"
-                        />
-                      </GeneratedPixtoSlotScale>
+                      <GeneratedPixtoCard
+                        illustrationUrl={gp.illustrationUrl}
+                        title={gp.title}
+                        category={gp.category}
+                        categoryColour={gp.categoryColour}
+                        iconUrl={gp.iconUrl}
+                        cardType={gp.cardType}
+                        focusPresentation
+                        suppressNeutralRing
+                        className="h-full w-full max-w-none"
+                      />
                     ) : (
                       <GeneratedPixtoSlotScale>
                         <GeneratedPixtoCard
@@ -763,19 +772,17 @@ export function SwipeableStepCard({
                 )}
               >
                 {variant === "focus" ? (
-                  <GeneratedPixtoSlotScale>
-                    <GeneratedPixtoCard
-                      illustrationUrl={gp.illustrationUrl}
-                      title={gp.title}
-                      category={gp.category}
-                      categoryColour={gp.categoryColour}
-                      iconUrl={gp.iconUrl}
-                      cardType={gp.cardType}
-                      focusPresentation
-                      suppressNeutralRing
-                      className="h-full w-full max-w-none"
-                    />
-                  </GeneratedPixtoSlotScale>
+                  <GeneratedPixtoCard
+                    illustrationUrl={gp.illustrationUrl}
+                    title={gp.title}
+                    category={gp.category}
+                    categoryColour={gp.categoryColour}
+                    iconUrl={gp.iconUrl}
+                    cardType={gp.cardType}
+                    focusPresentation
+                    suppressNeutralRing
+                    className="h-full w-full max-w-none"
+                  />
                 ) : (
                   <GeneratedPixtoSlotScale>
                     <GeneratedPixtoCard

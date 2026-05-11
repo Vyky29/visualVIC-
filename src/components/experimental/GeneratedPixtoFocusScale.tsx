@@ -1,18 +1,15 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import {
-  PIXTO_FOCUS_CARD_MAX_SCALE,
-  PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
-  PIXTO_FOCUS_CARD_REF_WIDTH_PX,
-} from "@/lib/constants/pixto-focus-card";
+import { GENERATED_PIXTO_CARD_SIZE } from "@/components/experimental/GeneratedPixtoCard";
+import { PIXTO_FOCUS_CARD_MAX_SCALE } from "@/lib/constants/pixto-focus-card";
 
 type Props = { children: ReactNode };
 
 /**
- * Same design box and scale math as {@link PixtoFocusCardScale} (390×ref H),
- * so generated HTML cards occupy the **same focus slot** as bundled PNG cards.
- * The child should fit the 744×1054 card inside this box (e.g. via {@link GeneratedPixtoSlotScale}).
+ * Focus scaling for generated HTML cards uses the card's own 744×1054 geometry.
+ * This keeps the ribete flush with the bottom edge, just like Schedule NOW/NEXT,
+ * and only enlarges the whole card to the biggest size that fits on screen.
  */
 export function GeneratedPixtoFocusScale({ children }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
@@ -25,8 +22,8 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
     const update = () => {
       const { width: W, height: H } = outer.getBoundingClientRect();
       if (W <= 0 || H <= 0) return;
-      const sx = W / PIXTO_FOCUS_CARD_REF_WIDTH_PX;
-      const sy = H / PIXTO_FOCUS_CARD_REF_HEIGHT_PX;
+      const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
       const uncapped = Math.min(sx, sy);
       const s = Math.min(uncapped, PIXTO_FOCUS_CARD_MAX_SCALE);
       setScale(Number.isFinite(s) && s > 0 ? s : 1);
@@ -46,8 +43,8 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
       <div
         className="mx-auto flex shrink-0 self-center will-change-transform"
         style={{
-          width: PIXTO_FOCUS_CARD_REF_WIDTH_PX,
-          height: PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
+          width: GENERATED_PIXTO_CARD_SIZE.w,
+          height: GENERATED_PIXTO_CARD_SIZE.h,
           transform: `scale(${scale})`,
           transformOrigin: "center center",
         }}
