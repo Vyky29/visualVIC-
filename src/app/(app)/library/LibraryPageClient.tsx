@@ -13,14 +13,17 @@ import { Button } from "@/components/ui/Button";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { coreImageUrl } from "@/lib/cards/core-cards";
-import { atTheAirportPackMarkUrl } from "@/lib/cards/at-the-airport-cards";
-import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
 import {
   GETTING_DRESS_REGISTRY,
   getDressRegistryCardBySlug,
 } from "@/lib/cards/getting-dress-undress-registry";
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
+import {
+  AIRPORT_GENERATED_CARD_PROPS,
+  HOTEL_GENERATED_CARD_PROPS,
+} from "@/lib/experimental/generated-pixto-demo-routine";
 import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
@@ -70,17 +73,11 @@ const SECTION_LABEL: Record<LibrarySectionId, string> = {
 const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   bt: brushingTeethImageUrl("toothbrush"),
   shower: showerImageUrl("shower"),
-  "dress-on":
-    GETTING_DRESS_REGISTRY.find((card) => card.actionType === "on")?.imageUrl ??
-    GETTING_DRESS_REGISTRY[0]?.imageUrl ??
-    "",
-  "dress-off":
-    GETTING_DRESS_REGISTRY.find((card) => card.actionType === "off")?.imageUrl ??
-    GETTING_DRESS_REGISTRY[0]?.imageUrl ??
-    "",
+  "dress-on": gettingDressUndressImageUrl("tshirt-on"),
+  "dress-off": gettingDressUndressImageUrl("trousers-off"),
   core: coreImageUrl("wash-hands"),
-  airport: atTheAirportPackMarkUrl(),
-  hotel: atTheHotelPackMarkUrl(),
+  airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
+  hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("changing-room"),
 };
@@ -196,7 +193,14 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
                 )
               : "object-center",
           )}
-          style={pixto ? { top: 0, bottom: "auto" } : undefined}
+          style={
+            pixto
+              ? {
+                  top: "7%",
+                  bottom: "auto",
+                }
+              : undefined
+          }
         />
         {selected ? (
           <div
@@ -362,6 +366,7 @@ export function LibraryPageClient() {
                   const count = cards.length;
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
+                  const cropHeaderIcon = true;
 
                   return (
                     <div
@@ -382,7 +387,7 @@ export function LibraryPageClient() {
                         >
                           <span
                             className={cn(
-                              "flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-12 sm:w-12",
+                              "relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-2 ring-inset sm:h-12 sm:w-12",
                               ringClass,
                             )}
                           >
@@ -390,10 +395,21 @@ export function LibraryPageClient() {
                               <Image
                                 src={iconSrc}
                                 alt=""
-                                width={40}
-                                height={40}
+                                fill
                                 unoptimized={iconUnopt}
-                                className="h-[2.125rem] w-[2.125rem] object-contain sm:h-[2.375rem] sm:w-[2.375rem]"
+                                className={cn(
+                                  cropHeaderIcon
+                                    ? "object-cover object-top scale-[1.26]"
+                                    : "object-contain p-1.5 sm:p-1.5",
+                                )}
+                                style={
+                                  cropHeaderIcon
+                                    ? {
+                                        top: "8%",
+                                        bottom: "auto",
+                                      }
+                                    : undefined
+                                }
                               />
                             ) : null}
                           </span>
