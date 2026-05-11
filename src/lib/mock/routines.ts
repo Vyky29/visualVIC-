@@ -11,7 +11,6 @@ import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-c
 import {
   buildGettingDressedRoutineSteps,
   buildGettingUndressedRoutineSteps,
-  getDressRegistryCardBySlug,
 } from "@/lib/cards/getting-dress-undress-registry";
 import {
   buildBedtimeEveningSteps,
@@ -43,9 +42,7 @@ export const mockRoutines: Routine[] = [
     description:
       "Modular demo — core cues plus dress layers (socks, shoes, jacket, cap)",
     tags: ["morning", "home", "self-care"],
-    homePreviewImageUrl:
-      getDressRegistryCardBySlug("trainers-on")?.imageUrl ??
-      coreImageUrl("walk"),
+    homePreviewImageUrl: coreImageUrl("walk"),
     steps: buildGettingReadyOutSteps(),
   },
   {
@@ -59,11 +56,11 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "demo-bedtime-evening",
-    name: "Bedtime / Evening Routine",
+    name: "Bedtime Routine",
     description:
       "Modular demo — toilet, shower, teeth, undress & quiet wind-down",
     tags: ["self-care", "home"],
-    homePreviewImageUrl: showerImageUrl("shower"),
+    homePreviewImageUrl: coreImageUrl("toilet"),
     steps: buildBedtimeEveningSteps(),
   },
   {

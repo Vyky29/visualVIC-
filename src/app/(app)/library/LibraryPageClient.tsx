@@ -129,6 +129,55 @@ function librarySectionFromCard(
   return dress?.actionType === "off" ? "dress-off" : "dress-on";
 }
 
+const SECTION_OBJECT_SLUGS: Partial<Record<LibrarySectionId, readonly string[]>> = {
+  bt: ["toothpaste"],
+  shower: [
+    "shower",
+    "sponge",
+    "brush",
+    "shampoo",
+    "conditioner",
+    "towel",
+    "comb",
+    "hair-dryer",
+    "gel",
+    "body-lotion",
+  ],
+  core: ["toilet"],
+  climb: [
+    "climbing-wall",
+    "magnesium-bag",
+    "helmet",
+    "harness",
+    "climbing-shoes",
+    "rope",
+    "carabiner",
+    "grigri",
+    "holds",
+    "boulder-wall",
+  ],
+  swim: ["changing-room", "swimming-costume", "pool", "sinkers"],
+};
+
+function objectCountForSection(
+  section: LibrarySectionId,
+  cards: readonly PickableLibraryCard[],
+): number {
+  if (section === "dress-on" || section === "dress-off") {
+    return cards.filter((c) => {
+      const slug = c.pickId.split("::")[1] ?? "";
+      return getDressRegistryCardBySlug(slug)?.itemType === "object";
+    }).length;
+  }
+
+  const objectSlugs = new Set(SECTION_OBJECT_SLUGS[section] ?? []);
+  if (objectSlugs.size === 0) return 0;
+  return cards.filter((c) => {
+    const slug = c.pickId.split("::")[1] ?? "";
+    return objectSlugs.has(slug);
+  }).length;
+}
+
 function groupByCategoryAndSection(): Map<
   (typeof groups)[number],
   Map<LibrarySectionId, PickableLibraryCard[]>
@@ -364,6 +413,7 @@ export function LibraryPageClient() {
                   const open = isAccordionOpen(accordionKey);
                   const ringClass = libraryPackIconRingClass[section];
                   const count = cards.length;
+                  const objectCount = objectCountForSection(section, cards);
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
                   const cropHeaderIcon = true;
@@ -405,7 +455,7 @@ export function LibraryPageClient() {
                                 style={
                                   cropHeaderIcon
                                     ? {
-                                        top: "8%",
+                                        top: "4%",
                                         bottom: "auto",
                                       }
                                     : undefined
@@ -423,6 +473,13 @@ export function LibraryPageClient() {
                             >
                               {count}{" "}
                               {count === 1 ? "step" : "steps"}
+                            </span>
+                            <span
+                              className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
+                              aria-label={`${objectCount} ${objectCount === 1 ? "object" : "objects"}`}
+                            >
+                              · {objectCount}{" "}
+                              {objectCount === 1 ? "object" : "objects"}
                             </span>
                           </span>
                         </button>
