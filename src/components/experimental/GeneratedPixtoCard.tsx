@@ -36,6 +36,7 @@ export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
 
 /** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
+const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = true;
 
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
@@ -153,6 +154,54 @@ const focusTitleBandTypography = cn(
   titleTypographyBase,
   "text-[31px] sm:text-[36px] leading-[1.08]",
 );
+
+function GeneratedPixtoDebugGuides({
+  gridTemplateRows,
+  illustrationWidthPct,
+}: {
+  gridTemplateRows: string;
+  illustrationWidthPct: string;
+}) {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-40 overflow-hidden rounded-[1.35rem]">
+      <div className="absolute inset-0 rounded-[1.35rem] border border-[rgba(255,0,0,0.55)]" />
+
+      <div
+        className="absolute inset-0 grid"
+        style={{ gridTemplateRows }}
+      >
+        <div className="relative border-b border-[rgba(0,140,255,0.55)] bg-[rgba(0,140,255,0.05)]">
+          <div className="absolute inset-x-0 top-0 h-[18.388%] border-b border-dashed border-[rgba(0,140,255,0.42)]" />
+          <div
+            className="absolute left-1/2 top-[18.388%] -translate-x-1/2 border border-[rgba(0,180,120,0.72)] bg-[rgba(0,180,120,0.06)]"
+            style={{
+              width: `min(${illustrationWidthPct}, 100%)`,
+              aspectRatio: ILLUSTRATION_FRAME_ASPECT,
+            }}
+          />
+          <span className="absolute left-2 top-1 rounded bg-[rgba(0,140,255,0.75)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white">
+            top + illustration
+          </span>
+          <span className="absolute left-2 top-[20%] rounded bg-[rgba(0,180,120,0.82)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white">
+            illustration block
+          </span>
+        </div>
+
+        <div className="relative border-b border-[rgba(255,140,0,0.55)] bg-[rgba(255,140,0,0.06)]">
+          <span className="absolute left-2 top-1 rounded bg-[rgba(255,140,0,0.85)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white">
+            white area
+          </span>
+        </div>
+
+        <div className="relative bg-[rgba(160,0,255,0.08)]">
+          <span className="absolute left-2 top-1 rounded bg-[rgba(160,0,255,0.82)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white">
+            ribete
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function TitleBand({
   title,
@@ -315,6 +364,13 @@ export function GeneratedPixtoCard({
         gridTemplateRows,
       }}
     >
+      {SHOW_GENERATED_PIXTO_DEBUG_GUIDES ? (
+        <GeneratedPixtoDebugGuides
+          gridTemplateRows={gridTemplateRows}
+          illustrationWidthPct={illustrationWidthPct}
+        />
+      ) : null}
+
       {markSrc ? (
         <div
           className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center bg-transparent"
