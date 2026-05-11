@@ -224,7 +224,7 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 pb-0 text-center",
+                "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 pb-[0.14em] text-center",
                 bandTypo,
               )}
             >
@@ -244,7 +244,7 @@ function TitleBand({
             <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center">
               <span className={cn(bandTypo, "leading-[1.14]")}>{row1Two}</span>
             </div>
-            <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0 text-center">
+            <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-[0.14em] text-center">
               <span className={cn(bandTypo, "leading-[1.14]")}>{row2Three}</span>
             </div>
           </>
