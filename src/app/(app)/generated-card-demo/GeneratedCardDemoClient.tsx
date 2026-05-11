@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils/cn";
 const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
-const TITLE_TEXT_SIZE_CLASS = "text-[28px]";
-const TITLE_LINE_HEIGHT_CLASS = "leading-[0.98]";
+const TITLE_TEXT_SIZE_CLASS = "text-[27px]";
+const TITLE_LINE_HEIGHT_CLASS = "leading-[0.9]";
 
 function DiagnosticPanel({
   title,
@@ -98,6 +98,13 @@ function PreviewTitleBand({
 }: {
   lines: [string] | [string, string] | [string, string, string];
 }) {
+  const lineOffsetClass =
+    lines.length === 1
+      ? ""
+      : lines.length === 2
+        ? "-mt-[0.18em]"
+        : "-mt-[0.24em]";
+
   return (
     <div
       className={cn(
@@ -106,8 +113,11 @@ function PreviewTitleBand({
         TITLE_LINE_HEIGHT_CLASS,
       )}
     >
-      {lines.map((line) => (
-        <span key={line} className="block w-full">
+      {lines.map((line, index) => (
+        <span
+          key={`${line}-${index}`}
+          className={cn("block w-full", index > 0 && lineOffsetClass)}
+        >
           {line}
         </span>
       ))}
@@ -184,6 +194,7 @@ function HotelPreviewCard({
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        boxShadow: `inset 0 0 0 1px ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
       }}
     >
       <div className="relative bg-white">
@@ -250,28 +261,21 @@ export function GeneratedCardDemoClient() {
             title="Hotel look · 1 line"
             hint="Original size, white area fixed, one title line and ribbon at the same text size."
           >
-            <HotelPreviewCard lines={["breakfast time"]} logoSize={88} />
+            <HotelPreviewCard lines={["breakfast time"]} logoSize={85} />
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="Hotel look · 2 lines"
             hint="Same white area, but the two lines are packed together without touching the ribbon."
           >
-            <HotelPreviewCard lines={["arrive at", "the hotel"]} logoSize={88} />
+            <HotelPreviewCard lines={["arrive at", "the hotel"]} logoSize={85} />
           </DiagnosticPanel>
 
           <DiagnosticPanel
             title="Hotel look · 3 lines"
-            hint="Same white area, three lines at the same size, logo at 88 x 88."
+            hint="Same white area, three lines at the same size, logo at 85 x 85."
           >
-            <HotelPreviewCard lines={["receive", "your room", "key"]} logoSize={88} />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Hotel look · 3 lines · logo 82"
-            hint="Same card as above, but with the logo reduced to 82 x 82."
-          >
-            <HotelPreviewCard lines={["receive", "your room", "key"]} logoSize={82} />
+            <HotelPreviewCard lines={["receive", "your room", "key"]} logoSize={85} />
           </DiagnosticPanel>
         </div>
       </section>
