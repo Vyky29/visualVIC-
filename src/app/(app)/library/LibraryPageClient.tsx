@@ -457,7 +457,7 @@ export function LibraryPageClient() {
                         if (prefersFineHover) setHoverPeekKey(null);
                       }}
                     >
-                      <div className="flex h-[58px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-[60px]">
+                      <div className="flex min-h-[58px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:min-h-[60px]">
                         <button
                           type="button"
                           onClick={() => openAccordion(accordionKey)}
@@ -491,22 +491,22 @@ export function LibraryPageClient() {
                               />
                             ) : null}
                           </span>
-                          <span className="flex min-w-0 flex-1 items-baseline gap-2">
+                          <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
                             <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
                               {SECTION_LABEL[section]}
                             </span>
                             <span
-                              className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
+                              className="inline-flex shrink-0 items-center rounded-full border border-ink/8 bg-white/82 px-2 py-0.5 text-[10px] font-medium tabular-nums tracking-tight text-ink-subtle shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:text-[11px]"
                               aria-label={`${stepCount} ${stepCount === 1 ? "step" : "steps"}`}
                             >
                               {stepCount}{" "}
                               {stepCount === 1 ? "step" : "steps"}
                             </span>
                             <span
-                              className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]"
+                              className="inline-flex shrink-0 items-center rounded-full border border-ink/8 bg-white/82 px-2 py-0.5 text-[10px] font-medium tabular-nums tracking-tight text-ink-subtle shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:text-[11px]"
                               aria-label={`${objectCount} ${objectCount === 1 ? "object" : "objects"}`}
                             >
-                              · {objectCount}{" "}
+                              {objectCount}{" "}
                               {objectCount === 1 ? "object" : "objects"}
                             </span>
                           </span>

@@ -222,6 +222,18 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   const title = step.title.trim().toLowerCase();
   const haystack = `${u} ${id} ${title}`;
 
+  // Mixed demo routines are composed from stock-pack steps; their ids are the
+  // most reliable source for category tone and should win before looser text
+  // matching. This fixes cases like `core-eat` inside Morning Routine.
+  if (id.startsWith("core-")) return "core";
+  if (id.startsWith("bt-")) return "brushing";
+  if (id.startsWith("shower-")) return "shower";
+  if (id.startsWith("climb-")) return "climbing";
+  if (id.startsWith("swim-")) return "swimming";
+  if (id.startsWith("gd-dressed-") || id.startsWith("gd-undressed-")) {
+    return "dress";
+  }
+
   if (
     includesAny(haystack, [
       "/brushing-teeth/",
