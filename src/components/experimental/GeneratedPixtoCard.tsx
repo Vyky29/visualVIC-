@@ -149,6 +149,11 @@ const scheduleTitleBandTypography = cn(
   "text-[72px] sm:text-[84px] leading-[1.14]",
 );
 
+const focusTitleBandTypography = cn(
+  titleTypographyBase,
+  "text-[36px] sm:text-[42px] leading-[1.1]",
+);
+
 function TitleBand({
   title,
   isDense,
@@ -171,7 +176,7 @@ function TitleBand({
     [title],
   );
 
-  if (isDense || focusPresentation || !scheduleLargeType) {
+  if (isDense || (!focusPresentation && !scheduleLargeType)) {
     return (
       <div
         className={cn(
@@ -194,7 +199,9 @@ function TitleBand({
   const row2Two = n === 2 ? safeLines[1] : "";
   const row2Three =
     n >= 3 ? safeLines.slice(2).join(" ") : "";
-  const bandTypo = scheduleTitleBandTypography;
+  const bandTypo = focusPresentation
+    ? focusTitleBandTypography
+    : scheduleTitleBandTypography;
 
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
