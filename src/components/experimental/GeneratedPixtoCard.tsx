@@ -200,8 +200,8 @@ function TitleBand({
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-1">
       {/*
         Always 3 equal grid rows above the ribete (design “thirds”).
-        · 1 line → row 1 empty; text only in row 2, baseline toward row 3 (same band as first line of 2-line titles).
-        · 2 lines → row 1 empty; line 1 in row 2 (items-end); line 2 in row 3 (items-end, ribete) — not one merged block (avoids “foto 2” centred stack).
+        · 1 line → row 1 empty; line in row 2 aligned to the top of that band (same vertical band as “check in at” in 2-line titles).
+        · 2 lines → row 1 empty; line 1 row 2 items-start; line 2 row 3 items-end at ribete (foto 1 — not both lines items-end at the bottom / foto 2).
         · 3 lines → one line per row 1 / 2 / 3.
       */}
       <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
@@ -210,7 +210,7 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center",
+                "col-start-1 row-start-2 flex min-h-0 items-start justify-center overflow-hidden px-0.5 pt-1 text-center",
                 bandTypo,
               )}
             >
@@ -225,7 +225,7 @@ function TitleBand({
             <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
             <div
               className={cn(
-                "col-start-1 row-start-2 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center",
+                "col-start-1 row-start-2 flex min-h-0 items-start justify-center overflow-hidden px-0.5 pt-1 text-center",
                 bandTypo,
               )}
             >

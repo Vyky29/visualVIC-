@@ -151,13 +151,13 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     home: "ring-2 ring-[#d4a017]/88 ring-offset-2 ring-offset-canvas",
     homeDashboard:
       "ring-1 ring-[#d4a017]/88 ring-offset-1 ring-offset-canvas",
-    /** Cream + offset so NOW reads on canvas (same family as ribbon #F9DD9E). */
+    /** Schedule: no ring-offset — matches other packs so the ring hugs the card shell (HTML cards looked “gappy”). */
     scheduleNow:
-      "ring-2 ring-[#F9DD9E]/95 ring-offset-2 ring-offset-canvas shadow-[0_8px_32px_-12px_rgba(212,160,23,0.38)]",
+      "ring-2 ring-[#F9DD9E]/95 shadow-[0_8px_32px_-12px_rgba(212,160,23,0.38)]",
     scheduleNext:
-      "ring-2 ring-[#f5d88a]/90 ring-offset-2 ring-offset-canvas shadow-[0_6px_22px_-12px_rgba(212,160,23,0.28)]",
+      "ring-2 ring-[#f5d88a]/90 shadow-[0_6px_22px_-12px_rgba(212,160,23,0.28)]",
     scheduleFocus:
-      "ring-2 ring-[#F9DD9E]/92 ring-offset-2 ring-offset-canvas shadow-[0_8px_32px_-12px_rgba(249,221,158,0.45)]",
+      "ring-2 ring-[#F9DD9E]/92 shadow-[0_8px_32px_-12px_rgba(249,221,158,0.45)]",
     scheduleCompact:
       "ml-0.5 border-l-[3px] border-dashed border-[#d4a017]/55 pl-3 ring-1 ring-[#F9DD9E]/40 ring-offset-2 ring-offset-cream",
     hoverGlow:
@@ -168,11 +168,11 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     homeDashboard:
       "ring-1 ring-[#8C1E2E]/90 ring-offset-1 ring-offset-canvas",
     scheduleNow:
-      "ring-2 ring-[#8C1E2E]/90 ring-offset-2 ring-offset-canvas shadow-[0_8px_32px_-12px_rgba(140,30,46,0.35)]",
+      "ring-2 ring-[#8C1E2E]/90 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.35)]",
     scheduleNext:
-      "ring-2 ring-[#a53b4d]/85 ring-offset-2 ring-offset-canvas shadow-[0_6px_22px_-12px_rgba(140,30,46,0.28)]",
+      "ring-2 ring-[#a53b4d]/85 shadow-[0_6px_22px_-12px_rgba(140,30,46,0.28)]",
     scheduleFocus:
-      "ring-2 ring-[#8C1E2E]/92 ring-offset-2 ring-offset-canvas shadow-[0_8px_32px_-12px_rgba(140,30,46,0.4)]",
+      "ring-2 ring-[#8C1E2E]/92 shadow-[0_8px_32px_-12px_rgba(140,30,46,0.4)]",
     scheduleCompact:
       "ml-0.5 border-l-[3px] border-dashed border-[#8C1E2E]/55 pl-3 ring-1 ring-[#8C1E2E]/30 ring-offset-2 ring-offset-cream",
     hoverGlow:
