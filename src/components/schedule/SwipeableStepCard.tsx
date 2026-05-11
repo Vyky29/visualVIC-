@@ -411,6 +411,12 @@ export function SwipeableStepCard({
       : variant === "next"
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
+  const focusGeneratedBorderStyle =
+    focusGenerated && gp?.categoryColour
+      ? {
+          boxShadow: `0 0 0 2px ${gp.categoryColour}, 0 8px 32px -12px rgba(28,36,32,0.24)`,
+        }
+      : undefined;
 
   return (
     <motion.div
@@ -447,9 +453,11 @@ export function SwipeableStepCard({
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
             "mx-auto max-w-full",
-            focusPixto || focusGenerated
+            focusPixto
               ? rings.scheduleFocus
-              : rings.scheduleNow,
+              : focusGenerated
+                ? ""
+                : rings.scheduleNow,
             focusPixto || focusGenerated
               ? "h-full min-h-0 w-full"
               : /* ~10px wider than Next at cap — smaller than old 96% for more scroll room */
@@ -474,6 +482,7 @@ export function SwipeableStepCard({
           "ring-1 ring-ink/8",
         !isNow && !isFinished && !isNext && variant !== "focus" && "opacity-80",
       )}
+      style={focusGeneratedBorderStyle}
     >
       <div
         className={cn(

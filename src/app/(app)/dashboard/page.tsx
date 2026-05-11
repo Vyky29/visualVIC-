@@ -22,6 +22,10 @@ import {
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 const groups = ["self-care", "home", "activity"] as const;
+const HIDE_FROM_HOME_FEATURED_IDS = new Set([
+  "demo-climbing-preparation",
+  "tpl-morning-mini",
+]);
 
 function dashboardCategoryForRoutine(
   routine: Routine,
@@ -159,7 +163,11 @@ export default function DashboardPage() {
     return customHydrated ? [...customRoutines, ...base] : base;
   }, [customRoutines, customHydrated]);
   const featuredRoutines = useMemo(
-    () => dashboardRoutines.filter((r) => !isStockPackRoutine(r)),
+    () =>
+      dashboardRoutines.filter(
+        (r) =>
+          !isStockPackRoutine(r) && !HIDE_FROM_HOME_FEATURED_IDS.has(r.id),
+      ),
     [dashboardRoutines],
   );
   const groupedPackRoutines = useMemo(() => {
