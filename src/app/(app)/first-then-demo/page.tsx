@@ -12,6 +12,7 @@ import {
 
 const cardShell =
   "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-white shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
+const WOW_CARD_ASPECT = "744 / 1054";
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -116,12 +117,13 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-white">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F7F8F9]">
         <div
           className={cn(
-            "absolute inset-[10px] overflow-hidden rounded-[1rem] border-4 bg-white",
+            "absolute left-1/2 top-1/2 w-[78%] max-h-[82%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[1rem] border-[5px] bg-white",
             tone === "sage" ? "border-sage/75" : "border-accent/65",
           )}
+          style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           {imageUrl ? (
             <Image
@@ -129,7 +131,7 @@ function StepVisualCard({
               alt={alt}
               fill
               className={cn(
-                "object-contain p-[6px]",
+                "object-contain p-[8px]",
                 isPixtoLearnBundledCardUrl(imageUrl)
                   ? pixtoBundledCardObjectPositionClass
                   : "object-center",
