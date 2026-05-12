@@ -551,7 +551,10 @@ export function SwipeableStepCard({
       <div
         className={cn(
           "relative w-full touch-manipulation",
-          hasGeneratedPixto && "overflow-hidden rounded-[1.35rem]",
+          hasGeneratedPixto &&
+            (variant === "focus"
+              ? "overflow-hidden rounded-[1.35rem]"
+              : "overflow-visible"),
           variant === "focus"
             ? focusPixto || focusGenerated
               ? "relative mx-auto h-full min-h-0 w-full max-w-full overflow-hidden bg-transparent"
@@ -610,7 +613,8 @@ export function SwipeableStepCard({
                 {gp ? (
                   <div
                     className={cn(
-                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.35rem]",
+                      variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
@@ -790,7 +794,8 @@ export function SwipeableStepCard({
             {scheduleGeneratedPixto && gp ? (
               <div
                 className={cn(
-                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white",
+                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.35rem]",
+                  variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >
