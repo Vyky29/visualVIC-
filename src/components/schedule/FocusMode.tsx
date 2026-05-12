@@ -296,6 +296,7 @@ export function FocusMode({ routine, exitHref }: Props) {
                   status={stepStatus(nowStep)}
                   variant="focus"
                   onSwipeComplete={completeCurrent}
+                  doubleTapCompletes
                   completionBackImageUrl={nowStepBackCardUrl}
                   accentRings={accentRings}
                 />

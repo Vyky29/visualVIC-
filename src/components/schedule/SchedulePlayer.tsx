@@ -213,12 +213,12 @@ export function SchedulePlayer({
               status={stepStatus(nowStep)}
               variant="hero"
               onSwipeComplete={() => completeCurrent()}
-              onDoubleTapOpenFocus={openFocus}
+              doubleTapCompletes
               completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
               accentRings={accentRings}
             />
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
-              Double tap to focus
+              Double tap to flip, or swipe right
             </p>
           </motion.section>
         ) : null}

@@ -44,6 +44,8 @@ type Props = {
   variant?: TimelineVariant;
   /** Double-tap (touch / pen) on image only — hero + now. Single tap does nothing. */
   onDoubleTapOpenFocus?: () => void;
+  /** Double-tap (touch / pen) on the card face triggers the same flip-and-advance as swipe. */
+  doubleTapCompletes?: boolean;
   /** Category back card shown during swipe-to-complete flip (Schedule hero / focus). */
   completionBackImageUrl?: string;
   /**
@@ -97,6 +99,7 @@ export function SwipeableStepCard({
   onSwipeComplete,
   variant = "hero",
   onDoubleTapOpenFocus,
+  doubleTapCompletes = false,
   completionBackImageUrl,
   accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
 }: Props) {
@@ -156,112 +159,6 @@ export function SwipeableStepCard({
     [],
   );
 
-  const focusImagePointerDown = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (
-        !onDoubleTapOpenFocus ||
-        variant !== "hero" ||
-        status !== "now" ||
-        completionAnimating || completionLockRef.current
-      ) {
-        return;
-      }
-      if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
-      try {
-        e.currentTarget.setPointerCapture(e.pointerId);
-      } catch {
-        /* Safari may throw for unsupported cases */
-      }
-      gestureRef.current = {
-        pointerId: e.pointerId,
-        originX: e.clientX,
-        originY: e.clientY,
-        maxSlop: 0,
-      };
-    },
-    [onDoubleTapOpenFocus, variant, status, completionAnimating],
-  );
-
-  const focusImagePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      const g = gestureRef.current;
-      if (!g || e.pointerId !== g.pointerId) return;
-      const slop = Math.hypot(
-        e.clientX - g.originX,
-        e.clientY - g.originY,
-      );
-      g.maxSlop = Math.max(g.maxSlop, slop);
-    },
-    [],
-  );
-
-  const focusImagePointerUp = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      if (
-        !onDoubleTapOpenFocus ||
-        variant !== "hero" ||
-        status !== "now" ||
-        completionAnimating || completionLockRef.current
-      ) {
-        return;
-      }
-      if (e.pointerType === "mouse") {
-        gestureRef.current = null;
-        return;
-      }
-
-      if (dragLockRef.current) {
-        releaseGestureCapture(e.currentTarget, e.pointerId);
-        gestureRef.current = null;
-        return;
-      }
-
-      if (e.pointerType === "touch" || e.pointerType === "pen") {
-        const g = gestureRef.current;
-        if (!g || g.pointerId !== e.pointerId) {
-          return;
-        }
-        releaseGestureCapture(e.currentTarget, e.pointerId);
-        gestureRef.current = null;
-        if (g.maxSlop > TAP_CANCEL_SLOP) {
-          lastTouchTapRef.current = null;
-          return;
-        }
-
-        const t = Date.now();
-        const x = e.clientX;
-        const y = e.clientY;
-        const prev = lastTouchTapRef.current;
-        if (
-          prev &&
-          t - prev.time <= DOUBLE_TAP_MS &&
-          Math.hypot(x - prev.x, y - prev.y) <= TAP_PAIR_MAX_DIST
-        ) {
-          lastTouchTapRef.current = null;
-          onDoubleTapOpenFocus();
-          return;
-        }
-        lastTouchTapRef.current = { time: t, x, y };
-      }
-    },
-    [
-      onDoubleTapOpenFocus,
-      variant,
-      status,
-      completionAnimating,
-      releaseGestureCapture,
-    ],
-  );
-
-  const focusImagePointerCancel = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      releaseGestureCapture(e.currentTarget, e.pointerId);
-      gestureRef.current = null;
-      lastTouchTapRef.current = null;
-    },
-    [releaseGestureCapture],
-  );
-
   const runSwipeCompleteFeedback = useCallback(async () => {
     completionLockRef.current = true;
     setCompletionAnimating(true);
@@ -298,6 +195,109 @@ export function SwipeableStepCard({
     onSwipeComplete,
     variant,
   ]);
+
+  const doubleTapEnabled =
+    (Boolean(onDoubleTapOpenFocus) || doubleTapCompletes) &&
+    (variant === "hero" || variant === "focus") &&
+    status === "now" &&
+    !completionAnimating &&
+    !completionLockRef.current;
+
+  const focusImagePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!doubleTapEnabled) return;
+      if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch {
+        /* Safari may throw for unsupported cases */
+      }
+      gestureRef.current = {
+        pointerId: e.pointerId,
+        originX: e.clientX,
+        originY: e.clientY,
+        maxSlop: 0,
+      };
+    },
+    [doubleTapEnabled],
+  );
+
+  const focusImagePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const g = gestureRef.current;
+      if (!g || e.pointerId !== g.pointerId) return;
+      const slop = Math.hypot(
+        e.clientX - g.originX,
+        e.clientY - g.originY,
+      );
+      g.maxSlop = Math.max(g.maxSlop, slop);
+    },
+    [],
+  );
+
+  const focusImagePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!doubleTapEnabled) return;
+      if (e.pointerType === "mouse") {
+        gestureRef.current = null;
+        return;
+      }
+
+      if (dragLockRef.current) {
+        releaseGestureCapture(e.currentTarget, e.pointerId);
+        gestureRef.current = null;
+        return;
+      }
+
+      if (e.pointerType === "touch" || e.pointerType === "pen") {
+        const g = gestureRef.current;
+        if (!g || g.pointerId !== e.pointerId) {
+          return;
+        }
+        releaseGestureCapture(e.currentTarget, e.pointerId);
+        gestureRef.current = null;
+        if (g.maxSlop > TAP_CANCEL_SLOP) {
+          lastTouchTapRef.current = null;
+          return;
+        }
+
+        const t = Date.now();
+        const x = e.clientX;
+        const y = e.clientY;
+        const prev = lastTouchTapRef.current;
+        if (
+          prev &&
+          t - prev.time <= DOUBLE_TAP_MS &&
+          Math.hypot(x - prev.x, y - prev.y) <= TAP_PAIR_MAX_DIST
+        ) {
+          lastTouchTapRef.current = null;
+          if (doubleTapCompletes) {
+            void runSwipeCompleteFeedback();
+          } else {
+            onDoubleTapOpenFocus?.();
+          }
+          return;
+        }
+        lastTouchTapRef.current = { time: t, x, y };
+      }
+    },
+    [
+      doubleTapEnabled,
+      doubleTapCompletes,
+      onDoubleTapOpenFocus,
+      runSwipeCompleteFeedback,
+      releaseGestureCapture,
+    ],
+  );
+
+  const focusImagePointerCancel = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      releaseGestureCapture(e.currentTarget, e.pointerId);
+      gestureRef.current = null;
+      lastTouchTapRef.current = null;
+    },
+    [releaseGestureCapture],
+  );
 
   const handleDragEnd = useCallback(
     async (_: unknown, info: { offset: { x: number; y: number } }) => {
@@ -400,8 +400,7 @@ export function SwipeableStepCard({
     );
   }
 
-  const imageInteractive =
-    Boolean(onDoubleTapOpenFocus) && variant === "hero" && isNow;
+  const imageInteractive = doubleTapEnabled;
 
   const completionFlip =
     (variant === "hero" || variant === "focus") &&
@@ -437,13 +436,7 @@ export function SwipeableStepCard({
       : variant === "next"
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
-  const generatedOutlineStyle =
-    scheduleGeneratedPixto && gp
-      ? ({
-          boxShadow: `0 0 0 3px ${gp.categoryColour}, inset 0 0 0 1px rgba(255,255,255,0.45)`,
-        } satisfies CSSProperties)
-      : undefined;
-  const focusGeneratedBorderStyle = focusGenerated ? generatedOutlineStyle : undefined;
+  const focusGeneratedBorderStyle = undefined;
   const nextOutlineStyle =
     variant === "next" && !hasGeneratedPixto
       ? (() => {
@@ -454,15 +447,7 @@ export function SwipeableStepCard({
           } satisfies CSSProperties;
         })()
       : undefined;
-  const heroGeneratedOutlineStyle =
-    variant === "hero" && isNow ? generatedOutlineStyle : undefined;
-  const nextGeneratedOutlineStyle =
-    variant === "next" ? generatedOutlineStyle : undefined;
-  const cardStyle =
-    heroGeneratedOutlineStyle ??
-    nextGeneratedOutlineStyle ??
-    nextOutlineStyle ??
-    focusGeneratedBorderStyle;
+  const cardStyle = nextOutlineStyle ?? focusGeneratedBorderStyle;
   const focusCardAspectRatio =
     variant === "focus"
       ? focusGenerated

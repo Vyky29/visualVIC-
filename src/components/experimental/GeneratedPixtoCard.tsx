@@ -474,6 +474,12 @@ export function GeneratedPixtoCard({
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
+  const colouredShellStyle = suppressNeutralRing
+    ? {
+        border: `3px solid ${categoryColour}`,
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
+      }
+    : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
@@ -509,6 +515,7 @@ export function GeneratedPixtoCard({
       style={{
         aspectRatio: cardAspect,
         gridTemplateRows,
+        ...colouredShellStyle,
       }}
     >
       {SHOW_GENERATED_PIXTO_DEBUG_GUIDES ? (

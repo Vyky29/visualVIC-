@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Header } from "@/components/navigation/Header";
 import { SchedulePlayer } from "@/components/schedule/SchedulePlayer";
@@ -512,11 +512,22 @@ function FocusModeRealCardBack({
 function FocusFlipPreview() {
   const [flipped, setFlipped] = useState(false);
   const widthPx = FOCUS_CARD_PREVIEW_W;
+  const lastTapRef = useRef(0);
+
+  const handleDoubleTapFlip = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current <= 320) {
+      setFlipped((prev) => !prev);
+      lastTapRef.current = 0;
+      return;
+    }
+    lastTapRef.current = now;
+  };
 
   const flipCard = (
     <button
       type="button"
-      onClick={() => setFlipped((prev) => !prev)}
+      onClick={handleDoubleTapFlip}
       className="w-full bg-transparent text-left"
       aria-label="Flip focus card preview"
     >
@@ -549,19 +560,30 @@ function FocusFlipPreview() {
       >
         {flipCard}
       </div>
-      <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
+      <p className="text-center text-[11px] text-ink-faint">Double tap the card to flip</p>
     </div>
   );
 }
 
 function NowFlipPreview() {
   const [flipped, setFlipped] = useState(false);
+  const lastTapRef = useRef(0);
+
+  const handleDoubleTapFlip = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current <= 320) {
+      setFlipped((prev) => !prev);
+      lastTapRef.current = 0;
+      return;
+    }
+    lastTapRef.current = now;
+  };
 
   return (
     <div className="space-y-3">
       <button
         type="button"
-        onClick={() => setFlipped((prev) => !prev)}
+        onClick={handleDoubleTapFlip}
         className="mx-auto block w-full bg-transparent text-left"
         aria-label="Flip now card preview"
       >
@@ -592,7 +614,7 @@ function NowFlipPreview() {
           </div>
         </div>
       </button>
-      <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
+      <p className="text-center text-[11px] text-ink-faint">Double tap the card to flip</p>
     </div>
   );
 }
