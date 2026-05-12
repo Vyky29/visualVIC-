@@ -329,24 +329,24 @@ export default function FirstThenDemoPage() {
 
   if (!showFocusMode) {
     return (
-      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-4">
-          <header className="flex flex-col items-center justify-center gap-2 pt-1 text-center">
-            <PixtoLearnIconMark className="h-11 w-11 rounded-[1.15rem]" />
-            <h1 className="text-[1.35rem] font-semibold tracking-tight text-ink">
+      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.6rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-3">
+          <div className="flex flex-col items-center justify-center gap-1.5 pt-0.5 text-center">
+            <PixtoLearnIconMark className="h-10 w-10 rounded-[1rem]" />
+            <h1 className="text-[1.22rem] font-semibold tracking-tight text-ink">
               First &amp; Then
             </h1>
-          </header>
+          </div>
 
-          <div className="flex min-h-0 flex-col items-center justify-center gap-3">
-            <div className="w-full max-w-[18rem]">
+          <div className="flex min-h-0 flex-col items-center justify-center gap-2.5">
+            <div className="w-full max-w-[15.75rem]">
               <StepVisualCard
                 generatedCard={first}
                 label="First"
                 icon={<IconFirst className="h-6 w-6" />}
               />
             </div>
-            <div className="w-full max-w-[18rem]">
+            <div className="w-full max-w-[15.75rem]">
               <StepVisualCard
                 generatedCard={second}
                 label="Then"
