@@ -426,7 +426,7 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))] pb-[max(3.25rem,env(safe-area-inset-left))]">
+          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))]">
             <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
@@ -450,43 +450,45 @@ export default function FirstThenDemoPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div className="pointer-events-none absolute bottom-[max(0.5rem,env(safe-area-inset-left))] left-0 right-0 z-20 flex justify-center px-[max(0.75rem,env(safe-area-inset-right))]">
-              <nav
-                aria-label="Focus mode navigation"
-                className="pointer-events-auto flex max-w-full flex-row flex-wrap items-end justify-center gap-x-6 gap-y-2 sm:gap-x-8"
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-30" style={sceneStyle}>
+          <div className="pointer-events-none absolute inset-0 flex justify-center">
+            <nav
+              aria-label="Focus mode navigation"
+              className="pointer-events-auto flex h-full min-h-0 w-max max-w-[min(100%,14rem)] flex-col items-end justify-end gap-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]"
+            >
+              <Link
+                href="/dashboard"
+                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
               >
-                <Link
-                  href="/dashboard"
-                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                >
-                  <HomeSectionIcon className="rotate-90 shrink-0" />
-                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                    Home
-                  </span>
-                </Link>
+                <HomeSectionIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Home
+                </span>
+              </Link>
 
-                <Link
-                  href="/menu"
-                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                >
-                  <MenuDotsIcon className="rotate-90 shrink-0" />
-                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                    Menu
-                  </span>
-                </Link>
+              <Link
+                href="/menu"
+                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+              >
+                <MenuDotsIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Menu
+                </span>
+              </Link>
 
-                <Link
-                  href="/player/brushing-teeth"
-                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                >
-                  <RoutinesHomeIcon className="rotate-90 shrink-0" />
-                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                    Routine
-                  </span>
-                </Link>
-              </nav>
-            </div>
+              <Link
+                href="/player/brushing-teeth"
+                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+              >
+                <RoutinesHomeIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Routine
+                </span>
+              </Link>
+            </nav>
           </div>
         </div>
       </div>
