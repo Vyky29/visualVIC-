@@ -25,6 +25,11 @@ const sections: {
         hint: "Two-card strip",
       },
       {
+        href: "/first-then-demo",
+        label: "First & Then demo",
+        hint: "Landscape digital wow study",
+      },
+      {
         href: "/generated-card-demo",
         label: "Generated card demo",
         hint: "Card geometry, title bands, Focus preview",
