@@ -438,24 +438,29 @@ function FocusModeRealCard({
       }}
     >
       <div
-        className="absolute left-0 top-0 origin-top-left"
-        style={{
-          width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
-          height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${scaleX}, ${scaleY})`,
-        }}
+        className="absolute left-1/2 top-0 -translate-x-1/2"
       >
-        <GeneratedPixtoCard
-          illustrationUrl={FOCUS_MODE_SAMPLE_CARD.illustrationUrl}
-          title={FOCUS_MODE_SAMPLE_CARD.title}
-          category={FOCUS_MODE_SAMPLE_CARD.category}
-          categoryColour={FOCUS_MODE_SAMPLE_CARD.categoryColour}
-          iconUrl={FOCUS_MODE_SAMPLE_CARD.iconUrl}
-          cardType={FOCUS_MODE_SAMPLE_CARD.cardType}
-          focusIllustrationScale={FOCUS_MODE_SAMPLE_CARD.focusIllustrationScale}
-          focusPresentation
-          className="h-full w-full max-w-none"
-        />
+        <div
+          className="origin-top-center"
+          style={{
+            width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
+            height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
+            transform: `scale(${scaleX}, ${scaleY})`,
+            transformOrigin: "top center",
+          }}
+        >
+          <GeneratedPixtoCard
+            illustrationUrl={FOCUS_MODE_SAMPLE_CARD.illustrationUrl}
+            title={FOCUS_MODE_SAMPLE_CARD.title}
+            category={FOCUS_MODE_SAMPLE_CARD.category}
+            categoryColour={FOCUS_MODE_SAMPLE_CARD.categoryColour}
+            iconUrl={FOCUS_MODE_SAMPLE_CARD.iconUrl}
+            cardType={FOCUS_MODE_SAMPLE_CARD.cardType}
+            focusIllustrationScale={FOCUS_MODE_SAMPLE_CARD.focusIllustrationScale}
+            focusPresentation
+            className="h-full w-full max-w-none"
+          />
+        </div>
       </div>
     </div>
   );
@@ -480,19 +485,24 @@ function FocusModeRealCardBack({
       }}
     >
       <div
-        className="absolute left-0 top-0 origin-top-left"
-        style={{
-          width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
-          height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${scaleX}, ${scaleY})`,
-        }}
+        className="absolute left-1/2 top-0 -translate-x-1/2"
       >
-        <PreviewCardBack
-          geometry={FOCUS_GEOMETRY}
-          widthPx={GENERATED_PIXTO_CARD_SIZE.w}
-          cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-          ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-        />
+        <div
+          className="origin-top-center"
+          style={{
+            width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
+            height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
+            transform: `scale(${scaleX}, ${scaleY})`,
+            transformOrigin: "top center",
+          }}
+        >
+          <PreviewCardBack
+            geometry={FOCUS_GEOMETRY}
+            widthPx={GENERATED_PIXTO_CARD_SIZE.w}
+            cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+            ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+          />
+        </div>
       </div>
     </div>
   );
