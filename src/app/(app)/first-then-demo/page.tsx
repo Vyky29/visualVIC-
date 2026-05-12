@@ -292,7 +292,7 @@ function IntroStepLabel({
   icon: ReactNode;
 }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center">
+    <div className="flex h-full w-full flex-col items-end justify-center gap-2 text-right">
       <div className="grayscale">{icon}</div>
       <span className="text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-ink">
         {label}
@@ -356,19 +356,19 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+            <div className="grid min-h-0 grid-cols-[5rem_minmax(0,1fr)] items-center gap-2">
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-start">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
+              <div className="flex min-h-0 items-center justify-center">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.1rem)/2.72))] max-w-[14.6rem]">
                   <MiniDigitalWowCard card={first} />
                 </div>
               </div>
             </div>
 
-            <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+            <div className="grid min-h-0 grid-cols-[5rem_minmax(0,1fr)] items-center gap-2">
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-start">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
+              <div className="flex min-h-0 items-center justify-center">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.1rem)/2.72))] max-w-[14.6rem]">
                   <MiniDigitalWowCard card={second} />
                 </div>
               </div>
@@ -393,10 +393,10 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_4.5rem_minmax(0,1fr)] items-center gap-1 px-[0.35rem]">
+          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))] pb-[3.35rem]">
+            <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -406,26 +406,8 @@ export default function FirstThenDemoPage() {
                 </div>
               </div>
 
-              <div className="flex h-full items-center justify-center">
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <Link
-                    href="/player/brushing-teeth"
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                  >
-                    <RoutinesHomeIcon className="rotate-90" />
-                  </Link>
-
-                  <Link
-                    href="/menu"
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                  >
-                    <MenuDotsIcon className="rotate-90" />
-                  </Link>
-                </div>
-              </div>
-
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -433,6 +415,24 @@ export default function FirstThenDemoPage() {
                     className="h-full"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-[max(0.65rem,env(safe-area-inset-left))] z-20 flex justify-center">
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/player/brushing-teeth"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                >
+                  <RoutinesHomeIcon className="rotate-90" />
+                </Link>
+
+                <Link
+                  href="/menu"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                >
+                  <MenuDotsIcon className="rotate-90" />
+                </Link>
               </div>
             </div>
           </div>
