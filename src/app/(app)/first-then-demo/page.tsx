@@ -426,26 +426,26 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
-              <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+          <div className="relative h-full w-full bg-canvas pb-[max(0.25rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.85rem,env(safe-area-inset-bottom))] pt-0">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 content-start items-start gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
+              <div className="flex h-full min-h-0 w-full min-w-0 items-start justify-center self-stretch">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
                     icon={<IconFirst className="h-7 w-7" />}
-                    className="h-full"
+                    className="h-full min-h-0"
                   />
                 </div>
               </div>
 
-              <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+              <div className="flex h-full min-h-0 w-full min-w-0 items-start justify-center self-stretch">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
                     icon={<IconThen className="h-7 w-7" />}
-                    className="h-full"
+                    className="h-full min-h-0"
                   />
                 </div>
               </div>
