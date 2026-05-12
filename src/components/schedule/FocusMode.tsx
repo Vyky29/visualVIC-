@@ -30,7 +30,7 @@ const showZoneDebug =
   process.env.NODE_ENV === "development" && SHOW_FOCUS_ZONE_LABELS;
 
 const FOCUS_STAGE_CARD_W = 357.5 as const;
-const FOCUS_STAGE_CARD_H = 629.4 as const;
+const FOCUS_STAGE_CARD_H = 619.4 as const;
 
 /** Bottom sheet — no handle bar, calm */
 function Sheet({
