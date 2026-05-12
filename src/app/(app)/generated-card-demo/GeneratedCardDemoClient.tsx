@@ -61,25 +61,25 @@ const EXPANDED_GEOMETRY: CardGeometry = {
 
 const LOCKED_PREVIEW_TEXT_STYLE: PreviewTextStyle = {
   textSizeClassName: TITLE_TEXT_SIZE_CLASS,
-  lineHeightClassName: TITLE_LINE_HEIGHT_CLASS,
-  trackingClassName: "tracking-tight",
-  lineGapClassName: "gap-[0.16em]",
+  lineHeightClassName: "leading-[0.94]",
+  trackingClassName: "tracking-[-0.02em]",
+  lineGapClassName: "gap-[0.18em]",
   wordSpacing: "0",
 };
 
 const BEST_UI_TEXT_STYLE_A: PreviewTextStyle = {
   textSizeClassName: "text-[24px]",
-  lineHeightClassName: "leading-[0.96]",
-  trackingClassName: "tracking-[-0.03em]",
-  lineGapClassName: "gap-[0.12em]",
+  lineHeightClassName: "leading-[0.95]",
+  trackingClassName: "tracking-[-0.025em]",
+  lineGapClassName: "gap-[0.16em]",
   wordSpacing: "0.01em",
 };
 
 const BEST_UI_TEXT_STYLE_B: PreviewTextStyle = {
   textSizeClassName: "text-[22px]",
   lineHeightClassName: "leading-[0.98]",
-  trackingClassName: "tracking-[-0.015em]",
-  lineGapClassName: "gap-[0.18em]",
+  trackingClassName: "tracking-[-0.01em]",
+  lineGapClassName: "gap-[0.2em]",
   wordSpacing: "0.015em",
 };
 
@@ -195,13 +195,13 @@ function PreviewTitleBand({
           textStyle.trackingClassName,
         )}
         style={{
-          width: `${(TEXT_BOX_SIZE.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-          height: `${(TEXT_BOX_SIZE.h / titleH) * 100}%`,
+          width: `min(100%, ${TEXT_BOX_SIZE.w}px)`,
+          height: `min(100%, ${TEXT_BOX_SIZE.h}px)`,
           wordSpacing: textStyle.wordSpacing,
         }}
       >
         {lines.map((line, index) => (
-          <span key={`${line}-${index}`} className="block w-full">
+          <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
             {line}
           </span>
         ))}
