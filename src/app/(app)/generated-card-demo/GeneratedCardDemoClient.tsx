@@ -17,12 +17,16 @@ import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
 } from "@/lib/experimental/generated-pixto-demo-routine";
-import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
+import {
+  atTheHotelBackCardUrl,
+  atTheHotelPackMarkUrl,
+} from "@/lib/cards/at-the-hotel-cards";
 import { cn } from "@/lib/utils/cn";
 
 const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
+const HOTEL_BACKCARD_URL = atTheHotelBackCardUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
@@ -364,16 +368,14 @@ function PreviewCardBack({
       }}
     >
       <div className="relative bg-white">
-        <div
-          className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[1.25rem] text-center font-semibold lowercase text-white"
-          style={{
-            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
-            backgroundColor: ribbonColour,
-          }}
-        >
-          <span className="px-6 text-[26px] leading-[1]">done</span>
-        </div>
+        <Image
+          src={HOTEL_BACKCARD_URL}
+          alt=""
+          fill
+          className="object-cover"
+          sizes={`${widthPx}px`}
+          unoptimized
+        />
       </div>
       <div className="border-y border-white bg-white px-4 py-1" />
       <div
@@ -461,6 +463,49 @@ function FocusFlipPreview({
   );
 }
 
+function NowFlipPreview() {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <div className="space-y-3">
+      <button
+        type="button"
+        onClick={() => setFlipped((prev) => !prev)}
+        className="mx-auto block w-full bg-transparent text-left"
+        aria-label="Flip now card preview"
+      >
+        <div
+          className="mx-auto [perspective:1200px]"
+          style={{ width: `min(100%, ${NOW_CARD_PREVIEW_W}px)` }}
+        >
+          <div
+            className={cn(
+              "relative transition-transform duration-500 [transform-style:preserve-3d]",
+              flipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]",
+            )}
+          >
+            <div className="[backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
+              <PreviewCard
+                lines={["breakfast time"]}
+                logoSize={85}
+                geometry={EXPANDED_GEOMETRY}
+                widthPx={NOW_CARD_PREVIEW_W}
+              />
+            </div>
+            <div className="absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
+              <PreviewCardBack
+                geometry={EXPANDED_GEOMETRY}
+                widthPx={NOW_CARD_PREVIEW_W}
+              />
+            </div>
+          </div>
+        </div>
+      </button>
+      <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
+    </div>
+  );
+}
+
 export function GeneratedCardDemoClient() {
   return (
     <div className="pb-10">
@@ -538,14 +583,9 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Now"
-            hint="Slightly bigger than Next for the active step."
+            hint="Slightly bigger than Next for the active step, with tap-to-flip kept on."
           >
-            <PreviewCard
-              lines={["breakfast time"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={NOW_CARD_PREVIEW_W}
-            />
+            <NowFlipPreview />
           </DiagnosticPanel>
 
           <DiagnosticPanel

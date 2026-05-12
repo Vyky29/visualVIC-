@@ -21,11 +21,26 @@ export const GENERATED_PIXTO_TITLE_ZONE_H = 166 as const;
 /** Bottom category strip height (design px). */
 export const GENERATED_PIXTO_CATEGORY_BAND_H = 94 as const;
 
+/** Focus-only extended white title band to help the card reach the screen top/bottom. */
+export const GENERATED_PIXTO_FOCUS_TITLE_ZONE_H = 230 as const;
+
+/** Focus-only extended category band; extra height is mostly "false" footer space. */
+export const GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H = 350 as const;
+
 /** Top layout block (illustration shell): 1054 − 166 − 94. */
 export const GENERATED_PIXTO_TOP_LAYOUT_H =
   GENERATED_PIXTO_CARD_SIZE.h -
   GENERATED_PIXTO_TITLE_ZONE_H -
   GENERATED_PIXTO_CATEGORY_BAND_H; // 794
+
+/** Focus card gets taller, but the illustration/top layout block stays the same. */
+export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
+  w: GENERATED_PIXTO_CARD_SIZE.w,
+  h:
+    GENERATED_PIXTO_TOP_LAYOUT_H +
+    GENERATED_PIXTO_FOCUS_TITLE_ZONE_H +
+    GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
+} as const;
 
 /** Vertical space above yellow inside the top block: 794 − 648. */
 export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
@@ -95,6 +110,8 @@ export type GeneratedPixtoCardProps = {
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
+const FOCUS_CARD_ASPECT =
+  `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} / ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}` as const;
 
 const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
 const SCHEDULE_TITLE_MAX_LINES = 3;
@@ -425,7 +442,14 @@ export function GeneratedPixtoCard({
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !isDense;
-  const gridTemplateRows = `${ROW_FR_TOP}fr ${ROW_FR_TITLE}fr ${ROW_FR_CATEGORY}fr`;
+  const titleRowFr = focusPresentation
+    ? GENERATED_PIXTO_FOCUS_TITLE_ZONE_H
+    : ROW_FR_TITLE;
+  const categoryRowFr = focusPresentation
+    ? GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H
+    : ROW_FR_CATEGORY;
+  const gridTemplateRows = `${ROW_FR_TOP}fr ${titleRowFr}fr ${categoryRowFr}fr`;
+  const cardAspect = focusPresentation ? FOCUS_CARD_ASPECT : CARD_ASPECT;
 
   return (
     <article
@@ -438,7 +462,7 @@ export function GeneratedPixtoCard({
         className,
       )}
       style={{
-        aspectRatio: CARD_ASPECT,
+        aspectRatio: cardAspect,
         gridTemplateRows,
       }}
     >
@@ -455,7 +479,9 @@ export function GeneratedPixtoCard({
           style={{
             width: markSize,
             height: markSize,
-            transform: "translate(-40px, 8px)",
+            transform: focusPresentation
+              ? "translate(-40px, 0px)"
+              : "translate(-40px, 8px)",
           }}
           aria-hidden
         >
