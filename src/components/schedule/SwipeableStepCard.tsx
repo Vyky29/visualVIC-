@@ -437,7 +437,13 @@ export function SwipeableStepCard({
       : variant === "next"
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
-  const focusGeneratedBorderStyle = undefined;
+  const generatedOutlineStyle =
+    scheduleGeneratedPixto && gp
+      ? ({
+          boxShadow: `0 0 0 3px ${gp.categoryColour}, inset 0 0 0 1px rgba(255,255,255,0.45)`,
+        } satisfies CSSProperties)
+      : undefined;
+  const focusGeneratedBorderStyle = focusGenerated ? generatedOutlineStyle : undefined;
   const nextOutlineStyle =
     variant === "next" && !hasGeneratedPixto
       ? (() => {
@@ -448,7 +454,15 @@ export function SwipeableStepCard({
           } satisfies CSSProperties;
         })()
       : undefined;
-  const cardStyle = nextOutlineStyle ?? focusGeneratedBorderStyle;
+  const heroGeneratedOutlineStyle =
+    variant === "hero" && isNow ? generatedOutlineStyle : undefined;
+  const nextGeneratedOutlineStyle =
+    variant === "next" ? generatedOutlineStyle : undefined;
+  const cardStyle =
+    heroGeneratedOutlineStyle ??
+    nextGeneratedOutlineStyle ??
+    nextOutlineStyle ??
+    focusGeneratedBorderStyle;
   const focusCardAspectRatio =
     variant === "focus"
       ? focusGenerated
