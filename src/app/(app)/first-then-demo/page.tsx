@@ -292,7 +292,7 @@ function IntroStepLabel({
   icon: ReactNode;
 }) {
   return (
-    <div className="flex h-full w-full flex-col items-end justify-center gap-2 text-right">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center">
       <div className="grayscale">{icon}</div>
       <span className="text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-ink">
         {label}
@@ -356,19 +356,19 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="grid min-h-0 grid-cols-[5rem_minmax(0,1fr)] items-center gap-2">
+            <div className="grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
               <div className="flex min-h-0 items-center justify-center">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.1rem)/2.72))] max-w-[14.6rem]">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
                   <MiniDigitalWowCard card={first} />
                 </div>
               </div>
             </div>
 
-            <div className="grid min-h-0 grid-cols-[5rem_minmax(0,1fr)] items-center gap-2">
+            <div className="grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
               <div className="flex min-h-0 items-center justify-center">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.1rem)/2.72))] max-w-[14.6rem]">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
                   <MiniDigitalWowCard card={second} />
                 </div>
               </div>
