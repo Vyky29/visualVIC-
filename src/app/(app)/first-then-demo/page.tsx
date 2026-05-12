@@ -301,6 +301,41 @@ function IntroStepLabel({
   );
 }
 
+function IntroCueChip({ kind }: { kind: "arrow" | "hand" }) {
+  return (
+    <div className="pointer-events-none absolute left-[6.025rem] top-0 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D7DDE2] bg-white px-2 py-1 shadow-soft">
+      {kind === "arrow" ? (
+        <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-ink-subtle" aria-hidden>
+          <path
+            d="M5 12h11M12 7l5 5-5 5"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-ink-subtle" aria-hidden>
+          <path
+            d="M8 20v-8.5a1 1 0 1 1 2 0V14a1 1 0 1 0 2 0v-4a1 1 0 1 1 2 0v4a1 1 0 1 0 2 0v-2.5a1 1 0 1 1 2 0V15c0 2.6-1.5 4.7-4 5.8L12.5 22 8 20Z"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M10 8.5V5.5a1 1 0 1 1 2 0V14"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      )}
+    </div>
+  );
+}
+
 export default function FirstThenDemoPage() {
   const [viewport, setViewport] = useState({ w: 402, h: 874 });
   const [showFocusMode, setShowFocusMode] = useState(false);
@@ -356,7 +391,9 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+              <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+              <IntroCueChip kind="arrow" />
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
               <div className="flex min-h-0 items-center justify-center">
                 <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
@@ -365,7 +402,9 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+              <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+              <IntroCueChip kind="hand" />
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
               <div className="flex min-h-0 items-center justify-center">
                 <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
@@ -393,7 +432,7 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))] pb-[3.35rem]">
+          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(3.4rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
             <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
@@ -418,22 +457,20 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-[max(0.65rem,env(safe-area-inset-left))] z-20 flex justify-center">
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/player/brushing-teeth"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                >
-                  <RoutinesHomeIcon className="rotate-90" />
-                </Link>
+            <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-2">
+              <Link
+                href="/menu"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              >
+                <MenuDotsIcon className="rotate-90" />
+              </Link>
 
-                <Link
-                  href="/menu"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                >
-                  <MenuDotsIcon className="rotate-90" />
-                </Link>
-              </div>
+              <Link
+                href="/player/brushing-teeth"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              >
+                <RoutinesHomeIcon className="rotate-90" />
+              </Link>
             </div>
           </div>
         </div>
