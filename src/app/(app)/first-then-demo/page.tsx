@@ -427,7 +427,7 @@ export default function FirstThenDemoPage() {
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
           <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(0.55rem,2.1vw,1.35rem)] px-[0.25rem] pb-[max(3.35rem,env(safe-area-inset-bottom))]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
                 <div className="aspect-[10/13] h-[min(100%,93%)] max-h-full w-auto max-w-[min(100%,96%)] min-w-0">
                   <StepVisualCard
@@ -457,7 +457,7 @@ export default function FirstThenDemoPage() {
           <div className="pointer-events-none absolute inset-0">
             <nav
               aria-label="Focus mode navigation"
-              className="pointer-events-auto absolute bottom-[max(2.25rem,calc(1.45rem+env(safe-area-inset-bottom)))] left-1/2 flex w-max max-w-[min(100%,6.5rem)] -translate-x-1/2 flex-col items-center gap-3"
+              className="pointer-events-auto absolute bottom-[max(1.05rem,calc(0.55rem+env(safe-area-inset-bottom)))] left-1/2 flex w-max max-w-[min(100%,6.5rem)] -translate-x-1/2 flex-col items-center gap-3"
             >
               <Link
                 href="/dashboard"
