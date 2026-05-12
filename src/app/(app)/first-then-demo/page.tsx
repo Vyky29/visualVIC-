@@ -451,38 +451,36 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] left-0 right-0 z-20 flex justify-end pr-[max(0.7rem,env(safe-area-inset-bottom))]">
-              <div className="pointer-events-auto flex flex-col items-center gap-3">
-                <Link
-                  href="/dashboard"
-                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/82 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                >
-                  <HomeSectionIcon className="rotate-90" />
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                    Home
-                  </span>
-                </Link>
+            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-0 top-[max(0.5rem,env(safe-area-inset-left))] z-20 flex flex-col items-end justify-end gap-3 pr-[max(0.7rem,env(safe-area-inset-bottom))]">
+              <Link
+                href="/dashboard"
+                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+              >
+                <HomeSectionIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Home
+                </span>
+              </Link>
 
-                <Link
-                  href="/menu"
-                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/78 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                >
-                  <MenuDotsIcon className="rotate-90" />
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                    Menu
-                  </span>
-                </Link>
+              <Link
+                href="/menu"
+                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+              >
+                <MenuDotsIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Menu
+                </span>
+              </Link>
 
-                <Link
-                  href="/player/brushing-teeth"
-                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/88 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-                >
-                  <RoutinesHomeIcon className="rotate-90" />
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                    Routine
-                  </span>
-                </Link>
-              </div>
+              <Link
+                href="/player/brushing-teeth"
+                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+              >
+                <RoutinesHomeIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  Routine
+                </span>
+              </Link>
             </div>
           </div>
         </div>
