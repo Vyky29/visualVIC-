@@ -1,9 +1,16 @@
  "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import {
-  GeneratedPixtoCard,
+  GENERATED_PIXTO_CARD_SIZE,
+  GENERATED_PIXTO_CATEGORY_BAND_H,
+  GENERATED_PIXTO_ILLUSTRATION_FRAME,
+  GENERATED_PIXTO_WOW_COMPANY_MARK,
+  GENERATED_PIXTO_WOW_TITLE_ZONE_H,
+  GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
+  GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
@@ -12,6 +19,7 @@ import { cn } from "@/lib/utils/cn";
 const cardShell =
   "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-[#F1F4F6] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
 const WOW_CARD_ASPECT = "744 / 1054";
+const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -65,6 +73,125 @@ function IconThen({ className }: { className?: string }) {
   );
 }
 
+function splitWowTitle(raw: string): [string] | [string, string] {
+  const words = raw.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 2) return [raw];
+
+  let bestIndex = 1;
+  let bestScore = Number.POSITIVE_INFINITY;
+  for (let index = 1; index < words.length; index += 1) {
+    const left = words.slice(0, index).join(" ");
+    const right = words.slice(index).join(" ");
+    const score =
+      Math.abs(left.length - right.length) +
+      (left.split(" ").length === 1 ? 2 : 0) +
+      (right.split(" ").length === 1 ? 2 : 0);
+    if (score < bestScore) {
+      bestScore = score;
+      bestIndex = index;
+    }
+  }
+
+  return [words.slice(0, bestIndex).join(" "), words.slice(bestIndex).join(" ")];
+}
+
+function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
+  const titleLines = splitWowTitle(card.title);
+  const titleStyle =
+    titleLines.length === 1
+      ? { fontSize: "24px", lineHeight: 0.92, letterSpacing: "-0.02em" }
+      : { fontSize: "18px", lineHeight: 0.96, letterSpacing: "-0.018em" };
+
+  return (
+    <article
+      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white"
+      style={{
+        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
+        gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        border: `3px solid ${card.categoryColour}`,
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
+      }}
+    >
+      <div className="relative bg-white">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
+          style={{
+            top: `${(GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_WOW_TOP_LAYOUT_H) * 100}%`,
+            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
+          }}
+        >
+          <Image
+            src={card.illustrationUrl}
+            alt=""
+            fill
+            className="object-contain object-center"
+            sizes="220px"
+            unoptimized
+          />
+        </div>
+
+        {card.iconUrl ? (
+          <div
+            className="absolute rounded-[0.9rem] bg-white"
+            style={{
+              right: "5.4%",
+              top: "3.8%",
+              width: `${(GENERATED_PIXTO_WOW_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+              aspectRatio: "1 / 1",
+            }}
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src={card.iconUrl}
+                alt=""
+                fill
+                className="object-contain"
+                sizes={`${GENERATED_PIXTO_WOW_COMPANY_MARK.w}px`}
+                unoptimized
+              />
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="border-y border-white bg-white px-3 py-1">
+        <div className="flex h-full min-h-0 w-full items-center justify-center">
+          <div
+            className={cn(
+              "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
+              titleLines.length > 1 ? "gap-[0.14em]" : "gap-0",
+            )}
+            style={{
+              width: `min(100%, ${WOW_TEXT_BOX_SIZE.w}px)`,
+              height: `min(100%, ${WOW_TEXT_BOX_SIZE.h}px)`,
+              ...titleStyle,
+            }}
+          >
+            {titleLines.map((line, index) => (
+              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
+                {line}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="flex items-center justify-center px-3"
+        style={{ backgroundColor: card.categoryColour }}
+      >
+        <span
+          className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white/95"
+          style={{ fontSize: "15px", lineHeight: 1, letterSpacing: "-0.014em" }}
+        >
+          {card.category}
+        </span>
+      </div>
+    </article>
+  );
+}
+
 function StepVisualCard({
   generatedCard,
   label,
@@ -91,15 +218,10 @@ function StepVisualCard({
       </div>
       <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F1F4F6] p-[10px]">
         <div
-          className="relative mx-auto h-full max-h-full w-full max-w-[90%]"
+          className="relative mx-auto flex h-full max-h-full w-full max-w-[92%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
-          <GeneratedPixtoCard
-            {...generatedCard}
-            schedulePresentation
-            suppressNeutralRing
-            className="h-full max-w-none w-full origin-center scale-[0.94]"
-          />
+          <MiniDigitalWowCard card={generatedCard} />
         </div>
       </div>
     </article>
