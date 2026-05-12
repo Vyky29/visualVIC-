@@ -16,7 +16,10 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const navHiddenByRoute =
-    pathname === "/first-then" || pathname.startsWith("/first-then/");
+    pathname === "/first-then" ||
+    pathname.startsWith("/first-then/") ||
+    pathname === "/first-then-demo" ||
+    pathname.startsWith("/first-then-demo/");
   const effectiveShowNav = showNav && !navHiddenByRoute;
 
   return (
