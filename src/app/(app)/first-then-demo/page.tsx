@@ -284,6 +284,23 @@ function StepVisualCard({
   );
 }
 
+function IntroStepLabel({
+  label,
+  icon,
+}: {
+  label: "First" | "Then";
+  icon: ReactNode;
+}) {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center">
+      <div className="grayscale">{icon}</div>
+      <span className="text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-ink">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 export default function FirstThenDemoPage() {
   const [viewport, setViewport] = useState({ w: 402, h: 874 });
   const [showFocusMode, setShowFocusMode] = useState(false);
@@ -338,24 +355,27 @@ export default function FirstThenDemoPage() {
             </h1>
           </div>
 
-          <div className="flex min-h-0 flex-col items-center justify-center gap-1.5">
-            <div className="w-[min(calc(100%-0.5rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))]">
-              <StepVisualCard
-                generatedCard={first}
-                label="First"
-                icon={<IconFirst className="h-6 w-6" />}
-              />
+          <div className="grid min-h-0 grid-rows-2 gap-2">
+            <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+              <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
+              <div className="flex min-h-0 items-center justify-center">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
+                  <MiniDigitalWowCard card={first} />
+                </div>
+              </div>
             </div>
-            <div className="w-[min(calc(100%-0.5rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))]">
-              <StepVisualCard
-                generatedCard={second}
-                label="Then"
-                icon={<IconThen className="h-6 w-6" />}
-              />
+
+            <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+              <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
+              <div className="flex min-h-0 items-center justify-center">
+                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
+                  <MiniDigitalWowCard card={second} />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-end justify-start">
+          <div className="flex items-end justify-end">
             <button
               type="button"
               onClick={() => setShowFocusMode(true)}
