@@ -621,7 +621,7 @@ export function GeneratedCardDemoClient() {
               </Link>
             </div>
           </DiagnosticPanel>
-        </div>
+            </div>
       </section>
     </div>
   );
