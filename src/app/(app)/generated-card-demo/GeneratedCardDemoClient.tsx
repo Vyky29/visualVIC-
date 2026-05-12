@@ -40,7 +40,7 @@ const IPHONE_16_PRO_VIEWPORT = { w: 402.4, h: 874 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
 const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
-const FOCUS_DEMO_VISIBLE_W = 402.4 as const;
+const FOCUS_DEMO_VISIBLE_W = 357.5 as const;
 const FOCUS_DEMO_VISIBLE_H = 629.4 as const;
 const FOCUS_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
 const FOCUS_PHONE_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
@@ -617,7 +617,7 @@ function FocusModeGeometryPreview() {
       <div className="space-y-3">
         <FocusModeRealCard widthPx={FOCUS_GEOMETRY_PREVIEW_W} />
         <p className="text-center text-[11px] text-ink-faint">
-          Real focus shell in the demo at 402.4 px wide, shortened a little and
+          Real focus shell in the demo at 357.5 px wide, shortened a little and
           centred.
         </p>
       </div>
