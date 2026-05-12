@@ -1,14 +1,13 @@
  "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { getRoutineById } from "@/lib/mock/routines";
-import { cn } from "@/lib/utils/cn";
 import {
-  isPixtoLearnBundledCardUrl,
-  pixtoBundledCardObjectPositionClass,
-} from "@/lib/utils/visual-card-url";
+  GeneratedPixtoCard,
+  type GeneratedPixtoCardProps,
+} from "@/components/experimental/GeneratedPixtoCard";
+import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
+import { cn } from "@/lib/utils/cn";
 
 const cardShell =
   "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-[#F1F4F6] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
@@ -88,16 +87,12 @@ function IconConnector({ className }: { className?: string }) {
 }
 
 function StepVisualCard({
-  imageUrl,
-  alt,
-  tone,
+  generatedCard,
   label,
   icon,
   className,
 }: {
-  imageUrl?: string;
-  alt: string;
-  tone: "sage" | "accent";
+  generatedCard: GeneratedPixtoCardProps;
   label: "First" | "Then";
   icon: ReactNode;
   className?: string;
@@ -120,21 +115,12 @@ function StepVisualCard({
           className="relative mx-auto h-full max-h-full w-full max-w-[84%]"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={alt}
-              fill
-              className={cn(
-                "object-contain",
-                isPixtoLearnBundledCardUrl(imageUrl)
-                  ? pixtoBundledCardObjectPositionClass
-                  : "object-center",
-              )}
-              sizes="(orientation: landscape) 34vw, 72vw"
-              priority={tone === "sage"}
-            />
-          ) : null}
+          <GeneratedPixtoCard
+            {...generatedCard}
+            schedulePresentation
+            suppressNeutralRing
+            className="h-full max-w-none w-full"
+          />
         </div>
       </div>
     </article>
@@ -171,9 +157,8 @@ export default function FirstThenDemoPage() {
     };
   }, []);
 
-  const brushing = getRoutineById("brushing-teeth");
-  const first = brushing?.steps[0];
-  const second = brushing?.steps[1];
+  const first = HOTEL_GENERATED_CARD_PROPS[0];
+  const second = HOTEL_GENERATED_CARD_PROPS[1];
   const shortSide = Math.min(viewport.w, viewport.h);
   const longSide = Math.max(viewport.w, viewport.h);
   const sceneScale = Math.min(viewport.w / shortSide, viewport.h / longSide);
@@ -193,9 +178,7 @@ export default function FirstThenDemoPage() {
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[15.4rem]">
                   <StepVisualCard
-                    imageUrl={first?.imageUrl}
-                    alt={first?.title ?? "First step"}
-                    tone="sage"
+                    generatedCard={first}
                     label="First"
                     icon={<IconFirst className="h-6 w-6" />}
                     className="h-full"
@@ -229,9 +212,7 @@ export default function FirstThenDemoPage() {
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[15.4rem]">
                   <StepVisualCard
-                    imageUrl={second?.imageUrl}
-                    alt={second?.title ?? "Then step"}
-                    tone="accent"
+                    generatedCard={second}
                     label="Then"
                     icon={<IconThen className="h-6 w-6" />}
                     className="h-full"
