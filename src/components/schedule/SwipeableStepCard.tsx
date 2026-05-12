@@ -31,6 +31,7 @@ import {
 import {
   GeneratedPixtoCard,
   GENERATED_PIXTO_CARD_SIZE,
+  GENERATED_PIXTO_FOCUS_CARD_SIZE,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 
@@ -451,7 +452,7 @@ export function SwipeableStepCard({
   const focusCardAspectRatio =
     variant === "focus"
       ? focusGenerated
-        ? `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`
+        ? `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} / ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}`
         : focusPixto
           ? `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`
           : undefined
