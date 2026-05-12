@@ -36,7 +36,7 @@ const HOTEL_BACKCARD_URL = atTheHotelBackCardUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
-const IPHONE_16_PRO_VIEWPORT = { w: 402, h: 874 } as const;
+const IPHONE_16_PRO_VIEWPORT = { w: 402.4, h: 874 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
 const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
@@ -536,7 +536,10 @@ function FocusFlipPreview({
   if (!phoneFrame) {
     return (
       <div className="space-y-3">
-        <div className="mx-auto flex w-full max-w-[28rem] items-center justify-center rounded-[1.75rem] bg-[#060807] px-4 py-5">
+        <div
+          className="mx-auto flex w-full items-center justify-center rounded-[1.75rem] bg-[#060807] py-5"
+          style={{ maxWidth: `${FOCUS_DEMO_VISIBLE_W}px` }}
+        >
           {flipCard}
         </div>
         <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
@@ -552,9 +555,9 @@ function FocusFlipPreview({
         aspectRatio: `${IPHONE_16_PRO_VIEWPORT.w} / ${IPHONE_16_PRO_VIEWPORT.h}`,
       }}
     >
-      <div className="flex h-full min-h-0 flex-col px-1.5 py-1.5 text-ink">
+      <div className="flex h-full min-h-0 flex-col py-1.5 text-ink">
         <div className="rounded-full bg-canvas-muted px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-ink-subtle">
-          iphone 16 pro · 402 x 874
+          iphone 16 pro · 402.4 x 874
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center pt-2">
           {flipCard}
