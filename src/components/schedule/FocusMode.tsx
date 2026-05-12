@@ -11,12 +11,9 @@ import {
 import type { Routine } from "@/lib/types/routine";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
-import { PixtoFocusCardScale } from "@/components/schedule/PixtoFocusCardScale";
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
-import { GeneratedPixtoFocusScale } from "@/components/experimental/GeneratedPixtoFocusScale";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
-import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
 import { routineAccentRings } from "@/lib/utils/routine-accent";
 
 type Props = {
@@ -31,6 +28,9 @@ const SHOW_FOCUS_ZONE_LABELS = false;
 
 const showZoneDebug =
   process.env.NODE_ENV === "development" && SHOW_FOCUS_ZONE_LABELS;
+
+const FOCUS_STAGE_CARD_W = 357.5 as const;
+const FOCUS_STAGE_CARD_H = 629.4 as const;
 
 /** Bottom sheet — no handle bar, calm */
 function Sheet({
@@ -89,6 +89,24 @@ function sheetRow(
     >
       {label}
     </button>
+  );
+}
+
+function FocusCardStage({ children }: { children: ReactNode }) {
+  return (
+    <div className="pointer-events-auto mx-auto flex h-full min-h-0 w-full max-w-lg flex-col px-5 py-4">
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <div
+          className="relative shrink-0"
+          style={{
+            width: `min(100%, ${FOCUS_STAGE_CARD_W}px)`,
+            height: `min(100%, ${FOCUS_STAGE_CARD_H}px)`,
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -197,6 +215,9 @@ export function FocusMode({ routine, exitHref }: Props) {
     !isComplete && nowStep && totalSteps > 0 && nowIndex >= 0
       ? `${nowIndex + 1} / ${totalSteps}`
       : null;
+  const nowStepBackCardUrl = nowStep
+    ? resolveCategoryBackCardUrlForStep(nowStep)
+    : undefined;
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-[#060807] touch-manipulation text-cream">
@@ -225,50 +246,16 @@ export function FocusMode({ routine, exitHref }: Props) {
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 flex min-h-0 w-full flex-col"
             >
-              {nowStep.generatedPixto ? (
-                <div className="pointer-events-auto flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
-                  <GeneratedPixtoFocusScale>
-                    <SwipeableStepCard
-                      step={nowStep}
-                      status={stepStatus(nowStep)}
-                      variant="focus"
-                      onSwipeComplete={completeCurrent}
-                      completionBackImageUrl={resolveCategoryBackCardUrlForStep(
-                        nowStep,
-                      )}
-                      accentRings={accentRings}
-                    />
-                  </GeneratedPixtoFocusScale>
-                </div>
-              ) : isPixtoLearnBundledCardUrl(nowStep.imageUrl) ? (
-                <div className="pointer-events-auto flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center">
-                  <PixtoFocusCardScale>
-                    <SwipeableStepCard
-                      step={nowStep}
-                      status={stepStatus(nowStep)}
-                      variant="focus"
-                      onSwipeComplete={completeCurrent}
-                      completionBackImageUrl={resolveCategoryBackCardUrlForStep(
-                        nowStep,
-                      )}
-                      accentRings={accentRings}
-                    />
-                  </PixtoFocusCardScale>
-                </div>
-              ) : (
-                <div className="pointer-events-auto absolute inset-0 min-h-0 min-w-0">
-                  <SwipeableStepCard
-                    step={nowStep}
-                    status={stepStatus(nowStep)}
-                    variant="focus"
-                    onSwipeComplete={completeCurrent}
-                    completionBackImageUrl={resolveCategoryBackCardUrlForStep(
-                      nowStep,
-                    )}
-                    accentRings={accentRings}
-                  />
-                </div>
-              )}
+              <FocusCardStage>
+                <SwipeableStepCard
+                  step={nowStep}
+                  status={stepStatus(nowStep)}
+                  variant="focus"
+                  onSwipeComplete={completeCurrent}
+                  completionBackImageUrl={nowStepBackCardUrl}
+                  accentRings={accentRings}
+                />
+              </FocusCardStage>
             </motion.div>
           ) : !isComplete && !nowStep ? (
             <motion.div
