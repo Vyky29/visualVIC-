@@ -285,9 +285,9 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-3">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-3.5">
         <div
-          className="relative mx-auto flex h-full max-h-[91%] w-[91%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[86%] w-[82%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -426,7 +426,7 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(2.85rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
+          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))] pb-[max(3.25rem,env(safe-area-inset-left))]">
             <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
@@ -451,36 +451,41 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-0 top-[max(0.5rem,env(safe-area-inset-left))] z-20 flex translate-x-[min(1.85rem,5.5vw)] flex-col items-end justify-end gap-3 pr-[max(0.35rem,env(safe-area-inset-bottom))]">
-              <Link
-                href="/dashboard"
-                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+            <div className="pointer-events-none absolute bottom-[max(0.5rem,env(safe-area-inset-left))] left-0 right-0 z-20 flex justify-center px-[max(0.75rem,env(safe-area-inset-right))]">
+              <nav
+                aria-label="Focus mode navigation"
+                className="pointer-events-auto flex max-w-full flex-row flex-wrap items-end justify-center gap-x-6 gap-y-2 sm:gap-x-8"
               >
-                <HomeSectionIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Home
-                </span>
-              </Link>
+                <Link
+                  href="/dashboard"
+                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                >
+                  <HomeSectionIcon className="rotate-90 shrink-0" />
+                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                    Home
+                  </span>
+                </Link>
 
-              <Link
-                href="/menu"
-                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-              >
-                <MenuDotsIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Menu
-                </span>
-              </Link>
+                <Link
+                  href="/menu"
+                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                >
+                  <MenuDotsIcon className="rotate-90 shrink-0" />
+                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                    Menu
+                  </span>
+                </Link>
 
-              <Link
-                href="/player/brushing-teeth"
-                className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-              >
-                <RoutinesHomeIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Routine
-                </span>
-              </Link>
+                <Link
+                  href="/player/brushing-teeth"
+                  className="flex min-w-0 flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                >
+                  <RoutinesHomeIcon className="rotate-90 shrink-0" />
+                  <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                    Routine
+                  </span>
+                </Link>
+              </nav>
             </div>
           </div>
         </div>
