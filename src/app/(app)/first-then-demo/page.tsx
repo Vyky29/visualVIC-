@@ -273,7 +273,7 @@ function StepVisualCard({
       </div>
       <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F1F4F6] p-[10px]">
         <div
-          className="relative mx-auto flex h-full max-h-full w-full max-w-[92%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[88%] w-[84%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -329,10 +329,10 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas px-[max(0.75rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[2.75rem]">
+          <div className="relative h-full w-full bg-canvas pl-[max(0.5rem,env(safe-area-inset-top))] pr-[max(3rem,env(safe-area-inset-left))] py-[max(0.5rem,env(safe-area-inset-left))]">
+            <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[0.5rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[16.6rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[18rem]">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -343,7 +343,7 @@ export default function FirstThenDemoPage() {
               </div>
 
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[16.6rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[18rem]">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -354,20 +354,21 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <Link
-              href="/player/brushing-teeth"
-              className="absolute left-[max(1.05rem,env(safe-area-inset-left))] top-[42.5%] flex h-8 min-w-[5.75rem] -translate-y-1/2 items-center justify-center gap-1.5 rounded-[0.9rem] bg-ink/82 px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-            >
-              <RoutinesHomeIcon />
-              Routines
-            </Link>
+            <div className="absolute right-[max(0.7rem,env(safe-area-inset-right))] top-1/2 flex -translate-y-1/2 flex-col items-center gap-2">
+              <Link
+                href="/player/brushing-teeth"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/82 text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              >
+                <RoutinesHomeIcon />
+              </Link>
 
-            <Link
-              href="/menu"
-              className="absolute right-[max(1.05rem,env(safe-area-inset-right))] top-[74%] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-            >
-              <MenuDotsIcon className="rotate-90" />
-            </Link>
+              <Link
+                href="/menu"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              >
+                <MenuDotsIcon className="rotate-90" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
