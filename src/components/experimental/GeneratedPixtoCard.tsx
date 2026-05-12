@@ -260,6 +260,17 @@ function scheduleTitleBandTypography(lineCount: 1 | 2 | 3): string {
   );
 }
 
+function focusTitleBandTypography(lineCount: 1 | 2 | 3): string {
+  return cn(
+    titleTypographyBase,
+    lineCount === 1
+      ? "text-[60px] sm:text-[68px] tracking-[-0.03em] leading-[1.08]"
+      : lineCount === 2
+        ? "text-[42px] sm:text-[48px] tracking-[-0.028em] leading-[1.04]"
+        : "text-[34px] sm:text-[40px] tracking-[-0.024em] leading-[1.02]",
+  );
+}
+
 function GeneratedPixtoDebugGuides({
   gridTemplateRows,
   illustrationWidthPct,
@@ -353,15 +364,28 @@ function TitleBand({
   const row2Two = n === 2 ? safeLines[1] : "";
   const row2Three =
     n >= 3 ? safeLines.slice(2).join(" ") : "";
-  const bandTypo = scheduleTitleBandTypography(n);
-  const bandLineLeading = n === 1
-    ? "leading-[1.14]"
-    : n === 2
-      ? "leading-[1.1]"
-      : "leading-[1.08]";
+  const bandTypo = focusPresentation
+    ? focusTitleBandTypography(n)
+    : scheduleTitleBandTypography(n);
+  const bandLineLeading = focusPresentation
+    ? n === 1
+      ? "leading-[1.08]"
+      : n === 2
+        ? "leading-[1.04]"
+        : "leading-[1.02]"
+    : n === 1
+      ? "leading-[1.14]"
+      : n === 2
+        ? "leading-[1.1]"
+        : "leading-[1.08]";
+  const bandShellPx = focusPresentation ? "px-2" : "px-4";
+  const bandInnerWidth = focusPresentation ? "max-w-[97%]" : "max-w-full";
 
   return (
-    <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-0.5">
+    <div className={cn(
+      "relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white py-0.5",
+      bandShellPx,
+    )}>
       {/*
         3 equal grid rows (design thirds). Row 1 often empty for 1–2 logical lines.
         · 2 lines: ONE cell row-span-2 + flex-col justify-center — lines stay touching without the first line clipping off the top edge.
@@ -378,7 +402,7 @@ function TitleBand({
                 bandTypo,
               )}
             >
-              <span className={cn("block w-full max-w-full", bandLineLeading)}>
+              <span className={cn("block w-full", bandInnerWidth, bandLineLeading)}>
                 {safeLines[0]}
               </span>
             </div>
@@ -392,10 +416,10 @@ function TitleBand({
                 bandTypo,
               )}
             >
-              <span className={cn("block w-full max-w-full", bandLineLeading)}>
+              <span className={cn("block w-full", bandInnerWidth, bandLineLeading)}>
                 {row1Two}
               </span>
-              <span className={cn("block w-full max-w-full", bandLineLeading)}>
+              <span className={cn("block w-full", bandInnerWidth, bandLineLeading)}>
                 {row2Two}
               </span>
             </div>
@@ -403,13 +427,13 @@ function TitleBand({
         ) : (
           <>
             <div className="col-start-1 row-start-1 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center">
-              <span className={cn(bandTypo, bandLineLeading)}>{row0}</span>
+              <span className={cn("block w-full", bandInnerWidth, bandTypo, bandLineLeading)}>{row0}</span>
             </div>
             <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center">
-              <span className={cn(bandTypo, bandLineLeading)}>{row1Two}</span>
+              <span className={cn("block w-full", bandInnerWidth, bandTypo, bandLineLeading)}>{row1Two}</span>
             </div>
             <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-[0.14em] text-center">
-              <span className={cn(bandTypo, bandLineLeading)}>{row2Three}</span>
+              <span className={cn("block w-full", bandInnerWidth, bandTypo, bandLineLeading)}>{row2Three}</span>
             </div>
           </>
         )}
@@ -587,7 +611,10 @@ export function GeneratedPixtoCard({
       />
 
       <div
-        className="flex min-h-0 shrink-0 items-center justify-center overflow-hidden px-3"
+        className={cn(
+          "flex min-h-0 shrink-0 items-center justify-center overflow-hidden",
+          focusPresentation ? "px-2" : "px-3",
+        )}
         style={{
           backgroundColor: categoryColour,
           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
@@ -595,11 +622,14 @@ export function GeneratedPixtoCard({
       >
         <span
           className={cn(
-            "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
+            "line-clamp-2 block w-full text-center font-semibold lowercase",
+            focusPresentation
+              ? "max-w-[96%] leading-[1.02] tracking-[0.02em] text-[52px] sm:text-[60px]"
+              : "leading-snug tracking-[0.08em]",
             isDense
                 ? "text-[14px] sm:text-[16px]"
                 : /* Schedule NOW/NEXT — coloured category ribete. */
-                  "text-[60px] sm:text-[70px] tracking-[0.04em]",
+                  !focusPresentation && "text-[60px] sm:text-[70px] tracking-[0.04em]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
