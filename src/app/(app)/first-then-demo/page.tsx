@@ -454,10 +454,10 @@ export default function FirstThenDemoPage() {
         </div>
 
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-30" style={sceneStyle}>
-          <div className="pointer-events-none absolute inset-0 flex justify-center">
+          <div className="pointer-events-none absolute inset-0">
             <nav
               aria-label="Focus mode navigation"
-              className="pointer-events-auto flex h-full min-h-0 w-max max-w-[min(100%,14rem)] flex-col items-end justify-end gap-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]"
+              className="pointer-events-auto absolute bottom-[max(1.55rem,calc(0.95rem+env(safe-area-inset-bottom)))] right-[max(0.65rem,env(safe-area-inset-bottom))] flex w-max max-w-[min(100%,5.5rem)] flex-col items-end gap-3"
             >
               <Link
                 href="/dashboard"
