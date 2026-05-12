@@ -427,9 +427,9 @@ export default function FirstThenDemoPage() {
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
           <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.7rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="mx-auto grid h-full min-h-0 w-full grid-cols-2 items-center gap-2.75 px-[0.35rem]">
-              <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.35rem,5.5vw,3.25rem)] px-[0.35rem]">
+              <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -439,8 +439,8 @@ export default function FirstThenDemoPage() {
                 </div>
               </div>
 
-              <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
+              <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -451,36 +451,38 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-3">
-              <Link
-                href="/dashboard"
-                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/82 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-              >
-                <HomeSectionIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                  Home
-                </span>
-              </Link>
+            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] left-0 right-0 z-20 flex justify-end pr-[max(0.7rem,env(safe-area-inset-bottom))]">
+              <div className="pointer-events-auto flex flex-col items-center gap-3">
+                <Link
+                  href="/dashboard"
+                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/82 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                >
+                  <HomeSectionIcon className="rotate-90" />
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                    Home
+                  </span>
+                </Link>
 
-              <Link
-                href="/menu"
-                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/78 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-              >
-                <MenuDotsIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                  Menu
-                </span>
-              </Link>
+                <Link
+                  href="/menu"
+                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/78 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                >
+                  <MenuDotsIcon className="rotate-90" />
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                    Menu
+                  </span>
+                </Link>
 
-              <Link
-                href="/player/brushing-teeth"
-                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/88 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-              >
-                <RoutinesHomeIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                  Routine
-                </span>
-              </Link>
+                <Link
+                  href="/player/brushing-teeth"
+                  className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/88 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                >
+                  <RoutinesHomeIcon className="rotate-90" />
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                    Routine
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
