@@ -76,6 +76,9 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   left: FOCUS_PIXTO_PNG_INSET_PX,
 };
 
+const GENERATED_WOW_NOW_CARD_W = 296 as const;
+const GENERATED_WOW_NEXT_CARD_W = 276 as const;
+
 const STEP_OUTLINE_HEX: Record<
   ReturnType<typeof stepCardVisualTone>,
   string
@@ -447,7 +450,24 @@ export function SwipeableStepCard({
           } satisfies CSSProperties;
         })()
       : undefined;
-  const cardStyle = nextOutlineStyle ?? focusGeneratedBorderStyle;
+  const scheduleGeneratedWidthStyle =
+    scheduleGeneratedPixto && !focusGenerated
+      ? variant === "hero" && isNow
+        ? ({
+            width: "100%",
+            maxWidth: `${GENERATED_WOW_NOW_CARD_W}px`,
+          } satisfies CSSProperties)
+        : variant === "next"
+          ? ({
+              width: "100%",
+              maxWidth: `${GENERATED_WOW_NEXT_CARD_W}px`,
+            } satisfies CSSProperties)
+          : undefined
+      : undefined;
+  const cardStyle = {
+    ...(scheduleGeneratedWidthStyle ?? {}),
+    ...(nextOutlineStyle ?? focusGeneratedBorderStyle ?? {}),
+  } satisfies CSSProperties;
   const focusCardAspectRatio =
     variant === "focus"
       ? focusGenerated
@@ -502,12 +522,14 @@ export function SwipeableStepCard({
                 : rings.scheduleNow,
             focusPixto || focusGenerated
               ? "h-full min-h-0 w-full"
+              : hasGeneratedPixto
+                ? "w-full"
               : /* ~10px wider than Next at cap — smaller than old 96% for more scroll room */
                 "w-[max(0px,min(100%,13.625rem)-4px)]",
           ),
         variant === "next" &&
           cn(
-            "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
+            hasGeneratedPixto ? "mx-auto w-full" : "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
             hasGeneratedPixto ? "" : rings.scheduleNext,
           ),
         variant === "focus" &&
@@ -615,6 +637,7 @@ export function SwipeableStepCard({
                           iconUrl={gp.iconUrl}
                           cardType={gp.cardType}
                           focusIllustrationScale={gp.focusIllustrationScale}
+                          schedulePresentation
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
                         />
@@ -794,6 +817,7 @@ export function SwipeableStepCard({
                       iconUrl={gp.iconUrl}
                       cardType={gp.cardType}
                       focusIllustrationScale={gp.focusIllustrationScale}
+                      schedulePresentation
                       focusPresentation={focusGenerated}
                       suppressNeutralRing
                       className="h-full w-full max-w-none"

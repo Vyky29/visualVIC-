@@ -18,6 +18,9 @@ export const GENERATED_PIXTO_ILLUSTRATION_FRAME = { w: 531, h: 648 } as const;
 /** White title band height (design px). */
 export const GENERATED_PIXTO_TITLE_ZONE_H = 166 as const;
 
+/** Locked Digital WOW white area used in the agreed Now / Next references. */
+export const GENERATED_PIXTO_WOW_TITLE_ZONE_H = 177 as const;
+
 /** Bottom category strip height (design px). */
 export const GENERATED_PIXTO_CATEGORY_BAND_H = 94 as const;
 
@@ -37,6 +40,12 @@ export const GENERATED_PIXTO_TOP_LAYOUT_H =
   GENERATED_PIXTO_CARD_SIZE.h -
   GENERATED_PIXTO_TITLE_ZONE_H -
   GENERATED_PIXTO_CATEGORY_BAND_H; // 794
+
+/** Locked Digital WOW top block after fixing the 177px white area. */
+export const GENERATED_PIXTO_WOW_TOP_LAYOUT_H =
+  GENERATED_PIXTO_CARD_SIZE.h -
+  GENERATED_PIXTO_WOW_TITLE_ZONE_H -
+  GENERATED_PIXTO_CATEGORY_BAND_H; // 783
 
 /** Focus-only top block after redistributing half of the old ribete space upward. */
 export const GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H = 881 as const;
@@ -63,8 +72,15 @@ export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
 export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
   GENERATED_PIXTO_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 146
 
+/** Vertical space above yellow in the locked Digital WOW layout: 783 − 648. */
+export const GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION =
+  GENERATED_PIXTO_WOW_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h; // 135
+
 /** Company mark — design px (corner glyph, scales with card width). */
 export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
+
+/** Locked Digital WOW schedule logo size used in the agreed Now / Next references. */
+export const GENERATED_PIXTO_WOW_COMPANY_MARK = { w: 85, h: 85 } as const;
 
 /** Focus-only logo size — slightly larger while keeping the same anchor. */
 export const GENERATED_PIXTO_FOCUS_COMPANY_MARK = { w: 91, h: 91 } as const;
@@ -109,9 +125,14 @@ const ILLUSTRATION_WIDTH_FRAC =
 const ROW_FR_TOP = GENERATED_PIXTO_TOP_LAYOUT_H;
 const ROW_FR_TITLE = GENERATED_PIXTO_TITLE_ZONE_H;
 const ROW_FR_CATEGORY = GENERATED_PIXTO_CATEGORY_BAND_H;
+const WOW_ROW_FR_TOP = GENERATED_PIXTO_WOW_TOP_LAYOUT_H;
+const WOW_ROW_FR_TITLE = GENERATED_PIXTO_WOW_TITLE_ZONE_H;
+const WOW_ROW_FR_CATEGORY = GENERATED_PIXTO_CATEGORY_BAND_H;
 
 const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
+const WOW_FR_TOP_SPACER = GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION;
+const WOW_FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
 const FOCUS_ROW_FR_TOP = GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H;
 const FOCUS_FR_TOP_SPACER =
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h;
@@ -131,6 +152,8 @@ export type GeneratedPixtoCardProps = {
   className?: string;
   /** Larger title / ribbon type when the shell is scaled down (Focus mode). */
   focusPresentation?: boolean;
+  /** Locked Digital WOW schedule geometry used for the agreed Now / Next cards. */
+  schedulePresentation?: boolean;
   /** Hide neutral ink ring — parent supplies category ring (Schedule Player). */
   suppressNeutralRing?: boolean;
 };
@@ -142,6 +165,8 @@ const FOCUS_CARD_ASPECT =
 const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
 const SCHEDULE_TITLE_MAX_LINES = 3;
 const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
+const SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH = 15.2;
+const SCHEDULE_LOCKED_TITLE_BASE_FONT_PX = 60;
 const FOCUS_TITLE_TARGET_VISUAL_WIDTH = 15.4;
 const FOCUS_TITLE_BASE_FONT_PX = 42;
 
@@ -169,6 +194,29 @@ const FOCUS_TITLE_SIZE_CANDIDATES = [
   {
     fontPx: 32,
     className: "text-[32px] sm:text-[38px] tracking-[-0.018em] leading-[1.02]",
+  },
+] as const;
+
+const SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES = [
+  {
+    fontPx: 60,
+    className: "text-[60px] leading-[0.92] tracking-[-0.022em]",
+  },
+  {
+    fontPx: 58,
+    className: "text-[58px] leading-[0.92] tracking-[-0.022em]",
+  },
+  {
+    fontPx: 56,
+    className: "text-[56px] leading-[0.92] tracking-[-0.02em]",
+  },
+  {
+    fontPx: 54,
+    className: "text-[54px] leading-[0.92] tracking-[-0.02em]",
+  },
+  {
+    fontPx: 52,
+    className: "text-[52px] leading-[0.94] tracking-[-0.018em]",
   },
 ] as const;
 
@@ -292,6 +340,104 @@ function scheduleTitleBandTypography(lineCount: 1 | 2 | 3): string {
   );
 }
 
+function buildFlexibleLineLayouts(
+  words: string[],
+  maxLines: number,
+  index = 0,
+  current: string[][] = [],
+): string[][][] {
+  if (index >= words.length) {
+    return current.length > 0 ? [current.map((line) => [...line])] : [];
+  }
+  if (current.length >= maxLines) {
+    return [];
+  }
+
+  const layouts: string[][][] = [];
+  const maxTake = words.length - index;
+  for (let take = 1; take <= maxTake; take += 1) {
+    current.push(words.slice(index, index + take));
+    layouts.push(...buildFlexibleLineLayouts(words, maxLines, index + take, current));
+    current.pop();
+  }
+  return layouts;
+}
+
+function scoreLockedLayout(layout: string[][], allowedWidth: number): number {
+  const widths = layout.map((line) => estimateScheduleLineVisualWidth(line));
+  const maxWidth = Math.max(...widths);
+  const minWidth = Math.min(...widths);
+  const overflowPenalty = widths.reduce(
+    (sum, width) => sum + Math.max(0, width - allowedWidth),
+    0,
+  );
+  const singleWordPenalty = layout.reduce(
+    (sum, line) => sum + (layout.length > 1 && line.length === 1 ? 1 : 0),
+    0,
+  );
+  const balancePenalty = maxWidth - minWidth;
+  const lineCountPenalty = (layout.length - 1) * 0.32;
+  return overflowPenalty * 100 + singleWordPenalty * 4 + balancePenalty + lineCountPenalty;
+}
+
+function resolveLockedTitleLayout(
+  raw: string,
+  targetWidth: number,
+  baseFontPx: number,
+  candidates: readonly { fontPx: number; className: string }[],
+  maxLines: number,
+): {
+  lines: string[];
+  className: string;
+} {
+  const words = raw.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    return {
+      lines: raw.trim() ? [raw.trim()] : [""],
+      className: cn(titleTypographyBase, candidates[0].className),
+    };
+  }
+
+  const layouts = buildFlexibleLineLayouts(words, maxLines);
+
+  for (const candidate of candidates) {
+    const allowedWidth = targetWidth * (baseFontPx / candidate.fontPx);
+    let bestFit: string[][] | null = null;
+    let bestScore = Number.POSITIVE_INFINITY;
+
+    for (const layout of layouts) {
+      const widths = layout.map((line) => estimateScheduleLineVisualWidth(line));
+      if (Math.max(...widths) > allowedWidth) continue;
+      const score = scoreLockedLayout(layout, allowedWidth);
+      if (score < bestScore) {
+        bestScore = score;
+        bestFit = layout;
+      }
+    }
+
+    if (bestFit) {
+      return {
+        lines: bestFit.map((line) => line.join(" ")),
+        className: cn(titleTypographyBase, candidate.className),
+      };
+    }
+  }
+
+  const fallback = candidates[candidates.length - 1];
+  const fallbackAllowedWidth = targetWidth * (baseFontPx / fallback.fontPx);
+  const bestFallback = layouts.reduce((best, layout) =>
+    scoreLockedLayout(layout, fallbackAllowedWidth) <
+    scoreLockedLayout(best, fallbackAllowedWidth)
+      ? layout
+      : best,
+  );
+
+  return {
+    lines: bestFallback.map((line) => line.join(" ")),
+    className: cn(titleTypographyBase, fallback.className),
+  };
+}
+
 function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
   if (words.length <= 1) {
     return [words.join(" ")];
@@ -329,50 +475,26 @@ function resolveFocusTitleLayout(raw: string): {
   lines: string[];
   className: string;
 } {
-  const words = raw.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) {
-    return {
-      lines: raw.trim() ? [raw.trim()] : [""],
-      className: cn(titleTypographyBase, FOCUS_TITLE_SIZE_CANDIDATES[0].className),
-    };
-  }
+  return resolveLockedTitleLayout(
+    raw,
+    FOCUS_TITLE_TARGET_VISUAL_WIDTH,
+    FOCUS_TITLE_BASE_FONT_PX,
+    FOCUS_TITLE_SIZE_CANDIDATES,
+    2,
+  );
+}
 
-  const fullWidth = estimateScheduleLineVisualWidth(words);
-
-  for (const candidate of FOCUS_TITLE_SIZE_CANDIDATES) {
-    const allowedWidth =
-      FOCUS_TITLE_TARGET_VISUAL_WIDTH *
-      (FOCUS_TITLE_BASE_FONT_PX / candidate.fontPx);
-
-    if (fullWidth <= allowedWidth) {
-      return {
-        lines: [words.join(" ")],
-        className: cn(titleTypographyBase, candidate.className),
-      };
-    }
-
-    const splitLines = splitTitleFocusLines(words, allowedWidth);
-    const splitWidths = splitLines.map((line) =>
-      estimateScheduleLineVisualWidth(line.split(/\s+/).filter(Boolean)),
-    );
-
-    if (Math.max(...splitWidths) <= allowedWidth) {
-      return {
-        lines: splitLines,
-        className: cn(titleTypographyBase, candidate.className),
-      };
-    }
-  }
-
-  const fallback = FOCUS_TITLE_SIZE_CANDIDATES[FOCUS_TITLE_SIZE_CANDIDATES.length - 1];
-  return {
-    lines: splitTitleFocusLines(
-      words,
-      FOCUS_TITLE_TARGET_VISUAL_WIDTH *
-        (FOCUS_TITLE_BASE_FONT_PX / fallback.fontPx),
-    ),
-    className: cn(titleTypographyBase, fallback.className),
-  };
+function resolveScheduleLockedTitleLayout(raw: string): {
+  lines: string[];
+  className: string;
+} {
+  return resolveLockedTitleLayout(
+    raw,
+    SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH,
+    SCHEDULE_LOCKED_TITLE_BASE_FONT_PX,
+    SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES,
+    3,
+  );
 }
 
 function GeneratedPixtoDebugGuides({
@@ -427,11 +549,13 @@ function TitleBand({
   title,
   isDense,
   focusPresentation,
+  schedulePresentation,
   scheduleLargeType,
 }: {
   title: string;
   isDense: boolean;
   focusPresentation: boolean;
+  schedulePresentation: boolean;
   scheduleLargeType: boolean;
 }) {
   const typo = titleTypography(
@@ -448,6 +572,10 @@ function TitleBand({
     () => (focusPresentation ? resolveFocusTitleLayout(title) : null),
     [focusPresentation, title],
   );
+  const scheduleLockedTitleLayout = useMemo(
+    () => (schedulePresentation ? resolveScheduleLockedTitleLayout(title) : null),
+    [schedulePresentation, title],
+  );
 
   if (focusPresentation && focusTitleLayout) {
     return (
@@ -462,6 +590,28 @@ function TitleBand({
             )}
           >
             {focusTitleLayout.lines.map((line, index) => (
+              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap text-center">
+                {line}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (schedulePresentation && scheduleLockedTitleLayout) {
+    return (
+      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-3 py-1">
+        <div className="relative z-10 flex h-full min-h-0 w-full items-center justify-center overflow-hidden">
+          <div
+            className={cn(
+              "flex w-full max-w-full min-h-0 flex-col items-center justify-center gap-0 text-center",
+              scheduleLockedTitleLayout.className,
+            )}
+            style={{ wordSpacing: "0" }}
+          >
+            {scheduleLockedTitleLayout.lines.map((line, index) => (
               <span key={`${line}-${index}`} className="block w-full whitespace-nowrap text-center">
                 {line}
               </span>
@@ -576,6 +726,7 @@ export function GeneratedPixtoCard({
   focusIllustrationScale,
   className,
   focusPresentation = false,
+  schedulePresentation = false,
   suppressNeutralRing = false,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
@@ -597,7 +748,9 @@ export function GeneratedPixtoCard({
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_COMPANY_MARK
-    : GENERATED_PIXTO_COMPANY_MARK;
+    : schedulePresentation
+      ? GENERATED_PIXTO_WOW_COMPANY_MARK
+      : GENERATED_PIXTO_COMPANY_MARK;
   const markSize = `calc(100% * ${markRef.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const colouredShellStyle = suppressNeutralRing
@@ -614,16 +767,22 @@ export function GeneratedPixtoCard({
     : "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
-  const scheduleLargeType = !focusPresentation && !isDense;
+  const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
   const topRowFr = focusPresentation
     ? FOCUS_ROW_FR_TOP
-    : ROW_FR_TOP;
+    : schedulePresentation
+      ? WOW_ROW_FR_TOP
+      : ROW_FR_TOP;
   const titleRowFr = focusPresentation
     ? GENERATED_PIXTO_FOCUS_TITLE_ZONE_H
-    : ROW_FR_TITLE;
+    : schedulePresentation
+      ? WOW_ROW_FR_TITLE
+      : ROW_FR_TITLE;
   const categoryRowFr = focusPresentation
     ? GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H
-    : ROW_FR_CATEGORY;
+    : schedulePresentation
+      ? WOW_ROW_FR_CATEGORY
+      : ROW_FR_CATEGORY;
   const gridTemplateRows = `${topRowFr}fr ${titleRowFr}fr ${categoryRowFr}fr`;
   const cardAspect = focusPresentation ? FOCUS_CARD_ASPECT : CARD_ASPECT;
 
@@ -688,6 +847,8 @@ export function GeneratedPixtoCard({
               flex: `${
                 focusPresentation
                   ? FOCUS_FR_TOP_SPACER
+                  : schedulePresentation
+                    ? WOW_FR_TOP_SPACER
                   : FR_TOP_SPACER
               } 1 0`,
             }}
@@ -697,7 +858,11 @@ export function GeneratedPixtoCard({
             className="relative flex w-full min-h-0 shrink-0 items-start justify-center"
             style={{
               flex: `${
-                focusPresentation ? FOCUS_FR_ILLUSTRATION : FR_ILLUSTRATION
+                focusPresentation
+                  ? FOCUS_FR_ILLUSTRATION
+                  : schedulePresentation
+                    ? WOW_FR_ILLUSTRATION
+                    : FR_ILLUSTRATION
               } 1 0`,
             }}
           >
@@ -740,13 +905,14 @@ export function GeneratedPixtoCard({
         title={title}
         isDense={isDense}
         focusPresentation={focusPresentation}
+        schedulePresentation={schedulePresentation}
         scheduleLargeType={scheduleLargeType}
       />
 
       <div
         className={cn(
           "flex min-h-0 shrink-0 items-center justify-center overflow-hidden",
-          focusPresentation ? "px-2" : "px-3",
+          focusPresentation ? "px-2" : schedulePresentation ? "px-3" : "px-3",
         )}
         style={{
           backgroundColor: categoryColour,
@@ -758,11 +924,15 @@ export function GeneratedPixtoCard({
             "line-clamp-2 block w-full text-center font-semibold lowercase",
             focusPresentation
               ? "max-w-[96%] leading-[1.02] tracking-[0.02em] text-[52px] sm:text-[60px]"
-              : "leading-snug tracking-[0.08em]",
+              : schedulePresentation
+                ? "max-w-full text-[60px] leading-[0.88] tracking-tight"
+                : "leading-snug tracking-[0.08em]",
             isDense
                 ? "text-[14px] sm:text-[16px]"
                 : /* Schedule NOW/NEXT — coloured category ribete. */
-                  !focusPresentation && "text-[60px] sm:text-[70px] tracking-[0.04em]",
+                  !focusPresentation &&
+                    !schedulePresentation &&
+                    "text-[60px] sm:text-[70px] tracking-[0.04em]",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
