@@ -10,7 +10,7 @@ import {
 } from "@/lib/utils/visual-card-url";
 
 const miniCard =
-  "w-full max-w-[8.9rem] overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
+  "w-full max-w-[10.9rem] overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -94,23 +94,12 @@ export default function FirstThenPage() {
     <div>
       <Header
         title="First & Then"
-        rightSlot={
-          <Link
-            href="/menu"
-            className="flex min-h-touch min-w-touch touch-manipulation items-center justify-center rounded-2xl px-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink active:bg-ink/10 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-ink/5"
-          >
-            Menu
-          </Link>
-        }
+        compact
       />
-      <div className="flex min-h-[calc(100dvh-5rem)] flex-col px-3 pb-4 pt-3">
-        <p className="px-1 text-center text-[13px] leading-relaxed text-ink-subtle">
-          First on the left, Then on the right, sized to fit the iPhone landscape view.
-        </p>
-
+      <div className="flex min-h-[calc(100dvh-3.75rem)] flex-col px-2.5 pb-3 pt-2">
         <div className="flex flex-1 items-center justify-center">
-          <div className="flex w-full items-center justify-center gap-2.5">
-            <Card className={cn("border-0 bg-transparent shadow-none ring-2 ring-sage/75", miniCard)}>
+          <div className="flex w-full items-center justify-center gap-2">
+            <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-sage/75", miniCard)}>
               <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-sage-mist/85 py-2.5">
                 <IconFirst className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
@@ -136,16 +125,16 @@ export default function FirstThenPage() {
               </div>
             </Card>
 
-            <div className="flex shrink-0 flex-col items-center justify-center gap-1.5">
+            <div className="flex shrink-0 flex-col items-center justify-center gap-1">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10">
                 <IconThenConnector className="h-5 w-5" />
               </div>
               <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-subtle">
-                Then
+                &amp;
               </span>
             </div>
 
-            <Card className={cn("border-0 bg-transparent shadow-none ring-2 ring-accent/55", miniCard)}>
+            <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-accent/55", miniCard)}>
               <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-accent-soft/55 py-2.5">
                 <IconThen className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
@@ -172,14 +161,22 @@ export default function FirstThenPage() {
           </div>
         </div>
 
-        <Link
-          href="/player/brushing-teeth"
-          className={cn(
-            "mx-auto flex min-h-touch w-full max-w-sm items-center justify-center rounded-2xl bg-ink px-5 py-3.5 text-center text-[15px] font-semibold text-cream shadow-soft transition active:scale-[0.99]",
-          )}
-        >
-          Open full brushing routine
-        </Link>
+        <div className="flex justify-end gap-2">
+          <Link
+            href="/menu"
+            className="flex min-h-touch items-center justify-center rounded-2xl border border-ink/10 bg-white px-4 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99]"
+          >
+            Menu
+          </Link>
+          <Link
+            href="/player/brushing-teeth"
+            className={cn(
+              "flex min-h-touch items-center justify-center rounded-2xl bg-ink px-5 py-3 text-center text-[15px] font-semibold text-cream shadow-soft transition active:scale-[0.99]",
+            )}
+          >
+            Open full routine
+          </Link>
+        </div>
       </div>
     </div>
   );
