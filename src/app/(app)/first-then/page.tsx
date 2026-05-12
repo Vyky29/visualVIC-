@@ -10,7 +10,7 @@ import {
 } from "@/lib/utils/visual-card-url";
 
 const miniCard =
-  "w-full max-w-[11.6rem] overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
+  "w-full overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -89,18 +89,25 @@ export default function FirstThenPage() {
   const brushing = getRoutineById("brushing-teeth");
   const first = brushing?.steps[0];
   const second = brushing?.steps[1];
+  const cardWidth = "min(calc((100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 8.5rem) / 2), calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 9.5rem) / 1.58))";
 
   return (
-    <div className="h-[100dvh] overflow-hidden overscroll-none">
+    <div className="box-border h-[100dvh] max-h-[100dvh] overflow-hidden overscroll-none">
       <Header
         title="First & Then"
         compact
-        className="min-h-[40px] pb-1.5 pt-[max(0.35rem,env(safe-area-inset-top))]"
+        className="min-h-[40px] pb-1.5 pt-[max(0.35rem,env(safe-area-inset-top))] [@media(orientation:landscape)_and_(max-height:500px)]:min-h-[34px] [@media(orientation:landscape)_and_(max-height:500px)]:pb-1 [@media(orientation:landscape)_and_(max-height:500px)]:pt-[max(0.2rem,env(safe-area-inset-top))]"
       />
-      <div className="relative flex h-[calc(100dvh-3rem)] flex-col overflow-hidden px-2 pb-2 pt-1">
-        <div className="flex min-h-0 flex-1 items-center justify-center pb-14">
-          <div className="flex w-full items-center justify-center gap-4">
-            <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-sage/75", miniCard)}>
+      <div className="relative flex h-[calc(100dvh-3rem)] max-h-[calc(100dvh-3rem)] flex-col overflow-hidden px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-1 [@media(orientation:landscape)_and_(max-height:500px)]:h-[calc(100dvh-2.5rem)] [@media(orientation:landscape)_and_(max-height:500px)]:max-h-[calc(100dvh-2.5rem)] [@media(orientation:landscape)_and_(max-height:500px)]:pt-0.5">
+        <div className="flex min-h-0 flex-1 items-center justify-center pb-[calc(4rem+env(safe-area-inset-bottom))] [@media(orientation:landscape)_and_(max-height:500px)]:pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
+          <div className="flex w-full max-w-full flex-nowrap items-center justify-center gap-4 [@media(orientation:landscape)_and_(max-height:500px)]:gap-5">
+            <Card
+              className={cn(
+                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-sage/75",
+                miniCard,
+              )}
+              style={{ width: cardWidth, maxWidth: "100%" }}
+            >
               <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-sage-mist/85 py-2.5">
                 <IconFirst className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
@@ -127,15 +134,21 @@ export default function FirstThenPage() {
             </Card>
 
             <div className="flex shrink-0 items-center justify-center">
-              <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10">
-                <IconThenConnector className="h-4 w-4" />
-                <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle">
+              <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10 [@media(orientation:landscape)_and_(max-height:500px)]:h-10 [@media(orientation:landscape)_and_(max-height:500px)]:w-10">
+                <IconThenConnector className="h-4 w-4 [@media(orientation:landscape)_and_(max-height:500px)]:h-3.5 [@media(orientation:landscape)_and_(max-height:500px)]:w-3.5" />
+                <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle [@media(orientation:landscape)_and_(max-height:500px)]:text-[10px]">
                   &amp;
                 </span>
               </div>
             </div>
 
-            <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-accent/55", miniCard)}>
+            <Card
+              className={cn(
+                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-accent/55",
+                miniCard,
+              )}
+              style={{ width: cardWidth, maxWidth: "100%" }}
+            >
               <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-accent-soft/55 py-2.5">
                 <IconThen className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
@@ -162,17 +175,17 @@ export default function FirstThenPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-2 right-2 z-10 flex items-end justify-end gap-2">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-10 flex items-end justify-between px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">
           <Link
             href="/menu"
-            className="flex h-11 items-center justify-center rounded-[1.1rem] border border-ink/10 bg-white px-3.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99]"
+            className="pointer-events-auto flex h-10 items-center justify-center rounded-[1rem] border border-ink/10 bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-9 [@media(orientation:landscape)_and_(max-height:500px)]:px-2.5 [@media(orientation:landscape)_and_(max-height:500px)]:text-[10px]"
           >
             Menu
           </Link>
           <Link
             href="/player/brushing-teeth"
             className={cn(
-              "flex h-11 items-center justify-center rounded-[1.1rem] bg-ink px-4 text-center text-[13px] font-semibold text-cream shadow-soft transition active:scale-[0.99]",
+              "pointer-events-auto flex h-10 items-center justify-center rounded-[1rem] bg-ink px-3.5 text-center text-[12px] font-semibold text-cream shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-9 [@media(orientation:landscape)_and_(max-height:500px)]:px-3 [@media(orientation:landscape)_and_(max-height:500px)]:text-[11px]",
             )}
           >
             Open full routine
