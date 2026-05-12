@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -166,11 +166,9 @@ const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
 const SCHEDULE_TITLE_MAX_LINES = 3;
 const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
 const SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH = 12.2;
-const SCHEDULE_RIBBON_BASE_FONT_PX = 60;
 const SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH = 15.2;
 const SCHEDULE_LOCKED_TITLE_BASE_FONT_PX = 60;
 const FOCUS_RIBBON_TARGET_VISUAL_WIDTH = 11.9;
-const FOCUS_RIBBON_BASE_FONT_PX = 52;
 const FOCUS_TITLE_TARGET_VISUAL_WIDTH = 15.4;
 const FOCUS_TITLE_BASE_FONT_PX = 42;
 
@@ -222,24 +220,6 @@ const SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES = [
     fontPx: 52,
     className: "text-[52px] leading-[0.94] tracking-[-0.018em]",
   },
-] as const;
-
-const SCHEDULE_RIBBON_SIZE_CANDIDATES = [
-  { fontPx: 60, className: "text-[60px] leading-none tracking-[-0.01em]" },
-  { fontPx: 58, className: "text-[58px] leading-none tracking-[-0.01em]" },
-  { fontPx: 56, className: "text-[56px] leading-none tracking-[-0.01em]" },
-  { fontPx: 54, className: "text-[54px] leading-none tracking-[-0.01em]" },
-  { fontPx: 52, className: "text-[52px] leading-none tracking-[-0.012em]" },
-  { fontPx: 50, className: "text-[50px] leading-none tracking-[-0.012em]" },
-] as const;
-
-const FOCUS_RIBBON_SIZE_CANDIDATES = [
-  { fontPx: 52, className: "text-[52px] leading-none tracking-[-0.01em]" },
-  { fontPx: 50, className: "text-[50px] leading-none tracking-[-0.01em]" },
-  { fontPx: 48, className: "text-[48px] leading-none tracking-[-0.012em]" },
-  { fontPx: 46, className: "text-[46px] leading-none tracking-[-0.012em]" },
-  { fontPx: 44, className: "text-[44px] leading-none tracking-[-0.014em]" },
-  { fontPx: 42, className: "text-[42px] leading-none tracking-[-0.014em]" },
 ] as const;
 
 function estimateScheduleWordVisualWidth(word: string): number {
@@ -411,12 +391,14 @@ function resolveLockedTitleLayout(
 ): {
   lines: string[];
   className: string;
+  fontPx: number;
 } {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) {
     return {
       lines: raw.trim() ? [raw.trim()] : [""],
       className: cn(titleTypographyBase, candidates[0].className),
+      fontPx: candidates[0].fontPx,
     };
   }
 
@@ -441,6 +423,7 @@ function resolveLockedTitleLayout(
       return {
         lines: bestFit.map((line) => line.join(" ")),
         className: cn(titleTypographyBase, candidate.className),
+        fontPx: candidate.fontPx,
       };
     }
   }
@@ -457,29 +440,43 @@ function resolveLockedTitleLayout(
   return {
     lines: bestFallback.map((line) => line.join(" ")),
     className: cn(titleTypographyBase, fallback.className),
+    fontPx: fallback.fontPx,
   };
 }
 
-function resolveSingleLineTypographyClass(
+function resolveSingleLineTypographyStyle(
   raw: string,
   targetWidth: number,
   baseFontPx: number,
-  candidates: readonly { fontPx: number; className: string }[],
-): string {
+  minFontPx: number,
+): CSSProperties {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) {
-    return candidates[0].className;
+    return {
+      fontSize: `${baseFontPx}px`,
+      lineHeight: 1,
+      letterSpacing: "-0.01em",
+    };
   }
 
   const fullWidth = estimateScheduleLineVisualWidth(words);
-  for (const candidate of candidates) {
-    const allowedWidth = targetWidth * (baseFontPx / candidate.fontPx);
+  let chosenFontPx = minFontPx;
+  for (let fontPx = baseFontPx; fontPx >= minFontPx; fontPx -= 2) {
+    const allowedWidth = targetWidth * (baseFontPx / fontPx);
     if (fullWidth <= allowedWidth) {
-      return candidate.className;
+      chosenFontPx = fontPx;
+      break;
     }
   }
 
-  return candidates[candidates.length - 1].className;
+  const letterSpacing =
+    chosenFontPx >= 50 ? "-0.01em" : chosenFontPx >= 38 ? "-0.012em" : "-0.014em";
+
+  return {
+    fontSize: `${chosenFontPx}px`,
+    lineHeight: 1,
+    letterSpacing,
+  };
 }
 
 function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
@@ -518,6 +515,7 @@ function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
 function resolveFocusTitleLayout(raw: string): {
   lines: string[];
   className: string;
+  fontPx: number;
 } {
   return resolveLockedTitleLayout(
     raw,
@@ -531,6 +529,7 @@ function resolveFocusTitleLayout(raw: string): {
 function resolveScheduleLockedTitleLayout(raw: string): {
   lines: string[];
   className: string;
+  fontPx: number;
 } {
   return resolveLockedTitleLayout(
     raw,
@@ -538,24 +537,6 @@ function resolveScheduleLockedTitleLayout(raw: string): {
     SCHEDULE_LOCKED_TITLE_BASE_FONT_PX,
     SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES,
     3,
-  );
-}
-
-function resolveScheduleRibbonTypography(raw: string): string {
-  return resolveSingleLineTypographyClass(
-    raw,
-    SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH,
-    SCHEDULE_RIBBON_BASE_FONT_PX,
-    SCHEDULE_RIBBON_SIZE_CANDIDATES,
-  );
-}
-
-function resolveFocusRibbonTypography(raw: string): string {
-  return resolveSingleLineTypographyClass(
-    raw,
-    FOCUS_RIBBON_TARGET_VISUAL_WIDTH,
-    FOCUS_RIBBON_BASE_FONT_PX,
-    FOCUS_RIBBON_SIZE_CANDIDATES,
   );
 }
 
@@ -822,11 +803,54 @@ export function GeneratedPixtoCard({
       }
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
-  const ribbonTypo = isDense
-    ? "text-[14px] leading-none tracking-[0.02em]"
-    : focusPresentation
-      ? resolveFocusRibbonTypography(category)
-      : resolveScheduleRibbonTypography(category);
+  const focusTitleLayout = useMemo(
+    () => (focusPresentation ? resolveFocusTitleLayout(title) : null),
+    [focusPresentation, title],
+  );
+  const scheduleLockedTitleLayout = useMemo(
+    () => (schedulePresentation ? resolveScheduleLockedTitleLayout(title) : null),
+    [schedulePresentation, title],
+  );
+  const scheduleLineCount = useMemo(() => {
+    if (focusPresentation || schedulePresentation) return 1;
+    const lines = splitTitleScheduleLines(title);
+    return Math.max(1, Math.min(lines.length > 0 ? lines.length : 1, 3)) as 1 | 2 | 3;
+  }, [focusPresentation, schedulePresentation, title]);
+  const ribbonTypographyStyle = useMemo<CSSProperties>(() => {
+    if (isDense) {
+      return { fontSize: "14px", lineHeight: 1, letterSpacing: "0.02em" };
+    }
+
+    const baseTitleFontPx = focusPresentation
+      ? (focusTitleLayout?.fontPx ?? FOCUS_TITLE_BASE_FONT_PX)
+      : schedulePresentation
+        ? (scheduleLockedTitleLayout?.fontPx ?? SCHEDULE_LOCKED_TITLE_BASE_FONT_PX)
+        : scheduleLineCount === 1
+          ? 72
+          : scheduleLineCount === 2
+            ? 48
+            : 40;
+
+    const baseRibbonFontPx = Math.max(
+      baseTitleFontPx - 10,
+      focusPresentation ? 20 : 24,
+    );
+
+    return resolveSingleLineTypographyStyle(
+      category,
+      focusPresentation ? FOCUS_RIBBON_TARGET_VISUAL_WIDTH : SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH,
+      baseRibbonFontPx,
+      focusPresentation ? 18 : 20,
+    );
+  }, [
+    category,
+    focusPresentation,
+    focusTitleLayout,
+    isDense,
+    scheduleLineCount,
+    scheduleLockedTitleLayout,
+    schedulePresentation,
+  ]);
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
     : ILLUSTRATION_FRAME_ASPECT;
@@ -995,15 +1019,17 @@ export function GeneratedPixtoCard({
               : schedulePresentation
                 ? "max-w-full"
                 : "max-w-full",
-            ribbonTypo,
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
           )}
           style={
             ribbonDarkText
-              ? undefined
-              : { textShadow: "0 1px 2px rgba(0,0,0,0.2)" }
+              ? ribbonTypographyStyle
+              : {
+                  ...ribbonTypographyStyle,
+                  textShadow: "0 1px 2px rgba(0,0,0,0.2)",
+                }
           }
         >
           {category}

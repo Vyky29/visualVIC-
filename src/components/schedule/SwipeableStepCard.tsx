@@ -560,7 +560,9 @@ export function SwipeableStepCard({
               ? "relative mx-auto h-full min-h-0 w-full max-w-full overflow-hidden bg-transparent"
               : "relative flex h-full min-h-0 w-full flex-1 flex-col min-w-0 overflow-hidden bg-transparent"
             : cn(
-                "relative w-full overflow-hidden bg-transparent",
+                hasGeneratedPixto
+                  ? "relative w-full overflow-visible bg-transparent"
+                  : "relative w-full overflow-hidden bg-transparent",
                 /* Generated: native 744×1054 slot (like before). Bundled PNG: catalog aspects. */
                 variant === "hero" && isNow
                   ? hasGeneratedPixto
