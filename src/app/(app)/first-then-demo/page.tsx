@@ -354,10 +354,10 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="absolute right-[max(0.7rem,env(safe-area-inset-right))] top-1/2 flex -translate-y-1/2 flex-col items-center gap-2">
+            <div className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2">
               <Link
                 href="/player/brushing-teeth"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/82 text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
               >
                 <RoutinesHomeIcon className="rotate-90" />
               </Link>
