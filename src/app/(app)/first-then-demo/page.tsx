@@ -454,7 +454,7 @@ export default function FirstThenDemoPage() {
             <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-3">
               <Link
                 href="/dashboard"
-                className="flex h-8 items-center justify-center gap-1.5 rounded-full border border-ink/10 bg-white/82 px-2.5 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/82 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
               >
                 <HomeSectionIcon className="rotate-90" />
                 <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
@@ -464,7 +464,7 @@ export default function FirstThenDemoPage() {
 
               <Link
                 href="/menu"
-                className="flex h-8 items-center justify-center gap-1.5 rounded-full border border-ink/10 bg-white/78 px-2.5 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/78 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
               >
                 <MenuDotsIcon className="rotate-90" />
                 <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
@@ -474,7 +474,7 @@ export default function FirstThenDemoPage() {
 
               <Link
                 href="/player/brushing-teeth"
-                className="flex h-8 items-center justify-center gap-1.5 rounded-full border border-ink/10 bg-white/88 px-2.5 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                className="flex min-h-[3.25rem] flex-col items-center justify-center gap-0.5 rounded-full border border-ink/10 bg-white/88 px-2.5 py-1 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
               >
                 <RoutinesHomeIcon className="rotate-90" />
                 <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
