@@ -722,100 +722,20 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — original card 1, original card 2, two locked text cards, and a flow
-          preview for now, next, focus, plus a measured focus shell and exact
-          schedule flow.
+          — final focus mode preview plus the real schedule flow.
         </p>
       </div>
 
       <section className="mx-auto mt-8 max-w-6xl space-y-4 px-4">
         <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Card geometry study
+          Focus mode
         </h2>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <DiagnosticPanel
-            title="Original card 1"
-            hint="Original Figma geometry with the block sizes marked."
-          >
-            <OriginalCardMeasurements geometry={ORIGINAL_GEOMETRY} />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Original card 2"
-            hint="Expanded white area to 177 while keeping the illustration block at its original size."
-          >
-            <OriginalCardMeasurements geometry={EXPANDED_GEOMETRY} />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Hotel look · 1 line"
-            hint="Locked to original card 2, with a fixed text box of 252 x 56.55."
-          >
-            <PreviewCard
-              lines={["breakfast time"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Hotel look · 2 lines"
-            hint="Same locked geometry, same word spacing as the one-line card, and more air between lines."
-          >
-            <PreviewCard
-              lines={["receive your", "room key"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-        </div>
-      </section>
-
-      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
-        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Flow preview
-        </h2>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <DiagnosticPanel
-            title="Original size"
-            hint="Reference card at the digital wow base size."
-          >
-            <PreviewCard
-              lines={["breakfast time"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Now"
-            hint="Slightly bigger than Next for the active step, with tap-to-flip kept on."
-          >
-            <NowFlipPreview />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Next"
-            hint="A little smaller than Now while keeping the same locked geometry."
-          >
-            <PreviewCard
-              lines={["receive your", "room key"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={NEXT_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Focus mode"
-            hint="Expanded card preview with tap-to-flip behavior."
-          >
-            <FocusFlipPreview />
-          </DiagnosticPanel>
-        </div>
+        <DiagnosticPanel
+          title="Focus mode"
+          hint="Final focus card preview with the current locked white area and flip behaviour."
+        >
+          <FocusFlipPreview />
+        </DiagnosticPanel>
       </section>
 
       <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
@@ -836,17 +756,6 @@ export function GeneratedCardDemoClient() {
         </DiagnosticPanel>
       </section>
 
-      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
-        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Focus mode geometry
-        </h2>
-        <DiagnosticPanel
-          title="Focus mode · measured card"
-          hint="Real focus card on the left, updated focus measurements on the right."
-        >
-          <FocusModeGeometryPreview />
-        </DiagnosticPanel>
-      </section>
     </div>
   );
 }
