@@ -483,7 +483,8 @@ export function SwipeableStepCard({
                 : undefined
       }
       className={cn(
-        "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300 touch-pan-y",
+        "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300",
+        variant === "focus" ? "touch-none" : "touch-pan-y",
         hasGeneratedPixto ? "overflow-visible" : "overflow-hidden shadow-card",
         /** Schedule HTML cards: ring sits flush on the white shell (no canvas “air” from ring-offset). */
         hasGeneratedPixto &&

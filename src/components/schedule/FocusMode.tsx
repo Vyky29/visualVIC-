@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -218,6 +219,49 @@ export function FocusMode({ routine, exitHref }: Props) {
   const nowStepBackCardUrl = nowStep
     ? resolveCategoryBackCardUrlForStep(nowStep)
     : undefined;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scrollY = window.scrollY;
+    const { body, documentElement } = document;
+    const prevBody = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overscrollBehavior: body.style.overscrollBehavior,
+    };
+    const prevHtml = {
+      overflow: documentElement.style.overflow,
+      overscrollBehavior: documentElement.style.overscrollBehavior,
+    };
+
+    documentElement.style.overflow = "hidden";
+    documentElement.style.overscrollBehavior = "none";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overscrollBehavior = "none";
+
+    return () => {
+      documentElement.style.overflow = prevHtml.overflow;
+      documentElement.style.overscrollBehavior = prevHtml.overscrollBehavior;
+      body.style.overflow = prevBody.overflow;
+      body.style.position = prevBody.position;
+      body.style.top = prevBody.top;
+      body.style.left = prevBody.left;
+      body.style.right = prevBody.right;
+      body.style.width = prevBody.width;
+      body.style.overscrollBehavior = prevBody.overscrollBehavior;
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-[#060807] touch-manipulation text-cream">
