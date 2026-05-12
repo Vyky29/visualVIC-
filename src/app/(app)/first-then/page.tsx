@@ -92,36 +92,36 @@ export default function FirstThenPage() {
   return (
     <div className="box-border h-[100dvh] max-h-[100dvh] overflow-hidden overscroll-none px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
       <div className="relative flex h-full max-h-full flex-col overflow-hidden">
-        <div className="flex min-h-0 flex-1 items-center justify-center">
-          <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 [@media(orientation:landscape)]:flex-row [@media(orientation:landscape)]:gap-3.5 [@media(orientation:landscape)_and_(max-height:500px)]:gap-4">
+        <div className="flex min-h-0 flex-1 items-center justify-center pb-[calc(4rem+env(safe-area-inset-bottom))] [@media(orientation:landscape)]:pb-[calc(4.25rem+env(safe-area-inset-bottom))] [@media(orientation:landscape)_and_(max-height:500px)]:pb-[calc(3.6rem+env(safe-area-inset-bottom))]">
+          <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 [@media(orientation:landscape)]:flex-row [@media(orientation:landscape)]:gap-4 [@media(orientation:landscape)_and_(max-height:500px)]:gap-5">
             <Card
               className={cn(
-                "shrink-0 border-0 bg-white shadow-none ring-1 ring-ink/14",
+                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-sage/75",
                 miniCard,
-                "w-[min(calc(100%-0.75rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-4.25rem)/2.75))]",
-                "[@media(orientation:landscape)]:w-[min(calc((100%-8.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.25rem)/1.3))]",
-                "[@media(orientation:landscape)_and_(max-height:500px)]:w-[min(calc((100%-8rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)/1.3))]",
+                "w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8.5rem)/2.75))]",
+                "[@media(orientation:landscape)]:w-[min(calc((100%-5.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.75rem)/1.3))]",
+                "[@media(orientation:landscape)_and_(max-height:500px)]:w-[min(calc((100%-6.25rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-4.75rem)/1.3))]",
               )}
             >
-              <div className="flex items-center justify-center gap-2 border-b border-ink/10 bg-ink/[0.055] py-2.5">
-                <IconFirst className="h-6 w-6 grayscale" />
+              <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-sage-mist/85 py-2.5">
+                <IconFirst className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
                   First
                 </span>
               </div>
-              <div className="relative aspect-[10/13] w-full overflow-hidden bg-white p-1.5">
+              <div className="relative aspect-[10/13] w-full overflow-hidden bg-transparent">
                 {first?.imageUrl ? (
                   <Image
                     src={first.imageUrl}
                     alt={first.title ?? "First step"}
                     fill
                     className={cn(
-                      "object-contain p-[1px]",
+                      "object-cover",
                       isPixtoLearnBundledCardUrl(first.imageUrl)
                         ? pixtoBundledCardObjectPositionClass
                         : "object-center",
                     )}
-                    sizes="(orientation: landscape) 38vw, 84vw"
+                    sizes="160px"
                     priority
                   />
                 ) : null}
@@ -129,60 +129,65 @@ export default function FirstThenPage() {
             </Card>
 
             <div className="flex shrink-0 items-center justify-center">
-              <div className="flex items-center gap-2 [@media(orientation:landscape)]:min-h-[12rem] [@media(orientation:landscape)]:flex-col [@media(orientation:landscape)]:justify-center">
-                <Link
-                  href="/menu"
-                  className="flex h-9 items-center justify-center rounded-[0.95rem] border border-ink/10 bg-white px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-8 [@media(orientation:landscape)_and_(max-height:500px)]:text-[9px]"
-                >
-                  Menu
-                </Link>
-                <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10 [@media(orientation:landscape)_and_(max-height:500px)]:h-10 [@media(orientation:landscape)_and_(max-height:500px)]:w-10">
-                  <IconThenConnector className="h-4 w-4 rotate-90 [@media(orientation:landscape)]:rotate-0 [@media(orientation:landscape)_and_(max-height:500px)]:h-3.5 [@media(orientation:landscape)_and_(max-height:500px)]:w-3.5" />
-                  <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle [@media(orientation:landscape)_and_(max-height:500px)]:text-[10px]">
-                    &amp;
-                  </span>
-                </div>
-                <Link
-                  href="/player/brushing-teeth"
-                  className="flex h-9 items-center justify-center rounded-[0.95rem] bg-ink px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-cream shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-8 [@media(orientation:landscape)_and_(max-height:500px)]:text-[9px]"
-                >
-                  Routine
-                </Link>
+              <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10 [@media(orientation:landscape)_and_(max-height:500px)]:h-10 [@media(orientation:landscape)_and_(max-height:500px)]:w-10">
+                <IconThenConnector className="h-4 w-4 rotate-90 [@media(orientation:landscape)]:rotate-0 [@media(orientation:landscape)_and_(max-height:500px)]:h-3.5 [@media(orientation:landscape)_and_(max-height:500px)]:w-3.5" />
+                <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle [@media(orientation:landscape)_and_(max-height:500px)]:text-[10px]">
+                  &amp;
+                </span>
               </div>
             </div>
 
             <Card
               className={cn(
-                "shrink-0 border-0 bg-white shadow-none ring-1 ring-ink/14",
+                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-accent/55",
                 miniCard,
-                "w-[min(calc(100%-0.75rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-4.25rem)/2.75))]",
-                "[@media(orientation:landscape)]:w-[min(calc((100%-8.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.25rem)/1.3))]",
-                "[@media(orientation:landscape)_and_(max-height:500px)]:w-[min(calc((100%-8rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)/1.3))]",
+                "w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8.5rem)/2.75))]",
+                "[@media(orientation:landscape)]:w-[min(calc((100%-5.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.75rem)/1.3))]",
+                "[@media(orientation:landscape)_and_(max-height:500px)]:w-[min(calc((100%-6.25rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-4.75rem)/1.3))]",
               )}
             >
-              <div className="flex items-center justify-center gap-2 border-b border-ink/10 bg-ink/[0.055] py-2.5">
-                <IconThen className="h-6 w-6 grayscale" />
+              <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-accent-soft/55 py-2.5">
+                <IconThen className="h-6 w-6" />
                 <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
                   Then
                 </span>
               </div>
-              <div className="relative aspect-[10/13] w-full overflow-hidden bg-white p-1.5">
+              <div className="relative aspect-[10/13] w-full overflow-hidden bg-transparent">
                 {second?.imageUrl ? (
                   <Image
                     src={second.imageUrl}
                     alt={second.title ?? "Then step"}
                     fill
                     className={cn(
-                      "object-contain p-[1px]",
+                      "object-cover",
                       isPixtoLearnBundledCardUrl(second.imageUrl)
                         ? pixtoBundledCardObjectPositionClass
                         : "object-center",
                     )}
-                    sizes="(orientation: landscape) 38vw, 84vw"
+                    sizes="160px"
                   />
                 ) : null}
               </div>
             </Card>
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-10 flex justify-center">
+          <div className="pointer-events-auto flex items-center gap-2">
+            <Link
+              href="/menu"
+              className="flex h-10 items-center justify-center rounded-[1rem] border border-ink/10 bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-9 [@media(orientation:landscape)_and_(max-height:500px)]:px-2.5 [@media(orientation:landscape)_and_(max-height:500px)]:text-[10px]"
+            >
+              Menu
+            </Link>
+            <Link
+              href="/player/brushing-teeth"
+              className={cn(
+                "flex h-10 items-center justify-center rounded-[1rem] bg-ink px-3.5 text-center text-[12px] font-semibold text-cream shadow-soft transition active:scale-[0.99] [@media(orientation:landscape)_and_(max-height:500px)]:h-9 [@media(orientation:landscape)_and_(max-height:500px)]:px-3 [@media(orientation:landscape)_and_(max-height:500px)]:text-[11px]",
+              )}
+            >
+              Open full routine
+            </Link>
           </div>
         </div>
       </div>
