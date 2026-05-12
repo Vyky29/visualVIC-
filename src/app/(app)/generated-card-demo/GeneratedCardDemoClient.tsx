@@ -234,7 +234,7 @@ function HotelPreviewCard({
         <SampleLogo size={logoSize} />
       </div>
 
-      <div className="border-y border-ink/[0.06] bg-white px-4 py-1">
+      <div className="border-y border-white bg-white px-4 py-1">
         <PreviewTitleBand lines={lines} />
       </div>
 
