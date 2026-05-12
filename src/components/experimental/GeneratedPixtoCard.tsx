@@ -44,6 +44,12 @@ export const GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H = 881 as const;
 /** Focus presentation gets a small extra horizontal stretch without changing height. */
 export const GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX = 10 as const;
 
+/** Focus-only illustration frame: same width, 10px taller upward within the top block. */
+export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME = {
+  w: GENERATED_PIXTO_ILLUSTRATION_FRAME.w,
+  h: GENERATED_PIXTO_ILLUSTRATION_FRAME.h + 10,
+} as const;
+
 /** Focus card keeps the same total height; the extra space is redistributed internally. */
 export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
   w: GENERATED_PIXTO_CARD_SIZE.w,
@@ -91,6 +97,8 @@ function categoryBandPrefersDarkInk(categoryColour: string): boolean {
 
 const ILLUSTRATION_FRAME_ASPECT =
   `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}` as const;
+const FOCUS_ILLUSTRATION_FRAME_ASPECT =
+  `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h}` as const;
 
 const ILLUSTRATION_WIDTH_FRAC =
   GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w;
@@ -102,6 +110,9 @@ const ROW_FR_CATEGORY = GENERATED_PIXTO_CATEGORY_BAND_H;
 const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
 const FOCUS_ROW_FR_TOP = GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H;
+const FOCUS_FR_TOP_SPACER =
+  GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h;
+const FOCUS_FR_ILLUSTRATION = GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h;
 
 export type GeneratedPixtoCardProps = {
   illustrationUrl: string;
@@ -439,6 +450,9 @@ export function GeneratedPixtoCard({
   const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
+  const illustrationAspect = focusPresentation
+    ? FOCUS_ILLUSTRATION_FRAME_ASPECT
+    : ILLUSTRATION_FRAME_ASPECT;
   const illustrationObjectClass = focusPresentation
     ? "object-cover object-center origin-center"
     : "object-contain object-center";
@@ -486,7 +500,7 @@ export function GeneratedPixtoCard({
             width: markSize,
             height: markSize,
             transform: focusPresentation
-              ? "translate(-40px, 0px)"
+              ? "translate(-37px, 0px)"
               : "translate(-40px, 8px)",
           }}
           aria-hidden
@@ -516,7 +530,7 @@ export function GeneratedPixtoCard({
             style={{
               flex: `${
                 focusPresentation
-                  ? FOCUS_ROW_FR_TOP - GENERATED_PIXTO_ILLUSTRATION_FRAME.h
+                  ? FOCUS_FR_TOP_SPACER
                   : FR_TOP_SPACER
               } 1 0`,
             }}
@@ -524,14 +538,18 @@ export function GeneratedPixtoCard({
           />
           <div
             className="relative flex w-full min-h-0 shrink-0 items-start justify-center"
-            style={{ flex: `${FR_ILLUSTRATION} 1 0` }}
+            style={{
+              flex: `${
+                focusPresentation ? FOCUS_FR_ILLUSTRATION : FR_ILLUSTRATION
+              } 1 0`,
+            }}
           >
             <div className="flex h-full w-full min-h-0 items-center justify-center">
               <div
                 className="relative min-h-0 overflow-hidden"
                 style={{
                   width: `min(${illustrationWidthPct}, 100%)`,
-                  aspectRatio: ILLUSTRATION_FRAME_ASPECT,
+                  aspectRatio: illustrationAspect,
                   maxHeight: "100%",
                 }}
               >
