@@ -18,7 +18,7 @@ import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-d
 import { cn } from "@/lib/utils/cn";
 
 const cardShell =
-  "relative overflow-hidden rounded-[1.35rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
+  "relative overflow-hidden rounded-[1.45rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_9px_30px_-14px_rgba(28,36,32,0.2)]";
 const WOW_CARD_ASPECT = "744 / 1054";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 
@@ -279,15 +279,15 @@ function StepVisualCard({
         className,
       )}
     >
-      <div className="flex items-center justify-center gap-2 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-2.5">
+      <div className="flex items-center justify-center gap-2.5 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-3">
         <div className="grayscale">{icon}</div>
-        <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
+        <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-ink">
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-[10px]">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-3">
         <div
-          className="relative mx-auto flex h-full max-h-[88%] w-[84%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[91%] w-[91%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -426,14 +426,14 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.7rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.35rem,5.5vw,3.25rem)] px-[0.35rem]">
+          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(2.85rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
-                    icon={<IconFirst className="h-6 w-6" />}
+                    icon={<IconFirst className="h-7 w-7" />}
                     className="h-full"
                   />
                 </div>
@@ -444,14 +444,14 @@ export default function FirstThenDemoPage() {
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
-                    icon={<IconThen className="h-6 w-6" />}
+                    icon={<IconThen className="h-7 w-7" />}
                     className="h-full"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-0 top-[max(0.5rem,env(safe-area-inset-left))] z-20 flex flex-col items-end justify-end gap-3 pr-[max(0.7rem,env(safe-area-inset-bottom))]">
+            <div className="pointer-events-none absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-0 top-[max(0.5rem,env(safe-area-inset-left))] z-20 flex translate-x-[min(1.85rem,5.5vw)] flex-col items-end justify-end gap-3 pr-[max(0.35rem,env(safe-area-inset-bottom))]">
               <Link
                 href="/dashboard"
                 className="pointer-events-auto flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
