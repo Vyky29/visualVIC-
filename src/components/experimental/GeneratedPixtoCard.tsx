@@ -142,6 +142,35 @@ const FOCUS_CARD_ASPECT =
 const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
 const SCHEDULE_TITLE_MAX_LINES = 3;
 const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
+const FOCUS_TITLE_TARGET_VISUAL_WIDTH = 15.4;
+const FOCUS_TITLE_BASE_FONT_PX = 42;
+
+const FOCUS_TITLE_SIZE_CANDIDATES = [
+  {
+    fontPx: 42,
+    className: "text-[42px] sm:text-[48px] tracking-[-0.028em] leading-[1.04]",
+  },
+  {
+    fontPx: 40,
+    className: "text-[40px] sm:text-[46px] tracking-[-0.026em] leading-[1.04]",
+  },
+  {
+    fontPx: 38,
+    className: "text-[38px] sm:text-[44px] tracking-[-0.024em] leading-[1.03]",
+  },
+  {
+    fontPx: 36,
+    className: "text-[36px] sm:text-[42px] tracking-[-0.022em] leading-[1.03]",
+  },
+  {
+    fontPx: 34,
+    className: "text-[34px] sm:text-[40px] tracking-[-0.02em] leading-[1.02]",
+  },
+  {
+    fontPx: 32,
+    className: "text-[32px] sm:text-[38px] tracking-[-0.018em] leading-[1.02]",
+  },
+] as const;
 
 function estimateScheduleWordVisualWidth(word: string): number {
   let width = 0;
@@ -263,15 +292,87 @@ function scheduleTitleBandTypography(lineCount: 1 | 2 | 3): string {
   );
 }
 
-function focusTitleBandTypography(lineCount: 1 | 2 | 3): string {
-  return cn(
-    titleTypographyBase,
-    lineCount === 1
-      ? "text-[60px] sm:text-[68px] tracking-[-0.03em] leading-[1.08]"
-      : lineCount === 2
-        ? "text-[42px] sm:text-[48px] tracking-[-0.028em] leading-[1.04]"
-        : "text-[34px] sm:text-[40px] tracking-[-0.024em] leading-[1.02]",
-  );
+function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
+  if (words.length <= 1) {
+    return [words.join(" ")];
+  }
+
+  let bestLines = [words.join(" ")];
+  let bestScore = Number.POSITIVE_INFINITY;
+
+  for (let index = 1; index < words.length; index += 1) {
+    const lines = [words.slice(0, index), words.slice(index)];
+    const widths = lines.map((line) => estimateScheduleLineVisualWidth(line));
+    const maxWidth = Math.max(...widths);
+    const minWidth = Math.min(...widths);
+    const overflowPenalty = widths.reduce(
+      (sum, width) => sum + Math.max(0, width - allowedWidth),
+      0,
+    );
+    const singleWordPenalty = lines.reduce(
+      (sum, line) => sum + (line.length === 1 ? 1 : 0),
+      0,
+    );
+    const balancePenalty = maxWidth - minWidth;
+    const score = overflowPenalty * 100 + singleWordPenalty * 4 + balancePenalty;
+
+    if (score < bestScore) {
+      bestScore = score;
+      bestLines = lines.map((line) => line.join(" "));
+    }
+  }
+
+  return bestLines;
+}
+
+function resolveFocusTitleLayout(raw: string): {
+  lines: string[];
+  className: string;
+} {
+  const words = raw.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    return {
+      lines: raw.trim() ? [raw.trim()] : [""],
+      className: cn(titleTypographyBase, FOCUS_TITLE_SIZE_CANDIDATES[0].className),
+    };
+  }
+
+  const fullWidth = estimateScheduleLineVisualWidth(words);
+
+  for (const candidate of FOCUS_TITLE_SIZE_CANDIDATES) {
+    const allowedWidth =
+      FOCUS_TITLE_TARGET_VISUAL_WIDTH *
+      (FOCUS_TITLE_BASE_FONT_PX / candidate.fontPx);
+
+    if (fullWidth <= allowedWidth) {
+      return {
+        lines: [words.join(" ")],
+        className: cn(titleTypographyBase, candidate.className),
+      };
+    }
+
+    const splitLines = splitTitleFocusLines(words, allowedWidth);
+    const splitWidths = splitLines.map((line) =>
+      estimateScheduleLineVisualWidth(line.split(/\s+/).filter(Boolean)),
+    );
+
+    if (Math.max(...splitWidths) <= allowedWidth) {
+      return {
+        lines: splitLines,
+        className: cn(titleTypographyBase, candidate.className),
+      };
+    }
+  }
+
+  const fallback = FOCUS_TITLE_SIZE_CANDIDATES[FOCUS_TITLE_SIZE_CANDIDATES.length - 1];
+  return {
+    lines: splitTitleFocusLines(
+      words,
+      FOCUS_TITLE_TARGET_VISUAL_WIDTH *
+        (FOCUS_TITLE_BASE_FONT_PX / fallback.fontPx),
+    ),
+    className: cn(titleTypographyBase, fallback.className),
+  };
 }
 
 function GeneratedPixtoDebugGuides({
@@ -343,6 +444,29 @@ function TitleBand({
     () => splitTitleScheduleLines(title),
     [title],
   );
+  const focusTitleLayout = useMemo(
+    () => (focusPresentation ? resolveFocusTitleLayout(title) : null),
+    [focusPresentation, title],
+  );
+
+  if (focusPresentation && focusTitleLayout) {
+    return (
+      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden bg-white px-2 py-1">
+        <div
+          className={cn(
+            "relative z-10 flex h-full min-h-0 w-full flex-col items-center justify-center gap-0 overflow-hidden px-0.5 text-center",
+            focusTitleLayout.className,
+          )}
+        >
+          {focusTitleLayout.lines.map((line, index) => (
+            <span key={`${line}-${index}`} className="block w-full max-w-[97%] whitespace-nowrap">
+              {line}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (isDense || (!focusPresentation && !scheduleLargeType)) {
     return (
@@ -367,22 +491,14 @@ function TitleBand({
   const row2Two = n === 2 ? safeLines[1] : "";
   const row2Three =
     n >= 3 ? safeLines.slice(2).join(" ") : "";
-  const bandTypo = focusPresentation
-    ? focusTitleBandTypography(n)
-    : scheduleTitleBandTypography(n);
-  const bandLineLeading = focusPresentation
-    ? n === 1
-      ? "leading-[1.08]"
-      : n === 2
-        ? "leading-[1.04]"
-        : "leading-[1.02]"
-    : n === 1
-      ? "leading-[1.14]"
-      : n === 2
-        ? "leading-[1.1]"
-        : "leading-[1.08]";
-  const bandShellPx = focusPresentation ? "px-2" : "px-4";
-  const bandInnerWidth = focusPresentation ? "max-w-[97%]" : "max-w-full";
+  const bandTypo = scheduleTitleBandTypography(n);
+  const bandLineLeading = n === 1
+    ? "leading-[1.14]"
+    : n === 2
+      ? "leading-[1.1]"
+      : "leading-[1.08]";
+  const bandShellPx = "px-4";
+  const bandInnerWidth = "max-w-full";
 
   return (
     <div className={cn(
