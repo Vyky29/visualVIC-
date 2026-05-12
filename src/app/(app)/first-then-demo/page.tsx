@@ -359,7 +359,7 @@ export default function FirstThenDemoPage() {
                 href="/player/brushing-teeth"
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/82 text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
               >
-                <RoutinesHomeIcon />
+                <RoutinesHomeIcon className="rotate-90" />
               </Link>
 
               <Link
