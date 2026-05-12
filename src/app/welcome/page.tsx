@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import {
   BRAND_ICON_AMBER,
   BRAND_ICON_PINK,
-  BRAND_ICON_TEAL,
 } from "@/lib/constants/brand";
 
 const features = [
@@ -25,14 +24,6 @@ const features = [
     to: "#F5C84D",
     previewSrc: "/welcome/focus-mode.png",
     previewAlt: "Focus Mode screenshot",
-  },
-  {
-    title: "Library View",
-    body: "Browse packs, objects and steps in one view.",
-    from: BRAND_ICON_TEAL,
-    to: "#6FD0C8",
-    previewSrc: "/welcome/library-view.png",
-    previewAlt: "Library screenshot",
   },
 ] as const;
 
@@ -77,7 +68,7 @@ export default function WelcomePage() {
         </p>
       </header>
 
-      <div className="grid min-h-0 grid-cols-3 gap-1.5 overflow-hidden py-0.5">
+      <div className="grid min-h-0 grid-cols-2 gap-2 overflow-hidden py-0.5">
         {features.map((feature) => (
           <section
             key={feature.title}
@@ -96,7 +87,7 @@ export default function WelcomePage() {
               <p className="mt-1 text-[8px] leading-[1.25] text-ink-subtle sm:text-[9px]">
                 {feature.body}
               </p>
-              <div className="mt-1.5 min-h-0 flex-1">
+              <div className="mt-1 min-h-0 flex-1">
                 <WelcomePreview
                   src={feature.previewSrc}
                   alt={feature.previewAlt}
@@ -107,16 +98,16 @@ export default function WelcomePage() {
         ))}
       </div>
 
-      <footer className="shrink-0 space-y-1.5 pt-0.5">
+      <footer className="shrink-0 space-y-1 pt-0.5">
         <Link href="/dashboard" className="block w-full">
-          <Button className="min-h-[42px] w-full py-2 text-[14px]">
+          <Button className="min-h-[38px] w-full whitespace-nowrap px-4 py-1.5 text-[13px]">
             Enter home
           </Button>
         </Link>
         <Link href="/auth" className="block w-full">
           <Button
             variant="secondary"
-            className="min-h-[42px] w-full py-2 text-[14px]"
+            className="min-h-[38px] w-full whitespace-nowrap px-4 py-1.5 text-[13px]"
           >
             Preview sign-in layout
           </Button>
