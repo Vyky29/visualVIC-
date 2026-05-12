@@ -121,7 +121,7 @@ function SampleLogo({
 function PreviewTitleBand({
   lines,
 }: {
-  lines: [string] | [string, string] | [string, string, string];
+  lines: [string] | [string, string];
 }) {
   const compactWordSpacing = lines.length > 1 ? "-0.08em" : "0";
 
@@ -207,7 +207,7 @@ function HotelPreviewCard({
   logoSize,
   geometry,
 }: {
-  lines: [string] | [string, string] | [string, string, string];
+  lines: [string] | [string, string];
   logoSize: number;
   geometry: CardGeometry;
 }) {
@@ -264,8 +264,8 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — original card, expanded original card, and three hotel-style cards using
-          the expanded geometry.
+          — original card 1, original card 2, and two hotel-style cards locked to
+          original card 2.
         </p>
       </div>
 
@@ -301,21 +301,10 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Hotel look · 2 lines"
-            hint="Expanded white area with a bit more breathing room between the two lines."
+            hint="Same locked geometry as original card 2, with the text forced into a maximum of two lines."
           >
             <HotelPreviewCard
-              lines={["arrive at", "the hotel"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Hotel look · 3 lines"
-            hint="Expanded white area with the same text size and a little more air for the three lines."
-          >
-            <HotelPreviewCard
-              lines={["receive", "your room", "key"]}
+              lines={["receive your", "room key"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
             />
