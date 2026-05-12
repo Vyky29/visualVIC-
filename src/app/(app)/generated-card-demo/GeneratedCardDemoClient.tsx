@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Header } from "@/components/navigation/Header";
 import {
   GENERATED_PIXTO_CARD_SIZE,
@@ -30,6 +31,7 @@ const ORIGINAL_CARD_PREVIEW_W = 284 as const;
 const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
 const FOCUS_CARD_PREVIEW_W = 320 as const;
+const FOCUS_PHONE_CARD_PREVIEW_W = 396 as const;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -392,7 +394,7 @@ function FocusFlipPreview({
   phoneFrame?: boolean;
 }) {
   const [flipped, setFlipped] = useState(false);
-  const widthPx = phoneFrame ? 390 : FOCUS_CARD_PREVIEW_W;
+  const widthPx = phoneFrame ? FOCUS_PHONE_CARD_PREVIEW_W : FOCUS_CARD_PREVIEW_W;
 
   const flipCard = (
     <button
@@ -440,20 +442,20 @@ function FocusFlipPreview({
 
   return (
     <div
-      className="mx-auto overflow-hidden rounded-[2rem] border border-ink/[0.08] bg-[#060807] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+      className="mx-auto overflow-hidden rounded-[2rem] border border-ink/[0.08] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
       style={{
         width: `min(100%, ${IPHONE_16_PRO_VIEWPORT.w}px)`,
         aspectRatio: `${IPHONE_16_PRO_VIEWPORT.w} / ${IPHONE_16_PRO_VIEWPORT.h}`,
       }}
     >
-      <div className="flex h-full min-h-0 flex-col px-3 py-3 text-cream">
-        <div className="rounded-full bg-white/10 px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-cream/90">
+      <div className="flex h-full min-h-0 flex-col px-1.5 py-1.5 text-ink">
+        <div className="rounded-full bg-canvas-muted px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-ink-subtle">
           iphone 16 pro · 402 x 874
         </div>
-        <div className="flex min-h-0 flex-1 items-center justify-center py-4">
+        <div className="flex min-h-0 flex-1 items-start justify-center pt-2">
           {flipCard}
         </div>
-        <p className="text-center text-[11px] text-cream/55">Tap the card to flip</p>
+        <p className="pb-1 text-center text-[11px] text-ink-faint">Tap the card to flip</p>
       </div>
     </div>
   );
@@ -567,9 +569,17 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Focus · iPhone 16 Pro"
-            hint="Same focus card inside a full iPhone 16 Pro viewport."
+            hint="Same focus card inside a full iPhone 16 Pro viewport, with almost no visible frame around it."
           >
             <FocusFlipPreview phoneFrame />
+            <div className="mt-3 flex justify-center">
+              <Link
+                href="/generated-card-demo/focus-flow"
+                className="inline-flex min-h-touch items-center justify-center rounded-2xl bg-ink px-4 py-3 text-[14px] font-semibold text-cream shadow-soft transition active:scale-[0.99]"
+              >
+                Open real focus flow
+              </Link>
+            </div>
           </DiagnosticPanel>
         </div>
       </section>
