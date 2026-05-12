@@ -18,7 +18,7 @@ import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-d
 import { cn } from "@/lib/utils/cn";
 
 const cardShell =
-  "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-[#F1F4F6] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
+  "relative overflow-hidden rounded-[1.35rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
 const WOW_CARD_ASPECT = "744 / 1054";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 
@@ -266,13 +266,13 @@ function StepVisualCard({
         className,
       )}
     >
-      <div className="flex items-center justify-center gap-2 border-b-2 border-[#CDD3D8] bg-[#F1F4F6] py-2.5">
+      <div className="flex items-center justify-center gap-2 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-2.5">
         <div className="grayscale">{icon}</div>
         <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F1F4F6] p-[10px]">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-[10px]">
         <div
           className="relative mx-auto flex h-full max-h-[88%] w-[84%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
@@ -348,7 +348,7 @@ export default function FirstThenDemoPage() {
     return (
       <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.65rem,env(safe-area-inset-bottom))]">
         <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-2.5">
-          <div className="flex flex-col items-center justify-center gap-1 pt-0.5 text-center">
+          <div className="flex items-center justify-center gap-2 pt-0.5 text-center">
             <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
             <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
               First &amp; Then
@@ -358,7 +358,7 @@ export default function FirstThenDemoPage() {
           <div className="grid min-h-0 grid-rows-2 gap-2">
             <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-center">
+              <div className="flex min-h-0 items-center justify-start">
                 <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
                   <MiniDigitalWowCard card={first} />
                 </div>
@@ -367,7 +367,7 @@ export default function FirstThenDemoPage() {
 
             <div className="grid min-h-0 grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-center">
+              <div className="flex min-h-0 items-center justify-start">
                 <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.5rem)/2.72))] max-w-[13.5rem]">
                   <MiniDigitalWowCard card={second} />
                 </div>
@@ -390,10 +390,10 @@ export default function FirstThenDemoPage() {
   }
 
   return (
-    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-black touch-manipulation">
+    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-black px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
+          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
             <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_4.5rem_minmax(0,1fr)] items-center gap-1 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
