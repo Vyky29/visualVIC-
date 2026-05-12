@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Header } from "@/components/navigation/Header";
+import { SchedulePlayer } from "@/components/schedule/SchedulePlayer";
 import {
   GeneratedPixtoCard,
   GENERATED_PIXTO_CARD_SIZE,
@@ -22,11 +22,13 @@ import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
   HOTEL_GENERATED_CARD_PROPS,
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
+  routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import {
   atTheHotelBackCardUrl,
   atTheHotelPackMarkUrl,
 } from "@/lib/cards/at-the-hotel-cards";
+import type { Routine } from "@/lib/types/routine";
 import { cn } from "@/lib/utils/cn";
 
 const HOTEL_RIBBON_TEXT = "at the hotel";
@@ -36,14 +38,12 @@ const HOTEL_BACKCARD_URL = atTheHotelBackCardUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
-const IPHONE_16_PRO_VIEWPORT = { w: 402.4, h: 874 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
 const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
 const FOCUS_DEMO_VISIBLE_W = 357.5 as const;
 const FOCUS_DEMO_VISIBLE_H = 619.4 as const;
 const FOCUS_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
-const FOCUS_PHONE_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
 const FOCUS_GEOMETRY_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
 
 type PreviewTextStyle = {
@@ -89,6 +89,7 @@ const FOCUS_GEOMETRY: CardGeometry = {
 
 const FOCUS_MODE_SAMPLE_CARD =
   HOTEL_GENERATED_CARD_PROPS[3] ?? HOTEL_GENERATED_CARD_PROPS[0];
+const DEMO_SCHEDULE_FLOW_CARDS = HOTEL_GENERATED_CARD_PROPS.slice(0, 4);
 
 const LOCKED_PREVIEW_TEXT_STYLE: PreviewTextStyle = {
   textSizeClassName: TITLE_TEXT_SIZE_CLASS,
@@ -497,13 +498,9 @@ function FocusModeRealCardBack({
   );
 }
 
-function FocusFlipPreview({
-  phoneFrame = false,
-}: {
-  phoneFrame?: boolean;
-}) {
+function FocusFlipPreview() {
   const [flipped, setFlipped] = useState(false);
-  const widthPx = phoneFrame ? FOCUS_PHONE_CARD_PREVIEW_W : FOCUS_CARD_PREVIEW_W;
+  const widthPx = FOCUS_CARD_PREVIEW_W;
 
   const flipCard = (
     <button
@@ -533,37 +530,15 @@ function FocusFlipPreview({
     </button>
   );
 
-  if (!phoneFrame) {
-    return (
-      <div className="space-y-3">
-        <div
-          className="mx-auto flex w-full items-center justify-center rounded-[1.75rem] bg-[#060807] py-5"
-          style={{ maxWidth: `${FOCUS_DEMO_VISIBLE_W}px` }}
-        >
-          {flipCard}
-        </div>
-        <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
-      </div>
-    );
-  }
-
   return (
-    <div
-      className="mx-auto overflow-hidden rounded-[2rem] border border-ink/[0.08] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
-      style={{
-        width: `min(100%, ${IPHONE_16_PRO_VIEWPORT.w}px)`,
-        aspectRatio: `${IPHONE_16_PRO_VIEWPORT.w} / ${IPHONE_16_PRO_VIEWPORT.h}`,
-      }}
-    >
-      <div className="flex h-full min-h-0 flex-col py-1.5 text-ink">
-        <div className="rounded-full bg-canvas-muted px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-ink-subtle">
-          iphone 16 pro · 402.4 x 874
-        </div>
-        <div className="flex min-h-0 flex-1 items-center justify-center pt-2">
-          {flipCard}
-        </div>
-        <p className="pb-1 text-center text-[11px] text-ink-faint">Tap the card to flip</p>
+    <div className="space-y-3">
+      <div
+        className="mx-auto flex w-full items-center justify-center rounded-[1.75rem] bg-[#060807] py-5"
+        style={{ maxWidth: `${FOCUS_DEMO_VISIBLE_W}px` }}
+      >
+        {flipCard}
       </div>
+      <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
     </div>
   );
 }
@@ -687,6 +662,22 @@ function FocusModeGeometryPreview() {
 }
 
 export function GeneratedCardDemoClient() {
+  const scheduleFlowRoutine = useMemo<Routine>(() => {
+    const suffix =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : String(Date.now());
+
+    return {
+      id: `generated-card-demo-schedule-${suffix}`,
+      name: "Hotel generated cards",
+      steps: routineStepsFromGeneratedCardProps(
+        `generated-card-demo-schedule-${suffix}`,
+        DEMO_SCHEDULE_FLOW_CARDS,
+      ),
+    };
+  }, []);
+
   return (
     <div className="pb-10">
       <Header title="Generated card demo" backHref="/menu" />
@@ -695,7 +686,8 @@ export function GeneratedCardDemoClient() {
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
           — original card 1, original card 2, two locked text cards, and a flow
-          preview for now, next, focus, plus a measured focus shell.
+          preview for now, next, focus, plus a measured focus shell and exact
+          schedule flow.
         </p>
       </div>
 
@@ -786,22 +778,25 @@ export function GeneratedCardDemoClient() {
           >
             <FocusFlipPreview />
           </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Focus · iPhone 16 Pro"
-            hint="Same focus card inside a full iPhone 16 Pro viewport, with almost no visible frame around it."
-          >
-            <FocusFlipPreview phoneFrame />
-            <div className="mt-3 flex justify-center">
-              <Link
-                href="/generated-card-demo/focus-flow"
-                className="inline-flex min-h-touch items-center justify-center rounded-2xl bg-ink px-4 py-3 text-[14px] font-semibold text-cream shadow-soft transition active:scale-[0.99]"
-              >
-                Open real focus flow
-              </Link>
-            </div>
-          </DiagnosticPanel>
         </div>
+      </section>
+
+      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
+        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
+          Exact schedule flow
+        </h2>
+        <DiagnosticPanel
+          title="Schedule player · now, next, focus"
+          hint="Real schedule-player behavior inside the demo. Use Focus Mode on the current card, then swipe in focus to move to the next one."
+        >
+          <SchedulePlayer
+            routine={scheduleFlowRoutine}
+            backHref="/generated-card-demo"
+            getFocusHref={({ nowIndex }) =>
+              `/generated-card-demo/focus-flow?start=${nowIndex}`
+            }
+          />
+        </DiagnosticPanel>
       </section>
 
       <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">

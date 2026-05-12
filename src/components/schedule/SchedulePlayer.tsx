@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import type { Routine } from "@/lib/types/routine";
+import type { Routine, RoutineStep } from "@/lib/types/routine";
 import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
 import { useRoutinePlayback } from "@/hooks/useRoutinePlayback";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +18,11 @@ import { cn } from "@/lib/utils/cn";
 type Props = {
   routine: Routine;
   backHref: string;
+  getFocusHref?: (args: {
+    routine: Routine;
+    nowStep: RoutineStep;
+    nowIndex: number;
+  }) => string;
 };
 
 function FocusButtonIcon() {
@@ -66,7 +71,11 @@ function CloseButtonIcon() {
   );
 }
 
-export function SchedulePlayer({ routine, backHref }: Props) {
+export function SchedulePlayer({
+  routine,
+  backHref,
+  getFocusHref,
+}: Props) {
   const router = useRouter();
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
   const scheduleChrome = useMemo(
@@ -83,6 +92,7 @@ export function SchedulePlayer({ routine, backHref }: Props) {
     stepStatus,
     completedCount,
     totalSteps,
+    nowIndex,
   } = useRoutinePlayback(routine, {
     syncSession: true,
     appendFinishStep: true,
@@ -91,10 +101,15 @@ export function SchedulePlayer({ routine, backHref }: Props) {
   const progress =
     totalSteps === 0 ? 0 : Math.round((completedCount / totalSteps) * 100);
 
-  const focusHref = `/focus/${routine.id}`;
   const showFirstThen = routine.tags?.includes("first-then") ?? false;
 
-  const openFocus = () => router.push(focusHref);
+  const openFocus = () => {
+    if (!nowStep) return;
+    const focusHref = getFocusHref
+      ? getFocusHref({ routine, nowStep, nowIndex })
+      : `/focus/${routine.id}`;
+    router.push(focusHref);
+  };
 
   return (
     <div className="flex flex-col gap-6 px-5 pb-10 pt-1">
