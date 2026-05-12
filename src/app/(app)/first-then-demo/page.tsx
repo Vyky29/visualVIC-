@@ -1,6 +1,8 @@
+ "use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { getRoutineById } from "@/lib/mock/routines";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -90,18 +92,21 @@ function StepVisualCard({
   tone,
   label,
   icon,
+  className,
 }: {
   imageUrl?: string;
   alt: string;
   tone: "sage" | "accent";
   label: "First" | "Then";
   icon: ReactNode;
+  className?: string;
 }) {
   return (
     <article
       className={cn(
         cardShell,
         tone === "sage" ? "ring-2 ring-sage/75" : "ring-2 ring-accent/55",
+        className,
       )}
     >
       <div
@@ -137,60 +142,99 @@ function StepVisualCard({
 }
 
 export default function FirstThenDemoPage() {
+  const [viewport, setViewport] = useState({ w: 402, h: 874 });
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setViewport({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      });
+    };
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+
+    const orientation = window.screen?.orientation;
+    if (orientation?.lock) {
+      orientation.lock("portrait").catch(() => {});
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      orientation?.unlock?.();
+    };
+  }, []);
+
   const brushing = getRoutineById("brushing-teeth");
   const first = brushing?.steps[0];
   const second = brushing?.steps[1];
+  const shortSide = Math.min(viewport.w, viewport.h);
+  const longSide = Math.max(viewport.w, viewport.h);
+  const sceneScale = Math.min(viewport.w / shortSide, viewport.h / longSide);
+  const sceneStyle: CSSProperties = {
+    width: `${longSide}px`,
+    height: `${shortSide}px`,
+    transform: `translate(-50%, -50%) rotate(90deg) scale(${sceneScale})`,
+    transformOrigin: "center center",
+  };
 
   return (
-    <div className="box-border h-[100dvh] max-h-[100dvh] overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-      <div className="grid h-full max-h-full grid-rows-[minmax(0,1fr)_auto] overflow-hidden">
-        <div className="flex min-h-0 items-center justify-center pb-4 [@media(orientation:landscape)]:pb-5">
-          <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 [@media(orientation:landscape)]:flex-row [@media(orientation:landscape)]:gap-4">
-            <div className="w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-6.75rem)/2.72))] shrink-0 [@media(orientation:landscape)]:w-[min(calc((100%-6rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.5rem)/1.32))]">
-              <StepVisualCard
-                imageUrl={first?.imageUrl}
-                alt={first?.title ?? "First step"}
-                tone="sage"
-                label="First"
-                icon={<IconFirst className="h-6 w-6" />}
-              />
+    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
+      <div className="relative h-full w-full overflow-hidden">
+        <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
+          <div className="grid h-full w-full grid-rows-[3.25rem_minmax(0,1fr)] bg-canvas px-[max(0.75rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
+            <div className="flex items-center justify-between gap-3">
+              <Link
+                href="/menu"
+                className="inline-flex h-9 items-center justify-center rounded-full border border-ink/10 bg-white/92 px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft backdrop-blur-sm"
+              >
+                Menu
+              </Link>
+              <Link
+                href="/player/brushing-teeth"
+                className="inline-flex h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[11px] font-semibold text-cream shadow-soft"
+              >
+                Open full routine
+              </Link>
             </div>
 
-            <div className="flex shrink-0 items-center justify-center">
-              <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10">
-                <IconConnector className="h-4 w-4 rotate-90 [@media(orientation:landscape)]:rotate-0" />
-                <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle">
-                  &amp;
-                </span>
+            <div className="grid min-h-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-1 pb-1">
+              <div className="flex h-full min-h-0 items-center justify-center">
+                <div className="aspect-[10/13] h-full max-h-full">
+                  <StepVisualCard
+                    imageUrl={first?.imageUrl}
+                    alt={first?.title ?? "First step"}
+                    tone="sage"
+                    label="First"
+                    icon={<IconFirst className="h-6 w-6" />}
+                    className="h-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex h-full items-center justify-center">
+                <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-full bg-canvas-muted/96 ring-1 ring-ink/10 shadow-[0_8px_18px_-14px_rgba(28,36,32,0.35)]">
+                  <IconConnector className="h-4 w-4" />
+                  <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle">
+                    &amp;
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex h-full min-h-0 items-center justify-center">
+                <div className="aspect-[10/13] h-full max-h-full">
+                  <StepVisualCard
+                    imageUrl={second?.imageUrl}
+                    alt={second?.title ?? "Then step"}
+                    tone="accent"
+                    label="Then"
+                    icon={<IconThen className="h-6 w-6" />}
+                    className="h-full"
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-6.75rem)/2.72))] shrink-0 [@media(orientation:landscape)]:w-[min(calc((100%-6rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.5rem)/1.32))]">
-              <StepVisualCard
-                imageUrl={second?.imageUrl}
-                alt={second?.title ?? "Then step"}
-                tone="accent"
-                label="Then"
-                icon={<IconThen className="h-6 w-6" />}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-center pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-          <div className="flex items-center gap-2">
-            <Link
-              href="/menu"
-              className="flex h-10 items-center justify-center rounded-[1rem] border border-ink/10 bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99]"
-            >
-              Menu
-            </Link>
-            <Link
-              href="/player/brushing-teeth"
-              className="flex h-10 items-center justify-center rounded-[1rem] bg-ink px-3.5 text-center text-[12px] font-semibold text-cream shadow-soft transition active:scale-[0.99]"
-            >
-              Open full routine
-            </Link>
           </div>
         </div>
       </div>
