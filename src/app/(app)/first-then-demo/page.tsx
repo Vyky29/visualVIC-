@@ -155,7 +155,12 @@ export default function FirstThenDemoPage() {
     updateViewport();
     window.addEventListener("resize", updateViewport);
 
-    const orientation = window.screen?.orientation;
+    const orientation = window.screen?.orientation as
+      | (ScreenOrientation & {
+          lock?: (orientation: "portrait") => Promise<void>;
+          unlock?: () => void;
+        })
+      | undefined;
     if (orientation?.lock) {
       orientation.lock("portrait").catch(() => {});
     }

@@ -45,6 +45,7 @@ type PreviewTextStyle = {
   trackingClassName: string;
   lineGapClassName: string;
   wordSpacing: string;
+  style?: React.CSSProperties;
 };
 
 type CardGeometry = {
@@ -67,6 +68,8 @@ type DocumentedCardProps = {
   cardHeight?: number;
   heightPx?: number;
   ribbonH?: number;
+  titleTextStyle?: PreviewTextStyle;
+  ribbonTextStyle?: React.CSSProperties;
 };
 
 const ORIGINAL_GEOMETRY: CardGeometry = {
@@ -97,6 +100,25 @@ const DOCUMENTED_TEXT_STYLE: PreviewTextStyle = {
   trackingClassName: "tracking-[-0.02em]",
   lineGapClassName: "gap-[0.18em]",
   wordSpacing: "0",
+};
+
+const FOCUS_DOCUMENTED_TEXT_STYLE: PreviewTextStyle = {
+  textSizeClassName: "text-[42px]",
+  lineHeightClassName: "leading-[1.04]",
+  trackingClassName: "tracking-[-0.028em]",
+  lineGapClassName: "gap-0",
+  wordSpacing: "0",
+  style: {
+    fontSize: "42px",
+    lineHeight: 1.04,
+    letterSpacing: "-0.028em",
+  },
+};
+
+const FOCUS_DOCUMENTED_RIBBON_STYLE: React.CSSProperties = {
+  fontSize: "32px",
+  lineHeight: 1,
+  letterSpacing: "-0.014em",
 };
 
 function DiagnosticPanel({
@@ -184,6 +206,7 @@ function PreviewTitleBand({
           width: `min(100%, ${TEXT_BOX_SIZE.w}px)`,
           height: `min(100%, ${TEXT_BOX_SIZE.h}px)`,
           wordSpacing: textStyle.wordSpacing,
+          ...textStyle.style,
         }}
       >
         {lines.map((line, index) => (
@@ -222,6 +245,8 @@ function DocumentedCard({
   cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
   heightPx,
   ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
+  titleTextStyle = DOCUMENTED_TEXT_STYLE,
+  ribbonTextStyle,
 }: DocumentedCardProps) {
   return (
     <article
@@ -267,7 +292,7 @@ function DocumentedCard({
       </div>
 
       <div className="relative border-y border-white bg-white px-4 py-1">
-        <PreviewTitleBand lines={titleLines} />
+        <PreviewTitleBand lines={titleLines} textStyle={titleTextStyle} />
       </div>
 
       <div
@@ -280,6 +305,7 @@ function DocumentedCard({
             TITLE_TEXT_SIZE_CLASS,
             TITLE_LINE_HEIGHT_CLASS,
           )}
+          style={ribbonTextStyle}
         >
           {HOTEL_RIBBON_TEXT}
         </span>
@@ -301,6 +327,8 @@ function DocumentedCardPanel({
   heightPx,
   ribbonH,
   extraMetrics = [],
+  titleTextStyle,
+  ribbonTextStyle,
 }: {
   title: string;
   hint: string;
@@ -314,6 +342,8 @@ function DocumentedCardPanel({
   heightPx?: number;
   ribbonH?: number;
   extraMetrics?: Metric[];
+  titleTextStyle?: PreviewTextStyle;
+  ribbonTextStyle?: React.CSSProperties;
 }) {
   const resolvedCardHeight = cardHeight ?? GENERATED_PIXTO_CARD_SIZE.h;
   const resolvedRibbonH = ribbonH ?? GENERATED_PIXTO_CATEGORY_BAND_H;
@@ -345,6 +375,8 @@ function DocumentedCardPanel({
         cardHeight={resolvedCardHeight}
         heightPx={heightPx}
         ribbonH={resolvedRibbonH}
+        titleTextStyle={titleTextStyle}
+        ribbonTextStyle={ribbonTextStyle}
       />
       <MetricList metrics={metrics} />
     </DiagnosticPanel>
@@ -369,7 +401,7 @@ export function GeneratedCardDemoClient() {
         </h2>
         <div className="grid gap-4 lg:grid-cols-2">
           <DocumentedCardPanel
-            title="Original 1"
+            title="fisical card (wow)"
             hint="Original Figma card shell kept here as the first reference."
             titleLines={["breakfast time"]}
             geometry={ORIGINAL_GEOMETRY}
@@ -380,7 +412,7 @@ export function GeneratedCardDemoClient() {
           />
 
           <DocumentedCardPanel
-            title="Original 2"
+            title="digital card (wow)"
             hint="Expanded white area reference that became the locked base for Now and Next."
             titleLines={["breakfast time"]}
             geometry={ORIGINAL_2_GEOMETRY}
@@ -422,8 +454,10 @@ export function GeneratedCardDemoClient() {
             cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
             logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK.w}
             ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-            titleMetrics="auto fit, up to 42px before reducing"
-            ribbonMetrics="52px focus ribbon"
+            titleMetrics="42px actual here / auto-fit down only if a longer title needs it"
+            ribbonMetrics="32px actual here / always 10px below the white area title"
+            titleTextStyle={FOCUS_DOCUMENTED_TEXT_STYLE}
+            ribbonTextStyle={FOCUS_DOCUMENTED_RIBBON_STYLE}
             extraMetrics={[
               { label: "Focus text rule", value: "1 line first, then 2, then reduce only if needed" },
             ]}
