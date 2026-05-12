@@ -21,11 +21,16 @@ export const GENERATED_PIXTO_TITLE_ZONE_H = 166 as const;
 /** Bottom category strip height (design px). */
 export const GENERATED_PIXTO_CATEGORY_BAND_H = 94 as const;
 
-/** Focus-only extended white title band to help the card reach the screen top/bottom. */
-export const GENERATED_PIXTO_FOCUS_TITLE_ZONE_H = 230 as const;
+/**
+ * Focus-only geometry rebalance:
+ * - ribete reduced to half of the previous 350px focus footer
+ * - half of the freed space goes to the white area
+ * - the other half goes to the illustration block above it
+ */
+export const GENERATED_PIXTO_FOCUS_TITLE_ZONE_H = 318 as const;
 
-/** Focus-only extended category band; extra height is mostly "false" footer space. */
-export const GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H = 350 as const;
+/** Focus-only category band reduced to half height. */
+export const GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H = 175 as const;
 
 /** Top layout block (illustration shell): 1054 − 166 − 94. */
 export const GENERATED_PIXTO_TOP_LAYOUT_H =
@@ -33,11 +38,14 @@ export const GENERATED_PIXTO_TOP_LAYOUT_H =
   GENERATED_PIXTO_TITLE_ZONE_H -
   GENERATED_PIXTO_CATEGORY_BAND_H; // 794
 
-/** Focus card gets taller, but the illustration/top layout block stays the same. */
+/** Focus-only top block after redistributing half of the old ribete space upward. */
+export const GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H = 881 as const;
+
+/** Focus card keeps the same total height; the extra space is redistributed internally. */
 export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
   w: GENERATED_PIXTO_CARD_SIZE.w,
   h:
-    GENERATED_PIXTO_TOP_LAYOUT_H +
+    GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H +
     GENERATED_PIXTO_FOCUS_TITLE_ZONE_H +
     GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
 } as const;
@@ -90,6 +98,7 @@ const ROW_FR_CATEGORY = GENERATED_PIXTO_CATEGORY_BAND_H;
 
 const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
+const FOCUS_ROW_FR_TOP = GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H;
 
 export type GeneratedPixtoCardProps = {
   illustrationUrl: string;
@@ -442,13 +451,16 @@ export function GeneratedPixtoCard({
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !isDense;
+  const topRowFr = focusPresentation
+    ? FOCUS_ROW_FR_TOP
+    : ROW_FR_TOP;
   const titleRowFr = focusPresentation
     ? GENERATED_PIXTO_FOCUS_TITLE_ZONE_H
     : ROW_FR_TITLE;
   const categoryRowFr = focusPresentation
     ? GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H
     : ROW_FR_CATEGORY;
-  const gridTemplateRows = `${ROW_FR_TOP}fr ${titleRowFr}fr ${categoryRowFr}fr`;
+  const gridTemplateRows = `${topRowFr}fr ${titleRowFr}fr ${categoryRowFr}fr`;
   const cardAspect = focusPresentation ? FOCUS_CARD_ASPECT : CARD_ASPECT;
 
   return (
@@ -502,12 +514,18 @@ export function GeneratedPixtoCard({
         </div>
       ) : null}
 
-      {/* Top block 794px @ design — white field + 531×648 illustration frame */}
+      {/* Top block — white field + 531×648 illustration frame; Focus gets extra depth here. */}
       <div className="relative min-h-0 bg-white">
         <div className="flex h-full min-h-0 w-full flex-col">
           <div
             className="min-h-0 shrink-0"
-            style={{ flex: `${FR_TOP_SPACER} 1 0` }}
+            style={{
+              flex: `${
+                focusPresentation
+                  ? FOCUS_ROW_FR_TOP - GENERATED_PIXTO_ILLUSTRATION_FRAME.h
+                  : FR_TOP_SPACER
+              } 1 0`,
+            }}
             aria-hidden
           />
           <div

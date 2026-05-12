@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import {
-  GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { PIXTO_FOCUS_CARD_MAX_SCALE } from "@/lib/constants/pixto-focus-card";
@@ -11,8 +10,8 @@ type Props = { children: ReactNode };
 
 /**
  * Focus scaling for generated HTML cards uses the focus-specific taller geometry.
- * The illustration block stays unchanged; the extra height comes from title/ribbon
- * so the card can sit higher and occupy more of the phone screen.
+ * The focus card keeps its full design height, but its internal blocks are
+ * rebalanced and the whole card is centred in the available screen area.
  */
 export function GeneratedPixtoFocusScale({ children }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +43,7 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
   return (
     <div
       ref={outerRef}
-      className="relative flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-start pt-2"
+      className="relative flex h-full min-h-0 w-full min-w-0 flex-1 flex-col items-center justify-center"
     >
       <div
         className="relative mx-auto shrink-0 self-center will-change-transform"
