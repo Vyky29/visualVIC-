@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils/cn";
 const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
-const TITLE_TEXT_SIZE_CLASS = "text-[21px]";
+const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 
 type CardGeometry = {
@@ -40,12 +40,12 @@ const ORIGINAL_GEOMETRY: CardGeometry = {
 };
 
 const EXPANDED_GEOMETRY: CardGeometry = {
-  titleH: 175,
+  titleH: 177,
   illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
-  topLayoutH: GENERATED_PIXTO_CARD_SIZE.h - 175 - GENERATED_PIXTO_CATEGORY_BAND_H,
+  topLayoutH: GENERATED_PIXTO_CARD_SIZE.h - 177 - GENERATED_PIXTO_CATEGORY_BAND_H,
   topGapH:
     GENERATED_PIXTO_CARD_SIZE.h -
-    175 -
+    177 -
     GENERATED_PIXTO_CATEGORY_BAND_H -
     GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
 };
@@ -283,7 +283,7 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Original card 2"
-            hint="Expanded white area to 175 while keeping the illustration block at its original size."
+            hint="Expanded white area to 177 while keeping the illustration block at its original size."
           >
             <OriginalCardMeasurements geometry={EXPANDED_GEOMETRY} />
           </DiagnosticPanel>
