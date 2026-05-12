@@ -285,9 +285,9 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#E2E7EB] p-3.5">
+      <div className="relative flex aspect-[10/13] w-full items-center justify-center overflow-hidden bg-[#E2E7EB] p-3.5">
         <div
-          className="relative mx-auto flex h-full max-h-[86%] w-[82%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[80%] w-[76%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -426,10 +426,10 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(3.15rem,env(safe-area-inset-bottom))]">
+          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))]">
             <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(1.2rem,4.75vw,2.85rem)] px-[0.25rem]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+                <div className="aspect-[10/13] h-[min(100%,93%)] max-h-full w-auto max-w-[min(100%,96%)] min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -440,7 +440,7 @@ export default function FirstThenDemoPage() {
               </div>
 
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+                <div className="aspect-[10/13] h-[min(100%,93%)] max-h-full w-auto max-w-[min(100%,96%)] min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -457,34 +457,34 @@ export default function FirstThenDemoPage() {
           <div className="pointer-events-none absolute inset-0">
             <nav
               aria-label="Focus mode navigation"
-              className="pointer-events-auto absolute bottom-[max(1.55rem,calc(0.95rem+env(safe-area-inset-bottom)))] right-[max(0.65rem,env(safe-area-inset-bottom))] flex w-max max-w-[min(100%,5.5rem)] flex-col items-end gap-3"
+              className="pointer-events-auto absolute bottom-[max(2.25rem,calc(1.45rem+env(safe-area-inset-bottom)))] left-1/2 flex w-max max-w-[min(100%,6.5rem)] -translate-x-1/2 flex-col items-center gap-3"
             >
               <Link
                 href="/dashboard"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
-                <HomeSectionIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <HomeSectionIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Home
                 </span>
               </Link>
 
               <Link
                 href="/menu"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
-                <MenuDotsIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <MenuDotsIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Menu
                 </span>
               </Link>
 
               <Link
                 href="/player/brushing-teeth"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
-                <RoutinesHomeIcon className="rotate-90" />
-                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <RoutinesHomeIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Routine
                 </span>
               </Link>
