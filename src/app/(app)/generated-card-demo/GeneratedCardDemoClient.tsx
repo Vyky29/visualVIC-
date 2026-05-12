@@ -5,9 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Header } from "@/components/navigation/Header";
 import {
+  GeneratedPixtoCard,
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
   GENERATED_PIXTO_COMPANY_MARK,
+  GENERATED_PIXTO_FOCUS_CARD_SIZE,
+  GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
+  GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
+  GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
   GENERATED_PIXTO_ILLUSTRATION_FRAME,
   GENERATED_PIXTO_TITLE_ZONE_H,
   GENERATED_PIXTO_TOP_LAYOUT_H,
@@ -15,6 +20,7 @@ import {
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
+  HOTEL_GENERATED_CARD_PROPS,
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import {
@@ -36,6 +42,7 @@ const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
 const FOCUS_CARD_PREVIEW_W = 320 as const;
 const FOCUS_PHONE_CARD_PREVIEW_W = 396 as const;
+const FOCUS_GEOMETRY_PREVIEW_W = 320 as const;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -69,6 +76,17 @@ const EXPANDED_GEOMETRY: CardGeometry = {
     GENERATED_PIXTO_CATEGORY_BAND_H -
     GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
 };
+
+const FOCUS_GEOMETRY: CardGeometry = {
+  titleH: GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
+  illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+  topLayoutH: GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
+  topGapH:
+    GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+};
+
+const FOCUS_MODE_SAMPLE_CARD =
+  HOTEL_GENERATED_CARD_PROPS[3] ?? HOTEL_GENERATED_CARD_PROPS[0];
 
 const LOCKED_PREVIEW_TEXT_STYLE: PreviewTextStyle = {
   textSizeClassName: TITLE_TEXT_SIZE_CLASS,
@@ -223,15 +241,19 @@ function PreviewTitleBand({
 
 function OriginalCardMeasurements({
   geometry,
+  cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
+  ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
 }: {
   geometry: CardGeometry;
+  cardHeight?: number;
+  ribbonH?: number;
 }) {
   return (
     <article
       className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] ring-2 ring-ink/[0.1]"
       style={{
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
+        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${ribbonH}fr`,
       }}
     >
       <div className="relative bg-[#d9eefc]">
@@ -273,7 +295,7 @@ function OriginalCardMeasurements({
       </div>
       <div className="relative flex items-center justify-center bg-[#d9c7ff]">
         <MeasurementPill>
-          ribbon {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_CATEGORY_BAND_H}
+          ribbon {GENERATED_PIXTO_CARD_SIZE.w} x {ribbonH}
         </MeasurementPill>
       </div>
     </article>
@@ -350,19 +372,23 @@ function PreviewCard({
 function PreviewCardBack({
   geometry,
   widthPx,
+  cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
   ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
+  ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
 }: {
   geometry: CardGeometry;
   widthPx: number;
+  cardHeight?: number;
   ribbonColour?: string;
+  ribbonH?: number;
 }) {
   return (
     <article
       className="relative mx-auto grid overflow-hidden rounded-[1.35rem] bg-white"
       style={{
         width: `min(100%, ${widthPx}px)`,
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
+        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${ribbonH}fr`,
         border: `3px solid ${ribbonColour}`,
         boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
       }}
@@ -387,6 +413,81 @@ function PreviewCardBack({
         </span>
       </div>
     </article>
+  );
+}
+
+function FocusModeRealCard({
+  widthPx,
+}: {
+  widthPx: number;
+}) {
+  const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
+  const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
+
+  return (
+    <div
+      className="relative mx-auto w-full overflow-hidden"
+      style={{
+        width: `min(100%, ${widthPx}px)`,
+        height: `${scaledHeight}px`,
+      }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left"
+        style={{
+          width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
+          height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
+          transform: `scale(${scale})`,
+        }}
+      >
+        <GeneratedPixtoCard
+          illustrationUrl={FOCUS_MODE_SAMPLE_CARD.illustrationUrl}
+          title={FOCUS_MODE_SAMPLE_CARD.title}
+          category={FOCUS_MODE_SAMPLE_CARD.category}
+          categoryColour={FOCUS_MODE_SAMPLE_CARD.categoryColour}
+          iconUrl={FOCUS_MODE_SAMPLE_CARD.iconUrl}
+          cardType={FOCUS_MODE_SAMPLE_CARD.cardType}
+          focusIllustrationScale={FOCUS_MODE_SAMPLE_CARD.focusIllustrationScale}
+          focusPresentation
+          className="h-full w-full max-w-none"
+        />
+      </div>
+    </div>
+  );
+}
+
+function FocusModeRealCardBack({
+  widthPx,
+}: {
+  widthPx: number;
+}) {
+  const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
+  const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
+
+  return (
+    <div
+      className="relative mx-auto w-full overflow-hidden"
+      style={{
+        width: `min(100%, ${widthPx}px)`,
+        height: `${scaledHeight}px`,
+      }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left"
+        style={{
+          width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
+          height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
+          transform: `scale(${scale})`,
+        }}
+      >
+        <PreviewCardBack
+          geometry={FOCUS_GEOMETRY}
+          widthPx={GENERATED_PIXTO_CARD_SIZE.w}
+          cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+          ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -416,15 +517,10 @@ function FocusFlipPreview({
           )}
         >
           <div className="[backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
-            <PreviewCard
-              lines={["receive your", "room key"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={widthPx}
-            />
+            <FocusModeRealCard widthPx={widthPx} />
           </div>
           <div className="absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <PreviewCardBack geometry={EXPANDED_GEOMETRY} widthPx={widthPx} />
+            <FocusModeRealCardBack widthPx={widthPx} />
           </div>
         </div>
       </div>
@@ -506,6 +602,68 @@ function NowFlipPreview() {
   );
 }
 
+function FocusModeGeometryPreview() {
+  return (
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div className="space-y-3">
+        <FocusModeRealCard widthPx={FOCUS_GEOMETRY_PREVIEW_W} />
+        <p className="text-center text-[11px] text-ink-faint">
+          Real focus shell using the same text size as the original card.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        <OriginalCardMeasurements
+          geometry={FOCUS_GEOMETRY}
+          cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+          ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+        />
+        <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
+          <p>
+            Card{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+            </span>
+          </p>
+          <p>
+            Top block{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.topLayoutH}
+            </span>
+          </p>
+          <p>
+            Top gap <span className="font-semibold text-ink">{FOCUS_GEOMETRY.topGapH} h</span>
+          </p>
+          <p>
+            Illustration{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {FOCUS_GEOMETRY.illustrationH}
+            </span>
+          </p>
+          <p>
+            White area{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.titleH}
+            </span>
+          </p>
+          <p>
+            Ribbon{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+            </span>
+          </p>
+          <p>
+            Logo{" "}
+            <span className="font-semibold text-ink">
+              {GENERATED_PIXTO_COMPANY_MARK.w} x {GENERATED_PIXTO_COMPANY_MARK.h}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function GeneratedCardDemoClient() {
   return (
     <div className="pb-10">
@@ -515,7 +673,7 @@ export function GeneratedCardDemoClient() {
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
           — original card 1, original card 2, two locked text cards, and a flow
-          preview for now, next, and focus.
+          preview for now, next, focus, plus a measured focus shell.
         </p>
       </div>
 
@@ -621,7 +779,19 @@ export function GeneratedCardDemoClient() {
               </Link>
             </div>
           </DiagnosticPanel>
-            </div>
+        </div>
+      </section>
+
+      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
+        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
+          Focus mode geometry
+        </h2>
+        <DiagnosticPanel
+          title="Focus mode · measured card"
+          hint="Real focus card on the left, updated focus measurements on the right."
+        >
+          <FocusModeGeometryPreview />
+        </DiagnosticPanel>
       </section>
     </div>
   );

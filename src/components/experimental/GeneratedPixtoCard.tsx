@@ -246,11 +246,6 @@ function scheduleTitleBandTypography(lineCount: 1 | 2 | 3): string {
   );
 }
 
-const focusTitleBandTypography = cn(
-  titleTypographyBase,
-  "text-[40px] sm:text-[46px] leading-[1.08]",
-);
-
 function GeneratedPixtoDebugGuides({
   gridTemplateRows,
   illustrationWidthPct,
@@ -344,16 +339,12 @@ function TitleBand({
   const row2Two = n === 2 ? safeLines[1] : "";
   const row2Three =
     n >= 3 ? safeLines.slice(2).join(" ") : "";
-  const bandTypo = focusPresentation
-    ? focusTitleBandTypography
-    : scheduleTitleBandTypography(n);
-  const bandLineLeading = focusPresentation
-    ? "leading-[1.08]"
-    : n === 1
-      ? "leading-[1.14]"
-      : n === 2
-        ? "leading-[1.1]"
-        : "leading-[1.08]";
+  const bandTypo = scheduleTitleBandTypography(n);
+  const bandLineLeading = n === 1
+    ? "leading-[1.14]"
+    : n === 2
+      ? "leading-[1.1]"
+      : "leading-[1.08]";
 
   return (
     <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-4 py-0.5">
@@ -584,9 +575,7 @@ export function GeneratedPixtoCard({
         <span
           className={cn(
             "line-clamp-2 text-center font-semibold lowercase leading-snug tracking-[0.08em]",
-            focusPresentation
-              ? "text-[32px] sm:text-[38px] tracking-[0.06em]"
-              : isDense
+            isDense
                 ? "text-[14px] sm:text-[16px]"
                 : /* Schedule NOW/NEXT — coloured category ribete. */
                   "text-[60px] sm:text-[70px] tracking-[0.04em]",
