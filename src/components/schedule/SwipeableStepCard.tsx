@@ -409,6 +409,8 @@ export function SwipeableStepCard({
     (variant === "hero" || variant === "focus") &&
     Boolean(completionBackImageUrl) &&
     isNow;
+  const suppressCompletionOutline =
+    completionAnimating && completionFlip && !hasGeneratedPixto;
 
   const stepPixtoBundled =
     isPixtoLearnBundledCardUrl(step.imageUrl) && !hasGeneratedPixto;
@@ -504,7 +506,11 @@ export function SwipeableStepCard({
       className={cn(
         "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300",
         variant === "focus" ? "touch-none" : "touch-pan-y",
-        hasGeneratedPixto ? "overflow-visible" : "overflow-hidden shadow-card",
+        hasGeneratedPixto
+          ? "overflow-visible"
+          : suppressCompletionOutline
+            ? "overflow-hidden shadow-none"
+            : "overflow-hidden shadow-card",
         /** Schedule HTML cards: ring sits flush on the white shell (no canvas “air” from ring-offset). */
         hasGeneratedPixto &&
           (variant === "hero" || variant === "next") &&
@@ -513,7 +519,9 @@ export function SwipeableStepCard({
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
             "mx-auto max-w-full",
-            focusPixto
+            suppressCompletionOutline
+              ? ""
+              : focusPixto
               ? rings.scheduleFocus
               : hasGeneratedPixto
                 ? ""
@@ -538,7 +546,7 @@ export function SwipeableStepCard({
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
             "overflow-hidden rounded-2xl sm:rounded-3xl",
-            rings.scheduleFocus,
+            !suppressCompletionOutline && rings.scheduleFocus,
           ),
         variant !== "hero" &&
           variant !== "next" &&
