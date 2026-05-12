@@ -24,6 +24,15 @@ const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
+const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
+
+type PreviewTextStyle = {
+  textSizeClassName: string;
+  lineHeightClassName: string;
+  trackingClassName: string;
+  lineGapClassName: string;
+  wordSpacing: string;
+};
 
 type CardGeometry = {
   titleH: number;
@@ -48,6 +57,30 @@ const EXPANDED_GEOMETRY: CardGeometry = {
     177 -
     GENERATED_PIXTO_CATEGORY_BAND_H -
     GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+};
+
+const LOCKED_PREVIEW_TEXT_STYLE: PreviewTextStyle = {
+  textSizeClassName: TITLE_TEXT_SIZE_CLASS,
+  lineHeightClassName: TITLE_LINE_HEIGHT_CLASS,
+  trackingClassName: "tracking-tight",
+  lineGapClassName: "gap-[0.16em]",
+  wordSpacing: "0",
+};
+
+const BEST_UI_TEXT_STYLE_A: PreviewTextStyle = {
+  textSizeClassName: "text-[24px]",
+  lineHeightClassName: "leading-[0.96]",
+  trackingClassName: "tracking-[-0.03em]",
+  lineGapClassName: "gap-[0.12em]",
+  wordSpacing: "0.01em",
+};
+
+const BEST_UI_TEXT_STYLE_B: PreviewTextStyle = {
+  textSizeClassName: "text-[22px]",
+  lineHeightClassName: "leading-[0.98]",
+  trackingClassName: "tracking-[-0.015em]",
+  lineGapClassName: "gap-[0.18em]",
+  wordSpacing: "0.015em",
 };
 
 function DiagnosticPanel({
@@ -93,8 +126,10 @@ function MeasurementPill({
 
 function SampleLogo({
   size,
+  tintColour,
 }: {
   size: number;
+  tintColour?: string;
 }) {
   return (
     <div
@@ -105,14 +140,36 @@ function SampleLogo({
       }}
     >
       <div className="relative h-full w-full">
-        <Image
-          src={HOTEL_LOGO_URL}
-          alt=""
-          fill
-          className="object-contain"
-          sizes={`${size}px`}
-          unoptimized
-        />
+        {tintColour ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <div
+              className="relative h-[68%] w-[68%] rounded-[0.75rem]"
+              style={{ border: `2px solid ${tintColour}` }}
+            >
+              <div
+                className="absolute left-[18%] top-[18%] h-[22%] w-[22%] rounded-full"
+                style={{ backgroundColor: tintColour }}
+              />
+              <div
+                className="absolute right-[18%] top-[18%] h-[22%] w-[22%] rounded-full"
+                style={{ backgroundColor: tintColour }}
+              />
+              <div
+                className="absolute bottom-[18%] left-1/2 h-[22%] w-[22%] -translate-x-1/2 rounded-full"
+                style={{ backgroundColor: tintColour }}
+              />
+            </div>
+          </div>
+        ) : (
+          <Image
+            src={HOTEL_LOGO_URL}
+            alt=""
+            fill
+            className="object-contain"
+            sizes={`${size}px`}
+            unoptimized
+          />
+        )}
       </div>
     </div>
   );
@@ -120,25 +177,35 @@ function SampleLogo({
 
 function PreviewTitleBand({
   lines,
+  titleH,
+  textStyle = LOCKED_PREVIEW_TEXT_STYLE,
 }: {
   lines: [string] | [string, string];
+  titleH: number;
+  textStyle?: PreviewTextStyle;
 }) {
-  const compactWordSpacing = lines.length > 1 ? "-0.08em" : "0";
-
   return (
-    <div
-      className={cn(
-        "flex h-full min-h-0 w-full flex-col items-center justify-center text-center font-semibold lowercase tracking-tight text-ink",
-        TITLE_TEXT_SIZE_CLASS,
-        TITLE_LINE_HEIGHT_CLASS,
-      )}
-      style={{ wordSpacing: compactWordSpacing }}
-    >
-      {lines.map((line, index) => (
-        <span key={`${line}-${index}`} className="block w-full">
-          {line}
-        </span>
-      ))}
+    <div className="flex h-full min-h-0 w-full items-center justify-center">
+      <div
+        className={cn(
+          "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
+          lines.length > 1 ? textStyle.lineGapClassName : "gap-0",
+          textStyle.textSizeClassName,
+          textStyle.lineHeightClassName,
+          textStyle.trackingClassName,
+        )}
+        style={{
+          width: `${(TEXT_BOX_SIZE.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+          height: `${(TEXT_BOX_SIZE.h / titleH) * 100}%`,
+          wordSpacing: textStyle.wordSpacing,
+        }}
+      >
+        {lines.map((line, index) => (
+          <span key={`${line}-${index}`} className="block w-full">
+            {line}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -202,14 +269,24 @@ function OriginalCardMeasurements({
   );
 }
 
-function HotelPreviewCard({
+function PreviewCard({
   lines,
   logoSize,
   geometry,
+  ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
+  ribbonText = HOTEL_RIBBON_TEXT,
+  lightBlockColour = HOTEL_LIGHT_BLOCK_COLOUR,
+  logoTintColour,
+  textStyle = LOCKED_PREVIEW_TEXT_STYLE,
 }: {
   lines: [string] | [string, string];
   logoSize: number;
   geometry: CardGeometry;
+  ribbonColour?: string;
+  ribbonText?: string;
+  lightBlockColour?: string;
+  logoTintColour?: string;
+  textStyle?: PreviewTextStyle;
 }) {
   return (
     <article
@@ -217,7 +294,7 @@ function HotelPreviewCard({
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        border: `3px solid ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
+        border: `3px solid ${ribbonColour}`,
         boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
       }}
     >
@@ -228,19 +305,19 @@ function HotelPreviewCard({
             top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
             width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
             aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
-            backgroundColor: HOTEL_LIGHT_BLOCK_COLOUR,
+            backgroundColor: lightBlockColour,
           }}
         />
-        <SampleLogo size={logoSize} />
+        <SampleLogo size={logoSize} tintColour={logoTintColour} />
       </div>
 
       <div className="border-y border-white bg-white px-4 py-1">
-        <PreviewTitleBand lines={lines} />
+        <PreviewTitleBand lines={lines} titleH={geometry.titleH} textStyle={textStyle} />
       </div>
 
       <div
         className="flex items-center justify-center px-3"
-        style={{ backgroundColor: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR }}
+        style={{ backgroundColor: ribbonColour }}
       >
         <span
           className={cn(
@@ -249,7 +326,7 @@ function HotelPreviewCard({
             TITLE_LINE_HEIGHT_CLASS,
           )}
         >
-          {HOTEL_RIBBON_TEXT}
+          {ribbonText}
         </span>
       </div>
     </article>
@@ -264,8 +341,8 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — original card 1, original card 2, and two hotel-style cards locked to
-          original card 2.
+          — original card 1, original card 2, two locked text cards, and two UI
+          proposal cards for comparison.
         </p>
       </div>
 
@@ -290,9 +367,9 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Hotel look · 1 line"
-            hint="Uses original card 2 geometry with the same text size and logo at 85 x 85."
+            hint="Locked to original card 2, with a fixed text box of 252 x 56.55."
           >
-            <HotelPreviewCard
+            <PreviewCard
               lines={["breakfast time"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
@@ -301,12 +378,42 @@ export function GeneratedCardDemoClient() {
 
           <DiagnosticPanel
             title="Hotel look · 2 lines"
-            hint="Same locked geometry as original card 2, with the text forced into a maximum of two lines."
+            hint="Same locked geometry, same word spacing as the one-line card, and more air between lines."
           >
-            <HotelPreviewCard
+            <PreviewCard
               lines={["receive your", "room key"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="AI proposal · teal"
+            hint="My preferred UI pass: slightly bigger type, softer tracking, and calmer line spacing."
+          >
+            <PreviewCard
+              lines={["receive your", "room key"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              ribbonColour="#2E7A6B"
+              lightBlockColour="#DDEEE8"
+              logoTintColour="#2E7A6B"
+              textStyle={BEST_UI_TEXT_STYLE_A}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="AI proposal · blue"
+            hint="A more neutral accessibility-first option with relaxed spacing and slightly smaller type."
+          >
+            <PreviewCard
+              lines={["receive your", "room key"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              ribbonColour="#2C4D8F"
+              lightBlockColour="#DEE7F8"
+              logoTintColour="#2C4D8F"
+              textStyle={BEST_UI_TEXT_STYLE_B}
             />
           </DiagnosticPanel>
         </div>
