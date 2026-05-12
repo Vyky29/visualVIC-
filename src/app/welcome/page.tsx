@@ -99,19 +99,21 @@ export default function WelcomePage() {
       </div>
 
       <footer className="shrink-0 space-y-1 pt-0.5">
-        <Link href="/dashboard" className="block w-full">
-          <Button className="min-h-[38px] w-full whitespace-nowrap px-4 py-1.5 text-[13px]">
-            Enter home
-          </Button>
-        </Link>
-        <Link href="/auth" className="block w-full">
-          <Button
-            variant="secondary"
-            className="min-h-[38px] w-full whitespace-nowrap px-4 py-1.5 text-[13px]"
-          >
-            Preview sign-in layout
-          </Button>
-        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <Link href="/dashboard" className="block w-full">
+            <Button className="min-h-[38px] w-full whitespace-nowrap px-3 py-1.5 text-[12px]">
+              Enter home
+            </Button>
+          </Link>
+          <Link href="/auth" className="block w-full">
+            <Button
+              variant="secondary"
+              className="min-h-[38px] w-full whitespace-nowrap px-3 py-1.5 text-[12px]"
+            >
+              Sign in
+            </Button>
+          </Link>
+        </div>
         <p className="line-clamp-2 text-center text-[10px] leading-tight text-ink-faint sm:text-[11px]">
           No backend or AI in this build — layout and flow only.
         </p>

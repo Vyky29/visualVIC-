@@ -11,7 +11,7 @@ import {
 } from "@/lib/utils/visual-card-url";
 
 const cardShell =
-  "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-white shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
+  "relative overflow-hidden rounded-[1.35rem] border-2 border-[#CDD3D8] bg-[#F1F4F6] shadow-[0_8px_28px_-14px_rgba(28,36,32,0.18)]";
 const WOW_CARD_ASPECT = "744 / 1054";
 
 function IconFirst({ className }: { className?: string }) {
@@ -109,17 +109,15 @@ function StepVisualCard({
         className,
       )}
     >
-      <div
-        className="flex items-center justify-center gap-2 border-b-2 border-[#CDD3D8] bg-[#EEF1F3] py-2.5"
-      >
+      <div className="flex items-center justify-center gap-2 border-b-2 border-[#CDD3D8] bg-[#F1F4F6] py-2.5">
         <div className="grayscale">{icon}</div>
         <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-ink">
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F7F8F9] p-[14px]">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F1F4F6] p-[10px]">
         <div
-          className="relative mx-auto h-full max-h-full w-full max-w-[80%]"
+          className="relative mx-auto h-full max-h-full w-full max-w-[84%]"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           {imageUrl ? (
