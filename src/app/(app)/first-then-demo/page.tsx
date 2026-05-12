@@ -366,7 +366,7 @@ export default function FirstThenDemoPage() {
               href="/menu"
               className="absolute right-[max(1.05rem,env(safe-area-inset-right))] top-[46%] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
             >
-              <MenuDotsIcon />
+              <MenuDotsIcon className="rotate-90" />
             </Link>
           </div>
         </div>
