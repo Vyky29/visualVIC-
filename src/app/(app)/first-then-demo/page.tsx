@@ -117,12 +117,9 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F7F8F9]">
+      <div className="relative aspect-[10/13] w-full overflow-hidden bg-[#F7F8F9] p-[14px]">
         <div
-          className={cn(
-            "absolute left-1/2 top-1/2 w-[78%] max-h-[82%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[1rem] border-[5px] bg-white",
-            tone === "sage" ? "border-sage/75" : "border-accent/65",
-          )}
+          className="relative mx-auto h-full max-h-full w-full max-w-[80%]"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           {imageUrl ? (
@@ -131,12 +128,12 @@ function StepVisualCard({
               alt={alt}
               fill
               className={cn(
-                "object-contain p-[8px]",
+                "object-contain",
                 isPixtoLearnBundledCardUrl(imageUrl)
                   ? pixtoBundledCardObjectPositionClass
                   : "object-center",
               )}
-              sizes="(orientation: landscape) 36vw, 78vw"
+              sizes="(orientation: landscape) 34vw, 72vw"
               priority={tone === "sage"}
             />
           ) : null}
@@ -196,7 +193,7 @@ export default function FirstThenDemoPage() {
           <div className="h-full w-full bg-canvas px-[max(0.75rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
             <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-1">
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[15.4rem]">
                   <StepVisualCard
                     imageUrl={first?.imageUrl}
                     alt={first?.title ?? "First step"}
@@ -232,7 +229,7 @@ export default function FirstThenDemoPage() {
               </div>
 
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[15.4rem]">
                   <StepVisualCard
                     imageUrl={second?.imageUrl}
                     alt={second?.title ?? "Then step"}
