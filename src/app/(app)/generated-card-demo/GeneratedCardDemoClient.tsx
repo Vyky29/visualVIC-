@@ -249,16 +249,19 @@ function OriginalCardMeasurements({
   cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
   logoSize = GENERATED_PIXTO_COMPANY_MARK,
   ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
+  widthPx = ORIGINAL_CARD_PREVIEW_W,
 }: {
   geometry: CardGeometry;
   cardHeight?: number;
   logoSize?: { w: number; h: number };
   ribbonH?: number;
+  widthPx?: number;
 }) {
   return (
     <article
-      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] ring-2 ring-ink/[0.1]"
+      className="relative mx-auto grid w-full overflow-hidden rounded-[1.35rem] ring-2 ring-ink/[0.1]"
       style={{
+        width: `min(100%, ${widthPx}px)`,
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
         gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${ribbonH}fr`,
       }}
@@ -306,6 +309,69 @@ function OriginalCardMeasurements({
         </MeasurementPill>
       </div>
     </article>
+  );
+}
+
+function FocusModeMeasurements() {
+  return (
+    <div className="space-y-3">
+      <OriginalCardMeasurements
+        geometry={FOCUS_GEOMETRY}
+        cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+        logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK}
+        ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+        widthPx={FOCUS_GEOMETRY_PREVIEW_W}
+      />
+      <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
+        <p>
+          Demo visible width{" "}
+          <span className="font-semibold text-ink">{FOCUS_DEMO_VISIBLE_W} px</span>
+        </p>
+        <p>
+          Demo visible height{" "}
+          <span className="font-semibold text-ink">{FOCUS_DEMO_VISIBLE_H} px</span>
+        </p>
+        <p>
+          Card{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+          </span>
+        </p>
+        <p>
+          Top block{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.topLayoutH}
+          </span>
+        </p>
+        <p>
+          Top gap <span className="font-semibold text-ink">{FOCUS_GEOMETRY.topGapH} h</span>
+        </p>
+        <p>
+          Illustration{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {FOCUS_GEOMETRY.illustrationH}
+          </span>
+        </p>
+        <p>
+          White area{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.titleH}
+          </span>
+        </p>
+        <p>
+          Ribbon{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+          </span>
+        </p>
+        <p>
+          Logo{" "}
+          <span className="font-semibold text-ink">
+            {GENERATED_PIXTO_FOCUS_COMPANY_MARK.w} x {GENERATED_PIXTO_FOCUS_COMPANY_MARK.h}
+          </span>
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -622,82 +688,6 @@ function NowFlipPreview() {
   );
 }
 
-function FocusModeGeometryPreview() {
-  return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-      <div className="space-y-3">
-        <FocusModeRealCard widthPx={FOCUS_GEOMETRY_PREVIEW_W} />
-        <p className="text-center text-[11px] text-ink-faint">
-          Real focus shell in the demo at 357.5 px wide, shortened a little and
-          centred.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        <OriginalCardMeasurements
-          geometry={FOCUS_GEOMETRY}
-          cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-          logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK}
-          ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-        />
-        <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
-          <p>
-            Demo visible width{" "}
-            <span className="font-semibold text-ink">
-              {FOCUS_DEMO_VISIBLE_W} px
-            </span>
-          </p>
-          <p>
-            Demo visible height{" "}
-            <span className="font-semibold text-ink">
-              {FOCUS_DEMO_VISIBLE_H} px
-            </span>
-          </p>
-          <p>
-            Card{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-            </span>
-          </p>
-          <p>
-            Top block{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.topLayoutH}
-            </span>
-          </p>
-          <p>
-            Top gap <span className="font-semibold text-ink">{FOCUS_GEOMETRY.topGapH} h</span>
-          </p>
-          <p>
-            Illustration{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {FOCUS_GEOMETRY.illustrationH}
-            </span>
-          </p>
-          <p>
-            White area{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.titleH}
-            </span>
-          </p>
-          <p>
-            Ribbon{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-            </span>
-          </p>
-          <p>
-            Logo{" "}
-            <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_FOCUS_COMPANY_MARK.w} x {GENERATED_PIXTO_FOCUS_COMPANY_MARK.h}
-            </span>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function GeneratedCardDemoClient() {
   const scheduleFlowRoutine = useMemo<Routine>(() => {
     const suffix =
@@ -722,20 +712,112 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — final focus mode preview plus the real schedule flow.
+          — measured cards first, visual cards second, plus the real schedule flow.
         </p>
       </div>
 
       <section className="mx-auto mt-8 max-w-6xl space-y-4 px-4">
         <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Focus mode
+          Card sizes
         </h2>
-        <DiagnosticPanel
-          title="Focus mode"
-          hint="Final focus card preview with the current locked white area and flip behaviour."
-        >
-          <FocusFlipPreview />
-        </DiagnosticPanel>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <DiagnosticPanel
+            title="Original card · measurements"
+            hint="Original Figma geometry with the exact block sizes."
+          >
+            <OriginalCardMeasurements
+              geometry={ORIGINAL_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Original card · preview"
+            hint="Original size card without measurements."
+          >
+            <PreviewCard
+              lines={["breakfast time"]}
+              logoSize={85}
+              geometry={ORIGINAL_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Original card 2 · measurements"
+            hint="Expanded white area with the locked geometry you kept as reference."
+          >
+            <OriginalCardMeasurements
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Original card 2 · preview"
+            hint="Original 2 shown as the clean visual card."
+          >
+            <PreviewCard
+              lines={["breakfast time"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Now · measurements"
+            hint="Same locked structure, shown at the bigger Now preview width."
+          >
+            <OriginalCardMeasurements
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={NOW_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Now · preview"
+            hint="Active step preview with the flip interaction."
+          >
+            <NowFlipPreview />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Next · measurements"
+            hint="Same locked structure, shown at the smaller Next preview width."
+          >
+            <OriginalCardMeasurements
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={NEXT_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Next · preview"
+            hint="Next step card without the measurement overlay."
+          >
+            <PreviewCard
+              lines={["receive your", "room key"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={NEXT_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Focus mode · measurements"
+            hint="Final focus shell with the exact focus measurements."
+          >
+            <FocusModeMeasurements />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Focus mode · preview"
+            hint="Final focus card preview with the current locked white area and flip behaviour."
+          >
+            <FocusFlipPreview />
+          </DiagnosticPanel>
+        </div>
       </section>
 
       <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
