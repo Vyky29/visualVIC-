@@ -10,7 +10,7 @@ import {
 } from "@/lib/utils/visual-card-url";
 
 const miniCard =
-  "w-full max-w-[10.9rem] overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
+  "w-full max-w-[11.6rem] overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -91,14 +91,15 @@ export default function FirstThenPage() {
   const second = brushing?.steps[1];
 
   return (
-    <div>
+    <div className="h-[100dvh] overflow-hidden overscroll-none">
       <Header
         title="First & Then"
         compact
+        className="min-h-[40px] pb-1.5 pt-[max(0.35rem,env(safe-area-inset-top))]"
       />
-      <div className="flex min-h-[calc(100dvh-3.75rem)] flex-col px-2.5 pb-3 pt-2">
-        <div className="flex flex-1 items-center justify-center">
-          <div className="flex w-full items-center justify-center gap-2">
+      <div className="relative flex h-[calc(100dvh-3rem)] flex-col overflow-hidden px-2 pb-2 pt-1">
+        <div className="flex min-h-0 flex-1 items-center justify-center pb-14">
+          <div className="flex w-full items-center justify-center gap-4">
             <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-sage/75", miniCard)}>
               <div className="flex items-center justify-center gap-2 border-b border-ink/8 bg-sage-mist/85 py-2.5">
                 <IconFirst className="h-6 w-6" />
@@ -125,13 +126,13 @@ export default function FirstThenPage() {
               </div>
             </Card>
 
-            <div className="flex shrink-0 flex-col items-center justify-center gap-1">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10">
-                <IconThenConnector className="h-5 w-5" />
+            <div className="flex shrink-0 items-center justify-center">
+              <div className="flex h-11 w-11 flex-col items-center justify-center rounded-full bg-canvas-muted ring-1 ring-ink/10">
+                <IconThenConnector className="h-4 w-4" />
+                <span className="mt-[-1px] text-[11px] font-semibold text-ink-subtle">
+                  &amp;
+                </span>
               </div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-subtle">
-                &amp;
-              </span>
             </div>
 
             <Card className={cn("flex-1 border-0 bg-transparent shadow-none ring-2 ring-accent/55", miniCard)}>
@@ -161,17 +162,17 @@ export default function FirstThenPage() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-2">
+        <div className="absolute bottom-2 right-2 z-10 flex items-end justify-end gap-2">
           <Link
             href="/menu"
-            className="flex min-h-touch items-center justify-center rounded-2xl border border-ink/10 bg-white px-4 py-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99]"
+            className="flex h-11 items-center justify-center rounded-[1.1rem] border border-ink/10 bg-white px-3.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft transition active:scale-[0.99]"
           >
             Menu
           </Link>
           <Link
             href="/player/brushing-teeth"
             className={cn(
-              "flex min-h-touch items-center justify-center rounded-2xl bg-ink px-5 py-3 text-center text-[15px] font-semibold text-cream shadow-soft transition active:scale-[0.99]",
+              "flex h-11 items-center justify-center rounded-[1.1rem] bg-ink px-4 text-center text-[13px] font-semibold text-cream shadow-soft transition active:scale-[0.99]",
             )}
           >
             Open full routine
