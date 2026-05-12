@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Header } from "@/components/navigation/Header";
 import {
@@ -25,6 +25,11 @@ const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
+const IPHONE_16_PRO_VIEWPORT = { w: 402, h: 874 } as const;
+const ORIGINAL_CARD_PREVIEW_W = 284 as const;
+const NOW_CARD_PREVIEW_W = 296 as const;
+const NEXT_CARD_PREVIEW_W = 276 as const;
+const FOCUS_CARD_PREVIEW_W = 320 as const;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -273,6 +278,7 @@ function PreviewCard({
   lines,
   logoSize,
   geometry,
+  widthPx = ORIGINAL_CARD_PREVIEW_W,
   ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
   ribbonText = HOTEL_RIBBON_TEXT,
   lightBlockColour = HOTEL_LIGHT_BLOCK_COLOUR,
@@ -282,6 +288,7 @@ function PreviewCard({
   lines: [string] | [string, string];
   logoSize: number;
   geometry: CardGeometry;
+  widthPx?: number;
   ribbonColour?: string;
   ribbonText?: string;
   lightBlockColour?: string;
@@ -290,8 +297,9 @@ function PreviewCard({
 }) {
   return (
     <article
-      className="relative mx-auto grid w-full max-w-[min(100%,17.75rem)] overflow-hidden rounded-[1.35rem] bg-white"
+      className="relative mx-auto grid overflow-hidden rounded-[1.35rem] bg-white"
       style={{
+        width: `min(100%, ${widthPx}px)`,
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
         border: `3px solid ${ribbonColour}`,
@@ -333,6 +341,124 @@ function PreviewCard({
   );
 }
 
+function PreviewCardBack({
+  geometry,
+  widthPx,
+  ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
+}: {
+  geometry: CardGeometry;
+  widthPx: number;
+  ribbonColour?: string;
+}) {
+  return (
+    <article
+      className="relative mx-auto grid overflow-hidden rounded-[1.35rem] bg-white"
+      style={{
+        width: `min(100%, ${widthPx}px)`,
+        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
+        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        border: `3px solid ${ribbonColour}`,
+        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
+      }}
+    >
+      <div className="relative bg-white">
+        <div
+          className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[1.25rem] text-center font-semibold lowercase text-white"
+          style={{
+            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
+            backgroundColor: ribbonColour,
+          }}
+        >
+          <span className="px-6 text-[26px] leading-[1]">done</span>
+        </div>
+      </div>
+      <div className="border-y border-white bg-white px-4 py-1" />
+      <div
+        className="flex items-center justify-center px-3"
+        style={{ backgroundColor: ribbonColour }}
+      >
+        <span className="text-center text-[23px] font-semibold lowercase tracking-tight text-white/95">
+          {HOTEL_RIBBON_TEXT}
+        </span>
+      </div>
+    </article>
+  );
+}
+
+function FocusFlipPreview({
+  phoneFrame = false,
+}: {
+  phoneFrame?: boolean;
+}) {
+  const [flipped, setFlipped] = useState(false);
+  const widthPx = phoneFrame ? 390 : FOCUS_CARD_PREVIEW_W;
+
+  const flipCard = (
+    <button
+      type="button"
+      onClick={() => setFlipped((prev) => !prev)}
+      className="w-full bg-transparent text-left"
+      aria-label="Flip focus card preview"
+    >
+      <div
+        className="mx-auto [perspective:1200px]"
+        style={{ width: `min(100%, ${widthPx}px)` }}
+      >
+        <div
+          className={cn(
+            "relative transition-transform duration-500 [transform-style:preserve-3d]",
+            flipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]",
+          )}
+        >
+          <div className="[backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
+            <PreviewCard
+              lines={["receive your", "room key"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={widthPx}
+            />
+          </div>
+          <div className="absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
+            <PreviewCardBack geometry={EXPANDED_GEOMETRY} widthPx={widthPx} />
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+
+  if (!phoneFrame) {
+    return (
+      <div className="space-y-3">
+        <div className="mx-auto flex w-full max-w-[22rem] items-center justify-center rounded-[1.75rem] bg-[#060807] px-4 py-5">
+          {flipCard}
+        </div>
+        <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="mx-auto overflow-hidden rounded-[2rem] border border-ink/[0.08] bg-[#060807] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+      style={{
+        width: `min(100%, ${IPHONE_16_PRO_VIEWPORT.w}px)`,
+        aspectRatio: `${IPHONE_16_PRO_VIEWPORT.w} / ${IPHONE_16_PRO_VIEWPORT.h}`,
+      }}
+    >
+      <div className="flex h-full min-h-0 flex-col px-3 py-3 text-cream">
+        <div className="rounded-full bg-white/10 px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-cream/90">
+          iphone 16 pro · 402 x 874
+        </div>
+        <div className="flex min-h-0 flex-1 items-center justify-center py-4">
+          {flipCard}
+        </div>
+        <p className="text-center text-[11px] text-cream/55">Tap the card to flip</p>
+      </div>
+    </div>
+  );
+}
+
 export function GeneratedCardDemoClient() {
   return (
     <div className="pb-10">
@@ -341,8 +467,8 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — original card 1, original card 2, two locked text cards, and two UI
-          proposal cards for comparison.
+          — original card 1, original card 2, two locked text cards, and a flow
+          preview for now, next, and focus.
         </p>
       </div>
 
@@ -373,6 +499,7 @@ export function GeneratedCardDemoClient() {
               lines={["breakfast time"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
             />
           </DiagnosticPanel>
 
@@ -384,37 +511,65 @@ export function GeneratedCardDemoClient() {
               lines={["receive your", "room key"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+        </div>
+      </section>
+
+      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
+        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
+          Flow preview
+        </h2>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <DiagnosticPanel
+            title="Original size"
+            hint="Reference card at the digital wow base size."
+          >
+            <PreviewCard
+              lines={["breakfast time"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={ORIGINAL_CARD_PREVIEW_W}
             />
           </DiagnosticPanel>
 
           <DiagnosticPanel
-            title="AI proposal · teal"
-            hint="My preferred UI pass: slightly bigger type, softer tracking, and calmer line spacing."
+            title="Now"
+            hint="Slightly bigger than Next for the active step."
+          >
+            <PreviewCard
+              lines={["breakfast time"]}
+              logoSize={85}
+              geometry={EXPANDED_GEOMETRY}
+              widthPx={NOW_CARD_PREVIEW_W}
+            />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Next"
+            hint="A little smaller than Now while keeping the same locked geometry."
           >
             <PreviewCard
               lines={["receive your", "room key"]}
               logoSize={85}
               geometry={EXPANDED_GEOMETRY}
-              ribbonColour="#2E7A6B"
-              lightBlockColour="#DDEEE8"
-              logoTintColour="#2E7A6B"
-              textStyle={BEST_UI_TEXT_STYLE_A}
+              widthPx={NEXT_CARD_PREVIEW_W}
             />
           </DiagnosticPanel>
 
           <DiagnosticPanel
-            title="AI proposal · blue"
-            hint="A more neutral accessibility-first option with relaxed spacing and slightly smaller type."
+            title="Focus mode"
+            hint="Expanded card preview with tap-to-flip behavior."
           >
-            <PreviewCard
-              lines={["receive your", "room key"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              ribbonColour="#2C4D8F"
-              lightBlockColour="#DEE7F8"
-              logoTintColour="#2C4D8F"
-              textStyle={BEST_UI_TEXT_STYLE_B}
-            />
+            <FocusFlipPreview />
+          </DiagnosticPanel>
+
+          <DiagnosticPanel
+            title="Focus · iPhone 16 Pro"
+            hint="Same focus card inside a full iPhone 16 Pro viewport."
+          >
+            <FocusFlipPreview phoneFrame />
           </DiagnosticPanel>
         </div>
       </section>
