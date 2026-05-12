@@ -601,7 +601,10 @@ export function SwipeableStepCard({
             >
               <div
                 className={cn(
-                  "absolute inset-0 overflow-hidden rounded-[1.35rem] bg-white [backface-visibility:hidden]",
+                  "absolute inset-0 rounded-[1.35rem] [backface-visibility:hidden]",
+                  gp && variant !== "focus"
+                    ? "overflow-visible bg-transparent"
+                    : "overflow-hidden bg-white",
                   "[-webkit-backface-visibility:hidden]",
                 )}
                 style={{
@@ -739,7 +742,10 @@ export function SwipeableStepCard({
               </div>
               <div
                 className={cn(
-                  "absolute inset-0 overflow-hidden rounded-[1.35rem] bg-white [backface-visibility:hidden]",
+                  "absolute inset-0 rounded-[1.35rem] [backface-visibility:hidden]",
+                  gp && variant !== "focus"
+                    ? "overflow-visible bg-transparent"
+                    : "overflow-hidden bg-white",
                   "[-webkit-backface-visibility:hidden]",
                 )}
                 style={{

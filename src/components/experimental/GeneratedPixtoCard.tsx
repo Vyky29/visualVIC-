@@ -165,8 +165,12 @@ const FOCUS_CARD_ASPECT =
 const SCHEDULE_TITLE_MAX_WORDS_PER_LINE = 3;
 const SCHEDULE_TITLE_MAX_LINES = 3;
 const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
+const SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH = 12.2;
+const SCHEDULE_RIBBON_BASE_FONT_PX = 60;
 const SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH = 15.2;
 const SCHEDULE_LOCKED_TITLE_BASE_FONT_PX = 60;
+const FOCUS_RIBBON_TARGET_VISUAL_WIDTH = 11.9;
+const FOCUS_RIBBON_BASE_FONT_PX = 52;
 const FOCUS_TITLE_TARGET_VISUAL_WIDTH = 15.4;
 const FOCUS_TITLE_BASE_FONT_PX = 42;
 
@@ -218,6 +222,24 @@ const SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES = [
     fontPx: 52,
     className: "text-[52px] leading-[0.94] tracking-[-0.018em]",
   },
+] as const;
+
+const SCHEDULE_RIBBON_SIZE_CANDIDATES = [
+  { fontPx: 60, className: "text-[60px] leading-none tracking-[-0.01em]" },
+  { fontPx: 58, className: "text-[58px] leading-none tracking-[-0.01em]" },
+  { fontPx: 56, className: "text-[56px] leading-none tracking-[-0.01em]" },
+  { fontPx: 54, className: "text-[54px] leading-none tracking-[-0.01em]" },
+  { fontPx: 52, className: "text-[52px] leading-none tracking-[-0.012em]" },
+  { fontPx: 50, className: "text-[50px] leading-none tracking-[-0.012em]" },
+] as const;
+
+const FOCUS_RIBBON_SIZE_CANDIDATES = [
+  { fontPx: 52, className: "text-[52px] leading-none tracking-[-0.01em]" },
+  { fontPx: 50, className: "text-[50px] leading-none tracking-[-0.01em]" },
+  { fontPx: 48, className: "text-[48px] leading-none tracking-[-0.012em]" },
+  { fontPx: 46, className: "text-[46px] leading-none tracking-[-0.012em]" },
+  { fontPx: 44, className: "text-[44px] leading-none tracking-[-0.014em]" },
+  { fontPx: 42, className: "text-[42px] leading-none tracking-[-0.014em]" },
 ] as const;
 
 function estimateScheduleWordVisualWidth(word: string): number {
@@ -438,6 +460,28 @@ function resolveLockedTitleLayout(
   };
 }
 
+function resolveSingleLineTypographyClass(
+  raw: string,
+  targetWidth: number,
+  baseFontPx: number,
+  candidates: readonly { fontPx: number; className: string }[],
+): string {
+  const words = raw.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    return candidates[0].className;
+  }
+
+  const fullWidth = estimateScheduleLineVisualWidth(words);
+  for (const candidate of candidates) {
+    const allowedWidth = targetWidth * (baseFontPx / candidate.fontPx);
+    if (fullWidth <= allowedWidth) {
+      return candidate.className;
+    }
+  }
+
+  return candidates[candidates.length - 1].className;
+}
+
 function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
   if (words.length <= 1) {
     return [words.join(" ")];
@@ -494,6 +538,24 @@ function resolveScheduleLockedTitleLayout(raw: string): {
     SCHEDULE_LOCKED_TITLE_BASE_FONT_PX,
     SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES,
     3,
+  );
+}
+
+function resolveScheduleRibbonTypography(raw: string): string {
+  return resolveSingleLineTypographyClass(
+    raw,
+    SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH,
+    SCHEDULE_RIBBON_BASE_FONT_PX,
+    SCHEDULE_RIBBON_SIZE_CANDIDATES,
+  );
+}
+
+function resolveFocusRibbonTypography(raw: string): string {
+  return resolveSingleLineTypographyClass(
+    raw,
+    FOCUS_RIBBON_TARGET_VISUAL_WIDTH,
+    FOCUS_RIBBON_BASE_FONT_PX,
+    FOCUS_RIBBON_SIZE_CANDIDATES,
   );
 }
 
@@ -760,6 +822,11 @@ export function GeneratedPixtoCard({
       }
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
+  const ribbonTypo = isDense
+    ? "text-[14px] leading-none tracking-[0.02em]"
+    : focusPresentation
+      ? resolveFocusRibbonTypography(category)
+      : resolveScheduleRibbonTypography(category);
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
     : ILLUSTRATION_FRAME_ASPECT;
@@ -922,18 +989,13 @@ export function GeneratedPixtoCard({
       >
         <span
           className={cn(
-            "line-clamp-2 block w-full text-center font-semibold lowercase",
+            "block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase",
             focusPresentation
-              ? "max-w-[96%] leading-[1.02] tracking-[0.02em] text-[52px] sm:text-[60px]"
+              ? "max-w-[98%]"
               : schedulePresentation
-                ? "max-w-full text-[60px] leading-[0.88] tracking-tight"
-                : "leading-snug tracking-[0.08em]",
-            isDense
-                ? "text-[14px] sm:text-[16px]"
-                : /* Schedule NOW/NEXT — coloured category ribete. */
-                  !focusPresentation &&
-                    !schedulePresentation &&
-                    "text-[60px] sm:text-[70px] tracking-[0.04em]",
+                ? "max-w-full"
+                : "max-w-full",
+            ribbonTypo,
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
