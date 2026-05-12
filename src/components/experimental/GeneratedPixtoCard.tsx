@@ -457,7 +457,7 @@ function TitleBand({
         >
           <div
             className={cn(
-              "flex w-full max-w-[97%] min-h-0 flex-col items-center justify-center gap-0 text-center",
+              "flex w-full max-w-[99%] min-h-0 flex-col items-center justify-center gap-0 text-center",
               focusTitleLayout.className,
             )}
           >
