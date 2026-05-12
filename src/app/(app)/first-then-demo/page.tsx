@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
@@ -285,6 +286,7 @@ function StepVisualCard({
 
 export default function FirstThenDemoPage() {
   const [viewport, setViewport] = useState({ w: 402, h: 874 });
+  const [showFocusMode, setShowFocusMode] = useState(false);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -325,14 +327,56 @@ export default function FirstThenDemoPage() {
     transformOrigin: "center center",
   };
 
+  if (!showFocusMode) {
+    return (
+      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-4">
+          <header className="flex flex-col items-center justify-center gap-2 pt-1 text-center">
+            <PixtoLearnIconMark className="h-11 w-11 rounded-[1.15rem]" />
+            <h1 className="text-[1.35rem] font-semibold tracking-tight text-ink">
+              First &amp; Then
+            </h1>
+          </header>
+
+          <div className="flex min-h-0 flex-col items-center justify-center gap-3">
+            <div className="w-full max-w-[18rem]">
+              <StepVisualCard
+                generatedCard={first}
+                label="First"
+                icon={<IconFirst className="h-6 w-6" />}
+              />
+            </div>
+            <div className="w-full max-w-[18rem]">
+              <StepVisualCard
+                generatedCard={second}
+                label="Then"
+                icon={<IconThen className="h-6 w-6" />}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-end justify-start">
+            <button
+              type="button"
+              onClick={() => setShowFocusMode(true)}
+              className="inline-flex h-9 items-center justify-center rounded-[0.95rem] border border-ink/10 bg-white px-3 text-[11px] font-semibold text-ink shadow-soft transition active:scale-[0.99]"
+            >
+              Focus mode
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pl-[max(0.5rem,env(safe-area-inset-top))] pr-[max(3rem,env(safe-area-inset-left))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[0.5rem]">
+          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
+            <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_4.5rem_minmax(0,1fr)] items-center gap-1 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[18rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -342,8 +386,26 @@ export default function FirstThenDemoPage() {
                 </div>
               </div>
 
+              <div className="flex h-full items-center justify-center">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Link
+                    href="/player/brushing-teeth"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                  >
+                    <RoutinesHomeIcon className="rotate-90" />
+                  </Link>
+
+                  <Link
+                    href="/menu"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+                  >
+                    <MenuDotsIcon className="rotate-90" />
+                  </Link>
+                </div>
+              </div>
+
               <div className="flex h-full min-h-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full max-w-[18rem]">
+                <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -352,22 +414,6 @@ export default function FirstThenDemoPage() {
                   />
                 </div>
               </div>
-            </div>
-
-            <div className="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2">
-              <Link
-                href="/player/brushing-teeth"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-              >
-                <RoutinesHomeIcon className="rotate-90" />
-              </Link>
-
-              <Link
-                href="/menu"
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
-              >
-                <MenuDotsIcon className="rotate-90" />
-              </Link>
             </div>
           </div>
         </div>
