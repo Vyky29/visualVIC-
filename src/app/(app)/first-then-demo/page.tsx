@@ -73,6 +73,61 @@ function IconThen({ className }: { className?: string }) {
   );
 }
 
+function MenuDotsIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className={cn("h-4 w-4", className)}
+      aria-hidden
+    >
+      <circle cx="12" cy="5.5" r="1.7" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.7" fill="currentColor" />
+      <circle cx="12" cy="18.5" r="1.7" fill="currentColor" />
+    </svg>
+  );
+}
+
+function RoutinesHomeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={cn("h-4 w-4", className)} aria-hidden>
+      <rect
+        x="4.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="13.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="4.5"
+        y="13.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M15.2 16.5h3.6M17 14.7v3.6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function splitWowTitle(raw: string): [string] | [string, string] {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length <= 2) return [raw];
@@ -99,8 +154,8 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
   const titleLines = splitWowTitle(card.title);
   const titleStyle =
     titleLines.length === 1
-      ? { fontSize: "24px", lineHeight: 0.92, letterSpacing: "-0.02em" }
-      : { fontSize: "18px", lineHeight: 0.96, letterSpacing: "-0.018em" };
+      ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
+      : { fontSize: "14px", lineHeight: 0.96, letterSpacing: "-0.016em" };
 
   return (
     <article
@@ -183,7 +238,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
       >
         <span
           className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white/95"
-          style={{ fontSize: "15px", lineHeight: 1, letterSpacing: "-0.014em" }}
+          style={{ fontSize: "11px", lineHeight: 1, letterSpacing: "-0.012em" }}
         >
           {card.category}
         </span>
@@ -301,16 +356,17 @@ export default function FirstThenDemoPage() {
 
             <Link
               href="/player/brushing-teeth"
-              className="absolute left-[max(0.45rem,env(safe-area-inset-left))] top-1/2 flex h-8 min-w-[4.85rem] -translate-y-1/2 items-center justify-center rounded-[0.9rem] bg-ink/88 px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              className="absolute left-[max(1.05rem,env(safe-area-inset-left))] top-[42.5%] flex h-8 min-w-[5.75rem] -translate-y-1/2 items-center justify-center gap-1.5 rounded-[0.9rem] bg-ink/82 px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-cream shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
             >
-              Routine
+              <RoutinesHomeIcon />
+              Routines
             </Link>
 
             <Link
               href="/menu"
-              className="absolute right-[max(0.45rem,env(safe-area-inset-right))] top-1/2 flex h-8 min-w-[4.85rem] -translate-y-1/2 items-center justify-center rounded-[0.9rem] border border-ink/10 bg-white/78 px-2.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              className="absolute right-[max(1.05rem,env(safe-area-inset-right))] top-[46%] flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
             >
-              Menu
+              <MenuDotsIcon />
             </Link>
           </div>
         </div>
