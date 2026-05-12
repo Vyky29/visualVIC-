@@ -329,24 +329,24 @@ export default function FirstThenDemoPage() {
 
   if (!showFocusMode) {
     return (
-      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.6rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-3">
-          <div className="flex flex-col items-center justify-center gap-1.5 pt-0.5 text-center">
-            <PixtoLearnIconMark className="h-10 w-10 rounded-[1rem]" />
-            <h1 className="text-[1.22rem] font-semibold tracking-tight text-ink">
+      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.65rem,env(safe-area-inset-bottom))]">
+        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-2.5">
+          <div className="flex flex-col items-center justify-center gap-1 pt-0.5 text-center">
+            <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
+            <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
               First &amp; Then
             </h1>
           </div>
 
-          <div className="flex min-h-0 flex-col items-center justify-center gap-2.5">
-            <div className="w-full max-w-[15.75rem]">
+          <div className="flex min-h-0 flex-col items-center justify-center gap-1.5">
+            <div className="w-[min(calc(100%-0.5rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))]">
               <StepVisualCard
                 generatedCard={first}
                 label="First"
                 icon={<IconFirst className="h-6 w-6" />}
               />
             </div>
-            <div className="w-full max-w-[15.75rem]">
+            <div className="w-[min(calc(100%-0.5rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))]">
               <StepVisualCard
                 generatedCard={second}
                 label="Then"
@@ -359,7 +359,7 @@ export default function FirstThenDemoPage() {
             <button
               type="button"
               onClick={() => setShowFocusMode(true)}
-              className="inline-flex h-9 items-center justify-center rounded-[0.95rem] border border-ink/10 bg-white px-3 text-[11px] font-semibold text-ink shadow-soft transition active:scale-[0.99]"
+              className="inline-flex h-8 items-center justify-center rounded-[0.9rem] border border-ink/10 bg-white px-3 text-[10px] font-semibold text-ink shadow-soft transition active:scale-[0.99]"
             >
               Focus mode
             </button>
