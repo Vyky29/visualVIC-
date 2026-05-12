@@ -383,7 +383,8 @@ function TitleBand({
 
   return (
     <div className={cn(
-      "relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white py-0.5",
+      "relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden bg-white py-0.5",
+      !focusPresentation && "border-t border-ink/[0.06]",
       bandShellPx,
     )}>
       {/*
