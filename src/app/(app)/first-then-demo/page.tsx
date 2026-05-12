@@ -370,10 +370,10 @@ export default function FirstThenDemoPage() {
   }
 
   return (
-    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
+    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-black touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
+          <div className="relative h-full w-full bg-black px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))]">
             <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_4.5rem_minmax(0,1fr)] items-center gap-1 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[17.2rem]">
