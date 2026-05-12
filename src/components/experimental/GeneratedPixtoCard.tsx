@@ -44,10 +44,10 @@ export const GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H = 881 as const;
 /** Focus presentation gets a small extra horizontal stretch without changing height. */
 export const GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX = 10 as const;
 
-/** Focus-only illustration frame: same width, 10px taller upward within the top block. */
+/** Focus-only illustration frame: same width, 15px taller upward within the top block. */
 export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME = {
   w: GENERATED_PIXTO_ILLUSTRATION_FRAME.w,
-  h: GENERATED_PIXTO_ILLUSTRATION_FRAME.h + 10,
+  h: GENERATED_PIXTO_ILLUSTRATION_FRAME.h + 15,
 } as const;
 
 /** Focus card keeps the same total height; the extra space is redistributed internally. */
@@ -476,8 +476,7 @@ export function GeneratedPixtoCard({
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const colouredShellStyle = suppressNeutralRing
     ? {
-        border: `3px solid ${categoryColour}`,
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
+        boxShadow: `inset 0 0 0 3px ${categoryColour}, inset 0 0 0 4px rgba(255,255,255,0.45)`,
       }
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
@@ -532,7 +531,7 @@ export function GeneratedPixtoCard({
             width: markSize,
             height: markSize,
             transform: focusPresentation
-              ? "translate(-37px, 0px)"
+              ? "translate(-32px, 0px)"
               : "translate(-40px, 8px)",
           }}
           aria-hidden
