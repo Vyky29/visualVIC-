@@ -129,6 +129,19 @@ function RoutinesHomeIcon({ className }: { className?: string }) {
   );
 }
 
+function HomeSectionIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={cn("h-4 w-4", className)} aria-hidden>
+      <path
+        d="M5.25 10.4 12 5l6.75 5.4v7.1a1.5 1.5 0 0 1-1.5 1.5h-2.9v-4.65a1.2 1.2 0 0 0-1.2-1.2h-2.3a1.2 1.2 0 0 0-1.2 1.2V19H6.75a1.5 1.5 0 0 1-1.5-1.5v-7.1Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function splitWowTitle(raw: string): [string] | [string, string] {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length <= 2) return [raw];
@@ -413,8 +426,8 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.4rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
-            <div className="grid h-full min-h-0 grid-cols-2 items-center gap-2.5 px-[0.35rem]">
+          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.7rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
+            <div className="mx-auto grid h-full min-h-0 w-full grid-cols-2 items-center gap-2.75 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
                   <StepVisualCard
@@ -438,7 +451,17 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-4">
+            <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="flex h-8 items-center justify-center gap-1.5 rounded-full border border-ink/10 bg-white/82 px-2.5 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
+              >
+                <HomeSectionIcon className="rotate-90" />
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                  Home
+                </span>
+              </Link>
+
               <Link
                 href="/menu"
                 className="flex h-8 items-center justify-center gap-1.5 rounded-full border border-ink/10 bg-white/78 px-2.5 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.99]"
@@ -455,7 +478,7 @@ export default function FirstThenDemoPage() {
               >
                 <RoutinesHomeIcon className="rotate-90" />
                 <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
-                  Routines
+                  Routine
                 </span>
               </Link>
             </div>
