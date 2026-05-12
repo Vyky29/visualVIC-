@@ -453,16 +453,20 @@ function TitleBand({
     return (
       <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden bg-white px-2 py-1">
         <div
-          className={cn(
-            "relative z-10 flex h-full min-h-0 w-full flex-col items-center justify-center gap-0 overflow-hidden px-0.5 text-center",
-            focusTitleLayout.className,
-          )}
+          className="relative z-10 flex h-full min-h-0 w-full items-center justify-center overflow-hidden px-0.5"
         >
-          {focusTitleLayout.lines.map((line, index) => (
-            <span key={`${line}-${index}`} className="block w-full max-w-[97%] whitespace-nowrap">
-              {line}
-            </span>
-          ))}
+          <div
+            className={cn(
+              "flex w-full max-w-[97%] min-h-0 flex-col items-center justify-center gap-0 text-center",
+              focusTitleLayout.className,
+            )}
+          >
+            {focusTitleLayout.lines.map((line, index) => (
+              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap text-center">
+                {line}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     );
