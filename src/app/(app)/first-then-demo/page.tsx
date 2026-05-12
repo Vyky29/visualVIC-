@@ -4,6 +4,10 @@ import {
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
   GENERATED_PIXTO_ILLUSTRATION_FRAME,
+  GENERATED_PIXTO_WOW_COMPANY_MARK,
+  GENERATED_PIXTO_WOW_TITLE_ZONE_H,
+  GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
+  GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR } from "@/lib/experimental/generated-pixto-demo-routine";
 import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
@@ -16,14 +20,10 @@ const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const IPHONE_16_PRO_LANDSCAPE = { w: 874, h: 402 } as const;
 
 const DIGITAL_WOW_GEOMETRY = {
-  titleH: 177,
+  titleH: GENERATED_PIXTO_WOW_TITLE_ZONE_H,
   illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
-  topLayoutH: GENERATED_PIXTO_CARD_SIZE.h - 177 - GENERATED_PIXTO_CATEGORY_BAND_H,
-  topGapH:
-    GENERATED_PIXTO_CARD_SIZE.h -
-    177 -
-    GENERATED_PIXTO_CATEGORY_BAND_H -
-    GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+  topLayoutH: GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
+  topGapH: GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 } as const;
 
 const LOCKED_TEXT_STYLE = {
@@ -118,7 +118,7 @@ function WowPreviewCard({
             backgroundColor: HOTEL_LIGHT_BLOCK_COLOUR,
           }}
         />
-        <HotelLogo size={85} />
+        <HotelLogo size={GENERATED_PIXTO_WOW_COMPANY_MARK.w} />
       </div>
 
       <div className="border-y border-white bg-white px-3 py-1">

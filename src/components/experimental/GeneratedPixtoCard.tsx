@@ -755,7 +755,8 @@ export function GeneratedPixtoCard({
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const colouredShellStyle = suppressNeutralRing
     ? {
-        boxShadow: `inset 0 0 0 3px ${categoryColour}, inset 0 0 0 4px rgba(255,255,255,0.45)`,
+        border: `3px solid ${categoryColour}`,
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
       }
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;

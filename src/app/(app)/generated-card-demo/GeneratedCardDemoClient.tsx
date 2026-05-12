@@ -1,11 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Header } from "@/components/navigation/Header";
-import { SchedulePlayer } from "@/components/schedule/SchedulePlayer";
 import {
-  GeneratedPixtoCard,
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
   GENERATED_PIXTO_COMPANY_MARK,
@@ -19,34 +16,28 @@ import {
   GENERATED_PIXTO_TITLE_ZONE_H,
   GENERATED_PIXTO_TOP_LAYOUT_H,
   GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION,
+  GENERATED_PIXTO_WOW_COMPANY_MARK,
+  GENERATED_PIXTO_WOW_TITLE_ZONE_H,
+  GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
+  GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
-  HOTEL_GENERATED_CARD_PROPS,
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-  routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
-import {
-  atTheHotelBackCardUrl,
-  atTheHotelPackMarkUrl,
-} from "@/lib/cards/at-the-hotel-cards";
-import type { Routine } from "@/lib/types/routine";
+import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
 import { cn } from "@/lib/utils/cn";
 
 const HOTEL_RIBBON_TEXT = "at the hotel";
-const HOTEL_LIGHT_BLOCK_COLOUR = "#E8C9CE";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
-const HOTEL_BACKCARD_URL = atTheHotelBackCardUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
-const NOW_CARD_PREVIEW_W = 296 as const;
-const NEXT_CARD_PREVIEW_W = 276 as const;
+const NOW_CARD_PREVIEW_W = 288 as const;
+const NEXT_CARD_PREVIEW_W = 268 as const;
 const FOCUS_DEMO_VISIBLE_W = 357.5 as const;
 const FOCUS_DEMO_VISIBLE_H = 619.4 as const;
-const FOCUS_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
-const FOCUS_GEOMETRY_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -63,6 +54,21 @@ type CardGeometry = {
   topGapH: number;
 };
 
+type Metric = {
+  label: string;
+  value: string;
+};
+
+type DocumentedCardProps = {
+  titleLines: [string] | [string, string];
+  geometry: CardGeometry;
+  widthPx: number;
+  logoSize: number;
+  cardHeight?: number;
+  heightPx?: number;
+  ribbonH?: number;
+};
+
 const ORIGINAL_GEOMETRY: CardGeometry = {
   titleH: GENERATED_PIXTO_TITLE_ZONE_H,
   illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
@@ -70,15 +76,11 @@ const ORIGINAL_GEOMETRY: CardGeometry = {
   topGapH: GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION,
 };
 
-const EXPANDED_GEOMETRY: CardGeometry = {
-  titleH: 177,
+const ORIGINAL_2_GEOMETRY: CardGeometry = {
+  titleH: GENERATED_PIXTO_WOW_TITLE_ZONE_H,
   illustrationH: GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
-  topLayoutH: GENERATED_PIXTO_CARD_SIZE.h - 177 - GENERATED_PIXTO_CATEGORY_BAND_H,
-  topGapH:
-    GENERATED_PIXTO_CARD_SIZE.h -
-    177 -
-    GENERATED_PIXTO_CATEGORY_BAND_H -
-    GENERATED_PIXTO_ILLUSTRATION_FRAME.h,
+  topLayoutH: GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
+  topGapH: GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 };
 
 const FOCUS_GEOMETRY: CardGeometry = {
@@ -89,32 +91,12 @@ const FOCUS_GEOMETRY: CardGeometry = {
     GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h,
 };
 
-const FOCUS_MODE_SAMPLE_CARD =
-  HOTEL_GENERATED_CARD_PROPS[3] ?? HOTEL_GENERATED_CARD_PROPS[0];
-const DEMO_SCHEDULE_FLOW_CARDS = HOTEL_GENERATED_CARD_PROPS.slice(0, 4);
-
-const LOCKED_PREVIEW_TEXT_STYLE: PreviewTextStyle = {
+const DOCUMENTED_TEXT_STYLE: PreviewTextStyle = {
   textSizeClassName: TITLE_TEXT_SIZE_CLASS,
   lineHeightClassName: "leading-[0.94]",
   trackingClassName: "tracking-[-0.02em]",
   lineGapClassName: "gap-[0.18em]",
   wordSpacing: "0",
-};
-
-const BEST_UI_TEXT_STYLE_A: PreviewTextStyle = {
-  textSizeClassName: "text-[24px]",
-  lineHeightClassName: "leading-[0.95]",
-  trackingClassName: "tracking-[-0.025em]",
-  lineGapClassName: "gap-[0.16em]",
-  wordSpacing: "0.01em",
-};
-
-const BEST_UI_TEXT_STYLE_B: PreviewTextStyle = {
-  textSizeClassName: "text-[22px]",
-  lineHeightClassName: "leading-[0.98]",
-  trackingClassName: "tracking-[-0.01em]",
-  lineGapClassName: "gap-[0.2em]",
-  wordSpacing: "0.015em",
 };
 
 function DiagnosticPanel({
@@ -124,7 +106,7 @@ function DiagnosticPanel({
 }: {
   title: string;
   hint: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex w-full flex-col gap-3 rounded-[1.5rem] border border-ink/[0.08] bg-white p-4 shadow-soft">
@@ -144,12 +126,12 @@ function MeasurementPill({
   children,
 }: {
   className?: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <div
       className={cn(
-        "rounded-full bg-white/88 px-2 py-1 text-[10px] font-semibold tracking-tight text-ink shadow-[0_1px_4px_rgba(0,0,0,0.08)] backdrop-blur",
+        "rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold tracking-tight text-ink shadow-[0_1px_4px_rgba(0,0,0,0.12)] backdrop-blur",
         className,
       )}
     >
@@ -158,13 +140,7 @@ function MeasurementPill({
   );
 }
 
-function SampleLogo({
-  size,
-  tintColour,
-}: {
-  size: number;
-  tintColour?: string;
-}) {
+function SampleLogo({ size }: { size: number }) {
   return (
     <div
       className="absolute right-[5.4%] top-[3.8%] rounded-[0.9rem] bg-white"
@@ -174,36 +150,14 @@ function SampleLogo({
       }}
     >
       <div className="relative h-full w-full">
-        {tintColour ? (
-          <div className="flex h-full w-full items-center justify-center">
-            <div
-              className="relative h-[68%] w-[68%] rounded-[0.75rem]"
-              style={{ border: `2px solid ${tintColour}` }}
-            >
-              <div
-                className="absolute left-[18%] top-[18%] h-[22%] w-[22%] rounded-full"
-                style={{ backgroundColor: tintColour }}
-              />
-              <div
-                className="absolute right-[18%] top-[18%] h-[22%] w-[22%] rounded-full"
-                style={{ backgroundColor: tintColour }}
-              />
-              <div
-                className="absolute bottom-[18%] left-1/2 h-[22%] w-[22%] -translate-x-1/2 rounded-full"
-                style={{ backgroundColor: tintColour }}
-              />
-            </div>
-          </div>
-        ) : (
-          <Image
-            src={HOTEL_LOGO_URL}
-            alt=""
-            fill
-            className="object-contain"
-            sizes={`${size}px`}
-            unoptimized
-          />
-        )}
+        <Image
+          src={HOTEL_LOGO_URL}
+          alt=""
+          fill
+          className="object-contain"
+          sizes={`${size}px`}
+          unoptimized
+        />
       </div>
     </div>
   );
@@ -211,11 +165,9 @@ function SampleLogo({
 
 function PreviewTitleBand({
   lines,
-  titleH,
-  textStyle = LOCKED_PREVIEW_TEXT_STYLE,
+  textStyle = DOCUMENTED_TEXT_STYLE,
 }: {
   lines: [string] | [string, string];
-  titleH: number;
   textStyle?: PreviewTextStyle;
 }) {
   return (
@@ -244,46 +196,61 @@ function PreviewTitleBand({
   );
 }
 
-function OriginalCardMeasurements({
+function formatVisibleShell(widthPx: number, cardHeight: number, heightPx?: number): string {
+  const visibleH =
+    heightPx ?? Number(((widthPx * cardHeight) / GENERATED_PIXTO_CARD_SIZE.w).toFixed(1));
+  return `${widthPx} x ${visibleH}px`;
+}
+
+function MetricList({ metrics }: { metrics: Metric[] }) {
+  return (
+    <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
+      {metrics.map((metric) => (
+        <p key={metric.label}>
+          {metric.label} <span className="font-semibold text-ink">{metric.value}</span>
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function DocumentedCard({
+  titleLines,
   geometry,
+  widthPx,
+  logoSize,
   cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
-  logoSize = GENERATED_PIXTO_COMPANY_MARK,
+  heightPx,
   ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
-  widthPx = ORIGINAL_CARD_PREVIEW_W,
-}: {
-  geometry: CardGeometry;
-  cardHeight?: number;
-  logoSize?: { w: number; h: number };
-  ribbonH?: number;
-  widthPx?: number;
-}) {
+}: DocumentedCardProps) {
   return (
     <article
-      className="relative mx-auto grid w-full overflow-hidden rounded-[1.35rem] ring-2 ring-ink/[0.1]"
+      className="relative mx-auto grid w-full overflow-hidden rounded-[1.35rem] bg-white"
       style={{
         width: `min(100%, ${widthPx}px)`,
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
+        height: heightPx ? `${heightPx}px` : undefined,
+        aspectRatio: heightPx ? undefined : `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
         gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${ribbonH}fr`,
+        border: `3px solid ${GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR}`,
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
       }}
     >
-      <div className="relative bg-[#d9eefc]">
+      <div className="relative bg-white">
         <div
-          className="absolute left-1/2 -translate-x-1/2 rounded-[1rem] border border-dashed border-ink/15 bg-[#f9e39c]"
+          className="absolute left-1/2 -translate-x-1/2 rounded-[1rem] bg-black"
           style={{
             top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
             width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
             aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
           }}
-        />
-        <div
-          className="absolute right-[6%] top-[4%] rounded-[0.8rem] border border-dashed border-ink/15 bg-[#ffb0c1]"
-          style={{
-            width: `${(logoSize.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: "1 / 1",
-          }}
-        />
+        >
+          <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
+            illustration
+          </div>
+        </div>
+        <SampleLogo size={logoSize} />
         <MeasurementPill className="absolute left-3 top-3">
-          card {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_CARD_SIZE.h}
+          shell {formatVisibleShell(widthPx, cardHeight, heightPx)}
         </MeasurementPill>
         <MeasurementPill className="absolute left-3 top-12">
           top block {GENERATED_PIXTO_CARD_SIZE.w} x {geometry.topLayoutH}
@@ -295,138 +262,17 @@ function OriginalCardMeasurements({
           illustration {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {geometry.illustrationH}
         </MeasurementPill>
         <MeasurementPill className="absolute right-3 top-3">
-          logo {logoSize.w} x {logoSize.h}
+          logo {logoSize} x {logoSize}
         </MeasurementPill>
       </div>
-      <div className="relative flex items-center justify-center border-y border-ink/[0.06] bg-[#fff5c7]">
-        <MeasurementPill>
-          white area {GENERATED_PIXTO_CARD_SIZE.w} x {geometry.titleH}
-        </MeasurementPill>
-      </div>
-      <div className="relative flex items-center justify-center bg-[#d9c7ff]">
-        <MeasurementPill>
-          ribbon {GENERATED_PIXTO_CARD_SIZE.w} x {ribbonH}
-        </MeasurementPill>
-      </div>
-    </article>
-  );
-}
 
-function FocusModeMeasurements() {
-  return (
-    <div className="space-y-3">
-      <OriginalCardMeasurements
-        geometry={FOCUS_GEOMETRY}
-        cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-        logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK}
-        ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-        widthPx={FOCUS_GEOMETRY_PREVIEW_W}
-      />
-      <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
-        <p>
-          Demo visible width{" "}
-          <span className="font-semibold text-ink">{FOCUS_DEMO_VISIBLE_W} px</span>
-        </p>
-        <p>
-          Demo visible height{" "}
-          <span className="font-semibold text-ink">{FOCUS_DEMO_VISIBLE_H} px</span>
-        </p>
-        <p>
-          Card{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-          </span>
-        </p>
-        <p>
-          Top block{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.topLayoutH}
-          </span>
-        </p>
-        <p>
-          Top gap <span className="font-semibold text-ink">{FOCUS_GEOMETRY.topGapH} h</span>
-        </p>
-        <p>
-          Illustration{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {FOCUS_GEOMETRY.illustrationH}
-          </span>
-        </p>
-        <p>
-          White area{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_CARD_SIZE.w} x {FOCUS_GEOMETRY.titleH}
-          </span>
-        </p>
-        <p>
-          Ribbon{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_CARD_SIZE.w} x {GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-          </span>
-        </p>
-        <p>
-          Logo{" "}
-          <span className="font-semibold text-ink">
-            {GENERATED_PIXTO_FOCUS_COMPANY_MARK.w} x {GENERATED_PIXTO_FOCUS_COMPANY_MARK.h}
-          </span>
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function PreviewCard({
-  lines,
-  logoSize,
-  geometry,
-  widthPx = ORIGINAL_CARD_PREVIEW_W,
-  ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-  ribbonText = HOTEL_RIBBON_TEXT,
-  lightBlockColour = HOTEL_LIGHT_BLOCK_COLOUR,
-  logoTintColour,
-  textStyle = LOCKED_PREVIEW_TEXT_STYLE,
-}: {
-  lines: [string] | [string, string];
-  logoSize: number;
-  geometry: CardGeometry;
-  widthPx?: number;
-  ribbonColour?: string;
-  ribbonText?: string;
-  lightBlockColour?: string;
-  logoTintColour?: string;
-  textStyle?: PreviewTextStyle;
-}) {
-  return (
-    <article
-      className="relative mx-auto grid overflow-hidden rounded-[1.35rem] bg-white"
-      style={{
-        width: `min(100%, ${widthPx}px)`,
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        border: `3px solid ${ribbonColour}`,
-        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
-      }}
-    >
-      <div className="relative bg-white">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 rounded-[1rem]"
-          style={{
-            top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
-            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
-            backgroundColor: lightBlockColour,
-          }}
-        />
-        <SampleLogo size={logoSize} tintColour={logoTintColour} />
-      </div>
-
-      <div className="border-y border-white bg-white px-4 py-1">
-        <PreviewTitleBand lines={lines} titleH={geometry.titleH} textStyle={textStyle} />
+      <div className="relative border-y border-white bg-white px-4 py-1">
+        <PreviewTitleBand lines={titleLines} />
       </div>
 
       <div
         className="flex items-center justify-center px-3"
-        style={{ backgroundColor: ribbonColour }}
+        style={{ backgroundColor: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR }}
       >
         <span
           className={cn(
@@ -435,53 +281,6 @@ function PreviewCard({
             TITLE_LINE_HEIGHT_CLASS,
           )}
         >
-          {ribbonText}
-        </span>
-      </div>
-    </article>
-  );
-}
-
-function PreviewCardBack({
-  geometry,
-  widthPx,
-  cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
-  ribbonColour = GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
-  ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
-}: {
-  geometry: CardGeometry;
-  widthPx: number;
-  cardHeight?: number;
-  ribbonColour?: string;
-  ribbonH?: number;
-}) {
-  return (
-    <article
-      className="relative mx-auto grid overflow-hidden rounded-[1.35rem] bg-white"
-      style={{
-        width: `min(100%, ${widthPx}px)`,
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${cardHeight}`,
-        gridTemplateRows: `${geometry.topLayoutH}fr ${geometry.titleH}fr ${ribbonH}fr`,
-        border: `3px solid ${ribbonColour}`,
-        boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.45)`,
-      }}
-    >
-      <div className="relative bg-white">
-        <Image
-          src={HOTEL_BACKCARD_URL}
-          alt=""
-          fill
-          className="object-cover"
-          sizes={`${widthPx}px`}
-          unoptimized
-        />
-      </div>
-      <div className="border-y border-white bg-white px-4 py-1" />
-      <div
-        className="flex items-center justify-center px-3"
-        style={{ backgroundColor: ribbonColour }}
-      >
-        <span className="text-center text-[23px] font-semibold lowercase tracking-tight text-white/95">
           {HOTEL_RIBBON_TEXT}
         </span>
       </div>
@@ -489,222 +288,70 @@ function PreviewCardBack({
   );
 }
 
-function FocusModeRealCard({
+function DocumentedCardPanel({
+  title,
+  hint,
+  titleLines,
+  geometry,
   widthPx,
-  heightPx = FOCUS_DEMO_VISIBLE_H,
+  logoSize,
+  titleMetrics,
+  ribbonMetrics,
+  cardHeight,
+  heightPx,
+  ribbonH,
+  extraMetrics = [],
 }: {
+  title: string;
+  hint: string;
+  titleLines: [string] | [string, string];
+  geometry: CardGeometry;
   widthPx: number;
+  logoSize: number;
+  titleMetrics: string;
+  ribbonMetrics: string;
+  cardHeight?: number;
   heightPx?: number;
+  ribbonH?: number;
+  extraMetrics?: Metric[];
 }) {
-  const scaleX = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
-  const scaleY = heightPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.h;
+  const resolvedCardHeight = cardHeight ?? GENERATED_PIXTO_CARD_SIZE.h;
+  const resolvedRibbonH = ribbonH ?? GENERATED_PIXTO_CATEGORY_BAND_H;
+  const metrics: Metric[] = [
+    { label: "Visible shell", value: formatVisibleShell(widthPx, resolvedCardHeight, heightPx) },
+    { label: "Design card", value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${resolvedCardHeight}` },
+    { label: "Top block", value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${geometry.topLayoutH}` },
+    { label: "Top gap", value: `${geometry.topGapH}h` },
+    {
+      label: "Illustration area",
+      value: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x ${geometry.illustrationH}`,
+    },
+    { label: "White area", value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${geometry.titleH}` },
+    { label: "Ribbon", value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${resolvedRibbonH}` },
+    { label: "Text box", value: `${TEXT_BOX_SIZE.w} x ${TEXT_BOX_SIZE.h}` },
+    { label: "Title text", value: titleMetrics },
+    { label: "Ribbon text", value: ribbonMetrics },
+    { label: "Logo", value: `${logoSize} x ${logoSize}` },
+    ...extraMetrics,
+  ];
 
   return (
-    <div
-      className="relative mx-auto w-full overflow-hidden"
-      style={{
-        width: `min(100%, ${widthPx}px)`,
-        height: `${heightPx}px`,
-      }}
-    >
-      <div
-        className="absolute left-1/2 top-0 -translate-x-1/2"
-      >
-        <div
-          className="origin-top-center"
-          style={{
-            width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
-            height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-            transform: `scale(${scaleX}, ${scaleY})`,
-            transformOrigin: "top center",
-          }}
-        >
-          <GeneratedPixtoCard
-            illustrationUrl={FOCUS_MODE_SAMPLE_CARD.illustrationUrl}
-            title={FOCUS_MODE_SAMPLE_CARD.title}
-            category={FOCUS_MODE_SAMPLE_CARD.category}
-            categoryColour={FOCUS_MODE_SAMPLE_CARD.categoryColour}
-            iconUrl={FOCUS_MODE_SAMPLE_CARD.iconUrl}
-            cardType={FOCUS_MODE_SAMPLE_CARD.cardType}
-            focusIllustrationScale={FOCUS_MODE_SAMPLE_CARD.focusIllustrationScale}
-            focusPresentation
-            className="h-full w-full max-w-none"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FocusModeRealCardBack({
-  widthPx,
-  heightPx = FOCUS_DEMO_VISIBLE_H,
-}: {
-  widthPx: number;
-  heightPx?: number;
-}) {
-  const scaleX = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
-  const scaleY = heightPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.h;
-
-  return (
-    <div
-      className="relative mx-auto w-full overflow-hidden"
-      style={{
-        width: `min(100%, ${widthPx}px)`,
-        height: `${heightPx}px`,
-      }}
-    >
-      <div
-        className="absolute left-1/2 top-0 -translate-x-1/2"
-      >
-        <div
-          className="origin-top-center"
-          style={{
-            width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
-            height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-            transform: `scale(${scaleX}, ${scaleY})`,
-            transformOrigin: "top center",
-          }}
-        >
-          <PreviewCardBack
-            geometry={FOCUS_GEOMETRY}
-            widthPx={GENERATED_PIXTO_CARD_SIZE.w}
-            cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-            ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FocusFlipPreview() {
-  const [flipped, setFlipped] = useState(false);
-  const widthPx = FOCUS_CARD_PREVIEW_W;
-  const lastTapRef = useRef(0);
-
-  const handleDoubleTapFlip = () => {
-    const now = Date.now();
-    if (now - lastTapRef.current <= 320) {
-      setFlipped((prev) => !prev);
-      lastTapRef.current = 0;
-      return;
-    }
-    lastTapRef.current = now;
-  };
-
-  const flipCard = (
-    <button
-      type="button"
-      onClick={handleDoubleTapFlip}
-      className="w-full bg-transparent text-left"
-      aria-label="Flip focus card preview"
-    >
-      <div
-        className="mx-auto [perspective:1200px]"
-        style={{ width: `min(100%, ${widthPx}px)` }}
-      >
-        <div
-          className={cn(
-            "relative transition-transform duration-500 [transform-style:preserve-3d]",
-            flipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]",
-          )}
-        >
-          <div className="[backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
-            <FocusModeRealCard widthPx={widthPx} />
-          </div>
-          <div className="absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <FocusModeRealCardBack widthPx={widthPx} />
-          </div>
-        </div>
-      </div>
-    </button>
-  );
-
-  return (
-    <div className="space-y-3">
-      <div
-        className="mx-auto flex w-full items-center justify-center rounded-[1.75rem] bg-[#060807] py-5"
-        style={{ maxWidth: `${FOCUS_DEMO_VISIBLE_W}px` }}
-      >
-        {flipCard}
-      </div>
-      <p className="text-center text-[11px] text-ink-faint">Double tap the card to flip</p>
-    </div>
-  );
-}
-
-function NowFlipPreview() {
-  const [flipped, setFlipped] = useState(false);
-  const lastTapRef = useRef(0);
-
-  const handleDoubleTapFlip = () => {
-    const now = Date.now();
-    if (now - lastTapRef.current <= 320) {
-      setFlipped((prev) => !prev);
-      lastTapRef.current = 0;
-      return;
-    }
-    lastTapRef.current = now;
-  };
-
-  return (
-    <div className="space-y-3">
-      <button
-        type="button"
-        onClick={handleDoubleTapFlip}
-        className="mx-auto block w-full bg-transparent text-left"
-        aria-label="Flip now card preview"
-      >
-        <div
-          className="mx-auto [perspective:1200px]"
-          style={{ width: `min(100%, ${NOW_CARD_PREVIEW_W}px)` }}
-        >
-          <div
-            className={cn(
-              "relative transition-transform duration-500 [transform-style:preserve-3d]",
-              flipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]",
-            )}
-          >
-            <div className="[backface-visibility:hidden] [-webkit-backface-visibility:hidden]">
-              <PreviewCard
-                lines={["breakfast time"]}
-                logoSize={85}
-                geometry={EXPANDED_GEOMETRY}
-                widthPx={NOW_CARD_PREVIEW_W}
-              />
-            </div>
-            <div className="absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)]">
-              <PreviewCardBack
-                geometry={EXPANDED_GEOMETRY}
-                widthPx={NOW_CARD_PREVIEW_W}
-              />
-            </div>
-          </div>
-        </div>
-      </button>
-      <p className="text-center text-[11px] text-ink-faint">Double tap the card to flip</p>
-    </div>
+    <DiagnosticPanel title={title} hint={hint}>
+      <DocumentedCard
+        titleLines={titleLines}
+        geometry={geometry}
+        widthPx={widthPx}
+        logoSize={logoSize}
+        cardHeight={resolvedCardHeight}
+        heightPx={heightPx}
+        ribbonH={resolvedRibbonH}
+      />
+      <MetricList metrics={metrics} />
+    </DiagnosticPanel>
   );
 }
 
 export function GeneratedCardDemoClient() {
-  const scheduleFlowRoutine = useMemo<Routine>(() => {
-    const suffix =
-      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-        ? crypto.randomUUID()
-        : String(Date.now());
-
-    return {
-      id: `generated-card-demo-schedule-${suffix}`,
-      name: "Hotel generated cards",
-      steps: routineStepsFromGeneratedCardProps(
-        `generated-card-demo-schedule-${suffix}`,
-        DEMO_SCHEDULE_FLOW_CARDS,
-      ),
-    };
-  }, []);
-
   return (
     <div className="pb-10">
       <Header title="Generated card demo" backHref="/menu" />
@@ -712,132 +359,77 @@ export function GeneratedCardDemoClient() {
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
           <span className="font-medium text-ink">{GENERATED_PIXTO_DEMO_ROUTINE_NAME}</span>{" "}
-          — measured cards first, visual cards second, plus the real schedule flow.
+          — locked hotel reference cards, documented with the agreed sizes only.
         </p>
       </div>
 
       <section className="mx-auto mt-8 max-w-6xl space-y-4 px-4">
         <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Card sizes
+          Locked card documentation
         </h2>
         <div className="grid gap-4 lg:grid-cols-2">
-          <DiagnosticPanel
-            title="Original card · measurements"
-            hint="Original Figma geometry with the exact block sizes."
-          >
-            <OriginalCardMeasurements
-              geometry={ORIGINAL_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
+          <DocumentedCardPanel
+            title="Original 1"
+            hint="Original Figma card shell kept here as the first reference."
+            titleLines={["breakfast time"]}
+            geometry={ORIGINAL_GEOMETRY}
+            widthPx={ORIGINAL_CARD_PREVIEW_W}
+            logoSize={GENERATED_PIXTO_COMPANY_MARK.w}
+            titleMetrics="23px reference / one locked line"
+            ribbonMetrics="23px reference"
+          />
 
-          <DiagnosticPanel
-            title="Original card · preview"
-            hint="Original size card without measurements."
-          >
-            <PreviewCard
-              lines={["breakfast time"]}
-              logoSize={85}
-              geometry={ORIGINAL_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
+          <DocumentedCardPanel
+            title="Original 2"
+            hint="Expanded white area reference that became the locked base for Now and Next."
+            titleLines={["breakfast time"]}
+            geometry={ORIGINAL_2_GEOMETRY}
+            widthPx={ORIGINAL_CARD_PREVIEW_W}
+            logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
+            titleMetrics="23px reference / locked text box"
+            ribbonMetrics="23px reference"
+          />
 
-          <DiagnosticPanel
-            title="Original card 2 · measurements"
-            hint="Expanded white area with the locked geometry you kept as reference."
-          >
-            <OriginalCardMeasurements
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
+          <DocumentedCardPanel
+            title="Now"
+            hint="Current agreed Now size, reduced proportionally without changing the internal geometry."
+            titleLines={["breakfast time"]}
+            geometry={ORIGINAL_2_GEOMETRY}
+            widthPx={NOW_CARD_PREVIEW_W}
+            logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
+            titleMetrics="23px reference / locked text box"
+            ribbonMetrics="23px reference"
+          />
 
-          <DiagnosticPanel
-            title="Original card 2 · preview"
-            hint="Original 2 shown as the clean visual card."
-          >
-            <PreviewCard
-              lines={["breakfast time"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={ORIGINAL_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
+          <DocumentedCardPanel
+            title="Next"
+            hint="Current agreed Next size, scaled down like a photo while keeping the same proportions."
+            titleLines={["receive your", "room key"]}
+            geometry={ORIGINAL_2_GEOMETRY}
+            widthPx={NEXT_CARD_PREVIEW_W}
+            logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
+            titleMetrics="23px reference / 2 lines in the same box"
+            ribbonMetrics="23px reference"
+          />
 
-          <DiagnosticPanel
-            title="Now · measurements"
-            hint="Same locked structure, shown at the bigger Now preview width."
-          >
-            <OriginalCardMeasurements
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={NOW_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Now · preview"
-            hint="Active step preview with the flip interaction."
-          >
-            <NowFlipPreview />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Next · measurements"
-            hint="Same locked structure, shown at the smaller Next preview width."
-          >
-            <OriginalCardMeasurements
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={NEXT_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Next · preview"
-            hint="Next step card without the measurement overlay."
-          >
-            <PreviewCard
-              lines={["receive your", "room key"]}
-              logoSize={85}
-              geometry={EXPANDED_GEOMETRY}
-              widthPx={NEXT_CARD_PREVIEW_W}
-            />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Focus mode · measurements"
-            hint="Final focus shell with the exact focus measurements."
-          >
-            <FocusModeMeasurements />
-          </DiagnosticPanel>
-
-          <DiagnosticPanel
-            title="Focus mode · preview"
-            hint="Final focus card preview with the current locked white area and flip behaviour."
-          >
-            <FocusFlipPreview />
-          </DiagnosticPanel>
+          <DocumentedCardPanel
+            title="Focus mode"
+            hint="Final focus shell documented with the visible screen size and the current text logic."
+            titleLines={["arrive at the hotel"]}
+            geometry={FOCUS_GEOMETRY}
+            widthPx={FOCUS_DEMO_VISIBLE_W}
+            heightPx={FOCUS_DEMO_VISIBLE_H}
+            cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+            logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK.w}
+            ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
+            titleMetrics="auto fit, up to 42px before reducing"
+            ribbonMetrics="52px focus ribbon"
+            extraMetrics={[
+              { label: "Focus text rule", value: "1 line first, then 2, then reduce only if needed" },
+            ]}
+          />
         </div>
       </section>
-
-      <section className="mx-auto mt-12 max-w-6xl space-y-4 px-4">
-        <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Exact schedule flow
-        </h2>
-        <DiagnosticPanel
-          title="Schedule player · now, next, focus"
-          hint="Real schedule-player behavior inside the demo. Use Focus Mode on the current card, then swipe in focus to move to the next one."
-        >
-          <SchedulePlayer
-            routine={scheduleFlowRoutine}
-            backHref="/generated-card-demo"
-            getFocusHref={({ nowIndex }) =>
-              `/generated-card-demo/focus-flow?start=${nowIndex}`
-            }
-          />
-        </DiagnosticPanel>
-      </section>
-
     </div>
   );
 }

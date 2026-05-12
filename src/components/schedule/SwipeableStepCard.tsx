@@ -76,8 +76,8 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   left: FOCUS_PIXTO_PNG_INSET_PX,
 };
 
-const GENERATED_WOW_NOW_CARD_W = 296 as const;
-const GENERATED_WOW_NEXT_CARD_W = 276 as const;
+const GENERATED_WOW_NOW_CARD_W = 288 as const;
+const GENERATED_WOW_NEXT_CARD_W = 268 as const;
 
 const STEP_OUTLINE_HEX: Record<
   ReturnType<typeof stepCardVisualTone>,
