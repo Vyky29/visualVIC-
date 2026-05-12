@@ -11,7 +11,6 @@ import {
   GENERATED_PIXTO_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
-  GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX,
   GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
   GENERATED_PIXTO_ILLUSTRATION_FRAME,
@@ -41,9 +40,11 @@ const IPHONE_16_PRO_VIEWPORT = { w: 402, h: 874 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
 const NOW_CARD_PREVIEW_W = 296 as const;
 const NEXT_CARD_PREVIEW_W = 276 as const;
-const FOCUS_CARD_PREVIEW_W = 320 as const;
-const FOCUS_PHONE_CARD_PREVIEW_W = 396 as const;
-const FOCUS_GEOMETRY_PREVIEW_W = 320 as const;
+const FOCUS_DEMO_VISIBLE_W = 402.4 as const;
+const FOCUS_DEMO_VISIBLE_H = 629.4 as const;
+const FOCUS_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
+const FOCUS_PHONE_CARD_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
+const FOCUS_GEOMETRY_PREVIEW_W = FOCUS_DEMO_VISIBLE_W;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -419,26 +420,20 @@ function PreviewCardBack({
 
 function FocusModeRealCard({
   widthPx,
+  heightPx = FOCUS_DEMO_VISIBLE_H,
 }: {
   widthPx: number;
+  heightPx?: number;
 }) {
-  const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
-  const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
-  const stretchedWidth = widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX;
-  const stretchedScaleX =
-    scale > 0
-      ? scale *
-        (1 +
-          GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX /
-            (GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale))
-      : scale;
+  const scaleX = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
+  const scaleY = heightPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.h;
 
   return (
     <div
       className="relative mx-auto w-full overflow-hidden"
       style={{
-        width: `min(100%, ${stretchedWidth}px)`,
-        height: `${scaledHeight}px`,
+        width: `min(100%, ${widthPx}px)`,
+        height: `${heightPx}px`,
       }}
     >
       <div
@@ -446,7 +441,7 @@ function FocusModeRealCard({
         style={{
           width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
           height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${stretchedScaleX}, ${scale})`,
+          transform: `scale(${scaleX}, ${scaleY})`,
         }}
       >
         <GeneratedPixtoCard
@@ -467,26 +462,20 @@ function FocusModeRealCard({
 
 function FocusModeRealCardBack({
   widthPx,
+  heightPx = FOCUS_DEMO_VISIBLE_H,
 }: {
   widthPx: number;
+  heightPx?: number;
 }) {
-  const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
-  const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
-  const stretchedWidth = widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX;
-  const stretchedScaleX =
-    scale > 0
-      ? scale *
-        (1 +
-          GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX /
-            (GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale))
-      : scale;
+  const scaleX = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
+  const scaleY = heightPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.h;
 
   return (
     <div
       className="relative mx-auto w-full overflow-hidden"
       style={{
-        width: `min(100%, ${stretchedWidth}px)`,
-        height: `${scaledHeight}px`,
+        width: `min(100%, ${widthPx}px)`,
+        height: `${heightPx}px`,
       }}
     >
       <div
@@ -494,7 +483,7 @@ function FocusModeRealCardBack({
         style={{
           width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
           height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${stretchedScaleX}, ${scale})`,
+          transform: `scale(${scaleX}, ${scaleY})`,
         }}
       >
         <PreviewCardBack
@@ -525,9 +514,7 @@ function FocusFlipPreview({
     >
       <div
         className="mx-auto [perspective:1200px]"
-        style={{
-          width: `min(100%, ${widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX}px)`,
-        }}
+        style={{ width: `min(100%, ${widthPx}px)` }}
       >
         <div
           className={cn(
@@ -549,7 +536,7 @@ function FocusFlipPreview({
   if (!phoneFrame) {
     return (
       <div className="space-y-3">
-        <div className="mx-auto flex w-full max-w-[22rem] items-center justify-center rounded-[1.75rem] bg-[#060807] px-4 py-5">
+        <div className="mx-auto flex w-full max-w-[28rem] items-center justify-center rounded-[1.75rem] bg-[#060807] px-4 py-5">
           {flipCard}
         </div>
         <p className="text-center text-[11px] text-ink-faint">Tap the card to flip</p>
@@ -569,7 +556,7 @@ function FocusFlipPreview({
         <div className="rounded-full bg-canvas-muted px-3 py-2 text-center text-[11px] font-semibold tracking-[0.12em] text-ink-subtle">
           iphone 16 pro · 402 x 874
         </div>
-        <div className="flex min-h-0 flex-1 items-start justify-center pt-2">
+        <div className="flex min-h-0 flex-1 items-center justify-center pt-2">
           {flipCard}
         </div>
         <p className="pb-1 text-center text-[11px] text-ink-faint">Tap the card to flip</p>
@@ -627,8 +614,8 @@ function FocusModeGeometryPreview() {
       <div className="space-y-3">
         <FocusModeRealCard widthPx={FOCUS_GEOMETRY_PREVIEW_W} />
         <p className="text-center text-[11px] text-ink-faint">
-          Real focus shell using the same text size as the original card, plus 10 px
-          of extra visual width.
+          Real focus shell in the demo at 402.4 px wide, shortened a little and
+          centred.
         </p>
       </div>
 
@@ -640,9 +627,15 @@ function FocusModeGeometryPreview() {
         />
         <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
           <p>
-            Visual shell width{" "}
+            Demo visible width{" "}
             <span className="font-semibold text-ink">
-              +{GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX} px
+              {FOCUS_DEMO_VISIBLE_W} px
+            </span>
+          </p>
+          <p>
+            Demo visible height{" "}
+            <span className="font-semibold text-ink">
+              {FOCUS_DEMO_VISIBLE_H} px
             </span>
           </p>
           <p>
