@@ -413,7 +413,7 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas px-[max(0.65rem,env(safe-area-inset-top))] py-[max(0.5rem,env(safe-area-inset-left))] pb-[4.6rem]">
+          <div className="relative h-full w-full bg-canvas pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(4.4rem,env(safe-area-inset-bottom))] py-[max(0.5rem,env(safe-area-inset-left))]">
             <div className="grid h-full min-h-0 grid-cols-2 items-center gap-1.5 px-[0.35rem]">
               <div className="flex h-full min-h-0 items-center justify-center">
                 <div className="aspect-[10/13] h-full max-h-full max-w-[18.2rem]">
@@ -438,32 +438,30 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-[max(0.55rem,env(safe-area-inset-left))] z-20 flex justify-center">
-              <div className="flex items-end gap-4">
-                <Link
-                  href="/menu"
-                  className="flex flex-col items-center justify-center gap-1 text-ink transition active:scale-[0.99]"
-                >
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/72">
-                    Menu
-                  </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm">
-                    <MenuDotsIcon className="rotate-90" />
-                  </span>
-                </Link>
+            <div className="absolute bottom-[max(0.65rem,env(safe-area-inset-left))] right-[max(0.7rem,env(safe-area-inset-bottom))] z-20 flex flex-col items-center gap-4">
+              <Link
+                href="/menu"
+                className="flex items-center gap-1.5 text-ink transition active:scale-[0.99]"
+              >
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                  Menu
+                </span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/72 text-ink shadow-soft backdrop-blur-sm">
+                  <MenuDotsIcon className="rotate-90" />
+                </span>
+              </Link>
 
-                <Link
-                  href="/player/brushing-teeth"
-                  className="flex flex-col items-center justify-center gap-1 text-ink transition active:scale-[0.99]"
-                >
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/72">
-                    Routines
-                  </span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm">
-                    <RoutinesHomeIcon className="rotate-90" />
-                  </span>
-                </Link>
-              </div>
+              <Link
+                href="/player/brushing-teeth"
+                className="flex items-center gap-1.5 text-ink transition active:scale-[0.99]"
+              >
+                <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/72">
+                  Routines
+                </span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/88 text-ink shadow-soft backdrop-blur-sm">
+                  <RoutinesHomeIcon className="rotate-90" />
+                </span>
+              </Link>
             </div>
           </div>
         </div>
