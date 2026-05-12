@@ -11,6 +11,7 @@ import {
   GENERATED_PIXTO_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
+  GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX,
   GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
   GENERATED_PIXTO_ILLUSTRATION_FRAME,
@@ -423,12 +424,20 @@ function FocusModeRealCard({
 }) {
   const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
   const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
+  const stretchedWidth = widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX;
+  const stretchedScaleX =
+    scale > 0
+      ? scale *
+        (1 +
+          GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX /
+            (GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale))
+      : scale;
 
   return (
     <div
       className="relative mx-auto w-full overflow-hidden"
       style={{
-        width: `min(100%, ${widthPx}px)`,
+        width: `min(100%, ${stretchedWidth}px)`,
         height: `${scaledHeight}px`,
       }}
     >
@@ -437,7 +446,7 @@ function FocusModeRealCard({
         style={{
           width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
           height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${scale})`,
+          transform: `scale(${stretchedScaleX}, ${scale})`,
         }}
       >
         <GeneratedPixtoCard
@@ -463,12 +472,20 @@ function FocusModeRealCardBack({
 }) {
   const scale = widthPx / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
   const scaledHeight = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
+  const stretchedWidth = widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX;
+  const stretchedScaleX =
+    scale > 0
+      ? scale *
+        (1 +
+          GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX /
+            (GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale))
+      : scale;
 
   return (
     <div
       className="relative mx-auto w-full overflow-hidden"
       style={{
-        width: `min(100%, ${widthPx}px)`,
+        width: `min(100%, ${stretchedWidth}px)`,
         height: `${scaledHeight}px`,
       }}
     >
@@ -477,7 +494,7 @@ function FocusModeRealCardBack({
         style={{
           width: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w}px`,
           height: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}px`,
-          transform: `scale(${scale})`,
+          transform: `scale(${stretchedScaleX}, ${scale})`,
         }}
       >
         <PreviewCardBack
@@ -508,7 +525,9 @@ function FocusFlipPreview({
     >
       <div
         className="mx-auto [perspective:1200px]"
-        style={{ width: `min(100%, ${widthPx}px)` }}
+        style={{
+          width: `min(100%, ${widthPx + GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX}px)`,
+        }}
       >
         <div
           className={cn(
@@ -608,7 +627,8 @@ function FocusModeGeometryPreview() {
       <div className="space-y-3">
         <FocusModeRealCard widthPx={FOCUS_GEOMETRY_PREVIEW_W} />
         <p className="text-center text-[11px] text-ink-faint">
-          Real focus shell using the same text size as the original card.
+          Real focus shell using the same text size as the original card, plus 10 px
+          of extra visual width.
         </p>
       </div>
 
@@ -619,6 +639,12 @@ function FocusModeGeometryPreview() {
           ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
         />
         <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
+          <p>
+            Visual shell width{" "}
+            <span className="font-semibold text-ink">
+              +{GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX} px
+            </span>
+          </p>
           <p>
             Card{" "}
             <span className="font-semibold text-ink">

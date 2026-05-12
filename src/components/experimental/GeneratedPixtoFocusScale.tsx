@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import {
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
+  GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { PIXTO_FOCUS_CARD_MAX_SCALE } from "@/lib/constants/pixto-focus-card";
 
@@ -37,8 +38,17 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
     return () => ro.disconnect();
   }, []);
 
-  const slotW = GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale;
+  const slotW =
+    GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale +
+    GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX;
   const slotH = GENERATED_PIXTO_FOCUS_CARD_SIZE.h * scale;
+  const stretchedScaleX =
+    scale > 0
+      ? scale *
+        (1 +
+          GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX /
+            (GENERATED_PIXTO_FOCUS_CARD_SIZE.w * scale))
+      : scale;
 
   return (
     <div
@@ -57,7 +67,7 @@ export function GeneratedPixtoFocusScale({ children }: Props) {
           style={{
             width: GENERATED_PIXTO_FOCUS_CARD_SIZE.w,
             height: GENERATED_PIXTO_FOCUS_CARD_SIZE.h,
-            transform: `scale(${scale})`,
+            transform: `scale(${stretchedScaleX}, ${scale})`,
           }}
         >
           <div className="relative h-full min-h-0 w-full min-w-0">{children}</div>

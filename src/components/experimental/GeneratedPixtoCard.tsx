@@ -41,6 +41,9 @@ export const GENERATED_PIXTO_TOP_LAYOUT_H =
 /** Focus-only top block after redistributing half of the old ribete space upward. */
 export const GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H = 881 as const;
 
+/** Focus presentation gets a small extra horizontal stretch without changing height. */
+export const GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX = 10 as const;
+
 /** Focus card keeps the same total height; the extra space is redistributed internally. */
 export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
   w: GENERATED_PIXTO_CARD_SIZE.w,
