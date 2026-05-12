@@ -66,6 +66,9 @@ export const GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION =
 /** Company mark — design px (corner glyph, scales with card width). */
 export const GENERATED_PIXTO_COMPANY_MARK = { w: 88, h: 88 } as const;
 
+/** Focus-only logo size — slightly larger while keeping the same anchor. */
+export const GENERATED_PIXTO_FOCUS_COMPANY_MARK = { w: 91, h: 91 } as const;
+
 /** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
 const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = false;
@@ -472,7 +475,10 @@ export function GeneratedPixtoCard({
   // (Schedule / Focus / Home previews) should scale that geometry, not resize
   // the illustration block ad hoc per context.
   const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
-  const markSize = `calc(100% * ${GENERATED_PIXTO_COMPANY_MARK.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
+  const markRef = focusPresentation
+    ? GENERATED_PIXTO_FOCUS_COMPANY_MARK
+    : GENERATED_PIXTO_COMPANY_MARK;
+  const markSize = `calc(100% * ${markRef.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
   const colouredShellStyle = suppressNeutralRing
     ? {
@@ -531,7 +537,7 @@ export function GeneratedPixtoCard({
             width: markSize,
             height: markSize,
             transform: focusPresentation
-              ? "translate(-32px, 0px)"
+              ? "translate(-26px, 0px)"
               : "translate(-40px, 8px)",
           }}
           aria-hidden
@@ -541,7 +547,7 @@ export function GeneratedPixtoCard({
             alt=""
             fill
             className="object-contain p-0"
-            sizes="88px"
+            sizes={`${markRef.w}px`}
             onError={onMarkError}
             unoptimized={
               markSrc.startsWith("/") ||

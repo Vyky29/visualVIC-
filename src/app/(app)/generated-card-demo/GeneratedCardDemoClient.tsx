@@ -11,6 +11,7 @@ import {
   GENERATED_PIXTO_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
+  GENERATED_PIXTO_FOCUS_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME,
   GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
@@ -246,10 +247,12 @@ function PreviewTitleBand({
 function OriginalCardMeasurements({
   geometry,
   cardHeight = GENERATED_PIXTO_CARD_SIZE.h,
+  logoSize = GENERATED_PIXTO_COMPANY_MARK,
   ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
 }: {
   geometry: CardGeometry;
   cardHeight?: number;
+  logoSize?: { w: number; h: number };
   ribbonH?: number;
 }) {
   return (
@@ -272,7 +275,7 @@ function OriginalCardMeasurements({
         <div
           className="absolute right-[6%] top-[4%] rounded-[0.8rem] border border-dashed border-ink/15 bg-[#ffb0c1]"
           style={{
-            width: `${(GENERATED_PIXTO_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+            width: `${(logoSize.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
             aspectRatio: "1 / 1",
           }}
         />
@@ -289,7 +292,7 @@ function OriginalCardMeasurements({
           illustration {GENERATED_PIXTO_ILLUSTRATION_FRAME.w} x {geometry.illustrationH}
         </MeasurementPill>
         <MeasurementPill className="absolute right-3 top-3">
-          logo {GENERATED_PIXTO_COMPANY_MARK.w} x {GENERATED_PIXTO_COMPANY_MARK.h}
+          logo {logoSize.w} x {logoSize.h}
         </MeasurementPill>
       </div>
       <div className="relative flex items-center justify-center border-y border-ink/[0.06] bg-[#fff5c7]">
@@ -634,6 +637,7 @@ function FocusModeGeometryPreview() {
         <OriginalCardMeasurements
           geometry={FOCUS_GEOMETRY}
           cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
+          logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK}
           ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
         />
         <div className="rounded-[1.25rem] border border-ink/[0.08] bg-canvas p-4 text-[12px] leading-relaxed text-ink-subtle">
@@ -685,7 +689,7 @@ function FocusModeGeometryPreview() {
           <p>
             Logo{" "}
             <span className="font-semibold text-ink">
-              {GENERATED_PIXTO_COMPANY_MARK.w} x {GENERATED_PIXTO_COMPANY_MARK.h}
+              {GENERATED_PIXTO_FOCUS_COMPANY_MARK.w} x {GENERATED_PIXTO_FOCUS_COMPANY_MARK.h}
             </span>
           </p>
         </div>
