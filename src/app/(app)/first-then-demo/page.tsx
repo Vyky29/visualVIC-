@@ -156,6 +156,23 @@ function HomeSectionIcon({ className }: { className?: string }) {
   );
 }
 
+function FocusModeIntroIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={cn("h-3.5 w-3.5 shrink-0", className)} aria-hidden>
+      <path
+        d="M9 3.5H4.5V8M15 3.5H19.5V8M15 20.5h4.5v-4.5M9 20.5H4.5V16"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const introFooterActionClass =
+  "inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-[0.9rem] border border-ink/10 bg-white px-2.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink shadow-soft transition active:scale-[0.99] sm:px-3";
+
 function splitWowTitle(raw: string): [string] | [string, string] {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length <= 2) return [raw];
@@ -408,8 +425,8 @@ export default function FirstThenDemoPage() {
 
   if (!showFocusMode) {
     return (
-      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] py-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.65rem,env(safe-area-inset-bottom))]">
-        <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] gap-2.5">
+      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-0 pt-[max(0.5rem,env(safe-area-inset-top))]">
+        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-2.5">
           <div className="flex items-center justify-center gap-2 pt-0.5 text-center">
             <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
             <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
@@ -441,12 +458,25 @@ export default function FirstThenDemoPage() {
             </div>
           </div>
 
-          <div className="flex items-end justify-end">
+          <div
+            className="flex min-h-[3.75rem] w-full min-w-0 flex-wrap items-end justify-center gap-2 px-1 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1 sm:gap-2.5"
+            role="navigation"
+            aria-label="Demo navigation"
+          >
+            <Link href="/dashboard" className={introFooterActionClass}>
+              <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
+              Home
+            </Link>
+            <Link href="/player/brushing-teeth" className={introFooterActionClass}>
+              <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
+              Routine
+            </Link>
             <button
               type="button"
               onClick={() => setShowFocusMode(true)}
-              className="inline-flex h-8 items-center justify-center rounded-[0.9rem] border border-ink/10 bg-white px-3 text-[10px] font-semibold text-ink shadow-soft transition active:scale-[0.99]"
+              className={introFooterActionClass}
             >
+              <FocusModeIntroIcon />
               Focus mode
             </button>
           </div>

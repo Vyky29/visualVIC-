@@ -700,3 +700,14 @@ export function welcomeLanguageButtonAria(lang: CardLanguageCode): string {
     ? "Idioma de la interfaz. Abrir menú"
     : "Interface language. Open menu";
 }
+
+export function welcomeFeaturePreviewSrc(
+  slot: WelcomeFeatureSlot,
+  lang: CardLanguageCode,
+): string {
+  const es = isEs(lang);
+  if (slot === "home") {
+    return es ? "/welcome/home-screen-es.png" : "/welcome/home-screen.png";
+  }
+  return es ? "/welcome/focus-mode-es.png" : "/welcome/focus-mode.png";
+}
