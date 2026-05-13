@@ -19,11 +19,15 @@ export const metadata: Metadata = {
   /** Favicon + “Add to Home Screen” (iOS uses `apple` + `appleWebApp`). */
   icons: {
     icon: [
-      { url: "/brand/pixtolearn-logo.png", type: "image/png", sizes: "any" },
+      {
+        url: "/brand/pixtolearn-app-icon-192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
     ],
     apple: [
       {
-        url: "/brand/pixtolearn-logo.png",
+        url: "/brand/pixtolearn-app-icon-180.png",
         type: "image/png",
         sizes: "180x180",
       },

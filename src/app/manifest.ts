@@ -18,19 +18,19 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#f4f6f4",
     icons: [
       {
-        src: "/brand/pixtolearn-logo.png",
+        src: "/brand/pixtolearn-app-icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/brand/pixtolearn-logo.png",
+        src: "/brand/pixtolearn-app-icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
       },
       {
-        src: "/brand/pixtolearn-logo.png",
+        src: "/brand/pixtolearn-app-icon-192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
