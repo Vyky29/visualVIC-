@@ -12,10 +12,10 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "PixtoLearn Routines",
+  title: "PixToLearn Routines",
   description:
     "Structured visual sequencing for calm, predictable daily routines.",
-  applicationName: "PixtoLearn Routines",
+  applicationName: "PixToLearn Routines",
   /** Favicon + “Add to Home Screen” (iOS uses `apple` + `appleWebApp`). */
   icons: {
     icon: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "PixtoLearn",
+    title: "PixToLearn",
     statusBarStyle: "default",
   },
 };

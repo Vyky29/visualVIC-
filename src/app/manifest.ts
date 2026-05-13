@@ -6,8 +6,8 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "PixtoLearn Routines",
-    short_name: "PixtoLearn",
+    name: "PixToLearn Routines",
+    short_name: "PixToLearn",
     description:
       "Structured visual sequencing for calm, predictable daily routines.",
     start_url: "/welcome",
