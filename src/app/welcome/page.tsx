@@ -16,6 +16,8 @@ const features = [
     to: "#E873B0",
     previewSrc: "/welcome/schedule-player.png",
     previewAlt: "Schedule Player screenshot",
+    /** Taller phone frame + wide screenshot: cover removes letterboxing under the tab bar */
+    previewFit: "cover" as const,
   },
   {
     title: "Focus Mode",
@@ -24,16 +26,22 @@ const features = [
     to: "#F5C84D",
     previewSrc: "/welcome/focus-mode.png",
     previewAlt: "Focus Mode screenshot",
+    previewFit: "contain" as const,
   },
 ] as const;
 
 function WelcomePreview({
   src,
   alt,
+  fit,
 }: {
   src: string;
   alt: string;
+  fit: "contain" | "cover";
 }) {
+  const imageClass =
+    fit === "cover" ? "object-cover object-top" : "object-contain object-top";
+
   return (
     <div className="mx-auto w-full max-w-[9.75rem] [@media(max-height:700px)]:max-w-[8.5rem]">
       <div className="rounded-[1.7rem] border border-ink/[0.08] bg-[#121916] p-1.5 shadow-[0_18px_32px_-20px_rgba(27,38,32,0.42)]">
@@ -46,7 +54,7 @@ function WelcomePreview({
               src={src}
               alt={alt}
               fill
-              className="object-contain object-top"
+              className={imageClass}
               sizes="(max-width: 640px) 38vw, 240px"
               priority
             />
@@ -83,22 +91,26 @@ export default function WelcomePage() {
             key={feature.title}
             className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[1.1rem] border border-ink/[0.06] bg-white px-2 py-2.5 shadow-soft sm:rounded-[1.25rem] sm:px-2.5 sm:py-3"
           >
-            <div className="shrink-0 text-left">
+            <div className="shrink-0 text-center">
               <div
-                className="mb-1.5 h-1 w-12 rounded-full opacity-95 sm:mb-2 sm:w-14"
+                className="mx-auto mb-1.5 h-1 w-12 rounded-full opacity-95 sm:mb-2 sm:w-14"
                 style={{
                   backgroundImage: `linear-gradient(to right, ${feature.from}, ${feature.to})`,
                 }}
               />
-              <p className="text-[0.8rem] font-semibold leading-tight text-ink sm:text-[0.88rem]">
+              <p className="text-balance text-[0.8rem] font-semibold leading-tight text-ink sm:text-[0.88rem]">
                 {feature.title}
               </p>
-              <p className="mt-1 line-clamp-4 text-[0.68rem] leading-[1.35] text-ink-subtle sm:text-[0.74rem]">
+              <p className="mx-auto mt-1 max-w-[11.5rem] text-pretty text-[0.68rem] leading-[1.4] text-ink-subtle sm:max-w-[12.5rem] sm:text-[0.74rem]">
                 {feature.body}
               </p>
             </div>
             <div className="mt-1.5 flex min-h-0 min-w-0 flex-1 items-end justify-center sm:mt-2">
-              <WelcomePreview src={feature.previewSrc} alt={feature.previewAlt} />
+              <WelcomePreview
+                src={feature.previewSrc}
+                alt={feature.previewAlt}
+                fit={feature.previewFit}
+              />
             </div>
           </section>
         ))}
