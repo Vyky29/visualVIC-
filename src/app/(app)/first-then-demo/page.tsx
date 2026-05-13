@@ -426,10 +426,10 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(3.5rem,env(safe-area-inset-bottom))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(0.55rem,2.1vw,1.35rem)] px-[0.25rem] pb-[max(3.35rem,env(safe-area-inset-bottom))]">
+          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(0.65rem,env(safe-area-inset-bottom))]">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(0.9rem,3.35vw,2.5rem)] px-[0.35rem] pb-[max(3.35rem,env(safe-area-inset-bottom))]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-[min(100%,93%)] max-h-full w-auto max-w-[min(100%,96%)] min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -440,7 +440,7 @@ export default function FirstThenDemoPage() {
               </div>
 
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-[min(100%,93%)] max-h-full w-auto max-w-[min(100%,96%)] min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
@@ -457,34 +457,34 @@ export default function FirstThenDemoPage() {
           <div className="pointer-events-none absolute inset-0">
             <nav
               aria-label="Focus mode navigation"
-              className="pointer-events-auto absolute bottom-[max(1.05rem,calc(0.55rem+env(safe-area-inset-bottom)))] right-0 flex w-max max-w-[min(100%,6.5rem)] flex-col items-end gap-3 pr-[max(0.35rem,env(safe-area-inset-bottom))]"
+              className="pointer-events-auto absolute bottom-[max(1.05rem,calc(0.55rem+env(safe-area-inset-bottom)))] left-1/2 flex w-max max-w-[min(100%,7rem)] -translate-x-1/2 flex-col items-center gap-3"
             >
               <Link
                 href="/dashboard"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <HomeSectionIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Home
                 </span>
               </Link>
 
               <Link
                 href="/menu"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <MenuDotsIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Menu
                 </span>
               </Link>
 
               <Link
                 href="/player/brushing-teeth"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <RoutinesHomeIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Routine
                 </span>
               </Link>
