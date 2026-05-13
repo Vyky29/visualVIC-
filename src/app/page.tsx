@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** First paint — welcome + language before the main shell. */
+/** Visiting `/` opens the marketing welcome flow; in-app Home uses `/dashboard`. */
 export default function Page() {
   redirect("/welcome");
 }

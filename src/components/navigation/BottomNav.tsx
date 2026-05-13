@@ -15,10 +15,10 @@ type NavItem = {
 
 const items: NavItem[] = [
   {
-    href: "/welcome",
+    href: "/dashboard",
     labelKey: "home",
     icon: "⌂",
-    groupPrefixes: ["/welcome", "/dashboard", "/"],
+    groupPrefixes: ["/dashboard"],
   },
   { href: "/library", labelKey: "library", icon: "◎" },
   { href: "/templates", labelKey: "templates", icon: "☷" },

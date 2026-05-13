@@ -9,7 +9,7 @@ import {
 } from "react";
 import { PixtoLearnLockup } from "@/components/brand/PixtoLearnLockup";
 import { MobileScreen } from "@/components/layout/MobileScreen";
-import { CardLanguageMenuButton } from "@/components/preferences/CardLanguageMenuButton";
+import { CardLanguageFlagButtons } from "@/components/preferences/CardLanguageMenuButton";
 import { WelcomeFooter } from "@/app/welcome/WelcomeFooter";
 import {
   BRAND_ICON_AMBER,
@@ -204,7 +204,7 @@ export function WelcomePageClient() {
           paddingTop: "max(0.5rem, env(safe-area-inset-top))",
         }}
       >
-        <CardLanguageMenuButton afterSelect="stay" />
+        <CardLanguageFlagButtons afterSelect="stay" />
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-1 pt-2 sm:gap-4 sm:px-0 sm:pt-3">

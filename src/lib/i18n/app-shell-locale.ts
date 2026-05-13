@@ -701,6 +701,26 @@ export function languageToggleButtonAria(lang: CardLanguageCode): string {
     : "Language: English. Tap to switch to Spanish";
 }
 
+export function languageFlagGroupAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Elegir idioma" : "Choose language";
+}
+
+/** aria-label for the Spanish-flag control (welcome two-button picker). */
+export function languageSelectSpanishAria(lang: CardLanguageCode): string {
+  if (lang === "es") {
+    return isEs(lang) ? "Español, idioma actual" : "Spanish, current language";
+  }
+  return isEs(lang) ? "Cambiar a español" : "Switch to Spanish";
+}
+
+/** aria-label for the UK-flag control (welcome two-button picker). */
+export function languageSelectEnglishAria(lang: CardLanguageCode): string {
+  if (lang === "en") {
+    return isEs(lang) ? "Inglés, idioma actual" : "English, current language";
+  }
+  return isEs(lang) ? "Cambiar a inglés" : "Switch to English";
+}
+
 const WELCOME_HOTEL_PREVIEW_DIR = "at the hotel";
 
 function welcomeHotelPreviewFile(file: string): string {
