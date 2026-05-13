@@ -1,8 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { PixtoLearnLockup } from "@/components/brand/PixtoLearnLockup";
 import { MobileScreen } from "@/components/layout/MobileScreen";
-import { Button } from "@/components/ui/Button";
+import { WelcomeFooter } from "@/app/welcome/WelcomeFooter";
 import {
   BRAND_ICON_AMBER,
   BRAND_ICON_PINK,
@@ -43,19 +42,19 @@ function WelcomePreview({
     fit === "cover" ? "object-cover object-top" : "object-contain object-top";
 
   return (
-    <div className="mx-auto w-full max-w-[9.75rem] [@media(max-height:700px)]:max-w-[8.5rem]">
-      <div className="rounded-[1.7rem] border border-ink/[0.08] bg-[#121916] p-1.5 shadow-[0_18px_32px_-20px_rgba(27,38,32,0.42)]">
-        <div className="relative overflow-hidden rounded-[1.3rem] border border-black/10 bg-white">
+    <div className="mx-auto w-full max-w-[11.25rem] [@media(max-height:700px)]:max-w-[9.75rem]">
+      <div className="rounded-[1.85rem] border border-ink/[0.08] bg-[#121916] p-[0.4rem] shadow-[0_18px_32px_-20px_rgba(27,38,32,0.42)] sm:p-1.5">
+        <div className="relative overflow-hidden rounded-[1.35rem] border border-black/10 bg-white sm:rounded-[1.4rem]">
           <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center pt-1.5">
             <span className="h-1 w-10 rounded-full bg-black/15" />
           </div>
-          <div className="relative aspect-[37/60] w-full bg-[#f6f6f4]">
+          <div className="relative aspect-[37/72] w-full bg-[#f6f6f4]">
             <Image
               src={src}
               alt={alt}
               fill
               className={imageClass}
-              sizes="(max-width: 640px) 38vw, 240px"
+              sizes="(max-width: 640px) 45vw, 280px"
               priority
             />
           </div>
@@ -105,7 +104,7 @@ export default function WelcomePage() {
                 {feature.body}
               </p>
             </div>
-            <div className="mt-1.5 flex min-h-0 min-w-0 flex-1 items-end justify-center sm:mt-2">
+            <div className="mt-2 flex min-h-0 min-w-0 justify-center sm:mt-2.5">
               <WelcomePreview
                 src={feature.previewSrc}
                 alt={feature.previewAlt}
@@ -116,26 +115,7 @@ export default function WelcomePage() {
         ))}
       </div>
 
-      <footer className="shrink-0 space-y-1.5 pt-0.5">
-        <div className="grid grid-cols-2 gap-2">
-          <Link href="/dashboard" className="block w-full">
-            <Button className="min-h-[40px] w-full whitespace-nowrap px-3 py-1.5 text-[13px]">
-              Enter home
-            </Button>
-          </Link>
-          <Link href="/auth" className="block w-full">
-            <Button
-              variant="secondary"
-              className="min-h-[40px] w-full whitespace-nowrap px-3 py-1.5 text-[13px]"
-            >
-              Sign in
-            </Button>
-          </Link>
-        </div>
-        <p className="text-center text-[11px] leading-tight text-ink-faint sm:text-[12px] [@media(max-height:700px)]:text-[10px]">
-          No backend or AI in this build — layout and flow only.
-        </p>
-      </footer>
+      <WelcomeFooter />
     </MobileScreen>
   );
 }

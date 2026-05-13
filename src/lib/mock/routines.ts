@@ -25,32 +25,18 @@ import {
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
-const CHECKIN_TEST_CARD =
-  AIRPORT_GENERATED_CARD_PROPS.find(
-    (card) => card.title === "check in at the airline counter",
-  ) ?? AIRPORT_GENERATED_CARD_PROPS[1] ?? AIRPORT_GENERATED_CARD_PROPS[0];
-const CHECKIN_TEST_CARD_FOCUS_FILL = CHECKIN_TEST_CARD
-  ? {
-      ...CHECKIN_TEST_CARD,
-      focusIllustrationScale: 1.2,
-    }
-  : undefined;
-
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
   {
-    id: "demo-prueba-checkin",
-    name: "PRUEBA",
-    description:
-      "Two check-in cards to compare the regular digital layout against a larger Focus-only illustration fill.",
-    tags: ["home"],
-    homePreviewImageUrl: CHECKIN_TEST_CARD?.illustrationUrl,
-    steps: CHECKIN_TEST_CARD && CHECKIN_TEST_CARD_FOCUS_FILL
-      ? routineStepsFromGeneratedCardProps("demo-prueba-checkin", [
-          CHECKIN_TEST_CARD,
-          CHECKIN_TEST_CARD_FOCUS_FILL,
-        ])
-      : [],
+    id: "brushing-teeth",
+    name: "Brushing Teeth",
+    description: "Clear, repeatable steps — PixtoLearn visual cards",
+    tags: ["self-care"],
+    steps: BRUSHING_TEETH_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: brushingTeethImageUrl(s.slug),
+    })),
   },
   {
     id: "morning-routine",
@@ -87,17 +73,6 @@ export const mockRoutines: Routine[] = [
     tags: ["self-care", "home"],
     homePreviewImageUrl: coreImageUrl("toilet"),
     steps: buildBedtimeEveningSteps(),
-  },
-  {
-    id: "brushing-teeth",
-    name: "Brushing Teeth",
-    description: "Clear, repeatable steps — PixtoLearn visual cards",
-    tags: ["self-care"],
-    steps: BRUSHING_TEETH_SEQUENCE.map((s) => ({
-      id: s.id,
-      title: s.title,
-      imageUrl: brushingTeethImageUrl(s.slug),
-    })),
   },
   {
     id: "getting-dressed",
