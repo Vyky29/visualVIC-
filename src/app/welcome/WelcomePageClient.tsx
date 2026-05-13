@@ -27,6 +27,7 @@ import {
   type WelcomeFeatureSlot,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { cn } from "@/lib/utils/cn";
 
 const FEATURES: readonly {
   slot: WelcomeFeatureSlot;
@@ -51,6 +52,31 @@ const FEATURES: readonly {
 /** Fixed text band so both columns stay visually paired; previews start on the same baseline. */
 const WELCOME_TEXT_BAND =
   "flex h-[6.75rem] shrink-0 flex-col items-center px-1 pb-1 pt-0.5 text-center sm:h-[7rem]";
+
+/** Shared “phone” chrome so zoom lightbox matches the small preview outline. */
+function WelcomePhoneDeviceChrome({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-[1.85rem] border border-ink/[0.08] bg-[#121916] p-[0.4rem] shadow-[0_18px_32px_-20px_rgba(27,38,32,0.42)] sm:p-1.5",
+        className,
+      )}
+    >
+      <div className="relative overflow-hidden rounded-[1.35rem] border border-black/10 bg-white sm:rounded-[1.4rem]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center pt-1.5">
+          <span className="h-1 w-10 rounded-full bg-black/15" />
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 function WelcomeZoomablePreview({
   src,
@@ -105,24 +131,19 @@ function WelcomeZoomablePreview({
       }}
       onPointerUp={handlePointerUp}
     >
-      <div className="rounded-[1.85rem] border border-ink/[0.08] bg-[#121916] p-[0.4rem] shadow-[0_18px_32px_-20px_rgba(27,38,32,0.42)] sm:p-1.5">
-        <div className="relative overflow-hidden rounded-[1.35rem] border border-black/10 bg-white sm:rounded-[1.4rem]">
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center pt-1.5">
-            <span className="h-1 w-10 rounded-full bg-black/15" />
-          </div>
-          <div className="relative aspect-[37/72] w-full bg-[#f6f6f4]">
-            <Image
-              key={src}
-              src={src}
-              alt={alt}
-              fill
-              className={imageClass}
-              sizes="(max-width: 768px) 50vw, min(52vw, 640px)"
-              priority
-            />
-          </div>
+      <WelcomePhoneDeviceChrome>
+        <div className="relative aspect-[37/72] w-full bg-[#f6f6f4]">
+          <Image
+            key={src}
+            src={src}
+            alt={alt}
+            fill
+            className={imageClass}
+            sizes="(max-width: 768px) 50vw, min(52vw, 640px)"
+            priority
+          />
         </div>
-      </div>
+      </WelcomePhoneDeviceChrome>
     </button>
   );
 }
@@ -131,11 +152,13 @@ function WelcomePreviewLightbox({
   src,
   alt,
   closeLabel,
+  fit,
   onClose,
 }: {
   src: string;
   alt: string;
   closeLabel: string;
+  fit: "contain" | "cover";
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -153,6 +176,11 @@ function WelcomePreviewLightbox({
       document.body.style.overflow = prev;
     };
   }, []);
+
+  const imageClass =
+    fit === "cover"
+      ? "object-cover object-top"
+      : "object-contain object-top";
 
   return (
     <div
@@ -175,17 +203,21 @@ function WelcomePreviewLightbox({
         onClick={onClose}
       >
         <div
-          className="relative h-[min(88dvh,calc(100dvh-5rem))] w-full max-w-[min(96vw,40rem)]"
+          className="mx-auto w-full max-w-[min(96vw,min(28rem,calc(100vw-2rem)))]"
           onClick={(e) => e.stopPropagation()}
         >
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            className="object-contain object-center"
-            sizes="min(100vw, 1200px)"
-            priority
-          />
+          <WelcomePhoneDeviceChrome>
+            <div className="relative aspect-[37/72] w-full max-h-[min(86dvh,calc(100dvh-6.5rem))] min-h-0 bg-[#f6f6f4]">
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                className={imageClass}
+                sizes="min(100vw, 1200px)"
+                priority
+              />
+            </div>
+          </WelcomePhoneDeviceChrome>
         </div>
       </div>
     </div>
@@ -195,6 +227,8 @@ function WelcomePreviewLightbox({
 export function WelcomePageClient() {
   const lang = useCardUiLanguage();
   const [zoomSlot, setZoomSlot] = useState<WelcomeFeatureSlot | null>(null);
+  const zoomFit =
+    FEATURES.find((f) => f.slot === zoomSlot)?.previewFit ?? "cover";
 
   return (
     <MobileScreen className="flex min-h-dvh w-full !max-w-2xl flex-col gap-0 bg-white !px-3 !pb-[max(1rem,env(safe-area-inset-bottom))] !pt-0 sm:!px-5">
@@ -268,6 +302,7 @@ export function WelcomePageClient() {
           src={welcomeFeaturePreviewSrc(zoomSlot, lang)}
           alt={welcomeFeaturePreviewAlt(zoomSlot, lang)}
           closeLabel={welcomePreviewLightboxCloseAria(lang)}
+          fit={zoomFit}
           onClose={() => setZoomSlot(null)}
         />
       ) : null}
