@@ -341,11 +341,12 @@ function StepVisualCard({
         </span>
       </div>
       <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 flex min-h-0 items-center justify-center p-3">
+        <div className="absolute inset-0 grid place-items-center p-3">
           <div
-            className="relative h-full max-h-full w-auto min-w-0 max-w-[min(92%,100%)] shrink-0"
+            className="relative w-[82%] max-w-full"
             style={{
               aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
+              maxHeight: "86%",
             }}
           >
             <MiniDigitalWowCard card={generatedCard} />
@@ -550,25 +551,29 @@ export default function FirstThenDemoPage() {
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
           <div className="relative h-full w-full bg-canvas pb-[max(0.5rem,env(safe-area-inset-bottom))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
             <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.42rem,1.25vw,0.78rem)] px-0 pb-0">
-              <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
-                <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
-                  <StepVisualCard
-                    generatedCard={first}
-                    label={firstThenSlotLabel("first", lang)}
-                    icon={<IconFirst className="h-7 w-7" />}
-                    className="h-full min-h-0"
-                  />
+              <div className="flex h-full min-h-0 w-full min-w-0 flex-col">
+                <div className="flex min-h-0 w-full flex-1 items-start justify-center">
+                  <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
+                    <StepVisualCard
+                      generatedCard={first}
+                      label={firstThenSlotLabel("first", lang)}
+                      icon={<IconFirst className="h-7 w-7" />}
+                      className="h-full min-h-0"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
-                <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
-                  <StepVisualCard
-                    generatedCard={second}
-                    label={firstThenSlotLabel("then", lang)}
-                    icon={<IconThen className="h-7 w-7" />}
-                    className="h-full min-h-0"
-                  />
+              <div className="flex h-full min-h-0 w-full min-w-0 flex-col">
+                <div className="flex min-h-0 w-full flex-1 items-start justify-center">
+                  <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
+                    <StepVisualCard
+                      generatedCard={second}
+                      label={firstThenSlotLabel("then", lang)}
+                      icon={<IconThen className="h-7 w-7" />}
+                      className="h-full min-h-0"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
