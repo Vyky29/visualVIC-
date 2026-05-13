@@ -3,12 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useMemo } from "react";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import {
+  dashboardStepsWord,
+  formatListWithAnd,
+  playerIndexIntro,
+  playerKindRoutine,
+  playerKindTemplate,
+  playerRoutineToneShortLabel,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -18,17 +26,7 @@ import {
   type RoutineVisualTone,
 } from "@/lib/utils/routine-accent";
 import type { Routine } from "@/lib/types/routine";
-
-const TONE_LABEL: Partial<Record<RoutineVisualTone, string>> = {
-  brushing: "Brushing teeth",
-  shower: "Shower",
-  climbing: "Climbing",
-  dress: "Dressing",
-  core: "Core",
-  swimming: "Swimming",
-  airport: "Airport",
-  hotel: "Hotel",
-};
+import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 
 const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   brushing: "border-[#91C24C]/30 bg-sage-mist/85 text-[#6a8f3a]",
@@ -44,26 +42,22 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   default: "border-sage/18 bg-sage-mist/70 text-sage",
 };
 
-function formatListLabel(labels: string[]): string {
-  if (labels.length === 0) return "";
-  if (labels.length === 1) return labels[0];
-  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
-  return `${labels.slice(0, -1).join(", ")} and ${labels.at(-1)}`;
-}
-
-function templateCardsSummary(routine: Routine): string {
+function templateCardsSummary(
+  routine: Routine,
+  lang: CardLanguageCode,
+): string {
   const labels: string[] = [];
   const seen = new Set<string>();
 
   for (const step of routine.steps) {
     const tone = stepCardVisualTone(step);
-    const label = TONE_LABEL[tone];
+    const label = playerRoutineToneShortLabel(tone, lang);
     if (!label || seen.has(label)) continue;
     seen.add(label);
     labels.push(label);
   }
 
-  return labels.length > 0 ? formatListLabel(labels) : routine.name;
+  return labels.length > 0 ? formatListWithAnd(labels, lang) : routine.name;
 }
 
 export default function PlayerIndexPage() {
@@ -83,20 +77,22 @@ export default function PlayerIndexPage() {
 
   return (
     <div>
-      <Header title="Schedule Player" backHref="/dashboard" />
+      <TranslatedHeader titleKey="schedulePlayer" backHref="/dashboard" />
       <div className="space-y-4 px-4 pb-8 pt-2">
-        <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">
-          Choose a mock routine. Each opens the vertical player with Now / Next /
-          Finished and swipe to complete.
+        <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+          {playerIndexIntro(cardUiLang)}
         </p>
         <ul className="flex flex-col gap-3">
           {combined.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
             const tone = routineVisualTone(r);
-            const kindLabel = r.kind === "Template" ? "First & Then" : r.kind;
+            const kindLabel =
+              r.kind === "Template"
+                ? playerKindTemplate(cardUiLang)
+                : playerKindRoutine(cardUiLang);
             const title =
               r.kind === "Template"
-                ? templateCardsSummary(r)
+                ? templateCardsSummary(r, cardUiLang)
                 : stockRoutineDisplayName(r.id, r.name, cardUiLang);
             return (
               <li key={r.id} className="group">
@@ -123,19 +119,19 @@ export default function PlayerIndexPage() {
                       ) : null}
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+                      <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
                         {kindLabel}
                       </p>
-                      <p className="truncate text-[17px] font-semibold text-ink">
+                      <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
                         {title}
                       </p>
                       <span
                         className={cn(
-                          "inline-flex w-fit items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-none",
+                          "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
                           STEP_CHIP_CLASS[tone],
                         )}
                       >
-                        {r.steps.length} steps
+                        {r.steps.length} {dashboardStepsWord(cardUiLang)}
                       </span>
                     </div>
                     <span className="self-center text-ink-faint" aria-hidden>

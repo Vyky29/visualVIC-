@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo } from "react";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import {
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
@@ -400,7 +400,7 @@ export function GeneratedCardDemoClient() {
 
   return (
     <div className="pb-10">
-      <Header title="Generated card demo" backHref="/menu" />
+      <TranslatedHeader titleKey="generatedCardDemo" backHref="/menu" />
 
       <div className="space-y-3 px-4 pt-3">
         <p className="px-1 text-[14px] leading-relaxed text-ink-subtle">

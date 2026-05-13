@@ -5,10 +5,24 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Header } from "@/components/navigation/Header";
+import {
+  authEmailLabel,
+  authLayoutNote,
+  authPasswordLabel,
+  authSubmitSignIn,
+  authSubmitSignUp,
+  authTabSignIn,
+  authTabSignUp,
+  authTermsPlaceholder,
+  shellBackAria,
+  shellHeaderTitle,
+} from "@/lib/i18n/app-shell-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 
 export default function AuthPage() {
   const router = useRouter();
+  const cardUiLang = useCardUiLanguage();
   const [email, setEmail] = useState("hello@pixtolearn.app");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
 
@@ -20,12 +34,18 @@ export default function AuthPage() {
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
-      <Header title={mode === "signin" ? "Sign in" : "Create account"} backHref="/welcome" />
+      <Header
+        title={shellHeaderTitle(
+          mode === "signin" ? "signIn" : "createAccount",
+          cardUiLang,
+        )}
+        backHref="/welcome"
+        backAriaLabel={shellBackAria(cardUiLang)}
+      />
       <MobileScreen className="px-6 pb-12 pt-6">
         <Card className="space-y-6">
-          <p className="text-[14px] leading-relaxed text-ink-subtle">
-            Layout prototype only — submitting does not create a session or call
-            any API.
+          <p className="break-words text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+            {authLayoutNote(cardUiLang)}
           </p>
           <div className="flex rounded-2xl bg-canvas-muted p-1">
             <button
@@ -37,7 +57,7 @@ export default function AuthPage() {
               }`}
               onClick={() => setMode("signin")}
             >
-              Sign in
+              {authTabSignIn(cardUiLang)}
             </button>
             <button
               type="button"
@@ -48,13 +68,13 @@ export default function AuthPage() {
               }`}
               onClick={() => setMode("signup")}
             >
-              Sign up
+              {authTabSignUp(cardUiLang)}
             </button>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <label className="block space-y-2">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Email
+                {authEmailLabel(cardUiLang)}
               </span>
               <input
                 type="email"
@@ -67,7 +87,7 @@ export default function AuthPage() {
             </label>
             <label className="block space-y-2">
               <span className="text-[13px] font-medium text-ink-subtle">
-                Password
+                {authPasswordLabel(cardUiLang)}
               </span>
               <input
                 type="password"
@@ -80,11 +100,13 @@ export default function AuthPage() {
               />
             </label>
             <Button type="submit" className="w-full">
-              {mode === "signin" ? "Continue" : "Create account"}
+              {mode === "signin"
+                ? authSubmitSignIn(cardUiLang)
+                : authSubmitSignUp(cardUiLang)}
             </Button>
           </form>
           <p className="text-center text-[12px] text-ink-faint">
-            Placeholder terms copy for layout spacing.
+            {authTermsPlaceholder(cardUiLang)}
           </p>
         </Card>
       </MobileScreen>

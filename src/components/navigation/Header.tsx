@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils/cn";
 type Props = {
   title: string;
   backHref?: string;
+  /** Screen reader label for the back control (default "Back"). */
+  backAriaLabel?: string;
   rightSlot?: ReactNode;
   className?: string;
   compact?: boolean;
@@ -16,6 +18,7 @@ type Props = {
 export function Header({
   title,
   backHref,
+  backAriaLabel = "Back",
   rightSlot,
   className,
   compact = false,
@@ -34,7 +37,7 @@ export function Header({
         <Link
           href={backHref}
           className="flex min-h-touch min-w-touch touch-manipulation items-center justify-center rounded-2xl text-ink active:bg-ink/10 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-ink/5"
-          aria-label="Back"
+          aria-label={backAriaLabel}
         >
           ←
         </Link>

@@ -2,23 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { bottomNavLabel, type BottomNavKey } from "@/lib/i18n/app-shell-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
 type NavItem = {
   href: string;
-  label: string;
+  labelKey: BottomNavKey;
   icon: string;
   groupPrefixes?: readonly string[];
 };
 
 const items: NavItem[] = [
-  { href: "/dashboard", label: "Home", icon: "⌂" },
-  { href: "/library", label: "Library", icon: "◎" },
-  { href: "/templates", label: "Templates", icon: "☷" },
-  { href: "/saved", label: "Saved", icon: "✦" },
+  { href: "/dashboard", labelKey: "home", icon: "⌂" },
+  { href: "/library", labelKey: "library", icon: "◎" },
+  { href: "/templates", labelKey: "templates", icon: "☷" },
+  { href: "/saved", labelKey: "saved", icon: "✦" },
   {
     href: "/menu",
-    label: "Menu",
+    labelKey: "menu",
     icon: "⋯",
     groupPrefixes: [
       "/menu",
@@ -44,6 +46,7 @@ function isActive(pathname: string, item: NavItem): boolean {
 
 export function BottomNav() {
   const pathname = usePathname();
+  const lang = useCardUiLanguage();
 
   return (
     <nav
@@ -56,7 +59,7 @@ export function BottomNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex min-h-touch min-w-[64px] max-w-[20%] flex-1 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 text-[10px] font-medium leading-tight transition-colors active:opacity-90 sm:text-[11px]",
+              "flex min-h-touch min-w-0 max-w-[20%] flex-1 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 py-2 text-[9px] font-medium leading-tight transition-colors active:opacity-90 sm:px-1 sm:text-[10px]",
               isActive(pathname, item)
                 ? "text-ink"
                 : "text-ink-faint active:text-ink-subtle [@media(hover:hover)_and_(pointer:fine)]:hover:text-ink-subtle",
@@ -65,7 +68,9 @@ export function BottomNav() {
             <span className="text-[17px] leading-none sm:text-lg" aria-hidden>
               {item.icon}
             </span>
-            {item.label}
+            <span className="line-clamp-2 w-full min-w-0 max-w-full break-words text-center hyphens-auto">
+              {bottomNavLabel(item.labelKey, lang)}
+            </span>
           </Link>
         ))}
       </div>

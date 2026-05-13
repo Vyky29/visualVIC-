@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
@@ -16,12 +16,34 @@ import {
   getPickableLibraryCard,
   routineStepsFromLibraryPick,
 } from "@/lib/library/pickable-library-cards";
+import {
+  bottomNavLabel,
+  routineFromLibraryDescription,
+  routineNewBackToLibrary,
+  routineNewEmptyAfterLibrary,
+  routineNewEmptyAfterSelect,
+  routineNewEmptyCreateWord,
+  routineNewEmptyLead,
+  routineNewEmptySelectWord,
+  routineNewIntro,
+  routineNewMoveDownAria,
+  routineNewMoveUpAria,
+  routineNewNameFieldLabel,
+  routineNewNamePlaceholder,
+  routineNewRemoveAria,
+  routineNewSaveButton,
+  routineNewStepOrdinal,
+  routineNewStepsHeading,
+  shellHeaderTitle,
+} from "@/lib/i18n/app-shell-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import type { Routine } from "@/lib/types/routine";
 
 type DraftRow = { pickId: string; label: string; imageUrl: string };
 
 export function RoutineNewClient() {
   const router = useRouter();
+  const cardUiLang = useCardUiLanguage();
   const { addRoutine } = useCustomRoutines();
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [name, setName] = useState("My routine");
@@ -76,7 +98,7 @@ export function RoutineNewClient() {
     const routine: Routine = {
       id,
       name: name.trim(),
-      description: "Created from Visual library",
+      description: routineFromLibraryDescription(cardUiLang),
       tags: ["custom", "library"],
       homePreviewImageUrl: steps[0]?.imageUrl,
       steps,
@@ -84,51 +106,59 @@ export function RoutineNewClient() {
     addRoutine(routine);
     clearLibrarySelectionDraft();
     router.push(`/player/${id}`);
-  }, [addRoutine, canSave, name, rows, router]);
+  }, [addRoutine, canSave, name, rows, router, cardUiLang]);
 
   const empty = hydrated && rows.length === 0;
 
   return (
     <div className="pb-28">
-      <Header title="New routine" backHref="/library" />
+      <TranslatedHeader titleKey="newRoutine" backHref="/library" />
       <div className="border-b border-ink/5 px-4 py-3">
         <p className="text-[18px] font-semibold leading-tight text-ink">
-          New routine
+          {shellHeaderTitle("newRoutine", cardUiLang)}
         </p>
-        <p className="mt-1 text-[13px] leading-relaxed text-ink-subtle">
-          Name the routine, reorder the steps, and save on this device. If you
-          opened this without picking cards, go to Library, tap the cards you
-          want, then tap Create routine in the header.
+        <p className="mt-1 break-words text-[13px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+          {routineNewIntro(cardUiLang)}
         </p>
       </div>
       <div className="space-y-5 px-4 pt-4">
         {empty ? (
-          <Card className="border border-ink/5 p-4 text-[14px] text-ink-subtle">
-            No cards selected. Go to{" "}
-            <Link href="/library" className="font-medium text-sage underline-offset-4 hover:underline">
-              Library
+          <Card className="border border-ink/5 p-4 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+            {routineNewEmptyLead(cardUiLang)}{" "}
+            <Link
+              href="/library"
+              className="font-medium text-sage underline-offset-4 hover:underline"
+            >
+              {bottomNavLabel("library", cardUiLang)}
             </Link>
-            , tap <span className="font-medium text-ink">Select</span>, choose
-            cards, then <span className="font-medium text-ink">Create routine</span>.
+            {routineNewEmptyAfterLibrary(cardUiLang)}{" "}
+            <span className="font-medium text-ink">
+              {routineNewEmptySelectWord(cardUiLang)}
+            </span>
+            {routineNewEmptyAfterSelect(cardUiLang)}{" "}
+            <span className="font-medium text-ink">
+              {routineNewEmptyCreateWord(cardUiLang)}
+            </span>
+            .
           </Card>
         ) : null}
 
         <label className="block px-1">
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-            Routine name
+            {routineNewNameFieldLabel(cardUiLang)}
           </span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-[16px] text-ink outline-none ring-sage/30 focus:ring-2"
-            placeholder="Name"
+            placeholder={routineNewNamePlaceholder(cardUiLang)}
             maxLength={80}
           />
         </label>
 
         <section className="space-y-2">
           <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-            Steps ({rows.length})
+            {routineNewStepsHeading(rows.length, cardUiLang)}
           </h2>
           <ul className="flex flex-col gap-2">
             {rows.map((row, index) => (
@@ -152,13 +182,13 @@ export function RoutineNewClient() {
                       {row.label}
                     </p>
                     <p className="text-[11px] text-ink-faint">
-                      Step {index + 1}
+                      {routineNewStepOrdinal(index + 1, cardUiLang)}
                     </p>
                   </div>
                   <div className="flex shrink-0 flex-col gap-1 self-center">
                     <button
                       type="button"
-                      aria-label="Move up"
+                      aria-label={routineNewMoveUpAria(cardUiLang)}
                       disabled={index === 0}
                       onClick={() => moveUp(index)}
                       className="rounded-lg px-2 py-1 text-[13px] text-ink disabled:opacity-30 active:bg-ink/10"
@@ -167,7 +197,7 @@ export function RoutineNewClient() {
                     </button>
                     <button
                       type="button"
-                      aria-label="Move down"
+                      aria-label={routineNewMoveDownAria(cardUiLang)}
                       disabled={index === rows.length - 1}
                       onClick={() => moveDown(index)}
                       className="rounded-lg px-2 py-1 text-[13px] text-ink disabled:opacity-30 active:bg-ink/10"
@@ -176,7 +206,7 @@ export function RoutineNewClient() {
                     </button>
                     <button
                       type="button"
-                      aria-label="Remove"
+                      aria-label={routineNewRemoveAria(cardUiLang)}
                       onClick={() => removeAt(index)}
                       className="rounded-lg px-2 py-1 text-[13px] text-ink-subtle active:bg-ink/10"
                     >
@@ -197,7 +227,7 @@ export function RoutineNewClient() {
             onClick={save}
             className="w-full"
           >
-            Save routine locally
+            {routineNewSaveButton(cardUiLang)}
           </Button>
           <Button
             type="button"
@@ -205,7 +235,7 @@ export function RoutineNewClient() {
             onClick={() => router.push("/library")}
             className="w-full"
           >
-            Back to library
+            {routineNewBackToLibrary(cardUiLang)}
           </Button>
         </div>
       </div>

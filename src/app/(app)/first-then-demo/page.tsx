@@ -198,7 +198,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
 
   return (
     <article
-      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white"
+      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
@@ -418,7 +418,7 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
@@ -429,7 +429,7 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />

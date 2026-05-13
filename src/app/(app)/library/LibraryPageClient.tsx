@@ -8,7 +8,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Button } from "@/components/ui/Button";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
@@ -28,7 +28,21 @@ import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
 } from "@/lib/library/library-selection-draft";
-import { libraryAirportHotelLabel } from "@/lib/i18n/pixto-digital-locale";
+import {
+  accordionOpenCloseAria,
+  dashboardPackCategoryTitle,
+  libraryClearSelection,
+  libraryCreateRoutine,
+  libraryIntroBlurb,
+  libraryNewRoutineButton,
+  libraryObjectCountBadge,
+  libraryPackSectionTitle,
+  librarySelectionSummary,
+  libraryStepCountBadge,
+  librarySubheadingObjects,
+  librarySubheadingSteps,
+  type DashboardPackCategory,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import {
   PICKABLE_LIBRARY_CARDS,
@@ -57,18 +71,6 @@ const SECTION_ORDER_BY_CATEGORY: Record<
   "self-care": ["bt", "shower", "dress-on", "dress-off"],
   home: ["core", "airport", "hotel"],
   activity: ["climb", "swim"],
-};
-
-const SECTION_LABEL: Record<LibrarySectionId, string> = {
-  bt: "Brushing teeth",
-  shower: "Shower",
-  "dress-on": "Dressing",
-  "dress-off": "Undressing",
-  core: "Core",
-  airport: "At the airport",
-  hotel: "At the hotel",
-  climb: "Climbing",
-  swim: "Swimming",
 };
 
 /** Thumbnail in each pack accordion header (same assets as the tiles). */
@@ -316,16 +318,6 @@ export function LibraryPageClient() {
 
   const grouped = useMemo(() => groupByCategoryAndSection(), []);
 
-  const sectionHeading = useCallback(
-    (section: LibrarySectionId) =>
-      section === "airport"
-        ? libraryAirportHotelLabel("airport", cardUiLang)
-        : section === "hotel"
-          ? libraryAirportHotelLabel("hotel", cardUiLang)
-          : SECTION_LABEL[section],
-    [cardUiLang],
-  );
-
   const isAccordionOpen = useCallback(
     (key: string) =>
       openAccordionKeys.has(key) ||
@@ -386,14 +378,14 @@ export function LibraryPageClient() {
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-[14px] font-medium text-ink">
-            {orderedPickIds.length} selected
+            {librarySelectionSummary(orderedPickIds.length, cardUiLang)}
           </p>
           <div className="flex flex-wrap gap-2">
             <Button type="button" variant="ghost" onClick={clearSelection}>
-              Clear
+              {libraryClearSelection(cardUiLang)}
             </Button>
             <Button type="button" variant="primary" onClick={createRoutine}>
-              Create routine
+              {libraryCreateRoutine(cardUiLang)}
             </Button>
           </div>
         </div>
@@ -407,15 +399,11 @@ export function LibraryPageClient() {
           "pb-[calc(11rem+env(safe-area-inset-bottom))]",
       )}
     >
-      <Header title="Library" />
+      <TranslatedHeader titleKey="library" />
       <div className="space-y-8 px-4 pb-10 pt-3">
         <div className="space-y-4">
-          <p className="px-1 text-center text-[15px] leading-relaxed text-ink-subtle">
-            Tap cards to select them in order (like photos). Tap a routine row to
-            open it; it stays open until you tap the{" "}
-            <span className="font-semibold text-ink">chevron on the right</span>.
-            Use <span className="font-semibold text-ink">New routine</span> below
-            to name and save without picking cards here first.
+          <p className="break-words px-1 text-center text-[15px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+            {libraryIntroBlurb(cardUiLang)}
           </p>
           <div className="flex justify-center px-1">
             <Button
@@ -424,7 +412,7 @@ export function LibraryPageClient() {
               className="!min-h-11 w-full max-w-sm !px-4 !py-2.5 text-[14px] sm:text-[15px]"
               onClick={() => router.push("/library/routine-new")}
             >
-              New routine
+              {libraryNewRoutineButton(cardUiLang)}
             </Button>
           </div>
         </div>
@@ -437,8 +425,8 @@ export function LibraryPageClient() {
 
           return (
             <section key={cat} className="space-y-3">
-              <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-                {cat.replace("-", " ")}
+              <h2 className="break-words px-1 text-[11px] font-semibold uppercase leading-snug tracking-[0.2em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+                {dashboardPackCategoryTitle(cat as DashboardPackCategory, cardUiLang)}
               </h2>
               <div className="space-y-2">
                 {SECTION_ORDER_BY_CATEGORY[cat].map((section) => {
@@ -505,22 +493,23 @@ export function LibraryPageClient() {
                             ) : null}
                           </span>
                           <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
-                            <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
-                              {sectionHeading(section)}
+                            <span className="min-w-0 max-w-full break-words text-[14px] font-semibold leading-snug text-ink [overflow-wrap:anywhere] line-clamp-2 sm:text-[15px]">
+                              {libraryPackSectionTitle(section, cardUiLang)}
                             </span>
                             <span
                               className="inline-flex shrink-0 items-center rounded-full border border-ink/8 bg-white/82 px-2 py-0.5 text-[10px] font-medium tabular-nums tracking-tight text-ink-subtle shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:text-[11px]"
-                              aria-label={`${stepCount} ${stepCount === 1 ? "step" : "steps"}`}
+                              aria-label={libraryStepCountBadge(stepCount, cardUiLang)}
                             >
-                              {stepCount}{" "}
-                              {stepCount === 1 ? "step" : "steps"}
+                              {libraryStepCountBadge(stepCount, cardUiLang)}
                             </span>
                             <span
                               className="inline-flex shrink-0 items-center rounded-full border border-ink/8 bg-white/82 px-2 py-0.5 text-[10px] font-medium tabular-nums tracking-tight text-ink-subtle shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:text-[11px]"
-                              aria-label={`${objectCount} ${objectCount === 1 ? "object" : "objects"}`}
+                              aria-label={libraryObjectCountBadge(
+                                objectCount,
+                                cardUiLang,
+                              )}
                             >
-                              {objectCount}{" "}
-                              {objectCount === 1 ? "object" : "objects"}
+                              {libraryObjectCountBadge(objectCount, cardUiLang)}
                             </span>
                           </span>
                         </button>
@@ -528,7 +517,7 @@ export function LibraryPageClient() {
                           type="button"
                           onClick={() => toggleAccordionCorner(accordionKey)}
                           className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
-                          aria-label={open ? "Close" : "Open"}
+                          aria-label={accordionOpenCloseAria(open, cardUiLang)}
                         >
                           <span aria-hidden>{open ? "▾" : "▸"}</span>
                         </button>
@@ -543,8 +532,8 @@ export function LibraryPageClient() {
                           <div className="space-y-3 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
                             {objectCards.length > 0 ? (
                               <section className="space-y-1.5">
-                                <p className="px-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                                  Objects
+                                <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+                                  {librarySubheadingObjects(cardUiLang)}
                                 </p>
                                 <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                                   {objectCards.map((v) => (
@@ -560,8 +549,8 @@ export function LibraryPageClient() {
                             ) : null}
                             {stepCards.length > 0 ? (
                               <section className="space-y-1.5">
-                                <p className="px-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                                  Steps
+                                <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+                                  {librarySubheadingSteps(cardUiLang)}
                                 </p>
                                 <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                                   {stepCards.map((v) => (

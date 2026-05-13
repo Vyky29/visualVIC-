@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { ChildSex } from "@/lib/types/routine";
@@ -68,7 +68,7 @@ export default function ProfileOnboardingPage() {
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
-      <Header title="Profile" backHref="/menu" />
+      <TranslatedHeader titleKey="profile" backHref="/menu" />
       <MobileScreen className="space-y-8 px-6 pb-14 pt-6">
         <div className="space-y-2 text-center">
           <p className="text-[22px] font-semibold text-ink">Child profile</p>

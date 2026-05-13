@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
-import { Header } from "@/components/navigation/Header";
+import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import {
@@ -20,6 +20,28 @@ import {
   routineDashboardHomeGridTileClass,
 } from "@/lib/utils/routine-accent";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import {
+  accordionOpenCloseAria,
+  bottomNavLabel,
+  dashboardAllRoutinesLink,
+  dashboardContinueLabel,
+  dashboardFeaturedStepsHint,
+  dashboardFirstThenCardEyebrow,
+  dashboardFirstThenCardTitle,
+  dashboardNoPreview,
+  dashboardPackCategoryTitle,
+  dashboardQuickBuilderEyebrow,
+  dashboardQuickBuilderTitle,
+  dashboardQuickLibraryTitle,
+  dashboardQuickTemplatesTitle,
+  dashboardRoutineCountLabel,
+  dashboardRoutinesSectionTitle,
+  dashboardSchedulePlayerTitle,
+  dashboardStepsWord,
+  profileAddAvatarHint,
+  profileDisplayNamePlaceholder,
+  profilePromoSubtitle,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
@@ -45,10 +67,6 @@ function dashboardCategoryForRoutine(
   if (tags.includes("home")) return "home";
   if (tags.includes("activity")) return "activity";
   return null;
-}
-
-function categoryTitle(cat: DashboardCategory): string {
-  return cat.replace("-", " ");
 }
 
 function ScheduleSectionIcon() {
@@ -199,7 +217,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center justify-between gap-3 px-1">
-      <div className="flex min-w-0 items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <span
           className={cn(
             "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-11 sm:w-11",
@@ -215,7 +233,7 @@ function SectionHeader({
             {icon}
           </span>
         </span>
-        <h2 className="min-w-0 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
+        <h2 className="min-w-0 flex-1 break-words text-balance text-[14px] font-semibold uppercase leading-snug tracking-[0.12em] text-ink line-clamp-2 [overflow-wrap:anywhere] sm:text-[15px] sm:tracking-[0.14em]">
           {title}
         </h2>
       </div>
@@ -224,11 +242,7 @@ function SectionHeader({
   );
 }
 
-function DashboardRoutineTile({
-  routine,
-}: {
-  routine: Routine;
-}) {
+function DashboardRoutineTile({ routine }: { routine: Routine }) {
   const previewUrl = routine.homePreviewImageUrl ?? routine.steps[0]?.imageUrl;
   const cardUiLang = useCardUiLanguage();
 
@@ -254,7 +268,7 @@ function DashboardRoutineTile({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center px-2 text-center text-[11px] text-ink-faint">
-              No preview
+              {dashboardNoPreview(cardUiLang)}
             </div>
           )}
         </div>
@@ -263,7 +277,7 @@ function DashboardRoutineTile({
             {stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
           </p>
           <p className="mt-0.5 text-[10px] text-ink-subtle">
-            {routine.steps.length} steps
+            {routine.steps.length} {dashboardStepsWord(cardUiLang)}
           </p>
         </div>
       </Card>
@@ -320,21 +334,6 @@ function HomeRoutinePreviewMedia({
   );
 }
 
-function profileSubtitle(profile: {
-  sex?: string;
-  heightCm?: number;
-} | null): string {
-  if (!profile)
-    return "Photo, name, and details · stored on this device only";
-  const parts: string[] = [];
-  if (profile.sex === "male") parts.push("Boy");
-  else if (profile.sex === "female") parts.push("Girl");
-  if (profile.heightCm != null) parts.push(`${profile.heightCm} cm`);
-  if (parts.length === 0)
-    return "Photo and name · stored on this device only";
-  return `${parts.join(" · ")} · local`;
-}
-
 export default function DashboardPage() {
   const { profile } = useProfile();
   const { routines: customRoutines, hydrated: customHydrated } =
@@ -370,6 +369,7 @@ export default function DashboardPage() {
   );
   const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
   const frameScale = profile?.avatarFrameScale ?? 1;
+  const cardUiLang = useCardUiLanguage();
 
   const isAccordionOpen = useCallback(
     (key: string) =>
@@ -398,7 +398,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <Header title="Home" />
+      <TranslatedHeader titleKey="home" />
       <div className="space-y-8 px-4 pb-8 pt-4">
         <Link href="/onboarding/profile">
           <Card className="flex items-center gap-4 border border-ink/5 bg-white/95 p-4 transition hover:shadow-soft">
@@ -421,16 +421,16 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="flex h-full items-center justify-center text-[11px] font-medium text-ink-faint">
-                  Add
+                  {profileAddAvatarHint(cardUiLang)}
                 </div>
               )}
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-[18px] font-semibold text-ink">
-                {profile?.displayName ?? "Your profile"}
+                {profile?.displayName ?? profileDisplayNamePlaceholder(cardUiLang)}
               </p>
               <p className="text-[13px] text-ink-subtle">
-                {profileSubtitle(profile)}
+                {profilePromoSubtitle(profile ?? null, cardUiLang)}
               </p>
             </div>
             <span className="text-ink-faint" aria-hidden>
@@ -441,7 +441,7 @@ export default function DashboardPage() {
 
         <section className="space-y-4">
           <SectionHeader
-            title="Schedule Player"
+            title={dashboardSchedulePlayerTitle(cardUiLang)}
             icon={<ScheduleSectionIcon />}
             ringClass="ring-sage/65"
             iconClassName="text-sage"
@@ -450,7 +450,7 @@ export default function DashboardPage() {
                 href="/player"
                 className="text-[13px] font-medium text-sage underline-offset-4 hover:underline"
               >
-                All routines
+                {dashboardAllRoutinesLink(cardUiLang)}
               </Link>
             }
           />
@@ -467,13 +467,13 @@ export default function DashboardPage() {
                 />
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-subtle">
-                    Continue
+                    {dashboardContinueLabel(cardUiLang)}
                   </p>
                   <p className="truncate text-[19px] font-semibold leading-tight text-ink">
-                    {primary.name}
+                    {stockRoutineDisplayName(primary.id, primary.name, cardUiLang)}
                   </p>
                   <p className="text-[13px] text-ink-subtle">
-                    {primary.steps.length} steps · tap for Focus anytime
+                    {primary.steps.length} {dashboardFeaturedStepsHint(cardUiLang)}
                   </p>
                 </div>
               </div>
@@ -483,7 +483,7 @@ export default function DashboardPage() {
 
         <section className="space-y-3">
           <SectionHeader
-            title="Routines"
+            title={dashboardRoutinesSectionTitle(cardUiLang)}
             icon={<RoutinesSectionIcon />}
             ringClass="ring-[#6b8f9e]/75"
             iconClassName="text-[#5f8392]"
@@ -516,11 +516,11 @@ export default function DashboardPage() {
                     if (prefersFineHover) setHoverPeekKey(null);
                   }}
                 >
-                  <div className="flex h-[56px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:h-[58px]">
+                  <div className="flex min-h-[56px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:min-h-[58px]">
                     <button
                       type="button"
                       onClick={() => openAccordion(accordionKey)}
-                      className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left transition hover:bg-canvas-muted/90 sm:px-4"
+                      className="flex min-h-[56px] min-w-0 flex-1 items-center gap-2 px-2 py-2 text-left transition hover:bg-canvas-muted/90 sm:min-h-[58px] sm:gap-3 sm:px-4 sm:py-2.5"
                     >
                       <span
                         className={cn(
@@ -537,19 +537,18 @@ export default function DashboardPage() {
                           {iconDef.icon}
                         </span>
                       </span>
-                      <span className="min-w-0 flex-1 text-[14px] font-semibold uppercase tracking-[0.14em] text-ink sm:text-[15px]">
-                        {categoryTitle(cat)}
+                      <span className="min-w-0 flex-1 break-words text-[12px] font-semibold uppercase leading-snug tracking-[0.1em] text-ink line-clamp-2 [overflow-wrap:anywhere] sm:text-[13px] sm:tracking-[0.12em]">
+                        {dashboardPackCategoryTitle(cat, cardUiLang)}
                       </span>
-                      <span className="shrink-0 whitespace-nowrap text-[11px] font-extralight tabular-nums tracking-wide text-ink-faint sm:text-[12px]">
-                        {routines.length}{" "}
-                        {routines.length === 1 ? "routine" : "routines"}
+                      <span className="shrink-0 self-center whitespace-nowrap text-[10px] font-medium tabular-nums tracking-wide text-ink-faint sm:text-[11px]">
+                        {dashboardRoutineCountLabel(routines.length, cardUiLang)}
                       </span>
                     </button>
                     <button
                       type="button"
                       onClick={() => toggleAccordionCorner(accordionKey)}
                       className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
-                      aria-label={open ? "Close" : "Open"}
+                      aria-label={accordionOpenCloseAria(open, cardUiLang)}
                     >
                       <span aria-hidden>{open ? "▾" : "▸"}</span>
                     </button>
@@ -580,41 +579,41 @@ export default function DashboardPage() {
         <section className="grid grid-cols-2 gap-3">
           <Link href="/first-then">
             <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                First & Then
+              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
+                {dashboardFirstThenCardEyebrow(cardUiLang)}
               </p>
-              <p className="mt-2 text-[15px] font-semibold leading-snug text-ink">
-                Two steps only
+              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                {dashboardFirstThenCardTitle(cardUiLang)}
               </p>
             </Card>
           </Link>
           <Link href="/builder">
             <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                Builder
+              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
+                {dashboardQuickBuilderEyebrow(cardUiLang)}
               </p>
-              <p className="mt-2 text-[15px] font-semibold leading-snug text-ink">
-                Edit titles
+              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                {dashboardQuickBuilderTitle(cardUiLang)}
               </p>
             </Card>
           </Link>
           <Link href="/library">
             <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                Library
+              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
+                {bottomNavLabel("library", cardUiLang)}
               </p>
-              <p className="mt-2 text-[15px] font-semibold leading-snug text-ink">
-                Visual cards
+              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                {dashboardQuickLibraryTitle(cardUiLang)}
               </p>
             </Card>
           </Link>
           <Link href="/templates">
             <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
-                Templates
+              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
+                {bottomNavLabel("templates", cardUiLang)}
               </p>
-              <p className="mt-2 text-[15px] font-semibold leading-snug text-ink">
-                Quick starts
+              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                {dashboardQuickTemplatesTitle(cardUiLang)}
               </p>
             </Card>
           </Link>

@@ -66,8 +66,8 @@ function WelcomePreview({
 
 export default function WelcomePage() {
   return (
-    <MobileScreen className="grid h-dvh max-h-dvh grid-rows-[auto_minmax(0,1fr)_auto] gap-3 overflow-hidden bg-white px-4 !pb-[max(0.55rem,env(safe-area-inset-bottom))] !pt-[max(0.55rem,env(safe-area-inset-top))]">
-      <header className="min-h-0 shrink-0 space-y-2 text-center">
+    <MobileScreen className="flex min-h-dvh w-full flex-col gap-4 bg-white px-4 !pb-[max(1rem,env(safe-area-inset-bottom))] !pt-[max(0.55rem,env(safe-area-inset-top))]">
+      <header className="shrink-0 space-y-2 text-center">
         <PixtoLearnLockup
           variant="hero"
           layout="stacked"
@@ -84,11 +84,11 @@ export default function WelcomePage() {
         </div>
       </header>
 
-      <div className="grid min-h-0 grid-cols-2 gap-2 overflow-hidden py-0.5 sm:gap-3">
+      <div className="grid w-full grid-cols-2 gap-2 py-0.5 sm:gap-3">
         {features.map((feature) => (
           <section
             key={feature.title}
-            className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[1.1rem] border border-ink/[0.06] bg-white px-2 py-2.5 shadow-soft sm:rounded-[1.25rem] sm:px-2.5 sm:py-3"
+            className="flex min-w-0 flex-col rounded-[1.1rem] border border-ink/[0.06] bg-white px-2 py-2.5 shadow-soft sm:rounded-[1.25rem] sm:px-2.5 sm:py-3"
           >
             <div className="shrink-0 text-center">
               <div
@@ -104,7 +104,7 @@ export default function WelcomePage() {
                 {feature.body}
               </p>
             </div>
-            <div className="mt-2 flex min-h-0 min-w-0 justify-center sm:mt-2.5">
+            <div className="mt-2 flex w-full justify-center sm:mt-2.5">
               <WelcomePreview
                 src={feature.previewSrc}
                 alt={feature.previewAlt}
@@ -115,7 +115,9 @@ export default function WelcomePage() {
         ))}
       </div>
 
-      <WelcomeFooter />
+      <div className="mt-auto shrink-0 pt-1">
+        <WelcomeFooter />
+      </div>
     </MobileScreen>
   );
 }
