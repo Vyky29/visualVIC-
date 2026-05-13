@@ -66,36 +66,40 @@ export default function WelcomePage() {
           layout="stacked"
           className="mx-auto w-full max-w-sm [@media(max-height:700px)]:gap-2"
         />
-        <h1 className="text-balance px-1 text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
-          Visual schedules that feel steady on the phone
-        </h1>
-        <p className="mx-auto max-w-sm text-[13px] leading-[1.35] text-ink-subtle sm:text-[14px] [@media(max-height:700px)]:text-[12px]">
-          One calm column — routines, steps, and Focus Mode — built for clarity,
-          not clutter.
-        </p>
+        <div className="mx-auto w-full max-w-[16.25rem] space-y-1.5 text-center sm:max-w-[17.5rem]">
+          <h1 className="text-balance text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
+            Visual schedules that feel steady on the phone
+          </h1>
+          <p className="text-pretty text-[13px] leading-[1.45] text-ink-subtle sm:text-[14px] [@media(max-height:700px)]:text-[12px]">
+            One calm column — routines, steps, and Focus Mode — built for
+            clarity, not clutter.
+          </p>
+        </div>
       </header>
 
-      <div className="grid min-h-0 auto-rows-fr gap-3 overflow-hidden py-0.5">
+      <div className="grid min-h-0 grid-cols-2 gap-2 overflow-hidden py-0.5 sm:gap-3">
         {features.map((feature) => (
           <section
             key={feature.title}
-            className="grid min-h-0 min-w-0 grid-cols-[minmax(0,1fr)_minmax(8.25rem,9.75rem)] items-center gap-3 overflow-hidden rounded-[1.35rem] border border-ink/[0.06] bg-white px-3 py-3 shadow-soft [@media(max-height:700px)]:grid-cols-[minmax(0,1fr)_minmax(7.5rem,8.5rem)] [@media(max-height:700px)]:gap-2.5 [@media(max-height:700px)]:px-2.5 [@media(max-height:700px)]:py-2.5"
+            className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-[1.1rem] border border-ink/[0.06] bg-white px-2 py-2.5 shadow-soft sm:rounded-[1.25rem] sm:px-2.5 sm:py-3"
           >
-            <div className="flex min-h-0 min-w-0 flex-col justify-center text-left">
+            <div className="shrink-0 text-left">
               <div
-                className="mb-2 h-1 w-16 rounded-full opacity-95"
+                className="mb-1.5 h-1 w-12 rounded-full opacity-95 sm:mb-2 sm:w-14"
                 style={{
                   backgroundImage: `linear-gradient(to right, ${feature.from}, ${feature.to})`,
                 }}
               />
-              <p className="text-[0.95rem] font-semibold leading-tight text-ink sm:text-[1rem] [@media(max-height:700px)]:text-[0.88rem]">
+              <p className="text-[0.8rem] font-semibold leading-tight text-ink sm:text-[0.88rem]">
                 {feature.title}
               </p>
-              <p className="mt-1.5 text-[0.82rem] leading-[1.4] text-ink-subtle sm:text-[0.9rem] [@media(max-height:700px)]:mt-1 [@media(max-height:700px)]:text-[0.76rem]">
+              <p className="mt-1 line-clamp-4 text-[0.68rem] leading-[1.35] text-ink-subtle sm:text-[0.74rem]">
                 {feature.body}
               </p>
             </div>
-            <WelcomePreview src={feature.previewSrc} alt={feature.previewAlt} />
+            <div className="mt-1.5 flex min-h-0 min-w-0 flex-1 items-end justify-center sm:mt-2">
+              <WelcomePreview src={feature.previewSrc} alt={feature.previewAlt} />
+            </div>
           </section>
         ))}
       </div>
