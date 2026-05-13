@@ -287,10 +287,10 @@ function StepVisualCard({
         </span>
       </div>
       <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 flex items-center justify-center p-3">
+        <div className="absolute inset-0 grid place-items-center p-3">
           <div
-            className="relative h-auto w-[82%] max-w-full shrink-0"
-            style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "min(86%, 100%)" }}
+            className="relative w-[82%] max-w-full"
+            style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "86%" }}
           >
             <MiniDigitalWowCard card={generatedCard} />
           </div>
