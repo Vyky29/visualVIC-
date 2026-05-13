@@ -293,7 +293,7 @@ export function WelcomePageClient() {
           ))}
         </div>
 
-        <div className="mt-auto shrink-0 pt-1">
+        <div className="mt-auto shrink-0 pt-0">
           <WelcomeFooter />
         </div>
       </div>
