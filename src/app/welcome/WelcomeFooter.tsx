@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import {
@@ -13,6 +14,7 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 export function WelcomeFooter() {
+  const router = useRouter();
   const [language, setLanguage] = useState<CardLanguageCode>("en");
   const [menuOpen, setMenuOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,7 @@ export function WelcomeFooter() {
     setLanguage(code);
     writeStoredCardLanguage(code);
     closeMenu();
+    router.push("/dashboard");
   };
 
   return (
@@ -110,8 +113,8 @@ export function WelcomeFooter() {
         </div>
       </div>
       <p className="text-center text-[10px] leading-snug text-ink-faint sm:text-[11px]">
-        Language is saved on this device. Card text is still English here — wiring
-        translation or AI-generated cards is the next step once those APIs exist.
+        Choosing English or Español saves it on this device and opens Home — airport and
+        hotel digital cards and matching labels follow that choice (local copy only).
       </p>
     </footer>
   );

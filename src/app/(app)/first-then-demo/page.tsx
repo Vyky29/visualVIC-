@@ -1,8 +1,8 @@
- "use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
   GENERATED_PIXTO_CARD_SIZE,
@@ -15,10 +15,12 @@ import {
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
+import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
 const cardShell =
-  "relative overflow-hidden rounded-[1.45rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_9px_30px_-14px_rgba(28,36,32,0.2)]";
+  "relative overflow-hidden rounded-[1.45rem] bg-[#E2E7EB] shadow-[0_9px_30px_-14px_rgba(28,36,32,0.2)]";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 
 function IconFirst({ className }: { className?: string }) {
@@ -177,7 +179,18 @@ function splitWowTitle(raw: string): [string] | [string, string] {
 }
 
 function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
-  const titleLines = splitWowTitle(card.title);
+  const cardUiLang = useCardUiLanguage();
+  const { title: displayTitle, category: displayCategory } = useMemo(
+    () =>
+      resolveDigitalPixtoStrings(
+        card.illustrationUrl,
+        card.title,
+        card.category,
+        cardUiLang,
+      ),
+    [card.illustrationUrl, card.title, card.category, cardUiLang],
+  );
+  const titleLines = splitWowTitle(displayTitle);
   const titleStyle =
     titleLines.length === 1
       ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
@@ -185,11 +198,10 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
 
   return (
     <article
-      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
+      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        border: `3px solid ${card.categoryColour}`,
       }}
     >
       <div className="relative bg-white">
@@ -265,7 +277,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
           className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white/95"
           style={{ fontSize: "11px", lineHeight: 1, letterSpacing: "-0.012em" }}
         >
-          {card.category}
+          {displayCategory}
         </span>
       </div>
     </article>
@@ -406,7 +418,7 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] bg-[#E6EBEF] px-2.5 py-2">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
@@ -417,7 +429,7 @@ export default function FirstThenDemoPage() {
               </div>
             </div>
 
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] bg-[#E6EBEF] px-2.5 py-2">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />

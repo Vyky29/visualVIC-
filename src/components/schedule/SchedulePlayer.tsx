@@ -14,6 +14,8 @@ import {
   routineSchedulePlayerChrome,
 } from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
+import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 type Props = {
   routine: Routine;
@@ -102,6 +104,7 @@ export function SchedulePlayer({
     totalSteps === 0 ? 0 : Math.round((completedCount / totalSteps) * 100);
 
   const showFirstThen = routine.tags?.includes("first-then") ?? false;
+  const cardUiLang = useCardUiLanguage();
 
   const openFocus = () => {
     if (!nowStep) return;
@@ -120,7 +123,7 @@ export function SchedulePlayer({
               Schedule Player
             </p>
             <h2 className="mt-1 text-[22px] font-semibold leading-tight tracking-tight text-ink">
-              {routine.name}
+              {stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
             </h2>
           </div>
           <span className={scheduleChrome.counterPill}>

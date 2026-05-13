@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/Card";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
+import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 import {
   routineSchedulePlayerIndexCardClass,
@@ -67,6 +69,7 @@ function templateCardsSummary(routine: Routine): string {
 export default function PlayerIndexPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
+  const cardUiLang = useCardUiLanguage();
   const combined = useMemo(
     () => [
       ...(customHydrated
@@ -92,7 +95,9 @@ export default function PlayerIndexPage() {
             const tone = routineVisualTone(r);
             const kindLabel = r.kind === "Template" ? "First & Then" : r.kind;
             const title =
-              r.kind === "Template" ? templateCardsSummary(r) : r.name;
+              r.kind === "Template"
+                ? templateCardsSummary(r)
+                : stockRoutineDisplayName(r.id, r.name, cardUiLang);
             return (
               <li key={r.id} className="group">
                 <Card

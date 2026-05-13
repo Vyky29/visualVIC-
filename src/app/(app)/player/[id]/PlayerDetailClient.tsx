@@ -5,6 +5,8 @@ import Link from "next/link";
 import { use } from "react";
 import { Header } from "@/components/navigation/Header";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
 
 const SchedulePlayerWithProfileRoutine = dynamic(
@@ -30,6 +32,7 @@ export function PlayerDetailClient({
 }) {
   const { id } = use(params);
   const { routines: custom } = useCustomRoutines();
+  const cardUiLang = useCardUiLanguage();
   const routine = resolveAnyRoutine(id, custom);
 
   if (!routine) {
@@ -51,7 +54,10 @@ export function PlayerDetailClient({
 
   return (
     <div className="pb-6">
-      <Header title={routine.name} backHref="/player" />
+      <Header
+        title={stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
+        backHref="/player"
+      />
       <SchedulePlayerWithProfileRoutine routine={routine} backHref="/player" />
     </div>
   );

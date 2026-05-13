@@ -95,8 +95,9 @@ export default function FirstThenPage() {
         <div className="flex min-h-0 flex-1 items-center justify-center pb-[calc(4rem+env(safe-area-inset-bottom))] [@media(orientation:landscape)]:pb-[calc(4.25rem+env(safe-area-inset-bottom))] [@media(orientation:landscape)_and_(max-height:500px)]:pb-[calc(3.6rem+env(safe-area-inset-bottom))]">
           <div className="flex min-h-0 w-full flex-col items-center justify-center gap-3 [@media(orientation:landscape)]:flex-row [@media(orientation:landscape)]:gap-4 [@media(orientation:landscape)_and_(max-height:500px)]:gap-5">
             <Card
+              omitInsetRing
               className={cn(
-                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-sage/75",
+                "shrink-0 border-0 bg-transparent shadow-none",
                 miniCard,
                 "w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8.5rem)/2.75))]",
                 "[@media(orientation:landscape)]:w-[min(calc((100%-5.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.75rem)/1.3))]",
@@ -138,8 +139,9 @@ export default function FirstThenPage() {
             </div>
 
             <Card
+              omitInsetRing
               className={cn(
-                "shrink-0 border-0 bg-transparent shadow-none ring-2 ring-accent/55",
+                "shrink-0 border-0 bg-transparent shadow-none",
                 miniCard,
                 "w-[min(calc(100%-1rem),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-8.5rem)/2.75))]",
                 "[@media(orientation:landscape)]:w-[min(calc((100%-5.75rem)/2),calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-5.75rem)/1.3))]",

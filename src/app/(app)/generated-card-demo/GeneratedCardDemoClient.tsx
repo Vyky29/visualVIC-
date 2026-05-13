@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useMemo } from "react";
 import { Header } from "@/components/navigation/Header";
 import {
   GENERATED_PIXTO_CARD_SIZE,
@@ -26,9 +27,10 @@ import {
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
+import { digitalCategoryStripLabel } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
-const HOTEL_RIBBON_TEXT = "at the hotel";
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
@@ -70,6 +72,8 @@ type DocumentedCardProps = {
   ribbonH?: number;
   titleTextStyle?: PreviewTextStyle;
   ribbonTextStyle?: React.CSSProperties;
+  /** Localised category strip (hotel pack). */
+  ribbonLabel?: string;
 };
 
 const ORIGINAL_GEOMETRY: CardGeometry = {
@@ -247,6 +251,7 @@ function DocumentedCard({
   ribbonH = GENERATED_PIXTO_CATEGORY_BAND_H,
   titleTextStyle = DOCUMENTED_TEXT_STYLE,
   ribbonTextStyle,
+  ribbonLabel = "at the hotel",
 }: DocumentedCardProps) {
   return (
     <article
@@ -307,7 +312,7 @@ function DocumentedCard({
           )}
           style={ribbonTextStyle}
         >
-          {HOTEL_RIBBON_TEXT}
+          {ribbonLabel}
         </span>
       </div>
     </article>
@@ -329,6 +334,7 @@ function DocumentedCardPanel({
   extraMetrics = [],
   titleTextStyle,
   ribbonTextStyle,
+  ribbonLabel,
 }: {
   title: string;
   hint: string;
@@ -344,6 +350,7 @@ function DocumentedCardPanel({
   extraMetrics?: Metric[];
   titleTextStyle?: PreviewTextStyle;
   ribbonTextStyle?: React.CSSProperties;
+  ribbonLabel?: string;
 }) {
   const resolvedCardHeight = cardHeight ?? GENERATED_PIXTO_CARD_SIZE.h;
   const resolvedRibbonH = ribbonH ?? GENERATED_PIXTO_CATEGORY_BAND_H;
@@ -377,6 +384,7 @@ function DocumentedCardPanel({
         ribbonH={resolvedRibbonH}
         titleTextStyle={titleTextStyle}
         ribbonTextStyle={ribbonTextStyle}
+        ribbonLabel={ribbonLabel}
       />
       <MetricList metrics={metrics} />
     </DiagnosticPanel>
@@ -384,6 +392,12 @@ function DocumentedCardPanel({
 }
 
 export function GeneratedCardDemoClient() {
+  const cardUiLang = useCardUiLanguage();
+  const hotelRibbonText = useMemo(
+    () => digitalCategoryStripLabel("hotel", cardUiLang),
+    [cardUiLang],
+  );
+
   return (
     <div className="pb-10">
       <Header title="Generated card demo" backHref="/menu" />
@@ -409,6 +423,7 @@ export function GeneratedCardDemoClient() {
             logoSize={GENERATED_PIXTO_COMPANY_MARK.w}
             titleMetrics="23px reference / one locked line"
             ribbonMetrics="23px reference"
+            ribbonLabel={hotelRibbonText}
           />
 
           <DocumentedCardPanel
@@ -420,6 +435,7 @@ export function GeneratedCardDemoClient() {
             logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
             titleMetrics="23px reference / locked text box"
             ribbonMetrics="23px reference"
+            ribbonLabel={hotelRibbonText}
           />
 
           <DocumentedCardPanel
@@ -431,6 +447,7 @@ export function GeneratedCardDemoClient() {
             logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
             titleMetrics="23px reference / locked text box"
             ribbonMetrics="23px reference"
+            ribbonLabel={hotelRibbonText}
           />
 
           <DocumentedCardPanel
@@ -442,6 +459,7 @@ export function GeneratedCardDemoClient() {
             logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
             titleMetrics="23px reference / 2 lines in the same box"
             ribbonMetrics="23px reference"
+            ribbonLabel={hotelRibbonText}
           />
 
           <DocumentedCardPanel
@@ -461,6 +479,7 @@ export function GeneratedCardDemoClient() {
             extraMetrics={[
               { label: "Focus text rule", value: "1 line first, then 2, then reduce only if needed" },
             ]}
+            ribbonLabel={hotelRibbonText}
           />
         </div>
       </section>

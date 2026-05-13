@@ -19,6 +19,8 @@ import {
   isStockPackRoutine,
   routineDashboardHomeGridTileClass,
 } from "@/lib/utils/routine-accent";
+import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 const groups = ["self-care", "home", "activity"] as const;
@@ -228,6 +230,7 @@ function DashboardRoutineTile({
   routine: Routine;
 }) {
   const previewUrl = routine.homePreviewImageUrl ?? routine.steps[0]?.imageUrl;
+  const cardUiLang = useCardUiLanguage();
 
   return (
     <Link
@@ -257,7 +260,7 @@ function DashboardRoutineTile({
         </div>
         <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
           <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
-            {routine.name}
+            {stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
           </p>
           <p className="mt-0.5 text-[10px] text-ink-subtle">
             {routine.steps.length} steps

@@ -34,6 +34,8 @@ import {
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
 } from "@/components/experimental/GeneratedPixtoCard";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
+import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
 
@@ -113,6 +115,16 @@ export function SwipeableStepCard({
 
   const hasGeneratedPixto = Boolean(step.generatedPixto);
   const gp = step.generatedPixto;
+  const cardUiLang = useCardUiLanguage();
+  const digitalStepTitle = useMemo(() => {
+    if (!gp) return step.title;
+    return resolveDigitalPixtoStrings(
+      gp.illustrationUrl,
+      gp.title,
+      gp.category,
+      cardUiLang,
+    ).title;
+  }, [gp, step.title, cardUiLang]);
   const controls = useAnimation();
   const flipControls = useAnimation();
   const lastTouchTapRef = useRef<{ time: number; x: number; y: number } | null>(
@@ -349,7 +361,9 @@ export function SwipeableStepCard({
     return (
       <div
         aria-label={
-          compactPixto || hasGeneratedPixto ? `Done: ${step.title}` : undefined
+          compactPixto || hasGeneratedPixto
+            ? `Done: ${hasGeneratedPixto ? digitalStepTitle : step.title}`
+            : undefined
         }
         className={cn(
           "flex items-center gap-3 rounded-2xl bg-cream/55 px-3 py-2.5 shadow-none",
@@ -392,7 +406,7 @@ export function SwipeableStepCard({
           </p>
           {!compactPixto || hasGeneratedPixto ? (
             <p className="truncate text-[14px] font-semibold lowercase text-ink/80">
-              {step.title}
+              {hasGeneratedPixto ? digitalStepTitle : step.title}
             </p>
           ) : null}
         </div>

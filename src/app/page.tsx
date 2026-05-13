@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Web app — Home (routines, schedule player, etc.) */
+/** First paint — welcome + language before the main shell. */
 export default function Page() {
-  redirect("/dashboard");
+  redirect("/welcome");
 }

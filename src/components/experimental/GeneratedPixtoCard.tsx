@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
+import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
+import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -590,12 +593,14 @@ function GeneratedPixtoDebugGuides({
 
 function TitleBand({
   title,
+  htmlLang,
   isDense,
   focusPresentation,
   schedulePresentation,
   scheduleLargeType,
 }: {
   title: string;
+  htmlLang: string;
   isDense: boolean;
   focusPresentation: boolean;
   schedulePresentation: boolean;
@@ -673,7 +678,7 @@ function TitleBand({
           isDense ? "py-1" : "py-2",
         )}
       >
-        <h2 lang="en" className={cn("relative z-10 line-clamp-5", typo)}>
+        <h2 lang={htmlLang} className={cn("relative z-10 line-clamp-5", typo)}>
           {title}
         </h2>
       </div>
@@ -773,6 +778,18 @@ export function GeneratedPixtoCard({
   suppressNeutralRing = false,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
+  const cardUiLang = useCardUiLanguage();
+  const htmlLang = effectiveDigitalUiLang(cardUiLang);
+  const { title: i18nTitle, category: i18nCategory } = useMemo(
+    () =>
+      resolveDigitalPixtoStrings(
+        illustrationUrl,
+        title,
+        category,
+        cardUiLang,
+      ),
+    [illustrationUrl, title, category, cardUiLang],
+  );
 
   const [markSrc, setMarkSrc] = useState(iconUrl ?? "");
   useEffect(() => {
@@ -804,18 +821,19 @@ export function GeneratedPixtoCard({
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
   const focusTitleLayout = useMemo(
-    () => (focusPresentation ? resolveFocusTitleLayout(title) : null),
-    [focusPresentation, title],
+    () => (focusPresentation ? resolveFocusTitleLayout(i18nTitle) : null),
+    [focusPresentation, i18nTitle],
   );
   const scheduleLockedTitleLayout = useMemo(
-    () => (schedulePresentation ? resolveScheduleLockedTitleLayout(title) : null),
-    [schedulePresentation, title],
+    () =>
+      schedulePresentation ? resolveScheduleLockedTitleLayout(i18nTitle) : null,
+    [schedulePresentation, i18nTitle],
   );
   const scheduleLineCount = useMemo(() => {
     if (focusPresentation || schedulePresentation) return 1;
-    const lines = splitTitleScheduleLines(title);
+    const lines = splitTitleScheduleLines(i18nTitle);
     return Math.max(1, Math.min(lines.length > 0 ? lines.length : 1, 3)) as 1 | 2 | 3;
-  }, [focusPresentation, schedulePresentation, title]);
+  }, [focusPresentation, schedulePresentation, i18nTitle]);
   const ribbonTypographyStyle = useMemo<CSSProperties>(() => {
     if (isDense) {
       return { fontSize: "14px", lineHeight: 1, letterSpacing: "0.02em" };
@@ -837,13 +855,13 @@ export function GeneratedPixtoCard({
     );
 
     return resolveSingleLineTypographyStyle(
-      category,
+      i18nCategory,
       focusPresentation ? FOCUS_RIBBON_TARGET_VISUAL_WIDTH : SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH,
       baseRibbonFontPx,
       focusPresentation ? 18 : 20,
     );
   }, [
-    category,
+    i18nCategory,
     focusPresentation,
     focusTitleLayout,
     isDense,
@@ -994,7 +1012,8 @@ export function GeneratedPixtoCard({
       </div>
 
       <TitleBand
-        title={title}
+        title={i18nTitle}
+        htmlLang={htmlLang}
         isDense={isDense}
         focusPresentation={focusPresentation}
         schedulePresentation={schedulePresentation}
@@ -1032,7 +1051,7 @@ export function GeneratedPixtoCard({
                 }
           }
         >
-          {category}
+          {i18nCategory}
         </span>
       </div>
     </article>

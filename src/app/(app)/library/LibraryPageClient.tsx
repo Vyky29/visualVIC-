@@ -28,6 +28,8 @@ import {
   clearLibrarySelectionDraft,
   writeLibrarySelectionDraft,
 } from "@/lib/library/library-selection-draft";
+import { libraryAirportHotelLabel } from "@/lib/i18n/pixto-digital-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import {
   PICKABLE_LIBRARY_CARDS,
   pickablePackFromPickId,
@@ -302,6 +304,7 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
 
 export function LibraryPageClient() {
   const router = useRouter();
+  const cardUiLang = useCardUiLanguage();
   const prefersFineHover = usePrefersFineHover();
   const [orderedPickIds, setOrderedPickIds] = useState<string[]>([]);
   /** Pinned open (touch + desktop) until corner closes. */
@@ -312,6 +315,16 @@ export function LibraryPageClient() {
   const [hoverPeekKey, setHoverPeekKey] = useState<string | null>(null);
 
   const grouped = useMemo(() => groupByCategoryAndSection(), []);
+
+  const sectionHeading = useCallback(
+    (section: LibrarySectionId) =>
+      section === "airport"
+        ? libraryAirportHotelLabel("airport", cardUiLang)
+        : section === "hotel"
+          ? libraryAirportHotelLabel("hotel", cardUiLang)
+          : SECTION_LABEL[section],
+    [cardUiLang],
+  );
 
   const isAccordionOpen = useCallback(
     (key: string) =>
@@ -493,7 +506,7 @@ export function LibraryPageClient() {
                           </span>
                           <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
                             <span className="min-w-0 text-[14px] font-semibold leading-tight text-ink sm:text-[15px]">
-                              {SECTION_LABEL[section]}
+                              {sectionHeading(section)}
                             </span>
                             <span
                               className="inline-flex shrink-0 items-center rounded-full border border-ink/8 bg-white/82 px-2 py-0.5 text-[10px] font-medium tabular-nums tracking-tight text-ink-subtle shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:text-[11px]"

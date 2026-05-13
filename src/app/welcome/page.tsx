@@ -9,12 +9,12 @@ import {
 
 const features = [
   {
-    title: "Schedule Player",
-    body: "Finished steps fade back while the current step stays clear and easy to follow.",
+    title: "Home",
+    body: "Routines by category — quick access to Library, Templates, and more from the tab bar.",
     from: BRAND_ICON_PINK,
     to: "#E873B0",
-    previewSrc: "/welcome/schedule-player.png",
-    previewAlt: "Schedule Player screenshot",
+    previewSrc: "/welcome/home-screen.png",
+    previewAlt: "Home screen with routine cards and bottom navigation",
     /** Taller phone frame + wide screenshot: cover removes letterboxing under the tab bar */
     previewFit: "cover" as const,
   },

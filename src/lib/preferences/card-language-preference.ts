@@ -3,7 +3,8 @@ export const CARD_LANGUAGE_STORAGE_KEY = "pixtolearn-card-language";
 /** Dispatched on `window` when the user picks a language (for future i18n / AI cards). */
 export const CARD_LANGUAGE_CHANGE_EVENT = "pixtolearn-card-language-change";
 
-export type CardLanguageCode = "en" | "es" | "fr" | "de";
+/** UI + bundled digital copy are wired for English and Spanish only for now. */
+export type CardLanguageCode = "en" | "es";
 
 export const CARD_LANGUAGE_OPTIONS: readonly {
   code: CardLanguageCode;
@@ -12,9 +13,12 @@ export const CARD_LANGUAGE_OPTIONS: readonly {
 }[] = [
   { code: "en", label: "English", initials: "ING" },
   { code: "es", label: "Español", initials: "ESP" },
-  { code: "fr", label: "Français", initials: "FRA" },
-  { code: "de", label: "Deutsch", initials: "DEU" },
 ] as const;
+
+/** Legacy keys from older builds map to English. */
+export function effectiveDigitalUiLang(code: CardLanguageCode): "en" | "es" {
+  return code === "es" ? "es" : "en";
+}
 
 export function isCardLanguageCode(value: string): value is CardLanguageCode {
   return CARD_LANGUAGE_OPTIONS.some((o) => o.code === value);
@@ -24,7 +28,8 @@ export function readStoredCardLanguage(): CardLanguageCode {
   if (typeof window === "undefined") return "en";
   try {
     const raw = window.localStorage.getItem(CARD_LANGUAGE_STORAGE_KEY);
-    if (raw && isCardLanguageCode(raw)) return raw;
+    if (raw === "es") return "es";
+    if (raw === "en") return "en";
   } catch {
     /* ignore */
   }
