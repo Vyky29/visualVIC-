@@ -228,6 +228,10 @@ export function WelcomePageClient() {
   const [zoomSlot, setZoomSlot] = useState<WelcomeFeatureSlot | null>(null);
   const zoomFit =
     FEATURES.find((f) => f.slot === zoomSlot)?.previewFit ?? "cover";
+  const [heroLine1, heroLine2] = (() => {
+    const parts = welcomeHeroTitle(lang).split("\n");
+    return [parts[0]?.trim() ?? "", parts[1]?.trim() ?? ""] as const;
+  })();
 
   return (
     <MobileScreen className="flex min-h-dvh w-full !max-w-2xl flex-col gap-0 bg-white !px-3 !pb-[max(1rem,env(safe-area-inset-bottom))] !pt-0 sm:!px-5">
@@ -248,8 +252,9 @@ export function WelcomePageClient() {
             className="mx-auto w-full max-w-sm [@media(max-height:700px)]:gap-2"
           />
           <div className="mx-auto w-full max-w-[16.25rem] text-center sm:max-w-[17.5rem]">
-            <h1 className="whitespace-pre-line text-balance text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
-              {welcomeHeroTitle(lang)}
+            <h1 className="text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
+              <span className="block">{heroLine1}</span>
+              {heroLine2 ? <span className="block">{heroLine2}</span> : null}
             </h1>
           </div>
         </div>
