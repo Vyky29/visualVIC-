@@ -128,6 +128,19 @@ function RoutinesHomeIcon({ className }: { className?: string }) {
   );
 }
 
+function FocusFabPlusIcon({ className, open }: { className?: string; open: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className={cn("h-5 w-5 transition-transform duration-200 ease-out", open && "rotate-45", className)}
+      aria-hidden
+    >
+      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function HomeSectionIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={cn("h-4 w-4", className)} aria-hidden>
@@ -337,6 +350,11 @@ function IntroCueChip() {
 export default function FirstThenDemoPage() {
   const [viewport, setViewport] = useState({ w: 402, h: 874 });
   const [showFocusMode, setShowFocusMode] = useState(false);
+  const [focusQuickMenuOpen, setFocusQuickMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!showFocusMode) setFocusQuickMenuOpen(false);
+  }, [showFocusMode]);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -459,40 +477,60 @@ export default function FirstThenDemoPage() {
 
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-30" style={sceneStyle}>
           <div className="pointer-events-none absolute inset-0">
-            <nav
-              aria-label="Focus mode navigation"
-              className="pointer-events-auto absolute bottom-[max(4.15rem,calc(2.35rem+env(safe-area-inset-bottom)))] right-0 top-[48%] flex w-full max-w-[min(100%,4.35rem)] flex-col items-center justify-center gap-3 px-1 pr-[max(0.35rem,env(safe-area-inset-bottom))]"
-            >
-              <Link
-                href="/dashboard"
-                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-              >
-                <HomeSectionIcon className="shrink-0" />
-                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Home
-                </span>
-              </Link>
+            <div className="pointer-events-auto absolute bottom-[max(4.15rem,calc(2.35rem+env(safe-area-inset-bottom)))] right-0 top-[48%] flex w-full max-w-[min(100%,4.35rem)] flex-col items-center justify-end gap-2 px-1 pr-[max(0.35rem,env(safe-area-inset-bottom))]">
+              {focusQuickMenuOpen ? (
+                <nav
+                  id="focus-quick-nav"
+                  aria-label="Focus mode navigation"
+                  className="flex flex-col items-center gap-3 pb-1"
+                >
+                  <Link
+                    href="/dashboard"
+                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                    onClick={() => setFocusQuickMenuOpen(false)}
+                  >
+                    <HomeSectionIcon className="shrink-0" />
+                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                      Home
+                    </span>
+                  </Link>
 
-              <Link
-                href="/menu"
-                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-              >
-                <MenuDotsIcon className="shrink-0" />
-                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Menu
-                </span>
-              </Link>
+                  <Link
+                    href="/menu"
+                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                    onClick={() => setFocusQuickMenuOpen(false)}
+                  >
+                    <MenuDotsIcon className="shrink-0" />
+                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                      Menu
+                    </span>
+                  </Link>
 
-              <Link
-                href="/player/brushing-teeth"
-                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                  <Link
+                    href="/player/brushing-teeth"
+                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                    onClick={() => setFocusQuickMenuOpen(false)}
+                  >
+                    <RoutinesHomeIcon className="shrink-0" />
+                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                      Routine
+                    </span>
+                  </Link>
+                </nav>
+              ) : null}
+
+              <button
+                type="button"
+                id="focus-quick-nav-toggle"
+                aria-expanded={focusQuickMenuOpen}
+                aria-controls={focusQuickMenuOpen ? "focus-quick-nav" : undefined}
+                aria-label={focusQuickMenuOpen ? "Ocultar accesos rápidos" : "Mostrar accesos rápidos"}
+                onClick={() => setFocusQuickMenuOpen((open) => !open)}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white/92 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.98]"
               >
-                <RoutinesHomeIcon className="shrink-0" />
-                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                  Routine
-                </span>
-              </Link>
-            </nav>
+                <FocusFabPlusIcon open={focusQuickMenuOpen} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
