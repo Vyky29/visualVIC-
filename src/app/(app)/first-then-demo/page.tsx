@@ -550,32 +550,19 @@ export default function FirstThenDemoPage() {
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
           <div className="relative h-full w-full bg-canvas pb-[max(0.5rem,env(safe-area-inset-bottom))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.42rem,1.25vw,0.78rem)] px-0 pb-0">
-              <div className="flex h-full min-h-0 w-full min-w-0 flex-col">
-                <div className="flex min-h-0 w-full flex-1 items-start justify-center">
-                  <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
-                    <StepVisualCard
-                      generatedCard={first}
-                      label={firstThenSlotLabel("first", lang)}
-                      icon={<IconFirst className="h-7 w-7" />}
-                      className="h-full min-h-0"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex h-full min-h-0 w-full min-w-0 flex-col">
-                <div className="flex min-h-0 w-full flex-1 items-start justify-center">
-                  <div className="mx-auto aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0 shrink-0">
-                    <StepVisualCard
-                      generatedCard={second}
-                      label={firstThenSlotLabel("then", lang)}
-                      icon={<IconThen className="h-7 w-7" />}
-                      className="h-full min-h-0"
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 grid-rows-1 gap-x-0.5 px-0 pb-0">
+              <StepVisualCard
+                generatedCard={first}
+                label={firstThenSlotLabel("first", lang)}
+                icon={<IconFirst className="h-7 w-7" />}
+                className="h-full min-h-0 w-full min-w-0"
+              />
+              <StepVisualCard
+                generatedCard={second}
+                label={firstThenSlotLabel("then", lang)}
+                icon={<IconThen className="h-7 w-7" />}
+                className="h-full min-h-0 w-full min-w-0"
+              />
             </div>
           </div>
         </div>
