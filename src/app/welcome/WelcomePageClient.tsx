@@ -183,7 +183,7 @@ function WelcomePreviewLightbox({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex flex-col bg-ink/90 backdrop-blur-[2px]"
+      className="fixed inset-0 z-[200] flex flex-col bg-black/82 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/68"
       role="dialog"
       aria-modal="true"
       aria-label={alt}
@@ -202,17 +202,17 @@ function WelcomePreviewLightbox({
         onClick={onClose}
       >
         <div
-          className="mx-auto w-full max-w-[min(96vw,min(28rem,calc(100vw-2rem)))]"
+          className="mx-auto w-full max-w-[min(72vw,17.5rem)] sm:max-w-[18.25rem]"
           onClick={(e) => e.stopPropagation()}
         >
           <WelcomePhoneDeviceChrome>
-            <div className="relative aspect-[37/72] w-full max-h-[min(86dvh,calc(100dvh-6.5rem))] min-h-0 bg-[#f6f6f4]">
+            <div className="relative aspect-[37/72] w-full max-h-[min(64dvh,calc(100dvh-8rem))] min-h-0 bg-[#f6f6f4]">
               <Image
                 src={src}
                 alt={alt}
                 fill
                 className={imageClass}
-                sizes="min(100vw, 1200px)"
+                sizes="(max-width: 640px) 280px, 320px"
                 priority
               />
             </div>
