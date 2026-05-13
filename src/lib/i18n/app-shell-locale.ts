@@ -635,12 +635,6 @@ export function welcomeHeroTitle(lang: CardLanguageCode): string {
     : "Visual schedules that feel steady\non the phone";
 }
 
-export function welcomeHeroSubtitle(lang: CardLanguageCode): string {
-  return isEs(lang)
-    ? "Una columna tranquila: rutinas, pasos y Modo Enfoque, pensada para la claridad y no el desorden."
-    : "One calm column — routines, steps, and Focus Mode — built for clarity, not clutter.";
-}
-
 export function welcomeFeatureTitle(
   slot: WelcomeFeatureSlot,
   lang: CardLanguageCode,

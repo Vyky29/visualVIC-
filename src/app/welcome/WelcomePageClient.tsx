@@ -20,7 +20,6 @@ import {
   welcomeFeaturePreviewAlt,
   welcomeFeaturePreviewSrc,
   welcomeFeatureTitle,
-  welcomeHeroSubtitle,
   welcomeHeroTitle,
   welcomePreviewExpandHint,
   welcomePreviewLightboxCloseAria,
@@ -242,19 +241,16 @@ export function WelcomePageClient() {
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-1 pt-2 sm:gap-4 sm:px-0 sm:pt-3">
-        <div className="shrink-0 space-y-2 text-center">
+        <div className="shrink-0 space-y-2.5 text-center">
           <PixtoLearnLockup
             variant="hero"
             layout="stacked"
             className="mx-auto w-full max-w-sm [@media(max-height:700px)]:gap-2"
           />
-          <div className="mx-auto w-full max-w-[16.25rem] space-y-1.5 text-center sm:max-w-[17.5rem]">
+          <div className="mx-auto w-full max-w-[16.25rem] text-center sm:max-w-[17.5rem]">
             <h1 className="whitespace-pre-line text-balance text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
               {welcomeHeroTitle(lang)}
             </h1>
-            <p className="text-pretty text-[13px] leading-[1.45] text-ink-subtle sm:text-[14px] [@media(max-height:700px)]:text-[12px]">
-              {welcomeHeroSubtitle(lang)}
-            </p>
           </div>
         </div>
 
