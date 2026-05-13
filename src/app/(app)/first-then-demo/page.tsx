@@ -288,7 +288,7 @@ function StepVisualCard({
       </div>
       <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-[#E2E7EB] p-2.5">
         <div
-          className="relative mx-auto flex h-full max-h-[92%] w-[92%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[94%] w-[94%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -427,8 +427,8 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pb-[max(0.35rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(2.25rem,env(safe-area-inset-bottom))] pt-0">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.25rem,1.1vw,0.65rem)] px-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="relative h-full w-full bg-canvas pb-[max(0.2rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-0">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.25rem,1.1vw,0.65rem)] px-0 pb-0">
               <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
                 <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
                   <StepVisualCard
@@ -458,34 +458,34 @@ export default function FirstThenDemoPage() {
           <div className="pointer-events-none absolute inset-0">
             <nav
               aria-label="Focus mode navigation"
-              className="pointer-events-auto absolute bottom-[max(3.35rem,env(safe-area-inset-bottom))] right-0 top-[58%] flex w-max max-w-[min(100%,7rem)] flex-col items-end justify-center gap-3 pr-[max(0.35rem,env(safe-area-inset-bottom))]"
+              className="pointer-events-auto absolute bottom-[max(4.15rem,calc(2.35rem+env(safe-area-inset-bottom)))] right-0 top-[48%] flex w-full max-w-[min(100%,4.35rem)] flex-col items-center justify-center gap-3 px-1 pr-[max(0.35rem,env(safe-area-inset-bottom))]"
             >
               <Link
                 href="/dashboard"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <HomeSectionIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Home
                 </span>
               </Link>
 
               <Link
                 href="/menu"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <MenuDotsIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Menu
                 </span>
               </Link>
 
               <Link
                 href="/player/brushing-teeth"
-                className="flex flex-col items-end gap-0.5 text-ink transition active:opacity-70"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
               >
                 <RoutinesHomeIcon className="shrink-0" />
-                <span className="text-right text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
                   Routine
                 </span>
               </Link>
