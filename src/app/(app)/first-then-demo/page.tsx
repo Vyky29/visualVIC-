@@ -185,7 +185,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
 
   return (
     <article
-      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white"
+      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
