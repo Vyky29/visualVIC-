@@ -19,7 +19,6 @@ import { cn } from "@/lib/utils/cn";
 
 const cardShell =
   "relative overflow-hidden rounded-[1.45rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_9px_30px_-14px_rgba(28,36,32,0.2)]";
-const WOW_CARD_ASPECT = "744 / 1054";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 
 function IconFirst({ className }: { className?: string }) {
@@ -287,10 +286,12 @@ function StepVisualCard({
         </span>
       </div>
       <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 grid place-items-center p-3">
+        <div className="absolute inset-0 flex min-h-0 items-center justify-center p-3">
           <div
-            className="relative w-[82%] max-w-full"
-            style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "86%" }}
+            className="relative h-full max-h-full w-auto min-w-0 max-w-[min(92%,100%)] shrink-0"
+            style={{
+              aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
+            }}
           >
             <MiniDigitalWowCard card={generatedCard} />
           </div>
