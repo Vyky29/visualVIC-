@@ -460,7 +460,7 @@ export default function FirstThenDemoPage() {
                 icon={<IconFirst className="h-7 w-7" />}
               />
               <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.35rem)/3.2))] max-w-[12.75rem]">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.05rem)/3.06))] max-w-[13.1rem]">
                   <MiniDigitalWowCard card={first} />
                 </div>
               </div>
@@ -474,7 +474,7 @@ export default function FirstThenDemoPage() {
                 icon={<IconThen className="h-7 w-7" />}
               />
               <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.35rem)/3.2))] max-w-[12.75rem]">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.05rem)/3.06))] max-w-[13.1rem]">
                   <MiniDigitalWowCard card={second} />
                 </div>
               </div>

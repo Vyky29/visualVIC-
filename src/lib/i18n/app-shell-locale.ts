@@ -671,14 +671,14 @@ export function welcomeFeaturePreviewAlt(
 ): string {
   if (!isEs(lang)) {
     if (slot === "home") {
-      return "Home screen with routine cards and bottom navigation";
+      return "Welcome preview — home screen in English (hotel routines)";
     }
-    return "Focus Mode screenshot";
+    return "Welcome preview — hotel routine card in English";
   }
   if (slot === "home") {
-    return "Pantalla de inicio con tarjetas de rutina y navegación inferior";
+    return "Vista previa de bienvenida — inicio en español (rutinas hotel)";
   }
-  return "Captura del Modo Enfoque";
+  return "Vista previa de bienvenida — tarjeta de rutina hotel en español";
 }
 
 export function welcomeFooterHint(lang: CardLanguageCode): string {
@@ -701,15 +701,25 @@ export function languageToggleButtonAria(lang: CardLanguageCode): string {
     : "Language: English. Tap to switch to Spanish";
 }
 
+const WELCOME_HOTEL_PREVIEW_DIR = "at the hotel";
+
+function welcomeHotelPreviewFile(file: string): string {
+  return `/cards/${encodeURIComponent(WELCOME_HOTEL_PREVIEW_DIR)}/${encodeURIComponent(file)}`;
+}
+
 export function welcomeFeaturePreviewSrc(
   slot: WelcomeFeatureSlot,
   lang: CardLanguageCode,
 ): string {
   const es = isEs(lang);
   if (slot === "home") {
-    return es ? "/welcome/home-screen-es.png" : "/welcome/home-screen.png";
+    return es
+      ? welcomeHotelPreviewFile("PANTALLA 1 ESPANOL.png")
+      : welcomeHotelPreviewFile("PANTALLA 1 INGLES.png");
   }
-  return es ? "/welcome/focus-mode-es.png" : "/welcome/focus-mode.png";
+  return es
+    ? welcomeHotelPreviewFile("PANTALLA 2 ESPANOL.png")
+    : welcomeHotelPreviewFile("PANTALLA 2 INGLES.png");
 }
 
 export function welcomePreviewExpandHint(lang: CardLanguageCode): string {

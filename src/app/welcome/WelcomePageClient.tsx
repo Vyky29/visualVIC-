@@ -117,7 +117,7 @@ function WelcomeZoomablePreview({
               alt={alt}
               fill
               className={imageClass}
-              sizes="(max-width: 640px) 46vw, 360px"
+              sizes="(max-width: 768px) 50vw, min(52vw, 640px)"
               priority
             />
           </div>
@@ -183,7 +183,7 @@ function WelcomePreviewLightbox({
             alt={alt}
             fill
             className="object-contain object-center"
-            sizes="100vw"
+            sizes="min(100vw, 1200px)"
             priority
           />
         </div>
