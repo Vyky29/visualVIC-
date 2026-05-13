@@ -259,7 +259,7 @@ export function WelcomePageClient() {
           </div>
         </div>
 
-        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-2 sm:gap-3">
+        <div className="mt-4 grid min-h-0 w-full flex-1 grid-cols-2 gap-2 sm:mt-5 sm:gap-3">
           {FEATURES.map((feature) => (
             <section
               key={feature.slot}

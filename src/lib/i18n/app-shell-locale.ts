@@ -675,12 +675,6 @@ export function welcomeFeaturePreviewAlt(
   return "Vista previa de bienvenida — tarjeta de rutina hotel en español";
 }
 
-export function welcomeFooterHint(lang: CardLanguageCode): string {
-  return isEs(lang)
-    ? "Elegir inglés o español guarda la preferencia en este dispositivo. Las tarjetas digitales de aeropuerto y hotel y las etiquetas siguen ese idioma (solo copia local)."
-    : "Choosing English or Español saves it on this device — airport and hotel digital cards and matching labels follow that choice (local copy only).";
-}
-
 export function welcomeHomeCta(lang: CardLanguageCode): string {
   return bottomNavLabel("home", lang);
 }
