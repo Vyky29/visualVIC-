@@ -631,8 +631,8 @@ export type WelcomeFeatureSlot = "home" | "focus";
 
 export function welcomeHeroTitle(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Agendas visuales que se sienten estables\nen el móvil"
-    : "Visual schedules that feel steady\non the phone";
+    ? "Agendas visuales que se sienten estables\nen el móvil o la tablet"
+    : "Visual schedules that feel steady\non the phone or tablet";
 }
 
 export function welcomeFeatureTitle(
