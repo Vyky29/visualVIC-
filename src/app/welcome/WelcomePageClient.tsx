@@ -48,9 +48,9 @@ const FEATURES: readonly {
   },
 ];
 
-/** Fixed text band so both columns stay visually paired; previews start on the same baseline. */
+/** Text band above previews — compact so phones sit closer to the copy. */
 const WELCOME_TEXT_BAND =
-  "flex h-[6.75rem] shrink-0 flex-col items-center px-1 pb-1 pt-0.5 text-center sm:h-[7rem]";
+  "flex h-[6.1rem] shrink-0 flex-col items-center px-1 pb-0.5 pt-0.5 text-center sm:h-[6.45rem]";
 
 /** Shared “phone” chrome so zoom lightbox matches the small preview outline. */
 function WelcomePhoneDeviceChrome({
@@ -244,7 +244,7 @@ export function WelcomePageClient() {
         <CardLanguageFlagButtons afterSelect="stay" />
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-3 px-1 pt-2 sm:gap-4 sm:px-0 sm:pt-3">
+      <div className="flex min-h-0 flex-1 flex-col gap-2 px-1 pt-1.5 sm:gap-3 sm:px-0 sm:pt-2">
         <div className="shrink-0 space-y-2.5 text-center">
           <PixtoLearnLockup
             variant="hero"
@@ -259,7 +259,7 @@ export function WelcomePageClient() {
           </div>
         </div>
 
-        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-2 sm:min-h-[min(58svh,600px)] sm:gap-3">
+        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-2 sm:gap-3">
           {FEATURES.map((feature) => (
             <section
               key={feature.slot}
@@ -280,7 +280,7 @@ export function WelcomePageClient() {
                 </p>
               </div>
 
-              <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-1 pb-2 pt-0 sm:px-1.5 sm:pb-2.5">
+              <div className="flex min-h-0 flex-1 flex-col items-center justify-start px-1 pb-1.5 pt-0 sm:px-1.5 sm:pb-2">
                 <WelcomeZoomablePreview
                   src={welcomeFeaturePreviewSrc(feature.slot, lang)}
                   alt={welcomeFeaturePreviewAlt(feature.slot, lang)}
