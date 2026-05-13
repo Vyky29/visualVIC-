@@ -16,9 +16,23 @@ export const metadata: Metadata = {
   description:
     "Structured visual sequencing for calm, predictable daily routines.",
   applicationName: "PixtoLearn Routines",
+  /** Favicon + “Add to Home Screen” (iOS uses `apple` + `appleWebApp`). */
   icons: {
-    icon: "/brand/pixtolearn-logo.png",
-    apple: "/brand/pixtolearn-logo.png",
+    icon: [
+      { url: "/brand/pixtolearn-logo.png", type: "image/png", sizes: "any" },
+    ],
+    apple: [
+      {
+        url: "/brand/pixtolearn-logo.png",
+        type: "image/png",
+        sizes: "180x180",
+      },
+    ],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "PixtoLearn",
+    statusBarStyle: "default",
   },
 };
 

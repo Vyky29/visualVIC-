@@ -14,7 +14,12 @@ type NavItem = {
 };
 
 const items: NavItem[] = [
-  { href: "/dashboard", labelKey: "home", icon: "⌂" },
+  {
+    href: "/welcome",
+    labelKey: "home",
+    icon: "⌂",
+    groupPrefixes: ["/welcome", "/dashboard", "/"],
+  },
   { href: "/library", labelKey: "library", icon: "◎" },
   { href: "/templates", labelKey: "templates", icon: "☷" },
   { href: "/saved", labelKey: "saved", icon: "✦" },
@@ -27,7 +32,6 @@ const items: NavItem[] = [
       "/builder",
       "/first-then",
       "/player",
-      "/welcome",
       "/auth",
       "/onboarding",
       "/library/routine-new",
@@ -37,9 +41,10 @@ const items: NavItem[] = [
 
 function isActive(pathname: string, item: NavItem): boolean {
   if (item.groupPrefixes?.length) {
-    return item.groupPrefixes.some(
-      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-    );
+    return item.groupPrefixes.some((prefix) => {
+      if (prefix === "/") return pathname === "/";
+      return pathname === prefix || pathname.startsWith(`${prefix}/`);
+    });
   }
   return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
