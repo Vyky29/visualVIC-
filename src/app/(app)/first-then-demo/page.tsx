@@ -190,7 +190,6 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
         border: `3px solid ${card.categoryColour}`,
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
       }}
     >
       <div className="relative bg-white">
@@ -236,7 +235,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
         ) : null}
       </div>
 
-      <div className="border-y border-white bg-white px-3 py-1">
+      <div className="bg-white px-3 py-1">
         <div className="flex h-full min-h-0 w-full items-center justify-center">
           <div
             className={cn(
