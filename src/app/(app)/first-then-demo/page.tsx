@@ -286,12 +286,14 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-[#E2E7EB] p-3">
-        <div
-          className="relative mx-auto h-auto w-[82%] max-w-full shrink-0"
-          style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "min(86%, 100%)" }}
-        >
-          <MiniDigitalWowCard card={generatedCard} />
+      <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
+        <div className="absolute inset-0 flex items-center justify-center p-3">
+          <div
+            className="relative h-auto w-[82%] max-w-full shrink-0"
+            style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "min(86%, 100%)" }}
+          >
+            <MiniDigitalWowCard card={generatedCard} />
+          </div>
         </div>
       </div>
     </article>
@@ -427,7 +429,7 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pb-[max(0.2rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-0">
+          <div className="relative h-full w-full bg-canvas pb-[max(0.2rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
             <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.42rem,1.25vw,0.78rem)] px-0 pb-0">
               <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
                 <div className="aspect-[10/13] h-full max-h-full w-[min(100%,98.5%)] max-w-full min-h-0 min-w-0">
