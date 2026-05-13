@@ -341,12 +341,11 @@ function StepVisualCard({
         </span>
       </div>
       <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 grid place-items-center p-2 sm:p-2">
+        <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-2">
           <div
-            className="relative w-[92%] max-w-full"
+            className="relative h-auto max-h-[94%] w-full min-w-0 max-w-[92%] shrink-0"
             style={{
               aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-              maxHeight: "94%",
             }}
           >
             <MiniDigitalWowCard card={generatedCard} />
@@ -549,8 +548,8 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pb-[max(0.5rem,env(safe-area-inset-bottom))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 grid-rows-1 gap-x-0.5 px-0 pb-0">
+          <div className="relative h-full w-full bg-canvas pb-0 pl-0 pt-0 pr-[max(4rem,env(safe-area-inset-bottom),env(safe-area-inset-right))]">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 grid-rows-1 gap-x-1.5 px-0 pb-0 sm:gap-x-2">
               <StepVisualCard
                 generatedCard={first}
                 label={firstThenSlotLabel("first", lang)}

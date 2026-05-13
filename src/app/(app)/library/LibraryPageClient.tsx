@@ -373,7 +373,7 @@ export function LibraryPageClient() {
       <div
         className="fixed left-1/2 z-30 w-full max-w-lg -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md"
         style={{
-          bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+          bottom: "calc(3.5rem + env(safe-area-inset-bottom, 0px))",
         }}
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -396,7 +396,7 @@ export function LibraryPageClient() {
     <div
       className={cn(
         orderedPickIds.length > 0 &&
-          "pb-[calc(11rem+env(safe-area-inset-bottom))]",
+          "pb-[calc(9rem+env(safe-area-inset-bottom))]",
       )}
     >
       <TranslatedHeader titleKey="library" />

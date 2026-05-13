@@ -679,6 +679,31 @@ export function routineSchedulePlayerIndexCardClass(r: Routine): string {
   return routineHomeRoutineCardClass(r);
 }
 
+function routineHasMixedStepCategoryTones(r: Routine): boolean {
+  const tones = new Set<RoutineVisualTone>();
+  for (const st of r.steps) {
+    const t = stepCardVisualTone(st);
+    if (t === "finish") continue;
+    tones.add(t);
+    if (tones.size > 1) return true;
+  }
+  return false;
+}
+
+/**
+ * Dashboard Home “Continue” tile under Schedule Player: white shell; ring matches
+ * routine grid tiles, or black when the routine is not a single stock pack or
+ * steps mix multiple category tones.
+ */
+export function routineDashboardScheduleContinueCardClass(r: Routine): string {
+  const tone: RoutineVisualTone =
+    !isStockPackRoutine(r) || routineHasMixedStepCategoryTones(r)
+      ? "custom"
+      : routineVisualTone(r);
+  const p = PALETTE[tone];
+  return `${p.homeDashboard} ${p.hoverGlow}`;
+}
+
 /**
  * @deprecated Prefer {@link routineHomeRoutineCardClass} + {@link routineAccentRings}.
  * Hover glow from {@link routinePlaybackVisualTone} for in-flow tiles.

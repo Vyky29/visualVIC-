@@ -27,7 +27,7 @@ export function AppShell({
       <div
         className={
           effectiveShowNav
-            ? "min-h-dvh pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
+            ? "min-h-dvh pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
             : "min-h-dvh"
         }
       >

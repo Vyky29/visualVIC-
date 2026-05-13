@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils/cn";
 import {
   isStockPackRoutine,
   routineDashboardHomeGridTileClass,
+  routineDashboardScheduleContinueCardClass,
 } from "@/lib/utils/routine-accent";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
@@ -40,7 +41,6 @@ import {
   dashboardStepsWord,
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
-  profilePromoSubtitle,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
@@ -400,9 +400,12 @@ export default function DashboardPage() {
     <div>
       <TranslatedHeader titleKey="home" />
       <div className="space-y-8 px-4 pb-8 pt-4">
-        <Link href="/onboarding/profile">
-          <Card className="flex items-center gap-4 border border-ink/5 bg-white/95 p-4 transition hover:shadow-soft">
-            <div className="relative h-[60px] w-[60px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted ring-1 ring-ink/8">
+        <div className="flex justify-center px-2">
+          <Link
+            href="/onboarding/profile"
+            className="flex w-fit max-w-[min(18rem,calc(100vw-2rem))] flex-col items-center gap-2 rounded-2xl py-1 text-center outline-none transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          >
+            <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-soft ring-1 ring-ink/[0.04]">
               {profile?.avatarUrl ? (
                 <div
                   className="relative h-full w-full"
@@ -420,24 +423,16 @@ export default function DashboardPage() {
                   />
                 </div>
               ) : (
-                <div className="flex h-full items-center justify-center text-[11px] font-medium text-ink-faint">
+                <div className="flex h-full items-center justify-center px-1 text-[11px] font-medium leading-snug text-ink-faint">
                   {profileAddAvatarHint(cardUiLang)}
                 </div>
               )}
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[18px] font-semibold text-ink">
-                {profile?.displayName ?? profileDisplayNamePlaceholder(cardUiLang)}
-              </p>
-              <p className="text-[13px] text-ink-subtle">
-                {profilePromoSubtitle(profile ?? null, cardUiLang)}
-              </p>
-            </div>
-            <span className="text-ink-faint" aria-hidden>
-              →
-            </span>
-          </Card>
-        </Link>
+            <p className="w-full min-w-0 max-w-[16rem] truncate px-1 text-center text-[17px] font-semibold leading-snug text-ink">
+              {profile?.displayName ?? profileDisplayNamePlaceholder(cardUiLang)}
+            </p>
+          </Link>
+        </div>
 
         <section className="space-y-4">
           <SectionHeader
@@ -454,8 +449,14 @@ export default function DashboardPage() {
               </Link>
             }
           />
-          <Link href={`/player/${primary.id}`} className="block">
-            <Card className="overflow-hidden border-0 bg-gradient-to-br from-sage-mist via-cream to-cream p-0 shadow-soft ring-1 ring-sage/20 transition hover:shadow-[0_12px_40px_-16px_rgba(28,36,32,0.18)]">
+          <Link href={`/player/${primary.id}`} className="group block">
+            <Card
+              omitInsetRing
+              className={cn(
+                "overflow-hidden border-0 bg-white p-0 shadow-card transition-shadow duration-200",
+                routineDashboardScheduleContinueCardClass(primary),
+              )}
+            >
               <div className="flex gap-4 p-4">
                 <HomeRoutinePreviewMedia
                   imageUrl={
