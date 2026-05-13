@@ -1,25 +1,72 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/Button";
-import {
-  CARD_LANGUAGE_OPTIONS,
-  optionForCode,
-  type CardLanguageCode,
-  writeStoredCardLanguage,
-} from "@/lib/preferences/card-language-preference";
+import { useCallback } from "react";
+import { languageToggleButtonAria } from "@/lib/i18n/app-shell-locale";
+import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
+import { writeStoredCardLanguage } from "@/lib/preferences/card-language-preference";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { welcomeLanguageButtonAria } from "@/lib/i18n/app-shell-locale";
 import { cn } from "@/lib/utils/cn";
 
 type AfterSelect = "stay" | "dashboard";
 
 type Props = {
-  /** After picking a language: stay on this page, or go to the app home. */
+  /** After switching language: stay on this page, or go to the app home. */
   afterSelect?: AfterSelect;
   className?: string;
 };
+
+/** Spain — red / gold / red (simplified civil flag proportions). */
+function FlagSpain({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 30 20"
+      className={cn("h-7 w-[2.625rem] shrink-0 overflow-hidden rounded-[3px]", className)}
+      aria-hidden
+    >
+      <rect width="30" height="5" y="0" fill="#AA151B" />
+      <rect width="30" height="10" y="5" fill="#F1BF00" />
+      <rect width="30" height="5" y="15" fill="#AA151B" />
+    </svg>
+  );
+}
+
+/** United Kingdom — Union Jack (simplified). */
+function FlagUk({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 60 30"
+      className={cn("h-7 w-[3.5rem] shrink-0 overflow-hidden rounded-[3px]", className)}
+      aria-hidden
+    >
+      <rect width="60" height="30" fill="#012169" />
+      <path
+        d="M0 0 L60 30 M60 0 L0 30"
+        stroke="#fff"
+        strokeWidth="8"
+        strokeLinecap="square"
+      />
+      <path
+        d="M0 0 L60 30 M60 0 L0 30"
+        stroke="#C8102E"
+        strokeWidth="5"
+        strokeLinecap="square"
+      />
+      <path
+        d="M30 0 v30 M0 15 h60"
+        stroke="#fff"
+        strokeWidth="12"
+        strokeLinecap="square"
+      />
+      <path
+        d="M30 0 v30 M0 15 h60"
+        stroke="#C8102E"
+        strokeWidth="7"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
 
 export function CardLanguageMenuButton({
   afterSelect = "stay",
@@ -27,80 +74,26 @@ export function CardLanguageMenuButton({
 }: Props) {
   const router = useRouter();
   const lang = useCardUiLanguage();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
 
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      const el = wrapRef.current;
-      if (el && !el.contains(e.target as Node)) closeMenu();
-    };
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu();
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [menuOpen, closeMenu]);
-
-  const current = optionForCode(lang);
-
-  const pick = (code: CardLanguageCode) => {
-    writeStoredCardLanguage(code);
-    closeMenu();
+  const toggle = useCallback(() => {
+    const next: CardLanguageCode = lang === "es" ? "en" : "es";
+    writeStoredCardLanguage(next);
     if (afterSelect === "dashboard") {
       router.push("/dashboard");
     }
-  };
+  }, [afterSelect, lang, router]);
 
   return (
-    <div ref={wrapRef} className={cn("relative", className)}>
-      <Button
-        type="button"
-        variant="secondary"
-        aria-haspopup="listbox"
-        aria-expanded={menuOpen}
-        aria-label={`${welcomeLanguageButtonAria(lang)}: ${current.label}`}
-        className="h-10 min-h-touch min-w-[3.25rem] px-3 font-semibold tracking-tight sm:h-11"
-        onClick={() => setMenuOpen((o) => !o)}
-      >
-        <span className="text-[13px] sm:text-[14px]">{current.initials}</span>
-      </Button>
-      {menuOpen ? (
-        <ul
-          className="absolute right-0 top-[calc(100%+6px)] z-30 w-[min(100vw-2rem,14rem)] rounded-xl border border-ink/10 bg-white p-1 shadow-soft"
-          role="listbox"
-          aria-label={current.label}
-        >
-          {CARD_LANGUAGE_OPTIONS.map((opt) => (
-            <li key={opt.code} role="none">
-              <button
-                type="button"
-                role="option"
-                aria-selected={opt.code === lang}
-                className={cn(
-                  "flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-[13px] text-ink transition-colors",
-                  opt.code === lang
-                    ? "bg-cream font-medium ring-1 ring-ink/10"
-                    : "active:bg-ink/5 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-ink/[0.04]",
-                )}
-                onClick={() => pick(opt.code)}
-              >
-                <span>{opt.label}</span>
-                <span className="text-[11px] font-semibold text-ink-subtle">
-                  {opt.initials}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </div>
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={languageToggleButtonAria(lang)}
+      className={cn(
+        "inline-flex min-h-touch min-w-touch items-center justify-center rounded-xl border border-ink/12 bg-white/95 px-2 py-1.5 shadow-soft ring-1 ring-black/[0.04] transition active:scale-[0.98] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-canvas-muted/80",
+        className,
+      )}
+    >
+      {lang === "es" ? <FlagSpain /> : <FlagUk />}
+    </button>
   );
 }

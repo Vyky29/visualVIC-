@@ -170,6 +170,10 @@ export function resolveDigitalPixtoStrings(
 }
 
 const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
+  "brushing-teeth": {
+    en: "Brushing teeth",
+    es: "Lavarse los dientes",
+  },
   "at-the-airport": {
     en: "At the airport",
     es: "En el aeropuerto",

@@ -695,10 +695,10 @@ export function welcomeSignInCta(lang: CardLanguageCode): string {
   return isEs(lang) ? "Entrar" : "Sign in";
 }
 
-export function welcomeLanguageButtonAria(lang: CardLanguageCode): string {
+export function languageToggleButtonAria(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Idioma de la interfaz. Abrir menú"
-    : "Interface language. Open menu";
+    ? "Idioma: español. Toca para cambiar a inglés"
+    : "Language: English. Tap to switch to Spanish";
 }
 
 export function welcomeFeaturePreviewSrc(
@@ -710,4 +710,198 @@ export function welcomeFeaturePreviewSrc(
     return es ? "/welcome/home-screen-es.png" : "/welcome/home-screen.png";
   }
   return es ? "/welcome/focus-mode-es.png" : "/welcome/focus-mode.png";
+}
+
+export function welcomePreviewExpandHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Doble pulsación para ver la captura a tamaño completo"
+    : "Double-click to view the screenshot full size";
+}
+
+export function welcomePreviewLightboxCloseAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cerrar vista ampliada" : "Close enlarged view";
+}
+
+export type FirstThenSlot = "first" | "then";
+
+export function firstThenSlotLabel(
+  slot: FirstThenSlot,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) return slot === "first" ? "First" : "Then";
+  return slot === "first" ? "Primero" : "Después";
+}
+
+export function firstThenConnectorSymbol(_lang: CardLanguageCode): string {
+  return "&";
+}
+
+export function firstThenOpenFullRoutine(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Abrir rutina completa" : "Open full routine";
+}
+
+export function schedulePlayerFocusModeCta(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Modo Enfoque" : "Focus Mode";
+}
+
+export function schedulePlayerResetCta(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Reiniciar" : "Reset";
+}
+
+export function schedulePlayerCloseCta(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cerrar" : "Close";
+}
+
+export function schedulePlayerNowLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Ahora" : "Now";
+}
+
+export function schedulePlayerNextLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Siguiente" : "Next";
+}
+
+export function schedulePlayerCompletedLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Hecho" : "Completed";
+}
+
+export function schedulePlayerDoneCountLabel(
+  completed: number,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) return `${completed} done`;
+  return `${completed} hecho${completed === 1 ? "" : "s"}`;
+}
+
+export function schedulePlayerDoubleTapHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Doble toque para girar, o desliza a la derecha"
+    : "Double tap to flip, or swipe right";
+}
+
+export function schedulePlayerRoutineCompleteTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Rutina terminada" : "Routine complete";
+}
+
+export function schedulePlayerRoutineCompleteBody(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Todos los pasos están listos. Vuelve a ejecutarla cuando quieras el mismo ritmo tranquilo."
+    : "All steps are done. Run again anytime for the same calm rhythm.";
+}
+
+export function schedulePlayerRunAgain(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Otra vez" : "Run again";
+}
+
+export function schedulePlayerDone(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Listo" : "Done";
+}
+
+export function firstThenDemoPageTitle(lang: CardLanguageCode): string {
+  return dashboardFirstThenCardEyebrow(lang);
+}
+
+export function firstThenDemoNavAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Navegación de la demo" : "Demo navigation";
+}
+
+export function firstThenDemoFocusModeCta(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Modo Enfoque" : "Focus mode";
+}
+
+export function firstThenDemoIntroMoreNavAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Inicio y rutina" : "Home and routine";
+}
+
+export function firstThenDemoIntroMoreToggleShow(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Mostrar inicio y rutina" : "Show Home and Routine";
+}
+
+export function firstThenDemoIntroMoreToggleHide(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Ocultar inicio y rutina" : "Hide Home and Routine";
+}
+
+export function focusQuickNavAriaLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Accesos rápidos en Modo Enfoque" : "Focus mode quick links";
+}
+
+export function focusQuickNavToggleShow(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Mostrar accesos rápidos" : "Show quick links";
+}
+
+export function focusQuickNavToggleHide(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Ocultar accesos rápidos" : "Hide quick links";
+}
+
+export function focusModeNothingLeftTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "No queda nada en esta pasada" : "Nothing left in this pass";
+}
+
+export function focusModeNothingLeftBody(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Toca en cualquier sitio para volver a tu rutina."
+    : "Tap anywhere to return to your schedule.";
+}
+
+export function focusModeAllFinishedTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Todos los pasos terminados" : "All steps finished";
+}
+
+export function focusModeReturnScheduleAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Volver a la rutina" : "Return to schedule";
+}
+
+export function focusModeAriaPreviousStep(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Paso anterior" : "Previous step";
+}
+
+export function focusModeAriaSkipNext(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Saltar al siguiente paso" : "Skip to next step";
+}
+
+export function focusModeAriaSupportTools(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Herramientas de apoyo" : "Support tools";
+}
+
+export function focusModeAriaOptions(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Opciones" : "Options";
+}
+
+export function focusModeSheetSupportTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Apoyo" : "Support";
+}
+
+export function focusModeSheetOptionsTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Opciones" : "Options";
+}
+
+export function focusModeSupportCalmCard(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Tarjeta tranquila" : "Calm card";
+}
+
+export function focusModeSupportRepeatInstruction(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Repetir instrucción" : "Repeat instruction";
+}
+
+export function focusModeSupportSimplified(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Apoyo simplificado" : "Simplified support";
+}
+
+export function focusModeOptBackSchedule(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Volver a la rutina" : "Back to schedule";
+}
+
+export function focusModeOptFirstThen(lang: CardLanguageCode): string {
+  return dashboardFirstThenCardEyebrow(lang);
+}
+
+export function focusModeOptRestartRoutine(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Reiniciar rutina" : "Restart routine";
+}
+
+export function focusModeOptMarkFinished(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Marcar como hecho" : "Mark as finished";
+}
+
+export function focusModeOptExitFocus(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Salir del Modo Enfoque" : "Exit focus mode";
 }

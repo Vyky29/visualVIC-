@@ -15,6 +15,22 @@ import {
 } from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
+import {
+  dashboardFirstThenCardEyebrow,
+  dashboardSchedulePlayerTitle,
+  schedulePlayerCloseCta,
+  schedulePlayerCompletedLabel,
+  schedulePlayerDone,
+  schedulePlayerDoneCountLabel,
+  schedulePlayerDoubleTapHint,
+  schedulePlayerFocusModeCta,
+  schedulePlayerNextLabel,
+  schedulePlayerNowLabel,
+  schedulePlayerResetCta,
+  schedulePlayerRoutineCompleteBody,
+  schedulePlayerRoutineCompleteTitle,
+  schedulePlayerRunAgain,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 type Props = {
@@ -120,7 +136,7 @@ export function SchedulePlayer({
         <div className="flex items-end justify-between gap-3 px-0.5">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-faint">
-              Schedule Player
+              {dashboardSchedulePlayerTitle(cardUiLang)}
             </p>
             <h2 className="mt-1 text-[22px] font-semibold leading-tight tracking-tight text-ink">
               {stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
@@ -162,7 +178,7 @@ export function SchedulePlayer({
               onClick={openFocus}
             >
               <FocusButtonIcon />
-              <span className="truncate">Focus Mode</span>
+              <span className="truncate">{schedulePlayerFocusModeCta(cardUiLang)}</span>
             </Button>
           ) : null}
           <Button
@@ -172,7 +188,7 @@ export function SchedulePlayer({
             onClick={reset}
           >
             <ResetButtonIcon />
-            <span>Reset</span>
+            <span>{schedulePlayerResetCta(cardUiLang)}</span>
           </Button>
           <Button
             type="button"
@@ -183,7 +199,7 @@ export function SchedulePlayer({
             <span className="text-[#C84C57]">
               <CloseButtonIcon />
             </span>
-            <span>Close</span>
+            <span>{schedulePlayerCloseCta(cardUiLang)}</span>
           </Button>
         </div>
 
@@ -193,7 +209,7 @@ export function SchedulePlayer({
               href="/first-then"
               className="touch-manipulation text-[13px] font-medium text-sage underline-offset-4 transition active:underline active:opacity-90 [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
             >
-              First &amp; Then
+              {dashboardFirstThenCardEyebrow(cardUiLang)}
             </Link>
           </div>
         ) : null}
@@ -209,7 +225,9 @@ export function SchedulePlayer({
           >
             <div className="flex items-center gap-2 px-1">
               <span className={scheduleChrome.nowDot} />
-              <h3 className={scheduleChrome.nowLabel}>Now</h3>
+              <h3 className={scheduleChrome.nowLabel}>
+                {schedulePlayerNowLabel(cardUiLang)}
+              </h3>
             </div>
             <SwipeableStepCard
               step={nowStep}
@@ -221,7 +239,7 @@ export function SchedulePlayer({
               accentRings={accentRings}
             />
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
-              Double tap to flip, or swipe right
+              {schedulePlayerDoubleTapHint(cardUiLang)}
             </p>
           </motion.section>
         ) : null}
@@ -234,7 +252,7 @@ export function SchedulePlayer({
             className="space-y-2"
           >
             <h3 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-subtle">
-              Next
+              {schedulePlayerNextLabel(cardUiLang)}
             </h3>
             <div className="flex flex-col items-center gap-4">
               {upcomingSteps.map((step, i) => (
@@ -272,10 +290,10 @@ export function SchedulePlayer({
           >
             <div className="flex items-baseline justify-between gap-3 px-1">
               <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-                Completed
+                {schedulePlayerCompletedLabel(cardUiLang)}
               </h3>
               <span className="text-[12px] font-medium tabular-nums text-ink-faint">
-                {completedCount} done
+                {schedulePlayerDoneCountLabel(completedCount, cardUiLang)}
               </span>
             </div>
             <div className="flex flex-col gap-2.5">
@@ -302,20 +320,22 @@ export function SchedulePlayer({
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto w-full max-w-[min(100%,21rem)] rounded-3xl bg-gradient-to-br from-accent-soft/50 to-cream px-5 py-6 text-center ring-1 ring-accent/25"
         >
-          <p className="text-[18px] font-semibold text-ink">Routine complete</p>
+          <p className="text-[18px] font-semibold text-ink">
+            {schedulePlayerRoutineCompleteTitle(cardUiLang)}
+          </p>
           <p className="mt-2 text-[14px] leading-relaxed text-ink-subtle">
-            All steps are done. Run again anytime for the same calm rhythm.
+            {schedulePlayerRoutineCompleteBody(cardUiLang)}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             <Button type="button" variant="secondary" onClick={reset}>
-              Run again
+              {schedulePlayerRunAgain(cardUiLang)}
             </Button>
             <Button
               type="button"
               variant="primary"
               onClick={() => router.push(backHref)}
             >
-              Done
+              {schedulePlayerDone(cardUiLang)}
             </Button>
           </div>
         </motion.div>

@@ -16,6 +16,20 @@ import {
 } from "@/components/experimental/GeneratedPixtoCard";
 import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
+import {
+  bottomNavLabel,
+  firstThenDemoFocusModeCta,
+  firstThenDemoIntroMoreNavAria,
+  firstThenDemoIntroMoreToggleHide,
+  firstThenDemoIntroMoreToggleShow,
+  firstThenDemoNavAria,
+  firstThenDemoPageTitle,
+  firstThenSlotLabel,
+  focusQuickNavAriaLabel,
+  focusQuickNavToggleHide,
+  focusQuickNavToggleShow,
+  playerKindRoutine,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
@@ -308,7 +322,7 @@ function StepVisualCard({
   className,
 }: {
   generatedCard: GeneratedPixtoCardProps;
-  label: "First" | "Then";
+  label: string;
   icon: ReactNode;
   className?: string;
 }) {
@@ -346,7 +360,7 @@ function IntroStepLabel({
   label,
   icon,
 }: {
-  label: "First" | "Then";
+  label: string;
   icon: ReactNode;
 }) {
   return (
@@ -376,12 +390,15 @@ function IntroCueChip() {
 }
 
 export default function FirstThenDemoPage() {
+  const lang = useCardUiLanguage();
   const [viewport, setViewport] = useState({ w: 402, h: 874 });
   const [showFocusMode, setShowFocusMode] = useState(false);
   const [focusQuickMenuOpen, setFocusQuickMenuOpen] = useState(false);
+  const [introFooterMoreOpen, setIntroFooterMoreOpen] = useState(false);
 
   useEffect(() => {
     if (!showFocusMode) setFocusQuickMenuOpen(false);
+    else setIntroFooterMoreOpen(false);
   }, [showFocusMode]);
 
   useEffect(() => {
@@ -430,28 +447,34 @@ export default function FirstThenDemoPage() {
           <div className="flex items-center justify-center gap-2 pt-0.5 text-center">
             <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
             <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
-              First &amp; Then
+              {firstThenDemoPageTitle(lang)}
             </h1>
           </div>
 
-          <div className="grid min-h-0 grid-rows-2 gap-2">
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+          <div className="grid min-h-0 grid-rows-2 gap-1.5">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-1.5">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
-              <IntroStepLabel label="First" icon={<IconFirst className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-center">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
+              <IntroStepLabel
+                label={firstThenSlotLabel("first", lang)}
+                icon={<IconFirst className="h-7 w-7" />}
+              />
+              <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.35rem)/3.2))] max-w-[12.75rem]">
                   <MiniDigitalWowCard card={first} />
                 </div>
               </div>
             </div>
 
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-2">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-1.5">
               <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
-              <IntroStepLabel label="Then" icon={<IconThen className="h-7 w-7" />} />
-              <div className="flex min-h-0 items-center justify-center">
-                <div className="w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-9.65rem)/2.72))] max-w-[15.3rem]">
+              <IntroStepLabel
+                label={firstThenSlotLabel("then", lang)}
+                icon={<IconThen className="h-7 w-7" />}
+              />
+              <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.35rem)/3.2))] max-w-[12.75rem]">
                   <MiniDigitalWowCard card={second} />
                 </div>
               </div>
@@ -459,26 +482,62 @@ export default function FirstThenDemoPage() {
           </div>
 
           <div
-            className="flex min-h-[3.75rem] w-full min-w-0 flex-wrap items-end justify-center gap-2 px-1 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1 sm:gap-2.5"
+            className="flex min-h-[3.75rem] w-full min-w-0 flex-col items-center justify-end gap-2 px-1 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1"
             role="navigation"
-            aria-label="Demo navigation"
+            aria-label={firstThenDemoNavAria(lang)}
           >
-            <Link href="/dashboard" className={introFooterActionClass}>
-              <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
-              Home
-            </Link>
-            <Link href="/player/brushing-teeth" className={introFooterActionClass}>
-              <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
-              Routine
-            </Link>
-            <button
-              type="button"
-              onClick={() => setShowFocusMode(true)}
-              className={introFooterActionClass}
-            >
-              <FocusModeIntroIcon />
-              Focus mode
-            </button>
+            {introFooterMoreOpen ? (
+              <nav
+                id="intro-demo-more-nav"
+                aria-label={firstThenDemoIntroMoreNavAria(lang)}
+                className="flex w-full min-w-0 flex-col items-center gap-2 pb-0.5"
+              >
+                <Link
+                  href="/dashboard"
+                  className={introFooterActionClass}
+                  onClick={() => setIntroFooterMoreOpen(false)}
+                >
+                  <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
+                  {bottomNavLabel("home", lang)}
+                </Link>
+                <Link
+                  href="/player/brushing-teeth"
+                  className={introFooterActionClass}
+                  onClick={() => setIntroFooterMoreOpen(false)}
+                >
+                  <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
+                  {playerKindRoutine(lang)}
+                </Link>
+              </nav>
+            ) : null}
+            <div className="flex w-full min-w-0 flex-wrap items-end justify-center gap-2 sm:gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setIntroFooterMoreOpen(false);
+                  setShowFocusMode(true);
+                }}
+                className={introFooterActionClass}
+              >
+                <FocusModeIntroIcon />
+                {firstThenDemoFocusModeCta(lang)}
+              </button>
+              <button
+                type="button"
+                id="intro-demo-more-toggle"
+                aria-expanded={introFooterMoreOpen}
+                aria-controls={introFooterMoreOpen ? "intro-demo-more-nav" : undefined}
+                aria-label={
+                  introFooterMoreOpen
+                    ? firstThenDemoIntroMoreToggleHide(lang)
+                    : firstThenDemoIntroMoreToggleShow(lang)
+                }
+                onClick={() => setIntroFooterMoreOpen((open) => !open)}
+                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white text-ink shadow-soft transition active:scale-[0.98]"
+              >
+                <FocusFabPlusIcon open={introFooterMoreOpen} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -495,7 +554,7 @@ export default function FirstThenDemoPage() {
                 <div className="aspect-[10/13] h-full max-h-full w-[min(100%,98.5%)] max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={first}
-                    label="First"
+                    label={firstThenSlotLabel("first", lang)}
                     icon={<IconFirst className="h-7 w-7" />}
                     className="h-full min-h-0"
                   />
@@ -506,7 +565,7 @@ export default function FirstThenDemoPage() {
                 <div className="aspect-[10/13] h-full max-h-full w-[min(100%,98.5%)] max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={second}
-                    label="Then"
+                    label={firstThenSlotLabel("then", lang)}
                     icon={<IconThen className="h-7 w-7" />}
                     className="h-full min-h-0"
                   />
@@ -522,7 +581,7 @@ export default function FirstThenDemoPage() {
               {focusQuickMenuOpen ? (
                 <nav
                   id="focus-quick-nav"
-                  aria-label="Focus mode navigation"
+                  aria-label={focusQuickNavAriaLabel(lang)}
                   className="flex flex-col items-center gap-3 pb-1"
                 >
                   <Link
@@ -532,7 +591,7 @@ export default function FirstThenDemoPage() {
                   >
                     <HomeSectionIcon className="shrink-0" />
                     <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      Home
+                      {bottomNavLabel("home", lang)}
                     </span>
                   </Link>
 
@@ -543,7 +602,7 @@ export default function FirstThenDemoPage() {
                   >
                     <MenuDotsIcon className="shrink-0" />
                     <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      Menu
+                      {bottomNavLabel("menu", lang)}
                     </span>
                   </Link>
 
@@ -554,7 +613,7 @@ export default function FirstThenDemoPage() {
                   >
                     <RoutinesHomeIcon className="shrink-0" />
                     <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      Routine
+                      {playerKindRoutine(lang)}
                     </span>
                   </Link>
                 </nav>
@@ -565,7 +624,11 @@ export default function FirstThenDemoPage() {
                 id="focus-quick-nav-toggle"
                 aria-expanded={focusQuickMenuOpen}
                 aria-controls={focusQuickMenuOpen ? "focus-quick-nav" : undefined}
-                aria-label={focusQuickMenuOpen ? "Ocultar accesos rápidos" : "Mostrar accesos rápidos"}
+                aria-label={
+                  focusQuickMenuOpen
+                    ? focusQuickNavToggleHide(lang)
+                    : focusQuickNavToggleShow(lang)
+                }
                 onClick={() => setFocusQuickMenuOpen((open) => !open)}
                 className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white/92 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.98]"
               >

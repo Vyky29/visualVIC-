@@ -16,6 +16,27 @@ import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 import { routineAccentRings } from "@/lib/utils/routine-accent";
+import {
+  focusModeAllFinishedTitle,
+  focusModeAriaOptions,
+  focusModeAriaPreviousStep,
+  focusModeAriaSkipNext,
+  focusModeAriaSupportTools,
+  focusModeNothingLeftBody,
+  focusModeNothingLeftTitle,
+  focusModeOptBackSchedule,
+  focusModeOptExitFocus,
+  focusModeOptFirstThen,
+  focusModeOptMarkFinished,
+  focusModeOptRestartRoutine,
+  focusModeReturnScheduleAria,
+  focusModeSheetOptionsTitle,
+  focusModeSheetSupportTitle,
+  focusModeSupportCalmCard,
+  focusModeSupportRepeatInstruction,
+  focusModeSupportSimplified,
+} from "@/lib/i18n/app-shell-locale";
+import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 type Props = {
   routine: Routine;
@@ -181,6 +202,7 @@ function useTapZone(onTap: () => void) {
 
 export function FocusMode({ routine, exitHref }: Props) {
   const router = useRouter();
+  const lang = useCardUiLanguage();
   const {
     nowStep,
     nowIndex,
@@ -310,14 +332,14 @@ export function FocusMode({ routine, exitHref }: Props) {
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
               <p className="text-[17px] font-medium text-cream/88">
-                Nothing left in this pass
+                {focusModeNothingLeftTitle(lang)}
               </p>
               <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/42">
-                Tap anywhere to return to your schedule.
+                {focusModeNothingLeftBody(lang)}
               </p>
               <button
                 type="button"
-                aria-label="Return to schedule"
+                aria-label={focusModeReturnScheduleAria(lang)}
                 className="pointer-events-auto absolute inset-0 bg-transparent"
                 onClick={exit}
               />
@@ -331,14 +353,14 @@ export function FocusMode({ routine, exitHref }: Props) {
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
               <p className="text-[20px] font-medium tracking-tight text-cream/92">
-                All steps finished
+                {focusModeAllFinishedTitle(lang)}
               </p>
               <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/42">
-                Tap anywhere to return to your schedule.
+                {focusModeNothingLeftBody(lang)}
               </p>
               <button
                 type="button"
-                aria-label="Return to schedule"
+                aria-label={focusModeReturnScheduleAria(lang)}
                 className="pointer-events-auto absolute inset-0 bg-transparent"
                 onClick={exit}
               />
@@ -359,7 +381,7 @@ export function FocusMode({ routine, exitHref }: Props) {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Previous step"
+            aria-label={focusModeAriaPreviousStep(lang)}
             className="pointer-events-auto relative flex flex-1 touch-manipulation select-none outline-none focus:outline-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={tl.onPointerDown}
@@ -376,7 +398,7 @@ export function FocusMode({ routine, exitHref }: Props) {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Skip to next step"
+            aria-label={focusModeAriaSkipNext(lang)}
             className="pointer-events-auto relative flex flex-1 touch-manipulation select-none outline-none focus:outline-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={tr.onPointerDown}
@@ -396,7 +418,7 @@ export function FocusMode({ routine, exitHref }: Props) {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Support tools"
+            aria-label={focusModeAriaSupportTools(lang)}
             className="pointer-events-auto relative flex flex-1 touch-manipulation select-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={bl.onPointerDown}
@@ -413,7 +435,7 @@ export function FocusMode({ routine, exitHref }: Props) {
           <div
             role="button"
             tabIndex={0}
-            aria-label="Options"
+            aria-label={focusModeAriaOptions(lang)}
             className="pointer-events-auto relative flex flex-1 touch-manipulation select-none outline-none focus:outline-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={br.onPointerDown}
@@ -433,14 +455,14 @@ export function FocusMode({ routine, exitHref }: Props) {
 
       <Sheet
         open={sheet === "support"}
-        title="Support"
+        title={focusModeSheetSupportTitle(lang)}
         onClose={() => setSheet(null)}
       >
         <div className="flex flex-col gap-2">
           {[
-            ["Calm card", () => setSheet(null)],
-            ["Repeat instruction", () => setSheet(null)],
-            ["Simplified support", () => setSheet(null)],
+            [focusModeSupportCalmCard(lang), () => setSheet(null)],
+            [focusModeSupportRepeatInstruction(lang), () => setSheet(null)],
+            [focusModeSupportSimplified(lang), () => setSheet(null)],
           ].map(([label, fn]) =>
             sheetRow(label as string, fn as () => void, label as string),
           )}
@@ -449,27 +471,27 @@ export function FocusMode({ routine, exitHref }: Props) {
 
       <Sheet
         open={sheet === "options"}
-        title="Options"
+        title={focusModeSheetOptionsTitle(lang)}
         onClose={() => setSheet(null)}
       >
         <div className="flex flex-col gap-2">
-          {sheetRow("Back to schedule", () => {
+          {sheetRow(focusModeOptBackSchedule(lang), () => {
             setSheet(null);
             exit();
           }, "opt-back")}
-          {sheetRow("First & then", () => {
+          {sheetRow(focusModeOptFirstThen(lang), () => {
             setSheet(null);
             router.push("/first-then");
           }, "opt-ft")}
-          {sheetRow("Restart routine", () => {
+          {sheetRow(focusModeOptRestartRoutine(lang), () => {
             setSheet(null);
             reset();
           }, "opt-restart")}
-          {sheetRow("Mark as finished", () => {
+          {sheetRow(focusModeOptMarkFinished(lang), () => {
             setSheet(null);
             completeCurrent();
           }, "opt-done")}
-          {sheetRow("Exit focus mode", () => {
+          {sheetRow(focusModeOptExitFocus(lang), () => {
             setSheet(null);
             exit();
           }, "opt-exit")}
