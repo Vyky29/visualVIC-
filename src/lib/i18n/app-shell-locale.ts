@@ -626,3 +626,77 @@ export function routineFromLibraryDescription(lang: CardLanguageCode): string {
     ? "Creada desde la biblioteca visual"
     : "Created from Visual library";
 }
+
+export type WelcomeFeatureSlot = "home" | "focus";
+
+export function welcomeHeroTitle(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Agendas visuales que se sienten estables en el móvil"
+    : "Visual schedules that feel steady on the phone";
+}
+
+export function welcomeHeroSubtitle(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Una columna tranquila: rutinas, pasos y Modo Enfoque, pensada para la claridad y no el desorden."
+    : "One calm column — routines, steps, and Focus Mode — built for clarity, not clutter.";
+}
+
+export function welcomeFeatureTitle(
+  slot: WelcomeFeatureSlot,
+  lang: CardLanguageCode,
+): string {
+  if (slot === "home") return isEs(lang) ? "Inicio" : "Home";
+  return isEs(lang) ? "Modo Enfoque" : "Focus Mode";
+}
+
+export function welcomeFeatureBody(
+  slot: WelcomeFeatureSlot,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    if (slot === "home") {
+      return "Routines by category — quick access to Library, Templates, and more from the tab bar.";
+    }
+    return "A larger single-card view that cuts distractions when the routine needs full attention.";
+  }
+  if (slot === "home") {
+    return "Rutinas por categoría: acceso rápido a Biblioteca, Plantillas y más desde la barra inferior.";
+  }
+  return "Vista de una sola tarjeta más grande que reduce distracciones cuando la rutina necesita toda la atención.";
+}
+
+export function welcomeFeaturePreviewAlt(
+  slot: WelcomeFeatureSlot,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    if (slot === "home") {
+      return "Home screen with routine cards and bottom navigation";
+    }
+    return "Focus Mode screenshot";
+  }
+  if (slot === "home") {
+    return "Pantalla de inicio con tarjetas de rutina y navegación inferior";
+  }
+  return "Captura del Modo Enfoque";
+}
+
+export function welcomeFooterHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Elegir inglés o español guarda la preferencia en este dispositivo. Las tarjetas digitales de aeropuerto y hotel y las etiquetas siguen ese idioma (solo copia local)."
+    : "Choosing English or Español saves it on this device — airport and hotel digital cards and matching labels follow that choice (local copy only).";
+}
+
+export function welcomeHomeCta(lang: CardLanguageCode): string {
+  return bottomNavLabel("home", lang);
+}
+
+export function welcomeSignInCta(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Entrar" : "Sign in";
+}
+
+export function welcomeLanguageButtonAria(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Idioma de la interfaz. Abrir menú"
+    : "Interface language. Open menu";
+}
