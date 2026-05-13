@@ -286,10 +286,10 @@ function StepVisualCard({
           {label}
         </span>
       </div>
-      <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-[#E2E7EB] p-2.5">
+      <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-[#E2E7EB] p-3">
         <div
-          className="relative mx-auto flex h-full max-h-[94%] w-[94%] items-center justify-center"
-          style={{ aspectRatio: WOW_CARD_ASPECT }}
+          className="relative mx-auto h-auto w-[82%] max-w-full shrink-0"
+          style={{ aspectRatio: WOW_CARD_ASPECT, maxHeight: "min(86%, 100%)" }}
         >
           <MiniDigitalWowCard card={generatedCard} />
         </div>
@@ -428,9 +428,9 @@ export default function FirstThenDemoPage() {
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
           <div className="relative h-full w-full bg-canvas pb-[max(0.2rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(4rem,env(safe-area-inset-bottom))] pt-0">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.25rem,1.1vw,0.65rem)] px-0 pb-0">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(0.42rem,1.25vw,0.78rem)] px-0 pb-0">
               <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-[min(100%,98.5%)] max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
@@ -441,7 +441,7 @@ export default function FirstThenDemoPage() {
               </div>
 
               <div className="flex h-full min-h-0 w-full min-w-0 items-end justify-center pb-0">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-[min(100%,98.5%)] max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
