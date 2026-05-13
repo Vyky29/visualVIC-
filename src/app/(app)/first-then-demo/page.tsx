@@ -341,12 +341,12 @@ function StepVisualCard({
         </span>
       </div>
       <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 grid place-items-center p-3">
+        <div className="absolute inset-0 grid place-items-center p-2 sm:p-2">
           <div
-            className="relative w-[82%] max-w-full"
+            className="relative w-[92%] max-w-full"
             style={{
               aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-              maxHeight: "86%",
+              maxHeight: "94%",
             }}
           >
             <MiniDigitalWowCard card={generatedCard} />
@@ -443,8 +443,8 @@ export default function FirstThenDemoPage() {
 
   if (!showFocusMode) {
     return (
-      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-0 pt-[max(0.5rem,env(safe-area-inset-top))]">
-        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-2.5">
+      <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
+        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-2">
           <div className="flex items-center justify-center gap-2 pt-0.5 text-center">
             <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
             <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
@@ -452,30 +452,30 @@ export default function FirstThenDemoPage() {
             </h1>
           </div>
 
-          <div className="grid min-h-0 grid-rows-2 gap-1.5">
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-1.5">
-              <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+          <div className="grid min-h-0 grid-rows-2 gap-1">
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
+              <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel
                 label={firstThenSlotLabel("first", lang)}
                 icon={<IconFirst className="h-7 w-7" />}
               />
-              <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.05rem)/3.06))] max-w-[13.1rem]">
+              <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
                   <MiniDigitalWowCard card={first} />
                 </div>
               </div>
             </div>
 
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-2 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-2.5 py-1.5">
-              <div className="pointer-events-none absolute bottom-2 left-[6.025rem] top-2 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
+              <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
               <IntroCueChip />
               <IntroStepLabel
                 label={firstThenSlotLabel("then", lang)}
                 icon={<IconThen className="h-7 w-7" />}
               />
-              <div className="flex min-h-0 h-full max-h-full overflow-hidden items-center justify-center">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-11.05rem)/3.06))] max-w-[13.1rem]">
+              <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
+                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
                   <MiniDigitalWowCard card={second} />
                 </div>
               </div>
