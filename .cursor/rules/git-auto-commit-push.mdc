@@ -1,0 +1,15 @@
+---
+description: After code changes in this repo, commit and push without being asked.
+alwaysApply: true
+---
+
+# Git: commit and push by default
+
+When you finish a coding task in this repository (meaningful edits under `src/`, config that ships, etc.):
+
+1. **Do not wait** for the user to say "commit" or "push" or to run Git Bash.
+2. **`git add`** only relevant files. Omit incidental build artifacts (e.g. revert or exclude `tsconfig.tsbuildinfo` / `.next` unless the task explicitly changes them).
+3. **`git commit`** with one clear sentence in English describing what changed.
+4. **`git push`** to the current branch’s remote tracking branch (usually `origin main`).
+
+If `git push` fails (auth, network), report the error and what remains to do. If there is nothing to commit, say so briefly.
