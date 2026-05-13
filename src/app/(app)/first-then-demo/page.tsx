@@ -276,18 +276,19 @@ function StepVisualCard({
     <article
       className={cn(
         cardShell,
+        "flex min-h-0 flex-col",
         className,
       )}
     >
-      <div className="flex items-center justify-center gap-2.5 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-3">
+      <div className="flex shrink-0 items-center justify-center gap-2.5 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-3">
         <div className="grayscale">{icon}</div>
         <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-ink">
           {label}
         </span>
       </div>
-      <div className="relative flex aspect-[10/13] w-full items-center justify-center overflow-hidden bg-[#E2E7EB] p-3.5">
+      <div className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden bg-[#E2E7EB] p-3">
         <div
-          className="relative mx-auto flex h-full max-h-[80%] w-[76%] items-center justify-center"
+          className="relative mx-auto flex h-full max-h-[88%] w-[88%] items-center justify-center"
           style={{ aspectRatio: WOW_CARD_ASPECT }}
         >
           <MiniDigitalWowCard card={generatedCard} />
@@ -426,26 +427,26 @@ export default function FirstThenDemoPage() {
     <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
       <div className="relative h-full w-full overflow-hidden">
         <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas py-[max(0.5rem,env(safe-area-inset-left))] pl-[max(0.65rem,env(safe-area-inset-top))] pr-[max(2.85rem,env(safe-area-inset-bottom))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-center gap-x-[clamp(0.9rem,3.35vw,2.5rem)] px-[0.35rem] pb-[max(3.35rem,env(safe-area-inset-bottom))]">
+          <div className="relative h-full w-full bg-canvas pb-[max(0.35rem,env(safe-area-inset-left))] pl-[max(0.55rem,env(safe-area-inset-top))] pr-[max(2.25rem,env(safe-area-inset-bottom))] pt-0">
+            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 items-stretch gap-x-[clamp(1.05rem,3.75vw,2.5rem)] px-[0.2rem] pb-[max(1.85rem,env(safe-area-inset-bottom))]">
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={first}
                     label="First"
                     icon={<IconFirst className="h-7 w-7" />}
-                    className="h-full"
+                    className="h-full min-h-0"
                   />
                 </div>
               </div>
 
               <div className="flex h-full min-h-0 w-full min-w-0 items-center justify-center">
-                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-w-0">
+                <div className="aspect-[10/13] h-full max-h-full w-auto max-w-full min-h-0 min-w-0">
                   <StepVisualCard
                     generatedCard={second}
                     label="Then"
                     icon={<IconThen className="h-7 w-7" />}
-                    className="h-full"
+                    className="h-full min-h-0"
                   />
                 </div>
               </div>
