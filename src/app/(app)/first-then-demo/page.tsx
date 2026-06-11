@@ -24,7 +24,6 @@ import {
   GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
-  IllustrationSlotDiagnosticBorder,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
@@ -305,7 +304,6 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
             sizes="220px"
             unoptimized
           />
-          <IllustrationSlotDiagnosticBorder />
         </div>
 
         {card.iconUrl ? (
@@ -433,16 +431,15 @@ function FirstThenFocusSpecCard({
             </div>
           ) : null}
 
-          <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+          <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
             <Image
               src={card.illustrationUrl}
               alt=""
               fill
-              className="!h-full !w-full object-contain object-center"
+              className="!h-full !w-full object-contain object-bottom"
               sizes={`${FOCUS_LANDSCAPE.cardW}px`}
               unoptimized
             />
-            <IllustrationSlotDiagnosticBorder />
           </div>
         </div>
 

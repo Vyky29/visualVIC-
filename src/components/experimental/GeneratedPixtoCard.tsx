@@ -10,6 +10,7 @@ import {
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
+  GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM,
 } from "@/lib/constants/generated-pixto-card-sizes";
 
 export {
@@ -100,11 +101,8 @@ export const GENERATED_PIXTO_FOCUS_COMPANY_MARK = { w: 91, h: 91 } as const;
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
 const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = false;
 
-/**
- * Green slot outline drawn on top of the illustration (overlay).
- * Does not affect layout, padding, image sizing, or object-fit.
- */
-export const SHOW_ILLUSTRATION_SLOT_DIAGNOSTIC_BORDER = true;
+/** Full green slot box — off (visible during NOW card flip). */
+export const SHOW_ILLUSTRATION_SLOT_DIAGNOSTIC_BORDER = false;
 
 export function IllustrationSlotDiagnosticBorder() {
   if (!SHOW_ILLUSTRATION_SLOT_DIAGNOSTIC_BORDER) return null;
@@ -188,6 +186,17 @@ const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
 const WOW_FR_TOP_SPACER = GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const WOW_FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
+const WOW_SCHEDULE_FR_TOP_SPACER =
+  WOW_FR_TOP_SPACER + GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.topPx;
+const WOW_SCHEDULE_FR_ILLUSTRATION =
+  WOW_FR_ILLUSTRATION - GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.topPx;
+const SCHEDULE_ILLUSTRATION_FRAME_W =
+  GENERATED_PIXTO_ILLUSTRATION_FRAME.w -
+  GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.widthPx;
+const SCHEDULE_ILLUSTRATION_FRAME_ASPECT =
+  `${SCHEDULE_ILLUSTRATION_FRAME_W} / ${WOW_SCHEDULE_FR_ILLUSTRATION}` as const;
+const SCHEDULE_ILLUSTRATION_WIDTH_FRAC =
+  SCHEDULE_ILLUSTRATION_FRAME_W / GENERATED_PIXTO_CARD_SIZE.w;
 const FOCUS_ROW_FR_TOP = GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H;
 const FOCUS_FR_TOP_SPACER =
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h;
@@ -964,18 +973,18 @@ function GeneratedPixtoFocusFixedZoneCard({
           </div>
         ) : null}
 
-        <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+        <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
           <Image
             src={resolvedIllustrationSrc}
             alt=""
             fill
             sizes={`${z.w}px`}
-            className="!h-full !w-full object-contain object-center select-none"
+            className="!h-full !w-full object-contain object-bottom select-none"
             style={
               resolvedFocusIllustrationScale !== 1
                 ? {
                     transform: `scale(${resolvedFocusIllustrationScale})`,
-                    transformOrigin: "center center",
+                    transformOrigin: "center bottom",
                   }
                 : undefined
             }
@@ -985,7 +994,6 @@ function GeneratedPixtoFocusFixedZoneCard({
             }
             draggable={false}
           />
-          <IllustrationSlotDiagnosticBorder />
         </div>
       </div>
 
@@ -1087,7 +1095,9 @@ export function GeneratedPixtoCard({
   // Card geometry should come from the real design block sizes. Each screen
   // (Schedule / Focus / Home previews) should scale that geometry, not resize
   // the illustration block ad hoc per context.
-  const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
+  const illustrationWidthPct = schedulePresentation
+    ? `${(SCHEDULE_ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`
+    : `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_COMPANY_MARK
     : schedulePresentation
@@ -1148,10 +1158,17 @@ export function GeneratedPixtoCard({
   ]);
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
-    : ILLUSTRATION_FRAME_ASPECT;
+    : schedulePresentation
+      ? SCHEDULE_ILLUSTRATION_FRAME_ASPECT
+      : ILLUSTRATION_FRAME_ASPECT;
   const illustrationFrameRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME
-    : GENERATED_PIXTO_ILLUSTRATION_FRAME;
+    : schedulePresentation
+      ? {
+          w: SCHEDULE_ILLUSTRATION_FRAME_W,
+          h: WOW_SCHEDULE_FR_ILLUSTRATION,
+        }
+      : GENERATED_PIXTO_ILLUSTRATION_FRAME;
   const showFrameGuide =
     showIllustrationFrameGuide ||
     (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
@@ -1159,7 +1176,9 @@ export function GeneratedPixtoCard({
    * Illustration slot = 531×648 (schedule) or 531×663 (focus) aspect box.
    * Pre-framed assets fill the slot; cover avoids letterboxing on full-bleed exports.
    */
-  const illustrationObjectClass = "object-cover object-center";
+  const illustrationObjectClass = schedulePresentation
+    ? "object-cover object-bottom"
+    : "object-cover object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
@@ -1269,20 +1288,20 @@ export function GeneratedPixtoCard({
                 focusPresentation
                   ? FOCUS_FR_TOP_SPACER
                   : schedulePresentation
-                    ? WOW_FR_TOP_SPACER
+                    ? WOW_SCHEDULE_FR_TOP_SPACER
                   : FR_TOP_SPACER
               } 1 0`,
             }}
             aria-hidden
           />
           <div
-            className="relative flex h-full w-full min-h-0 shrink-0 items-start justify-center"
+            className="relative flex h-full w-full min-h-0 shrink-0 items-end justify-center"
             style={{
               flex: `${
                 focusPresentation
                   ? FOCUS_FR_ILLUSTRATION
                   : schedulePresentation
-                    ? WOW_FR_ILLUSTRATION
+                    ? WOW_SCHEDULE_FR_ILLUSTRATION
                     : FR_ILLUSTRATION
               } 1 0`,
             }}
@@ -1324,7 +1343,7 @@ export function GeneratedPixtoCard({
                 }
                 draggable={false}
               />
-              <IllustrationSlotDiagnosticBorder />
+              {!schedulePresentation ? <IllustrationSlotDiagnosticBorder /> : null}
             </div>
           </div>
         </div>
