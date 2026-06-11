@@ -851,6 +851,16 @@ export function firstThenDemoIntroMoreToggleHide(lang: CardLanguageCode): string
   return isEs(lang) ? "Ocultar inicio y rutina" : "Hide Home and Routine";
 }
 
+export function firstThenDemoRotateForFocusTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Gira el móvil en horizontal" : "Rotate your phone sideways";
+}
+
+export function firstThenDemoRotateForFocusBody(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "El Modo Enfoque muestra las dos tarjetas a pantalla completa."
+    : "Focus mode shows both cards full screen.";
+}
+
 export function focusQuickNavAriaLabel(lang: CardLanguageCode): string {
   return isEs(lang) ? "Accesos rápidos en Modo Enfoque" : "Focus mode quick links";
 }
