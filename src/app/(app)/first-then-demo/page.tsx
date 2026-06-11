@@ -8,6 +8,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
@@ -343,9 +344,13 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
 function FirstThenLandscapePair({
   firstCard,
   secondCard,
+  className,
+  style,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
+  className?: string;
+  style?: CSSProperties;
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.28);
@@ -379,12 +384,16 @@ function FirstThenLandscapePair({
   return (
     <div
       ref={outerRef}
-      className="absolute inset-0 flex min-h-0 w-full min-w-0 items-center justify-center"
+      className={cn(
+        "flex min-h-0 w-full min-w-0 items-center justify-center",
+        className ?? "absolute inset-0",
+      )}
       style={{
         paddingLeft: "max(4px, env(safe-area-inset-left))",
         paddingRight: "max(4px, env(safe-area-inset-right))",
         paddingTop: "max(4px, env(safe-area-inset-top))",
         paddingBottom: "max(4px, env(safe-area-inset-bottom))",
+        ...style,
       }}
     >
       <div
@@ -467,22 +476,6 @@ function IntroStepLabel({
   );
 }
 
-function IntroCueChip() {
-  return (
-    <div className="pointer-events-none absolute left-[6.025rem] top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D7DDE2] bg-white px-2 py-1 shadow-soft">
-      <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-ink-subtle" aria-hidden>
-        <path
-          d="M5 12h11M12 7l5 5-5 5"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
-}
-
 export default function FirstThenDemoPage() {
   const lang = useCardUiLanguage();
   const isMobileLandscape = useMobileLandscape();
@@ -501,7 +494,7 @@ export default function FirstThenDemoPage() {
   if (!showFocusMode) {
     return (
       <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
-        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-2">
+        <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-2">
           <div className="flex items-center justify-center gap-2 pt-0.5 text-center">
             <PixtoLearnIconMark className="h-9 w-9 rounded-[0.95rem]" />
             <h1 className="text-[1.16rem] font-semibold tracking-tight text-ink">
@@ -509,72 +502,49 @@ export default function FirstThenDemoPage() {
             </h1>
           </div>
 
-          {isMobileLandscape ? (
-            <div className="relative min-h-0">
-              <FirstThenLandscapePair firstCard={first} secondCard={second} />
+          <div className="grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] grid-rows-[auto_minmax(0,1fr)] gap-x-2 gap-y-1">
+            <div className="flex justify-center px-0.5 pt-0.5">
+              <IntroStepLabel
+                label={firstThenSlotLabel("first", lang)}
+                icon={<IconFirst className="h-7 w-7" />}
+              />
             </div>
-          ) : (
-            <div className="grid min-h-0 grid-rows-2 gap-1">
-              <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
-                <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
-                <IntroCueChip />
-                <IntroStepLabel
-                  label={firstThenSlotLabel("first", lang)}
-                  icon={<IconFirst className="h-7 w-7" />}
-                />
-                <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
-                  <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
-                    <MiniDigitalWowCard card={first} />
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
-                <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
-                <IntroCueChip />
-                <IntroStepLabel
-                  label={firstThenSlotLabel("then", lang)}
-                  icon={<IconThen className="h-7 w-7" />}
-                />
-                <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
-                  <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
-                    <MiniDigitalWowCard card={second} />
-                  </div>
-                </div>
-              </div>
+            <div className="flex justify-center px-0.5 pt-0.5">
+              <IntroStepLabel
+                label={firstThenSlotLabel("then", lang)}
+                icon={<IconThen className="h-7 w-7" />}
+              />
             </div>
-          )}
 
-          <div
-            className="flex min-h-[3.75rem] w-full min-w-0 flex-col items-center justify-end gap-2 px-1 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1"
-            role="navigation"
-            aria-label={firstThenDemoNavAria(lang)}
-          >
-            {introFooterMoreOpen ? (
-              <nav
-                id="intro-demo-more-nav"
-                aria-label={firstThenDemoIntroMoreNavAria(lang)}
-                className="flex w-full min-w-0 flex-col items-center gap-2 pb-0.5"
-              >
-                <Link
-                  href="/dashboard"
-                  className={introFooterActionClass}
-                  onClick={() => setIntroFooterMoreOpen(false)}
+            <div
+              className="row-span-2 flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
+              role="navigation"
+              aria-label={firstThenDemoNavAria(lang)}
+            >
+              {introFooterMoreOpen ? (
+                <nav
+                  id="intro-demo-more-nav"
+                  aria-label={firstThenDemoIntroMoreNavAria(lang)}
+                  className="flex flex-col items-center gap-2 pb-0.5"
                 >
-                  <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
-                  {bottomNavLabel("home", lang)}
-                </Link>
-                <Link
-                  href="/player/brushing-teeth"
-                  className={introFooterActionClass}
-                  onClick={() => setIntroFooterMoreOpen(false)}
-                >
-                  <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
-                  {playerKindRoutine(lang)}
-                </Link>
-              </nav>
-            ) : null}
-            <div className="flex w-full min-w-0 flex-wrap items-end justify-center gap-2 sm:gap-2.5">
+                  <Link
+                    href="/dashboard"
+                    className={introFooterActionClass}
+                    onClick={() => setIntroFooterMoreOpen(false)}
+                  >
+                    <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
+                    {bottomNavLabel("home", lang)}
+                  </Link>
+                  <Link
+                    href="/player/brushing-teeth"
+                    className={introFooterActionClass}
+                    onClick={() => setIntroFooterMoreOpen(false)}
+                  >
+                    <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
+                    {playerKindRoutine(lang)}
+                  </Link>
+                </nav>
+              ) : null}
               <button
                 type="button"
                 onClick={() => {
@@ -601,6 +571,20 @@ export default function FirstThenDemoPage() {
               >
                 <FocusFabPlusIcon open={introFooterMoreOpen} />
               </button>
+            </div>
+
+            <div className="col-span-2 relative min-h-0">
+              <FirstThenLandscapePair
+                firstCard={first}
+                secondCard={second}
+                className="relative h-full min-h-0"
+                style={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }}
+              />
             </div>
           </div>
         </div>

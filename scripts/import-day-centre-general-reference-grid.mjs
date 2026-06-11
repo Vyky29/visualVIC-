@@ -23,9 +23,10 @@ const defaultSrc = path.join(
 const srcPath = process.argv[2] ?? defaultSrc;
 const outDir = path.join(root, "public", "cards", "day centre", "general");
 
-/** @type {Array<{ slug: string; col: number; row: number; colSpan?: number; split?: "left" | "right"; pad?: number; noTrim?: boolean; centerScale?: number; inset?: { top?: number; bottom?: number; left?: number; right?: number } }>} */
+/** @type {Array<{ slug: string; col: number; row: number; colSpan?: number; split?: "left" | "right"; pad?: number; minPad?: number; inset?: { top?: number; bottom?: number; left?: number; right?: number }; extend?: { top?: number; bottom?: number; left?: number; right?: number } }>} */
 const CELLS = [
-  { slug: "music", col: 0, row: 0, inset: { right: 28 } },
+  // Maraca bleeds past col-0 boundary — extend right, do not crop.
+  { slug: "music", col: 0, row: 0, extend: { right: 56 }, minPad: 28 },
   { slug: "cafe", col: 1, row: 0, inset: { left: 56, right: 20 } },
   { slug: "black-nail-varnish", col: 2, row: 0, split: "right", inset: { left: 12 } },
   { slug: "bus", col: 3, row: 0, inset: { left: 16, top: 12, bottom: 12 } },
@@ -65,6 +66,12 @@ async function extractCell(meta, cell) {
   width -= (inset.left ?? 0) + (inset.right ?? 0);
   height -= (inset.top ?? 0) + (inset.bottom ?? 0);
 
+  const extend = cell.extend ?? {};
+  left -= extend.left ?? 0;
+  top -= extend.top ?? 0;
+  width += (extend.left ?? 0) + (extend.right ?? 0);
+  height += (extend.top ?? 0) + (extend.bottom ?? 0);
+
   let img = sharp(srcPath).extract({ left, top, width, height });
   if (cell.pad) {
     img = img.extend({
@@ -79,8 +86,8 @@ async function extractCell(meta, cell) {
   return img.png().toBuffer();
 }
 
-async function toCard(cellBuffer, dest) {
-  await fitIllustrationToCard(cellBuffer, dest);
+async function toCard(cellBuffer, dest, cell) {
+  await fitIllustrationToCard(cellBuffer, dest, { minPad: cell.minPad });
 }
 
 async function main() {
@@ -97,7 +104,7 @@ async function main() {
     const dest = path.join(outDir, `${cell.slug}.png`);
     const buf = await extractCell(meta, cell);
     fs.writeFileSync(rawDest, buf);
-    await toCard(buf, dest);
+    await toCard(buf, dest, cell);
     console.log("ok:", cell.slug);
   }
 

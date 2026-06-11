@@ -7,16 +7,16 @@ import sharp from "sharp";
 export const NOW_W = 531;
 export const NOW_H = 648;
 
-/** Max fraction of the frame the trimmed subject may occupy (after centre composite). */
-export const SAFE_FRAC = 0.82;
+/** Minimum white padding (px) on every side inside the 531×648 frame. */
+export const MIN_PAD = 36;
 
 /**
  * @param {Buffer | string} src
  * @param {string} dest
- * @param {{ safeFrac?: number; trim?: boolean; trimThreshold?: number }} [opts]
+ * @param {{ minPad?: number; trim?: boolean; trimThreshold?: number }} [opts]
  */
 export async function fitIllustrationToCard(src, dest, opts = {}) {
-  const safeFrac = opts.safeFrac ?? SAFE_FRAC;
+  const minPad = opts.minPad ?? MIN_PAD;
   const trimThreshold = opts.trimThreshold ?? 12;
   let img = sharp(src);
 
@@ -29,8 +29,9 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
   }
 
   const meta = await img.metadata();
-  const scale =
-    Math.min(NOW_W / meta.width, NOW_H / meta.height) * safeFrac;
+  const maxW = NOW_W - 2 * minPad;
+  const maxH = NOW_H - 2 * minPad;
+  const scale = Math.min(maxW / meta.width, maxH / meta.height);
   const w = Math.round(meta.width * scale);
   const h = Math.round(meta.height * scale);
   const resized = await img.resize(w, h).png().toBuffer();
