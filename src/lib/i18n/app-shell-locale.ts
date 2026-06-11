@@ -4,6 +4,7 @@ import {
   libraryAirportHotelLabel,
   libraryDayCentreIkramLabel,
 } from "@/lib/i18n/pixto-digital-locale";
+import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { RoutineVisualTone } from "@/lib/utils/routine-accent";
 
 function isEs(lang: CardLanguageCode): boolean {
@@ -419,6 +420,44 @@ export function librarySubheadingObjects(lang: CardLanguageCode): string {
 
 export function librarySubheadingSteps(lang: CardLanguageCode): string {
   return isEs(lang) ? "Pasos" : "Steps";
+}
+
+/** Day centre library accordion — thematic sub-headings (cooking, fitness, …). */
+export function dayCentreLibraryGroupLabel(
+  group: DayCentreLibraryGroup,
+  lang: CardLanguageCode,
+): string {
+  const en: Record<DayCentreLibraryGroup, string> = {
+    "fitness-equipment": "Fitness — equipment",
+    "fitness-stretching": "Fitness — stretching",
+    "materials-kitchen": "Materials — kitchen",
+    "materials-art": "Materials — art & craft",
+    "activities-cognitive": "Activities — puzzles & matching",
+    "activities-cooking": "Activities — cooking & art",
+    "personal-care": "Personal care",
+    community: "Community & transport",
+    "activities-leisure": "Activities & leisure",
+    shopping: "Shopping",
+    "food-drink": "Food & drink",
+    communication: "Communication",
+    "places-extras": "Places & extras",
+  };
+  const es: Record<DayCentreLibraryGroup, string> = {
+    "fitness-equipment": "Fitness — equipamiento",
+    "fitness-stretching": "Fitness — estiramientos",
+    "materials-kitchen": "Materiales — cocina",
+    "materials-art": "Materiales — arte y manualidades",
+    "activities-cognitive": "Actividades — puzzles y clasificación",
+    "activities-cooking": "Actividades — cocina y arte",
+    "personal-care": "Cuidado personal",
+    community: "Comunidad y transporte",
+    "activities-leisure": "Actividades y ocio",
+    shopping: "Compras",
+    "food-drink": "Comida y bebida",
+    communication: "Comunicación",
+    "places-extras": "Lugares y extras",
+  };
+  return isEs(lang) ? es[group] : en[group];
 }
 
 export function menuFocusModeLabel(lang: CardLanguageCode): string {

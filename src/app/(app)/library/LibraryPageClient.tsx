@@ -20,6 +20,10 @@ import {
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
+import {
+  DAY_CENTRE_LIBRARY_GROUP_ORDER,
+  dayCentreLibraryGroupForSlug,
+} from "@/lib/cards/day-centre-library-groups";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -42,6 +46,7 @@ import {
   libraryPackSectionTitle,
   librarySelectionSummary,
   libraryStepCountBadge,
+  dayCentreLibraryGroupLabel,
   librarySubheadingObjects,
   librarySubheadingSteps,
   type DashboardPackCategory,
@@ -540,40 +545,78 @@ export function LibraryPageClient() {
                       >
                         <div className="min-h-0 overflow-hidden">
                           <div className="space-y-3 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
-                            {objectCards.length > 0 ? (
-                              <section className="space-y-1.5">
-                                <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
-                                  {librarySubheadingObjects(cardUiLang)}
-                                </p>
-                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                                  {objectCards.map((v) => (
-                                    <LibraryPickTile
-                                      key={v.pickId}
-                                      v={v}
-                                      selected={selectedSet.has(v.pickId)}
-                                      onToggle={togglePick}
-                                    />
-                                  ))}
-                                </div>
-                              </section>
-                            ) : null}
-                            {stepCards.length > 0 ? (
-                              <section className="space-y-1.5">
-                                <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
-                                  {librarySubheadingSteps(cardUiLang)}
-                                </p>
-                                <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                                  {stepCards.map((v) => (
-                                    <LibraryPickTile
-                                      key={v.pickId}
-                                      v={v}
-                                      selected={selectedSet.has(v.pickId)}
-                                      onToggle={togglePick}
-                                    />
-                                  ))}
-                                </div>
-                              </section>
-                            ) : null}
+                            {section === "daycentre" ? (
+                              DAY_CENTRE_LIBRARY_GROUP_ORDER.map((groupId) => {
+                                const groupCards = cards.filter((v) => {
+                                  const slug = v.pickId.split("::")[1] ?? "";
+                                  return (
+                                    dayCentreLibraryGroupForSlug(slug) ===
+                                    groupId
+                                  );
+                                });
+                                if (groupCards.length === 0) return null;
+                                return (
+                                  <section
+                                    key={groupId}
+                                    className="space-y-1.5"
+                                  >
+                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+                                      {dayCentreLibraryGroupLabel(
+                                        groupId,
+                                        cardUiLang,
+                                      )}
+                                    </p>
+                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                      {groupCards.map((v) => (
+                                        <LibraryPickTile
+                                          key={v.pickId}
+                                          v={v}
+                                          selected={selectedSet.has(v.pickId)}
+                                          onToggle={togglePick}
+                                        />
+                                      ))}
+                                    </div>
+                                  </section>
+                                );
+                              })
+                            ) : (
+                              <>
+                                {objectCards.length > 0 ? (
+                                  <section className="space-y-1.5">
+                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+                                      {librarySubheadingObjects(cardUiLang)}
+                                    </p>
+                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                      {objectCards.map((v) => (
+                                        <LibraryPickTile
+                                          key={v.pickId}
+                                          v={v}
+                                          selected={selectedSet.has(v.pickId)}
+                                          onToggle={togglePick}
+                                        />
+                                      ))}
+                                    </div>
+                                  </section>
+                                ) : null}
+                                {stepCards.length > 0 ? (
+                                  <section className="space-y-1.5">
+                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+                                      {librarySubheadingSteps(cardUiLang)}
+                                    </p>
+                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                      {stepCards.map((v) => (
+                                        <LibraryPickTile
+                                          key={v.pickId}
+                                          v={v}
+                                          selected={selectedSet.has(v.pickId)}
+                                          onToggle={togglePick}
+                                        />
+                                      ))}
+                                    </div>
+                                  </section>
+                                ) : null}
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
