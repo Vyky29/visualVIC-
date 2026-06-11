@@ -25,11 +25,11 @@ export const MIN_PAD = 36;
  * }} [opts]
  */
 export async function fitIllustrationToCard(src, dest, opts = {}) {
-  const minPad = opts.minPad ?? MIN_PAD;
   const trimThreshold = opts.trimThreshold ?? 12;
   const width = opts.width ?? NOW_W;
   const height = opts.height ?? NOW_H;
   const background = opts.background ?? "#ffffff";
+  const fit = opts.fit ?? "cover";
   let img = sharp(src);
 
   if (opts.trim !== false) {
@@ -40,6 +40,15 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
     }
   }
 
+  if (fit === "cover") {
+    await img
+      .resize(width, height, { fit: "cover", position: opts.position ?? "centre" })
+      .png()
+      .toFile(dest);
+    return;
+  }
+
+  const minPad = opts.minPad ?? MIN_PAD;
   const meta = await img.metadata();
   const maxW = width - 2 * minPad;
   const maxH = height - 2 * minPad;

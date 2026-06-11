@@ -942,9 +942,9 @@ export function GeneratedPixtoCard({
     (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
   /**
    * Illustration slot = 531×648 (schedule) or 531×663 (focus) aspect box.
-   * Source PNGs can be any size — UI scales with contain, centred, never cropped.
+   * Pre-framed assets fill the slot; cover avoids letterboxing on full-bleed exports.
    */
-  const illustrationObjectClass = "object-contain object-center";
+  const illustrationObjectClass = "object-cover object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;

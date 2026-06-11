@@ -5,15 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import sharp from "sharp";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, "..");
-
-const NOW_W = 531;
-const NOW_H = 648;
-const FOCUS_H = 663;
-const CROP_POSITION = "centre";
+import { fitIllustrationToCard, FOCUS_H } from "./pixtolearn-card-fit.mjs";
 
 const assets =
   process.env.IKRAM_ASSETS_DIR ??
@@ -41,13 +33,6 @@ function resolveSrc() {
   throw new Error("home source not found");
 }
 
-async function writeFramed(src, dest, height) {
-  await sharp(src)
-    .resize(NOW_W, height, { fit: "cover", position: CROP_POSITION })
-    .png()
-    .toFile(dest);
-}
-
 async function main() {
   const src = resolveSrc();
   console.log("source:", src);
@@ -58,11 +43,13 @@ async function main() {
     fs.copyFileSync(src, rawLocal);
   }
 
-  await writeFramed(src, path.join(scenesDir, "home.png"), NOW_H);
-  await writeFramed(src, path.join(scenesDir, "home-focus.png"), FOCUS_H);
-  await writeFramed(src, path.join(ikramDir, "home.png"), NOW_H);
+  await fitIllustrationToCard(src, path.join(scenesDir, "home.png"));
+  await fitIllustrationToCard(src, path.join(scenesDir, "home-focus.png"), {
+    height: FOCUS_H,
+  });
+  await fitIllustrationToCard(src, path.join(ikramDir, "home.png"));
 
-  console.log(`Done — home reframed (${CROP_POSITION}), Ikram + cat.`);
+  console.log("Done — home reframed (cover fill), Ikram + Muchie.");
 }
 
 main().catch((err) => {

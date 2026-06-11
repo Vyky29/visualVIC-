@@ -265,7 +265,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
             src={card.illustrationUrl}
             alt=""
             fill
-            className="object-contain object-center"
+            className="object-cover object-center"
             sizes="220px"
             unoptimized
           />

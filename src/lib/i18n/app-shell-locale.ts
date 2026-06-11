@@ -107,18 +107,18 @@ export function dashboardFirstThenCardTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Solo dos pasos" : "Two steps only";
 }
 
-export function dashboardFirstThenMunchyHomeTitle(lang: CardLanguageCode): string {
-  return isEs(lang) ? "Casa con Munchy" : "Home with Munchy";
+export function dashboardFirstThenMuchieHomeTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Casa con Muchie" : "Home with Muchie";
 }
 
-export function dashboardFirstThenMunchyHomeHint(lang: CardLanguageCode): string {
+export function dashboardFirstThenMuchieHomeHint(lang: CardLanguageCode): string {
   return isEs(lang)
     ? "Taxi y casa — demo Primero / Después"
     : "Cab and home — First & Then demo";
 }
 
 export function firstThenDemoIkramHomeThenTitle(lang: CardLanguageCode): string {
-  return isEs(lang) ? "casa con munchy" : "home with munchy";
+  return isEs(lang) ? "casa con muchie" : "home with muchie";
 }
 
 export function dashboardNoPreview(lang: CardLanguageCode): string {

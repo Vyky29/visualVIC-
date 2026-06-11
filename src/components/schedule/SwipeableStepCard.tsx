@@ -664,7 +664,6 @@ export function SwipeableStepCard({
                           focusIllustrationUrl={gp.focusIllustrationUrl}
                           focusPresentation
                           suppressNeutralRing
-                          showIllustrationFrameGuide
                           className="h-full w-full max-w-none"
                         />
                       </GeneratedPixtoFocusSlotScale>
@@ -853,7 +852,6 @@ export function SwipeableStepCard({
                       focusIllustrationUrl={gp.focusIllustrationUrl}
                       focusPresentation
                       suppressNeutralRing
-                      showIllustrationFrameGuide
                       className="h-full w-full max-w-none"
                     />
                   </GeneratedPixtoFocusSlotScale>

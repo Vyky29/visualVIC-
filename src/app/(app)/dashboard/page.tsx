@@ -30,8 +30,8 @@ import {
   dashboardFeaturedStepsHint,
   dashboardFirstThenCardEyebrow,
   dashboardFirstThenCardTitle,
-  dashboardFirstThenMunchyHomeHint,
-  dashboardFirstThenMunchyHomeTitle,
+  dashboardFirstThenMuchieHomeHint,
+  dashboardFirstThenMuchieHomeTitle,
   dashboardNoPreview,
   dashboardPackCategoryTitle,
   dashboardQuickBuilderEyebrow,
@@ -700,10 +700,10 @@ export default function DashboardPage() {
                           {dashboardFirstThenCardEyebrow(cardUiLang)}
                         </p>
                         <p className="text-[15px] font-semibold leading-snug text-ink">
-                          {dashboardFirstThenMunchyHomeTitle(cardUiLang)}
+                          {dashboardFirstThenMuchieHomeTitle(cardUiLang)}
                         </p>
                         <p className="text-[12px] leading-snug text-ink-subtle">
-                          {dashboardFirstThenMunchyHomeHint(cardUiLang)}
+                          {dashboardFirstThenMuchieHomeHint(cardUiLang)}
                         </p>
                       </div>
                     </div>
