@@ -393,19 +393,24 @@ function FirstThenLandscapeColumn({ card }: { card: GeneratedPixtoCardProps }) {
   );
 }
 
+const LANDSCAPE_STEP_LABEL_BAND_PX = 24;
+
 function FirstThenLandscapePair({
   firstCard,
   secondCard,
   className,
   style,
+  stepLabels,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   className?: string;
   style?: CSSProperties;
+  stepLabels?: [ReactNode, ReactNode];
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.28);
+  const hasStepLabels = Boolean(stepLabels);
 
   useLayoutEffect(() => {
     const outer = outerRef.current;
@@ -416,9 +421,10 @@ function FirstThenLandscapePair({
       const H = outer.clientHeight;
       if (W <= 0 || H <= 0) return;
 
+      const labelBand = hasStepLabels ? LANDSCAPE_STEP_LABEL_BAND_PX : 0;
       const sx =
         (W - LANDSCAPE_PAIR_GAP_PX) / (GENERATED_PIXTO_CARD_SIZE.w * 2);
-      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const sy = (H - labelBand) / GENERATED_PIXTO_CARD_SIZE.h;
       const next = Math.min(sx, sy);
       setScale(Number.isFinite(next) && next > 0 ? next : 0.28);
     };
@@ -427,7 +433,7 @@ function FirstThenLandscapePair({
     const ro = new ResizeObserver(update);
     ro.observe(outer);
     return () => ro.disconnect();
-  }, []);
+  }, [hasStepLabels]);
 
   const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
   const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
@@ -449,31 +455,39 @@ function FirstThenLandscapePair({
       }}
     >
       <div
-        className="flex items-center justify-center"
+        className="flex items-end justify-center"
         style={{ gap: LANDSCAPE_PAIR_GAP_PX }}
       >
-        {cards.map((card) => (
+        {cards.map((card, index) => (
           <div
             key={card.illustrationUrl}
-            className="relative shrink-0"
-            style={{ width: slotW, height: slotH }}
+            className="flex shrink-0 flex-col items-center"
+            style={{ width: slotW }}
           >
+            {stepLabels?.[index] ? (
+              <div className="mb-0.5 shrink-0">{stepLabels[index]}</div>
+            ) : null}
             <div
-              className="absolute left-0 top-0 origin-top-left"
-              style={{
-                width: GENERATED_PIXTO_CARD_SIZE.w,
-                height: GENERATED_PIXTO_CARD_SIZE.h,
-                transform: `scale(${scale})`,
-              }}
+              className="relative shrink-0"
+              style={{ width: slotW, height: slotH }}
             >
               <div
-                className="relative h-full w-full"
+                className="absolute left-0 top-0 origin-top-left"
                 style={{
                   width: GENERATED_PIXTO_CARD_SIZE.w,
                   height: GENERATED_PIXTO_CARD_SIZE.h,
+                  transform: `scale(${scale})`,
                 }}
               >
-                <MiniDigitalWowCard card={card} />
+                <div
+                  className="relative h-full w-full"
+                  style={{
+                    width: GENERATED_PIXTO_CARD_SIZE.w,
+                    height: GENERATED_PIXTO_CARD_SIZE.h,
+                  }}
+                >
+                  <MiniDigitalWowCard card={card} />
+                </div>
               </div>
             </div>
           </div>
@@ -483,20 +497,78 @@ function FirstThenLandscapePair({
   );
 }
 
+function FirstThenLandscapeMenuRail({ children }: { children: ReactNode }) {
+  return (
+    <div className="pointer-events-none absolute inset-y-0 right-0 z-20 flex w-[min(4.35rem,max-content)] min-w-[3.6rem]">
+      <div className="pointer-events-auto flex min-h-0 w-full flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FirstThenLandscapeFullWidthShell({
+  firstCard,
+  secondCard,
+  stepLabels,
+  footer,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  stepLabels?: [ReactNode, ReactNode];
+  footer: ReactNode;
+}) {
+  return (
+    <div className="relative h-full w-full min-h-0">
+      <FirstThenLandscapePair
+        firstCard={firstCard}
+        secondCard={secondCard}
+        stepLabels={stepLabels}
+        className="absolute inset-0"
+      />
+      <FirstThenLandscapeMenuRail>{footer}</FirstThenLandscapeMenuRail>
+    </div>
+  );
+}
+
+function landscapeStepLabels(lang: ReturnType<typeof useCardUiLanguage>): [
+  ReactNode,
+  ReactNode,
+] {
+  return [
+    <FocusStepLabel
+      key="first"
+      label={firstThenSlotLabel("first", lang)}
+      icon={<IconFirst className="h-6 w-6" />}
+    />,
+    <FocusStepLabel
+      key="then"
+      label={firstThenSlotLabel("then", lang)}
+      icon={<IconThen className="h-6 w-6" />}
+    />,
+  ];
+}
+
 function IntroFooterColumn({
   lang,
   introFooterMoreOpen,
   setIntroFooterMoreOpen,
   onFocusMode,
+  embedded = false,
 }: {
   lang: ReturnType<typeof useCardUiLanguage>;
   introFooterMoreOpen: boolean;
   setIntroFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
   onFocusMode: () => void;
+  embedded?: boolean;
 }) {
   return (
     <div
-      className="flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
+      className={cn(
+        "flex min-h-0 flex-col items-center justify-end gap-2",
+        !embedded &&
+          "pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]",
+      )}
       role="navigation"
       aria-label={firstThenDemoNavAria(lang)}
     >
@@ -622,15 +694,21 @@ function FocusFooterColumn({
   focusFooterMoreOpen,
   setFocusFooterMoreOpen,
   onExitFocus,
+  embedded = false,
 }: {
   lang: ReturnType<typeof useCardUiLanguage>;
   focusFooterMoreOpen: boolean;
   setFocusFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
   onExitFocus: () => void;
+  embedded?: boolean;
 }) {
   return (
     <div
-      className="flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
+      className={cn(
+        "flex min-h-0 flex-col items-center justify-end gap-2",
+        !embedded &&
+          "pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]",
+      )}
       role="navigation"
       aria-label={firstThenDemoNavAria(lang)}
     >
@@ -704,38 +782,24 @@ export default function FirstThenDemoPage() {
   if (!showFocusMode) {
     if (isMobileLandscape) {
       return (
-        <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
-          <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] gap-x-2">
-            <div className="flex min-h-0 flex-col gap-1">
-              <div className="flex shrink-0 justify-center px-0.5 pt-0.5">
-                <IntroStepLabel
-                  label={firstThenSlotLabel("first", lang)}
-                  icon={<IconFirst className="h-7 w-7" />}
-                />
-              </div>
-              <FirstThenLandscapeColumn card={first} />
-            </div>
-
-            <div className="flex min-h-0 flex-col gap-1">
-              <div className="flex shrink-0 justify-center px-0.5 pt-0.5">
-                <IntroStepLabel
-                  label={firstThenSlotLabel("then", lang)}
-                  icon={<IconThen className="h-7 w-7" />}
-                />
-              </div>
-              <FirstThenLandscapeColumn card={second} />
-            </div>
-
-            <IntroFooterColumn
-              lang={lang}
-              introFooterMoreOpen={introFooterMoreOpen}
-              setIntroFooterMoreOpen={setIntroFooterMoreOpen}
-              onFocusMode={() => {
-                setIntroFooterMoreOpen(false);
-                setShowFocusMode(true);
-              }}
-            />
-          </div>
+        <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas">
+          <FirstThenLandscapeFullWidthShell
+            firstCard={first}
+            secondCard={second}
+            stepLabels={landscapeStepLabels(lang)}
+            footer={
+              <IntroFooterColumn
+                embedded
+                lang={lang}
+                introFooterMoreOpen={introFooterMoreOpen}
+                setIntroFooterMoreOpen={setIntroFooterMoreOpen}
+                onFocusMode={() => {
+                  setIntroFooterMoreOpen(false);
+                  setShowFocusMode(true);
+                }}
+              />
+            }
+          />
         </div>
       );
     }
@@ -798,25 +862,13 @@ export default function FirstThenDemoPage() {
   return (
     <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation">
       {isMobileLandscape ? (
-        <div className="h-full w-full px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
-          <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] gap-x-2">
-            <div className="flex min-h-0 flex-col gap-0.5">
-              <FocusStepLabel
-                label={firstThenSlotLabel("first", lang)}
-                icon={<IconFirst className="h-6 w-6" />}
-              />
-              <FirstThenLandscapeColumn card={first} />
-            </div>
-
-            <div className="flex min-h-0 flex-col gap-0.5">
-              <FocusStepLabel
-                label={firstThenSlotLabel("then", lang)}
-                icon={<IconThen className="h-6 w-6" />}
-              />
-              <FirstThenLandscapeColumn card={second} />
-            </div>
-
+        <FirstThenLandscapeFullWidthShell
+          firstCard={first}
+          secondCard={second}
+          stepLabels={landscapeStepLabels(lang)}
+          footer={
             <FocusFooterColumn
+              embedded
               lang={lang}
               focusFooterMoreOpen={focusFooterMoreOpen}
               setFocusFooterMoreOpen={setFocusFooterMoreOpen}
@@ -825,8 +877,8 @@ export default function FirstThenDemoPage() {
                 setShowFocusMode(false);
               }}
             />
-          </div>
-        </div>
+          }
+        />
       ) : (
         <div className="absolute inset-0 flex min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           <FirstThenPortraitStack
