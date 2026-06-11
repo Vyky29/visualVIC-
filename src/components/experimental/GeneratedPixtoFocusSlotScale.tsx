@@ -6,8 +6,9 @@ import { GENERATED_PIXTO_FOCUS_CARD_SIZE } from "@/components/experimental/Gener
 type Props = { children: ReactNode };
 
 /**
- * Fits the focus design card (744×1374) inside the parent slot — scales title,
- * ribbon, illustration, and logo together (no independent image crop).
+ * Fits the Focus 3-zone card into the stage. Width-first: fills the stage
+ * width (up to 28rem), then uses remaining height — illustration zone grows
+ * inside the card; text/footer stay fixed px.
  */
 export function GeneratedPixtoFocusSlotScale({ children }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
@@ -22,7 +23,11 @@ export function GeneratedPixtoFocusSlotScale({ children }: Props) {
       if (W <= 0 || H <= 0) return;
       const sx = W / GENERATED_PIXTO_FOCUS_CARD_SIZE.w;
       const sy = H / GENERATED_PIXTO_FOCUS_CARD_SIZE.h;
-      const s = Math.min(sx, sy);
+      // Width-first on tall stages; fall back to height when landscape is short.
+      const s =
+        H >= GENERATED_PIXTO_FOCUS_CARD_SIZE.h * sx
+          ? sx
+          : Math.min(sx, sy);
       setScale(Number.isFinite(s) && s > 0 ? s : 1);
     };
 
@@ -38,7 +43,7 @@ export function GeneratedPixtoFocusSlotScale({ children }: Props) {
   return (
     <div
       ref={outerRef}
-      className="relative flex h-full min-h-0 w-full min-w-0 flex-1 items-center justify-center"
+      className="relative flex h-full min-h-0 w-full min-w-0 items-center justify-center"
     >
       <div
         className="relative mx-auto shrink-0 will-change-transform"

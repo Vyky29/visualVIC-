@@ -6,6 +6,17 @@ import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
+import {
+  GENERATED_PIXTO_FOCUS_DESIGN_H,
+  GENERATED_PIXTO_FOCUS_DESIGN_W,
+  GENERATED_PIXTO_FOCUS_FIXED_ZONE,
+} from "@/lib/constants/generated-pixto-card-sizes";
+
+export {
+  GENERATED_PIXTO_FOCUS_DESIGN_H,
+  GENERATED_PIXTO_FOCUS_DESIGN_W,
+  GENERATED_PIXTO_FOCUS_FIXED_ZONE,
+};
 
 /**
  * Experimental HTML/CSS card shell for AI illustration-only assets.
@@ -60,27 +71,6 @@ export const GENERATED_PIXTO_FOCUS_EXTRA_WIDTH_PX = 10 as const;
 export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME = {
   w: GENERATED_PIXTO_ILLUSTRATION_FRAME.w,
   h: GENERATED_PIXTO_ILLUSTRATION_FRAME.h + 15,
-} as const;
-
-/**
- * Focus presentation — fixed 3-zone card (illustration flex:1, text 110px, footer 84px).
- * Matches first-then Focus landscape spec; slot scaler fits this frame.
- */
-export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {
-  w: 384,
-  h: 520,
-  illustPadTop: 56,
-  illustPadX: 28,
-  illustPadBottom: 16,
-  actionH: 110,
-  actionPadX: 24,
-  footerH: 84,
-  footerPadX: 24,
-  illustBorder: 2,
-  illustBorderColor: "#2cc55e",
-  packMarkSize: 28,
-  packMarkTop: 16,
-  packMarkRight: 28,
 } as const;
 
 /** Focus card design frame used by GeneratedPixtoFocusSlotScale. */
@@ -1011,7 +1001,7 @@ function GeneratedPixtoFocusFixedZoneCard({
         <p
           className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
           style={{
-            fontSize: 36,
+            fontSize: z.actionTitleFontPx,
             fontWeight: 800,
             lineHeight: 1.05,
           }}
@@ -1037,14 +1027,16 @@ function GeneratedPixtoFocusFixedZoneCard({
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
           )}
-          style={
-            ribbonDarkText
+          style={{
+            ...(ribbonDarkText
               ? ribbonTypographyStyle
               : {
                   ...ribbonTypographyStyle,
                   textShadow: "0 1px 2px rgba(0,0,0,0.2)",
-                }
-          }
+                }),
+            fontSize: z.footerTitleMaxFontPx,
+            lineHeight: 1.1,
+          }}
         >
           {i18nCategory}
         </span>

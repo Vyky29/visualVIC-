@@ -23,6 +23,7 @@ import {
   GENERATED_PIXTO_WOW_TITLE_ZONE_H,
   GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
+  GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   IllustrationSlotDiagnosticBorder,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
@@ -50,24 +51,24 @@ import { cn } from "@/lib/utils/cn";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 
-/** Focus landscape — fixed 3-zone card (illustration flex:1 | text 110 | footer 84). */
+/** Focus landscape — same 3-zone frame as schedule Focus (`GENERATED_PIXTO_FOCUS_FIXED_ZONE`). */
 const FOCUS_LANDSCAPE = {
-  cardW: 384,
-  cardH: 520,
+  cardW: GENERATED_PIXTO_FOCUS_FIXED_ZONE.w,
+  cardH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.h,
   cardRadius: 16,
   cardGap: 24,
-  illustPadTop: 56,
-  illustPadX: 28,
-  illustPadBottom: 16,
-  actionH: 110,
-  actionPadX: 24,
-  footerH: 84,
-  footerPadX: 24,
-  illustBorder: 2,
-  illustBorderColor: "#2cc55e",
-  packMarkSize: 28,
-  packMarkTop: 16,
-  packMarkRight: 28,
+  illustPadTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadTop,
+  illustPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadX,
+  illustPadBottom: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadBottom,
+  actionH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionH,
+  actionPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionPadX,
+  footerH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerH,
+  footerPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerPadX,
+  illustBorder: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorder,
+  illustBorderColor: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorderColor,
+  packMarkSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkSize,
+  packMarkTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkTop,
+  packMarkRight: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkRight,
   cardsToSidebarGap: 64,
   sidebarW: 64,
   sidebarEdge: 24,
@@ -462,7 +463,7 @@ function FirstThenFocusSpecCard({
           <p
             className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
             style={{
-              fontSize: "clamp(26px, 5vw, 42px)",
+              fontSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionTitleFontPx,
               fontWeight: 800,
               lineHeight: 1.05,
             }}
