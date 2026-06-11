@@ -30,9 +30,20 @@ import {
   AT_THE_HOTEL_SEQUENCE,
   atTheHotelImageUrl,
 } from "@/lib/cards/at-the-hotel-cards";
+import {
+  DAY_CENTRE_GENERAL_CARD_FILES,
+  DAY_CENTRE_GENERAL_SEQUENCE,
+  dayCentreGeneralImageUrlForStep,
+} from "@/lib/cards/day-centre-general-cards";
+import {
+  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
+  dayCentreIkramImageUrlForStep,
+} from "@/lib/cards/day-centre-ikram-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
+  DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
@@ -47,7 +58,9 @@ export type PickablePackId =
   | "swim"
   | "dress"
   | "airport"
-  | "hotel";
+  | "hotel"
+  | "daycentre"
+  | "dcikram";
 
 export function pickablePackFromPickId(pickId: string): PickablePackId | null {
   const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
@@ -59,7 +72,9 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "swim" ||
     ns === "dress" ||
     ns === "airport" ||
-    ns === "hotel"
+    ns === "hotel" ||
+    ns === "daycentre" ||
+    ns === "dcikram"
   ) {
     return ns as PickablePackId;
   }
@@ -132,6 +147,8 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   const swimTitleMap = titleMapFromSequence(SWIMMING_SEQUENCE);
   const airportTitleMap = titleMapFromSequence(AT_THE_AIRPORT_SEQUENCE);
   const hotelTitleMap = titleMapFromSequence(AT_THE_HOTEL_SEQUENCE);
+  const dayCentreGeneralTitleMap = titleMapFromSequence(DAY_CENTRE_GENERAL_SEQUENCE);
+  const dayCentreIkramTitleMap = titleMapFromSequence(DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE);
 
   for (const s of BRUSHING_TEETH_SEQUENCE) {
     out.push({
@@ -268,6 +285,56 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     category: "home",
     imageUrlForSlug: atTheHotelImageUrl,
     titleMap: hotelTitleMap,
+  });
+
+  DAY_CENTRE_GENERAL_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("daycentre", s.slug),
+      label: s.title,
+      imageUrl: dayCentreGeneralImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+          }
+        : undefined,
+    });
+  });
+  appendExtraCardsFromFiles({
+    out,
+    ns: "daycentre",
+    files: DAY_CENTRE_GENERAL_CARD_FILES,
+    category: "home",
+    imageUrlForSlug: (slug) =>
+      dayCentreGeneralImageUrlForStep({ id: slug, slug, title: slug }),
+    titleMap: dayCentreGeneralTitleMap,
+  });
+
+  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcikram", s.slug),
+      label: s.title,
+      imageUrl: dayCentreIkramImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
   });
 
   for (const card of GETTING_DRESS_REGISTRY) {

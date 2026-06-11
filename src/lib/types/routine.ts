@@ -8,6 +8,8 @@ export type GeneratedPixtoRoutineStepData = {
   cardType?: string;
   /** Optional Focus-only illustration zoom for one-off visual tests. */
   focusIllustrationScale?: number;
+  /** Optional Focus-only asset (531×663); falls back to `illustrationUrl`. */
+  focusIllustrationUrl?: string;
 };
 
 export type RoutineStep = {

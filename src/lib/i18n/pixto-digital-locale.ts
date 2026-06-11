@@ -5,12 +5,22 @@ function lc(s: string): string {
   return s.toLowerCase();
 }
 
-/** Slug stem from `/cards/at%20the%20airport/…` or hotel (matches bundled PNG URLs). */
+/** Slug stem from bundled Pixto illustration URLs. */
 export function slugFromBundledIllustrationUrl(url: string): string | null {
   const u = url.toLowerCase();
-  const m = u.match(/at%20the%20(airport|hotel)\/([^/?#]+)/);
-  if (!m?.[2]) return null;
-  return m[2].replace(/\.(png|jpe?g)$/i, "");
+  const airportHotel = u.match(/at%20the%20(?:airport|hotel)\/([^/?#]+)/);
+  if (airportHotel?.[1]) {
+    return airportHotel[1].replace(/\.(png|jpe?g)$/i, "");
+  }
+  const dayCentre = u.match(/day%20centre\/([^/?#]+)/);
+  if (dayCentre?.[1]) {
+    return dayCentre[1].replace(/\.(png|jpe?g)$/i, "");
+  }
+  const generic = u.match(/\/cards\/[^/]+\/([^/?#]+)/);
+  if (generic?.[1] && !generic[1].startsWith("backcard") && !generic[1].startsWith("logo-")) {
+    return generic[1].replace(/\.(png|jpe?g)$/i, "");
+  }
+  return null;
 }
 
 const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
@@ -116,25 +126,56 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "breakfast time",
     es: "hora del desayuno",
   },
+  // Day centre
+  bus: { en: "take the bus", es: "subir al autobús" },
+  walk: { en: "walk", es: "caminar" },
+  music: { en: "music", es: "música" },
+  cafe: { en: "cafe", es: "cafetería" },
+  park: { en: "park", es: "parque" },
+  "park-and-swing": { en: "park and swing", es: "parque y columpio" },
+  "hair-salon": { en: "hair salon", es: "peluquería" },
+  "make-up": { en: "make up", es: "maquillaje" },
+  pool: { en: "swimming pool", es: "piscina" },
+  toilet: { en: "toilet", es: "baño" },
+  "wash-hands": { en: "wash hands", es: "lavarse las manos" },
+  shower: { en: "shower", es: "ducha" },
+  "birthday-cake": { en: "birthday cake", es: "tarta de cumpleaños" },
+  "birthday-party": { en: "birthday party", es: "fiesta de cumpleaños" },
+  westfield: { en: "westfield", es: "westfield" },
+  "hair-care": { en: "hair care", es: "cuidado del pelo" },
+  library: { en: "library", es: "biblioteca" },
+  breakfast: { en: "breakfast", es: "desayuno" },
+  dinner: { en: "dinner", es: "cena" },
+  "bus-stop": { en: "bus stop", es: "parada de autobús" },
+  "community-centre": { en: "community centre", es: "centro comunitario" },
+  shops: { en: "shops", es: "tiendas" },
+  playground: { en: "playground", es: "parque infantil" },
+  "swimming-pool": { en: "swimming pool", es: "piscina" },
 };
 
-function digitalPackFromUrl(url: string): "airport" | "hotel" | null {
+type DigitalPackId = "airport" | "hotel" | "daycentre";
+
+function digitalPackFromStrings(
+  url: string,
+  category: string,
+): DigitalPackId | null {
+  const c = category.toLowerCase();
+  if (c.includes("day centre") || c.includes("day centre")) return "daycentre";
   const u = url.toLowerCase();
   if (u.includes("at%20the%20airport")) return "airport";
   if (u.includes("at%20the%20hotel")) return "hotel";
+  if (u.includes("day%20centre")) return "daycentre";
   return null;
 }
 
-const CATEGORY_STRIP: Record<
-  "airport" | "hotel",
-  { en: string; es: string }
-> = {
+const CATEGORY_STRIP: Record<DigitalPackId, { en: string; es: string }> = {
   airport: { en: "at the airport", es: "en el aeropuerto" },
   hotel: { en: "at the hotel", es: "en el hotel" },
+  daycentre: { en: "at the day centre", es: "en el centro de día" },
 };
 
 export function digitalCategoryStripLabel(
-  pack: "airport" | "hotel",
+  pack: DigitalPackId,
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -150,7 +191,7 @@ export function resolveDigitalPixtoStrings(
 ): { title: string; category: string } {
   const ui = effectiveDigitalUiLang(language);
   const slug = slugFromBundledIllustrationUrl(illustrationUrl);
-  const pack = digitalPackFromUrl(illustrationUrl);
+  const pack = digitalPackFromStrings(illustrationUrl, category);
 
   let nextTitle = title;
   if (slug) {
@@ -162,8 +203,14 @@ export function resolveDigitalPixtoStrings(
 
   let nextCategory = category;
   if (pack) {
-    const c = CATEGORY_STRIP[pack];
-    nextCategory = lc(ui === "es" ? c.es : c.en);
+    if (category.toLowerCase().includes("ikram")) {
+      nextCategory = lc(
+        ui === "es" ? "ikram · centro de día" : "ikram · day centre",
+      );
+    } else {
+      const c = CATEGORY_STRIP[pack];
+      nextCategory = lc(ui === "es" ? c.es : c.en);
+    }
   }
 
   return { title: nextTitle, category: nextCategory };
@@ -182,7 +229,19 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "At the hotel",
     es: "En el hotel",
   },
+  "at-the-day-centre": {
+    en: "Day centre",
+    es: "Centro de día",
+  },
+  "ikram-day-centre": {
+    en: "Ikram · day centre",
+    es: "Ikram · centro de día",
+  },
 };
+
+export function libraryDayCentreIkramLabel(language: CardLanguageCode): string {
+  return stockRoutineDisplayName("ikram-day-centre", "Ikram · day centre", language);
+}
 
 export function stockRoutineDisplayName(
   routineId: string,
@@ -197,9 +256,14 @@ export function stockRoutineDisplayName(
 
 /** Library section headers for airport / hotel packs (Title Case). */
 export function libraryAirportHotelLabel(
-  pack: "airport" | "hotel",
+  pack: "airport" | "hotel" | "daycentre",
   language: CardLanguageCode,
 ): string {
-  const id = pack === "airport" ? "at-the-airport" : "at-the-hotel";
+  const id =
+    pack === "airport"
+      ? "at-the-airport"
+      : pack === "hotel"
+        ? "at-the-hotel"
+        : "at-the-day-centre";
   return stockRoutineDisplayName(id, pack, language);
 }

@@ -93,6 +93,7 @@ const STEP_OUTLINE_HEX: Record<
   swimming: "#B8E3F4",
   airport: "#F9DD9F",
   hotel: "#EBA29C",
+  daycentre: "#E05C9A",
   finish: "#9aa3a8",
   custom: "#1c2420",
   default: "#7d9b87",
@@ -654,6 +655,7 @@ export function SwipeableStepCard({
                         iconUrl={gp.iconUrl}
                         cardType={gp.cardType}
                         focusIllustrationScale={gp.focusIllustrationScale}
+                        focusIllustrationUrl={gp.focusIllustrationUrl}
                         focusPresentation
                         suppressNeutralRing
                         className="h-full w-full max-w-none"
@@ -668,6 +670,7 @@ export function SwipeableStepCard({
                           iconUrl={gp.iconUrl}
                           cardType={gp.cardType}
                           focusIllustrationScale={gp.focusIllustrationScale}
+                          focusIllustrationUrl={gp.focusIllustrationUrl}
                           schedulePresentation
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
@@ -838,6 +841,7 @@ export function SwipeableStepCard({
                     iconUrl={gp.iconUrl}
                     cardType={gp.cardType}
                     focusIllustrationScale={gp.focusIllustrationScale}
+                    focusIllustrationUrl={gp.focusIllustrationUrl}
                     focusPresentation
                     suppressNeutralRing
                     className="h-full w-full max-w-none"
@@ -852,6 +856,7 @@ export function SwipeableStepCard({
                       iconUrl={gp.iconUrl}
                       cardType={gp.cardType}
                       focusIllustrationScale={gp.focusIllustrationScale}
+                      focusIllustrationUrl={gp.focusIllustrationUrl}
                       schedulePresentation
                       focusPresentation={focusGenerated}
                       suppressNeutralRing

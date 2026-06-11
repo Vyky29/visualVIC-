@@ -21,6 +21,8 @@ import {
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
+  DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
@@ -157,6 +159,31 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "at-the-hotel",
       HOTEL_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "at-the-day-centre",
+    name: "Day centre",
+    description:
+      "Saturday outing — illustrated PixtoLearn cards (general day centre pack)",
+    tags: ["home", "activity"],
+    homePreviewImageUrl:
+      DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "at-the-day-centre",
+      DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-day-centre",
+    name: "Ikram · day centre",
+    description:
+      "Ikram's Saturday schedule — personalised photo cards for the day centre",
+    tags: ["home", "activity"],
+    homePreviewImageUrl: DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-day-centre",
+      DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
 ];

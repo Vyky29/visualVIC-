@@ -1,6 +1,9 @@
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
-import { libraryAirportHotelLabel } from "@/lib/i18n/pixto-digital-locale";
+import {
+  libraryAirportHotelLabel,
+  libraryDayCentreIkramLabel,
+} from "@/lib/i18n/pixto-digital-locale";
 import type { RoutineVisualTone } from "@/lib/utils/routine-accent";
 
 function isEs(lang: CardLanguageCode): boolean {
@@ -117,6 +120,8 @@ export type LibraryPackSectionId =
   | "core"
   | "airport"
   | "hotel"
+  | "daycentre"
+  | "dcikram"
   | "climb"
   | "swim";
 
@@ -126,6 +131,8 @@ export function libraryPackSectionTitle(
 ): string {
   if (section === "airport") return libraryAirportHotelLabel("airport", lang);
   if (section === "hotel") return libraryAirportHotelLabel("hotel", lang);
+  if (section === "daycentre") return libraryAirportHotelLabel("daycentre", lang);
+  if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (isEs(lang)) {
     switch (section) {
       case "bt":
@@ -523,6 +530,7 @@ export function playerRoutineToneShortLabel(
       swimming: "Swimming",
       airport: "Airport",
       hotel: "Hotel",
+      daycentre: "Day centre",
       finish: "Finish",
       custom: "Custom",
       default: "Routine",
@@ -538,6 +546,7 @@ export function playerRoutineToneShortLabel(
     swimming: "Natación",
     airport: "Aeropuerto",
     hotel: "Hotel",
+    daycentre: "Centro de día",
     finish: "Fin",
     custom: "Personalizado",
     default: "Rutina",

@@ -2,7 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
   GENERATED_PIXTO_CARD_SIZE,
@@ -33,9 +40,27 @@ import {
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
-const cardShell =
-  "relative overflow-hidden rounded-[1.45rem] border-2 border-[#BCC5CC] bg-[#E2E7EB] shadow-[0_9px_30px_-14px_rgba(28,36,32,0.2)]";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
+const LANDSCAPE_PAIR_GAP_PX = 12;
+const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
+
+function useMobileLandscape() {
+  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_LANDSCAPE_MQ);
+    const update = () => setIsMobileLandscape(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    window.addEventListener("resize", update);
+    return () => {
+      mq.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  return isMobileLandscape;
+}
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -315,44 +340,113 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
   );
 }
 
-function StepVisualCard({
-  generatedCard,
-  label,
-  icon,
+function FirstThenLandscapePair({
+  firstCard,
+  secondCard,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+}) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.28);
+
+  useLayoutEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
+
+    const update = () => {
+      const W = outer.clientWidth;
+      const H = outer.clientHeight;
+      if (W <= 0 || H <= 0) return;
+
+      const sx =
+        (W - LANDSCAPE_PAIR_GAP_PX) / (GENERATED_PIXTO_CARD_SIZE.w * 2);
+      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const next = Math.min(sx, sy);
+      setScale(Number.isFinite(next) && next > 0 ? next : 0.28);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(outer);
+    return () => ro.disconnect();
+  }, []);
+
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+  const cards = [firstCard, secondCard] as const;
+
+  return (
+    <div
+      ref={outerRef}
+      className="absolute inset-0 flex min-h-0 w-full min-w-0 items-center justify-center"
+      style={{
+        paddingLeft: "max(4px, env(safe-area-inset-left))",
+        paddingRight: "max(4px, env(safe-area-inset-right))",
+        paddingTop: "max(4px, env(safe-area-inset-top))",
+        paddingBottom: "max(4px, env(safe-area-inset-bottom))",
+      }}
+    >
+      <div
+        className="flex items-center justify-center"
+        style={{ gap: LANDSCAPE_PAIR_GAP_PX }}
+      >
+        {cards.map((card) => (
+          <div
+            key={card.illustrationUrl}
+            className="relative shrink-0"
+            style={{ width: slotW, height: slotH }}
+          >
+            <div
+              className="absolute left-0 top-0 origin-top-left"
+              style={{
+                width: GENERATED_PIXTO_CARD_SIZE.w,
+                height: GENERATED_PIXTO_CARD_SIZE.h,
+                transform: `scale(${scale})`,
+              }}
+            >
+              <div
+                className="relative h-full w-full"
+                style={{
+                  width: GENERATED_PIXTO_CARD_SIZE.w,
+                  height: GENERATED_PIXTO_CARD_SIZE.h,
+                }}
+              >
+                <MiniDigitalWowCard card={card} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FirstThenPortraitStack({
+  firstCard,
+  secondCard,
   className,
 }: {
-  generatedCard: GeneratedPixtoCardProps;
-  label: string;
-  icon: ReactNode;
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
   className?: string;
 }) {
+  const cardWidthClass =
+    "mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0";
+
   return (
-    <article
-      className={cn(
-        cardShell,
-        "flex min-h-0 flex-col",
-        className,
-      )}
-    >
-      <div className="flex shrink-0 items-center justify-center gap-2.5 border-b-2 border-[#BCC5CC] bg-[#E2E7EB] py-3">
-        <div className="grayscale">{icon}</div>
-        <span className="text-[13px] font-bold uppercase tracking-[0.14em] text-ink">
-          {label}
-        </span>
-      </div>
-      <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-[#E2E7EB]">
-        <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-2">
-          <div
-            className="relative h-auto max-h-[94%] w-full min-w-0 max-w-[92%] shrink-0"
-            style={{
-              aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-            }}
-          >
-            <MiniDigitalWowCard card={generatedCard} />
-          </div>
+    <div className={cn("grid min-h-0 grid-rows-2 gap-2", className)}>
+      <div className="flex min-h-0 items-center justify-center">
+        <div className={cardWidthClass}>
+          <MiniDigitalWowCard card={firstCard} />
         </div>
       </div>
-    </article>
+      <div className="flex min-h-0 items-center justify-center">
+        <div className={cardWidthClass}>
+          <MiniDigitalWowCard card={secondCard} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -391,7 +485,7 @@ function IntroCueChip() {
 
 export default function FirstThenDemoPage() {
   const lang = useCardUiLanguage();
-  const [viewport, setViewport] = useState({ w: 402, h: 874 });
+  const isMobileLandscape = useMobileLandscape();
   const [showFocusMode, setShowFocusMode] = useState(false);
   const [focusQuickMenuOpen, setFocusQuickMenuOpen] = useState(false);
   const [introFooterMoreOpen, setIntroFooterMoreOpen] = useState(false);
@@ -401,44 +495,8 @@ export default function FirstThenDemoPage() {
     else setIntroFooterMoreOpen(false);
   }, [showFocusMode]);
 
-  useEffect(() => {
-    const updateViewport = () => {
-      setViewport({
-        w: window.innerWidth,
-        h: window.innerHeight,
-      });
-    };
-
-    updateViewport();
-    window.addEventListener("resize", updateViewport);
-
-    const orientation = window.screen?.orientation as
-      | (ScreenOrientation & {
-          lock?: (orientation: "portrait") => Promise<void>;
-          unlock?: () => void;
-        })
-      | undefined;
-    if (orientation?.lock) {
-      orientation.lock("portrait").catch(() => {});
-    }
-
-    return () => {
-      window.removeEventListener("resize", updateViewport);
-      orientation?.unlock?.();
-    };
-  }, []);
-
   const first = HOTEL_GENERATED_CARD_PROPS[3];
   const second = HOTEL_GENERATED_CARD_PROPS[4];
-  const shortSide = Math.min(viewport.w, viewport.h);
-  const longSide = Math.max(viewport.w, viewport.h);
-  const sceneScale = Math.min(viewport.w / shortSide, viewport.h / longSide);
-  const sceneStyle: CSSProperties = {
-    width: `${longSide}px`,
-    height: `${shortSide}px`,
-    transform: `translate(-50%, -50%) rotate(90deg) scale(${sceneScale})`,
-    transformOrigin: "center center",
-  };
 
   if (!showFocusMode) {
     return (
@@ -451,35 +509,41 @@ export default function FirstThenDemoPage() {
             </h1>
           </div>
 
-          <div className="grid min-h-0 grid-rows-2 gap-1">
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
-              <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
-              <IntroCueChip />
-              <IntroStepLabel
-                label={firstThenSlotLabel("first", lang)}
-                icon={<IconFirst className="h-7 w-7" />}
-              />
-              <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
-                  <MiniDigitalWowCard card={first} />
+          {isMobileLandscape ? (
+            <div className="relative min-h-0">
+              <FirstThenLandscapePair firstCard={first} secondCard={second} />
+            </div>
+          ) : (
+            <div className="grid min-h-0 grid-rows-2 gap-1">
+              <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
+                <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+                <IntroCueChip />
+                <IntroStepLabel
+                  label={firstThenSlotLabel("first", lang)}
+                  icon={<IconFirst className="h-7 w-7" />}
+                />
+                <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
+                  <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
+                    <MiniDigitalWowCard card={first} />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
-              <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
-              <IntroCueChip />
-              <IntroStepLabel
-                label={firstThenSlotLabel("then", lang)}
-                icon={<IconThen className="h-7 w-7" />}
-              />
-              <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
-                <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
-                  <MiniDigitalWowCard card={second} />
+              <div className="relative grid min-h-0 grid-cols-[5.15rem_minmax(0,1fr)] items-center gap-1.5 rounded-[1.3rem] border border-[#C8D0D6] bg-[#E6EBEF] px-1.5 py-1">
+                <div className="pointer-events-none absolute bottom-1.5 left-[6.025rem] top-1.5 w-px -translate-x-1/2 bg-[#BCC5CC]" />
+                <IntroCueChip />
+                <IntroStepLabel
+                  label={firstThenSlotLabel("then", lang)}
+                  icon={<IconThen className="h-7 w-7" />}
+                />
+                <div className="flex min-h-0 h-full w-full max-h-full min-w-0 overflow-hidden items-stretch justify-center px-0.5 py-0.5">
+                  <div className="mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0">
+                    <MiniDigitalWowCard card={second} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div
             className="flex min-h-[3.75rem] w-full min-w-0 flex-col items-center justify-end gap-2 px-1 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-1"
@@ -545,88 +609,77 @@ export default function FirstThenDemoPage() {
   }
 
   return (
-    <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas touch-manipulation">
-      <div className="relative h-full w-full overflow-hidden">
-        <div className="absolute left-1/2 top-1/2" style={sceneStyle}>
-          <div className="relative h-full w-full bg-canvas pb-0 pl-0 pt-0 pr-[max(4rem,env(safe-area-inset-bottom),env(safe-area-inset-right))]">
-            <div className="mx-auto grid h-full min-h-0 w-full min-w-0 grid-cols-2 grid-rows-1 gap-x-1.5 px-0 pb-0 sm:gap-x-2">
-              <StepVisualCard
-                generatedCard={first}
-                label={firstThenSlotLabel("first", lang)}
-                icon={<IconFirst className="h-7 w-7" />}
-                className="h-full min-h-0 w-full min-w-0"
-              />
-              <StepVisualCard
-                generatedCard={second}
-                label={firstThenSlotLabel("then", lang)}
-                icon={<IconThen className="h-7 w-7" />}
-                className="h-full min-h-0 w-full min-w-0"
-              />
-            </div>
-          </div>
+    <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation">
+      {isMobileLandscape ? (
+        <FirstThenLandscapePair firstCard={first} secondCard={second} />
+      ) : (
+        <div className="absolute inset-0 flex min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+          <FirstThenPortraitStack
+            firstCard={first}
+            secondCard={second}
+            className="min-h-0 flex-1"
+          />
         </div>
+      )}
 
-        <div className="pointer-events-none absolute left-1/2 top-1/2 z-30" style={sceneStyle}>
-          <div className="pointer-events-none absolute inset-0">
-            <div className="pointer-events-auto absolute bottom-[max(4.15rem,calc(2.35rem+env(safe-area-inset-bottom)))] right-0 top-[48%] flex w-full max-w-[min(100%,4.35rem)] flex-col items-center justify-end gap-2 px-1 pr-[max(0.35rem,env(safe-area-inset-bottom))]">
-              {focusQuickMenuOpen ? (
-                <nav
-                  id="focus-quick-nav"
-                  aria-label={focusQuickNavAriaLabel(lang)}
-                  className="flex flex-col items-center gap-3 pb-1"
-                >
-                  <Link
-                    href="/dashboard"
-                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                    onClick={() => setFocusQuickMenuOpen(false)}
-                  >
-                    <HomeSectionIcon className="shrink-0" />
-                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      {bottomNavLabel("home", lang)}
-                    </span>
-                  </Link>
-
-                  <Link
-                    href="/menu"
-                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                    onClick={() => setFocusQuickMenuOpen(false)}
-                  >
-                    <MenuDotsIcon className="shrink-0" />
-                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      {bottomNavLabel("menu", lang)}
-                    </span>
-                  </Link>
-
-                  <Link
-                    href="/player/brushing-teeth"
-                    className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
-                    onClick={() => setFocusQuickMenuOpen(false)}
-                  >
-                    <RoutinesHomeIcon className="shrink-0" />
-                    <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
-                      {playerKindRoutine(lang)}
-                    </span>
-                  </Link>
-                </nav>
-              ) : null}
-
-              <button
-                type="button"
-                id="focus-quick-nav-toggle"
-                aria-expanded={focusQuickMenuOpen}
-                aria-controls={focusQuickMenuOpen ? "focus-quick-nav" : undefined}
-                aria-label={
-                  focusQuickMenuOpen
-                    ? focusQuickNavToggleHide(lang)
-                    : focusQuickNavToggleShow(lang)
-                }
-                onClick={() => setFocusQuickMenuOpen((open) => !open)}
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white/92 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.98]"
+      <div className="pointer-events-none fixed inset-0 z-30">
+        <div className="pointer-events-auto absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] flex flex-col items-center gap-2">
+          {focusQuickMenuOpen ? (
+            <nav
+              id="focus-quick-nav"
+              aria-label={focusQuickNavAriaLabel(lang)}
+              className="flex flex-col items-center gap-3 pb-1"
+            >
+              <Link
+                href="/dashboard"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                onClick={() => setFocusQuickMenuOpen(false)}
               >
-                <FocusFabPlusIcon open={focusQuickMenuOpen} />
-              </button>
-            </div>
-          </div>
+                <HomeSectionIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  {bottomNavLabel("home", lang)}
+                </span>
+              </Link>
+
+              <Link
+                href="/menu"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                onClick={() => setFocusQuickMenuOpen(false)}
+              >
+                <MenuDotsIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  {bottomNavLabel("menu", lang)}
+                </span>
+              </Link>
+
+              <Link
+                href="/player/brushing-teeth"
+                className="flex flex-col items-center gap-0.5 text-ink transition active:opacity-70"
+                onClick={() => setFocusQuickMenuOpen(false)}
+              >
+                <RoutinesHomeIcon className="shrink-0" />
+                <span className="text-center text-[8px] font-semibold uppercase tracking-[0.12em] text-ink/65">
+                  {playerKindRoutine(lang)}
+                </span>
+              </Link>
+            </nav>
+          ) : null}
+
+          <button
+            type="button"
+            id="focus-quick-nav-toggle"
+            aria-expanded={focusQuickMenuOpen}
+            aria-controls={focusQuickMenuOpen ? "focus-quick-nav" : undefined}
+            aria-label={
+              focusQuickMenuOpen
+                ? focusQuickNavToggleHide(lang)
+                : focusQuickNavToggleShow(lang)
+            }
+            onClick={() => setFocusQuickMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white/92 text-ink shadow-soft backdrop-blur-sm transition active:scale-[0.98]"
+          >
+            <FocusFabPlusIcon open={focusQuickMenuOpen} />
+          </button>
         </div>
       </div>
     </div>

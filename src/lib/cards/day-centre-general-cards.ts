@@ -1,0 +1,162 @@
+/**
+ * Day Centre — General pack (illustrated placeholders only).
+ * Grouped from Ikram schedule + IKRAM Visual Cards sheet — all drawings.
+ */
+
+import {
+  DAY_CENTRE_CATEGORY_COLOUR,
+  dayCentreGeneralImageUrl,
+} from "@/lib/cards/day-centre-shared";
+
+export { DAY_CENTRE_CATEGORY_COLOUR };
+
+export type DayCentreGeneralStep = {
+  id: string;
+  slug: string;
+  title: string;
+};
+
+export const DAY_CENTRE_GENERAL_CATEGORY_LABEL = "At the day centre" as const;
+
+/** Illustrated PNGs under `public/cards/day centre/general/`. */
+export const DAY_CENTRE_GENERAL_CARD_FILES = [
+  "bean-bag.png",
+  "birthday-cake.png",
+  "birthday-party.png",
+  "black-nail-varnish.png",
+  "breakfast.png",
+  "brush-teeth.png",
+  "bus-stop.png",
+  "bus.png",
+  "cab.png",
+  "cafe.png",
+  "community-centre.png",
+  "cross-road.png",
+  "dinner.png",
+  "drink.png",
+  "eat.png",
+  "finished.png",
+  "get-dressed.png",
+  "hair-care.png",
+  "hair-salon.png",
+  "help.png",
+  "home.png",
+  "karaoke.png",
+  "library.png",
+  "make-up.png",
+  "market.png",
+  "mcdonalds.png",
+  "more.png",
+  "music.png",
+  "no.png",
+  "not-now.png",
+  "park-and-swing.png",
+  "park.png",
+  "pay.png",
+  "playground.png",
+  "queue.png",
+  "restaurant.png",
+  "shopping-basket.png",
+  "shopping.png",
+  "shops.png",
+  "shower.png",
+  "snack.png",
+  "stop.png",
+  "supermarket.png",
+  "swimming-pool.png",
+  "taxi.png",
+  "toilet.png",
+  "wait.png",
+  "walk.png",
+  "wash-hands.png",
+  "westfield.png",
+  "yes.png",
+] as const;
+
+export function dayCentreGeneralImageUrlForStep(step: DayCentreGeneralStep): string {
+  return dayCentreGeneralImageUrl(step.slug);
+}
+
+/** General library — grouped like IKRAM Visual Cards (illustrations). */
+export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  // Personal care
+  { id: "dcg-toilet", slug: "toilet", title: "Toilet" },
+  { id: "dcg-shower", slug: "shower", title: "Shower" },
+  { id: "dcg-wash-hands", slug: "wash-hands", title: "Wash hands" },
+  { id: "dcg-brush-teeth", slug: "brush-teeth", title: "Brush teeth" },
+  { id: "dcg-get-dressed", slug: "get-dressed", title: "Get dressed" },
+  { id: "dcg-hair-care", slug: "hair-care", title: "Hair care" },
+  // Community access
+  { id: "dcg-bus", slug: "bus", title: "Bus" },
+  { id: "dcg-taxi", slug: "taxi", title: "Taxi" },
+  { id: "dcg-cab", slug: "cab", title: "Cab" },
+  { id: "dcg-walk", slug: "walk", title: "Walking" },
+  { id: "dcg-cross-road", slug: "cross-road", title: "Crossing road" },
+  { id: "dcg-wait", slug: "wait", title: "Waiting" },
+  { id: "dcg-home", slug: "home", title: "Home" },
+  { id: "dcg-bus-stop", slug: "bus-stop", title: "Bus stop" },
+  // Activities & leisure
+  { id: "dcg-swimming-pool", slug: "swimming-pool", title: "Swimming" },
+  { id: "dcg-hair-salon", slug: "hair-salon", title: "Hairdresser" },
+  { id: "dcg-karaoke", slug: "karaoke", title: "Karaoke" },
+  { id: "dcg-park", slug: "park", title: "Park" },
+  { id: "dcg-park-swing", slug: "park-and-swing", title: "Park and swing" },
+  { id: "dcg-playground", slug: "playground", title: "Playground" },
+  { id: "dcg-cafe", slug: "cafe", title: "Cafe" },
+  { id: "dcg-library", slug: "library", title: "Library" },
+  { id: "dcg-music", slug: "music", title: "Music" },
+  { id: "dcg-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
+  // Shopping & market
+  { id: "dcg-supermarket", slug: "supermarket", title: "Supermarket" },
+  { id: "dcg-market", slug: "market", title: "Market" },
+  { id: "dcg-shops", slug: "shops", title: "Shops" },
+  { id: "dcg-shopping", slug: "shopping", title: "Shopping" },
+  { id: "dcg-shopping-basket", slug: "shopping-basket", title: "Basket" },
+  { id: "dcg-pay", slug: "pay", title: "Pay" },
+  { id: "dcg-queue", slug: "queue", title: "Queue" },
+  { id: "dcg-westfield", slug: "westfield", title: "Westfield" },
+  {
+    id: "dcg-nail-varnish",
+    slug: "black-nail-varnish",
+    title: "Buy black nail varnish",
+  },
+  // Food & drink
+  { id: "dcg-eat", slug: "eat", title: "Eat" },
+  { id: "dcg-drink", slug: "drink", title: "Drink" },
+  { id: "dcg-snack", slug: "snack", title: "Snack" },
+  { id: "dcg-restaurant", slug: "restaurant", title: "Restaurant" },
+  { id: "dcg-breakfast", slug: "breakfast", title: "Breakfast" },
+  { id: "dcg-dinner", slug: "dinner", title: "Dinner" },
+  { id: "dcg-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
+  // Communication
+  { id: "dcg-help", slug: "help", title: "Help" },
+  { id: "dcg-stop", slug: "stop", title: "Stop" },
+  { id: "dcg-finished", slug: "finished", title: "Finished" },
+  { id: "dcg-more", slug: "more", title: "More" },
+  { id: "dcg-yes", slug: "yes", title: "Yes" },
+  { id: "dcg-no", slug: "no", title: "No" },
+  { id: "dcg-not-now", slug: "not-now", title: "Not now" },
+  // Places & extras
+  { id: "dcg-community-centre", slug: "community-centre", title: "Community centre" },
+  { id: "dcg-make-up", slug: "make-up", title: "Make up" },
+  { id: "dcg-birthday-cake", slug: "birthday-cake", title: "Birthday cake" },
+  { id: "dcg-birthday-party", slug: "birthday-party", title: "Birthday party" },
+] as const;
+
+/** Saturday schedule (photo 1) — general illustrations; return bus reuses `bus` art. */
+export const DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgs-music", slug: "music", title: "Music" },
+  { id: "dcgs-cafe", slug: "cafe", title: "Cafe" },
+  { id: "dcgs-bus", slug: "bus", title: "Bus" },
+  { id: "dcgs-westfield", slug: "westfield", title: "Westfield" },
+  {
+    id: "dcgs-nail-varnish",
+    slug: "black-nail-varnish",
+    title: "Buy black nail varnish",
+  },
+  { id: "dcgs-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
+  { id: "dcgs-bus-return", slug: "bus", title: "Bus" },
+  { id: "dcgs-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
+  { id: "dcgs-cab", slug: "cab", title: "Cab" },
+  { id: "dcgs-home", slug: "home", title: "Home" },
+] as const;

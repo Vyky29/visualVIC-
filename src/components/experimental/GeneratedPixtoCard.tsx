@@ -151,6 +151,8 @@ export type GeneratedPixtoCardProps = {
   cardType?: string;
   /** Optional Focus-only illustration zoom for one-off visual tests. */
   focusIllustrationScale?: number;
+  /** Optional Focus-only asset (531×663); uses `illustrationUrl` when omitted. */
+  focusIllustrationUrl?: string;
   /** e.g. Focus preview: `h-full w-full max-w-none` on design 744×1054 slot */
   className?: string;
   /** Larger title / ribbon type when the shell is scaled down (Focus mode). */
@@ -772,6 +774,7 @@ export function GeneratedPixtoCard({
   iconUrl,
   cardType,
   focusIllustrationScale,
+  focusIllustrationUrl,
   className,
   focusPresentation = false,
   schedulePresentation = false,
@@ -820,6 +823,10 @@ export function GeneratedPixtoCard({
       }
     : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
+  const resolvedIllustrationSrc =
+    focusPresentation && focusIllustrationUrl
+      ? focusIllustrationUrl
+      : illustrationUrl;
   const focusTitleLayout = useMemo(
     () => (focusPresentation ? resolveFocusTitleLayout(i18nTitle) : null),
     [focusPresentation, i18nTitle],
@@ -872,9 +879,11 @@ export function GeneratedPixtoCard({
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
     : ILLUSTRATION_FRAME_ASPECT;
-  const illustrationObjectClass = focusPresentation
-    ? "object-cover object-center origin-center"
-    : "object-contain object-center";
+  /** Schedule + Focus: illustration fills 531×648 / 531×663 frame (no letterboxing). */
+  const illustrationObjectClass =
+    focusPresentation || schedulePresentation
+      ? "object-cover object-center origin-center"
+      : "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
@@ -986,7 +995,7 @@ export function GeneratedPixtoCard({
                 }}
               >
                 <Image
-                  src={illustrationUrl}
+                  src={resolvedIllustrationSrc}
                   alt=""
                   fill
                   sizes="(max-width: 640px) 72vw, 240px"

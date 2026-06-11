@@ -6,6 +6,25 @@ import {
   atTheAirportPackMarkUrl,
 } from "@/lib/cards/at-the-airport-cards";
 import {
+  DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_GENERAL_SEQUENCE,
+  dayCentreGeneralImageUrlForStep,
+} from "@/lib/cards/day-centre-general-cards";
+import {
+  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
+  DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
+  dayCentreIkramFocusImageUrlForStep,
+  dayCentreIkramImageUrlForStep,
+  dayCentreIkramScheduleFocusImageUrlForStep,
+  dayCentreIkramScheduleImageUrlForStep,
+  type DayCentreIkramStep,
+} from "@/lib/cards/day-centre-ikram-cards";
+import {
+  DAY_CENTRE_CATEGORY_COLOUR,
+  dayCentreIkramPackMarkUrl,
+  dayCentrePackMarkUrl,
+} from "@/lib/cards/day-centre-shared";
+import {
   AT_THE_HOTEL_SEQUENCE,
   atTheHotelImageUrl,
   atTheHotelPackMarkUrl,
@@ -20,6 +39,10 @@ export const GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR = "#F9DD9E" as const;
 
 /** Hotel category accent — ribbon + schedule chrome. */
 export const GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR = "#8C1E2E" as const;
+
+/** Day Centre category accent — pink ribbon + schedule chrome. */
+export const GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR =
+  DAY_CENTRE_CATEGORY_COLOUR;
 
 function lc(s: string): string {
   return s.toLowerCase();
@@ -44,6 +67,62 @@ export const HOTEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     categoryColour: GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
     iconUrl: atTheHotelPackMarkUrl(),
   }));
+
+/** Day Centre · General — illustrated library. */
+export const DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_GENERAL_SEQUENCE.map((s) => ({
+    illustrationUrl: dayCentreGeneralImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc("At the day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
+
+/** Day Centre · General — Saturday schedule routine (photo 1). */
+export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE.map((s) => ({
+    illustrationUrl: dayCentreGeneralImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc("At the day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
+
+/** Day Centre · Ikram — full photo library. */
+function ikramGeneratedCardProps(step: DayCentreIkramStep) {
+  const focusIllustrationUrl = dayCentreIkramFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreIkramImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc("Ikram · day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Day Centre · Ikram — personalised library only (no generic object cards). */
+export const DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE.map((s) => ikramGeneratedCardProps(s));
+
+function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
+  const focusIllustrationUrl = dayCentreIkramScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreIkramScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc("Ikram · day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Day Centre · Ikram — Saturday schedule routine (personalised scenes only). */
+export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => ikramScheduleGeneratedCardProps(s));
+
+/** @deprecated Use {@link DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_GENERATED_CARD_PROPS = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS;
 
 /** Full demo sequence (airport → hotel) for `/generated-card-demo` only. */
 export const GENERATED_PIXTO_DEMO_ROUTINE_STEPS: GeneratedPixtoCardProps[] = [
@@ -70,6 +149,7 @@ export function routineStepsFromGeneratedCardProps(
       iconUrl: c.iconUrl,
       cardType: c.cardType,
       focusIllustrationScale: c.focusIllustrationScale,
+      focusIllustrationUrl: c.focusIllustrationUrl,
     },
   }));
 }

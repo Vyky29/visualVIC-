@@ -10,6 +10,7 @@ export type RoutineVisualTone =
   | "swimming"
   | "airport"
   | "hotel"
+  | "daycentre"
   | "finish"
   /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
   | "custom"
@@ -26,6 +27,8 @@ const STOCK_PACK_IDS = new Set<string>([
   "swimming-routine",
   "at-the-airport",
   "at-the-hotel",
+  "at-the-day-centre",
+  "ikram-day-centre",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -179,6 +182,21 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(235,162,156,0.52)]",
   },
+  daycentre: {
+    home: "ring-2 ring-[#E05C9A] ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#E05C9A] ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#E05C9A] shadow-[0_8px_32px_-12px_rgba(224,92,154,0.42)]",
+    scheduleNext:
+      "ring-2 ring-[#E05C9A] shadow-[0_6px_22px_-12px_rgba(224,92,154,0.34)]",
+    scheduleFocus:
+      "ring-2 ring-[#E05C9A] shadow-[0_8px_32px_-12px_rgba(224,92,154,0.46)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#E05C9A] pl-3 ring-1 ring-[#E05C9A] ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_36px_-12px_rgba(224,92,154,0.52)]",
+  },
   finish: {
     home: "ring-2 ring-[#9aa3a8]/88 ring-offset-2 ring-offset-canvas",
     homeDashboard:
@@ -241,7 +259,9 @@ function isFinishLikeStepData(step: RoutineStep, haystack: string): boolean {
 export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (step.generatedPixto) {
     const c = step.generatedPixto.category.toLowerCase();
+    if (c.includes("day centre")) return "daycentre";
     if (c.includes("hotel")) return "hotel";
+    if (c.includes("airport")) return "airport";
     return "airport";
   }
   const u = safeLowerDecoded(step.imageUrl);
@@ -394,6 +414,9 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   }
   if (includesAny(haystack, ["at the airport", "airport"])) return "airport";
   if (includesAny(haystack, ["at the hotel", "hotel"])) return "hotel";
+  if (includesAny(haystack, ["day centre", "day%20centre", "daycentre"])) {
+    return "daycentre";
+  }
   return "default";
 }
 
@@ -416,6 +439,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
   let sw = 0;
   let ap = 0;
   let ho = 0;
+  let dc = 0;
   for (const st of r.steps) {
     const t = stepCardVisualTone(st);
     if (t === "brushing") b++;
@@ -426,6 +450,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     else if (t === "swimming") sw++;
     else if (t === "airport") ap++;
     else if (t === "hotel") ho++;
+    else if (t === "daycentre") dc++;
   }
   const ranked: [RoutineVisualTone, number][] = [
     ["brushing", b],
@@ -436,8 +461,9 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     ["swimming", sw],
     ["airport", ap],
     ["hotel", ho],
+    ["daycentre", dc],
   ];
-  const max = Math.max(b, s, d, cl, co, sw, ap, ho);
+  const max = Math.max(b, s, d, cl, co, sw, ap, ho, dc);
   if (max <= 0) return null;
   const top = ranked.filter(([, n]) => n === max).map(([k]) => k);
   const priority: RoutineVisualTone[] = [
@@ -449,6 +475,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     "swimming",
     "airport",
     "hotel",
+    "daycentre",
   ];
   for (const p of priority) {
     if (top.includes(p)) return p;
@@ -467,6 +494,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
+  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -514,6 +542,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   }
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
+  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);
@@ -627,6 +656,16 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
       nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#8C1E2E] ring-2 ring-[#8C1E2E]/35",
       nowLabel:
         "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8C1E2E]",
+    },
+    daycentre: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#fde8f4] to-[#f9c8e0] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#E05C9A]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#E05C9A]",
+      counterPill:
+        "rounded-full bg-[#fde8f4]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#E05C9A]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#E05C9A] ring-2 ring-[#E05C9A]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E05C9A]",
     },
     custom: {
       focusCta:
