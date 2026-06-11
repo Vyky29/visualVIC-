@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
+import { fitIllustrationToCard } from "./pixtolearn-card-fit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -18,10 +19,6 @@ const assets =
     "Users-victor-cursor-visualVIC",
     "assets",
   );
-
-const W = 531;
-const H = 648;
-const PINK = "#E05C9A";
 
 const ikramDir = path.join(root, "public", "cards", "day centre", "ikram");
 const avatarDir = path.join(root, "public", "avatars");
@@ -53,21 +50,12 @@ const REAL_PHOTO_SLUGS = {
   shopping: "pinkShirt",
 };
 
-async function coverPng(src, dest) {
-  await sharp(src)
-    .resize(W, H, { fit: "cover", position: "attention" })
-    .png()
-    .toFile(dest);
+async function photoCardPng(src, dest) {
+  await fitIllustrationToCard(src, dest);
 }
 
 async function cartoonCardPng(src, dest) {
-  await sharp(src)
-    .resize(W, H, {
-      fit: "contain",
-      background: { r: 255, g: 245, b: 250, alpha: 1 },
-    })
-    .png()
-    .toFile(dest);
+  await fitIllustrationToCard(src, dest);
 }
 
 function listIkramSlugs() {
@@ -123,7 +111,7 @@ async function main() {
     const dest = path.join(ikramDir, `${slug}.png`);
     const photoKey = REAL_PHOTO_SLUGS[slug];
     if (photoKey && photoSrc[photoKey]) {
-      await coverPng(photoSrc[photoKey], dest);
+      await photoCardPng(photoSrc[photoKey], dest);
       real++;
       console.log("photo:", slug, "←", photoKey);
     } else if (slug === "cafe" && fs.existsSync(cartoonLeopardSrc)) {

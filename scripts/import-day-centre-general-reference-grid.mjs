@@ -25,8 +25,8 @@ const outDir = path.join(root, "public", "cards", "day centre", "general");
 
 /** @type {Array<{ slug: string; col: number; row: number; colSpan?: number; split?: "left" | "right"; pad?: number; minPad?: number; inset?: { top?: number; bottom?: number; left?: number; right?: number }; extend?: { top?: number; bottom?: number; left?: number; right?: number } }>} */
 const CELLS = [
-  // Maraca bleeds past col-0 boundary — extend right, do not crop.
-  { slug: "music", col: 0, row: 0, extend: { right: 56 }, minPad: 28 },
+  // Maraca bleeds past col-0 boundary — extend right, then shrink into safe margin.
+  { slug: "music", col: 0, row: 0, extend: { right: 48 }, minPad: 40 },
   { slug: "cafe", col: 1, row: 0, inset: { left: 56, right: 20 } },
   { slug: "black-nail-varnish", col: 2, row: 0, split: "right", inset: { left: 12 } },
   { slug: "bus", col: 3, row: 0, inset: { left: 16, top: 12, bottom: 12 } },

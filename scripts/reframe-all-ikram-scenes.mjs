@@ -1,22 +1,15 @@
 /**
  * Re-frame all Ikram scene illustrations from RAW sources.
- * PixtoLearn: Now/Next 531×648, Focus 531×663, cover crop (no letterboxing).
- *
- * Default crop: centre (keeps Ikram in frame).
- * Vehicle scenes: right anchor (window was stealing attention crop).
+ * PixtoLearn: Now/Next 531×648, Focus 531×663 — safe margins (no edge clipping).
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import sharp from "sharp";
+import { fitIllustrationToCard, FOCUS_H } from "./pixtolearn-card-fit.mjs";
 import { IKRAM_PECS_GRID } from "./ikram-pecs-grid-manifest.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-
-const NOW_W = 531;
-const NOW_H = 648;
-const FOCUS_H = 663;
 
 const assets =
   process.env.IKRAM_ASSETS_DIR ??
@@ -46,13 +39,6 @@ const ALL_SLUGS = [
   ...SCHEDULE_EXTRAS.filter((s) => !IKRAM_PECS_GRID.some((g) => g.slug === s)),
 ];
 
-/** Scenes where the subject sits by a window — anchor crop on the right. */
-const CROP_RIGHT = new Set(["bus", "bus-return", "taxi", "cab"]);
-
-function cropPosition(slug) {
-  return CROP_RIGHT.has(slug) ? "right" : "centre";
-}
-
 function rawAssetNames(slug) {
   const names = [
     `ikram-pecs-${slug}-raw.png`,
@@ -76,13 +62,6 @@ function resolveSrc(slug) {
   return null;
 }
 
-async function writeCrop(src, dest, height, position) {
-  await sharp(src)
-    .resize(NOW_W, height, { fit: "cover", position })
-    .png()
-    .toFile(dest);
-}
-
 async function main() {
   fs.mkdirSync(scenesDir, { recursive: true });
 
@@ -102,12 +81,13 @@ async function main() {
       fs.copyFileSync(src, rawLocal);
     }
 
-    const pos = cropPosition(slug);
-    await writeCrop(src, path.join(scenesDir, `${slug}.png`), NOW_H, pos);
-    await writeCrop(src, path.join(scenesDir, `${slug}-focus.png`), FOCUS_H, pos);
-    await writeCrop(src, path.join(ikramDir, `${slug}.png`), NOW_H, pos);
+    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`));
+    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
+      height: FOCUS_H,
+    });
+    await fitIllustrationToCard(src, path.join(ikramDir, `${slug}.png`));
 
-    console.log("ok:", slug, `(${pos})`);
+    console.log("ok:", slug);
     ok++;
   }
 
