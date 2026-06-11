@@ -52,6 +52,7 @@ import {
   type DashboardPackCategory,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { PIXTO_CARD_SLOTS } from "@/lib/constants/generated-pixto-card-sizes";
 import {
   PICKABLE_LIBRARY_CARDS,
   pickablePackFromPickId,
@@ -263,9 +264,12 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
     >
       <div
         className={cn(
-          "relative aspect-[5/6] w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
+          "relative w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
           pixto ? "bg-white" : "bg-canvas-muted",
         )}
+        style={{
+          aspectRatio: `${PIXTO_CARD_SLOTS.thumbGallery.w} / ${PIXTO_CARD_SLOTS.thumbGallery.h}`,
+        }}
       >
         <Image
           src={v.imageUrl}

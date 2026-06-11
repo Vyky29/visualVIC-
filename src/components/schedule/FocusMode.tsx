@@ -314,11 +314,11 @@ export function FocusMode({ routine, exitHref }: Props) {
   }, []);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-[#060807] touch-manipulation text-cream">
+    <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-canvas touch-manipulation text-ink">
       {stepPositionLabel ? (
         <div
           aria-live="polite"
-          className="pointer-events-none absolute left-1/2 top-[max(0.5rem,env(safe-area-inset-top))] z-[55] -translate-x-1/2 rounded-full bg-ink/55 px-3 py-1.5 text-[13px] font-semibold tabular-nums tracking-tight text-cream/92 ring-1 ring-cream/18"
+          className="pointer-events-none absolute left-1/2 top-[max(0.5rem,env(safe-area-inset-top))] z-[55] -translate-x-1/2 rounded-full bg-white px-3 py-1.5 text-[13px] font-semibold tabular-nums tracking-tight text-ink shadow-soft ring-1 ring-ink/10"
         >
           {stepPositionLabel}
         </div>
@@ -359,10 +359,10 @@ export function FocusMode({ routine, exitHref }: Props) {
               animate={{ opacity: 1 }}
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
-              <p className="text-[17px] font-medium text-cream/88">
+              <p className="text-[17px] font-medium text-ink">
                 {focusModeNothingLeftTitle(lang)}
               </p>
-              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/42">
+              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-ink-subtle">
                 {focusModeNothingLeftBody(lang)}
               </p>
               <button
@@ -380,10 +380,10 @@ export function FocusMode({ routine, exitHref }: Props) {
               transition={{ duration: 0.22 }}
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
-              <p className="text-[20px] font-medium tracking-tight text-cream/92">
+              <p className="text-[20px] font-medium tracking-tight text-ink">
                 {focusModeAllFinishedTitle(lang)}
               </p>
-              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/42">
+              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-ink-subtle">
                 {focusModeNothingLeftBody(lang)}
               </p>
               <button

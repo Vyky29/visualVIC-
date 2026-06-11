@@ -13,7 +13,7 @@ const FocusModeWithProfileRoutine = dynamic(
     })),
   {
     loading: () => (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#060807] text-[14px] text-cream/55">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-canvas text-[14px] text-ink-subtle">
         Loading…
       </div>
     ),
@@ -31,8 +31,8 @@ export function FocusDetailClient({
 
   if (!routine) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#060807] px-6 text-center">
-        <p className="text-[15px] text-cream/65">Routine not found.</p>
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-canvas px-6 text-center">
+        <p className="text-[15px] text-ink-subtle">Routine not found.</p>
         <Link
           href="/player"
           className="mt-5 text-[14px] font-medium text-sage underline-offset-4 hover:underline"

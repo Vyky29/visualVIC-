@@ -99,41 +99,44 @@ Used in generated-card-demo labels; **player Focus uses 384×520** since the 3-z
 
 | | px |
 |---|-----|
-| Agreed **max width** | **288** | `GENERATED_PIXTO_SCHEDULE_NOW_W` |
-| Height at max width | **~408** | 288 × (1054/744) |
+| **Total card (visible)** | **288 × 420** | `GENERATED_PIXTO_SCHEDULE_NOW_W` × `GENERATED_PIXTO_SCHEDULE_NOW_H` |
+| Design frame scaled | 384 × 560 @ 75% | same 3-zone geometry as Focus |
 | vs Focus width | **75%** | 288/384 |
-| vs locked digital width | **39%** | 288/744 |
 
-**Slot:** hero aspect `744/1054` or `GeneratedPixtoSlotScale` inside hero cell.
+**Slot:** fixed `288×420` box + `GeneratedPixtoFocusSlotScale` + `focusPresentation`.
 
 ### Schedule Player — NEXT
 
 | | px |
 |---|-----|
-| Agreed **max width** | **268** | `GENERATED_PIXTO_SCHEDULE_NEXT_W` |
-| Height at max width | **~380** | 268 × (1054/744) |
+| **Total card (visible)** | **268 × 392** | `GENERATED_PIXTO_SCHEDULE_NEXT_W` × `GENERATED_PIXTO_SCHEDULE_NEXT_H` |
+| Design frame scaled | 384 × 560 @ ~69.8% | same 3-zone geometry as Focus |
 | vs Focus width | **70%** | 268/384 |
 
 Slightly smaller than NOW (same geometry, narrower cap).
 
-### First & Then — portrait intro (mini)
+### First & Then — portrait intro (mini, pink 3-zone)
 
 | | px |
 |---|-----|
-| Design frame | **744 × 1054** | `MiniDigitalWowCard` inside `FirstThenPortraitCardCell` |
-| Scale | `min(cellW/744, cellH/1054)` | fits grid cell (~½ screen height) |
-| Typical rendered | **~200–280 wide** | depends on viewport; not fixed px |
+| **Fixed slot** | **268 × 392** | `PIXTO_CARD_SLOTS.firstThenPortrait` (= NEXT) |
+| Geometry | 384 × 560 @ 70% | `GeneratedPixtoCard` `focusPresentation` |
 
-Both FIRST and THEN cells use the **same** scaler → **same mini size**.
-
-### First & Then — Focus landscape
+### First & Then — Focus landscape (liked pink)
 
 | | px |
 |---|-----|
-| Design per card | **384 × 520** | `FOCUS_LANDSCAPE` in `first-then-demo/page.tsx` |
+| **Per card** | **384 × 560** | `PIXTO_CARD_SLOTS.firstThenLandscape` |
 | Scene | 2 cards + gap + sidebar | scaled to fit landscape viewport (`scale ≤ 1`) |
 
-Same **384×520** design as schedule Focus; whole scene shrinks on small landscape screens.
+### Thumbnails (`PIXTO_CARD_SLOTS`)
+
+| Slot | px | Use |
+|------|-----|-----|
+| `thumbMd` | 68 × 88 | Home continue |
+| `thumbSm` | 52 × 68 | Schedule done |
+| `thumbNav` | 72 × 72 | Player index |
+| `thumbGallery` | 84 × 100 (5/6) | Library grid |
 
 ---
 
@@ -164,16 +167,16 @@ Locked digital design      (744px = 100% in Figma/code, never shown full width o
 
 ---
 
-## 7. Code map (where size is decided)
+## 7. Code map — `PIXTO_CARD_SLOTS` in `generated-pixto-card-sizes.ts`
 
-| Screen | Component | Design px | Width cap / behaviour |
-|--------|-----------|-----------|------------------------|
-| Focus (schedule/player) | `FocusCardStage` + `GeneratedPixtoFocusSlotScale` | 384×520 | 28rem / 540px stage |
-| Schedule NOW | `SwipeableStepCard` + `GeneratedPixtoSlotScale` | 744×1054 | max **288px** |
-| Schedule NEXT | same | 744×1054 | max **268px** |
-| First & Then portrait | `FirstThenPortraitCardCell` | 744×1054 | cell fit (mini) |
-| First & Then Focus landscape | `FirstThenFocusLandscapeLayout` | 384×520 ×2 | scene scale |
-| Demo / QA | `/generated-card-demo` | all constants | preview widths |
+| Slot | px | Screen |
+|------|-----|--------|
+| `focus` | 384×560 (stage-capped) | Focus Mode |
+| `now` | 288×420 | Schedule AHORA |
+| `next` | 268×392 | Schedule SIGUIENTE, `/first-then` |
+| `firstThenLandscape` | 384×560 | First & Then demo Focus |
+| `firstThenPortrait` | 268×392 | First & Then demo intro |
+| `thumbMd` / `thumbSm` / `thumbNav` / `thumbGallery` | see §4 | Home, done, player, library |
 
 ---
 

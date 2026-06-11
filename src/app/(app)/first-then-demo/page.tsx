@@ -16,17 +16,14 @@ import {
 import { useSearchParams } from "next/navigation";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
-  GENERATED_PIXTO_CARD_SIZE,
-  GENERATED_PIXTO_CATEGORY_BAND_H,
-  GENERATED_PIXTO_ILLUSTRATION_FRAME,
-  GENERATED_PIXTO_WOW_COMPANY_MARK,
-  GENERATED_PIXTO_WOW_TITLE_ZONE_H,
-  GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
-  GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
-  GENERATED_PIXTO_FOCUS_FIXED_ZONE,
-  IllustrationSlotDiagnosticBorder,
+  GeneratedPixtoCard,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
+import {
+  PIXTO_CARD_CATEGORY_PINK,
+  PIXTO_CARD_SLOTS,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import {
   parseFirstThenDemoPackId,
   resolveFirstThenDemoPack,
@@ -48,27 +45,17 @@ import {
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
-const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 
-/** Focus landscape — same 3-zone frame as schedule Focus (`GENERATED_PIXTO_FOCUS_FIXED_ZONE`). */
+const PORTRAIT_SLOT = PIXTO_CARD_SLOTS.firstThenPortrait;
+const LANDSCAPE_SLOT = PIXTO_CARD_SLOTS.firstThenLandscape;
+
+/** Focus landscape — liked pink 3-zone card (`PIXTO_CARD_SLOTS.firstThenLandscape`). */
 const FOCUS_LANDSCAPE = {
-  cardW: GENERATED_PIXTO_FOCUS_FIXED_ZONE.w,
-  cardH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.h,
+  cardW: LANDSCAPE_SLOT.w,
+  cardH: LANDSCAPE_SLOT.h,
   cardRadius: 16,
   cardGap: 24,
-  illustPadTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadTop,
-  illustPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadX,
-  illustPadBottom: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadBottom,
-  actionH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionH,
-  actionPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionPadX,
-  footerH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerH,
-  footerPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerPadX,
-  illustBorder: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorder,
-  illustBorderColor: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorderColor,
-  packMarkSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkSize,
-  packMarkTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkTop,
-  packMarkRight: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkRight,
   cardsToSidebarGap: 64,
   sidebarW: 64,
   sidebarEdge: 24,
@@ -76,7 +63,7 @@ const FOCUS_LANDSCAPE = {
   focusBtnH: 88,
   menuBtnH: 56,
   menuBtnRadius: 12,
-  pink: "#EC1D7A",
+  pink: PIXTO_CARD_CATEGORY_PINK,
   menuBtnBg: "#2B2F33",
 } as const;
 
@@ -240,132 +227,21 @@ function FocusModeIntroIcon({ className }: { className?: string }) {
 const introFooterActionClass =
   "inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-[0.9rem] border border-ink/10 bg-white px-2.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink shadow-soft transition active:scale-[0.99] sm:px-3";
 
-function splitWowTitle(raw: string): [string] | [string, string] {
-  const words = raw.trim().split(/\s+/).filter(Boolean);
-  if (words.length <= 2) return [raw];
-
-  let bestIndex = 1;
-  let bestScore = Number.POSITIVE_INFINITY;
-  for (let index = 1; index < words.length; index += 1) {
-    const left = words.slice(0, index).join(" ");
-    const right = words.slice(index).join(" ");
-    const score =
-      Math.abs(left.length - right.length) +
-      (left.split(" ").length === 1 ? 2 : 0) +
-      (right.split(" ").length === 1 ? 2 : 0);
-    if (score < bestScore) {
-      bestScore = score;
-      bestIndex = index;
-    }
-  }
-
-  return [words.slice(0, bestIndex).join(" "), words.slice(bestIndex).join(" ")];
-}
-
-function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
-  const cardUiLang = useCardUiLanguage();
-  const { title: displayTitle, category: displayCategory } = useMemo(
-    () =>
-      resolveDigitalPixtoStrings(
-        card.illustrationUrl,
-        card.title,
-        card.category,
-        cardUiLang,
-      ),
-    [card.illustrationUrl, card.title, card.category, cardUiLang],
-  );
-  const titleLines = splitWowTitle(displayTitle);
-  const titleStyle =
-    titleLines.length === 1
-      ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
-      : { fontSize: "14px", lineHeight: 0.96, letterSpacing: "-0.016em" };
-
+function PixtoFocusSlotCard({ card }: { card: GeneratedPixtoCardProps }) {
   return (
-    <article
-      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
-      style={{
-        aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
-        gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-      }}
-    >
-      <div className="relative bg-white">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
-          style={{
-            top: `${(GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_WOW_TOP_LAYOUT_H) * 100}%`,
-            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
-          }}
-        >
-          <Image
-            src={card.illustrationUrl}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="220px"
-            unoptimized
-          />
-          <IllustrationSlotDiagnosticBorder />
-        </div>
-
-        {card.iconUrl ? (
-          <div
-            className="absolute rounded-[0.9rem] bg-white"
-            style={{
-              right: "5.4%",
-              top: "3.8%",
-              width: `${(GENERATED_PIXTO_WOW_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-              aspectRatio: "1 / 1",
-            }}
-          >
-            <div className="relative h-full w-full">
-              <Image
-                src={card.iconUrl}
-                alt=""
-                fill
-                className="object-contain"
-                sizes={`${GENERATED_PIXTO_WOW_COMPANY_MARK.w}px`}
-                unoptimized
-              />
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="bg-white px-3 py-1">
-        <div className="flex h-full min-h-0 w-full items-center justify-center">
-          <div
-            className={cn(
-              "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
-              titleLines.length > 1 ? "gap-[0.14em]" : "gap-0",
-            )}
-            style={{
-              width: `min(100%, ${WOW_TEXT_BOX_SIZE.w}px)`,
-              height: `min(100%, ${WOW_TEXT_BOX_SIZE.h}px)`,
-              ...titleStyle,
-            }}
-          >
-            {titleLines.map((line, index) => (
-              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
-                {line}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="flex items-center justify-center px-3"
-        style={{ backgroundColor: card.categoryColour }}
-      >
-        <span
-          className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white/95"
-          style={{ fontSize: "11px", lineHeight: 1, letterSpacing: "-0.012em" }}
-        >
-          {displayCategory}
-        </span>
-      </div>
-    </article>
+    <GeneratedPixtoCard
+      illustrationUrl={card.illustrationUrl}
+      title={card.title}
+      category={card.category}
+      categoryColour={card.categoryColour}
+      iconUrl={card.iconUrl}
+      cardType={card.cardType}
+      focusIllustrationScale={card.focusIllustrationScale}
+      focusIllustrationUrl={card.focusIllustrationUrl}
+      focusPresentation
+      suppressNeutralRing
+      className="h-full w-full max-w-none"
+    />
   );
 }
 
@@ -379,7 +255,7 @@ function FirstThenFocusSpecCard({
   lang: ReturnType<typeof useCardUiLanguage>;
 }) {
   const cardUiLang = useCardUiLanguage();
-  const { title: displayTitle, category: displayCategory } = useMemo(
+  const { title: displayTitle } = useMemo(
     () =>
       resolveDigitalPixtoStrings(
         card.illustrationUrl,
@@ -399,100 +275,8 @@ function FirstThenFocusSpecCard({
         height: FOCUS_LANDSCAPE.cardH,
         borderRadius: FOCUS_LANDSCAPE.cardRadius,
       }}
-      aria-label={`${slotLabel} — ${displayTitle}`}
     >
-      <div className="flex h-full min-h-0 flex-col">
-        {/* Section 1 — illustration area (all remaining space) */}
-        <div
-          className="relative flex min-h-0 flex-1 items-center justify-center"
-          style={{
-            paddingTop: FOCUS_LANDSCAPE.illustPadTop,
-            paddingRight: FOCUS_LANDSCAPE.illustPadX,
-            paddingBottom: FOCUS_LANDSCAPE.illustPadBottom,
-            paddingLeft: FOCUS_LANDSCAPE.illustPadX,
-          }}
-        >
-          {card.iconUrl ? (
-            <div
-              className="absolute z-10"
-              style={{
-                top: FOCUS_LANDSCAPE.packMarkTop,
-                right: FOCUS_LANDSCAPE.packMarkRight,
-                width: FOCUS_LANDSCAPE.packMarkSize,
-                height: FOCUS_LANDSCAPE.packMarkSize,
-              }}
-            >
-              <Image
-                src={card.iconUrl}
-                alt=""
-                fill
-                className="object-contain"
-                sizes={`${FOCUS_LANDSCAPE.packMarkSize}px`}
-                unoptimized
-              />
-            </div>
-          ) : null}
-
-          <div
-            className="relative flex h-full w-full items-center justify-center overflow-hidden"
-            style={{
-              border: `${FOCUS_LANDSCAPE.illustBorder}px solid ${FOCUS_LANDSCAPE.illustBorderColor}`,
-            }}
-          >
-            <Image
-              src={card.illustrationUrl}
-              alt=""
-              fill
-              className="!h-full !w-full object-contain object-center"
-              sizes={`${FOCUS_LANDSCAPE.cardW}px`}
-              unoptimized
-            />
-            <IllustrationSlotDiagnosticBorder />
-          </div>
-        </div>
-
-        {/* Section 2 — action text (fixed 110px) */}
-        <div
-          className="flex shrink-0 items-center justify-center"
-          style={{
-            height: FOCUS_LANDSCAPE.actionH,
-            paddingLeft: FOCUS_LANDSCAPE.actionPadX,
-            paddingRight: FOCUS_LANDSCAPE.actionPadX,
-          }}
-        >
-          <p
-            className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
-            style={{
-              fontSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionTitleFontPx,
-              fontWeight: 800,
-              lineHeight: 1.05,
-            }}
-          >
-            {displayTitle}
-          </p>
-        </div>
-
-        {/* Section 3 — footer (fixed 84px) */}
-        <footer
-          className="flex shrink-0 items-center justify-center"
-          style={{
-            height: FOCUS_LANDSCAPE.footerH,
-            backgroundColor: FOCUS_LANDSCAPE.pink,
-            paddingLeft: FOCUS_LANDSCAPE.footerPadX,
-            paddingRight: FOCUS_LANDSCAPE.footerPadX,
-          }}
-        >
-          <span
-            className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-white [overflow-wrap:break-word]"
-            style={{
-              fontSize: "clamp(18px, 3.2vw, 26px)",
-              lineHeight: 1.1,
-            }}
-          >
-            {displayCategory}
-          </span>
-        </footer>
-      </div>
+      <PixtoFocusSlotCard card={card} />
     </article>
   );
 }
@@ -661,49 +445,19 @@ function SlotLabelColumn({
 }
 
 function FirstThenPortraitCardCell({ card }: { card: GeneratedPixtoCardProps }) {
-  const outerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.28);
-
-  useLayoutEffect(() => {
-    const outer = outerRef.current;
-    if (!outer) return;
-
-    const update = () => {
-      const W = outer.clientWidth;
-      const H = outer.clientHeight;
-      if (W <= 0 || H <= 0) return;
-
-      const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
-      const next = Math.min(sx, sy);
-      setScale(Number.isFinite(next) && next > 0 ? next : 0.28);
-    };
-
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(outer);
-    return () => ro.disconnect();
-  }, []);
-
-  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
-  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
-
   return (
-    <div
-      ref={outerRef}
-      className="flex h-full min-h-0 w-full items-center justify-center"
-    >
-      <div className="relative shrink-0" style={{ width: slotW, height: slotH }}>
-        <div
-          className="absolute left-0 top-0 origin-top-left"
-          style={{
-            width: GENERATED_PIXTO_CARD_SIZE.w,
-            height: GENERATED_PIXTO_CARD_SIZE.h,
-            transform: `scale(${scale})`,
-          }}
-        >
-          <MiniDigitalWowCard card={card} />
-        </div>
+    <div className="flex h-full min-h-0 w-full items-center justify-center">
+      <div
+        className="relative mx-auto shrink-0 overflow-hidden rounded-[1rem]"
+        style={{
+          width: PORTRAIT_SLOT.w,
+          height: PORTRAIT_SLOT.h,
+          maxWidth: "100%",
+        }}
+      >
+        <GeneratedPixtoFocusSlotScale>
+          <PixtoFocusSlotCard card={card} />
+        </GeneratedPixtoFocusSlotScale>
       </div>
     </div>
   );
@@ -941,7 +695,7 @@ function FirstThenDemoPageClient() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden overscroll-none bg-[#060807] touch-manipulation">
+    <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation">
       {isMobileLandscape ? (
         <FirstThenFocusLandscapeLayout
           firstCard={first}

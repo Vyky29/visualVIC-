@@ -31,10 +31,7 @@ import {
 import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
 import { digitalCategoryStripLabel } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import {
-  GENERATED_PIXTO_SCHEDULE_NEXT_W,
-  GENERATED_PIXTO_SCHEDULE_NOW_W,
-} from "@/lib/constants/generated-pixto-card-sizes";
+import { PIXTO_CARD_SLOTS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
@@ -43,8 +40,8 @@ const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const FOCUS_TEXT_BOX_SIZE = { w: 340, h: 96 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
-const NOW_CARD_PREVIEW_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
-const NEXT_CARD_PREVIEW_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
+const NOW_CARD_PREVIEW_W = PIXTO_CARD_SLOTS.now.w;
+const NEXT_CARD_PREVIEW_W = PIXTO_CARD_SLOTS.next.w;
 const FOCUS_DEMO_PREVIEW_MAX_W = 390 as const;
 
 type PreviewTextStyle = {
