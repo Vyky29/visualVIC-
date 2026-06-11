@@ -71,6 +71,44 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "wash-hands.png",
   "westfield.png",
   "yes.png",
+  // Materials — kitchen
+  "apron.png",
+  "mixing-bowl.png",
+  "wooden-spoon.png",
+  "rolling-pin.png",
+  "cheese-grater.png",
+  "vegetable-peeler.png",
+  "chopping-board.png",
+  "tomato-sauce.png",
+  // Materials — art & craft
+  "paintbrush.png",
+  "paint-palette.png",
+  "scissors.png",
+  "glue-stick.png",
+  "coloured-paper.png",
+  // Activities — cognitive & sensory
+  "jigsaw-puzzle.png",
+  "sorting-trays.png",
+  "matching-cards.png",
+  "play-dough.png",
+  // Activities — cooking, food & art (generic objects, no people)
+  "pizza.png",
+  "cooking.png",
+  "painting.png",
+  "peeling.png",
+  // Fitness — equipment
+  "therapy-ball.png",
+  "trampoline.png",
+  "step-platform.png",
+  "treadmill.png",
+  "exercise-machine.png",
+  "skis.png",
+  "exercise-bike.png",
+  // Fitness — stretching
+  "exercise-mat.png",
+  "resistance-bands.png",
+  "foam-roller.png",
+  "stretching.png",
 ] as const;
 
 export function dayCentreGeneralImageUrlForStep(step: DayCentreGeneralStep): string {
@@ -128,6 +166,44 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-breakfast", slug: "breakfast", title: "Breakfast" },
   { id: "dcg-dinner", slug: "dinner", title: "Dinner" },
   { id: "dcg-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
+  // Materials — kitchen & cooking
+  { id: "dcg-apron", slug: "apron", title: "Apron" },
+  { id: "dcg-mixing-bowl", slug: "mixing-bowl", title: "Mixing bowl" },
+  { id: "dcg-wooden-spoon", slug: "wooden-spoon", title: "Wooden spoon" },
+  { id: "dcg-rolling-pin", slug: "rolling-pin", title: "Rolling pin" },
+  { id: "dcg-cheese-grater", slug: "cheese-grater", title: "Cheese grater" },
+  { id: "dcg-vegetable-peeler", slug: "vegetable-peeler", title: "Vegetable peeler" },
+  { id: "dcg-chopping-board", slug: "chopping-board", title: "Chopping board" },
+  { id: "dcg-tomato-sauce", slug: "tomato-sauce", title: "Tomato sauce" },
+  // Materials — art & craft
+  { id: "dcg-paintbrush", slug: "paintbrush", title: "Paintbrush" },
+  { id: "dcg-paint-palette", slug: "paint-palette", title: "Paint palette" },
+  { id: "dcg-scissors", slug: "scissors", title: "Scissors" },
+  { id: "dcg-glue-stick", slug: "glue-stick", title: "Glue stick" },
+  { id: "dcg-coloured-paper", slug: "coloured-paper", title: "Coloured paper" },
+  // Activities — puzzles, sorting & matching
+  { id: "dcg-jigsaw-puzzle", slug: "jigsaw-puzzle", title: "Jigsaw puzzle" },
+  { id: "dcg-sorting-trays", slug: "sorting-trays", title: "Sorting trays" },
+  { id: "dcg-matching-cards", slug: "matching-cards", title: "Matching cards" },
+  { id: "dcg-play-dough", slug: "play-dough", title: "Play dough" },
+  // Activities — cooking, food & art (until Oct — object illustrations)
+  { id: "dcg-pizza", slug: "pizza", title: "Pizza" },
+  { id: "dcg-cooking", slug: "cooking", title: "Cooking" },
+  { id: "dcg-painting", slug: "painting", title: "Painting" },
+  { id: "dcg-peeling", slug: "peeling", title: "Peeling" },
+  // Fitness — equipment
+  { id: "dcg-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+  { id: "dcg-trampoline", slug: "trampoline", title: "Trampoline" },
+  { id: "dcg-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcg-treadmill", slug: "treadmill", title: "Treadmill" },
+  { id: "dcg-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcg-skis", slug: "skis", title: "Skis" },
+  { id: "dcg-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
+  // Fitness — stretching
+  { id: "dcg-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
+  { id: "dcg-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
+  { id: "dcg-foam-roller", slug: "foam-roller", title: "Foam roller" },
+  { id: "dcg-stretching", slug: "stretching", title: "Stretching" },
   // Communication
   { id: "dcg-help", slug: "help", title: "Help" },
   { id: "dcg-stop", slug: "stop", title: "Stop" },

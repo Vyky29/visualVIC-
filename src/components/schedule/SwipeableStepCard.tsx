@@ -560,7 +560,7 @@ export function SwipeableStepCard({
         hasGeneratedPixto &&
           (variant === "hero" || variant === "next") &&
           "ring-offset-0",
-        variant === "focus" && "outline-none focus:outline-none",
+        variant === "focus" && "h-full min-h-0 w-full outline-none focus:outline-none",
         ((variant === "hero" && isNow) || focusPixto || focusGenerated) &&
           cn(
             "mx-auto max-w-full",
@@ -667,7 +667,8 @@ export function SwipeableStepCard({
                 {gp ? (
                   <div
                     className={cn(
-                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden",
+                      "absolute inset-0 flex min-h-0 min-w-0 overflow-hidden",
+                      variant !== "focus" && "items-center justify-center",
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
@@ -805,7 +806,12 @@ export function SwipeableStepCard({
               >
                 {completionBackImageUrl ? (
                   gp ? (
-                    <div className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden">
+                    <div
+                      className={cn(
+                        "absolute inset-0 flex min-h-0 min-w-0 overflow-hidden",
+                        variant !== "focus" && "items-center justify-center",
+                      )}
+                    >
                       {variant === "focus" ? (
                         <GeneratedPixtoFocusSlotScale>
                           <div className="relative h-full w-full overflow-hidden">
@@ -892,8 +898,10 @@ export function SwipeableStepCard({
             {scheduleGeneratedPixto && gp ? (
               <div
                 className={cn(
-                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.5rem]",
-                  variant === "focus" ? "overflow-hidden bg-transparent" : "overflow-visible bg-transparent",
+                  "absolute inset-0 flex min-h-0 min-w-0 rounded-[1.5rem]",
+                  variant === "focus"
+                    ? "overflow-hidden bg-transparent"
+                    : "items-center justify-center overflow-visible bg-transparent",
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >

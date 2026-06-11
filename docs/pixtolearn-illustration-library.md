@@ -62,6 +62,8 @@ Legacy generic PNGs may still exist under `ikram/scenes/` on disk — they are *
 |--------|--------|
 | `scripts/import-day-centre-general-reference-grid.mjs` | **Level 1** reference grid → `general/` (premium art) |
 | `scripts/generate-day-centre-general-schedule.mjs` | **Level 1** SVG fallback → `general/` only |
+| `scripts/generate-day-centre-general-activities.mjs` | Activity & material cards (puzzles, cooking, painting…) → `general/` |
+| `scripts/generate-day-centre-general-fitness.mjs` | Fitness equipment & stretching (therapy ball, treadmill, skis…) → `general/` |
 | `scripts/generate-pixtolearn-bus.mjs` | London bus → Ikram scenes + `general/bus.png` |
 | `scripts/generate-day-centre-general-home.mjs` | House only → `general/home.png` (superseded by schedule script) |
 | `scripts/generate-day-centre-placeholders.mjs` | Legacy general placeholders |

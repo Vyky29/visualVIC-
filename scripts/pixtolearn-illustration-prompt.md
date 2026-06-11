@@ -52,6 +52,82 @@ Prefer a single clear object or landmark over a complete environment or scene.
 | `home` (General pack) | Simple family home icon only — `generate-day-centre-general-home.mjs` → `general/home.png` |
 | `finished` | A large green tick next to a finish flag. |
 
+## Subject lines — Day Centre activities & materials (generic, no people)
+
+**Rule:** show **objects and materials only** — not Ikram, not hands performing actions.
+
+### Materials — kitchen
+
+| Slug | Subject |
+|------|---------|
+| `apron` | A pink cooking apron with neck straps. |
+| `mixing-bowl` | A large light-blue mixing bowl. |
+| `wooden-spoon` | A wooden spoon with oval bowl and handle. |
+| `rolling-pin` | A wooden rolling pin with handles. |
+| `cheese-grater` | A box cheese grater with a small cheese wedge. |
+| `vegetable-peeler` | A green-handled peeler beside an orange vegetable. |
+| `chopping-board` | A wooden chopping board with tomato and pepper pieces. |
+| `tomato-sauce` | A jar of tomato sauce with label area blank. |
+
+### Materials — art & craft
+
+| Slug | Subject |
+|------|---------|
+| `paintbrush` | A paintbrush with blue bristles. |
+| `paint-palette` | A white artist palette with colourful paint blobs and thumb hole. |
+| `scissors` | Safety scissors with rounded tips. |
+| `glue-stick` | A yellow glue stick with white cap. |
+| `coloured-paper` | A small stack of coloured paper sheets. |
+
+### Activities — cognitive & sensory
+
+| Slug | Subject |
+|------|---------|
+| `jigsaw-puzzle` | Four interlocking jigsaw pieces in bright colours. |
+| `sorting-trays` | Three trays with one red circle, one blue square, one green triangle. |
+| `matching-cards` | Two picture cards showing the same orange circle. |
+| `play-dough` | Three blobs of play dough in pink, yellow and blue. |
+
+### Activities — cooking, food & art (until Oct)
+
+| Slug | Subject |
+|------|---------|
+| `pizza` | A whole pizza with cheese and pepperoni toppings. |
+| `cooking` | A cooking pot with wooden spoon and orange food inside. |
+| `painting` | A paint palette and paintbrush together. |
+| `peeling` | A vegetable peeler beside a partly peeled orange vegetable. |
+
+```bash
+node scripts/generate-day-centre-general-activities.mjs
+```
+
+## Subject lines — Day Centre fitness & stretching (generic, no people)
+
+### Fitness — equipment
+
+| Slug | Subject |
+|------|---------|
+| `therapy-ball` | A large blue therapy / exercise ball. |
+| `trampoline` | A small rebounder trampoline with safety frame. |
+| `step-platform` | Three pink aerobic step platforms stacked. |
+| `treadmill` | A treadmill viewed from the side with display panel. |
+| `exercise-machine` | A generic seated gym / cable exercise machine. |
+| `skis` | A pair of skis with bindings, side by side. |
+| `exercise-bike` | A static exercise bike (máquina estática). |
+
+### Fitness — stretching
+
+| Slug | Subject |
+|------|---------|
+| `exercise-mat` | A rolled purple exercise / yoga mat. |
+| `resistance-bands` | Three resistance bands with handles. |
+| `foam-roller` | A blue foam roller cylinder. |
+| `stretching` | A green stretch band loop (no person). |
+
+```bash
+node scripts/generate-day-centre-general-fitness.mjs
+```
+
 ## Regenerate (dev)
 
 ```bash
