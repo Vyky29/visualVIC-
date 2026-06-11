@@ -92,6 +92,23 @@ export const GENERATED_PIXTO_FOCUS_COMPANY_MARK = { w: 91, h: 91 } as const;
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
 const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = false;
 
+/**
+ * Permanent visual diagnostic: 2px green outline on the illustration slot only
+ * (front face). Does not affect layout, image sizing, or object-fit.
+ */
+export const SHOW_ILLUSTRATION_SLOT_DIAGNOSTIC_BORDER = true;
+
+export function IllustrationSlotDiagnosticBorder() {
+  if (!SHOW_ILLUSTRATION_SLOT_DIAGNOSTIC_BORDER) return null;
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 z-20 box-border border-2 border-[#00ff00]"
+      aria-hidden
+      data-illustration-slot-diagnostic
+    />
+  );
+}
+
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return null;
@@ -1083,6 +1100,7 @@ export function GeneratedPixtoCard({
                 }
                 draggable={false}
               />
+              <IllustrationSlotDiagnosticBorder />
             </div>
           </div>
         </div>

@@ -104,6 +104,26 @@ const STEP_OUTLINE_HEX: Record<
   default: "#7d9b87",
 };
 
+/** Shared clip + radius for 3D flip faces (front and back must match exactly). */
+const FLIP_CARD_RADIUS_CLASS = "rounded-[1.5rem]";
+const FLIP_FACE_MEDIA_CLASS = "absolute inset-0";
+
+function flipFaceShellClass(bgClass: string) {
+  return cn(
+    "absolute inset-0",
+    FLIP_CARD_RADIUS_CLASS,
+    "overflow-hidden",
+    bgClass,
+    "[backface-visibility:hidden]",
+    "[-webkit-backface-visibility:hidden]",
+  );
+}
+
+const flipFacePreserve3dStyle = {
+  transformStyle: "preserve-3d",
+  WebkitTransformStyle: "preserve-3d",
+} as const;
+
 export function SwipeableStepCard({
   step,
   status,
@@ -429,6 +449,8 @@ export function SwipeableStepCard({
     (variant === "hero" || variant === "focus") &&
     Boolean(completionBackImageUrl) &&
     isNow;
+  const flipFaceBgClass =
+    variant === "focus" ? "bg-transparent" : "bg-white";
   const suppressCompletionOutline =
     completionAnimating && completionFlip && !hasGeneratedPixto;
 
@@ -524,13 +546,16 @@ export function SwipeableStepCard({
                 : undefined
       }
       className={cn(
-        "relative touch-manipulation rounded-[1.5rem] transition-shadow duration-300",
+        "relative touch-manipulation transition-shadow duration-300",
+        completionFlip ? FLIP_CARD_RADIUS_CLASS : "rounded-[1.5rem]",
         variant === "focus" ? "touch-none" : "touch-pan-y",
-        hasGeneratedPixto
-          ? "overflow-visible"
-          : suppressCompletionOutline
-            ? "overflow-hidden shadow-none"
-            : "overflow-hidden shadow-card",
+        completionFlip
+          ? "overflow-hidden"
+          : hasGeneratedPixto
+            ? "overflow-visible"
+            : suppressCompletionOutline
+              ? "overflow-hidden shadow-none"
+              : "overflow-hidden shadow-card",
         /** Schedule HTML cards: ring sits flush on the white shell (no canvas “air” from ring-offset). */
         hasGeneratedPixto &&
           (variant === "hero" || variant === "next") &&
@@ -565,7 +590,8 @@ export function SwipeableStepCard({
           !focusGenerated &&
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
-            "overflow-hidden rounded-2xl sm:rounded-3xl",
+            "overflow-hidden",
+            completionFlip ? FLIP_CARD_RADIUS_CLASS : "rounded-2xl sm:rounded-3xl",
             !suppressCompletionOutline && rings.scheduleFocus,
           ),
         variant !== "hero" &&
@@ -579,7 +605,9 @@ export function SwipeableStepCard({
       <div
         className={cn(
           "relative w-full touch-manipulation",
-          hasGeneratedPixto &&
+          completionFlip && cn("overflow-hidden", FLIP_CARD_RADIUS_CLASS),
+          !completionFlip &&
+            hasGeneratedPixto &&
             (variant === "focus"
               ? "overflow-hidden rounded-[1.5rem]"
               : "overflow-visible"),
@@ -617,7 +645,7 @@ export function SwipeableStepCard({
       >
         {completionFlip ? (
           <div
-            className="absolute inset-0 [perspective:900px]"
+            className="absolute inset-0 overflow-hidden [perspective:900px]"
             style={{ perspectiveOrigin: "50% 50%" }}
           >
             <motion.div
@@ -630,24 +658,16 @@ export function SwipeableStepCard({
               }}
             >
               <div
-                className={cn(
-                  "absolute inset-0 rounded-[1.5rem] [backface-visibility:hidden]",
-                  gp && variant !== "focus"
-                    ? "overflow-visible bg-transparent"
-                    : "overflow-hidden bg-white",
-                  "[-webkit-backface-visibility:hidden]",
-                )}
+                className={flipFaceShellClass(flipFaceBgClass)}
                 style={{
                   transform: "translateZ(1px)",
-                  transformStyle: "preserve-3d",
-                  WebkitTransformStyle: "preserve-3d",
+                  ...flipFacePreserve3dStyle,
                 }}
               >
                 {gp ? (
                   <div
                     className={cn(
-                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.5rem]",
-                      variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
+                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden",
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
@@ -688,10 +708,10 @@ export function SwipeableStepCard({
                 ) : step.imageUrl ? (
                   stepPixtoBundled ? (
                     variant === "focus" ? (
-                      <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
+                      <div className={FLIP_FACE_MEDIA_CLASS}>
                         <div
                           className={cn(
-                            "absolute overflow-hidden rounded-[1.5rem]",
+                            "absolute overflow-hidden",
                             FOCUS_PIXTO_PNG_INSET_PX === 0 && "inset-0",
                             FOCUS_PIXTO_PNG_INSET_PX > 0 && "bg-cream",
                           )}
@@ -727,7 +747,7 @@ export function SwipeableStepCard({
                         </div>
                       </div>
                     ) : (
-                      <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
+                      <div className={FLIP_FACE_MEDIA_CLASS}>
                         <div
                           className={cn(
                             "absolute inset-0 origin-center",
@@ -752,21 +772,23 @@ export function SwipeableStepCard({
                       </div>
                     )
                   ) : (
-                    <Image
-                      src={step.imageUrl}
-                      alt=""
-                      fill
-                      unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
-                      className={cn(
-                        "object-cover transition-[filter] select-none",
-                        "object-center",
-                        heroNowImageScaleClass,
-                        isFinished && "brightness-[0.9] grayscale",
-                      )}
-                      sizes="(max-width: 512px) 100vw, 512px"
-                      priority={isNow && variant === "hero"}
-                      draggable={false}
-                    />
+                    <div className={FLIP_FACE_MEDIA_CLASS}>
+                      <Image
+                        src={step.imageUrl}
+                        alt=""
+                        fill
+                        unoptimized={isPixtoLearnBundledCardUrl(step.imageUrl)}
+                        className={cn(
+                          "object-cover transition-[filter] select-none",
+                          "object-center",
+                          heroNowImageScaleClass,
+                          isFinished && "brightness-[0.9] grayscale",
+                        )}
+                        sizes="(max-width: 512px) 100vw, 512px"
+                        priority={isNow && variant === "hero"}
+                        draggable={false}
+                      />
+                    </div>
                   )
                 ) : (
                   <div className="flex h-full min-h-[160px] items-center justify-center text-ink-faint">
@@ -775,23 +797,57 @@ export function SwipeableStepCard({
                 )}
               </div>
               <div
-                className={cn(
-                  "absolute inset-0 rounded-[1.5rem] [backface-visibility:hidden]",
-                  gp && variant !== "focus"
-                    ? "overflow-visible bg-transparent"
-                    : "overflow-hidden bg-white",
-                  "[-webkit-backface-visibility:hidden]",
-                )}
+                className={flipFaceShellClass(flipFaceBgClass)}
                 style={{
                   transform: "rotateY(180deg) translateZ(1px)",
-                  transformStyle: "preserve-3d",
-                  WebkitTransformStyle: "preserve-3d",
+                  ...flipFacePreserve3dStyle,
                 }}
               >
                 {completionBackImageUrl ? (
-                  backPixtoBundled ? (
-                    <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
-                      <div className="absolute inset-0 origin-center scale-[1.06]">
+                  gp ? (
+                    <div className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden">
+                      {variant === "focus" ? (
+                        <GeneratedPixtoFocusSlotScale>
+                          <div className="relative h-full w-full overflow-hidden">
+                            <Image
+                              src={completionBackImageUrl}
+                              alt=""
+                              fill
+                              unoptimized={isPixtoLearnBundledCardUrl(
+                                completionBackImageUrl,
+                              )}
+                              className="object-cover object-center select-none"
+                              sizes="(max-width: 512px) 100vw, 512px"
+                              draggable={false}
+                            />
+                          </div>
+                        </GeneratedPixtoFocusSlotScale>
+                      ) : (
+                        <GeneratedPixtoSlotScale>
+                          <div className="relative h-full w-full overflow-hidden">
+                            <Image
+                              src={completionBackImageUrl}
+                              alt=""
+                              fill
+                              unoptimized={isPixtoLearnBundledCardUrl(
+                                completionBackImageUrl,
+                              )}
+                              className="object-cover object-center select-none"
+                              sizes="(max-width: 512px) 100vw, 512px"
+                              draggable={false}
+                            />
+                          </div>
+                        </GeneratedPixtoSlotScale>
+                      )}
+                    </div>
+                  ) : backPixtoBundled ? (
+                    <div className={FLIP_FACE_MEDIA_CLASS}>
+                      <div
+                        className={cn(
+                          "absolute inset-0 origin-center",
+                          schedulePixtoBleedScaleClass,
+                        )}
+                      >
                         <Image
                           src={completionBackImageUrl}
                           alt=""
@@ -809,21 +865,23 @@ export function SwipeableStepCard({
                       </div>
                     </div>
                   ) : (
-                    <Image
-                      src={completionBackImageUrl}
-                      alt=""
-                      fill
-                      unoptimized={isPixtoLearnBundledCardUrl(
-                        completionBackImageUrl,
-                      )}
-                      className={cn(
-                        "object-cover select-none",
-                        "object-center",
-                        heroNowImageScaleClass,
-                      )}
-                      sizes="(max-width: 512px) 100vw, 512px"
-                      draggable={false}
-                    />
+                    <div className={FLIP_FACE_MEDIA_CLASS}>
+                      <Image
+                        src={completionBackImageUrl}
+                        alt=""
+                        fill
+                        unoptimized={isPixtoLearnBundledCardUrl(
+                          completionBackImageUrl,
+                        )}
+                        className={cn(
+                          "object-cover select-none",
+                          "object-center",
+                          heroNowImageScaleClass,
+                        )}
+                        sizes="(max-width: 512px) 100vw, 512px"
+                        draggable={false}
+                      />
+                    </div>
                   )
                 ) : null}
               </div>
@@ -835,7 +893,7 @@ export function SwipeableStepCard({
               <div
                 className={cn(
                   "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.5rem]",
-                  variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
+                  variant === "focus" ? "overflow-hidden bg-transparent" : "overflow-visible bg-transparent",
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >

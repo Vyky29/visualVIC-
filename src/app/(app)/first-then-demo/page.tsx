@@ -24,6 +24,7 @@ import {
   GENERATED_PIXTO_WOW_TITLE_ZONE_H,
   GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
+  IllustrationSlotDiagnosticBorder,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
@@ -269,6 +270,7 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
             sizes="220px"
             unoptimized
           />
+          <IllustrationSlotDiagnosticBorder />
         </div>
 
         {card.iconUrl ? (
@@ -879,7 +881,7 @@ function FirstThenDemoPageClient() {
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation">
+    <div className="fixed inset-0 overflow-hidden overscroll-none bg-[#060807] touch-manipulation">
       {isMobileLandscape ? (
         <FirstThenLandscapeFullWidthShell
           firstCard={first}
