@@ -36,6 +36,7 @@ import {
   firstThenDemoPageTitle,
   firstThenSlotLabel,
   focusQuickNavAriaLabel,
+  focusModeOptExitFocus,
   focusQuickNavToggleHide,
   focusQuickNavToggleShow,
   playerKindRoutine,
@@ -551,25 +552,38 @@ function FirstThenPortraitStack({
   firstCard,
   secondCard,
   className,
+  showStepBadges = false,
+  lang,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   className?: string;
+  showStepBadges?: boolean;
+  lang?: ReturnType<typeof useCardUiLanguage>;
 }) {
   const cardWidthClass = `mx-auto w-[min(100%,${GENERATED_PIXTO_SCHEDULE_NEXT_W}px)] min-w-0`;
+  const slots = [
+    { card: firstCard, slot: "first" as const, icon: <IconFirst className="h-5 w-5" /> },
+    { card: secondCard, slot: "then" as const, icon: <IconThen className="h-5 w-5" /> },
+  ];
 
   return (
     <div className={cn("grid min-h-0 grid-rows-2 gap-2", className)}>
-      <div className="flex min-h-0 items-center justify-center">
-        <div className={cardWidthClass}>
-          <MiniDigitalWowCard card={firstCard} />
+      {slots.map(({ card, slot, icon }) => (
+        <div key={slot} className="relative flex min-h-0 items-center justify-center">
+          {showStepBadges && lang ? (
+            <div className="pointer-events-none absolute inset-x-0 top-1 z-10 flex justify-center">
+              <FocusStepLabelBadge
+                label={firstThenSlotLabel(slot, lang)}
+                icon={icon}
+              />
+            </div>
+          ) : null}
+          <div className={cardWidthClass}>
+            <MiniDigitalWowCard card={card} />
+          </div>
         </div>
-      </div>
-      <div className="flex min-h-0 items-center justify-center">
-        <div className={cardWidthClass}>
-          <MiniDigitalWowCard card={secondCard} />
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
@@ -591,16 +605,105 @@ function IntroStepLabel({
   );
 }
 
+/** Compact badge overlaid on the card area — no flex height reserved for labels. */
+function FocusStepLabelBadge({
+  label,
+  icon,
+}: {
+  label: string;
+  icon: ReactNode;
+}) {
+  return (
+    <div className="flex justify-center px-1">
+      <div className="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white/92 px-2.5 py-1 shadow-soft backdrop-blur-sm">
+        <div className="grayscale [&_svg]:h-5 [&_svg]:w-5">{icon}</div>
+        <span className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function FocusFooterColumn({
+  lang,
+  focusFooterMoreOpen,
+  setFocusFooterMoreOpen,
+  onExitFocus,
+}: {
+  lang: ReturnType<typeof useCardUiLanguage>;
+  focusFooterMoreOpen: boolean;
+  setFocusFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
+  onExitFocus: () => void;
+}) {
+  return (
+    <div
+      className="flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
+      role="navigation"
+      aria-label={firstThenDemoNavAria(lang)}
+    >
+      {focusFooterMoreOpen ? (
+        <nav
+          id="focus-demo-more-nav"
+          aria-label={firstThenDemoIntroMoreNavAria(lang)}
+          className="flex flex-col items-center gap-2 pb-0.5"
+        >
+          <Link
+            href="/dashboard"
+            className={introFooterActionClass}
+            onClick={() => setFocusFooterMoreOpen(false)}
+          >
+            <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
+            {bottomNavLabel("home", lang)}
+          </Link>
+          <Link
+            href="/player/brushing-teeth"
+            className={introFooterActionClass}
+            onClick={() => setFocusFooterMoreOpen(false)}
+          >
+            <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
+            {playerKindRoutine(lang)}
+          </Link>
+        </nav>
+      ) : null}
+      <button type="button" onClick={onExitFocus} className={introFooterActionClass}>
+        <FocusModeIntroIcon />
+        {focusModeOptExitFocus(lang)}
+      </button>
+      <button
+        type="button"
+        id="focus-demo-more-toggle"
+        aria-expanded={focusFooterMoreOpen}
+        aria-controls={focusFooterMoreOpen ? "focus-demo-more-nav" : undefined}
+        aria-label={
+          focusFooterMoreOpen
+            ? firstThenDemoIntroMoreToggleHide(lang)
+            : firstThenDemoIntroMoreToggleShow(lang)
+        }
+        onClick={() => setFocusFooterMoreOpen((open) => !open)}
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white text-ink shadow-soft transition active:scale-[0.98]"
+      >
+        <FocusFabPlusIcon open={focusFooterMoreOpen} />
+      </button>
+    </div>
+  );
+}
+
 export default function FirstThenDemoPage() {
   const lang = useCardUiLanguage();
   const isMobileLandscape = useMobileLandscape();
   const [showFocusMode, setShowFocusMode] = useState(false);
   const [focusQuickMenuOpen, setFocusQuickMenuOpen] = useState(false);
+  const [focusFooterMoreOpen, setFocusFooterMoreOpen] = useState(false);
   const [introFooterMoreOpen, setIntroFooterMoreOpen] = useState(false);
 
   useEffect(() => {
-    if (!showFocusMode) setFocusQuickMenuOpen(false);
-    else setIntroFooterMoreOpen(false);
+    if (!showFocusMode) {
+      setFocusQuickMenuOpen(false);
+      setFocusFooterMoreOpen(false);
+    } else {
+      setIntroFooterMoreOpen(false);
+    }
   }, [showFocusMode]);
 
   const first = HOTEL_GENERATED_CARD_PROPS[3];
@@ -703,17 +806,56 @@ export default function FirstThenDemoPage() {
   return (
     <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation">
       {isMobileLandscape ? (
-        <FirstThenLandscapePair firstCard={first} secondCard={second} />
+        <div className="h-full w-full px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
+          <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] gap-x-2">
+            <div className="relative col-span-2 min-h-0">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 grid grid-cols-2 gap-x-2 pt-0.5">
+                <FocusStepLabelBadge
+                  label={firstThenSlotLabel("first", lang)}
+                  icon={<IconFirst className="h-5 w-5" />}
+                />
+                <FocusStepLabelBadge
+                  label={firstThenSlotLabel("then", lang)}
+                  icon={<IconThen className="h-5 w-5" />}
+                />
+              </div>
+              <FirstThenLandscapePair
+                firstCard={first}
+                secondCard={second}
+                className="relative h-full min-h-0"
+                style={{
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }}
+              />
+            </div>
+
+            <FocusFooterColumn
+              lang={lang}
+              focusFooterMoreOpen={focusFooterMoreOpen}
+              setFocusFooterMoreOpen={setFocusFooterMoreOpen}
+              onExitFocus={() => {
+                setFocusFooterMoreOpen(false);
+                setShowFocusMode(false);
+              }}
+            />
+          </div>
+        </div>
       ) : (
         <div className="absolute inset-0 flex min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.5rem,env(safe-area-inset-top))] pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           <FirstThenPortraitStack
             firstCard={first}
             secondCard={second}
             className="min-h-0 flex-1"
+            showStepBadges
+            lang={lang}
           />
         </div>
       )}
 
+      {!isMobileLandscape ? (
       <div className="pointer-events-none fixed inset-0 z-30">
         <div className="pointer-events-auto absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] flex flex-col items-center gap-2">
           {focusQuickMenuOpen ? (
@@ -774,6 +916,7 @@ export default function FirstThenDemoPage() {
           </button>
         </div>
       </div>
+      ) : null}
     </div>
   );
 }
