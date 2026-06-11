@@ -941,6 +941,10 @@ export function focusModeSupportSimplified(lang: CardLanguageCode): string {
   return isEs(lang) ? "Apoyo simplificado" : "Simplified support";
 }
 
+export function focusModeOptExpandedCards(_lang: CardLanguageCode): string {
+  return "Expanded Cards";
+}
+
 export function focusModeOptBackSchedule(lang: CardLanguageCode): string {
   return isEs(lang) ? "Volver a la rutina" : "Back to schedule";
 }

@@ -25,6 +25,7 @@ import {
   focusModeNothingLeftBody,
   focusModeNothingLeftTitle,
   focusModeOptBackSchedule,
+  focusModeOptExpandedCards,
   focusModeOptExitFocus,
   focusModeOptFirstThen,
   focusModeOptMarkFinished,
@@ -37,6 +38,7 @@ import {
   focusModeSupportSimplified,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
 
 type Props = {
   routine: Routine;
@@ -111,10 +113,47 @@ function sheetRow(
   );
 }
 
-function FocusCardStage({ children }: { children: ReactNode }) {
+function sheetToggleRow(
+  label: string,
+  active: boolean,
+  onToggle: () => void,
+  key: string,
+) {
+  return (
+    <button
+      key={key}
+      type="button"
+      aria-pressed={active}
+      className="flex w-full items-center justify-between gap-3 rounded-xl border-0 bg-canvas-muted/90 py-3.5 pl-4 pr-4 text-left text-[15px] font-normal text-ink ring-1 ring-ink/[0.07] transition-colors active:bg-canvas"
+      onClick={onToggle}
+    >
+      <span>{label}</span>
+      {active ? (
+        <span className="shrink-0 text-[13px] font-semibold text-sage">On</span>
+      ) : null}
+    </button>
+  );
+}
+
+function FocusCardStage({
+  children,
+  expandedCards,
+}: {
+  children: ReactNode;
+  expandedCards: boolean;
+}) {
   return (
     <div className="pointer-events-auto flex h-full min-h-0 w-full flex-col items-center justify-center px-1.5 py-1 sm:px-2 sm:py-1.5">
-      <div className="relative h-full min-h-0 w-full max-w-[min(100%,28rem)]">{children}</div>
+      <div
+        className={cn(
+          "relative mx-auto h-full min-h-0",
+          expandedCards
+            ? "w-[min(94vw,540px)]"
+            : "w-full max-w-[min(100%,28rem)]",
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -190,6 +229,8 @@ function useTapZone(onTap: () => void) {
 export function FocusMode({ routine, exitHref }: Props) {
   const router = useRouter();
   const lang = useCardUiLanguage();
+  const { enabled: expandedCards, toggle: toggleExpandedCards } =
+    useFocusExpandedCards();
   const {
     nowStep,
     nowIndex,
@@ -299,7 +340,7 @@ export function FocusMode({ routine, exitHref }: Props) {
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="absolute inset-0 flex min-h-0 w-full flex-col"
             >
-              <FocusCardStage>
+              <FocusCardStage expandedCards={expandedCards}>
                 <SwipeableStepCard
                   step={nowStep}
                   status={stepStatus(nowStep)}
@@ -462,6 +503,12 @@ export function FocusMode({ routine, exitHref }: Props) {
         onClose={() => setSheet(null)}
       >
         <div className="flex flex-col gap-2">
+          {sheetToggleRow(
+            focusModeOptExpandedCards(lang),
+            expandedCards,
+            toggleExpandedCards,
+            "opt-expanded-cards",
+          )}
           {sheetRow(focusModeOptBackSchedule(lang), () => {
             setSheet(null);
             exit();

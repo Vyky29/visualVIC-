@@ -62,13 +62,31 @@ export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME = {
   h: GENERATED_PIXTO_ILLUSTRATION_FRAME.h + 15,
 } as const;
 
-/** Focus card keeps the same total height; the extra space is redistributed internally. */
+/**
+ * Focus presentation — fixed 3-zone card (illustration flex:1, text 110px, footer 84px).
+ * Matches first-then Focus landscape spec; slot scaler fits this frame.
+ */
+export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {
+  w: 384,
+  h: 520,
+  illustPadTop: 56,
+  illustPadX: 28,
+  illustPadBottom: 16,
+  actionH: 110,
+  actionPadX: 24,
+  footerH: 84,
+  footerPadX: 24,
+  illustBorder: 2,
+  illustBorderColor: "#2cc55e",
+  packMarkSize: 28,
+  packMarkTop: 16,
+  packMarkRight: 28,
+} as const;
+
+/** Focus card design frame used by GeneratedPixtoFocusSlotScale. */
 export const GENERATED_PIXTO_FOCUS_CARD_SIZE = {
-  w: GENERATED_PIXTO_CARD_SIZE.w,
-  h:
-    GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H +
-    GENERATED_PIXTO_FOCUS_TITLE_ZONE_H +
-    GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
+  w: GENERATED_PIXTO_FOCUS_FIXED_ZONE.w,
+  h: GENERATED_PIXTO_FOCUS_FIXED_ZONE.h,
 } as const;
 
 /** Vertical space above yellow inside the top block: 794 − 648. */
@@ -105,6 +123,29 @@ export function IllustrationSlotDiagnosticBorder() {
       className="pointer-events-none absolute inset-0 z-20 box-border border-2 border-[#00ff00]"
       aria-hidden
       data-illustration-slot-diagnostic
+    />
+  );
+}
+
+/**
+ * Diagnostic only: pink top edge of the proposed taller illustration slot
+ * (Focus + Schedule) — the band between this line and the green box is extra
+ * illustration height we could reclaim from the white margin above.
+ */
+export const SHOW_ILLUSTRATION_EXPANDED_TOP_DIAGNOSTIC = false;
+
+export function IllustrationExpandedTopDiagnosticLine({
+  illustrationWidthPct,
+}: {
+  illustrationWidthPct: string;
+}) {
+  if (!SHOW_ILLUSTRATION_EXPANDED_TOP_DIAGNOSTIC) return null;
+  return (
+    <div
+      className="pointer-events-none absolute left-1/2 top-0 z-30 -translate-x-1/2 border-t-2 border-[#E05C9A]"
+      style={{ width: illustrationWidthPct }}
+      aria-hidden
+      data-illustration-expanded-top-diagnostic
     />
   );
 }
@@ -840,6 +881,178 @@ function TitleBand({
   );
 }
 
+function GeneratedPixtoFocusFixedZoneCard({
+  illustrationUrl,
+  title,
+  category,
+  categoryColour,
+  iconUrl,
+  focusIllustrationScale,
+  focusIllustrationUrl,
+  className,
+  suppressNeutralRing,
+  markSrc,
+  onMarkError,
+  i18nTitle,
+  i18nCategory,
+  ribbonTypographyStyle,
+  ribbonDarkText,
+}: {
+  illustrationUrl: string;
+  title: string;
+  category: string;
+  categoryColour: string;
+  iconUrl?: string;
+  focusIllustrationScale?: number;
+  focusIllustrationUrl?: string;
+  className?: string;
+  suppressNeutralRing?: boolean;
+  markSrc: string;
+  onMarkError: () => void;
+  i18nTitle: string;
+  i18nCategory: string;
+  ribbonTypographyStyle: CSSProperties;
+  ribbonDarkText: boolean;
+}) {
+  const z = GENERATED_PIXTO_FOCUS_FIXED_ZONE;
+  const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
+  const resolvedIllustrationSrc =
+    focusIllustrationUrl ?? illustrationUrl;
+
+  return (
+    <article
+      data-generated-pixto-card
+      data-card-type="focus-fixed-zone"
+      className={cn(
+        "relative flex min-h-0 flex-col overflow-hidden rounded-[1.5rem] bg-white touch-manipulation",
+        suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
+        className,
+      )}
+      style={{
+        width: z.w,
+        height: z.h,
+      }}
+      aria-label={title}
+    >
+      <div
+        className="relative flex min-h-0 flex-1 items-center justify-center"
+        style={{
+          paddingTop: z.illustPadTop,
+          paddingRight: z.illustPadX,
+          paddingBottom: z.illustPadBottom,
+          paddingLeft: z.illustPadX,
+        }}
+      >
+        {markSrc ? (
+          <div
+            className="absolute z-10"
+            style={{
+              top: z.packMarkTop,
+              right: z.packMarkRight,
+              width: z.packMarkSize,
+              height: z.packMarkSize,
+            }}
+          >
+            <Image
+              src={markSrc}
+              alt=""
+              fill
+              className="object-contain"
+              sizes={`${z.packMarkSize}px`}
+              onError={onMarkError}
+              unoptimized={
+                markSrc.startsWith("/") ||
+                markSrc.includes("/cards/") ||
+                /\.jpe?g$/i.test(markSrc) ||
+                /\.png$/i.test(markSrc)
+              }
+            />
+          </div>
+        ) : null}
+
+        <div
+          className="relative flex h-full w-full items-center justify-center overflow-hidden"
+          style={{
+            border: `${z.illustBorder}px solid ${z.illustBorderColor}`,
+          }}
+        >
+          <Image
+            src={resolvedIllustrationSrc}
+            alt=""
+            fill
+            sizes={`${z.w}px`}
+            className="!h-full !w-full object-contain object-center select-none"
+            style={
+              resolvedFocusIllustrationScale !== 1
+                ? {
+                    transform: `scale(${resolvedFocusIllustrationScale})`,
+                    transformOrigin: "center center",
+                  }
+                : undefined
+            }
+            unoptimized={
+              illustrationUrl.startsWith("/") ||
+              illustrationUrl.includes("/cards/")
+            }
+            draggable={false}
+          />
+          <IllustrationSlotDiagnosticBorder />
+        </div>
+      </div>
+
+      <div
+        className="flex shrink-0 items-center justify-center"
+        style={{
+          height: z.actionH,
+          paddingLeft: z.actionPadX,
+          paddingRight: z.actionPadX,
+        }}
+      >
+        <p
+          className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
+          style={{
+            fontSize: 36,
+            fontWeight: 800,
+            lineHeight: 1.05,
+          }}
+        >
+          {i18nTitle}
+        </p>
+      </div>
+
+      <footer
+        className="flex shrink-0 items-center justify-center overflow-hidden"
+        style={{
+          height: z.footerH,
+          backgroundColor: categoryColour,
+          paddingLeft: z.footerPadX,
+          paddingRight: z.footerPadX,
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
+        }}
+      >
+        <span
+          className={cn(
+            "line-clamp-2 max-w-full text-center font-semibold lowercase [overflow-wrap:break-word]",
+            ribbonDarkText
+              ? "text-ink/90 drop-shadow-none"
+              : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",
+          )}
+          style={
+            ribbonDarkText
+              ? ribbonTypographyStyle
+              : {
+                  ...ribbonTypographyStyle,
+                  textShadow: "0 1px 2px rgba(0,0,0,0.2)",
+                }
+          }
+        >
+          {i18nCategory}
+        </span>
+      </footer>
+    </article>
+  );
+}
+
 export function GeneratedPixtoCard({
   illustrationUrl,
   title,
@@ -891,12 +1104,6 @@ export function GeneratedPixtoCard({
       : GENERATED_PIXTO_COMPANY_MARK;
   const markSize = `calc(100% * ${markRef.w} / ${GENERATED_PIXTO_CARD_SIZE.w})`;
   const ribbonDarkText = categoryBandPrefersDarkInk(categoryColour);
-  const colouredShellStyle = suppressNeutralRing
-    ? {
-        border: `3px solid ${categoryColour}`,
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
-      }
-    : undefined;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
   const resolvedIllustrationSrc =
     focusPresentation && focusIllustrationUrl
@@ -983,6 +1190,28 @@ export function GeneratedPixtoCard({
   const gridTemplateRows = `${topRowFr}fr ${titleRowFr}fr ${categoryRowFr}fr`;
   const cardAspect = focusPresentation ? FOCUS_CARD_ASPECT : CARD_ASPECT;
 
+  if (focusPresentation) {
+    return (
+      <GeneratedPixtoFocusFixedZoneCard
+        illustrationUrl={illustrationUrl}
+        title={title}
+        category={category}
+        categoryColour={categoryColour}
+        iconUrl={iconUrl}
+        focusIllustrationScale={focusIllustrationScale}
+        focusIllustrationUrl={focusIllustrationUrl}
+        className={className}
+        suppressNeutralRing={suppressNeutralRing}
+        markSrc={markSrc}
+        onMarkError={onMarkError}
+        i18nTitle={i18nTitle}
+        i18nCategory={i18nCategory}
+        ribbonTypographyStyle={ribbonTypographyStyle}
+        ribbonDarkText={ribbonDarkText}
+      />
+    );
+  }
+
   return (
     <article
       data-generated-pixto-card
@@ -996,7 +1225,6 @@ export function GeneratedPixtoCard({
       style={{
         aspectRatio: cardAspect,
         gridTemplateRows,
-        ...colouredShellStyle,
       }}
     >
       {SHOW_GENERATED_PIXTO_DEBUG_GUIDES ? (
@@ -1037,6 +1265,11 @@ export function GeneratedPixtoCard({
 
       {/* Top block — white field + 531×648 illustration frame; Focus gets extra depth here. */}
       <div className="relative min-h-0 bg-white">
+        {(focusPresentation || schedulePresentation) ? (
+          <IllustrationExpandedTopDiagnosticLine
+            illustrationWidthPct={illustrationWidthPct}
+          />
+        ) : null}
         <div className="flex h-full min-h-0 w-full flex-col">
           <div
             className="min-h-0 shrink-0"
