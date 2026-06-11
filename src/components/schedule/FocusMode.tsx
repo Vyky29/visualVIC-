@@ -143,13 +143,15 @@ function FocusCardStage({
   expandedCards: boolean;
 }) {
   return (
-    <div
-      className={cn(
-        "pointer-events-auto flex h-full min-h-0 w-full flex-col",
-        expandedCards ? "px-1 py-0" : "px-1.5 py-1 sm:px-2 sm:py-1.5",
-      )}
-    >
-      <div className="relative mx-auto h-full min-h-0 w-full max-w-[min(100%,28rem)]">
+    <div className="pointer-events-auto flex h-full min-h-0 w-full flex-col items-center justify-center px-1.5 py-1 sm:px-2 sm:py-1.5">
+      <div
+        className={cn(
+          "relative mx-auto h-full min-h-0",
+          expandedCards
+            ? "w-[min(94vw,540px)]"
+            : "w-full max-w-[min(100%,28rem)]",
+        )}
+      >
         {children}
       </div>
     </div>

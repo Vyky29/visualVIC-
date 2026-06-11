@@ -924,10 +924,14 @@ function GeneratedPixtoFocusFixedZoneCard({
       data-generated-pixto-card
       data-card-type="focus-fixed-zone"
       className={cn(
-        "relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-[1.5rem] bg-white touch-manipulation",
+        "relative flex min-h-0 flex-col overflow-hidden rounded-[1.5rem] bg-white touch-manipulation",
         suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
         className,
       )}
+      style={{
+        width: z.w,
+        height: z.h,
+      }}
       aria-label={title}
     >
       <div

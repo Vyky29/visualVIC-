@@ -50,14 +50,11 @@ import { cn } from "@/lib/utils/cn";
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 
-/** Focus landscape — NOW uses full 3-zone card; THEN matches portrait mini WOW size. */
+/** Focus landscape — fixed 3-zone card (illustration flex:1 | text 110 | footer 84). */
 const FOCUS_LANDSCAPE = {
-  nowCardW: 384,
-  nowCardH: 520,
-  /** WOW aspect (744×1054) at ~55% of NOW width — matches portrait “finish” preview. */
-  thenCardW: 220,
-  thenCardH: Math.round((GENERATED_PIXTO_CARD_SIZE.h / GENERATED_PIXTO_CARD_SIZE.w) * 220),
-  cardRadius: 24,
+  cardW: 384,
+  cardH: 520,
+  cardRadius: 16,
   cardGap: 24,
   illustPadTop: 56,
   illustPadX: 28,
@@ -83,12 +80,11 @@ const FOCUS_LANDSCAPE = {
 } as const;
 
 const FOCUS_LANDSCAPE_SCENE_W =
-  FOCUS_LANDSCAPE.nowCardW +
+  FOCUS_LANDSCAPE.cardW * 2 +
   FOCUS_LANDSCAPE.cardGap +
-  FOCUS_LANDSCAPE.thenCardW +
   FOCUS_LANDSCAPE.cardsToSidebarGap +
   FOCUS_LANDSCAPE.sidebarW;
-const FOCUS_LANDSCAPE_SCENE_H = FOCUS_LANDSCAPE.nowCardH;
+const FOCUS_LANDSCAPE_SCENE_H = FOCUS_LANDSCAPE.cardH;
 
 function useMobileLandscape() {
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
@@ -265,13 +261,7 @@ function splitWowTitle(raw: string): [string] | [string, string] {
   return [words.slice(0, bestIndex).join(" "), words.slice(bestIndex).join(" ")];
 }
 
-function MiniDigitalWowCard({
-  card,
-  borderless = false,
-}: {
-  card: GeneratedPixtoCardProps;
-  borderless?: boolean;
-}) {
+function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
   const cardUiLang = useCardUiLanguage();
   const { title: displayTitle, category: displayCategory } = useMemo(
     () =>
@@ -291,10 +281,7 @@ function MiniDigitalWowCard({
 
   return (
     <article
-      className={cn(
-        "relative grid h-full w-full overflow-hidden rounded-[1.5rem] bg-white",
-        !borderless && "ring-1 ring-inset ring-[rgba(20,28,24,0.32)]",
-      )}
+      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
@@ -381,10 +368,12 @@ function MiniDigitalWowCard({
   );
 }
 
-function FirstThenFocusNowCard({
+function FirstThenFocusSpecCard({
+  slot,
   card,
   lang,
 }: {
+  slot: "first" | "then";
   card: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
 }) {
@@ -399,14 +388,14 @@ function FirstThenFocusNowCard({
       ),
     [card.illustrationUrl, card.title, card.category, cardUiLang],
   );
-  const slotLabel = firstThenSlotLabel("first", lang);
+  const slotLabel = firstThenSlotLabel(slot, lang);
 
   return (
     <article
       className="relative shrink-0 overflow-hidden bg-white"
       style={{
-        width: FOCUS_LANDSCAPE.nowCardW,
-        height: FOCUS_LANDSCAPE.nowCardH,
+        width: FOCUS_LANDSCAPE.cardW,
+        height: FOCUS_LANDSCAPE.cardH,
         borderRadius: FOCUS_LANDSCAPE.cardRadius,
       }}
       aria-label={`${slotLabel} — ${displayTitle}`}
@@ -454,7 +443,7 @@ function FirstThenFocusNowCard({
               alt=""
               fill
               className="!h-full !w-full object-contain object-center"
-              sizes={`${FOCUS_LANDSCAPE.nowCardW}px`}
+              sizes={`${FOCUS_LANDSCAPE.cardW}px`}
               unoptimized
             />
             <IllustrationSlotDiagnosticBorder />
@@ -502,51 +491,6 @@ function FirstThenFocusNowCard({
             {displayCategory}
           </span>
         </footer>
-      </div>
-    </article>
-  );
-}
-
-function FirstThenFocusThenCard({
-  card,
-  lang,
-}: {
-  card: GeneratedPixtoCardProps;
-  lang: ReturnType<typeof useCardUiLanguage>;
-}) {
-  const cardUiLang = useCardUiLanguage();
-  const { title: displayTitle } = useMemo(
-    () =>
-      resolveDigitalPixtoStrings(
-        card.illustrationUrl,
-        card.title,
-        card.category,
-        cardUiLang,
-      ),
-    [card.illustrationUrl, card.title, card.category, cardUiLang],
-  );
-  const slotLabel = firstThenSlotLabel("then", lang);
-  const scale = FOCUS_LANDSCAPE.thenCardW / GENERATED_PIXTO_CARD_SIZE.w;
-
-  return (
-    <article
-      className="relative shrink-0 overflow-hidden bg-white"
-      style={{
-        width: FOCUS_LANDSCAPE.thenCardW,
-        height: FOCUS_LANDSCAPE.thenCardH,
-        borderRadius: FOCUS_LANDSCAPE.cardRadius,
-      }}
-      aria-label={`${slotLabel} — ${displayTitle}`}
-    >
-      <div
-        className="absolute left-0 top-0 origin-top-left"
-        style={{
-          width: GENERATED_PIXTO_CARD_SIZE.w,
-          height: GENERATED_PIXTO_CARD_SIZE.h,
-          transform: `scale(${scale})`,
-        }}
-      >
-        <MiniDigitalWowCard card={card} borderless />
       </div>
     </article>
   );
@@ -687,8 +631,8 @@ function FirstThenFocusLandscapeLayout({
             className="flex items-center"
             style={{ gap: FOCUS_LANDSCAPE.cardGap }}
           >
-            <FirstThenFocusNowCard card={firstCard} lang={lang} />
-            <FirstThenFocusThenCard card={secondCard} lang={lang} />
+            <FirstThenFocusSpecCard slot="first" card={firstCard} lang={lang} />
+            <FirstThenFocusSpecCard slot="then" card={secondCard} lang={lang} />
           </div>
           <FirstThenFocusSidebar lang={lang} onExitFocus={onExitFocus} />
         </div>
