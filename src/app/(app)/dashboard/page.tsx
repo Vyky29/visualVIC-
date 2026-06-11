@@ -30,6 +30,8 @@ import {
   dashboardFeaturedStepsHint,
   dashboardFirstThenCardEyebrow,
   dashboardFirstThenCardTitle,
+  dashboardFirstThenMunchyHomeHint,
+  dashboardFirstThenMunchyHomeTitle,
   dashboardNoPreview,
   dashboardPackCategoryTitle,
   dashboardQuickBuilderEyebrow,
@@ -43,6 +45,7 @@ import {
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
+import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
@@ -679,6 +682,33 @@ export default function DashboardPage() {
                 {extraPackRoutines.map((routine) => (
                   <DashboardRoutineTile key={routine.id} routine={routine} />
                 ))}
+                <Link href="/first-then-demo?pack=ikram-home" className="col-span-2 block">
+                  <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
+                    <div className="flex gap-3 p-3">
+                      <div className="relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35">
+                        <Image
+                          src={firstThenDemoPackPreviewUrl("ikram-home")}
+                          alt=""
+                          fill
+                          className="object-contain object-center"
+                          sizes="68px"
+                          unoptimized
+                        />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+                          {dashboardFirstThenCardEyebrow(cardUiLang)}
+                        </p>
+                        <p className="text-[15px] font-semibold leading-snug text-ink">
+                          {dashboardFirstThenMunchyHomeTitle(cardUiLang)}
+                        </p>
+                        <p className="text-[12px] leading-snug text-ink-subtle">
+                          {dashboardFirstThenMunchyHomeHint(cardUiLang)}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
               </div>
             </div>
           ) : null}

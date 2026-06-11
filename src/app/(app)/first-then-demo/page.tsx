@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Suspense,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -13,6 +14,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
+import { useSearchParams } from "next/navigation";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
   GENERATED_PIXTO_CARD_SIZE,
@@ -24,7 +26,10 @@ import {
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
-import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
+import {
+  parseFirstThenDemoPackId,
+  resolveFirstThenDemoPack,
+} from "@/lib/experimental/first-then-demo-packs";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import {
   bottomNavLabel,
@@ -806,7 +811,21 @@ function FocusFooterColumn({
 }
 
 export default function FirstThenDemoPage() {
+  return (
+    <Suspense fallback={null}>
+      <FirstThenDemoPageClient />
+    </Suspense>
+  );
+}
+
+function FirstThenDemoPageClient() {
   const lang = useCardUiLanguage();
+  const searchParams = useSearchParams();
+  const packId = parseFirstThenDemoPackId(searchParams.get("pack"));
+  const { first, second } = useMemo(
+    () => resolveFirstThenDemoPack(packId, lang),
+    [packId, lang],
+  );
   const isMobileLandscape = useMobileLandscape();
   const [showFocusMode, setShowFocusMode] = useState(false);
   const [focusFooterMoreOpen, setFocusFooterMoreOpen] = useState(false);
@@ -819,6 +838,12 @@ export default function FirstThenDemoPage() {
       setIntroFooterMoreOpen(false);
     }
   }, [showFocusMode]);
+
+  useEffect(() => {
+    setShowFocusMode(false);
+    setFocusFooterMoreOpen(false);
+    setIntroFooterMoreOpen(false);
+  }, [packId]);
 
   useEffect(() => {
     if (!showFocusMode) return;
@@ -836,9 +861,6 @@ export default function FirstThenDemoPage() {
       orientation.unlock();
     };
   }, [showFocusMode]);
-
-  const first = HOTEL_GENERATED_CARD_PROPS[3];
-  const second = HOTEL_GENERATED_CARD_PROPS[4];
 
   if (!showFocusMode) {
     return (
