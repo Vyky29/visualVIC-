@@ -501,15 +501,18 @@ export function SwipeableStepCard({
             width: "100%",
             maxWidth: `${GENERATED_WOW_NOW_CARD_W}px`,
           } satisfies CSSProperties)
-        : variant === "next"
-          ? ({
-              width: "100%",
-              maxWidth: `${GENERATED_WOW_NEXT_CARD_W}px`,
-            } satisfies CSSProperties)
-          : undefined
+        : undefined
+      : undefined;
+  const scheduleNextWidthStyle =
+    variant === "next"
+      ? ({
+          width: "100%",
+          maxWidth: `${GENERATED_WOW_NEXT_CARD_W}px`,
+        } satisfies CSSProperties)
       : undefined;
   const cardStyle = {
     ...(scheduleGeneratedWidthStyle ?? {}),
+    ...(scheduleNextWidthStyle ?? {}),
     ...(nextOutlineStyle ?? focusGeneratedBorderStyle ?? {}),
   } satisfies CSSProperties;
   const focusCardAspectRatio =
@@ -582,7 +585,7 @@ export function SwipeableStepCard({
           ),
         variant === "next" &&
           cn(
-            hasGeneratedPixto ? "mx-auto w-full" : "mx-auto w-[max(0px,min(100%,13rem)-4px)]",
+            hasGeneratedPixto ? "mx-auto w-full" : "mx-auto w-full max-w-full",
             hasGeneratedPixto ? "" : rings.scheduleNext,
           ),
         variant === "focus" &&

@@ -433,12 +433,7 @@ function FirstThenFocusSpecCard({
             </div>
           ) : null}
 
-          <div
-            className="relative flex h-full w-full items-center justify-center overflow-hidden"
-            style={{
-              border: `${FOCUS_LANDSCAPE.illustBorder}px solid ${FOCUS_LANDSCAPE.illustBorderColor}`,
-            }}
-          >
+          <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
             <Image
               src={card.illustrationUrl}
               alt=""

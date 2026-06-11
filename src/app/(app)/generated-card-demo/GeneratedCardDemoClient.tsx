@@ -501,7 +501,7 @@ export function GeneratedCardDemoClient() {
 
           <DocumentedCardPanel
             title="First & Then · vertical"
-            hint="Portrait FIRST / THEN stack uses the same width as Schedule · Next (268px cap)."
+            hint="Portrait FIRST / THEN stack uses the same width as Schedule · Next (218px cap)."
             titleLines={["receive your", "room key"]}
             geometry={ORIGINAL_2_GEOMETRY}
             widthPx={NEXT_CARD_PREVIEW_W}

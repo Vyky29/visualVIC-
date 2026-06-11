@@ -129,6 +129,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   // Day centre
   bus: { en: "take the bus", es: "subir al autobús" },
   walk: { en: "walk", es: "caminar" },
+  "sit-down": { en: "sit down", es: "sentarse" },
   music: { en: "music", es: "música" },
   cafe: { en: "cafe", es: "cafetería" },
   park: { en: "park", es: "parque" },

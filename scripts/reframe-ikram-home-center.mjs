@@ -7,6 +7,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { fitIllustrationToCard, FOCUS_H } from "./pixtolearn-card-fit.mjs";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+
 const assets =
   process.env.IKRAM_ASSETS_DIR ??
   path.join(
@@ -22,6 +25,9 @@ const scenesDir = path.join(ikramDir, "scenes");
 
 function resolveSrc() {
   const candidates = [
+    path.join(assets, "ikram-home-black-cat-v2-raw.png"),
+    path.join(assets, "ikram-home-black-cat-raw.png"),
+    path.join(assets, "ikram-home-cat-raw.png"),
     path.join(assets, "ikram-pecs-home-raw.png"),
     path.join(assets, "ikram-scene-home-raw.png"),
     path.join(scenesDir, "_raw-home.png"),
@@ -43,13 +49,15 @@ async function main() {
     fs.copyFileSync(src, rawLocal);
   }
 
-  await fitIllustrationToCard(src, path.join(scenesDir, "home.png"));
+  const fitOpts = { fit: "contain", position: "centre" };
+  await fitIllustrationToCard(src, path.join(scenesDir, "home.png"), fitOpts);
   await fitIllustrationToCard(src, path.join(scenesDir, "home-focus.png"), {
+    ...fitOpts,
     height: FOCUS_H,
   });
-  await fitIllustrationToCard(src, path.join(ikramDir, "home.png"));
+  await fitIllustrationToCard(src, path.join(ikramDir, "home.png"), fitOpts);
 
-  console.log("Done — home reframed (cover fill), Ikram + Muchie.");
+  console.log("Done — home reframed (contain), Ikram + black cat.");
 }
 
 main().catch((err) => {

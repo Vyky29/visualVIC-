@@ -15,17 +15,11 @@ export const GENERATED_PIXTO_FOCUS_STAGE_MAX_W_PX = 448 as const;
 /** Optional expanded Focus stage cap. */
 export const GENERATED_PIXTO_FOCUS_STAGE_EXPANDED_MAX_W_PX = 540 as const;
 
-/**
- * Schedule visible caps = fraction of Focus design width (uniform scale of 744×1054).
- * NOW ≈ 75%, NEXT ≈ 70%.
- */
-export const GENERATED_PIXTO_SCHEDULE_NOW_W = Math.round(
-  GENERATED_PIXTO_FOCUS_DESIGN_W * 0.75,
-) as 288;
+/** Schedule NOW — agreed cap (744×1054 uniform scale). */
+export const GENERATED_PIXTO_SCHEDULE_NOW_W = 288 as const;
 
-export const GENERATED_PIXTO_SCHEDULE_NEXT_W = Math.round(
-  GENERATED_PIXTO_FOCUS_DESIGN_W * 0.698,
-) as 268;
+/** Schedule NEXT — agreed cap (744×1054 uniform scale). */
+export const GENERATED_PIXTO_SCHEDULE_NEXT_W = 218 as const;
 
 /** Focus fixed zones — compact text/footer so illustration dominates (~69% of card height). */
 export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {

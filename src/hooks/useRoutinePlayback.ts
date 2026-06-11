@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { coreImageUrl } from "@/lib/cards/core-cards";
-import type { Routine, RoutineStep } from "@/lib/types/routine";
+import type {
+  GeneratedPixtoRoutineStepData,
+  Routine,
+  RoutineStep,
+} from "@/lib/types/routine";
 
 export type PlaybackStatus = "idle" | "now" | "next" | "finished";
 
@@ -46,11 +50,35 @@ function saveSnapshot(key: string, snapshot: PlaybackSnapshot) {
   sessionStorage.setItem(key, JSON.stringify(snapshot));
 }
 
+/** Finish category ribbon — always grey, never the routine pack colour. */
+const PLAYBACK_FINISH_CATEGORY_COLOUR = "#9aa3a8" as const;
+
+const PLAYBACK_FINISH_GENERATED_PIXTO: GeneratedPixtoRoutineStepData = {
+  illustrationUrl: coreImageUrl("finish"),
+  title: "finish",
+  category: "finish",
+  categoryColour: PLAYBACK_FINISH_CATEGORY_COLOUR,
+};
+
 const PLAYBACK_FINISH_STEP: RoutineStep = {
   id: "__playback-finish__",
   title: "Finish",
   imageUrl: coreImageUrl("finish"),
 };
+
+/**
+ * Last routine step. Digital routines use the same WOW shell as NOW/NEXT (288/218)
+ * but always `core/finish.png` + grey finish ribbon — not the routine category.
+ */
+function buildPlaybackFinishStep(routine: Routine): RoutineStep {
+  const usesDigitalShell = routine.steps.some((s) => s.generatedPixto);
+  if (!usesDigitalShell) return { ...PLAYBACK_FINISH_STEP };
+
+  return {
+    ...PLAYBACK_FINISH_STEP,
+    generatedPixto: { ...PLAYBACK_FINISH_GENERATED_PIXTO },
+  };
+}
 
 function isFinishLikeStep(step: RoutineStep): boolean {
   const id = step.id.trim().toLowerCase();
@@ -75,7 +103,7 @@ export function useRoutinePlayback(
   const steps = useMemo(() => {
     if (!options?.appendFinishStep) return routine.steps;
     if (routine.steps.some(isFinishLikeStep)) return routine.steps;
-    return [...routine.steps, { ...PLAYBACK_FINISH_STEP }];
+    return [...routine.steps, buildPlaybackFinishStep(routine)];
   }, [routine.steps, options?.appendFinishStep]);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [skippedIds, setSkippedIds] = useState<Set<string>>(new Set());

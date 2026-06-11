@@ -73,6 +73,9 @@ export const DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] =
 /** Full Ikram library — PECS grid first, then schedule extras + communication. */
 export const DAY_CENTRE_IKRAM_SEQUENCE: readonly DayCentreIkramStep[] = [
   ...DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE,
+  /** 2D cartoon poses (same style as standing/walk batch — separate from 3D `walking`). */
+  { id: "dci-walk", slug: "walk", title: "Walk" },
+  { id: "dci-sit-down", slug: "sit-down", title: "Sit down" },
   { id: "dci-music", slug: "music", title: "Music" },
   { id: "dci-westfield", slug: "westfield", title: "Westfield" },
   {
