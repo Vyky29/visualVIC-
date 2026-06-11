@@ -26,6 +26,7 @@ import {
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
+import { GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET } from "@/lib/constants/generated-pixto-card-sizes";
 import {
   parseFirstThenDemoPackId,
   resolveFirstThenDemoPack,
@@ -402,7 +403,7 @@ function FirstThenFocusSpecCard({
       <div className="flex h-full min-h-0 flex-col">
         {/* Section 1 — illustration area (all remaining space) */}
         <div
-          className="relative flex min-h-0 flex-1 items-center justify-center"
+          className="relative flex min-h-0 flex-1 items-end justify-center"
           style={{
             paddingTop: FOCUS_LANDSCAPE.illustPadTop,
             paddingRight: FOCUS_LANDSCAPE.illustPadX,
@@ -432,14 +433,22 @@ function FirstThenFocusSpecCard({
           ) : null}
 
           <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
-            <Image
-              src={card.illustrationUrl}
-              alt=""
-              fill
-              className="!h-full !w-full object-contain object-bottom"
-              sizes={`${FOCUS_LANDSCAPE.cardW}px`}
-              unoptimized
-            />
+            <div
+              className="relative mx-auto shrink-0"
+              style={{
+                width: `max(0px, calc(100% - ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.leftPx + GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.rightPx}px))`,
+                height: `max(0px, calc(100% - ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.topPx + GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.bottomPx}px))`,
+              }}
+            >
+              <Image
+                src={card.illustrationUrl}
+                alt=""
+                fill
+                className="!h-full !w-full object-contain object-bottom"
+                sizes={`${FOCUS_LANDSCAPE.cardW}px`}
+                unoptimized
+              />
+            </div>
           </div>
         </div>
 

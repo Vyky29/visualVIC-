@@ -10,7 +10,7 @@ import {
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
-  GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
 } from "@/lib/constants/generated-pixto-card-sizes";
 
 export {
@@ -142,6 +142,53 @@ export function IllustrationExpandedTopDiagnosticLine({
   );
 }
 
+/** Focus only — inset illustration box; centred, bottom on title/action band. */
+function FocusAnchoredIllustrationImage({
+  src,
+  sizes,
+  objectClass,
+  scale = 1,
+}: {
+  src: string;
+  sizes: string;
+  objectClass: string;
+  scale?: number;
+}) {
+  const { topPx, leftPx, rightPx, bottomPx } =
+    GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
+  const widthTrim = leftPx + rightPx;
+  const heightTrim = topPx + bottomPx;
+  const unoptimized =
+    src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
+  return (
+    <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
+      <div
+        className="relative mx-auto shrink-0"
+        style={{
+          width: `max(0px, calc(100% - ${widthTrim}px))`,
+          height: `max(0px, calc(100% - ${heightTrim}px))`,
+          ...(scale !== 1
+            ? {
+                transform: `scale(${scale})`,
+                transformOrigin: "center bottom",
+              }
+            : {}),
+        }}
+      >
+        <Image
+          src={src}
+          alt=""
+          fill
+          sizes={sizes}
+          className={cn(objectClass, "select-none")}
+          unoptimized={unoptimized}
+          draggable={false}
+        />
+      </div>
+    </div>
+  );
+}
+
 function parseHexRgb(hex: string): { r: number; g: number; b: number } | null {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return null;
@@ -186,17 +233,6 @@ const FR_TOP_SPACER = GENERATED_PIXTO_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
 const WOW_FR_TOP_SPACER = GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION;
 const WOW_FR_ILLUSTRATION = GENERATED_PIXTO_ILLUSTRATION_FRAME.h;
-const WOW_SCHEDULE_FR_TOP_SPACER =
-  WOW_FR_TOP_SPACER + GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.topPx;
-const WOW_SCHEDULE_FR_ILLUSTRATION =
-  WOW_FR_ILLUSTRATION - GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.topPx;
-const SCHEDULE_ILLUSTRATION_FRAME_W =
-  GENERATED_PIXTO_ILLUSTRATION_FRAME.w -
-  GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM.widthPx;
-const SCHEDULE_ILLUSTRATION_FRAME_ASPECT =
-  `${SCHEDULE_ILLUSTRATION_FRAME_W} / ${WOW_SCHEDULE_FR_ILLUSTRATION}` as const;
-const SCHEDULE_ILLUSTRATION_WIDTH_FRAC =
-  SCHEDULE_ILLUSTRATION_FRAME_W / GENERATED_PIXTO_CARD_SIZE.w;
 const FOCUS_ROW_FR_TOP = GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H;
 const FOCUS_FR_TOP_SPACER =
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h;
@@ -938,7 +974,7 @@ function GeneratedPixtoFocusFixedZoneCard({
       aria-label={title}
     >
       <div
-        className="relative flex min-h-0 flex-1 items-center justify-center"
+        className="relative flex min-h-0 flex-1 items-end justify-center"
         style={{
           paddingTop: z.illustPadTop,
           paddingRight: z.illustPadX,
@@ -973,28 +1009,12 @@ function GeneratedPixtoFocusFixedZoneCard({
           </div>
         ) : null}
 
-        <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
-          <Image
-            src={resolvedIllustrationSrc}
-            alt=""
-            fill
-            sizes={`${z.w}px`}
-            className="!h-full !w-full object-contain object-bottom select-none"
-            style={
-              resolvedFocusIllustrationScale !== 1
-                ? {
-                    transform: `scale(${resolvedFocusIllustrationScale})`,
-                    transformOrigin: "center bottom",
-                  }
-                : undefined
-            }
-            unoptimized={
-              illustrationUrl.startsWith("/") ||
-              illustrationUrl.includes("/cards/")
-            }
-            draggable={false}
-          />
-        </div>
+        <FocusAnchoredIllustrationImage
+          src={resolvedIllustrationSrc}
+          sizes={`${z.w}px`}
+          objectClass="!h-full !w-full object-contain object-bottom"
+          scale={resolvedFocusIllustrationScale}
+        />
       </div>
 
       <div
@@ -1095,9 +1115,7 @@ export function GeneratedPixtoCard({
   // Card geometry should come from the real design block sizes. Each screen
   // (Schedule / Focus / Home previews) should scale that geometry, not resize
   // the illustration block ad hoc per context.
-  const illustrationWidthPct = schedulePresentation
-    ? `${(SCHEDULE_ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`
-    : `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
+  const illustrationWidthPct = `${(ILLUSTRATION_WIDTH_FRAC * 100).toFixed(3)}%`;
   const markRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_COMPANY_MARK
     : schedulePresentation
@@ -1158,17 +1176,10 @@ export function GeneratedPixtoCard({
   ]);
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
-    : schedulePresentation
-      ? SCHEDULE_ILLUSTRATION_FRAME_ASPECT
-      : ILLUSTRATION_FRAME_ASPECT;
+    : ILLUSTRATION_FRAME_ASPECT;
   const illustrationFrameRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME
-    : schedulePresentation
-      ? {
-          w: SCHEDULE_ILLUSTRATION_FRAME_W,
-          h: WOW_SCHEDULE_FR_ILLUSTRATION,
-        }
-      : GENERATED_PIXTO_ILLUSTRATION_FRAME;
+    : GENERATED_PIXTO_ILLUSTRATION_FRAME;
   const showFrameGuide =
     showIllustrationFrameGuide ||
     (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
@@ -1176,9 +1187,7 @@ export function GeneratedPixtoCard({
    * Illustration slot = 531×648 (schedule) or 531×663 (focus) aspect box.
    * Pre-framed assets fill the slot; cover avoids letterboxing on full-bleed exports.
    */
-  const illustrationObjectClass = schedulePresentation
-    ? "object-cover object-bottom"
-    : "object-cover object-center";
+  const illustrationObjectClass = "object-cover object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
@@ -1288,20 +1297,20 @@ export function GeneratedPixtoCard({
                 focusPresentation
                   ? FOCUS_FR_TOP_SPACER
                   : schedulePresentation
-                    ? WOW_SCHEDULE_FR_TOP_SPACER
+                    ? WOW_FR_TOP_SPACER
                   : FR_TOP_SPACER
               } 1 0`,
             }}
             aria-hidden
           />
           <div
-            className="relative flex h-full w-full min-h-0 shrink-0 items-end justify-center"
+            className="relative flex h-full w-full min-h-0 shrink-0 items-start justify-center"
             style={{
               flex: `${
                 focusPresentation
                   ? FOCUS_FR_ILLUSTRATION
                   : schedulePresentation
-                    ? WOW_SCHEDULE_FR_ILLUSTRATION
+                    ? WOW_FR_ILLUSTRATION
                     : FR_ILLUSTRATION
               } 1 0`,
             }}

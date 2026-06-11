@@ -22,22 +22,23 @@ export const GENERATED_PIXTO_SCHEDULE_NOW_W = 288 as const;
 export const GENERATED_PIXTO_SCHEDULE_NEXT_W = 218 as const;
 
 /**
- * Illustration slot trim — 3px narrower, 3px down from top; bottom stays on title/action band.
+ * Focus only — shrink the illustration render box inside its slot.
+ * Clears the top-right pack mark; bottom stays on the title/action band.
  */
-export const GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM = {
-  topPx: 3,
-  widthPx: 3,
+export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET = {
+  topPx: 24,
+  leftPx: 8,
+  rightPx: 18,
+  bottomPx: 0,
 } as const;
-
-const ILLUST_TRIM = GENERATED_PIXTO_ILLUSTRATION_SLOT_TRIM;
 
 /** Focus fixed zones — compact text/footer so illustration dominates (~69% of card height). */
 export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {
   w: GENERATED_PIXTO_FOCUS_DESIGN_W,
   h: GENERATED_PIXTO_FOCUS_DESIGN_H,
-  illustPadTop: 32 + ILLUST_TRIM.topPx,
-  illustPadX: 20 + ILLUST_TRIM.widthPx / 2,
-  illustPadBottom: 12,
+  illustPadTop: 38,
+  illustPadX: 40,
+  illustPadBottom: 0,
   actionH: 72,
   actionPadX: 16,
   actionTitleFontPx: 28,
@@ -46,9 +47,9 @@ export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {
   footerTitleMaxFontPx: 22,
   illustBorder: 2,
   illustBorderColor: "#2cc55e",
-  packMarkSize: 24,
-  packMarkTop: 12,
-  packMarkRight: 20,
+  packMarkSize: 22,
+  packMarkTop: 22,
+  packMarkRight: 32,
 } as const;
 
 /** @deprecated Legacy documented shell — pre 3-zone Focus. */
