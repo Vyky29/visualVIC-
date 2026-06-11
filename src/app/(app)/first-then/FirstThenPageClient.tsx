@@ -12,11 +12,7 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import {
-  GENERATED_PIXTO_FOCUS_DESIGN_H,
-  GENERATED_PIXTO_FOCUS_DESIGN_W,
-  PIXTO_CARD_SLOTS,
-} from "@/lib/constants/generated-pixto-card-sizes";
+import { GENERATED_PIXTO_SCHEDULE_NEXT_W } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -26,9 +22,8 @@ import {
 const miniCard =
   "w-full overflow-hidden rounded-[1.15rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
 
-/** Portrait stack: same slot as Schedule NEXT / First & Then demo portrait. */
-const portraitCardWidthClass = `w-[min(100%,${PIXTO_CARD_SLOTS.next.w}px)]`;
-const portraitCardAspect = `${GENERATED_PIXTO_FOCUS_DESIGN_W} / ${GENERATED_PIXTO_FOCUS_DESIGN_H}`;
+/** Portrait stack: same visible width as Schedule NEXT (bus card). */
+const portraitCardWidthClass = `w-[min(100%,${GENERATED_PIXTO_SCHEDULE_NEXT_W}px)]`;
 
 function IconFirst({ className }: { className?: string }) {
   return (
@@ -133,10 +128,7 @@ export function FirstThenPageClient() {
                   {firstThenSlotLabel("first", lang)}
                 </span>
               </div>
-              <div
-                className="relative w-full overflow-hidden bg-transparent"
-                style={{ aspectRatio: portraitCardAspect }}
-              >
+              <div className="relative aspect-[510/676] w-full overflow-hidden bg-transparent">
                 {first?.imageUrl ? (
                   <Image
                     src={first.imageUrl}
@@ -184,10 +176,7 @@ export function FirstThenPageClient() {
                   {firstThenSlotLabel("then", lang)}
                 </span>
               </div>
-              <div
-                className="relative w-full overflow-hidden bg-transparent"
-                style={{ aspectRatio: portraitCardAspect }}
-              >
+              <div className="relative aspect-[510/676] w-full overflow-hidden bg-transparent">
                 {second?.imageUrl ? (
                   <Image
                     src={second.imageUrl}

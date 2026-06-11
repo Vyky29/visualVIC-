@@ -18,7 +18,6 @@ import {
   playerRoutineToneShortLabel,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { PIXTO_CARD_SLOTS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   routineSchedulePlayerIndexCardClass,
@@ -109,13 +108,7 @@ export default function PlayerIndexPage() {
                     href={`/player/${r.id}`}
                     className="flex gap-4 p-4 transition hover:bg-white/60"
                   >
-                    <div
-                      className="relative shrink-0 overflow-hidden rounded-2xl bg-canvas-muted"
-                      style={{
-                        width: PIXTO_CARD_SLOTS.thumbNav.w,
-                        height: PIXTO_CARD_SLOTS.thumbNav.h,
-                      }}
-                    >
+                    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted">
                       {previewUrl ? (
                         <Image
                           src={previewUrl}

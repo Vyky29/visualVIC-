@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { mockRoutines } from "@/lib/mock/routines";
@@ -48,7 +48,6 @@ import {
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { PIXTO_CARD_SLOTS } from "@/lib/constants/generated-pixto-card-sizes";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 const groups = ["self-care", "home", "activity"] as const;
@@ -357,13 +356,11 @@ function DashboardRoutineTile({ routine }: { routine: Routine }) {
 function HomeRoutinePreviewMedia({
   imageUrl,
   frameClassName,
-  frameStyle,
   sizes,
   priority,
 }: {
   imageUrl: string | undefined;
   frameClassName: string;
-  frameStyle?: CSSProperties;
   sizes: string;
   /** First tile only — faster LCP on Home */
   priority?: boolean;
@@ -377,7 +374,6 @@ function HomeRoutinePreviewMedia({
         pixto ? "bg-white" : "bg-canvas-muted",
         frameClassName,
       )}
-      style={frameStyle}
     >
       <Image
         src={imageUrl}
@@ -536,11 +532,7 @@ export default function DashboardPage() {
                   imageUrl={
                     primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl
                   }
-                  frameClassName="shrink-0 rounded-2xl bg-white shadow-card"
-                  frameStyle={{
-                    width: PIXTO_CARD_SLOTS.thumbMd.w,
-                    height: PIXTO_CARD_SLOTS.thumbMd.h,
-                  }}
+                  frameClassName="aspect-[10/13] w-[4.25rem] shrink-0 rounded-2xl bg-white shadow-card"
                   sizes="96px"
                   priority
                 />
@@ -678,13 +670,7 @@ export default function DashboardPage() {
                 <Link href="/first-then-demo?pack=ikram-home" className="col-span-2 block">
                   <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
                     <div className="flex gap-3 p-3">
-                      <div
-                        className="relative shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35"
-                        style={{
-                          width: PIXTO_CARD_SLOTS.thumbMd.w,
-                          height: PIXTO_CARD_SLOTS.thumbMd.h,
-                        }}
-                      >
+                      <div className="relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35">
                         <Image
                           src={firstThenDemoPackPreviewUrl("ikram-home")}
                           alt=""

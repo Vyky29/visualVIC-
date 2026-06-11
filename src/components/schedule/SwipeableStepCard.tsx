@@ -28,9 +28,17 @@ import {
   PIXTO_FOCUS_CARD_REF_HEIGHT_PX,
   PIXTO_FOCUS_CARD_REF_WIDTH_PX,
 } from "@/lib/constants/pixto-focus-card";
-import { GeneratedPixtoCard } from "@/components/experimental/GeneratedPixtoCard";
+import {
+  GeneratedPixtoCard,
+  GENERATED_PIXTO_CARD_SIZE,
+  GENERATED_PIXTO_FOCUS_CARD_SIZE,
+} from "@/components/experimental/GeneratedPixtoCard";
 import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
-import { PIXTO_CARD_SLOTS } from "@/lib/constants/generated-pixto-card-sizes";
+import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
+import {
+  GENERATED_PIXTO_SCHEDULE_NEXT_W,
+  GENERATED_PIXTO_SCHEDULE_NOW_W,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
@@ -75,9 +83,8 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   left: FOCUS_PIXTO_PNG_INSET_PX,
 };
 
-const SCHEDULE_NOW_SLOT = PIXTO_CARD_SLOTS.now;
-const SCHEDULE_NEXT_SLOT = PIXTO_CARD_SLOTS.next;
-const DONE_THUMB_SLOT = PIXTO_CARD_SLOTS.thumbSm;
+const GENERATED_WOW_NOW_CARD_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
+const GENERATED_WOW_NEXT_CARD_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
 
 const STEP_OUTLINE_HEX: Record<
   ReturnType<typeof stepCardVisualTone>,
@@ -390,13 +397,7 @@ export function SwipeableStepCard({
           rings.scheduleCompact,
         )}
       >
-        <div
-          className="relative shrink-0 overflow-hidden rounded-xl bg-canvas-muted"
-          style={{
-            width: DONE_THUMB_SLOT.w,
-            height: DONE_THUMB_SLOT.h,
-          }}
-        >
+        <div className="relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
           {gp ? (
             <Image
               src={gp.illustrationUrl}
@@ -493,24 +494,22 @@ export function SwipeableStepCard({
           } satisfies CSSProperties;
         })()
       : undefined;
-  const scheduleGeneratedSizeStyle =
+  const scheduleGeneratedWidthStyle =
     scheduleGeneratedPixto && !focusGenerated
       ? variant === "hero" && isNow
         ? ({
-            width: `${SCHEDULE_NOW_SLOT.w}px`,
-            maxWidth: `${SCHEDULE_NOW_SLOT.w}px`,
-            height: `${SCHEDULE_NOW_SLOT.h}px`,
+            width: "100%",
+            maxWidth: `${GENERATED_WOW_NOW_CARD_W}px`,
           } satisfies CSSProperties)
         : variant === "next"
           ? ({
-              width: `${SCHEDULE_NEXT_SLOT.w}px`,
-              maxWidth: `${SCHEDULE_NEXT_SLOT.w}px`,
-              height: `${SCHEDULE_NEXT_SLOT.h}px`,
+              width: "100%",
+              maxWidth: `${GENERATED_WOW_NEXT_CARD_W}px`,
             } satisfies CSSProperties)
           : undefined
       : undefined;
   const cardStyle = {
-    ...(scheduleGeneratedSizeStyle ?? {}),
+    ...(scheduleGeneratedWidthStyle ?? {}),
     ...(nextOutlineStyle ?? focusGeneratedBorderStyle ?? {}),
   } satisfies CSSProperties;
   const focusCardAspectRatio =
@@ -620,14 +619,14 @@ export function SwipeableStepCard({
                 hasGeneratedPixto
                   ? "relative w-full overflow-visible bg-transparent"
                   : "relative w-full overflow-hidden bg-transparent",
-                /* Generated schedule: fixed 384×560 footprint scaled to NOW/NEXT caps. */
+                /* Generated: native 744×1054 slot (like before). Bundled PNG: catalog aspects. */
                 variant === "hero" && isNow
                   ? hasGeneratedPixto
-                    ? "shrink-0"
+                    ? "aspect-[744/1054]"
                     : "aspect-[48/65]"
                   : variant === "next"
                     ? hasGeneratedPixto
-                      ? "shrink-0"
+                      ? "aspect-[744/1054]"
                       : "aspect-[510/676]"
                     : "aspect-[10/13]",
               ),
@@ -690,7 +689,7 @@ export function SwipeableStepCard({
                         />
                       </GeneratedPixtoFocusSlotScale>
                     ) : (
-                      <GeneratedPixtoFocusSlotScale>
+                      <GeneratedPixtoSlotScale>
                         <GeneratedPixtoCard
                           illustrationUrl={gp.illustrationUrl}
                           title={gp.title}
@@ -700,11 +699,11 @@ export function SwipeableStepCard({
                           cardType={gp.cardType}
                           focusIllustrationScale={gp.focusIllustrationScale}
                           focusIllustrationUrl={gp.focusIllustrationUrl}
-                          focusPresentation
+                          schedulePresentation
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
                         />
-                      </GeneratedPixtoFocusSlotScale>
+                      </GeneratedPixtoSlotScale>
                     )}
                   </div>
                 ) : step.imageUrl ? (
@@ -825,7 +824,7 @@ export function SwipeableStepCard({
                           </div>
                         </GeneratedPixtoFocusSlotScale>
                       ) : (
-                        <GeneratedPixtoFocusSlotScale>
+                        <GeneratedPixtoSlotScale>
                           <div className="relative h-full w-full overflow-hidden">
                             <Image
                               src={completionBackImageUrl}
@@ -839,7 +838,7 @@ export function SwipeableStepCard({
                               draggable={false}
                             />
                           </div>
-                        </GeneratedPixtoFocusSlotScale>
+                        </GeneratedPixtoSlotScale>
                       )}
                     </div>
                   ) : backPixtoBundled ? (
@@ -918,7 +917,7 @@ export function SwipeableStepCard({
                     />
                   </GeneratedPixtoFocusSlotScale>
                 ) : (
-                  <GeneratedPixtoFocusSlotScale>
+                  <GeneratedPixtoSlotScale>
                     <GeneratedPixtoCard
                       illustrationUrl={gp.illustrationUrl}
                       title={gp.title}
@@ -928,15 +927,16 @@ export function SwipeableStepCard({
                       cardType={gp.cardType}
                       focusIllustrationScale={gp.focusIllustrationScale}
                       focusIllustrationUrl={gp.focusIllustrationUrl}
-                      focusPresentation
+                      schedulePresentation
+                      focusPresentation={focusGenerated}
                       suppressNeutralRing
                       className="h-full w-full max-w-none"
                     />
-                  </GeneratedPixtoFocusSlotScale>
+                  </GeneratedPixtoSlotScale>
                 )}
               </div>
             ) : variant === "focus" && !step.imageUrl ? (
-              <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-ink-faint">
+              <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-cream/35">
                 Visual
               </div>
             ) : step.imageUrl ? (
