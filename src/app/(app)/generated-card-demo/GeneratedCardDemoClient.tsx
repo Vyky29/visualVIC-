@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useMemo } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import {
+  GeneratedPixtoCard,
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
   GENERATED_PIXTO_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H,
-  GENERATED_PIXTO_FOCUS_COMPANY_MARK,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME,
   GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
   GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
@@ -22,24 +22,30 @@ import {
   GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 } from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
 import {
+  DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
   GENERATED_PIXTO_DEMO_ROUTINE_NAME,
   GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { atTheHotelPackMarkUrl } from "@/lib/cards/at-the-hotel-cards";
 import { digitalCategoryStripLabel } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import {
+  GENERATED_PIXTO_SCHEDULE_NEXT_W,
+  GENERATED_PIXTO_SCHEDULE_NOW_W,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 
 const HOTEL_LOGO_URL = atTheHotelPackMarkUrl();
 const TITLE_TEXT_SIZE_CLASS = "text-[23px]";
 const TITLE_LINE_HEIGHT_CLASS = "leading-[0.88]";
 const TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
+const FOCUS_TEXT_BOX_SIZE = { w: 340, h: 96 } as const;
 const ORIGINAL_CARD_PREVIEW_W = 284 as const;
-const NOW_CARD_PREVIEW_W = 288 as const;
-const NEXT_CARD_PREVIEW_W = 268 as const;
-const FOCUS_DEMO_VISIBLE_W = 357.5 as const;
-const FOCUS_DEMO_VISIBLE_H = 619.4 as const;
+const NOW_CARD_PREVIEW_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
+const NEXT_CARD_PREVIEW_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
+const FOCUS_DEMO_PREVIEW_MAX_W = 390 as const;
 
 type PreviewTextStyle = {
   textSizeClassName: string;
@@ -90,39 +96,12 @@ const ORIGINAL_2_GEOMETRY: CardGeometry = {
   topGapH: GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
 };
 
-const FOCUS_GEOMETRY: CardGeometry = {
-  titleH: GENERATED_PIXTO_FOCUS_TITLE_ZONE_H,
-  illustrationH: GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h,
-  topLayoutH: GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H,
-  topGapH:
-    GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H - GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h,
-};
-
 const DOCUMENTED_TEXT_STYLE: PreviewTextStyle = {
   textSizeClassName: TITLE_TEXT_SIZE_CLASS,
   lineHeightClassName: "leading-[0.94]",
   trackingClassName: "tracking-[-0.02em]",
   lineGapClassName: "gap-[0.18em]",
   wordSpacing: "0",
-};
-
-const FOCUS_DOCUMENTED_TEXT_STYLE: PreviewTextStyle = {
-  textSizeClassName: "text-[42px]",
-  lineHeightClassName: "leading-[1.04]",
-  trackingClassName: "tracking-[-0.028em]",
-  lineGapClassName: "gap-0",
-  wordSpacing: "0",
-  style: {
-    fontSize: "42px",
-    lineHeight: 1.04,
-    letterSpacing: "-0.028em",
-  },
-};
-
-const FOCUS_DOCUMENTED_RIBBON_STYLE: React.CSSProperties = {
-  fontSize: "32px",
-  lineHeight: 1,
-  letterSpacing: "-0.014em",
 };
 
 function DiagnosticPanel({
@@ -192,29 +171,31 @@ function SampleLogo({ size }: { size: number }) {
 function PreviewTitleBand({
   lines,
   textStyle = DOCUMENTED_TEXT_STYLE,
+  textBoxSize = TEXT_BOX_SIZE,
 }: {
   lines: [string] | [string, string];
   textStyle?: PreviewTextStyle;
+  textBoxSize?: { w: number; h: number };
 }) {
   return (
-    <div className="flex h-full min-h-0 w-full items-center justify-center">
+    <div className="flex h-full min-h-0 w-full items-center justify-center px-1">
       <div
         className={cn(
-          "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
+          "flex min-h-0 max-w-full flex-col items-center justify-center text-center font-semibold lowercase text-ink",
           lines.length > 1 ? textStyle.lineGapClassName : "gap-0",
           textStyle.textSizeClassName,
           textStyle.lineHeightClassName,
           textStyle.trackingClassName,
         )}
         style={{
-          width: `min(100%, ${TEXT_BOX_SIZE.w}px)`,
-          height: `min(100%, ${TEXT_BOX_SIZE.h}px)`,
+          width: `min(100%, ${textBoxSize.w}px)`,
+          maxHeight: `min(100%, ${textBoxSize.h}px)`,
           wordSpacing: textStyle.wordSpacing,
           ...textStyle.style,
         }}
       >
         {lines.map((line, index) => (
-          <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
+          <span key={`${line}-${index}`} className="block w-full text-center">
             {line}
           </span>
         ))}
@@ -255,7 +236,7 @@ function DocumentedCard({
 }: DocumentedCardProps) {
   return (
     <article
-      className="relative mx-auto grid w-full overflow-hidden rounded-[1.35rem] bg-white"
+      className="relative mx-auto grid w-full overflow-hidden rounded-[1.5rem] bg-white"
       style={{
         width: `min(100%, ${widthPx}px)`,
         height: heightPx ? `${heightPx}px` : undefined,
@@ -265,17 +246,28 @@ function DocumentedCard({
         boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
       }}
     >
-      <div className="relative bg-white">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 rounded-[1rem] bg-black"
-          style={{
-            top: `${(geometry.topGapH / geometry.topLayoutH) * 100}%`,
-            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
-          }}
-        >
-          <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
-            illustration
+      <div className="relative min-h-0 bg-white">
+        <div className="flex h-full min-h-0 w-full flex-col">
+          <div
+            className="min-h-0 shrink-0"
+            style={{ flex: `${geometry.topGapH} 1 0` }}
+            aria-hidden
+          />
+          <div
+            className="relative flex min-h-0 shrink-0 items-start justify-center"
+            style={{ flex: `${geometry.illustrationH} 1 0` }}
+          >
+            <div
+              className="relative h-full min-h-0 w-auto max-w-full rounded-[1rem] bg-black"
+              style={{
+                aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${geometry.illustrationH}`,
+                maxWidth: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+              }}
+            >
+              <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                illustration
+              </div>
+            </div>
           </div>
         </div>
         <SampleLogo size={logoSize} />
@@ -296,8 +288,16 @@ function DocumentedCard({
         </MeasurementPill>
       </div>
 
-      <div className="relative border-y border-white bg-white px-4 py-1">
-        <PreviewTitleBand lines={titleLines} textStyle={titleTextStyle} />
+      <div className="relative border-y border-white bg-white px-3 py-1">
+        <PreviewTitleBand
+          lines={titleLines}
+          textStyle={titleTextStyle}
+          textBoxSize={
+            cardHeight === GENERATED_PIXTO_FOCUS_CARD_SIZE.h
+              ? FOCUS_TEXT_BOX_SIZE
+              : TEXT_BOX_SIZE
+          }
+        />
       </div>
 
       <div
@@ -316,6 +316,43 @@ function DocumentedCard({
         </span>
       </div>
     </article>
+  );
+}
+
+function LiveFocusCardPreview() {
+  const card =
+    DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS.find((c) =>
+      c.illustrationUrl.includes("/socks-on"),
+    ) ??
+    DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS.find((c) =>
+      c.illustrationUrl.includes("/walking"),
+    ) ??
+    DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS[0];
+  if (!card) return null;
+
+  return (
+    <div
+      className="mx-auto w-full overflow-hidden rounded-[1.5rem] border border-ink/[0.08] bg-[#060807]"
+      style={{
+        width: `min(100%, ${FOCUS_DEMO_PREVIEW_MAX_W}px)`,
+        aspectRatio: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} / ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}`,
+        maxHeight: "min(85dvh, 720px)",
+      }}
+    >
+      <GeneratedPixtoFocusSlotScale>
+        <GeneratedPixtoCard
+          illustrationUrl={card.illustrationUrl}
+          title={card.title}
+          category={card.category}
+          categoryColour={card.categoryColour}
+          iconUrl={card.iconUrl}
+          focusPresentation
+          suppressNeutralRing
+          showIllustrationFrameGuide
+          className="h-full w-full max-w-none"
+        />
+      </GeneratedPixtoFocusSlotScale>
+    </div>
   );
 }
 
@@ -411,12 +448,12 @@ export function GeneratedCardDemoClient() {
 
       <section className="mx-auto mt-8 max-w-6xl space-y-4 px-4">
         <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
-          Locked card documentation
+          Card sizes by context
         </h2>
         <div className="grid gap-4 lg:grid-cols-2">
           <DocumentedCardPanel
-            title="fisical card (wow)"
-            hint="Original Figma card shell kept here as the first reference."
+            title="Reference · physical card (wow)"
+            hint="Original Figma shell — source geometry for all proportional downscales."
             titleLines={["breakfast time"]}
             geometry={ORIGINAL_GEOMETRY}
             widthPx={ORIGINAL_CARD_PREVIEW_W}
@@ -427,8 +464,8 @@ export function GeneratedCardDemoClient() {
           />
 
           <DocumentedCardPanel
-            title="digital card (wow)"
-            hint="Expanded white area reference that became the locked base for Now and Next."
+            title="Reference · digital card (wow)"
+            hint="Expanded white area — locked base for Schedule Now / Next and First & Then."
             titleLines={["breakfast time"]}
             geometry={ORIGINAL_2_GEOMETRY}
             widthPx={ORIGINAL_CARD_PREVIEW_W}
@@ -439,8 +476,8 @@ export function GeneratedCardDemoClient() {
           />
 
           <DocumentedCardPanel
-            title="Now"
-            hint="Current agreed Now size, reduced proportionally without changing the internal geometry."
+            title="Schedule · Now"
+            hint="Hero NOW slot (e.g. put toothpaste on toothbrush). Whole card scales down together — illustration uses contain, never cropped."
             titleLines={["breakfast time"]}
             geometry={ORIGINAL_2_GEOMETRY}
             widthPx={NOW_CARD_PREVIEW_W}
@@ -451,8 +488,8 @@ export function GeneratedCardDemoClient() {
           />
 
           <DocumentedCardPanel
-            title="Next"
-            hint="Current agreed Next size, scaled down like a photo while keeping the same proportions."
+            title="Schedule · Next"
+            hint="NEXT slot (e.g. bus). Slightly smaller than Now; same 744×1054 geometry, uniform scale."
             titleLines={["receive your", "room key"]}
             geometry={ORIGINAL_2_GEOMETRY}
             widthPx={NEXT_CARD_PREVIEW_W}
@@ -463,24 +500,59 @@ export function GeneratedCardDemoClient() {
           />
 
           <DocumentedCardPanel
-            title="Focus mode"
-            hint="Final focus shell documented with the visible screen size and the current text logic."
-            titleLines={["arrive at the hotel"]}
-            geometry={FOCUS_GEOMETRY}
-            widthPx={FOCUS_DEMO_VISIBLE_W}
-            heightPx={FOCUS_DEMO_VISIBLE_H}
-            cardHeight={GENERATED_PIXTO_FOCUS_CARD_SIZE.h}
-            logoSize={GENERATED_PIXTO_FOCUS_COMPANY_MARK.w}
-            ribbonH={GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}
-            titleMetrics="42px actual here / auto-fit down only if a longer title needs it"
-            ribbonMetrics="32px actual here / always 10px below the white area title"
-            titleTextStyle={FOCUS_DOCUMENTED_TEXT_STYLE}
-            ribbonTextStyle={FOCUS_DOCUMENTED_RIBBON_STYLE}
-            extraMetrics={[
-              { label: "Focus text rule", value: "1 line first, then 2, then reduce only if needed" },
-            ]}
+            title="First & Then · vertical"
+            hint="Portrait FIRST / THEN stack uses the same width as Schedule · Next (268px cap)."
+            titleLines={["receive your", "room key"]}
+            geometry={ORIGINAL_2_GEOMETRY}
+            widthPx={NEXT_CARD_PREVIEW_W}
+            logoSize={GENERATED_PIXTO_WOW_COMPANY_MARK.w}
+            titleMetrics="23px reference / 2 lines in the same box"
+            ribbonMetrics="23px reference"
             ribbonLabel={hotelRibbonText}
           />
+
+          <DiagnosticPanel
+            title="Focus mode"
+            hint="Ikram · put socks on — green ring = illustration slot (531×663). Socks and shoes stay visible in Ikram PECS art."
+          >
+            <LiveFocusCardPreview />
+            <MetricList
+              metrics={[
+                {
+                  label: "Design card",
+                  value: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} x ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}`,
+                },
+                {
+                  label: "Top block",
+                  value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${GENERATED_PIXTO_FOCUS_TOP_LAYOUT_H}`,
+                },
+                {
+                  label: "Illustration area",
+                  value: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.w} x ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME.h}`,
+                },
+                {
+                  label: "White area",
+                  value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${GENERATED_PIXTO_FOCUS_TITLE_ZONE_H}`,
+                },
+                {
+                  label: "Ribbon",
+                  value: `${GENERATED_PIXTO_CARD_SIZE.w} x ${GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H}`,
+                },
+                {
+                  label: "Runtime scale",
+                  value: "min(viewport width, viewport height) — entire card visible",
+                },
+                {
+                  label: "Title / ribbon scale",
+                  value: "Same locked 60px base as Schedule · Next (white band taller, type unchanged)",
+                },
+                {
+                  label: "White area layout",
+                  value: "1 line → row 2; 2 lines → centred block; 3 lines → one row each",
+                },
+              ]}
+            />
+          </DiagnosticPanel>
         </div>
       </section>
     </div>

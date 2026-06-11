@@ -3,10 +3,27 @@ export const IKRAM_PECS_GRID = [
   { slug: "toilet", title: "Toilet", scene: "sitting on toilet in bathroom" },
   { slug: "wash-hands", title: "Wash hands", scene: "washing hands with soap at sink" },
   { slug: "brush-teeth", title: "Brush teeth", scene: "brushing teeth with toothbrush" },
+  {
+    slug: "socks-on",
+    title: "Put socks on",
+    scene:
+      "sitting putting white ankle sock on one foot, other foot already wearing white sock, both feet clearly visible",
+  },
+  {
+    slug: "shoes-on",
+    title: "Put shoes on",
+    scene:
+      "sitting tying grey trainer on foot, white socks visible above shoes, both feet with socks and shoes",
+  },
   { slug: "hairdresser", title: "Hairdresser", scene: "sitting in salon chair getting hair styled" },
   { slug: "bus", title: "Bus", scene: "sitting on bus by window" },
   { slug: "taxi", title: "Taxi", scene: "sitting in back seat of taxi" },
-  { slug: "walking", title: "Walking", scene: "walking on sidewalk with backpack" },
+  {
+    slug: "walking",
+    title: "Walking",
+    scene:
+      "walking on sidewalk with backpack, white ankle socks and grey trainers clearly visible on both feet",
+  },
   { slug: "cross-road", title: "Cross road", scene: "waiting at pedestrian crossing" },
   { slug: "wait", title: "Wait", scene: "sitting on bench at bus stop waiting" },
   { slug: "home", title: "Home", scene: "sitting on grey sofa at home" },

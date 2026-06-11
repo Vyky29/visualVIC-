@@ -33,7 +33,12 @@ import {
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
 } from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
+import {
+  GENERATED_PIXTO_SCHEDULE_NEXT_W,
+  GENERATED_PIXTO_SCHEDULE_NOW_W,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
@@ -78,8 +83,8 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   left: FOCUS_PIXTO_PNG_INSET_PX,
 };
 
-const GENERATED_WOW_NOW_CARD_W = 288 as const;
-const GENERATED_WOW_NEXT_CARD_W = 268 as const;
+const GENERATED_WOW_NOW_CARD_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
+const GENERATED_WOW_NEXT_CARD_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
 
 const STEP_OUTLINE_HEX: Record<
   ReturnType<typeof stepCardVisualTone>,
@@ -488,7 +493,7 @@ export function SwipeableStepCard({
   const focusCardAspectRatio =
     variant === "focus"
       ? focusGenerated
-        ? `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} / ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}`
+        ? undefined
         : focusPixto
           ? `${PIXTO_FOCUS_CARD_REF_WIDTH_PX} / ${PIXTO_FOCUS_CARD_REF_HEIGHT_PX}`
           : undefined
@@ -519,7 +524,7 @@ export function SwipeableStepCard({
                 : undefined
       }
       className={cn(
-        "relative touch-manipulation rounded-[1.35rem] transition-shadow duration-300",
+        "relative touch-manipulation rounded-[1.5rem] transition-shadow duration-300",
         variant === "focus" ? "touch-none" : "touch-pan-y",
         hasGeneratedPixto
           ? "overflow-visible"
@@ -576,7 +581,7 @@ export function SwipeableStepCard({
           "relative w-full touch-manipulation",
           hasGeneratedPixto &&
             (variant === "focus"
-              ? "overflow-hidden rounded-[1.35rem]"
+              ? "overflow-hidden rounded-[1.5rem]"
               : "overflow-visible"),
           variant === "focus"
             ? focusPixto || focusGenerated
@@ -626,7 +631,7 @@ export function SwipeableStepCard({
             >
               <div
                 className={cn(
-                  "absolute inset-0 rounded-[1.35rem] [backface-visibility:hidden]",
+                  "absolute inset-0 rounded-[1.5rem] [backface-visibility:hidden]",
                   gp && variant !== "focus"
                     ? "overflow-visible bg-transparent"
                     : "overflow-hidden bg-white",
@@ -641,25 +646,28 @@ export function SwipeableStepCard({
                 {gp ? (
                   <div
                     className={cn(
-                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.35rem]",
+                      "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.5rem]",
                       variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
                     {variant === "focus" ? (
-                      <GeneratedPixtoCard
-                        illustrationUrl={gp.illustrationUrl}
-                        title={gp.title}
-                        category={gp.category}
-                        categoryColour={gp.categoryColour}
-                        iconUrl={gp.iconUrl}
-                        cardType={gp.cardType}
-                        focusIllustrationScale={gp.focusIllustrationScale}
-                        focusIllustrationUrl={gp.focusIllustrationUrl}
-                        focusPresentation
-                        suppressNeutralRing
-                        className="h-full w-full max-w-none"
-                      />
+                      <GeneratedPixtoFocusSlotScale>
+                        <GeneratedPixtoCard
+                          illustrationUrl={gp.illustrationUrl}
+                          title={gp.title}
+                          category={gp.category}
+                          categoryColour={gp.categoryColour}
+                          iconUrl={gp.iconUrl}
+                          cardType={gp.cardType}
+                          focusIllustrationScale={gp.focusIllustrationScale}
+                          focusIllustrationUrl={gp.focusIllustrationUrl}
+                          focusPresentation
+                          suppressNeutralRing
+                          showIllustrationFrameGuide
+                          className="h-full w-full max-w-none"
+                        />
+                      </GeneratedPixtoFocusSlotScale>
                     ) : (
                       <GeneratedPixtoSlotScale>
                         <GeneratedPixtoCard
@@ -681,10 +689,10 @@ export function SwipeableStepCard({
                 ) : step.imageUrl ? (
                   stepPixtoBundled ? (
                     variant === "focus" ? (
-                      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                      <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
                         <div
                           className={cn(
-                            "absolute overflow-hidden rounded-[1.35rem]",
+                            "absolute overflow-hidden rounded-[1.5rem]",
                             FOCUS_PIXTO_PNG_INSET_PX === 0 && "inset-0",
                             FOCUS_PIXTO_PNG_INSET_PX > 0 && "bg-cream",
                           )}
@@ -720,7 +728,7 @@ export function SwipeableStepCard({
                         </div>
                       </div>
                     ) : (
-                      <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                      <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
                         <div
                           className={cn(
                             "absolute inset-0 origin-center",
@@ -769,7 +777,7 @@ export function SwipeableStepCard({
               </div>
               <div
                 className={cn(
-                  "absolute inset-0 rounded-[1.35rem] [backface-visibility:hidden]",
+                  "absolute inset-0 rounded-[1.5rem] [backface-visibility:hidden]",
                   gp && variant !== "focus"
                     ? "overflow-visible bg-transparent"
                     : "overflow-hidden bg-white",
@@ -783,7 +791,7 @@ export function SwipeableStepCard({
               >
                 {completionBackImageUrl ? (
                   backPixtoBundled ? (
-                    <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                    <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
                       <div className="absolute inset-0 origin-center scale-[1.06]">
                         <Image
                           src={completionBackImageUrl}
@@ -827,25 +835,28 @@ export function SwipeableStepCard({
             {scheduleGeneratedPixto && gp ? (
               <div
                 className={cn(
-                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.35rem]",
+                  "absolute inset-0 flex min-h-0 min-w-0 items-center justify-center rounded-[1.5rem]",
                   variant === "focus" ? "overflow-hidden bg-white" : "overflow-visible bg-transparent",
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >
                 {variant === "focus" ? (
-                  <GeneratedPixtoCard
-                    illustrationUrl={gp.illustrationUrl}
-                    title={gp.title}
-                    category={gp.category}
-                    categoryColour={gp.categoryColour}
-                    iconUrl={gp.iconUrl}
-                    cardType={gp.cardType}
-                    focusIllustrationScale={gp.focusIllustrationScale}
-                    focusIllustrationUrl={gp.focusIllustrationUrl}
-                    focusPresentation
-                    suppressNeutralRing
-                    className="h-full w-full max-w-none"
-                  />
+                  <GeneratedPixtoFocusSlotScale>
+                    <GeneratedPixtoCard
+                      illustrationUrl={gp.illustrationUrl}
+                      title={gp.title}
+                      category={gp.category}
+                      categoryColour={gp.categoryColour}
+                      iconUrl={gp.iconUrl}
+                      cardType={gp.cardType}
+                      focusIllustrationScale={gp.focusIllustrationScale}
+                      focusIllustrationUrl={gp.focusIllustrationUrl}
+                      focusPresentation
+                      suppressNeutralRing
+                      showIllustrationFrameGuide
+                      className="h-full w-full max-w-none"
+                    />
+                  </GeneratedPixtoFocusSlotScale>
                 ) : (
                   <GeneratedPixtoSlotScale>
                     <GeneratedPixtoCard
@@ -871,10 +882,10 @@ export function SwipeableStepCard({
               </div>
             ) : step.imageUrl ? (
               schedulePixtoBleed ? (
-                <div className="absolute inset-0 overflow-hidden rounded-[1.35rem]">
+                <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
                   <div
                     className={cn(
-                      "absolute overflow-hidden rounded-[1.35rem]",
+                      "absolute overflow-hidden rounded-[1.5rem]",
                       variant === "focus"
                         ? cn(
                             FOCUS_PIXTO_PNG_INSET_PX === 0 && "inset-0",

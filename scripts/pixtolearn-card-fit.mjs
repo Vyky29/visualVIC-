@@ -1,6 +1,7 @@
 /**
- * Fit illustration sources into PixtoLearn card canvas (531×648).
- * Keeps the subject inside the yellow block with safe margins (no edge clipping).
+ * Fit illustration sources into a fixed PixtoLearn export canvas (531×648).
+ * Use for library / batch exports only — schedule UI scales any source with
+ * object-contain inside the 531×648 (or 531×663 focus) illustration slot.
  */
 import sharp from "sharp";
 
@@ -53,4 +54,21 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
     .composite([{ input: resized, gravity: "centre" }])
     .png()
     .toFile(dest);
+}
+
+/**
+ * Trim whitespace only — keeps natural artwork dimensions for UI scaling.
+ * @param {Buffer | string} src
+ * @param {string} dest
+ */
+export async function trimIllustrationOnly(src, dest, opts = {}) {
+  const trimThreshold = opts.trimThreshold ?? 12;
+  const background = opts.background ?? "#ffffff";
+  let img = sharp(src);
+  try {
+    img = img.trim({ threshold: trimThreshold, background });
+  } catch {
+    // keep original
+  }
+  await img.png().toFile(dest);
 }

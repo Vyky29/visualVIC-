@@ -161,6 +161,8 @@ export type GeneratedPixtoCardProps = {
   schedulePresentation?: boolean;
   /** Hide neutral ink ring — parent supplies category ring (Schedule Player). */
   suppressNeutralRing?: boolean;
+  /** Draw the illustration slot (531×648 / 531×663) so layout can be checked. */
+  showIllustrationFrameGuide?: boolean;
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
@@ -173,36 +175,10 @@ const SCHEDULE_TITLE_TARGET_VISUAL_WIDTH = 15.2;
 const SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH = 12.2;
 const SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH = 15.2;
 const SCHEDULE_LOCKED_TITLE_BASE_FONT_PX = 60;
-const FOCUS_RIBBON_TARGET_VISUAL_WIDTH = 11.9;
-const FOCUS_TITLE_TARGET_VISUAL_WIDTH = 15.4;
-const FOCUS_TITLE_BASE_FONT_PX = 42;
-
-const FOCUS_TITLE_SIZE_CANDIDATES = [
-  {
-    fontPx: 42,
-    className: "text-[42px] sm:text-[48px] tracking-[-0.028em] leading-[1.04]",
-  },
-  {
-    fontPx: 40,
-    className: "text-[40px] sm:text-[46px] tracking-[-0.026em] leading-[1.04]",
-  },
-  {
-    fontPx: 38,
-    className: "text-[38px] sm:text-[44px] tracking-[-0.024em] leading-[1.03]",
-  },
-  {
-    fontPx: 36,
-    className: "text-[36px] sm:text-[42px] tracking-[-0.022em] leading-[1.03]",
-  },
-  {
-    fontPx: 34,
-    className: "text-[34px] sm:text-[40px] tracking-[-0.02em] leading-[1.02]",
-  },
-  {
-    fontPx: 32,
-    className: "text-[32px] sm:text-[38px] tracking-[-0.018em] leading-[1.02]",
-  },
-] as const;
+/** Focus title/ribbon use the same locked schedule scale (60px base) — larger white band, not larger type. */
+const FOCUS_RIBBON_TARGET_VISUAL_WIDTH = SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH;
+const FOCUS_TITLE_TARGET_VISUAL_WIDTH = SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH;
+const FOCUS_TITLE_BASE_FONT_PX = SCHEDULE_LOCKED_TITLE_BASE_FONT_PX;
 
 const SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES = [
   {
@@ -387,23 +363,51 @@ function scoreLockedLayout(layout: string[][], allowedWidth: number): number {
   return overflowPenalty * 100 + singleWordPenalty * 4 + balancePenalty + lineCountPenalty;
 }
 
+type LockedTitleCandidate = {
+  fontPx: number;
+  className?: string;
+  lineHeight?: number;
+  letterSpacing?: string;
+};
+
+type LockedTitleLayout = {
+  lines: string[];
+  className: string;
+  fontPx: number;
+  style?: CSSProperties;
+};
+
+function lockedTitlePresentation(candidate: LockedTitleCandidate): Pick<
+  LockedTitleLayout,
+  "className" | "style"
+> {
+  if (candidate.className) {
+    return { className: cn(titleTypographyBase, candidate.className) };
+  }
+  return {
+    className: titleTypographyBase,
+    style: {
+      fontSize: `${candidate.fontPx}px`,
+      lineHeight: candidate.lineHeight ?? 1.04,
+      letterSpacing: candidate.letterSpacing ?? "-0.02em",
+    },
+  };
+}
+
 function resolveLockedTitleLayout(
   raw: string,
   targetWidth: number,
   baseFontPx: number,
-  candidates: readonly { fontPx: number; className: string }[],
+  candidates: readonly LockedTitleCandidate[],
   maxLines: number,
-): {
-  lines: string[];
-  className: string;
-  fontPx: number;
-} {
+): LockedTitleLayout {
   const words = raw.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) {
+    const first = candidates[0];
     return {
       lines: raw.trim() ? [raw.trim()] : [""],
-      className: cn(titleTypographyBase, candidates[0].className),
-      fontPx: candidates[0].fontPx,
+      fontPx: first.fontPx,
+      ...lockedTitlePresentation(first),
     };
   }
 
@@ -427,8 +431,8 @@ function resolveLockedTitleLayout(
     if (bestFit) {
       return {
         lines: bestFit.map((line) => line.join(" ")),
-        className: cn(titleTypographyBase, candidate.className),
         fontPx: candidate.fontPx,
+        ...lockedTitlePresentation(candidate),
       };
     }
   }
@@ -444,8 +448,8 @@ function resolveLockedTitleLayout(
 
   return {
     lines: bestFallback.map((line) => line.join(" ")),
-    className: cn(titleTypographyBase, fallback.className),
     fontPx: fallback.fontPx,
+    ...lockedTitlePresentation(fallback),
   };
 }
 
@@ -517,25 +521,17 @@ function splitTitleFocusLines(words: string[], allowedWidth: number): string[] {
   return bestLines;
 }
 
-function resolveFocusTitleLayout(raw: string): {
-  lines: string[];
-  className: string;
-  fontPx: number;
-} {
+function resolveFocusTitleLayout(raw: string): LockedTitleLayout {
   return resolveLockedTitleLayout(
     raw,
     FOCUS_TITLE_TARGET_VISUAL_WIDTH,
     FOCUS_TITLE_BASE_FONT_PX,
-    FOCUS_TITLE_SIZE_CANDIDATES,
-    2,
+    SCHEDULE_LOCKED_TITLE_SIZE_CANDIDATES,
+    3,
   );
 }
 
-function resolveScheduleLockedTitleLayout(raw: string): {
-  lines: string[];
-  className: string;
-  fontPx: number;
-} {
+function resolveScheduleLockedTitleLayout(raw: string): LockedTitleLayout {
   return resolveLockedTitleLayout(
     raw,
     SCHEDULE_LOCKED_TITLE_TARGET_VISUAL_WIDTH,
@@ -593,6 +589,89 @@ function GeneratedPixtoDebugGuides({
   );
 }
 
+function LockedTitleBandGrid({
+  lines,
+  className,
+  style,
+  lineLeading = "leading-[0.92]",
+}: {
+  lines: string[];
+  className: string;
+  style?: CSSProperties;
+  lineLeading?: string;
+}) {
+  const n = Math.max(1, Math.min(lines.length, 3)) as 1 | 2 | 3;
+  const row1 = n === 2 ? lines[0] : n >= 3 ? lines[0] : "";
+  const row2 = n === 2 ? lines[1] : n >= 3 ? lines[1] : "";
+  const row3 = n >= 3 ? lines.slice(2).join(" ") : "";
+
+  return (
+    <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
+      {n === 1 ? (
+        <>
+          <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+          <div
+            className={cn(
+              "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 text-center pb-[1lh]",
+              className,
+            )}
+            style={style}
+          >
+            <span className={cn("block w-full max-w-full whitespace-nowrap", lineLeading)}>
+              {lines[0]}
+            </span>
+          </div>
+        </>
+      ) : n === 2 ? (
+        <>
+          <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+          <div
+            className={cn(
+              "col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-center gap-0 overflow-hidden px-0.5 text-center",
+              className,
+            )}
+            style={style}
+          >
+            <span className={cn("block w-full max-w-full whitespace-nowrap", lineLeading)}>
+              {row1}
+            </span>
+            <span className={cn("block w-full max-w-full whitespace-nowrap", lineLeading)}>
+              {row2}
+            </span>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="col-start-1 row-start-1 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-0.5 text-center">
+            <span
+              className={cn("block w-full max-w-full whitespace-nowrap", className, lineLeading)}
+              style={style}
+            >
+              {row1}
+            </span>
+          </div>
+          <div className="col-start-1 row-start-2 flex min-h-0 items-center justify-center overflow-hidden px-0.5 text-center">
+            <span
+              className={cn("block w-full max-w-full whitespace-nowrap", className, lineLeading)}
+              style={style}
+            >
+              {row2}
+            </span>
+          </div>
+          <div className="col-start-1 row-start-3 flex min-h-0 items-end justify-center overflow-hidden px-0.5 pb-[0.14em] text-center">
+            <span
+              className={cn("block w-full max-w-full whitespace-nowrap", className, lineLeading)}
+              style={style}
+            >
+              {row3}
+            </span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function TitleBand({
   title,
   htmlLang,
@@ -629,45 +708,23 @@ function TitleBand({
 
   if (focusPresentation && focusTitleLayout) {
     return (
-      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden bg-white px-2 py-1">
-        <div
-          className="relative z-10 flex h-full min-h-0 w-full items-center justify-center overflow-hidden px-0.5"
-        >
-          <div
-            className={cn(
-              "flex w-full max-w-[99%] min-h-0 flex-col items-center justify-center gap-0 text-center",
-              focusTitleLayout.className,
-            )}
-          >
-            {focusTitleLayout.lines.map((line, index) => (
-              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap text-center">
-                {line}
-              </span>
-            ))}
-          </div>
-        </div>
+      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden bg-white px-3 py-0.5">
+        <LockedTitleBandGrid
+          lines={focusTitleLayout.lines}
+          className={focusTitleLayout.className}
+          style={focusTitleLayout.style}
+        />
       </div>
     );
   }
 
   if (schedulePresentation && scheduleLockedTitleLayout) {
     return (
-      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-3 py-1">
-        <div className="relative z-10 flex h-full min-h-0 w-full items-center justify-center overflow-hidden">
-          <div
-            className={cn(
-              "flex w-full max-w-full min-h-0 flex-col items-center justify-center gap-0 text-center",
-              scheduleLockedTitleLayout.className,
-            )}
-            style={{ wordSpacing: "0" }}
-          >
-            {scheduleLockedTitleLayout.lines.map((line, index) => (
-              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap text-center">
-                {line}
-              </span>
-            ))}
-          </div>
-        </div>
+      <div className="relative flex min-h-0 h-full shrink-0 flex-col overflow-hidden border-t border-ink/[0.06] bg-white px-3 py-0.5">
+        <LockedTitleBandGrid
+          lines={scheduleLockedTitleLayout.lines}
+          className={scheduleLockedTitleLayout.className}
+        />
       </div>
     );
   }
@@ -779,6 +836,7 @@ export function GeneratedPixtoCard({
   focusPresentation = false,
   schedulePresentation = false,
   suppressNeutralRing = false,
+  showIllustrationFrameGuide = false,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
   const cardUiLang = useCardUiLanguage();
@@ -822,7 +880,7 @@ export function GeneratedPixtoCard({
         boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.45)",
       }
     : undefined;
-  const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1.08;
+  const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
   const resolvedIllustrationSrc =
     focusPresentation && focusIllustrationUrl
       ? focusIllustrationUrl
@@ -856,16 +914,13 @@ export function GeneratedPixtoCard({
             ? 48
             : 40;
 
-    const baseRibbonFontPx = Math.max(
-      baseTitleFontPx - 10,
-      focusPresentation ? 20 : 24,
-    );
+    const baseRibbonFontPx = Math.max(baseTitleFontPx - 10, 24);
 
     return resolveSingleLineTypographyStyle(
       i18nCategory,
       focusPresentation ? FOCUS_RIBBON_TARGET_VISUAL_WIDTH : SCHEDULE_RIBBON_TARGET_VISUAL_WIDTH,
       baseRibbonFontPx,
-      focusPresentation ? 18 : 20,
+      20,
     );
   }, [
     i18nCategory,
@@ -879,11 +934,17 @@ export function GeneratedPixtoCard({
   const illustrationAspect = focusPresentation
     ? FOCUS_ILLUSTRATION_FRAME_ASPECT
     : ILLUSTRATION_FRAME_ASPECT;
-  /** Schedule + Focus: illustration fills 531×648 / 531×663 frame (no letterboxing). */
-  const illustrationObjectClass =
-    focusPresentation || schedulePresentation
-      ? "object-cover object-center origin-center"
-      : "object-contain object-center";
+  const illustrationFrameRef = focusPresentation
+    ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME
+    : GENERATED_PIXTO_ILLUSTRATION_FRAME;
+  const showFrameGuide =
+    showIllustrationFrameGuide ||
+    (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
+  /**
+   * Illustration slot = 531×648 (schedule) or 531×663 (focus) aspect box.
+   * Source PNGs can be any size — UI scales with contain, centred, never cropped.
+   */
+  const illustrationObjectClass = "object-contain object-center";
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
@@ -910,7 +971,7 @@ export function GeneratedPixtoCard({
       data-generated-pixto-card
       data-card-type={cardType ?? "default"}
       className={cn(
-        "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.35rem]",
+        "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.5rem]",
         "bg-white touch-manipulation",
         suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
         className,
@@ -974,7 +1035,7 @@ export function GeneratedPixtoCard({
             aria-hidden
           />
           <div
-            className="relative flex w-full min-h-0 shrink-0 items-start justify-center"
+            className="relative flex h-full w-full min-h-0 shrink-0 items-start justify-center"
             style={{
               flex: `${
                 focusPresentation
@@ -985,36 +1046,43 @@ export function GeneratedPixtoCard({
               } 1 0`,
             }}
           >
-            <div className="flex h-full w-full min-h-0 items-center justify-center">
-              <div
-                className="relative min-h-0 overflow-hidden"
-                style={{
-                  width: `min(${illustrationWidthPct}, 100%)`,
-                  aspectRatio: illustrationAspect,
-                  maxHeight: "100%",
-                }}
-              >
-                <Image
-                  src={resolvedIllustrationSrc}
-                  alt=""
-                  fill
-                  sizes="(max-width: 640px) 72vw, 240px"
-                  className={cn(illustrationObjectClass, "select-none")}
-                  style={
-                    focusPresentation
-                      ? {
-                          transform: `scale(${resolvedFocusIllustrationScale})`,
-                          transformOrigin: "center center",
-                        }
-                      : undefined
-                  }
-                  unoptimized={
-                    illustrationUrl.startsWith("/") ||
-                    illustrationUrl.includes("/cards/")
-                  }
-                  draggable={false}
-                />
-              </div>
+            <div
+              className={cn(
+                "relative mx-auto w-full min-h-0 shrink-0",
+                showFrameGuide &&
+                  "bg-[rgba(0,180,120,0.08)] ring-2 ring-inset ring-[rgba(0,180,120,0.9)]",
+              )}
+              style={{
+                width: illustrationWidthPct,
+                aspectRatio: illustrationAspect,
+                maxHeight: "100%",
+              }}
+            >
+              {showFrameGuide ? (
+                <span className="pointer-events-none absolute left-1 top-1 z-20 rounded bg-[rgba(0,180,120,0.92)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-white">
+                  {illustrationFrameRef.w}×{illustrationFrameRef.h}
+                </span>
+              ) : null}
+              <Image
+                src={resolvedIllustrationSrc}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 72vw, 240px"
+                className={cn(illustrationObjectClass, "select-none")}
+                style={
+                  focusPresentation && resolvedFocusIllustrationScale !== 1
+                    ? {
+                        transform: `scale(${resolvedFocusIllustrationScale})`,
+                        transformOrigin: "center center",
+                      }
+                    : undefined
+                }
+                unoptimized={
+                  illustrationUrl.startsWith("/") ||
+                  illustrationUrl.includes("/cards/")
+                }
+                draggable={false}
+              />
             </div>
           </div>
         </div>

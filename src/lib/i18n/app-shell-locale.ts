@@ -59,6 +59,10 @@ export function dashboardRoutinesSectionTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Rutinas" : "Routines";
 }
 
+export function dashboardExtrasSectionTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Extras" : "Extras";
+}
+
 export function dashboardSchedulePlayerTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Reproductor de rutina" : "Schedule Player";
 }

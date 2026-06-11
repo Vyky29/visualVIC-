@@ -51,9 +51,6 @@ const SHOW_FOCUS_ZONE_LABELS = false;
 const showZoneDebug =
   process.env.NODE_ENV === "development" && SHOW_FOCUS_ZONE_LABELS;
 
-const FOCUS_STAGE_CARD_W = 357.5 as const;
-const FOCUS_STAGE_CARD_H = 619.4 as const;
-
 /** Bottom sheet — no handle bar, calm */
 function Sheet({
   open,
@@ -116,18 +113,8 @@ function sheetRow(
 
 function FocusCardStage({ children }: { children: ReactNode }) {
   return (
-    <div className="pointer-events-auto mx-auto flex h-full min-h-0 w-full max-w-lg flex-col px-5 py-4">
-      <div className="flex min-h-0 flex-1 items-center justify-center">
-        <div
-          className="relative shrink-0"
-          style={{
-            width: `min(100%, ${FOCUS_STAGE_CARD_W}px)`,
-            height: `min(100%, ${FOCUS_STAGE_CARD_H}px)`,
-          }}
-        >
-          {children}
-        </div>
-      </div>
+    <div className="pointer-events-auto flex h-full min-h-0 w-full flex-col items-center justify-center px-1.5 py-1 sm:px-2 sm:py-1.5">
+      <div className="relative h-full min-h-0 w-full max-w-[min(100%,28rem)]">{children}</div>
     </div>
   );
 }

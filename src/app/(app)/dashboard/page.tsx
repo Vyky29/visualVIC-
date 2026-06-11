@@ -26,6 +26,7 @@ import {
   bottomNavLabel,
   dashboardAllRoutinesLink,
   dashboardContinueLabel,
+  dashboardExtrasSectionTitle,
   dashboardFeaturedStepsHint,
   dashboardFirstThenCardEyebrow,
   dashboardFirstThenCardTitle,
@@ -59,9 +60,13 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
   "tpl-morning-mini",
 ]);
 
+/** Stock pack routines listed below Activity instead of Home / Activity accordions. */
+const HOME_EXTRA_PACK_ROUTINE_IDS = new Set(["ikram-day-centre"]);
+
 function dashboardCategoryForRoutine(
   routine: Routine,
 ): DashboardCategory | null {
+  if (HOME_EXTRA_PACK_ROUTINE_IDS.has(routine.id)) return null;
   const tags = routine.tags ?? [];
   if (tags.includes("self-care")) return "self-care";
   if (tags.includes("home")) return "home";
@@ -169,6 +174,41 @@ function HomeSectionIcon() {
   );
 }
 
+function ExtrasSectionIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <circle cx="12" cy="8.25" r="3.1" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M6.75 19.25c.9-3.1 2.85-4.75 5.25-4.75s4.35 1.65 5.25 4.75"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M17.1 6.4 18.7 8l-3.35 3.35"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function BuilderQuickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <path
+        d="M5.5 18.5h13M8.25 15.75 16.5 7.5l2 2L10.25 17.75l-3.5.75.75-3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function ActivitySectionIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
@@ -201,6 +241,46 @@ const HOME_CATEGORY_HEADER_ICON: Record<
     iconClassName: "text-[#cf9a1b]",
   },
 };
+
+function DashboardCenteredIntro({
+  icon,
+  ringClass,
+  iconClassName,
+  category,
+  title,
+}: {
+  icon: React.ReactNode;
+  ringClass: string;
+  iconClassName?: string;
+  category: string;
+  title: string;
+}) {
+  return (
+    <div className="flex flex-col items-center px-2 pb-1 pt-1 text-center">
+      <span
+        className={cn(
+          "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas sm:h-11 sm:w-11",
+          ringClass,
+        )}
+      >
+        <span
+          className={cn(
+            "flex h-full w-full items-center justify-center text-ink/78",
+            iconClassName,
+          )}
+        >
+          {icon}
+        </span>
+      </span>
+      <p className="mt-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+        {category}
+      </p>
+      <p className="mt-1.5 text-[18px] font-semibold leading-tight text-ink sm:text-[19px]">
+        {title}
+      </p>
+    </div>
+  );
+}
 
 function SectionHeader({
   title,
@@ -364,6 +444,13 @@ export default function DashboardPage() {
     }
     return out;
   }, [dashboardRoutines]);
+  const extraPackRoutines = useMemo(
+    () =>
+      dashboardRoutines.filter(
+        (r) => isStockPackRoutine(r) && HOME_EXTRA_PACK_ROUTINE_IDS.has(r.id),
+      ),
+    [dashboardRoutines],
+  );
   const [openCategoryKeys, setOpenCategoryKeys] = useState<Set<string>>(
     () => new Set(),
   );
@@ -575,6 +662,26 @@ export default function DashboardPage() {
               );
             })}
           </div>
+
+          {extraPackRoutines.length > 0 ? (
+            <div className="space-y-3 pt-2">
+              <div className="flex flex-col items-center px-2 pb-1 pt-1 text-center">
+                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-[#E05C9A]/80 ring-offset-[1.5px] ring-offset-canvas sm:h-11 sm:w-11">
+                  <span className="flex h-full w-full items-center justify-center text-[#E05C9A]">
+                    <ExtrasSectionIcon />
+                  </span>
+                </span>
+                <p className="mt-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+                  {dashboardExtrasSectionTitle(cardUiLang)}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
+                {extraPackRoutines.map((routine) => (
+                  <DashboardRoutineTile key={routine.id} routine={routine} />
+                ))}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="grid grid-cols-2 gap-3">
@@ -589,13 +696,13 @@ export default function DashboardPage() {
             </Card>
           </Link>
           <Link href="/builder">
-            <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
-                {dashboardQuickBuilderEyebrow(cardUiLang)}
-              </p>
-              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                {dashboardQuickBuilderTitle(cardUiLang)}
-              </p>
+            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+              <DashboardCenteredIntro
+                icon={<BuilderQuickIcon />}
+                ringClass="ring-[#6b8f9e]/75"
+                category={dashboardQuickBuilderEyebrow(cardUiLang)}
+                title={dashboardQuickBuilderTitle(cardUiLang)}
+              />
             </Card>
           </Link>
           <Link href="/library">

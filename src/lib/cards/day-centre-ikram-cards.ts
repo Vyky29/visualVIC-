@@ -28,6 +28,8 @@ export const DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE: readonly DayCentreIkramStep[] 
   { id: "dci-toilet", slug: "toilet", title: "Toilet" },
   { id: "dci-wash-hands", slug: "wash-hands", title: "Wash hands" },
   { id: "dci-brush-teeth", slug: "brush-teeth", title: "Brush teeth" },
+  { id: "dci-socks-on", slug: "socks-on", title: "Put socks on" },
+  { id: "dci-shoes-on", slug: "shoes-on", title: "Put shoes on" },
   { id: "dci-hairdresser", slug: "hairdresser", title: "Hairdresser" },
   { id: "dci-bus", slug: "bus", title: "Bus" },
   { id: "dci-taxi", slug: "taxi", title: "Taxi" },

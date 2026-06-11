@@ -179,7 +179,7 @@ export const mockRoutines: Routine[] = [
     name: "Ikram · day centre",
     description:
       "Ikram's Saturday schedule — personalised photo cards for the day centre",
-    tags: ["home", "activity"],
+    tags: ["extra"],
     homePreviewImageUrl: DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "ikram-day-centre",

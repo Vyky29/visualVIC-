@@ -39,6 +39,7 @@ import {
   playerKindRoutine,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { GENERATED_PIXTO_SCHEDULE_NEXT_W } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
@@ -440,8 +441,7 @@ function FirstThenPortraitStack({
   secondCard: GeneratedPixtoCardProps;
   className?: string;
 }) {
-  const cardWidthClass =
-    "mx-auto w-[min(100%,calc((100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-10.25rem)/2.72))] max-w-[min(100%,17.25rem)] min-w-0";
+  const cardWidthClass = `mx-auto w-[min(100%,${GENERATED_PIXTO_SCHEDULE_NEXT_W}px)] min-w-0`;
 
   return (
     <div className={cn("grid min-h-0 grid-rows-2 gap-2", className)}>
