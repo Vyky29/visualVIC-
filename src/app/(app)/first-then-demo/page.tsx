@@ -9,7 +9,9 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
 import {
@@ -342,6 +344,55 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
   );
 }
 
+function FirstThenLandscapeColumn({ card }: { card: GeneratedPixtoCardProps }) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.28);
+
+  useLayoutEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
+
+    const update = () => {
+      const W = outer.clientWidth;
+      const H = outer.clientHeight;
+      if (W <= 0 || H <= 0) return;
+
+      const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const next = Math.min(sx, sy);
+      setScale(Number.isFinite(next) && next > 0 ? next : 0.28);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(outer);
+    return () => ro.disconnect();
+  }, []);
+
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+
+  return (
+    <div
+      ref={outerRef}
+      className="flex min-h-0 w-full min-w-0 flex-1 items-center justify-center"
+    >
+      <div className="relative shrink-0" style={{ width: slotW, height: slotH }}>
+        <div
+          className="absolute left-0 top-0 origin-top-left"
+          style={{
+            width: GENERATED_PIXTO_CARD_SIZE.w,
+            height: GENERATED_PIXTO_CARD_SIZE.h,
+            transform: `scale(${scale})`,
+          }}
+        >
+          <MiniDigitalWowCard card={card} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FirstThenLandscapePair({
   firstCard,
   secondCard,
@@ -432,6 +483,70 @@ function FirstThenLandscapePair({
   );
 }
 
+function IntroFooterColumn({
+  lang,
+  introFooterMoreOpen,
+  setIntroFooterMoreOpen,
+  onFocusMode,
+}: {
+  lang: ReturnType<typeof useCardUiLanguage>;
+  introFooterMoreOpen: boolean;
+  setIntroFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
+  onFocusMode: () => void;
+}) {
+  return (
+    <div
+      className="flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
+      role="navigation"
+      aria-label={firstThenDemoNavAria(lang)}
+    >
+      {introFooterMoreOpen ? (
+        <nav
+          id="intro-demo-more-nav"
+          aria-label={firstThenDemoIntroMoreNavAria(lang)}
+          className="flex flex-col items-center gap-2 pb-0.5"
+        >
+          <Link
+            href="/dashboard"
+            className={introFooterActionClass}
+            onClick={() => setIntroFooterMoreOpen(false)}
+          >
+            <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
+            {bottomNavLabel("home", lang)}
+          </Link>
+          <Link
+            href="/player/brushing-teeth"
+            className={introFooterActionClass}
+            onClick={() => setIntroFooterMoreOpen(false)}
+          >
+            <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
+            {playerKindRoutine(lang)}
+          </Link>
+        </nav>
+      ) : null}
+      <button type="button" onClick={onFocusMode} className={introFooterActionClass}>
+        <FocusModeIntroIcon />
+        {firstThenDemoFocusModeCta(lang)}
+      </button>
+      <button
+        type="button"
+        id="intro-demo-more-toggle"
+        aria-expanded={introFooterMoreOpen}
+        aria-controls={introFooterMoreOpen ? "intro-demo-more-nav" : undefined}
+        aria-label={
+          introFooterMoreOpen
+            ? firstThenDemoIntroMoreToggleHide(lang)
+            : firstThenDemoIntroMoreToggleShow(lang)
+        }
+        onClick={() => setIntroFooterMoreOpen((open) => !open)}
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white text-ink shadow-soft transition active:scale-[0.98]"
+      >
+        <FocusFabPlusIcon open={introFooterMoreOpen} />
+      </button>
+    </div>
+  );
+}
+
 function FirstThenPortraitStack({
   firstCard,
   secondCard,
@@ -492,6 +607,44 @@ export default function FirstThenDemoPage() {
   const second = HOTEL_GENERATED_CARD_PROPS[4];
 
   if (!showFocusMode) {
+    if (isMobileLandscape) {
+      return (
+        <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
+          <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] gap-x-2">
+            <div className="flex min-h-0 flex-col gap-1">
+              <div className="flex shrink-0 justify-center px-0.5 pt-0.5">
+                <IntroStepLabel
+                  label={firstThenSlotLabel("first", lang)}
+                  icon={<IconFirst className="h-7 w-7" />}
+                />
+              </div>
+              <FirstThenLandscapeColumn card={first} />
+            </div>
+
+            <div className="flex min-h-0 flex-col gap-1">
+              <div className="flex shrink-0 justify-center px-0.5 pt-0.5">
+                <IntroStepLabel
+                  label={firstThenSlotLabel("then", lang)}
+                  icon={<IconThen className="h-7 w-7" />}
+                />
+              </div>
+              <FirstThenLandscapeColumn card={second} />
+            </div>
+
+            <IntroFooterColumn
+              lang={lang}
+              introFooterMoreOpen={introFooterMoreOpen}
+              setIntroFooterMoreOpen={setIntroFooterMoreOpen}
+              onFocusMode={() => {
+                setIntroFooterMoreOpen(false);
+                setShowFocusMode(true);
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="h-[100dvh] w-full overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
         <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-2">
@@ -516,61 +669,16 @@ export default function FirstThenDemoPage() {
               />
             </div>
 
-            <div
-              className="row-span-2 flex min-h-0 flex-col items-center justify-end gap-2 pb-[max(0.65rem,env(safe-area-inset-bottom))] pr-[max(0.35rem,env(safe-area-inset-right))]"
-              role="navigation"
-              aria-label={firstThenDemoNavAria(lang)}
-            >
-              {introFooterMoreOpen ? (
-                <nav
-                  id="intro-demo-more-nav"
-                  aria-label={firstThenDemoIntroMoreNavAria(lang)}
-                  className="flex flex-col items-center gap-2 pb-0.5"
-                >
-                  <Link
-                    href="/dashboard"
-                    className={introFooterActionClass}
-                    onClick={() => setIntroFooterMoreOpen(false)}
-                  >
-                    <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
-                    {bottomNavLabel("home", lang)}
-                  </Link>
-                  <Link
-                    href="/player/brushing-teeth"
-                    className={introFooterActionClass}
-                    onClick={() => setIntroFooterMoreOpen(false)}
-                  >
-                    <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
-                    {playerKindRoutine(lang)}
-                  </Link>
-                </nav>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => {
+            <div className="row-span-2">
+              <IntroFooterColumn
+                lang={lang}
+                introFooterMoreOpen={introFooterMoreOpen}
+                setIntroFooterMoreOpen={setIntroFooterMoreOpen}
+                onFocusMode={() => {
                   setIntroFooterMoreOpen(false);
                   setShowFocusMode(true);
                 }}
-                className={introFooterActionClass}
-              >
-                <FocusModeIntroIcon />
-                {firstThenDemoFocusModeCta(lang)}
-              </button>
-              <button
-                type="button"
-                id="intro-demo-more-toggle"
-                aria-expanded={introFooterMoreOpen}
-                aria-controls={introFooterMoreOpen ? "intro-demo-more-nav" : undefined}
-                aria-label={
-                  introFooterMoreOpen
-                    ? firstThenDemoIntroMoreToggleHide(lang)
-                    : firstThenDemoIntroMoreToggleShow(lang)
-                }
-                onClick={() => setIntroFooterMoreOpen((open) => !open)}
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white text-ink shadow-soft transition active:scale-[0.98]"
-              >
-                <FocusFabPlusIcon open={introFooterMoreOpen} />
-              </button>
+              />
             </div>
 
             <div className="col-span-2 relative min-h-0">
