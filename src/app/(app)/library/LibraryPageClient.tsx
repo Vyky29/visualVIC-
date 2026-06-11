@@ -20,7 +20,7 @@ import {
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
-import { dayCentreIkramAvatarUrl } from "@/lib/cards/day-centre-cards";
+import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
@@ -85,8 +85,8 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   core: coreImageUrl("wash-hands"),
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
-  daycentre: DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
-  dcikram: dayCentreIkramAvatarUrl(),
+  daycentre: dayCentrePackMarkUrl(),
+  dcikram: dayCentrePackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
 };
@@ -454,7 +454,8 @@ export function LibraryPageClient() {
                   );
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
-                  const cropHeaderIcon = true;
+                  const cropHeaderIcon =
+                    section !== "daycentre" && section !== "dcikram";
 
                   return (
                     <div

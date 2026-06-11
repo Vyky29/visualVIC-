@@ -45,6 +45,7 @@ import {
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
+import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
@@ -171,27 +172,6 @@ function HomeSectionIcon() {
         d="M5.25 10.4 12 5l6.75 5.4v7.1a1.5 1.5 0 0 1-1.5 1.5h-2.9v-4.65a1.2 1.2 0 0 0-1.2-1.2h-2.3a1.2 1.2 0 0 0-1.2 1.2V19H6.75a1.5 1.5 0 0 1-1.5-1.5v-7.1Z"
         stroke="currentColor"
         strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ExtrasSectionIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-      <circle cx="12" cy="8.25" r="3.1" stroke="currentColor" strokeWidth="1.8" />
-      <path
-        d="M6.75 19.25c.9-3.1 2.85-4.75 5.25-4.75s4.35 1.65 5.25 4.75"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="M17.1 6.4 18.7 8l-3.35 3.35"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
@@ -670,9 +650,14 @@ export default function DashboardPage() {
             <div className="space-y-3 pt-2">
               <div className="flex flex-col items-center px-2 pb-1 pt-1 text-center">
                 <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-[#E05C9A]/80 ring-offset-[1.5px] ring-offset-canvas sm:h-11 sm:w-11">
-                  <span className="flex h-full w-full items-center justify-center text-[#E05C9A]">
-                    <ExtrasSectionIcon />
-                  </span>
+                  <Image
+                    src={dayCentrePackMarkUrl()}
+                    alt=""
+                    fill
+                    className="object-contain p-1.5"
+                    sizes="44px"
+                    unoptimized
+                  />
                 </span>
                 <p className="mt-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
                   {dashboardExtrasSectionTitle(cardUiLang)}
