@@ -21,7 +21,6 @@ import {
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
-  dayCentreIkramPackMarkUrl,
   dayCentrePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
@@ -96,7 +95,7 @@ function ikramGeneratedCardProps(step: DayCentreIkramStep) {
     title: lc(step.title),
     category: lc("Ikram · day centre"),
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentreIkramPackMarkUrl(),
+    iconUrl: dayCentrePackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -112,7 +111,7 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
     title: lc(step.title),
     category: lc("Ikram · day centre"),
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentreIkramPackMarkUrl(),
+    iconUrl: dayCentrePackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
