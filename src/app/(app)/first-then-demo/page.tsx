@@ -36,7 +36,6 @@ import {
   firstThenDemoPageTitle,
   firstThenSlotLabel,
   focusQuickNavAriaLabel,
-  focusModeOptExitFocus,
   focusQuickNavToggleHide,
   focusQuickNavToggleShow,
   playerKindRoutine,
@@ -552,34 +551,29 @@ function FirstThenPortraitStack({
   firstCard,
   secondCard,
   className,
-  showStepBadges = false,
+  showStepLabels = false,
   lang,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   className?: string;
-  showStepBadges?: boolean;
+  showStepLabels?: boolean;
   lang?: ReturnType<typeof useCardUiLanguage>;
 }) {
   const cardWidthClass = `mx-auto w-[min(100%,${GENERATED_PIXTO_SCHEDULE_NEXT_W}px)] min-w-0`;
   const slots = [
-    { card: firstCard, slot: "first" as const, icon: <IconFirst className="h-5 w-5" /> },
-    { card: secondCard, slot: "then" as const, icon: <IconThen className="h-5 w-5" /> },
+    { card: firstCard, slot: "first" as const, icon: <IconFirst className="h-6 w-6" /> },
+    { card: secondCard, slot: "then" as const, icon: <IconThen className="h-6 w-6" /> },
   ];
 
   return (
-    <div className={cn("grid min-h-0 grid-rows-2 gap-2", className)}>
+    <div className={cn("grid min-h-0 grid-rows-2 gap-1.5", className)}>
       {slots.map(({ card, slot, icon }) => (
-        <div key={slot} className="relative flex min-h-0 items-center justify-center">
-          {showStepBadges && lang ? (
-            <div className="pointer-events-none absolute inset-x-0 top-1 z-10 flex justify-center">
-              <FocusStepLabelBadge
-                label={firstThenSlotLabel(slot, lang)}
-                icon={icon}
-              />
-            </div>
+        <div key={slot} className="flex min-h-0 flex-col items-center justify-center gap-0.5">
+          {showStepLabels && lang ? (
+            <FocusStepLabel label={firstThenSlotLabel(slot, lang)} icon={icon} />
           ) : null}
-          <div className={cardWidthClass}>
+          <div className={cn(cardWidthClass, "min-h-0 flex-1")}>
             <MiniDigitalWowCard card={card} />
           </div>
         </div>
@@ -605,8 +599,8 @@ function IntroStepLabel({
   );
 }
 
-/** Compact badge overlaid on the card area — no flex height reserved for labels. */
-function FocusStepLabelBadge({
+/** Slim horizontal label — less height than IntroStepLabel so cards keep more space. */
+function FocusStepLabel({
   label,
   icon,
 }: {
@@ -614,13 +608,11 @@ function FocusStepLabelBadge({
   icon: ReactNode;
 }) {
   return (
-    <div className="flex justify-center px-1">
-      <div className="inline-flex items-center gap-1.5 rounded-full border border-ink/10 bg-white/92 px-2.5 py-1 shadow-soft backdrop-blur-sm">
-        <div className="grayscale [&_svg]:h-5 [&_svg]:w-5">{icon}</div>
-        <span className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink">
-          {label}
-        </span>
-      </div>
+    <div className="flex shrink-0 items-center justify-center gap-1.5 px-0.5 pt-0.5 text-center">
+      <div className="grayscale">{icon}</div>
+      <span className="text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-ink">
+        {label}
+      </span>
     </div>
   );
 }
@@ -668,7 +660,7 @@ function FocusFooterColumn({
       ) : null}
       <button type="button" onClick={onExitFocus} className={introFooterActionClass}>
         <FocusModeIntroIcon />
-        {focusModeOptExitFocus(lang)}
+        {firstThenDemoFocusModeCta(lang)}
       </button>
       <button
         type="button"
@@ -808,28 +800,20 @@ export default function FirstThenDemoPage() {
       {isMobileLandscape ? (
         <div className="h-full w-full px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-0 pt-[max(0.35rem,env(safe-area-inset-top))]">
           <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min(4.35rem,max-content)] gap-x-2">
-            <div className="relative col-span-2 min-h-0">
-              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 grid grid-cols-2 gap-x-2 pt-0.5">
-                <FocusStepLabelBadge
-                  label={firstThenSlotLabel("first", lang)}
-                  icon={<IconFirst className="h-5 w-5" />}
-                />
-                <FocusStepLabelBadge
-                  label={firstThenSlotLabel("then", lang)}
-                  icon={<IconThen className="h-5 w-5" />}
-                />
-              </div>
-              <FirstThenLandscapePair
-                firstCard={first}
-                secondCard={second}
-                className="relative h-full min-h-0"
-                style={{
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
+            <div className="flex min-h-0 flex-col gap-0.5">
+              <FocusStepLabel
+                label={firstThenSlotLabel("first", lang)}
+                icon={<IconFirst className="h-6 w-6" />}
               />
+              <FirstThenLandscapeColumn card={first} />
+            </div>
+
+            <div className="flex min-h-0 flex-col gap-0.5">
+              <FocusStepLabel
+                label={firstThenSlotLabel("then", lang)}
+                icon={<IconThen className="h-6 w-6" />}
+              />
+              <FirstThenLandscapeColumn card={second} />
             </div>
 
             <FocusFooterColumn
@@ -849,7 +833,7 @@ export default function FirstThenDemoPage() {
             firstCard={first}
             secondCard={second}
             className="min-h-0 flex-1"
-            showStepBadges
+            showStepLabels
             lang={lang}
           />
         </div>
