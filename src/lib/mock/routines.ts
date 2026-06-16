@@ -21,6 +21,7 @@ import {
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
+  PHYSICAL_3D_GENERATED_CARD_PROPS,
   PHYSICAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
@@ -185,6 +186,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "physical",
       PHYSICAL_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "physical-3d",
+    name: "Physical · 3D",
+    description:
+      "Physical activity — soft 3D equipment cards including BOSU and extras",
+    tags: ["extra", "activity"],
+    homePreviewImageUrl: PHYSICAL_3D_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "physical-3d",
+      PHYSICAL_3D_GENERATED_CARD_PROPS,
     ),
   },
   {

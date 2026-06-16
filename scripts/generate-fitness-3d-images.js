@@ -1,22 +1,21 @@
 /**
- * Generate PixtoLearn library illustrations (531×648 PNG).
+ * Generate fitness / Physical 3D library illustrations (531×648 PNG).
  *
- * Mode A — local SVG (default, no API, free):
- *   node scripts/generate-pixtolearn-images.js
- *   node scripts/generate-pixtolearn-images.js --mode=local
+ * Local SVG (default, no API):
+ *   node scripts/generate-fitness-3d-images.js
  *
- * Mode B — OpenAI gpt-image-1 (when billing is ready):
- *   Add OPENAI_API_KEY to private/.env.local
- *   node scripts/generate-pixtolearn-images.js --mode=openai
+ * OpenAI gpt-image-1 (when billing is ready):
+ *   node scripts/generate-fitness-3d-images.js --mode=openai
  *
  * Options:
  *   --force              overwrite existing PNGs
- *   --only=therapy-ball.png   single file
+ *   --only=bosu.png      single file
  */
 const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
+const { FITNESS_3D_ITEMS, build3dPrompt } = require("./pixtolearn-fitness-3d-items");
 
 /** Load KEY=VALUE lines from env files (later files do not override existing env). */
 function loadEnvFiles(filenames) {
@@ -50,55 +49,10 @@ function loadEnvFiles(filenames) {
 
 loadEnvFiles(["private/.env.local", ".env.local", ".env"]);
 
-const OUT_DIR = path.join(ROOT, "public", "images", "library");
+const OUT_DIR = path.join(ROOT, "public", "images", "library-3d");
 const W = 531;
 const H = 648;
-
-const ITEMS = [
-  { file: "therapy-ball.png", slug: "therapy-ball", object: "therapy ball" },
-  { file: "trampoline.png", slug: "trampoline", object: "trampoline" },
-  { file: "step-platform.png", slug: "step-platform", object: "step platform" },
-  { file: "treadmill.png", slug: "treadmill", object: "treadmill" },
-  { file: "exercise-machine.png", slug: "exercise-machine", object: "exercise machine" },
-  { file: "weights.png", slug: "weights", object: "weights" },
-  { file: "row-machine.png", slug: "row-machine", object: "row machine" },
-  { file: "skis.png", slug: "skis", object: "skis" },
-  { file: "exercise-bike.png", slug: "exercise-bike", object: "exercise bike" },
-  { file: "exercise-mat.png", slug: "exercise-mat", object: "exercise mat" },
-  { file: "resistance-bands.png", slug: "resistance-bands", object: "resistance bands" },
-  { file: "foam-roller.png", slug: "foam-roller", object: "foam roller" },
-  { file: "stretching.png", slug: "stretching", object: "stretching symbol" },
-  { file: "apron.png", slug: "apron", object: "apron" },
-  { file: "mixing-bowl.png", slug: "mixing-bowl", object: "mixing bowl" },
-  { file: "wooden-spoon.png", slug: "wooden-spoon", object: "wooden spoon" },
-  { file: "rolling-pin.png", slug: "rolling-pin", object: "rolling pin" },
-  { file: "cheese-grater.png", slug: "cheese-grater", object: "cheese grater" },
-  { file: "vegetable-peeler.png", slug: "vegetable-peeler", object: "vegetable peeler" },
-  { file: "chopping-board.png", slug: "chopping-board", object: "chopping board" },
-  { file: "tomato-sauce.png", slug: "tomato-sauce", object: "tomato sauce bottle" },
-  { file: "paintbrush.png", slug: "paintbrush", object: "paintbrush" },
-  { file: "paint-palette.png", slug: "paint-palette", object: "paint palette" },
-  { file: "scissors.png", slug: "scissors", object: "scissors" },
-  { file: "glue-stick.png", slug: "glue-stick", object: "glue stick" },
-  { file: "coloured-paper.png", slug: "coloured-paper", object: "coloured paper" },
-  { file: "jigsaw-puzzle.png", slug: "jigsaw-puzzle", object: "jigsaw puzzle" },
-  { file: "sorting-trays.png", slug: "sorting-trays", object: "sorting trays" },
-  { file: "matching-cards.png", slug: "matching-cards", object: "matching cards" },
-  { file: "play-dough.png", slug: "play-dough", object: "play dough" },
-  { file: "pizza.png", slug: "pizza", object: "pizza" },
-  { file: "cooking.png", slug: "cooking", object: "cooking activity" },
-  { file: "painting.png", slug: "painting", object: "painting activity" },
-  { file: "peeling.png", slug: "peeling", object: "peeling activity" },
-];
-
-const PROMPT_TEMPLATE =
-  "Create a single PixtoLearn style object illustration of [OBJECT]. Canvas size 531 × 648 px. PNG with transparent background. Flat vector illustration. Clean educational visual. Thin dark outlines. Soft rounded shapes. Professional and child friendly. No text, no labels, no shadows, no gradients, no background elements. Object centred vertically and horizontally. Object should occupy approximately 80 percent of the canvas height. Single isolated object only.";
-
 const REQUEST_DELAY_MS = 1500;
-
-function buildPrompt(object) {
-  return PROMPT_TEMPLATE.replace("[OBJECT]", object);
-}
 
 function parseArgs() {
   const force = process.argv.includes("--force");
@@ -169,18 +123,18 @@ async function resizeToCanvas(sharp, inputBuffer) {
 }
 
 async function generateLocalOne(sharp, item) {
-  const { ILLUSTRATIONS, illustrationSvg } = require("./pixtolearn-library-illustrations");
-  const body = ILLUSTRATIONS[item.slug];
+  const { ILLUSTRATIONS_3D, illustrationSvg3d } = require("./pixtolearn-library-illustrations-3d");
+  const body = ILLUSTRATIONS_3D[item.slug];
   if (!body) {
-    throw new Error(`No local SVG for slug "${item.slug}"`);
+    throw new Error(`No local 3D SVG for slug "${item.slug}"`);
   }
 
-  const svg = illustrationSvg(body, W, H);
+  const svg = illustrationSvg3d(body, W, H);
   return sharp(Buffer.from(svg)).png().toBuffer();
 }
 
 async function generateOpenAIOne(openai, sharp, item) {
-  const prompt = buildPrompt(item.object);
+  const prompt = build3dPrompt(item.object);
 
   const response = await openai.images.generate({
     model: "gpt-image-1",
@@ -221,9 +175,9 @@ async function main() {
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  let items = ITEMS;
+  let items = FITNESS_3D_ITEMS;
   if (only) {
-    items = ITEMS.filter((item) => item.file === only);
+    items = FITNESS_3D_ITEMS.filter((item) => item.file === only);
     if (items.length === 0) {
       console.error(`Error: no item matches --only=${only}`);
       process.exit(1);
@@ -234,10 +188,10 @@ async function main() {
   const skipped = [];
   const failed = [];
 
-  const modeLabel = mode === "local" ? "A (local SVG)" : "B (OpenAI API)";
+  const modeLabel = mode === "local" ? "local 3D SVG" : "OpenAI 3D API";
   console.log(`Mode: ${modeLabel}`);
   console.log(`Output directory: ${OUT_DIR}`);
-  console.log(`Generating ${items.length} image(s)...\n`);
+  console.log(`Generating ${items.length} fitness 3D image(s)...\n`);
 
   for (let i = 0; i < items.length; i += 1) {
     const item = items[i];

@@ -68,6 +68,7 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
 const HOME_EXTRA_PACK_ROUTINE_IDS = new Set([
   "at-the-day-centre",
   "physical",
+  "physical-3d",
   "ikram-day-centre",
 ]);
 

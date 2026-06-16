@@ -102,6 +102,8 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "step-platform.png",
   "treadmill.png",
   "exercise-machine.png",
+  "weights.png",
+  "row-machine.png",
   "skis.png",
   "exercise-bike.png",
   // Fitness — stretching
@@ -197,6 +199,8 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-step-platform", slug: "step-platform", title: "Steps" },
   { id: "dcg-treadmill", slug: "treadmill", title: "Treadmill" },
   { id: "dcg-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcg-weights", slug: "weights", title: "Weights" },
+  { id: "dcg-row-machine", slug: "row-machine", title: "Row machine" },
   { id: "dcg-skis", slug: "skis", title: "Skis" },
   { id: "dcg-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
   // Fitness — stretching
@@ -226,6 +230,8 @@ export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgf-step-platform", slug: "step-platform", title: "Steps" },
   { id: "dcgf-treadmill", slug: "treadmill", title: "Treadmill" },
   { id: "dcgf-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcgf-weights", slug: "weights", title: "Weights" },
+  { id: "dcgf-row-machine", slug: "row-machine", title: "Row machine" },
   { id: "dcgf-skis", slug: "skis", title: "Skis" },
   { id: "dcgf-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
   { id: "dcgf-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },

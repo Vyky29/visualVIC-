@@ -245,6 +245,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Physical",
     es: "Actividad física",
   },
+  "physical-3d": {
+    en: "Physical · 3D",
+    es: "Actividad física · 3D",
+  },
 };
 
 export function libraryDayCentreIkramLabel(language: CardLanguageCode): string {

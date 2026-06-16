@@ -15,9 +15,15 @@ export {
 } from "@/lib/cards/day-centre-general-cards";
 
 export {
+  PHYSICAL_3D_CATEGORY_LABEL,
+  PHYSICAL_3D_EXTRA_SEQUENCE,
+  PHYSICAL_3D_LIBRARY_DIR,
+  PHYSICAL_3D_SEQUENCE,
   PHYSICAL_CATEGORY_COLOUR,
   PHYSICAL_CATEGORY_LABEL,
   PHYSICAL_SEQUENCE,
+  physical3dImageUrl,
+  physical3dImageUrlForStep,
   physicalImageUrl,
   physicalImageUrlForStep,
   type PhysicalStep,

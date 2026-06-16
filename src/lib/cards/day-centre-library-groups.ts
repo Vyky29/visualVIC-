@@ -42,6 +42,8 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "step-platform": "fitness-equipment",
   treadmill: "fitness-equipment",
   "exercise-machine": "fitness-equipment",
+  weights: "fitness-equipment",
+  "row-machine": "fitness-equipment",
   skis: "fitness-equipment",
   "exercise-bike": "fitness-equipment",
   // Fitness — stretching
