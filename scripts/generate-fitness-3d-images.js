@@ -1,11 +1,14 @@
 /**
  * Generate fitness / Physical 3D library illustrations (531×648 PNG).
  *
- * Local SVG (default, no API):
- *   node scripts/generate-fitness-3d-images.js
+ * IMPORTANT: --mode=local produces flat SVG icons, NOT real 3D art.
+ * Do not ship those to public/images/library-3d/. Prefer:
+ *   - User reference PNGs (same workflow as import-fitness-2d-references.mjs)
+ *   - OpenAI when billing is ready:
+ *       node scripts/generate-fitness-3d-images.js --mode=openai
  *
- * OpenAI gpt-image-1 (when billing is ready):
- *   node scripts/generate-fitness-3d-images.js --mode=openai
+ * Local SVG (dev placeholder only):
+ *   node scripts/generate-fitness-3d-images.js --mode=local
  *
  * Options:
  *   --force              overwrite existing PNGs
