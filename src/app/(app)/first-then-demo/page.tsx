@@ -27,7 +27,7 @@ import {
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
-  GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import {
   parseFirstThenDemoLayout,
@@ -64,7 +64,6 @@ const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 const FOCUS_LANDSCAPE = {
   cardW: GENERATED_PIXTO_FOCUS_FIXED_ZONE.w,
   cardH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.h,
-  cardRadius: GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
   cardGap: 40,
   /** Pink “First” / “Then” row above illustration (wireframe). */
   slotLabelH: 36,
@@ -484,7 +483,7 @@ function FirstThenFocusSpecCard({
       style={{
         width: FOCUS_LANDSCAPE.cardW,
         height: FOCUS_LANDSCAPE.cardH,
-        borderRadius: FOCUS_LANDSCAPE.cardRadius,
+        ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
         border: `1px solid ${card.categoryColour}`,
       }}
       aria-label={`${slotLabel} — ${displayTitle}`}

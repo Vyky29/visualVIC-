@@ -18,6 +18,7 @@ import {
   playerRoutineToneShortLabel,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   routineSchedulePlayerIndexCardClass,
@@ -25,6 +26,7 @@ import {
   stepCardVisualTone,
   type RoutineVisualTone,
 } from "@/lib/utils/routine-accent";
+import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
 import type { Routine } from "@/lib/types/routine";
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 
@@ -86,6 +88,10 @@ export default function PlayerIndexPage() {
         <ul className="flex flex-col gap-3">
           {combined.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+            const previewPixto =
+              Boolean(previewUrl) &&
+              (isPixtoLearnBundledCardUrl(previewUrl) ||
+                Boolean(r.steps[0]?.generatedPixto));
             const tone = routineVisualTone(r);
             const kindLabel =
               r.kind === "Template"
@@ -108,7 +114,12 @@ export default function PlayerIndexPage() {
                     href={`/player/${r.id}`}
                     className="flex gap-4 p-4 transition hover:bg-white/60"
                   >
-                    <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl bg-canvas-muted">
+                    <div
+                      className={cn(
+                        "relative h-[72px] w-[72px] shrink-0 overflow-hidden bg-canvas-muted",
+                        previewPixto && GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+                      )}
+                    >
                       {previewUrl ? (
                         <Image
                           src={previewUrl}

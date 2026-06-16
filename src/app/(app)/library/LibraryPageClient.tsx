@@ -59,6 +59,7 @@ import {
   type PickablePackId,
 } from "@/lib/library/pickable-library-cards";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
+import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -257,13 +258,14 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
       type="button"
       onClick={() => onToggle(v.pickId)}
       className={cn(
-        "flex w-full flex-col overflow-hidden rounded-xl border border-ink/5 bg-cream p-0 text-left shadow-card transition active:scale-[0.99] sm:rounded-2xl",
+        "flex w-full flex-col overflow-hidden border border-ink/5 bg-cream p-0 text-left shadow-card transition active:scale-[0.99]",
+        GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
         selected ? "ring-2 ring-sage/50" : "hover:shadow-soft",
       )}
     >
       <div
         className={cn(
-          "relative aspect-[5/6] w-full shrink-0 overflow-hidden rounded-t-xl bg-canvas-muted sm:rounded-t-2xl",
+          "relative aspect-[5/6] w-full shrink-0 overflow-hidden bg-canvas-muted",
           pixto ? "bg-white" : "bg-canvas-muted",
         )}
       >
@@ -300,12 +302,12 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
           </div>
         ) : null}
         {selected ? (
-          <div className="pointer-events-none absolute inset-0 rounded-t-xl ring-2 ring-inset ring-sage/70 sm:rounded-t-2xl" />
+          <div className="pointer-events-none absolute inset-0 ring-2 ring-inset ring-sage/70" />
         ) : null}
       </div>
       <div
         className={cn(
-          "isolate flex w-full shrink-0 flex-col justify-center rounded-b-xl px-1.5 pb-1.5 pt-1 sm:rounded-b-2xl sm:px-2 sm:pb-1.5 sm:pt-1",
+          "isolate flex w-full shrink-0 flex-col justify-center px-1.5 pb-1.5 pt-1 sm:px-2 sm:pb-1.5 sm:pt-1",
           "min-h-[2.75rem] sm:min-h-[2.95rem]",
           libraryRibbonClassForPickId(v.pickId),
         )}

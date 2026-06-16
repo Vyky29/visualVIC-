@@ -11,15 +11,20 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { GENERATED_PIXTO_SCHEDULE_NEXT_W } from "@/lib/constants/generated-pixto-card-sizes";
+import {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+  GENERATED_PIXTO_SCHEDULE_NEXT_W,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
   pixtoBundledCardObjectPositionClass,
 } from "@/lib/utils/visual-card-url";
 
-const miniCard =
-  "w-full overflow-hidden rounded-[1.5rem] p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]";
+const miniCard = cn(
+  "w-full overflow-hidden p-0 shadow-[0_6px_22px_-12px_rgba(42,86,58,0.2)]",
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+);
 
 /** Portrait stack: same visible width as Schedule NEXT (bus card). */
 const portraitCardWidthClass = `w-[min(100%,${GENERATED_PIXTO_SCHEDULE_NEXT_W}px)]`;

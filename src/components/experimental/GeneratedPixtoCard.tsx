@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils/cn";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  generatedPixtoCornerRadiusPx,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
@@ -19,6 +21,8 @@ import {
 export {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  generatedPixtoCornerRadiusPx,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
@@ -985,6 +989,7 @@ function GeneratedPixtoFocusFixedZoneCard({
       style={{
         width: z.w,
         height: z.h,
+        ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
       }}
       aria-label={title}
     >
@@ -1263,6 +1268,7 @@ export function GeneratedPixtoCard({
       style={{
         aspectRatio: cardAspect,
         gridTemplateRows,
+        ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
       }}
     >
       {SHOW_GENERATED_PIXTO_DEBUG_GUIDES ? (

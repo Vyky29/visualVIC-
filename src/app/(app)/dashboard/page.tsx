@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
+import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import {
@@ -379,7 +380,7 @@ function HomeRoutinePreviewMedia({
     <div
       className={cn(
         "relative overflow-hidden",
-        pixto ? "bg-white" : "bg-canvas-muted",
+        pixto ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS) : "bg-canvas-muted",
         frameClassName,
       )}
     >
@@ -540,7 +541,10 @@ export default function DashboardPage() {
                   imageUrl={
                     primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl
                   }
-                  frameClassName="aspect-[10/13] w-[4.25rem] shrink-0 rounded-2xl bg-white shadow-card"
+                  frameClassName={cn(
+                    "aspect-[10/13] w-[4.25rem] shrink-0 bg-white shadow-card",
+                    GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+                  )}
                   sizes="96px"
                   priority
                 />
@@ -728,7 +732,10 @@ export default function DashboardPage() {
                     >
                       <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
                         <div className="flex gap-3 p-3">
-                          <div className="relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35">
+                          <div className={cn(
+                            "relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden bg-white shadow-card ring-1 ring-[#E05C9A]/35",
+                            GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+                          )}>
                             <Image
                               src={firstThenDemoPackPreviewUrl("ikram-home")}
                               alt=""

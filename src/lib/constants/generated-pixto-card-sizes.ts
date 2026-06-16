@@ -26,10 +26,37 @@ export const GENERATED_PIXTO_SCHEDULE_NEXT_W = 218 as const;
 
 /**
  * Uniform outer corner radius for all Pixto card shells (NOW, NEXT, Focus, demos).
- * Matches Tailwind `rounded-3xl` (1.5rem).
+ * 24px at the master 744×1054 design frame — scales with rendered width/height.
  */
 export const GENERATED_PIXTO_CARD_CORNER_RADIUS_PX = 24 as const;
-export const GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS = "rounded-[1.5rem]" as const;
+
+/** Master generated-card design frame (px). */
+export const GENERATED_PIXTO_CARD_DESIGN_W = 744 as const;
+export const GENERATED_PIXTO_CARD_DESIGN_H = 1054 as const;
+
+/**
+ * Proportional shell radius — `calc` resolves against the element box so NOW/NEXT/Focus
+ * thumbnails and scaled shells keep the same curvature ratio as 24px @ 744×1054.
+ */
+export const GENERATED_PIXTO_CARD_CORNER_RADIUS_CALC =
+  `calc(100% * ${GENERATED_PIXTO_CARD_CORNER_RADIUS_PX} / ${GENERATED_PIXTO_CARD_DESIGN_W}) / calc(100% * ${GENERATED_PIXTO_CARD_CORNER_RADIUS_PX} / ${GENERATED_PIXTO_CARD_DESIGN_H})` as const;
+
+/** Inline style for shells that cannot use the Tailwind utility class. */
+export const GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE = {
+  borderRadius: GENERATED_PIXTO_CARD_CORNER_RADIUS_CALC,
+} as const;
+
+/** @see {@link GENERATED_PIXTO_CARD_CORNER_RADIUS_CALC} in `globals.css` */
+export const GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS =
+  "pixto-card-shell-radius" as const;
+
+/** Pixel radius for a known render width (uniform scale from master width). */
+export function generatedPixtoCornerRadiusPx(renderWidthPx: number): number {
+  return (
+    (GENERATED_PIXTO_CARD_CORNER_RADIUS_PX * renderWidthPx) /
+    GENERATED_PIXTO_CARD_DESIGN_W
+  );
+}
 
 /**
  * Focus only — shrink the illustration render box inside its slot.

@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import {
   GeneratedPixtoCard,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_CATEGORY_BAND_H,
   GENERATED_PIXTO_COMPANY_MARK,
@@ -114,7 +115,7 @@ function DiagnosticPanel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex w-full flex-col gap-3 rounded-[1.5rem] border border-ink/[0.08] bg-white p-4 shadow-soft">
+    <div className={cn("flex w-full flex-col gap-3 border border-ink/[0.08] bg-white p-4 shadow-soft", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)}>
       <div className="space-y-1">
         <h3 className="text-[13px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
           {title}
@@ -236,7 +237,7 @@ function DocumentedCard({
 }: DocumentedCardProps) {
   return (
     <article
-      className="relative mx-auto grid w-full overflow-hidden rounded-[1.5rem] bg-white"
+      className={cn("relative mx-auto grid w-full overflow-hidden bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)}
       style={{
         width: `min(100%, ${widthPx}px)`,
         height: heightPx ? `${heightPx}px` : undefined,
@@ -332,7 +333,7 @@ function LiveFocusCardPreview() {
 
   return (
     <div
-      className="mx-auto w-full overflow-hidden rounded-[1.5rem] border border-ink/[0.08] bg-[#060807]"
+      className={cn("mx-auto w-full overflow-hidden border border-ink/[0.08] bg-[#060807]", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)}
       style={{
         width: `min(100%, ${FOCUS_DEMO_PREVIEW_MAX_W}px)`,
         aspectRatio: `${GENERATED_PIXTO_FOCUS_CARD_SIZE.w} / ${GENERATED_PIXTO_FOCUS_CARD_SIZE.h}`,

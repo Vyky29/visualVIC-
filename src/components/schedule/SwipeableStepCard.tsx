@@ -398,7 +398,10 @@ export function SwipeableStepCard({
           rings.scheduleCompact,
         )}
       >
-        <div className="relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
+        <div className={cn(
+          "relative aspect-[10/13] w-[3.25rem] shrink-0 overflow-hidden bg-canvas-muted",
+          GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+        )}>
           {gp ? (
             <Image
               src={gp.illustrationUrl}
