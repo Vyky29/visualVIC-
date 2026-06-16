@@ -36,6 +36,9 @@ yarn-error.log*
 # local-only notes (API keys, generation checklists — never commit)
 /private/
 
+# dev image staging (generated before fit to library)
+/scripts/.staging/
+
 # typescript
 next-env.d.ts
 
