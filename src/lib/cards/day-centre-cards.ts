@@ -7,11 +7,21 @@ export {
   DAY_CENTRE_CATEGORY_COLOUR,
   DAY_CENTRE_GENERAL_CARD_FILES,
   DAY_CENTRE_GENERAL_CATEGORY_LABEL,
+  DAY_CENTRE_FITNESS_SEQUENCE,
   DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_GENERAL_SEQUENCE,
   dayCentreGeneralImageUrlForStep,
   type DayCentreGeneralStep,
 } from "@/lib/cards/day-centre-general-cards";
+
+export {
+  PHYSICAL_CATEGORY_COLOUR,
+  PHYSICAL_CATEGORY_LABEL,
+  PHYSICAL_SEQUENCE,
+  physicalImageUrl,
+  physicalImageUrlForStep,
+  type PhysicalStep,
+} from "@/lib/cards/physical-cards";
 
 export {
   DAY_CENTRE_IKRAM_CATEGORY_LABEL,

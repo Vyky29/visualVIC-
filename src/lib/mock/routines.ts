@@ -21,6 +21,7 @@ import {
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
+  PHYSICAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
@@ -172,6 +173,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "at-the-day-centre",
       DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "physical",
+    name: "Physical",
+    description:
+      "Physical activity — equipment and stretching PixtoLearn cards",
+    tags: ["extra", "activity"],
+    homePreviewImageUrl: PHYSICAL_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "physical",
+      PHYSICAL_GENERATED_CARD_PROPS,
     ),
   },
   {

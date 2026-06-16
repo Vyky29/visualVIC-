@@ -36,6 +36,7 @@ import {
 import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_SCHEDULE_NEXT_W,
   GENERATED_PIXTO_SCHEDULE_NOW_W,
 } from "@/lib/constants/generated-pixto-card-sizes";
@@ -105,7 +106,7 @@ const STEP_OUTLINE_HEX: Record<
 };
 
 /** Shared clip + radius for 3D flip faces (front and back must match exactly). */
-const FLIP_CARD_RADIUS_CLASS = "rounded-[1.5rem]";
+const FLIP_CARD_RADIUS_CLASS = GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS;
 const FLIP_FACE_MEDIA_CLASS = "absolute inset-0";
 
 function flipFaceShellClass(bgClass: string) {
@@ -550,7 +551,7 @@ export function SwipeableStepCard({
       }
       className={cn(
         "relative touch-manipulation transition-shadow duration-300",
-        completionFlip ? FLIP_CARD_RADIUS_CLASS : "rounded-[1.5rem]",
+        FLIP_CARD_RADIUS_CLASS,
         variant === "focus" ? "touch-none" : "touch-pan-y",
         completionFlip
           ? "overflow-hidden"
@@ -594,7 +595,7 @@ export function SwipeableStepCard({
           cn(
             "flex h-full min-h-0 w-full max-w-full flex-col bg-transparent",
             "overflow-hidden",
-            completionFlip ? FLIP_CARD_RADIUS_CLASS : "rounded-2xl sm:rounded-3xl",
+            FLIP_CARD_RADIUS_CLASS,
             !suppressCompletionOutline && rings.scheduleFocus,
           ),
         variant !== "hero" &&
@@ -612,7 +613,7 @@ export function SwipeableStepCard({
           !completionFlip &&
             hasGeneratedPixto &&
             (variant === "focus"
-              ? "overflow-hidden rounded-[1.5rem]"
+              ? cn("overflow-hidden", FLIP_CARD_RADIUS_CLASS)
               : "overflow-visible"),
           variant === "focus"
             ? focusPixto || focusGenerated
@@ -896,7 +897,8 @@ export function SwipeableStepCard({
             {scheduleGeneratedPixto && gp ? (
               <div
                 className={cn(
-                  "absolute inset-0 flex min-h-0 min-w-0 rounded-[1.5rem]",
+                  "absolute inset-0 flex min-h-0 min-w-0",
+                  FLIP_CARD_RADIUS_CLASS,
                   variant === "focus"
                     ? "overflow-hidden bg-transparent"
                     : "items-center justify-center overflow-visible bg-transparent",
@@ -944,10 +946,13 @@ export function SwipeableStepCard({
               </div>
             ) : step.imageUrl ? (
               schedulePixtoBleed ? (
-                <div className="absolute inset-0 overflow-hidden rounded-[1.5rem]">
+                <div
+                  className={cn("absolute inset-0 overflow-hidden", FLIP_CARD_RADIUS_CLASS)}
+                >
                   <div
                     className={cn(
-                      "absolute overflow-hidden rounded-[1.5rem]",
+                      "absolute overflow-hidden",
+                      FLIP_CARD_RADIUS_CLASS,
                       variant === "focus"
                         ? cn(
                             FOCUS_PIXTO_PNG_INSET_PX === 0 && "inset-0",

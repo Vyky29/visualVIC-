@@ -11,6 +11,12 @@ import {
   dayCentreGeneralImageUrlForStep,
 } from "@/lib/cards/day-centre-general-cards";
 import {
+  PHYSICAL_CATEGORY_COLOUR,
+  PHYSICAL_CATEGORY_LABEL,
+  PHYSICAL_SEQUENCE,
+  physicalImageUrlForStep,
+} from "@/lib/cards/physical-cards";
+import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
   dayCentreIkramFocusImageUrlForStep,
@@ -86,6 +92,19 @@ export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCar
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
     iconUrl: dayCentrePackMarkUrl(),
   }));
+
+/** Physical — equipment + stretching (library illustrations). */
+export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  PHYSICAL_SEQUENCE.map((s) => ({
+    illustrationUrl: physicalImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc(PHYSICAL_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
+
+/** @deprecated Use {@link PHYSICAL_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_FITNESS_GENERATED_CARD_PROPS = PHYSICAL_GENERATED_CARD_PROPS;
 
 /** Day Centre · Ikram — full photo library. */
 function ikramGeneratedCardProps(step: DayCentreIkramStep) {

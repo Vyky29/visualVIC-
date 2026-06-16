@@ -7,13 +7,18 @@ import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preferen
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 import {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
 } from "@/lib/constants/generated-pixto-card-sizes";
 
 export {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
@@ -142,8 +147,8 @@ export function IllustrationExpandedTopDiagnosticLine({
   );
 }
 
-/** Focus only — inset illustration box; centred, bottom on title/action band. */
-function FocusAnchoredIllustrationImage({
+/** Focus routine — locked illustration render box (`GENERATED_PIXTO_FOCUS_*`). */
+export function FocusRoutineIllustrationImage({
   src,
   sizes,
   objectClass,
@@ -157,7 +162,6 @@ function FocusAnchoredIllustrationImage({
   const { topPx, leftPx, rightPx, bottomPx } =
     GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
   const widthTrim = leftPx + rightPx;
-  const heightTrim = topPx + bottomPx;
   const unoptimized =
     src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
   return (
@@ -166,7 +170,7 @@ function FocusAnchoredIllustrationImage({
         className="relative mx-auto shrink-0"
         style={{
           width: `max(0px, calc(100% - ${widthTrim}px))`,
-          height: `max(0px, calc(100% - ${heightTrim}px))`,
+          height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px`,
           ...(scale !== 1
             ? {
                 transform: `scale(${scale})`,
@@ -646,8 +650,18 @@ function GeneratedPixtoDebugGuides({
   illustrationWidthPct: string;
 }) {
   return (
-    <div className="pointer-events-none absolute inset-0 z-40 overflow-hidden rounded-[1.35rem]">
-      <div className="absolute inset-0 rounded-[1.35rem] border border-[rgba(255,0,0,0.55)]" />
+    <div
+      className={cn(
+        "pointer-events-none absolute inset-0 z-40 overflow-hidden",
+        GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+      )}
+    >
+      <div
+        className={cn(
+          "absolute inset-0 border border-[rgba(255,0,0,0.55)]",
+          GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+        )}
+      />
 
       <div
         className="absolute inset-0 grid"
@@ -963,7 +977,8 @@ function GeneratedPixtoFocusFixedZoneCard({
       data-generated-pixto-card
       data-card-type="focus-fixed-zone"
       className={cn(
-        "relative flex min-h-0 flex-col overflow-hidden rounded-[1.5rem] bg-white touch-manipulation",
+        "relative flex min-h-0 flex-col overflow-hidden bg-white touch-manipulation",
+        GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
         suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
         className,
       )}
@@ -1009,7 +1024,7 @@ function GeneratedPixtoFocusFixedZoneCard({
           </div>
         ) : null}
 
-        <FocusAnchoredIllustrationImage
+        <FocusRoutineIllustrationImage
           src={resolvedIllustrationSrc}
           sizes={`${z.w}px`}
           objectClass="!h-full !w-full object-contain object-bottom"
@@ -1026,7 +1041,10 @@ function GeneratedPixtoFocusFixedZoneCard({
         }}
       >
         <p
-          className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
+          className={cn(
+            "max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]",
+            z.actionMaxLines === 3 ? "line-clamp-3" : "line-clamp-2",
+          )}
           style={{
             fontSize: z.actionTitleFontPx,
             fontWeight: 800,
@@ -1236,7 +1254,8 @@ export function GeneratedPixtoCard({
       data-generated-pixto-card
       data-card-type={cardType ?? "default"}
       className={cn(
-        "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden rounded-[1.5rem]",
+        "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden",
+        GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
         "bg-white touch-manipulation",
         suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
         className,

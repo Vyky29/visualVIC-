@@ -219,6 +219,21 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-birthday-party", slug: "birthday-party", title: "Birthday party" },
 ] as const;
 
+/** Fitness routine — equipment then stretching (531×648 illustrations). */
+export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgf-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+  { id: "dcgf-trampoline", slug: "trampoline", title: "Trampoline" },
+  { id: "dcgf-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcgf-treadmill", slug: "treadmill", title: "Treadmill" },
+  { id: "dcgf-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcgf-skis", slug: "skis", title: "Skis" },
+  { id: "dcgf-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
+  { id: "dcgf-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
+  { id: "dcgf-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
+  { id: "dcgf-foam-roller", slug: "foam-roller", title: "Foam roller" },
+  { id: "dcgf-stretching", slug: "stretching", title: "Stretching" },
+] as const;
+
 /** Saturday schedule (photo 1) — general illustrations; return bus reuses `bus` art. */
 export const DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgs-music", slug: "music", title: "Music" },

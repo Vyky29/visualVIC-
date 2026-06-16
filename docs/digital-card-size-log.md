@@ -5,7 +5,7 @@ Reference for **original PNG**, **locked digital** (744×1054), and **where each
 > **Product rule (agreed):**  
 > **Focus Mode on mobile = the largest card** — what the user should feel as “full size”.  
 > The **locked digital card** (744×1054 geometry) is the **same design**, but shown **smaller** in Schedule NOW/NEXT, First & Then (portrait + landscape mini), and other previews.  
-> Focus may render **slightly larger** than the strict locked frame when the slot allows it (`GeneratedPixtoFocusSlotScale` fits 384×520 into the stage).
+> Focus may render **slightly larger** than the strict locked frame when the slot allows it (`GeneratedPixtoFocusSlotScale` fits 384×560 into the stage).
 
 ---
 
@@ -40,38 +40,37 @@ Single HTML/CSS frame — **do not resize zones independently**; scale the whole
 
 ---
 
-## 3. Focus Mode — largest on phone (reference)
+## 3. Focus routine card — LOCKED (agreed perfect digital)
 
-### 3a. Generated digital cards (HTML shell)
+**Source of truth:** `GENERATED_PIXTO_FOCUS_ROUTINE_CARD_LOCKED` in `src/lib/constants/generated-pixto-card-sizes.ts`
 
-New **3-zone Focus frame** (illustration flex + fixed text/footer):
+**Applies to:** routine Focus Mode (`/focus/...`, `FocusMode.tsx`), `GeneratedPixtoFocusFixedZoneCard`, first-then-demo Focus landscape (`FOCUS_LANDSCAPE` aliases same constants). **Does not** change Schedule NOW/NEXT geometry.
 
-| Zone | Size (px) | Constant |
+### 3a. Card shell (384 × 560 design px)
+
+| Zone | Size (px) | Constant / field |
+|------|-----------|------------------|
+| **Full card** | **384 × 560** | `designW` × `designH` |
+| Illustration slot padding | top **38**, sides **40**, bottom **0** | `illustPadTop` / `illustPadX` / `illustPadBottom` |
+| **Illustration render box** (locked) | **304 × 370** | width = 384−80 inset; `illustrationRenderBoxH` **370** |
+| Illustration render inset | top **24**, left **8**, right **18** | `illustrationRenderInset` |
+| White title band | **96** tall, **3 lines**, font **28** | `actionH`, `actionMaxLines`, `actionTitleFontPx` |
+| Category ribbon footer | **56** | `footerH` — fill from `categoryColour` (Day Centre **#E05C9A** pink; Hotel **#8C1E2E** red; Airport **#F9DD9E** yellow; Finish **#9aa3a8** grey) |
+| Pack mark (logo) | **44 × 44** | `packMarkSize` |
+| Pack mark position | top **20**, right **24** | `packMarkTop`, `packMarkRight` |
+
+**Behaviour:** extra title height steals only from the flex illustration slot; illustration **render px stay 370** and sit **flush** on the white title band (`items-end`, `object-bottom`). Card total height **560** never changes.
+
+**Stage cap (scaled on phone):**
+
+| Mode | Max width | Constant |
 |------|-----------|----------|
-| **Full card** | **384 × 560** | `GENERATED_PIXTO_FOCUS_FIXED_ZONE` in `generated-pixto-card-sizes.ts` |
-| Illustration area | flex 1 (~**388px** inner) | pads 32/20/12 — **~69%** of card height |
-| Action text | 384 × **72** | `actionH` |
-| Footer ribbon | 384 × **56** | `footerH` |
+| Default | **448** (28rem) | `stageMaxW` |
+| Expanded option | **540** | `stageExpandedMaxW` |
 
-**Stage cap (parent width):**
+**Scaler:** `GeneratedPixtoFocusSlotScale` + `FocusRoutineIllustrationImage` — uniform scale of the 384×560 frame.
 
-| Mode | Max width | File |
-|------|-----------|------|
-| Default | `min(100%, 28rem)` → **448px** | `FocusMode.tsx` → `FocusCardStage` |
-| Expanded cards option | `min(94vw, 540px)` | same |
-
-**Scaler:** `GeneratedPixtoFocusSlotScale` — **width-first** (`stageW/384`) when height allows; else `min(sx,sy)`.
-
-**Schedule caps** derive from Focus width: NOW = **75%**, NEXT = **~70%** (`generated-pixto-card-sizes.ts`).
-
-**Example — iPhone ~390px wide, ~780px tall stage:**
-
-| | Design px | Rendered ≈ |
-|---|-----------|------------|
-| Width | 384 | **390** (width-limited, scale ≈ 1.02) |
-| Height | 520 | **528** |
-
-→ This is the **target “full mobile” feel**.
+**Schedule caps** (separate geometry, 744×1054 WOW): NOW **288**, NEXT **218**.
 
 ### 3b. Legacy Focus PNG cards (bundled image)
 
@@ -89,7 +88,7 @@ New **3-zone Focus frame** (illustration flex + fixed text/footer):
 | Title | 744 × 318 | `GENERATED_PIXTO_FOCUS_TITLE_ZONE_H` |
 | Ribbon | 744 × 175 | `GENERATED_PIXTO_FOCUS_CATEGORY_BAND_H` |
 
-Used in generated-card-demo labels; **player Focus uses 384×520** since the 3-zone Focus layout.
+Used in generated-card-demo labels only; **player Focus uses 384×560** (`GENERATED_PIXTO_FOCUS_ROUTINE_CARD_LOCKED`).
 
 ---
 
@@ -110,9 +109,9 @@ Used in generated-card-demo labels; **player Focus uses 384×520** since the 3-z
 
 | | px |
 |---|-----|
-| Agreed **max width** | **268** | `GENERATED_PIXTO_SCHEDULE_NEXT_W` |
-| Height at max width | **~380** | 268 × (1054/744) |
-| vs Focus width | **70%** | 268/384 |
+| Agreed **max width** | **218** | `GENERATED_PIXTO_SCHEDULE_NEXT_W` |
+| Height at max width | **~309** | 218 × (1054/744) |
+| vs Focus width | **~57%** | 218/384 |
 
 Slightly smaller than NOW (same geometry, narrower cap).
 
@@ -130,10 +129,10 @@ Both FIRST and THEN cells use the **same** scaler → **same mini size**.
 
 | | px |
 |---|-----|
-| Design per card | **384 × 520** | `FOCUS_LANDSCAPE` in `first-then-demo/page.tsx` |
+| Design per card | **384 × 560** | `FOCUS_LANDSCAPE` → `GENERATED_PIXTO_FOCUS_FIXED_ZONE` |
 | Scene | 2 cards + gap + sidebar | scaled to fit landscape viewport (`scale ≤ 1`) |
 
-Same **384×520** design as schedule Focus; whole scene shrinks on small landscape screens.
+Same locked Focus routine geometry as `/focus/...`; whole scene shrinks on small landscape screens.
 
 ---
 
@@ -143,7 +142,7 @@ Same **384×520** design as schedule Focus; whole scene shrinks on small landsca
 Focus Mode (generated)     ████████████████████  ~390px   ← LARGEST (reference)
 Focus Mode (expanded opt)  ██████████████████████ ~540px cap
 Schedule NOW               ██████████████        288px
-Schedule NEXT              █████████████         268px
+Schedule NEXT              ███████████           218px
 First & Then portrait      ████████              ~200–280px (dynamic)
 Locked digital design      (744px = 100% in Figma/code, never shown full width on phone)
 ```
@@ -157,9 +156,9 @@ Locked digital design      (744px = 100% in Figma/code, never shown full width o
 | Comparison | Ratio |
 |------------|-------|
 | Focus design W / Locked digital W | 384/744 = **51.6%** |
-| Focus design H / Locked digital H | 520/1054 = **49.3%** |
+| Focus design H / Locked digital H | 560/1054 = **53.1%** |
 | NOW cap / Focus design W | 288/384 = **75%** |
-| NEXT cap / Focus design W | 268/384 = **70%** |
+| NEXT cap / Focus design W | 218/384 = **~57%** |
 | NOW cap / Locked digital W | 288/744 = **38.7%** |
 
 ---
@@ -168,19 +167,19 @@ Locked digital design      (744px = 100% in Figma/code, never shown full width o
 
 | Screen | Component | Design px | Width cap / behaviour |
 |--------|-----------|-----------|------------------------|
-| Focus (schedule/player) | `FocusCardStage` + `GeneratedPixtoFocusSlotScale` | 384×520 | 28rem / 540px stage |
+| Focus (schedule/player) | `FocusCardStage` + `GeneratedPixtoFocusSlotScale` + `GeneratedPixtoFocusFixedZoneCard` | **384×560** locked | 28rem / 540px stage |
 | Schedule NOW | `SwipeableStepCard` + `GeneratedPixtoSlotScale` | 744×1054 | max **288px** |
-| Schedule NEXT | same | 744×1054 | max **268px** |
+| Schedule NEXT | same | 744×1054 | max **218px** |
 | First & Then portrait | `FirstThenPortraitCardCell` | 744×1054 | cell fit (mini) |
-| First & Then Focus landscape | `FirstThenFocusLandscapeLayout` | 384×520 ×2 | scene scale |
+| First & Then Focus landscape | `FirstThenFocusLandscapeLayout` + `FocusRoutineIllustrationImage` | **384×560** ×2 | scene scale |
 | Demo / QA | `/generated-card-demo` | all constants | preview widths |
 
 ---
 
 ## 8. Open alignment notes
 
-1. **Two Focus geometries coexist in constants:** legacy 744-based zones vs current **384×520** 3-zone shell. Player uses **384×520**.
-2. **User intent:** locked **744×1054** stays the design master; **Focus on phone** is the **visible maximum**; everything else scales **down** from that experience.
-3. Next implementation step (when ready): encode caps as `% of Focus rendered width` so NOW/NEXT/mini stay in sync if Focus stage changes.
+1. **Two Focus geometries coexist in constants:** legacy 744-based zones (demo labels) vs **locked 384×560** routine shell (`GENERATED_PIXTO_FOCUS_ROUTINE_CARD_LOCKED`). Player + first-then Focus use the locked shell only.
+2. **User intent:** **Focus routine card** geometry is frozen (Jun 2026); **744×1054** stays schedule/NOW/NEXT master; Focus on phone is the visible maximum width experience.
+3. NOW/NEXT caps are fixed px (**288** / **218**), not % of Focus — do not change unless product asks.
 
-**Last synced with code:** commit `da6cf91` (post size revert).
+**Last synced with code:** uncommitted — `generated-pixto-card-sizes.ts` + `GeneratedPixtoCard.tsx` + `first-then-demo` + this doc.

@@ -28,6 +28,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "at-the-airport",
   "at-the-hotel",
   "at-the-day-centre",
+  "physical",
   "ikram-day-centre",
 ]);
 
@@ -494,7 +495,8 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
+  if (id === "at-the-day-centre" || id === "physical" || id === "ikram-day-centre")
+    return "daycentre";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -542,7 +544,8 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   }
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
+  if (id === "at-the-day-centre" || id === "physical" || id === "ikram-day-centre")
+    return "daycentre";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);

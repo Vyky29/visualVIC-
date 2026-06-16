@@ -9,9 +9,7 @@ import {
   useMemo,
   useRef,
   useState,
-  type Dispatch,
   type ReactNode,
-  type SetStateAction,
 } from "react";
 import { useSearchParams } from "next/navigation";
 import { PixtoLearnIconMark } from "@/components/brand/PixtoLearnIconMark";
@@ -23,19 +21,27 @@ import {
   GENERATED_PIXTO_WOW_TITLE_ZONE_H,
   GENERATED_PIXTO_WOW_TOP_LAYOUT_H,
   GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION,
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
+  FocusRoutineIllustrationImage,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
-import { GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET } from "@/lib/constants/generated-pixto-card-sizes";
 import {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
+} from "@/lib/constants/generated-pixto-card-sizes";
+import {
+  parseFirstThenDemoLayout,
+  parseFirstThenDemoOnlyFirstThen,
   parseFirstThenDemoPackId,
   resolveFirstThenDemoPack,
+  resolveFirstThenDemoRoutineHref,
+  type FirstThenDemoLayoutId,
 } from "@/lib/experimental/first-then-demo-packs";
+import { setFirstThenDemoFocusActive } from "@/lib/experimental/first-then-demo-focus-nav";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import {
   bottomNavLabel,
   firstThenDemoFocusModeCta,
-  firstThenDemoIntroMoreNavAria,
   firstThenDemoIntroMoreToggleHide,
   firstThenDemoIntroMoreToggleShow,
   firstThenDemoNavAria,
@@ -49,25 +55,34 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
+/** Digital WOW schedule type at 744×1054 — CSS scale on the card keeps text in sync with size. */
+const DIGITAL_WOW_TITLE_FONT_PX = 60;
+const DIGITAL_WOW_RIBBON_FONT_PX = 50;
 const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 
-/** Focus landscape — same 3-zone frame as schedule Focus (`GENERATED_PIXTO_FOCUS_FIXED_ZONE`). */
+/** Focus landscape — wireframe: 384×560 cards + sidebar (category accent from pack). */
 const FOCUS_LANDSCAPE = {
   cardW: GENERATED_PIXTO_FOCUS_FIXED_ZONE.w,
   cardH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.h,
-  cardRadius: 16,
-  cardGap: 24,
-  illustPadTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadTop,
+  cardRadius: GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
+  cardGap: 40,
+  /** Pink “First” / “Then” row above illustration (wireframe). */
+  slotLabelH: 36,
+  slotLabelFontPx: 26,
+  illustPadTop: 8,
   illustPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadX,
   illustPadBottom: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustPadBottom,
   actionH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionH,
   actionPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionPadX,
+  actionMaxLines: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionMaxLines,
+  actionTitleFontPx: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionTitleFontPx,
   footerH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerH,
   footerPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerPadX,
+  footerTitleMaxFontPx: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerTitleMaxFontPx,
   illustBorder: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorder,
   illustBorderColor: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorderColor,
   packMarkSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkSize,
-  packMarkTop: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkTop,
+  packMarkTop: 14,
   packMarkRight: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkRight,
   cardsToSidebarGap: 64,
   sidebarW: 64,
@@ -76,16 +91,17 @@ const FOCUS_LANDSCAPE = {
   focusBtnH: 88,
   menuBtnH: 56,
   menuBtnRadius: 12,
-  pink: "#EC1D7A",
-  menuBtnBg: "#2B2F33",
 } as const;
 
+const FOCUS_LANDSCAPE_CARDS_SCENE_W =
+  FOCUS_LANDSCAPE.cardW * 2 + FOCUS_LANDSCAPE.cardGap;
 const FOCUS_LANDSCAPE_SCENE_W =
-  FOCUS_LANDSCAPE.cardW * 2 +
-  FOCUS_LANDSCAPE.cardGap +
+  FOCUS_LANDSCAPE_CARDS_SCENE_W +
   FOCUS_LANDSCAPE.cardsToSidebarGap +
   FOCUS_LANDSCAPE.sidebarW;
 const FOCUS_LANDSCAPE_SCENE_H = FOCUS_LANDSCAPE.cardH;
+/** Screen px between landscape cards — fixed so card scale stays unchanged. */
+const FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX = 40;
 
 function useMobileLandscape() {
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
@@ -105,23 +121,29 @@ function useMobileLandscape() {
   return isMobileLandscape;
 }
 
-function IconFirst({ className }: { className?: string }) {
+function IconFirst({
+  categoryColour,
+  className,
+}: {
+  categoryColour: string;
+  className?: string;
+}) {
   return (
     <svg
-      className={cn("shrink-0 text-sage", className)}
+      className={cn("shrink-0", className)}
       width="28"
       height="28"
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden
     >
-      <circle cx="12" cy="12" r="10" className="fill-sage stroke-ink/15" strokeWidth="1" />
+      <circle cx="12" cy="12" r="10" fill={categoryColour} stroke="rgba(28,36,32,0.12)" strokeWidth="1" />
       <text
         x="12"
-        y="16"
+        y="16.5"
         textAnchor="middle"
         fill="white"
-        fontSize="12"
+        fontSize="13"
         fontWeight="700"
         fontFamily="ui-sans-serif, system-ui, sans-serif"
       >
@@ -131,23 +153,29 @@ function IconFirst({ className }: { className?: string }) {
   );
 }
 
-function IconThen({ className }: { className?: string }) {
+function IconThen({
+  categoryColour,
+  className,
+}: {
+  categoryColour: string;
+  className?: string;
+}) {
   return (
     <svg
-      className={cn("shrink-0 text-accent", className)}
+      className={cn("shrink-0", className)}
       width="28"
       height="28"
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden
     >
-      <circle cx="12" cy="12" r="10" className="fill-accent stroke-ink/12" strokeWidth="1" />
+      <circle cx="12" cy="12" r="10" fill={categoryColour} stroke="rgba(28,36,32,0.12)" strokeWidth="1" />
       <text
         x="12"
-        y="16"
+        y="16.5"
         textAnchor="middle"
         fill="white"
-        fontSize="12"
+        fontSize="13"
         fontWeight="700"
         fontFamily="ui-sans-serif, system-ui, sans-serif"
       >
@@ -160,33 +188,9 @@ function IconThen({ className }: { className?: string }) {
 function RoutinesHomeIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={cn("h-4 w-4", className)} aria-hidden>
-      <rect
-        x="4.5"
-        y="4.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <rect
-        x="13.5"
-        y="4.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <rect
-        x="4.5"
-        y="13.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
+      <rect x="4.5" y="4.5" width="6" height="6" rx="1.8" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="13.5" y="4.5" width="6" height="6" rx="1.8" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="4.5" y="13.5" width="6" height="6" rx="1.8" stroke="currentColor" strokeWidth="1.8" />
       <path
         d="M15.2 16.5h3.6M17 14.7v3.6"
         stroke="currentColor"
@@ -262,7 +266,17 @@ function splitWowTitle(raw: string): [string] | [string, string] {
   return [words.slice(0, bestIndex).join(" "), words.slice(bestIndex).join(" ")];
 }
 
-function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
+function MiniDigitalWowCard({
+  card,
+  slotHeaderLabel,
+  readableTitle = false,
+}: {
+  card: GeneratedPixtoCardProps;
+  /** Prueba 3 — FIRST / THEN centered in card header (text only). */
+  slotHeaderLabel?: string;
+  /** Portrait demo — larger title/category for legibility after scale. */
+  readableTitle?: boolean;
+}) {
   const cardUiLang = useCardUiLanguage();
   const { title: displayTitle, category: displayCategory } = useMemo(
     () =>
@@ -275,82 +289,152 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
     [card.illustrationUrl, card.title, card.category, cardUiLang],
   );
   const titleLines = splitWowTitle(displayTitle);
-  const titleStyle =
-    titleLines.length === 1
+  const digitalTitleStyle = {
+    fontSize: `${DIGITAL_WOW_TITLE_FONT_PX}px`,
+    lineHeight: 0.92,
+    letterSpacing: "-0.022em",
+  } as const;
+  const titleStyle = readableTitle
+    ? digitalTitleStyle
+    : titleLines.length === 1
       ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
       : { fontSize: "14px", lineHeight: 0.96, letterSpacing: "-0.016em" };
+  const categoryFontPx = readableTitle ? `${DIGITAL_WOW_RIBBON_FONT_PX}px` : "11px";
 
   return (
     <article
-      className="relative grid h-full w-full overflow-hidden rounded-[1rem] bg-white ring-1 ring-inset ring-[rgba(20,28,24,0.32)]"
+      className={cn(
+        "relative grid h-full w-full overflow-hidden bg-white",
+        GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+      )}
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
+        boxShadow: `0 0 0 1px ${card.categoryColour}`,
       }}
     >
-      <div className="relative bg-white">
-        <div
-          className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
-          style={{
-            top: `${(GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_WOW_TOP_LAYOUT_H) * 100}%`,
-            width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-            aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
-          }}
-        >
-          <Image
-            src={card.illustrationUrl}
-            alt=""
-            fill
-            className="object-cover object-center"
-            sizes="220px"
-            unoptimized
-          />
-        </div>
-
-        {card.iconUrl ? (
-          <div
-            className="absolute rounded-[0.9rem] bg-white"
-            style={{
-              right: "5.4%",
-              top: "3.8%",
-              width: `${(GENERATED_PIXTO_WOW_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
-              aspectRatio: "1 / 1",
-            }}
-          >
-            <div className="relative h-full w-full">
-              <Image
-                src={card.iconUrl}
-                alt=""
-                fill
-                className="object-contain"
-                sizes={`${GENERATED_PIXTO_WOW_COMPANY_MARK.w}px`}
-                unoptimized
-              />
-            </div>
+      <div className="relative flex min-h-0 flex-col bg-white">
+        {slotHeaderLabel ? (
+          <div className="relative z-10 flex shrink-0 items-center justify-center py-2">
+            <span
+              className="font-extrabold lowercase"
+              style={{
+                color: card.categoryColour,
+                fontSize: 22,
+                lineHeight: 1,
+              }}
+            >
+              {slotHeaderLabel}
+            </span>
           </div>
         ) : null}
-      </div>
 
-      <div className="bg-white px-3 py-1">
-        <div className="flex h-full min-h-0 w-full items-center justify-center">
+        <div className="relative min-h-0 flex-1">
           <div
-            className={cn(
-              "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
-              titleLines.length > 1 ? "gap-[0.14em]" : "gap-0",
-            )}
+            className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
             style={{
-              width: `min(100%, ${WOW_TEXT_BOX_SIZE.w}px)`,
-              height: `min(100%, ${WOW_TEXT_BOX_SIZE.h}px)`,
-              ...titleStyle,
+              top: slotHeaderLabel
+                ? "2%"
+                : `${(GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_WOW_TOP_LAYOUT_H) * 100}%`,
+              width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+              aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
             }}
           >
-            {titleLines.map((line, index) => (
-              <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
-                {line}
-              </span>
-            ))}
+            <Image
+              src={card.illustrationUrl}
+              alt=""
+              fill
+              className="object-cover object-center"
+              sizes="320px"
+              unoptimized
+            />
           </div>
+
+          {card.iconUrl ? (
+            <div
+              className="absolute rounded-[0.9rem] bg-white"
+              style={{
+                right: "5.4%",
+                top: slotHeaderLabel ? "14%" : "3.8%",
+                width: `${(GENERATED_PIXTO_WOW_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+                aspectRatio: "1 / 1",
+              }}
+            >
+              <div className="relative h-full w-full">
+                <Image
+                  src={card.iconUrl}
+                  alt=""
+                  fill
+                  className="object-contain"
+                  sizes={`${GENERATED_PIXTO_WOW_COMPANY_MARK.w}px`}
+                  unoptimized
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
+      </div>
+
+      <div
+        className={cn(
+          "relative flex min-h-0 shrink-0 flex-col overflow-hidden bg-white",
+          readableTitle ? "border-t border-ink/[0.06] px-3 py-0.5" : "px-3 py-1",
+        )}
+      >
+        {readableTitle ? (
+          <div className="relative z-10 grid h-full min-h-0 w-full grid-rows-3">
+            {titleLines.length === 1 ? (
+              <>
+                <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+                <div
+                  className="col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-end gap-0 overflow-hidden px-0.5 text-center font-semibold lowercase text-ink"
+                  style={digitalTitleStyle}
+                >
+                  <span className="block w-full max-w-full whitespace-nowrap leading-[0.92]">
+                    {titleLines[0]}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="col-start-1 row-start-1 min-h-0" aria-hidden />
+                <div
+                  className="col-start-1 row-start-2 row-span-2 flex min-h-0 flex-col items-center justify-center gap-0 overflow-hidden px-0.5 text-center font-semibold lowercase text-ink"
+                  style={digitalTitleStyle}
+                >
+                  {titleLines.map((line, index) => (
+                    <span
+                      key={`${line}-${index}`}
+                      className="block w-full max-w-full whitespace-nowrap leading-[0.92]"
+                    >
+                      {line}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="flex h-full min-h-0 w-full items-center justify-center">
+            <div
+              className={cn(
+                "flex shrink-0 flex-col items-center justify-center text-center font-semibold lowercase text-ink",
+                titleLines.length > 1 ? "gap-[0.14em]" : "gap-0",
+              )}
+              style={{
+                width: `min(100%, ${WOW_TEXT_BOX_SIZE.w}px)`,
+                height: `min(100%, ${WOW_TEXT_BOX_SIZE.h}px)`,
+                ...titleStyle,
+              }}
+            >
+              {titleLines.map((line, index) => (
+                <span key={`${line}-${index}`} className="block w-full whitespace-nowrap">
+                  {line}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div
@@ -358,8 +442,12 @@ function MiniDigitalWowCard({ card }: { card: GeneratedPixtoCardProps }) {
         style={{ backgroundColor: card.categoryColour }}
       >
         <span
-          className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white/95"
-          style={{ fontSize: "11px", lineHeight: 1, letterSpacing: "-0.012em" }}
+          className="block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase text-white"
+          style={{
+            fontSize: categoryFontPx,
+            lineHeight: 1.1,
+            letterSpacing: "-0.012em",
+          }}
         >
           {displayCategory}
         </span>
@@ -392,16 +480,53 @@ function FirstThenFocusSpecCard({
 
   return (
     <article
-      className="relative shrink-0 overflow-hidden bg-white"
+      className="relative shrink-0 overflow-hidden bg-white shadow-card"
       style={{
         width: FOCUS_LANDSCAPE.cardW,
         height: FOCUS_LANDSCAPE.cardH,
         borderRadius: FOCUS_LANDSCAPE.cardRadius,
+        border: `1px solid ${card.categoryColour}`,
       }}
       aria-label={`${slotLabel} — ${displayTitle}`}
     >
+      {card.iconUrl ? (
+        <div
+          className="absolute z-10"
+          style={{
+            top: FOCUS_LANDSCAPE.packMarkTop,
+            right: FOCUS_LANDSCAPE.packMarkRight,
+            width: FOCUS_LANDSCAPE.packMarkSize,
+            height: FOCUS_LANDSCAPE.packMarkSize,
+          }}
+        >
+          <Image
+            src={card.iconUrl}
+            alt=""
+            fill
+            className="object-contain"
+            sizes={`${FOCUS_LANDSCAPE.packMarkSize}px`}
+            unoptimized
+          />
+        </div>
+      ) : null}
+
       <div className="flex h-full min-h-0 flex-col">
-        {/* Section 1 — illustration area (all remaining space) */}
+        <div
+          className="flex shrink-0 items-center justify-center"
+          style={{ height: FOCUS_LANDSCAPE.slotLabelH }}
+        >
+          <span
+            className="font-extrabold lowercase"
+            style={{
+              color: card.categoryColour,
+              fontSize: FOCUS_LANDSCAPE.slotLabelFontPx,
+              lineHeight: 1,
+            }}
+          >
+            {slotLabel}
+          </span>
+        </div>
+
         <div
           className="relative flex min-h-0 flex-1 items-end justify-center"
           style={{
@@ -411,50 +536,23 @@ function FirstThenFocusSpecCard({
             paddingLeft: FOCUS_LANDSCAPE.illustPadX,
           }}
         >
-          {card.iconUrl ? (
-            <div
-              className="absolute z-10"
-              style={{
-                top: FOCUS_LANDSCAPE.packMarkTop,
-                right: FOCUS_LANDSCAPE.packMarkRight,
-                width: FOCUS_LANDSCAPE.packMarkSize,
-                height: FOCUS_LANDSCAPE.packMarkSize,
-              }}
-            >
-              <Image
-                src={card.iconUrl}
-                alt=""
-                fill
-                className="object-contain"
-                sizes={`${FOCUS_LANDSCAPE.packMarkSize}px`}
-                unoptimized
-              />
-            </div>
-          ) : null}
-
-          <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
-            <div
-              className="relative mx-auto shrink-0"
-              style={{
-                width: `max(0px, calc(100% - ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.leftPx + GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.rightPx}px))`,
-                height: `max(0px, calc(100% - ${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.topPx + GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET.bottomPx}px))`,
-              }}
-            >
-              <Image
-                src={card.illustrationUrl}
-                alt=""
-                fill
-                className="!h-full !w-full object-contain object-bottom"
-                sizes={`${FOCUS_LANDSCAPE.cardW}px`}
-                unoptimized
-              />
-            </div>
+          <div
+            className="relative flex h-full w-full min-h-0 items-end justify-center overflow-hidden"
+            style={{
+              border: `${FOCUS_LANDSCAPE.illustBorder}px solid ${FOCUS_LANDSCAPE.illustBorderColor}`,
+              borderRadius: 6,
+            }}
+          >
+            <FocusRoutineIllustrationImage
+              src={card.illustrationUrl}
+              sizes={`${FOCUS_LANDSCAPE.cardW}px`}
+              objectClass="!h-full !w-full object-contain object-bottom"
+            />
           </div>
         </div>
 
-        {/* Section 2 — action text (fixed 110px) */}
         <div
-          className="flex shrink-0 items-center justify-center"
+          className="flex shrink-0 items-center justify-center bg-white"
           style={{
             height: FOCUS_LANDSCAPE.actionH,
             paddingLeft: FOCUS_LANDSCAPE.actionPadX,
@@ -462,9 +560,12 @@ function FirstThenFocusSpecCard({
           }}
         >
           <p
-            className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]"
+            className={cn(
+              "max-w-full text-center font-extrabold lowercase text-black [overflow-wrap:break-word]",
+              FOCUS_LANDSCAPE.actionMaxLines === 3 ? "line-clamp-3" : "line-clamp-2",
+            )}
             style={{
-              fontSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.actionTitleFontPx,
+              fontSize: FOCUS_LANDSCAPE.actionTitleFontPx,
               fontWeight: 800,
               lineHeight: 1.05,
             }}
@@ -473,20 +574,20 @@ function FirstThenFocusSpecCard({
           </p>
         </div>
 
-        {/* Section 3 — footer (fixed 84px) */}
         <footer
           className="flex shrink-0 items-center justify-center"
           style={{
             height: FOCUS_LANDSCAPE.footerH,
-            backgroundColor: FOCUS_LANDSCAPE.pink,
+            backgroundColor: card.categoryColour,
             paddingLeft: FOCUS_LANDSCAPE.footerPadX,
             paddingRight: FOCUS_LANDSCAPE.footerPadX,
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
           }}
         >
           <span
-            className="line-clamp-2 max-w-full text-center font-extrabold lowercase text-white [overflow-wrap:break-word]"
+            className="line-clamp-2 max-w-full text-center font-semibold lowercase text-white/95 [overflow-wrap:break-word]"
             style={{
-              fontSize: "clamp(18px, 3.2vw, 26px)",
+              fontSize: FOCUS_LANDSCAPE.footerTitleMaxFontPx,
               lineHeight: 1.1,
             }}
           >
@@ -500,25 +601,29 @@ function FirstThenFocusSpecCard({
 
 function FirstThenFocusSidebar({
   lang,
-  onExitFocus,
+  categoryAccent,
+  routineHref,
 }: {
   lang: ReturnType<typeof useCardUiLanguage>;
-  onExitFocus: () => void;
+  categoryAccent: string;
+  routineHref: string;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   const menuBtnClass =
     "flex w-full flex-col items-center justify-center gap-1 text-white transition active:opacity-80";
 
-  const menuBtnStyle = {
-    height: FOCUS_LANDSCAPE.menuBtnH,
+  const categoryBtnStyle = {
     borderRadius: FOCUS_LANDSCAPE.menuBtnRadius,
-    backgroundColor: FOCUS_LANDSCAPE.menuBtnBg,
-    fontSize: "clamp(12px, 2.2vw, 16px)",
+    backgroundColor: categoryAccent,
+    fontSize: "clamp(11px, 2vw, 14px)",
     fontWeight: 700 as const,
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.12)",
   };
 
   return (
     <aside
-      className="flex shrink-0 flex-col"
+      className="flex flex-col-reverse items-stretch"
       style={{
         width: FOCUS_LANDSCAPE.sidebarW,
         gap: FOCUS_LANDSCAPE.sidebarBtnGap,
@@ -526,39 +631,69 @@ function FirstThenFocusSidebar({
       role="navigation"
       aria-label={firstThenDemoNavAria(lang)}
     >
-      <button
-        type="button"
-        onClick={onExitFocus}
-        className={menuBtnClass}
-        style={{
-          height: FOCUS_LANDSCAPE.focusBtnH,
-          borderRadius: FOCUS_LANDSCAPE.menuBtnRadius,
-          backgroundColor: FOCUS_LANDSCAPE.pink,
-          fontSize: "clamp(12px, 2.2vw, 16px)",
-          fontWeight: 700,
-        }}
-      >
-        <FocusModeIntroIcon className="h-6 w-6" />
-        <span className="text-center leading-tight">{firstThenDemoFocusModeCta(lang)}</span>
-      </button>
+      {expanded ? (
+        <button
+          type="button"
+          onClick={() => setExpanded(false)}
+          className={menuBtnClass}
+          style={{
+            ...categoryBtnStyle,
+            height: FOCUS_LANDSCAPE.menuBtnH,
+          }}
+          aria-expanded
+          aria-label={firstThenDemoIntroMoreToggleHide(lang)}
+        >
+          <FocusFabPlusIcon open className="h-7 w-7 text-white" />
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className={menuBtnClass}
+          style={{
+            ...categoryBtnStyle,
+            height: FOCUS_LANDSCAPE.menuBtnH,
+          }}
+          aria-expanded={false}
+          aria-label={firstThenDemoIntroMoreToggleShow(lang)}
+        >
+          <FocusFabPlusIcon open={false} className="h-7 w-7 text-white" />
+        </button>
+      )}
 
-      <Link
-        href="/menu"
-        className={menuBtnClass}
-        style={menuBtnStyle}
-      >
-        <FocusFabPlusIcon open={false} className="h-6 w-6" />
-      </Link>
+      {expanded ? (
+        <>
+          <Link
+            href="/dashboard"
+            className={menuBtnClass}
+            style={{
+              ...categoryBtnStyle,
+              height: FOCUS_LANDSCAPE.menuBtnH,
+            }}
+            onClick={() => setExpanded(false)}
+          >
+            <HomeSectionIcon className="h-6 w-6 text-white" />
+            <span className="text-center leading-tight text-white">
+              {bottomNavLabel("home", lang)}
+            </span>
+          </Link>
 
-      <Link href="/player/brushing-teeth" className={menuBtnClass} style={menuBtnStyle}>
-        <RoutinesHomeIcon className="h-6 w-6" />
-        <span>{playerKindRoutine(lang)}</span>
-      </Link>
-
-      <Link href="/dashboard" className={menuBtnClass} style={menuBtnStyle}>
-        <HomeSectionIcon className="h-6 w-6" />
-        <span>{bottomNavLabel("home", lang)}</span>
-      </Link>
+          <Link
+            href={routineHref}
+            className={menuBtnClass}
+            style={{
+              ...categoryBtnStyle,
+              height: FOCUS_LANDSCAPE.menuBtnH,
+            }}
+            onClick={() => setExpanded(false)}
+          >
+            <RoutinesHomeIcon className="h-6 w-6 text-white" />
+            <span className="text-center leading-tight text-white">
+              {playerKindRoutine(lang)}
+            </span>
+          </Link>
+        </>
+      ) : null}
     </aside>
   );
 }
@@ -567,12 +702,12 @@ function FirstThenFocusLandscapeLayout({
   firstCard,
   secondCard,
   lang,
-  onExitFocus,
+  routineHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
-  onExitFocus: () => void;
+  routineHref: string;
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.5);
@@ -583,15 +718,17 @@ function FirstThenFocusLandscapeLayout({
 
     const update = () => {
       const padL = 24;
-      const padR = FOCUS_LANDSCAPE.sidebarEdge;
+      const padR = 24;
       const padT = 8;
       const padB = 8;
       const W = outer.clientWidth - padL - padR;
       const H = outer.clientHeight - padT - padB;
       if (W <= 0 || H <= 0) return;
 
-      const sx = W / FOCUS_LANDSCAPE_SCENE_W;
-      const sy = H / FOCUS_LANDSCAPE_SCENE_H;
+      const centerHubPx =
+        FOCUS_LANDSCAPE.sidebarW + FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX * 2;
+      const sx = (W - centerHubPx) / (FOCUS_LANDSCAPE.cardW * 2);
+      const sy = H / FOCUS_LANDSCAPE.cardH;
       const next = Math.min(sx, sy, 1);
       setScale(Number.isFinite(next) && next > 0 ? next : 0.5);
     };
@@ -602,13 +739,32 @@ function FirstThenFocusLandscapeLayout({
     return () => ro.disconnect();
   }, []);
 
-  const scaledW = FOCUS_LANDSCAPE_SCENE_W * scale;
-  const scaledH = FOCUS_LANDSCAPE_SCENE_H * scale;
+  const slotW = FOCUS_LANDSCAPE.cardW * scale;
+  const slotH = FOCUS_LANDSCAPE.cardH * scale;
+
+  const renderFocusCard = (slot: "first" | "then", card: GeneratedPixtoCardProps) => (
+    <div
+      key={slot}
+      className="relative shrink-0"
+      style={{ width: slotW, height: slotH }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left"
+        style={{
+          width: FOCUS_LANDSCAPE.cardW,
+          height: FOCUS_LANDSCAPE.cardH,
+          transform: `scale(${scale})`,
+        }}
+      >
+        <FirstThenFocusSpecCard slot={slot} card={card} lang={lang} />
+      </div>
+    </div>
+  );
 
   return (
     <div
       ref={outerRef}
-      className="flex h-full min-h-0 w-full items-center justify-center"
+      className="relative flex h-full min-h-0 w-full items-center justify-center"
       style={{
         paddingLeft: "max(24px, env(safe-area-inset-left))",
         paddingRight: "max(24px, env(safe-area-inset-right))",
@@ -617,51 +773,312 @@ function FirstThenFocusLandscapeLayout({
       }}
     >
       <div
-        className="relative shrink-0"
-        style={{ width: scaledW, height: scaledH }}
+        className="flex shrink-0 items-center"
+        style={{ gap: FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX }}
       >
-        <div
-          className="absolute left-0 top-0 flex origin-top-left items-center"
-          style={{
-            width: FOCUS_LANDSCAPE_SCENE_W,
-            height: FOCUS_LANDSCAPE_SCENE_H,
-            gap: FOCUS_LANDSCAPE.cardsToSidebarGap,
-            transform: `scale(${scale})`,
-          }}
-        >
-          <div
-            className="flex items-center"
-            style={{ gap: FOCUS_LANDSCAPE.cardGap }}
-          >
-            <FirstThenFocusSpecCard slot="first" card={firstCard} lang={lang} />
-            <FirstThenFocusSpecCard slot="then" card={secondCard} lang={lang} />
-          </div>
-          <FirstThenFocusSidebar lang={lang} onExitFocus={onExitFocus} />
-        </div>
+        {renderFocusCard("first", firstCard)}
+        <FirstThenFocusSidebar
+          lang={lang}
+          categoryAccent={firstCard.categoryColour}
+          routineHref={routineHref}
+        />
+        {renderFocusCard("then", secondCard)}
       </div>
     </div>
   );
 }
 
-/** Narrow column: icon stacked above slot label (FIRST / THEN). */
-function SlotLabelColumn({
-  label,
-  icon,
-}: {
-  label: string;
-  icon: ReactNode;
-}) {
+function SubtleArrowToCard() {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-0.5 text-center">
-      <div className="grayscale">{icon}</div>
-      <span className="text-[0.62rem] font-semibold uppercase leading-tight tracking-[0.1em] text-ink">
+    <svg
+      className="-mx-0.5 h-3 w-3 shrink-0 text-ink/35"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M5 12h11.5M14.5 8.5 18 12l-3.5 3.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const SLOT_LABEL_COLUMN_W_PX = 52;
+const SLOT_LABEL_TO_CARD_GAP_PX = 16;
+
+/** Prueba 1 — numbered slot label in the middle column (not on the card). */
+function SlotLabelRow({
+  slot,
+  label,
+  categoryColour,
+}: {
+  slot: "first" | "then";
+  label: string;
+  categoryColour: string;
+}) {
+  const Icon = slot === "first" ? IconFirst : IconThen;
+  return (
+    <div
+      className="flex shrink-0 flex-col items-center justify-center gap-1.5 text-center"
+      style={{ width: SLOT_LABEL_COLUMN_W_PX }}
+    >
+      <Icon categoryColour={categoryColour} className="h-9 w-9" />
+      <span
+        className="text-[0.78rem] font-semibold uppercase leading-tight tracking-[0.08em]"
+        style={{ color: categoryColour }}
+      >
         {label}
       </span>
     </div>
   );
 }
 
-function FirstThenPortraitCardCell({ card }: { card: GeneratedPixtoCardProps }) {
+function splitFocusModeCtaLines(cta: string): [string, string] {
+  const words = cta.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= 1) return [cta, ""];
+  const mid = Math.ceil(words.length / 2);
+  return [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
+}
+
+function FirstThenFocusEntryButton({
+  lang,
+  onFocusMode,
+  className,
+  variant = "inline",
+  size = "default",
+  categoryColour,
+}: {
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onFocusMode: () => void;
+  className?: string;
+  variant?: "inline" | "stacked";
+  size?: "default" | "compact";
+  categoryColour?: string;
+}) {
+  const cta = firstThenDemoFocusModeCta(lang);
+  const [line1, line2] = splitFocusModeCtaLines(cta);
+  const accentStyle = categoryColour
+    ? { backgroundColor: categoryColour, borderColor: categoryColour }
+    : undefined;
+
+  if (variant === "stacked") {
+    const compact = size === "compact";
+    return (
+      <button
+        type="button"
+        onClick={onFocusMode}
+        style={accentStyle}
+        className={cn(
+          "flex w-full flex-col items-center font-semibold uppercase shadow-soft transition active:scale-[0.99]",
+          categoryColour
+            ? "border text-white"
+            : "border border-ink/10 bg-white text-ink",
+          compact
+            ? "gap-0.5 rounded-[0.7rem] px-1 py-1.5 text-[7px] tracking-[0.05em]"
+            : "gap-1 rounded-[0.9rem] px-1.5 py-2 text-[9px] tracking-[0.06em]",
+          className,
+        )}
+      >
+        <FocusModeIntroIcon className={cn("shrink-0", compact ? "h-3 w-3" : "h-4 w-4")} />
+        <span
+          className={cn(
+            "flex flex-col items-center text-center",
+            compact ? "leading-[1.1]" : "leading-[1.15]",
+          )}
+        >
+          <span>{line1}</span>
+          {line2 ? <span>{line2}</span> : null}
+        </span>
+      </button>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onFocusMode}
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink/10 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink shadow-soft transition active:scale-[0.99]",
+        className,
+      )}
+    >
+      <FocusModeIntroIcon />
+      {cta}
+    </button>
+  );
+}
+
+function FirstThenPortraitCardScaled({
+  card,
+  scale,
+  slotHeaderLabel,
+  readableTitle = false,
+  sizeTrimPx = 0,
+  enterAnimation = false,
+  enterDelayMs = 0,
+}: {
+  card: GeneratedPixtoCardProps;
+  scale: number;
+  slotHeaderLabel?: string;
+  readableTitle?: boolean;
+  /** Uniform shrink on rendered card box (e.g. 1px). */
+  sizeTrimPx?: number;
+  /** Grow from slightly smaller on mount (Prueba 1). */
+  enterAnimation?: boolean;
+  enterDelayMs?: number;
+}) {
+  const rawW = GENERATED_PIXTO_CARD_SIZE.w * scale;
+  const rawH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+  const trimFactor =
+    sizeTrimPx > 0 && rawW > 0 && rawH > 0
+      ? Math.min((rawW - sizeTrimPx) / rawW, (rawH - sizeTrimPx) / rawH)
+      : 1;
+  const renderScale = scale * trimFactor;
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * renderScale;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * renderScale;
+
+  return (
+    <div
+      className={cn(
+        "relative shrink-0",
+        enterAnimation && "first-then-portrait-card-enter",
+      )}
+      style={{
+        width: slotW,
+        height: slotH,
+        animationDelay: enterAnimation && enterDelayMs > 0 ? `${enterDelayMs}ms` : undefined,
+      }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left"
+        style={{
+          width: GENERATED_PIXTO_CARD_SIZE.w,
+          height: GENERATED_PIXTO_CARD_SIZE.h,
+          transform: `scale(${renderScale})`,
+        }}
+      >
+        <MiniDigitalWowCard
+          card={card}
+          slotHeaderLabel={slotHeaderLabel}
+          readableTitle={readableTitle}
+        />
+      </div>
+    </div>
+  );
+}
+
+const FIRST_THEN_FOCUS_ACTION_RESERVE_PX = 52;
+/** Prueba 1 — resting card scale (matches initial “photo 1” size, no post-mount growth). */
+const PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR = 0.93;
+
+/** Prueba 1 — slot label + card + optional focus, centered as one group. */
+function FirstThenPortraitLabeledRow({
+  slot,
+  label,
+  card,
+  categoryColour,
+  scaleMultiplier = 1,
+  readableTitle = false,
+  actionReservePx = 0,
+  focusBottomAction,
+}: {
+  slot: "first" | "then";
+  label: string;
+  card: GeneratedPixtoCardProps;
+  categoryColour: string;
+  scaleMultiplier?: number;
+  readableTitle?: boolean;
+  /** Width reserved for focus slot so FIRST/THEN cards match. */
+  actionReservePx?: number;
+  /** Bottom of the group (THEN row only). */
+  focusBottomAction?: ReactNode;
+}) {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState<number | null>(null);
+  const stableScaleRef = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+
+    const update = () => {
+      const H = row.clientHeight;
+      const W = row.clientWidth;
+      if (W <= 0 || H <= 0) return;
+
+      const labelReservePx = SLOT_LABEL_COLUMN_W_PX + SLOT_LABEL_TO_CARD_GAP_PX;
+      const sx = (W - labelReservePx - actionReservePx) / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const next = Math.min(sx, sy) * scaleMultiplier;
+      if (!Number.isFinite(next) || next <= 0) return;
+
+      const prev = stableScaleRef.current;
+      if (prev === null) {
+        stableScaleRef.current = next;
+        setScale(next);
+        return;
+      }
+      // Keep first measured size; only shrink if the viewport gets narrower/shorter.
+      if (next < prev) {
+        stableScaleRef.current = next;
+        setScale(next);
+      }
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(row);
+    return () => ro.disconnect();
+  }, [actionReservePx, scaleMultiplier]);
+
+  return (
+    <div
+      ref={rowRef}
+      className="flex min-h-0 flex-1 w-full min-w-0 items-center justify-center"
+    >
+      <div
+        className={cn(
+          "flex shrink-0 items-center",
+          scale === null && "invisible",
+        )}
+        style={{ gap: SLOT_LABEL_TO_CARD_GAP_PX }}
+      >
+        <SlotLabelRow slot={slot} label={label} categoryColour={categoryColour} />
+        {scale !== null ? (
+          <FirstThenPortraitCardScaled
+            card={card}
+            scale={scale}
+            readableTitle={readableTitle}
+            sizeTrimPx={1}
+          />
+        ) : null}
+        {actionReservePx > 0 ? (
+          <div className="flex w-[2.75rem] shrink-0 flex-col justify-end self-stretch pb-1">
+            {focusBottomAction}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function FirstThenPortraitCardCell({
+  card,
+  scaleMultiplier = 1,
+  slotHeaderLabel,
+  readableTitle = false,
+  align = "center",
+}: {
+  card: GeneratedPixtoCardProps;
+  scaleMultiplier?: number;
+  slotHeaderLabel?: string;
+  readableTitle?: boolean;
+  align?: "center" | "end";
+}) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.28);
 
@@ -676,15 +1093,15 @@ function FirstThenPortraitCardCell({ card }: { card: GeneratedPixtoCardProps }) 
 
       const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
       const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
-      const next = Math.min(sx, sy);
-      setScale(Number.isFinite(next) && next > 0 ? next : 0.28);
+      const next = Math.min(sx, sy) * scaleMultiplier;
+      setScale(Number.isFinite(next) && next > 0 ? next : 0.28 * scaleMultiplier);
     };
 
     update();
     const ro = new ResizeObserver(update);
     ro.observe(outer);
     return () => ro.disconnect();
-  }, []);
+  }, [scaleMultiplier]);
 
   const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
   const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
@@ -692,7 +1109,10 @@ function FirstThenPortraitCardCell({ card }: { card: GeneratedPixtoCardProps }) 
   return (
     <div
       ref={outerRef}
-      className="flex h-full min-h-0 w-full items-center justify-center"
+      className={cn(
+        "flex h-full min-h-0 w-full items-center",
+        align === "end" ? "justify-end" : "justify-center",
+      )}
     >
       <div className="relative shrink-0" style={{ width: slotW, height: slotH }}>
         <div
@@ -703,136 +1123,195 @@ function FirstThenPortraitCardCell({ card }: { card: GeneratedPixtoCardProps }) 
             transform: `scale(${scale})`,
           }}
         >
-          <MiniDigitalWowCard card={card} />
+          <MiniDigitalWowCard
+            card={card}
+            slotHeaderLabel={slotHeaderLabel}
+            readableTitle={readableTitle}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function IntroPortraitFooterBar({
+const PORTRAIT_MAIN_MIN_H =
+  "min-h-[calc(100dvh-(3.5rem+env(safe-area-inset-bottom)))]" as const;
+
+function FirstThenIntroPortraitShell({
   lang,
-  introFooterMoreOpen,
-  setIntroFooterMoreOpen,
-  onFocusMode,
+  children,
+  flushRight = false,
 }: {
   lang: ReturnType<typeof useCardUiLanguage>;
-  introFooterMoreOpen: boolean;
-  setIntroFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
-  onFocusMode: () => void;
+  children: ReactNode;
+  flushRight?: boolean;
 }) {
   return (
     <div
-      className="shrink-0 px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2"
-      role="navigation"
-      aria-label={firstThenDemoNavAria(lang)}
+      className={cn(
+        "flex w-full flex-col overflow-hidden overscroll-none bg-canvas pt-[max(0.35rem,env(safe-area-inset-top))]",
+        "pl-[max(0.5rem,env(safe-area-inset-left))]",
+        flushRight ? "pr-0" : "pr-[max(0.5rem,env(safe-area-inset-right))]",
+        PORTRAIT_MAIN_MIN_H,
+      )}
     >
-      {introFooterMoreOpen ? (
-        <nav
-          id="intro-demo-more-nav"
-          aria-label={firstThenDemoIntroMoreNavAria(lang)}
-          className="mb-2 flex flex-wrap items-center justify-center gap-2"
-        >
-          <Link
-            href="/dashboard"
-            className={introFooterActionClass}
-            onClick={() => setIntroFooterMoreOpen(false)}
-          >
-            <HomeSectionIcon className="h-3.5 w-3.5 shrink-0" />
-            {bottomNavLabel("home", lang)}
-          </Link>
-          <Link
-            href="/player/brushing-teeth"
-            className={introFooterActionClass}
-            onClick={() => setIntroFooterMoreOpen(false)}
-          >
-            <RoutinesHomeIcon className="h-3.5 w-3.5 shrink-0" />
-            {playerKindRoutine(lang)}
-          </Link>
-        </nav>
-      ) : null}
-      <div className="flex items-center justify-center gap-2">
-        <Link href="/menu" className={introFooterActionClass}>
-          {bottomNavLabel("menu", lang)}
-        </Link>
-        <button type="button" onClick={onFocusMode} className={introFooterActionClass}>
-          <FocusModeIntroIcon />
-          {firstThenDemoFocusModeCta(lang)}
-        </button>
-        <button
-          type="button"
-          id="intro-demo-more-toggle"
-          aria-expanded={introFooterMoreOpen}
-          aria-controls={introFooterMoreOpen ? "intro-demo-more-nav" : undefined}
-          aria-label={
-            introFooterMoreOpen
-              ? firstThenDemoIntroMoreToggleHide(lang)
-              : firstThenDemoIntroMoreToggleShow(lang)
-          }
-          onClick={() => setIntroFooterMoreOpen((open) => !open)}
-          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/12 bg-white text-ink shadow-soft transition active:scale-[0.98]"
-        >
-          <FocusFabPlusIcon open={introFooterMoreOpen} />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function FirstThenIntroPortraitScreen({
-  firstCard,
-  secondCard,
-  lang,
-  introFooterMoreOpen,
-  setIntroFooterMoreOpen,
-  onFocusMode,
-}: {
-  firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
-  lang: ReturnType<typeof useCardUiLanguage>;
-  introFooterMoreOpen: boolean;
-  setIntroFooterMoreOpen: Dispatch<SetStateAction<boolean>>;
-  onFocusMode: () => void;
-}) {
-  return (
-    <div className="grid h-[100dvh] w-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden overscroll-none bg-canvas px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pt-[max(0.35rem,env(safe-area-inset-top))]">
       <header className="flex shrink-0 flex-col items-center gap-1.5 pb-2 pt-0.5 text-center">
         <PixtoLearnIconMark className="h-10 w-10 rounded-[0.95rem]" />
         <h1 className="text-[1.12rem] font-semibold tracking-tight text-ink">
           {firstThenDemoPageTitle(lang)}
         </h1>
       </header>
-
-      <div className="grid min-h-0 grid-cols-[minmax(3.25rem,4.25rem)_minmax(0,1fr)] grid-rows-[minmax(0,1fr)_minmax(0,1fr)] gap-x-2 gap-y-2">
-        <div className="flex min-h-0 items-center">
-          <SlotLabelColumn
-            label={firstThenSlotLabel("first", lang)}
-            icon={<IconFirst className="h-7 w-7" />}
-          />
-        </div>
-        <div className="min-h-0">
-          <FirstThenPortraitCardCell card={firstCard} />
-        </div>
-
-        <div className="flex min-h-0 items-center">
-          <SlotLabelColumn
-            label={firstThenSlotLabel("then", lang)}
-            icon={<IconThen className="h-7 w-7" />}
-          />
-        </div>
-        <div className="min-h-0">
-          <FirstThenPortraitCardCell card={secondCard} />
-        </div>
-      </div>
-
-      <IntroPortraitFooterBar
-        lang={lang}
-        introFooterMoreOpen={introFooterMoreOpen}
-        setIntroFooterMoreOpen={setIntroFooterMoreOpen}
-        onFocusMode={onFocusMode}
-      />
+      <main className="relative flex min-h-0 flex-1 flex-col items-stretch justify-center pb-1">
+        {children}
+      </main>
     </div>
   );
+}
+
+/** Prueba 1 — middle slot label + card per row; Focus entry bottom-right. */
+function FirstThenIntroLayout1({
+  firstCard,
+  secondCard,
+  lang,
+  onFocusMode,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onFocusMode: () => void;
+}) {
+  const firstLabel = firstThenSlotLabel("first", lang);
+  const thenLabel = firstThenSlotLabel("then", lang);
+
+  return (
+    <FirstThenIntroPortraitShell lang={lang}>
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1">
+        <FirstThenPortraitLabeledRow
+          slot="first"
+          label={firstLabel}
+          card={firstCard}
+          categoryColour={firstCard.categoryColour}
+          scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
+          readableTitle
+          actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+        />
+        <FirstThenPortraitLabeledRow
+          slot="then"
+          label={thenLabel}
+          card={secondCard}
+          categoryColour={secondCard.categoryColour}
+          scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
+          readableTitle
+          actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+          focusBottomAction={
+            <FirstThenFocusEntryButton
+              lang={lang}
+              onFocusMode={onFocusMode}
+              variant="stacked"
+              size="compact"
+              categoryColour={firstCard.categoryColour}
+            />
+          }
+        />
+      </div>
+    </FirstThenIntroPortraitShell>
+  );
+}
+
+/** Prueba 2 — two cards stacked vertically, no side labels. */
+function FirstThenIntroLayout2({
+  firstCard,
+  secondCard,
+  lang,
+  onFocusMode,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onFocusMode: () => void;
+}) {
+  return (
+    <FirstThenIntroPortraitShell lang={lang}>
+      <div className="relative w-full max-w-[min(100%,240px)] px-1">
+        <FirstThenFocusEntryButton
+          lang={lang}
+          onFocusMode={onFocusMode}
+          className="absolute right-0 top-0 z-10"
+        />
+        <div className="flex flex-col items-center gap-4 pt-10">
+          <div className="h-[min(34dvh,260px)] w-full min-h-0">
+            <FirstThenPortraitCardCell card={firstCard} scaleMultiplier={0.92} />
+          </div>
+          <div className="h-[min(34dvh,260px)] w-full min-h-0">
+            <FirstThenPortraitCardCell card={secondCard} scaleMultiplier={0.92} />
+          </div>
+        </div>
+      </div>
+    </FirstThenIntroPortraitShell>
+  );
+}
+
+/** Prueba 3 — stacked cards; FIRST/THEN text inside each card header. */
+function FirstThenIntroLayout3({
+  firstCard,
+  secondCard,
+  lang,
+  onFocusMode,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onFocusMode: () => void;
+}) {
+  const firstLabel = firstThenSlotLabel("first", lang);
+  const thenLabel = firstThenSlotLabel("then", lang);
+
+  return (
+    <FirstThenIntroPortraitShell lang={lang}>
+      <div className="relative flex w-full max-w-[min(100%,360px)] flex-1 flex-col items-center justify-center px-1 pb-12">
+        <div className="flex w-full flex-col items-center gap-3">
+          <div className="h-[min(32dvh,272px)] w-full min-h-0">
+            <FirstThenPortraitCardCell
+              card={firstCard}
+              scaleMultiplier={0.98}
+              slotHeaderLabel={firstLabel}
+            />
+          </div>
+          <div className="h-[min(32dvh,272px)] w-full min-h-0">
+            <FirstThenPortraitCardCell
+              card={secondCard}
+              scaleMultiplier={0.98}
+              slotHeaderLabel={thenLabel}
+            />
+          </div>
+        </div>
+        <FirstThenFocusEntryButton
+          lang={lang}
+          onFocusMode={onFocusMode}
+          className="absolute bottom-0 right-0 z-10"
+        />
+      </div>
+    </FirstThenIntroPortraitShell>
+  );
+}
+
+function FirstThenIntroPortraitScreen({
+  layout,
+  firstCard,
+  secondCard,
+  lang,
+  onFocusMode,
+}: {
+  layout: FirstThenDemoLayoutId;
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onFocusMode: () => void;
+}) {
+  const props = { firstCard, secondCard, lang, onFocusMode };
+  if (layout === "2") return <FirstThenIntroLayout2 {...props} />;
+  if (layout === "3") return <FirstThenIntroLayout3 {...props} />;
+  return <FirstThenIntroLayout1 {...props} />;
 }
 
 function FocusRotatePrompt({ lang }: { lang: ReturnType<typeof useCardUiLanguage> }) {
@@ -889,24 +1368,32 @@ function FirstThenDemoPageClient() {
   const lang = useCardUiLanguage();
   const searchParams = useSearchParams();
   const packId = parseFirstThenDemoPackId(searchParams.get("pack"));
+  const layout = parseFirstThenDemoLayout(searchParams.get("layout"));
+  const fromRoutine = searchParams.get("from");
+  const onlyFirstThen = parseFirstThenDemoOnlyFirstThen(searchParams.get("onlyFirstThen"));
+  const routineHref = useMemo(
+    () =>
+      resolveFirstThenDemoRoutineHref(packId, {
+        from: fromRoutine,
+        onlyFirstThen,
+      }),
+    [packId, fromRoutine, onlyFirstThen],
+  );
   const { first, second } = useMemo(
     () => resolveFirstThenDemoPack(packId, lang),
     [packId, lang],
   );
   const isMobileLandscape = useMobileLandscape();
   const [showFocusMode, setShowFocusMode] = useState(false);
-  const [introFooterMoreOpen, setIntroFooterMoreOpen] = useState(false);
-
-  useEffect(() => {
-    if (showFocusMode) {
-      setIntroFooterMoreOpen(false);
-    }
-  }, [showFocusMode]);
 
   useEffect(() => {
     setShowFocusMode(false);
-    setIntroFooterMoreOpen(false);
-  }, [packId]);
+  }, [packId, layout]);
+
+  useEffect(() => {
+    setFirstThenDemoFocusActive(showFocusMode);
+    return () => setFirstThenDemoFocusActive(false);
+  }, [showFocusMode]);
 
   useEffect(() => {
     if (!showFocusMode) return;
@@ -928,27 +1415,23 @@ function FirstThenDemoPageClient() {
   if (!showFocusMode) {
     return (
       <FirstThenIntroPortraitScreen
+        layout={layout}
         firstCard={first}
         secondCard={second}
         lang={lang}
-        introFooterMoreOpen={introFooterMoreOpen}
-        setIntroFooterMoreOpen={setIntroFooterMoreOpen}
-        onFocusMode={() => {
-          setIntroFooterMoreOpen(false);
-          setShowFocusMode(true);
-        }}
+        onFocusMode={() => setShowFocusMode(true)}
       />
     );
   }
 
   return (
-    <div className="fixed inset-0 overflow-hidden overscroll-none bg-canvas touch-manipulation text-ink">
+    <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-canvas touch-manipulation text-ink">
       {isMobileLandscape ? (
         <FirstThenFocusLandscapeLayout
           firstCard={first}
           secondCard={second}
           lang={lang}
-          onExitFocus={() => setShowFocusMode(false)}
+          routineHref={routineHref}
         />
       ) : (
         <div className="flex h-full min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">

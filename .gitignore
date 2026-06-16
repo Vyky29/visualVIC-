@@ -33,6 +33,9 @@ yarn-error.log*
 .env*.local
 .env
 
+# local-only notes (API keys, generation checklists — never commit)
+/private/
+
 # typescript
 next-env.d.ts
 

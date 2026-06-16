@@ -61,7 +61,7 @@ export function dashboardRoutinesSectionTitle(lang: CardLanguageCode): string {
 }
 
 export function dashboardExtrasSectionTitle(lang: CardLanguageCode): string {
-  return isEs(lang) ? "Extras" : "Extras";
+  return isEs(lang) ? "Centro de día" : "Day centre";
 }
 
 export function dashboardSchedulePlayerTitle(lang: CardLanguageCode): string {

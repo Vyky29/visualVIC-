@@ -64,8 +64,15 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
   "tpl-morning-mini",
 ]);
 
-/** Stock pack routines listed below Activity instead of Home / Activity accordions. */
-const HOME_EXTRA_PACK_ROUTINE_IDS = new Set(["ikram-day-centre"]);
+/** Day centre packs — grouped under Home “Day centre” accordion (not Home / Activity). */
+const HOME_EXTRA_PACK_ROUTINE_IDS = new Set([
+  "at-the-day-centre",
+  "physical",
+  "ikram-day-centre",
+]);
+
+const HOME_EXTRAS_ACCORDION_KEY = "home::extras";
+const HOME_EXTRAS_RING_CLASS = "ring-[#E05C9A]/80";
 
 function dashboardCategoryForRoutine(
   routine: Routine,
@@ -647,53 +654,105 @@ export default function DashboardPage() {
           </div>
 
           {extraPackRoutines.length > 0 ? (
-            <div className="space-y-3 pt-2">
-              <div className="flex flex-col items-center px-2 pb-1 pt-1 text-center">
-                <span className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-[#E05C9A]/80 ring-offset-[1.5px] ring-offset-canvas sm:h-11 sm:w-11">
-                  <Image
-                    src={dayCentrePackMarkUrl()}
-                    alt=""
-                    fill
-                    className="object-contain p-1.5"
-                    sizes="44px"
-                    unoptimized
-                  />
-                </span>
-                <p className="mt-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                  {dashboardExtrasSectionTitle(cardUiLang)}
-                </p>
+            <div
+              className="overflow-hidden rounded-2xl border border-ink/8 bg-cream/40"
+              onMouseEnter={() => {
+                if (prefersFineHover) setHoverPeekKey(HOME_EXTRAS_ACCORDION_KEY);
+              }}
+              onMouseLeave={() => {
+                if (prefersFineHover) setHoverPeekKey(null);
+              }}
+            >
+              <div className="flex min-h-[56px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:min-h-[58px]">
+                <button
+                  type="button"
+                  onClick={() => openAccordion(HOME_EXTRAS_ACCORDION_KEY)}
+                  className="flex min-h-[56px] min-w-0 flex-1 items-center gap-2 px-2 py-2 text-left transition hover:bg-canvas-muted/90 sm:min-h-[58px] sm:gap-3 sm:px-4 sm:py-2.5"
+                >
+                  <span
+                    className={cn(
+                      "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-11 sm:w-11",
+                      HOME_EXTRAS_RING_CLASS,
+                    )}
+                  >
+                    <Image
+                      src={dayCentrePackMarkUrl()}
+                      alt=""
+                      fill
+                      className="object-contain p-1.5"
+                      sizes="44px"
+                      unoptimized
+                    />
+                  </span>
+                  <span className="min-w-0 flex-1 break-words text-[12px] font-semibold uppercase leading-snug tracking-[0.1em] text-ink line-clamp-2 [overflow-wrap:anywhere] sm:text-[13px] sm:tracking-[0.12em]">
+                    {dashboardExtrasSectionTitle(cardUiLang)}
+                  </span>
+                  <span className="shrink-0 self-center whitespace-nowrap text-[10px] font-medium tabular-nums tracking-wide text-ink-faint sm:text-[11px]">
+                    {dashboardRoutineCountLabel(
+                      extraPackRoutines.length + 1,
+                      cardUiLang,
+                    )}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleAccordionCorner(HOME_EXTRAS_ACCORDION_KEY)}
+                  className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
+                  aria-label={accordionOpenCloseAria(
+                    isAccordionOpen(HOME_EXTRAS_ACCORDION_KEY),
+                    cardUiLang,
+                  )}
+                >
+                  <span aria-hidden>
+                    {isAccordionOpen(HOME_EXTRAS_ACCORDION_KEY) ? "▾" : "▸"}
+                  </span>
+                </button>
               </div>
-              <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
-                {extraPackRoutines.map((routine) => (
-                  <DashboardRoutineTile key={routine.id} routine={routine} />
-                ))}
-                <Link href="/first-then-demo?pack=ikram-home" className="col-span-2 block">
-                  <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
-                    <div className="flex gap-3 p-3">
-                      <div className="relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35">
-                        <Image
-                          src={firstThenDemoPackPreviewUrl("ikram-home")}
-                          alt=""
-                          fill
-                          className="object-contain object-center"
-                          sizes="68px"
-                          unoptimized
-                        />
-                      </div>
-                      <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-                          {dashboardFirstThenCardEyebrow(cardUiLang)}
-                        </p>
-                        <p className="text-[15px] font-semibold leading-snug text-ink">
-                          {dashboardFirstThenMuchieHomeTitle(cardUiLang)}
-                        </p>
-                        <p className="text-[12px] leading-snug text-ink-subtle">
-                          {dashboardFirstThenMuchieHomeHint(cardUiLang)}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
+              <div
+                className={cn(
+                  "grid transition-[grid-template-rows] duration-300 ease-out",
+                  isAccordionOpen(HOME_EXTRAS_ACCORDION_KEY)
+                    ? "grid-rows-[1fr]"
+                    : "grid-rows-[0fr]",
+                )}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                    {extraPackRoutines.map((routine) => (
+                      <DashboardRoutineTile key={routine.id} routine={routine} />
+                    ))}
+                    <Link
+                      href="/first-then-demo?pack=ikram-home"
+                      className="col-span-2 block"
+                    >
+                      <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
+                        <div className="flex gap-3 p-3">
+                          <div className="relative aspect-[10/13] w-[4.25rem] shrink-0 overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-[#E05C9A]/35">
+                            <Image
+                              src={firstThenDemoPackPreviewUrl("ikram-home")}
+                              alt=""
+                              fill
+                              className="object-contain object-center"
+                              sizes="68px"
+                              unoptimized
+                            />
+                          </div>
+                          <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+                              {dashboardFirstThenCardEyebrow(cardUiLang)}
+                            </p>
+                            <p className="text-[15px] font-semibold leading-snug text-ink">
+                              {dashboardFirstThenMuchieHomeTitle(cardUiLang)}
+                            </p>
+                            <p className="text-[12px] leading-snug text-ink-subtle">
+                              {dashboardFirstThenMuchieHomeHint(cardUiLang)}
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           ) : null}
