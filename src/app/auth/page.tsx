@@ -33,7 +33,8 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
+    <div className="min-h-dvh w-full bg-black">
+      <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
       <Header
         title={shellHeaderTitle(
           mode === "signin" ? "signIn" : "createAccount",
@@ -42,7 +43,7 @@ export default function AuthPage() {
         backHref="/welcome"
         backAriaLabel={shellBackAria(cardUiLang)}
       />
-      <MobileScreen className="px-6 pb-12 pt-6">
+      <MobileScreen withChrome={false} className="px-6 pb-12 pt-6">
         <Card className="space-y-6">
           <p className="break-words text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
             {authLayoutNote(cardUiLang)}
@@ -110,6 +111,7 @@ export default function AuthPage() {
           </p>
         </Card>
       </MobileScreen>
+    </div>
     </div>
   );
 }

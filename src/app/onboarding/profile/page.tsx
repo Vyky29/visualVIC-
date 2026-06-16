@@ -87,9 +87,10 @@ export default function ProfileOnboardingPage() {
   }
 
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
+    <div className="min-h-dvh w-full bg-black">
+      <div className="mx-auto min-h-dvh w-full max-w-lg bg-canvas">
       <TranslatedHeader titleKey="profile" backHref="/menu" />
-      <MobileScreen className="space-y-10 px-5 pb-16 pt-8 sm:px-6">
+      <MobileScreen withChrome={false} className="space-y-10 px-5 pb-16 pt-8 sm:px-6">
         <header className="mx-auto max-w-sm space-y-3 text-center">
           <h1 className="text-[clamp(1.35rem,5vw,1.65rem)] font-semibold tracking-tight text-ink">
             Child Profile
@@ -255,6 +256,7 @@ export default function ProfileOnboardingPage() {
           </Button>
         </form>
       </MobileScreen>
+    </div>
     </div>
   );
 }

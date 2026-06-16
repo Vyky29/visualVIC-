@@ -8,10 +8,11 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  @apply min-h-dvh bg-black;
 }
 
 body {
-  @apply min-h-dvh overflow-x-hidden bg-canvas text-ink antialiased;
+  @apply min-h-dvh overflow-x-hidden bg-black text-ink antialiased;
 }
 
 ::selection {

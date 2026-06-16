@@ -34,7 +34,7 @@ export function AppShell({
   const effectiveShowNav = showNav && !navHiddenByRoute;
 
   const phoneShell = (
-    <div className="relative mx-auto min-h-dvh w-full max-w-lg bg-canvas text-ink shadow-[0_0_0_1px_rgba(28,36,32,0.06)]">
+    <div className="relative mx-auto min-h-dvh w-full max-w-lg bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
       <div
         className={
           effectiveShowNav
@@ -48,9 +48,9 @@ export function AppShell({
     </div>
   );
 
-  if (isFirstThenDemo) {
-    return <div className="min-h-dvh bg-black">{phoneShell}</div>;
-  }
-
-  return phoneShell;
+  return (
+    <div className="min-h-dvh w-full bg-black">
+      {phoneShell}
+    </div>
+  );
 }

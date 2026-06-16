@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils/cn";
  */
 export function MobileScreen({
   className,
+  withChrome = true,
   ...props
-}: HTMLAttributes<HTMLDivElement>) {
-  return (
+}: HTMLAttributes<HTMLDivElement> & { withChrome?: boolean }) {
+  const screen = (
     <div
       className={cn(
         "mx-auto min-h-dvh w-full max-w-lg bg-canvas px-6 pb-10 pt-[max(1.25rem,env(safe-area-inset-top))]",
@@ -17,4 +18,8 @@ export function MobileScreen({
       {...props}
     />
   );
+
+  if (!withChrome) return screen;
+
+  return <div className="min-h-dvh w-full bg-black">{screen}</div>;
 }
