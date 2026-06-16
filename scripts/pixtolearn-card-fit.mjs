@@ -29,7 +29,7 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
   const width = opts.width ?? NOW_W;
   const height = opts.height ?? NOW_H;
   const background = opts.background ?? "#ffffff";
-  const fit = opts.fit ?? "cover";
+  const fit = opts.fit ?? "contain";
   let img = sharp(src);
 
   if (opts.trim !== false) {

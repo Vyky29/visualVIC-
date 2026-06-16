@@ -70,6 +70,7 @@ const HOME_EXTRA_PACK_ROUTINE_IDS = new Set([
   "at-the-day-centre",
   "physical",
   "physical-3d",
+  "physical-3d-gym",
   "ikram-day-centre",
 ]);
 

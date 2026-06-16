@@ -30,6 +30,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "at-the-day-centre",
   "physical",
   "physical-3d",
+  "physical-3d-gym",
   "ikram-day-centre",
 ]);
 
@@ -500,6 +501,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
     id === "at-the-day-centre" ||
     id === "physical" ||
     id === "physical-3d" ||
+    id === "physical-3d-gym" ||
     id === "ikram-day-centre"
   )
     return "daycentre";
@@ -554,6 +556,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
     id === "at-the-day-centre" ||
     id === "physical" ||
     id === "physical-3d" ||
+    id === "physical-3d-gym" ||
     id === "ikram-day-centre"
   )
     return "daycentre";

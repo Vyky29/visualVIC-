@@ -92,7 +92,8 @@ async function main() {
     seen.add(slug);
 
     await fitIllustrationToCard(buf, dest, {
-      minPad: 16,
+      minPad: 36,
+      fit: "contain",
       background: "#ffffff",
       trim: true,
       trimThreshold: 18,

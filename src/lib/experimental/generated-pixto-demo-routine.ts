@@ -12,10 +12,13 @@ import {
 } from "@/lib/cards/day-centre-general-cards";
 import {
   PHYSICAL_3D_CATEGORY_LABEL,
+  PHYSICAL_3D_GYM_CATEGORY_LABEL,
+  PHYSICAL_3D_GYM_SEQUENCE,
   PHYSICAL_3D_SEQUENCE,
   PHYSICAL_CATEGORY_COLOUR,
   PHYSICAL_CATEGORY_LABEL,
   PHYSICAL_SEQUENCE,
+  physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
   physicalImageUrlForStep,
 } from "@/lib/cards/physical-cards";
@@ -112,6 +115,16 @@ export const PHYSICAL_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     illustrationUrl: physical3dImageUrlForStep(s),
     title: lc(s.title),
     category: lc(PHYSICAL_3D_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
+
+/** Physical · 3D gym — 5×5 machines & accessories sheet (25 steps). */
+export const PHYSICAL_3D_GYM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  PHYSICAL_3D_GYM_SEQUENCE.map((s) => ({
+    illustrationUrl: physical3dGymImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc(PHYSICAL_3D_GYM_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: dayCentrePackMarkUrl(),
   }));

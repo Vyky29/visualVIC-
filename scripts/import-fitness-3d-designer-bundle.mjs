@@ -69,7 +69,8 @@ async function main() {
     const dest = path.join(outDir, `${slug}.png`);
     fs.writeFileSync(rawDest, buf);
     await fitIllustrationToCard(buf, dest, {
-      minPad: 20,
+      minPad: 36,
+      fit: "contain",
       background: "#ffffff",
       trim: true,
       trimThreshold: 24,

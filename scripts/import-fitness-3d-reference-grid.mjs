@@ -83,7 +83,8 @@ async function main() {
     const buf = await extractCell(meta, cell);
     fs.writeFileSync(rawDest, buf);
     await fitIllustrationToCard(buf, dest, {
-      minPad: cell.minPad ?? 24,
+      minPad: 36,
+      fit: "contain",
       background: cell.background ?? "#ffffff",
       trim: cell.trim ?? true,
       trimThreshold: 24,

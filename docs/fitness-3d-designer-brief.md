@@ -7,7 +7,7 @@ Use this when commissioning a **sprite sheet / grid bundle** for the Physical ·
 | Spec | Value |
 |------|--------|
 | **Illustration area (crop this)** | **531 × 648 px** (portrait) |
-| **Label band (optional, below)** | **531 × 56 px** — name only, **not** part of the illustration |
+| **Label band (REQUIRED on grid sheets, below)** | **531 × 56 px** — English name only, **not** part of the illustration |
 | **Total cell (illustration + label)** | **531 × 704 px** |
 | **Format** | PNG |
 | **Colour** | sRGB |
@@ -19,7 +19,9 @@ Use this when commissioning a **sprite sheet / grid bundle** for the Physical ·
 This matches the PixtoLearn **illustration slot** inside the 744×1054 card shell.  
 We **crop only the top 531×648 px**; the label band is for the designer’s reference and is discarded on import.
 
-### Label band (for bundle sheets only)
+### Label band — REQUIRED on every grid / sprite sheet
+
+**If the sheet has no text label under each cell, we cannot verify the order and the delivery must be redone.**
 
 When delivering a **grid / sprite sheet**, put the English name **below** each illustration:
 
@@ -46,7 +48,24 @@ When delivering a **grid / sprite sheet**, put the English name **below** each i
      531 × 704 px total cell
 ```
 
-Individual PNG files (531×648 only, no label) are still preferred.
+Individual PNG files named `{slug}.png` (531×648, no label) are also accepted — filename replaces the label.
+
+---
+
+## Message to send the designer (copy-paste)
+
+> **Corrección obligatoria:** las hojas entregadas no llevan etiqueta bajo cada ilustración. Hay que **re-exportar** con el nombre en inglés **debajo** de cada objeto, **fuera** del área de la ilustración.
+>
+> **Por celda:**
+> - Arriba: ilustración **531 × 648 px** (sin texto dentro)
+> - Abajo: franja **531 × 56 px** con el nombre centrado (ej. `BOSU`, `Treadmill`, `Foam roller`)
+> - Texto: sans-serif ~24 px, gris `#888888`, fondo blanco
+> - **Línea clara** entre ilustración y texto — el texto **no puede invadir** la ilustración
+>
+> **Lienzo 4×5 con etiquetas:** **2124 × 3520 px** (filas de 704 px, no 648 px)
+>
+> **Lista en orden fila por fila (izquierda → derecha, arriba → abajo):**  
+> Therapy ball · Trampoline · Step platform · Treadmill · Exercise machine · Row machine · Skis · Exercise bike · Resistance bands · BOSU · Kettlebell · Medicine ball · Jump rope · Punching bag · Agility ladder · Balance board · Weights · Foam roller · Exercise mat · Dumbbells
 
 ## Recommended bundle layout
 

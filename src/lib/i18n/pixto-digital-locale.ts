@@ -242,12 +242,16 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Ikram · centro de día",
   },
   physical: {
-    en: "Physical",
+    en: "Physical Activity",
     es: "Actividad física",
   },
   "physical-3d": {
-    en: "Physical · 3D",
+    en: "Physical Activity · 3D",
     es: "Actividad física · 3D",
+  },
+  "physical-3d-gym": {
+    en: "Physical Activity · 3D gym",
+    es: "Actividad física · 3D gimnasio",
   },
 };
 

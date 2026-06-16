@@ -58,7 +58,8 @@ for (const entry of entries) {
   try {
     fs.copyFileSync(srcPath, referenceCopy);
     await fitIllustrationToCard(srcPath, libraryOut, {
-      minPad: 24,
+      minPad: 36,
+      fit: "contain",
       background: "#ffffff",
       trim: true,
       trimThreshold: 18,
