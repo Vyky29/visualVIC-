@@ -26,6 +26,7 @@ export {
   physical3dImageUrlForStep,
   physicalImageUrl,
   physicalImageUrlForStep,
+  physicalPackMarkUrl,
   type PhysicalStep,
 } from "@/lib/cards/physical-cards";
 

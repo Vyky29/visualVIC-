@@ -11,6 +11,7 @@ export type RoutineVisualTone =
   | "airport"
   | "hotel"
   | "daycentre"
+  | "physical"
   | "finish"
   /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
   | "custom"
@@ -200,6 +201,21 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(224,92,154,0.52)]",
   },
+  physical: {
+    home: "ring-2 ring-[#43A047] ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#43A047] ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#43A047] shadow-[0_8px_32px_-12px_rgba(67,160,71,0.42)]",
+    scheduleNext:
+      "ring-2 ring-[#43A047] shadow-[0_6px_22px_-12px_rgba(67,160,71,0.34)]",
+    scheduleFocus:
+      "ring-2 ring-[#43A047] shadow-[0_8px_32px_-12px_rgba(67,160,71,0.46)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#43A047] pl-3 ring-1 ring-[#43A047] ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_36px_-12px_rgba(67,160,71,0.52)]",
+  },
   finish: {
     home: "ring-2 ring-[#9aa3a8]/88 ring-offset-2 ring-offset-canvas",
     homeDashboard:
@@ -262,6 +278,7 @@ function isFinishLikeStepData(step: RoutineStep, haystack: string): boolean {
 export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (step.generatedPixto) {
     const c = step.generatedPixto.category.toLowerCase();
+    if (c.includes("physical activity")) return "physical";
     if (c.includes("day centre")) return "daycentre";
     if (c.includes("hotel")) return "hotel";
     if (c.includes("airport")) return "airport";
@@ -417,6 +434,17 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   }
   if (includesAny(haystack, ["at the airport", "airport"])) return "airport";
   if (includesAny(haystack, ["at the hotel", "hotel"])) return "hotel";
+  if (
+    includesAny(haystack, [
+      "/images/library/",
+      "/images/library-3d",
+      "/cards/physical/",
+      "physical activity",
+      "physical-3d",
+    ])
+  ) {
+    return "physical";
+  }
   if (includesAny(haystack, ["day centre", "day%20centre", "daycentre"])) {
     return "daycentre";
   }
@@ -443,6 +471,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
   let ap = 0;
   let ho = 0;
   let dc = 0;
+  let ph = 0;
   for (const st of r.steps) {
     const t = stepCardVisualTone(st);
     if (t === "brushing") b++;
@@ -454,6 +483,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     else if (t === "airport") ap++;
     else if (t === "hotel") ho++;
     else if (t === "daycentre") dc++;
+    else if (t === "physical") ph++;
   }
   const ranked: [RoutineVisualTone, number][] = [
     ["brushing", b],
@@ -465,8 +495,9 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     ["airport", ap],
     ["hotel", ho],
     ["daycentre", dc],
+    ["physical", ph],
   ];
-  const max = Math.max(b, s, d, cl, co, sw, ap, ho, dc);
+  const max = Math.max(b, s, d, cl, co, sw, ap, ho, dc, ph);
   if (max <= 0) return null;
   const top = ranked.filter(([, n]) => n === max).map(([k]) => k);
   const priority: RoutineVisualTone[] = [
@@ -479,6 +510,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
     "airport",
     "hotel",
     "daycentre",
+    "physical",
   ];
   for (const p of priority) {
     if (top.includes(p)) return p;
@@ -497,14 +529,10 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (
-    id === "at-the-day-centre" ||
-    id === "physical" ||
-    id === "physical-3d" ||
-    id === "physical-3d-gym" ||
-    id === "ikram-day-centre"
-  )
-    return "daycentre";
+  if (id === "physical" || id === "physical-3d" || id === "physical-3d-gym") {
+    return "physical";
+  }
+  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -552,14 +580,10 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   }
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (
-    id === "at-the-day-centre" ||
-    id === "physical" ||
-    id === "physical-3d" ||
-    id === "physical-3d-gym" ||
-    id === "ikram-day-centre"
-  )
-    return "daycentre";
+  if (id === "physical" || id === "physical-3d" || id === "physical-3d-gym") {
+    return "physical";
+  }
+  if (id === "at-the-day-centre" || id === "ikram-day-centre") return "daycentre";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);
@@ -683,6 +707,16 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
       nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#E05C9A] ring-2 ring-[#E05C9A]/35",
       nowLabel:
         "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E05C9A]",
+    },
+    physical: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e8f5e9] to-[#c8e6c9] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#43A047]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#43A047]",
+      counterPill:
+        "rounded-full bg-[#e8f5e9]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#43A047]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#43A047] ring-2 ring-[#43A047]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#2E7D32]",
     },
     custom: {
       focusCta:

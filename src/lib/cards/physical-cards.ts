@@ -20,6 +20,16 @@ export const PHYSICAL_3D_GYM_CATEGORY_LABEL = "Physical Activity · 3D gym" as c
 /** Green ribbon — physical / fitness activity (distinct from day centre pink). */
 export const PHYSICAL_CATEGORY_COLOUR = "#43A047" as const;
 
+export const PHYSICAL_PUBLIC_DIR = "/cards/physical" as const;
+
+export function physicalPackMarkUrl(): string {
+  return `${PHYSICAL_PUBLIC_DIR}/logo-physical.png`;
+}
+
+export function physicalBackCardUrl(): string {
+  return `${PHYSICAL_PUBLIC_DIR}/backcard-physical.png`;
+}
+
 export type PhysicalStep = {
   id: string;
   slug: string;

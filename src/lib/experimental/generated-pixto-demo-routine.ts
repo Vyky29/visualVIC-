@@ -20,7 +20,9 @@ import {
   PHYSICAL_SEQUENCE,
   physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
+  physicalBackCardUrl,
   physicalImageUrlForStep,
+  physicalPackMarkUrl,
 } from "@/lib/cards/physical-cards";
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
@@ -106,7 +108,7 @@ export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     title: lc(s.title),
     category: lc(PHYSICAL_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
+    iconUrl: physicalPackMarkUrl(),
   }));
 
 /** Physical · 3D — soft 3D library + BOSU and extra equipment (20 steps). */
@@ -116,7 +118,7 @@ export const PHYSICAL_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     title: lc(s.title),
     category: lc(PHYSICAL_3D_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
+    iconUrl: physicalPackMarkUrl(),
   }));
 
 /** Physical · 3D gym — 5×5 machines & accessories sheet (25 steps). */
@@ -126,7 +128,7 @@ export const PHYSICAL_3D_GYM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     title: lc(s.title),
     category: lc(PHYSICAL_3D_GYM_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
+    iconUrl: physicalPackMarkUrl(),
   }));
 
 /** @deprecated Use {@link PHYSICAL_GENERATED_CARD_PROPS}. */

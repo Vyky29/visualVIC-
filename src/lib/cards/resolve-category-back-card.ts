@@ -10,6 +10,7 @@ import { showerBackCardUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { atTheAirportBackCardUrl } from "@/lib/cards/at-the-airport-cards";
 import { dayCentreBackCardUrl } from "@/lib/cards/day-centre-cards";
+import { physicalBackCardUrl } from "@/lib/cards/physical-cards";
 import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
 import { stepCardVisualTone } from "@/lib/utils/routine-accent";
 
@@ -32,6 +33,13 @@ export function resolveCategoryBackCardUrl(
   }
   if (path.includes("day%20centre")) {
     return dayCentreBackCardUrl();
+  }
+  if (
+    path.includes("/images/library/") ||
+    path.includes("/images/library-3d") ||
+    path.includes("/cards/physical/")
+  ) {
+    return physicalBackCardUrl();
   }
 
   if (path.includes("/cards/brushing-teeth/")) {
@@ -74,6 +82,8 @@ export function resolveCategoryBackCardUrlForStep(
       return atTheHotelBackCardUrl();
     case "daycentre":
       return dayCentreBackCardUrl();
+    case "physical":
+      return physicalBackCardUrl();
     case "core":
     case "swimming":
     case "custom":

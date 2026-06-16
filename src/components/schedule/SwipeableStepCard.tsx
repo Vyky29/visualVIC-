@@ -100,6 +100,7 @@ const STEP_OUTLINE_HEX: Record<
   airport: "#F9DD9F",
   hotel: "#EBA29C",
   daycentre: "#E05C9A",
+  physical: "#43A047",
   finish: "#9aa3a8",
   custom: "#1c2420",
   default: "#7d9b87",
