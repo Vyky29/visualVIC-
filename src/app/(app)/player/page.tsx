@@ -35,6 +35,7 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   hotel: "border-[#8C1E2E]/24 bg-[#fdeef0]/95 text-[#8C1E2E]",
   daycentre: "border-[#E53935]/24 bg-[#ffebee]/95 text-[#E53935]",
   tailored: "border-[#E05C9A]/24 bg-[#fde8f4]/95 text-[#E05C9A]",
+  ayaan: "border-[#1E4A73]/24 bg-[#e8eef5]/95 text-[#1E4A73]",
   physical: "border-[#43A047]/24 bg-[#e8f5e9]/95 text-[#2E7D32]",
   finish: "border-[#9aa3a8]/24 bg-[#eef1f2]/95 text-[#7c858b]",
   custom: "border-ink/12 bg-canvas-muted text-ink-subtle",

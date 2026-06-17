@@ -52,6 +52,7 @@ import {
   DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE,
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE,
   DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
   dayCentreAyaanFocusImageUrlForStep,
   dayCentreAyaanImageUrlForStep,
   dayCentreAyaanScheduleFocusImageUrlForStep,
@@ -265,7 +266,7 @@ function ayaanGeneratedCardProps(step: DayCentreAyaanStep) {
     illustrationUrl: dayCentreAyaanImageUrlForStep(step),
     title: lc(step.title),
     category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
-    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    categoryColour: DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
     iconUrl: dayCentreAyaanAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
@@ -280,7 +281,7 @@ function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
     illustrationUrl: dayCentreAyaanScheduleImageUrlForStep(step),
     title: lc(step.title),
     category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
-    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    categoryColour: DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
     iconUrl: dayCentreAyaanAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };

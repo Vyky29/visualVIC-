@@ -12,6 +12,7 @@ export type RoutineVisualTone =
   | "hotel"
   | "daycentre"
   | "tailored"
+  | "ayaan"
   | "physical"
   | "finish"
   /** Custom, plantillas y demos modulares — borde negro en Home / reproductor. */
@@ -218,6 +219,21 @@ const PALETTE: Record<RoutineVisualTone, RoutineAccentRings> = {
     hoverGlow:
       "group-hover:shadow-[0_0_36px_-12px_rgba(224,92,154,0.52)]",
   },
+  ayaan: {
+    home: "ring-2 ring-[#1E4A73] ring-offset-2 ring-offset-canvas",
+    homeDashboard:
+      "ring-1 ring-[#1E4A73] ring-offset-1 ring-offset-canvas",
+    scheduleNow:
+      "ring-2 ring-[#1E4A73] shadow-[0_8px_32px_-12px_rgba(30,74,115,0.42)]",
+    scheduleNext:
+      "ring-2 ring-[#1E4A73] shadow-[0_6px_22px_-12px_rgba(30,74,115,0.34)]",
+    scheduleFocus:
+      "ring-2 ring-[#1E4A73] shadow-[0_8px_32px_-12px_rgba(30,74,115,0.46)]",
+    scheduleCompact:
+      "ml-0.5 border-l-[3px] border-dashed border-[#1E4A73] pl-3 ring-1 ring-[#1E4A73] ring-offset-2 ring-offset-cream",
+    hoverGlow:
+      "group-hover:shadow-[0_0_36px_-12px_rgba(30,74,115,0.52)]",
+  },
   physical: {
     home: "ring-2 ring-[#43A047] ring-offset-2 ring-offset-canvas",
     homeDashboard:
@@ -297,6 +313,7 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
     const c = step.generatedPixto.category.toLowerCase();
     if (c.includes("physical activity")) return "physical";
     if (c.includes("tailored")) return "tailored";
+    if (c.includes("ayaan")) return "ayaan";
     if (c.includes("ikram")) return "tailored";
     if (c.includes("serine")) return "tailored";
     if (c.includes("day centre")) return "daycentre";
@@ -465,7 +482,10 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   ) {
     return "physical";
   }
-  if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/", "/day centre/ayaan", "/ayaan/", "/day centre/emmanuel", "/emmanuel/"])) {
+  if (includesAny(haystack, ["/day centre/ayaan", "/ayaan/"])) {
+    return "ayaan";
+  }
+  if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/", "/day centre/emmanuel", "/emmanuel/"])) {
     return "tailored";
   }
   if (includesAny(haystack, ["day centre", "day%20centre", "daycentre"])) {
@@ -486,6 +506,7 @@ const CATEGORY_OUTLINE_HEX: Record<RoutineVisualTone, string> = {
   hotel: "#EBA29C",
   daycentre: "#E53935",
   tailored: "#E05C9A",
+  ayaan: "#1E4A73",
   physical: "#43A047",
   finish: "#9aa3a8",
   custom: "#1c2420",
@@ -585,7 +606,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "serine-day-centre") return "tailored";
-  if (id === "ayaan-day-centre") return "tailored";
+  if (id === "ayaan-day-centre") return "ayaan";
   if (id === "emmanuel-day-centre") return "tailored";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
@@ -638,7 +659,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "serine-day-centre") return "tailored";
-  if (id === "ayaan-day-centre") return "tailored";
+  if (id === "ayaan-day-centre") return "ayaan";
   if (id === "emmanuel-day-centre") return "tailored";
   if (id.includes("core")) return "core";
 
@@ -773,6 +794,16 @@ const SCHEDULE_PLAYER_CHROME: Record<RoutineVisualTone, RoutineSchedulePlayerChr
       nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#E05C9A] ring-2 ring-[#E05C9A]/35",
       nowLabel:
         "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E05C9A]",
+    },
+    ayaan: {
+      focusCta:
+        "min-h-touch w-full bg-gradient-to-b from-[#e8eef5] to-[#d0dde8] text-[15px] font-semibold text-ink shadow-card ring-1 ring-[#1E4A73]/35 transition active:scale-[0.99]",
+      progressFill: "bg-[#1E4A73]",
+      counterPill:
+        "rounded-full bg-[#e8eef5]/95 px-3 py-1.5 text-[12px] font-medium tabular-nums text-ink ring-1 ring-[#1E4A73]/28",
+      nowDot: "h-2 w-2 shrink-0 rounded-full bg-[#1E4A73] ring-2 ring-[#1E4A73]/35",
+      nowLabel:
+        "text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1E4A73]",
     },
     physical: {
       focusCta:

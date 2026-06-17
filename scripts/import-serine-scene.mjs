@@ -38,16 +38,13 @@ async function publish(style, src, outDir) {
     fs.copyFileSync(src, rawLocal);
   }
 
-  const fitOpts = { trim: false, minPad: 28 };
-
-  await fitIllustrationToCard(src, path.join(outDir, `${slug}.png`), fitOpts);
+  await fitIllustrationToCard(src, path.join(outDir, `${slug}.png`));
   await fitIllustrationToCard(src, path.join(outDir, `${slug}-focus.png`), {
-    ...fitOpts,
     height: FOCUS_H,
   });
 
   if (style === "3d") {
-    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`), fitOpts);
+    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`));
   }
 
   console.log(`${style}:`, path.relative(root, outDir));
