@@ -175,7 +175,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   treadmill: { en: "treadmill", es: "cinta de correr" },
   "row-machine": { en: "row machine", es: "máquina de remo" },
   "exercise-bike": { en: "exercise bike", es: "bici estática" },
-  "sandbag-carry": { en: "carry sandbag", es: "cargar saco de arena" },
+  "sandbag-carry": { en: "walk with sandbag", es: "caminar con saco de arena" },
   "therapy-ball": { en: "therapy ball", es: "pelota terapéutica" },
   skierg: { en: "ski machine", es: "máquina de esquí" },
   stretching: { en: "stretching", es: "estiramientos" },
