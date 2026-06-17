@@ -563,9 +563,11 @@ function HomeRoutinePreviewMedia({
         priority={priority}
         decoding="async"
         className={cn(
-          fillFrame || !illustrationOnly
-            ? "object-cover object-center"
-            : "object-contain object-center",
+          tailoredAvatar
+            ? "object-contain object-center p-1"
+            : fillFrame || !illustrationOnly
+              ? "object-cover object-center"
+              : "object-contain object-center",
           fullBleedPixto
             ? cn(
                 pixtoBundledCardObjectPositionTopClass,

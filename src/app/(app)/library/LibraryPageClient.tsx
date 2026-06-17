@@ -289,7 +289,7 @@ function libraryPackHeaderImageClass(
   cropHeaderIcon: boolean,
 ): string {
   if (isDayCentreTailoredPackIconUrl(iconSrc)) {
-    return "object-cover object-center";
+    return "object-contain object-center p-0.5";
   }
   if (cropHeaderIcon) {
     return "object-cover object-top scale-[1.26]";

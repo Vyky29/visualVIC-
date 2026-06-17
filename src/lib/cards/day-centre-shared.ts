@@ -34,7 +34,7 @@ export function dayCentreIkramTailoredHomeAvatarUrl(): string {
   return dayCentreIkramAvatarLeopard2dUrl();
 }
 
-/** Library pack accordion — same 3D face close-ups, fill the icon square. */
+/** Library pack accordion — same 2D face portraits, white background. */
 export function dayCentreIkramLibraryPackIconUrl(): string {
   return dayCentreIkramTailoredHomeAvatarUrl();
 }
