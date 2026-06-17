@@ -78,6 +78,8 @@ import {
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
+  isPixtoLearnFullBleedCardUrl,
+  isPixtoLearnIllustrationOnlyUrl,
   pixtoBundledCardObjectPositionTopClass,
 } from "@/lib/utils/visual-card-url";
 
@@ -130,7 +132,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
   dcayaan: "ring-[#1E4A73]/75",
-  dcemmanuel: "ring-[#E05C9A]/75",
+  dcemmanuel: "ring-[#1E4A73]/75",
   physical: "ring-[#43A047]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
@@ -150,7 +152,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dcikram: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   dcserine: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   dcayaan: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
-  dcemmanuel: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
+  dcemmanuel: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
   phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
   phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
@@ -440,6 +442,8 @@ type LibraryPickTileProps = {
 function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
   const unopt = cardImageUnoptimized(v.imageUrl);
   const pixto = isPixtoLearnBundledCardUrl(v.imageUrl);
+  const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(v.imageUrl);
+  const fullBleedPixto = isPixtoLearnFullBleedCardUrl(v.imageUrl);
   const categoryOutlineStyle = v.generatedPixto?.categoryColour
     ? generatedPixtoCategoryOutlineStyle(v.generatedPixto.categoryColour, {
         cardShadow: false,
@@ -470,8 +474,8 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
           sizes="(max-width: 512px) 23vw, 120px"
           unoptimized={unopt}
           className={cn(
-            "object-cover",
-            pixto
+            illustrationOnly ? "object-contain object-center" : "object-cover",
+            fullBleedPixto
               ? cn(
                   pixtoBundledCardObjectPositionTopClass,
                   "!h-[120%] !max-h-none w-full",
@@ -479,7 +483,7 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
               : "object-center",
           )}
           style={
-            pixto
+            fullBleedPixto
               ? {
                   top: "7%",
                   bottom: "auto",

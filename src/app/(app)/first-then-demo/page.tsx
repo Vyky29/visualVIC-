@@ -1427,7 +1427,7 @@ function FirstThenDemoPageClient() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-canvas touch-manipulation text-ink">
+    <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
       {isMobileLandscape ? (
         <FirstThenFocusLandscapeLayout
           firstCard={first}

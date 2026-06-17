@@ -64,11 +64,16 @@ async function main() {
       fs.copyFileSync(src, rawLocal);
     }
 
-    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`));
+    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`), {
+      fit: "cover-padded",
+    });
     await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
+      fit: "cover-padded",
       height: FOCUS_H,
     });
-    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`));
+    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`), {
+      fit: "cover-padded",
+    });
 
     console.log("ok:", slug);
     ok++;

@@ -314,7 +314,7 @@ export function FocusMode({ routine, exitHref }: Props) {
   }, []);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-canvas touch-manipulation text-ink">
+    <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
       {stepPositionLabel ? (
         <div
           aria-live="polite"
@@ -359,10 +359,10 @@ export function FocusMode({ routine, exitHref }: Props) {
               animate={{ opacity: 1 }}
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
-              <p className="text-[17px] font-medium text-ink">
+              <p className="text-[17px] font-medium text-cream">
                 {focusModeNothingLeftTitle(lang)}
               </p>
-              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-ink-subtle">
+              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/70">
                 {focusModeNothingLeftBody(lang)}
               </p>
               <button
@@ -380,10 +380,10 @@ export function FocusMode({ routine, exitHref }: Props) {
               transition={{ duration: 0.22 }}
               className="absolute inset-0 flex min-h-0 flex-col items-center justify-center px-6 text-center"
             >
-              <p className="text-[20px] font-medium tracking-tight text-ink">
+              <p className="text-[20px] font-medium tracking-tight text-cream">
                 {focusModeAllFinishedTitle(lang)}
               </p>
-              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-ink-subtle">
+              <p className="mt-3 max-w-xs text-[12px] leading-relaxed text-cream/70">
                 {focusModeNothingLeftBody(lang)}
               </p>
               <button

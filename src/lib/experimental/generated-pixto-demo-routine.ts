@@ -63,6 +63,7 @@ import {
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
   dayCentreEmmanuelFocusImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelScheduleFocusImageUrlForStep,
@@ -298,7 +299,7 @@ function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
     illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
     title: lc(step.title),
     category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
-    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
@@ -314,7 +315,7 @@ function emmanuelScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
     illustrationUrl: dayCentreEmmanuelScheduleImageUrlForStep(step),
     title: lc(step.title),
     category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
-    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };

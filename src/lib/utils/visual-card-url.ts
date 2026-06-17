@@ -5,6 +5,21 @@ export function isPixtoLearnBundledCardUrl(url: string | undefined): boolean {
 }
 
 /**
+ * Illustration-only assets (531×648) for HTML `GeneratedPixtoCard` shells — participant
+ * scenes, focus variants, etc. Must use `object-contain`, not full-bleed cover crop.
+ */
+export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return u.includes("/scenes/") || u.includes("/scenes-2d/");
+}
+
+/** Full designer PNG cards with embedded title strip — thumbnails may cover-crop. */
+export function isPixtoLearnFullBleedCardUrl(url: string | undefined): boolean {
+  return isPixtoLearnBundledCardUrl(url) && !isPixtoLearnIllustrationOnlyUrl(url);
+}
+
+/**
  * Bundled card art reads slightly right of geometric center with `object-cover` + `object-center`.
  * Nudge horizontal anchor so the illustration/title strip look balanced in the frame.
  */

@@ -10,6 +10,8 @@ import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   isPixtoLearnBundledCardUrl,
+  isPixtoLearnFullBleedCardUrl,
+  isPixtoLearnIllustrationOnlyUrl,
   pixtoBundledCardObjectPositionTopClass,
 } from "@/lib/utils/visual-card-url";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
@@ -486,6 +488,8 @@ function HomeRoutinePreviewMedia({
 }) {
   if (!imageUrl) return null;
   const pixto = isPixtoLearnBundledCardUrl(imageUrl);
+  const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(imageUrl);
+  const fullBleedPixto = isPixtoLearnFullBleedCardUrl(imageUrl);
   return (
     <div
       className={cn(
@@ -502,15 +506,15 @@ function HomeRoutinePreviewMedia({
         priority={priority}
         decoding="async"
         className={cn(
-          "object-cover",
-          pixto
+          illustrationOnly ? "object-contain object-center" : "object-cover",
+          fullBleedPixto
             ? cn(
                 pixtoBundledCardObjectPositionTopClass,
                 "!h-[132%] !max-h-none w-full",
               )
             : "object-center",
         )}
-        style={pixto ? { top: 0, bottom: "auto" } : undefined}
+        style={fullBleedPixto ? { top: 0, bottom: "auto" } : undefined}
       />
     </div>
   );

@@ -22,6 +22,8 @@ export const MIN_PAD = 36;
  *   width?: number;
  *   height?: number;
  *   background?: string;
+ *   fit?: "contain" | "cover" | "cover-padded";
+ *   position?: string;
  * }} [opts]
  */
 export async function fitIllustrationToCard(src, dest, opts = {}) {
@@ -49,9 +51,24 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
   }
 
   const minPad = opts.minPad ?? MIN_PAD;
-  const meta = await img.metadata();
   const maxW = width - 2 * minPad;
   const maxH = height - 2 * minPad;
+
+  if (fit === "cover-padded") {
+    const resized = await img
+      .resize(maxW, maxH, { fit: "cover", position: opts.position ?? "centre" })
+      .png()
+      .toBuffer();
+    await sharp({
+      create: { width, height, channels: 3, background },
+    })
+      .composite([{ input: resized, gravity: "centre" }])
+      .png()
+      .toFile(dest);
+    return;
+  }
+
+  const meta = await img.metadata();
   const scale = Math.min(maxW / meta.width, maxH / meta.height);
   const w = Math.round(meta.width * scale);
   const h = Math.round(meta.height * scale);

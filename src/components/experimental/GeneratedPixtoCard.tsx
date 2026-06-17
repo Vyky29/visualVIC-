@@ -171,7 +171,7 @@ export function FocusRoutineIllustrationImage({
   const unoptimized =
     src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
   return (
-    <div className="relative flex h-full w-full items-end justify-center overflow-hidden">
+    <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
       <div
         className="relative mx-auto shrink-0"
         style={{
@@ -180,7 +180,7 @@ export function FocusRoutineIllustrationImage({
           ...(scale !== 1
             ? {
                 transform: `scale(${scale})`,
-                transformOrigin: "center bottom",
+                transformOrigin: "center center",
               }
             : {}),
         }}
@@ -999,7 +999,7 @@ function GeneratedPixtoFocusFixedZoneCard({
       aria-label={title}
     >
       <div
-        className="relative flex min-h-0 flex-1 items-end justify-center"
+        className="relative flex min-h-0 flex-1 items-center justify-center"
         style={{
           paddingTop: z.illustPadTop,
           paddingRight: z.illustPadX,
@@ -1037,7 +1037,7 @@ function GeneratedPixtoFocusFixedZoneCard({
         <FocusRoutineIllustrationImage
           src={resolvedIllustrationSrc}
           sizes={`${z.w}px`}
-          objectClass="!h-full !w-full object-contain object-bottom"
+          objectClass="!h-full !w-full object-contain object-center"
           scale={resolvedFocusIllustrationScale}
         />
       </div>
@@ -1202,9 +1202,6 @@ export function GeneratedPixtoCard({
     scheduleLockedTitleLayout,
     schedulePresentation,
   ]);
-  const illustrationAspect = focusPresentation
-    ? FOCUS_ILLUSTRATION_FRAME_ASPECT
-    : ILLUSTRATION_FRAME_ASPECT;
   const illustrationFrameRef = focusPresentation
     ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_FRAME
     : GENERATED_PIXTO_ILLUSTRATION_FRAME;
@@ -1234,8 +1231,19 @@ export function GeneratedPixtoCard({
     : schedulePresentation
       ? WOW_ROW_FR_CATEGORY
       : ROW_FR_CATEGORY;
-  const gridTemplateRows = `${topRowFr}fr ${titleRowFr}fr ${categoryRowFr}fr`;
+  const gridTemplateRows = `minmax(0, ${topRowFr}fr) minmax(0, ${titleRowFr}fr) minmax(0, ${categoryRowFr}fr)`;
   const cardAspect = focusPresentation ? FOCUS_CARD_ASPECT : CARD_ASPECT;
+  const topSpacerFr = focusPresentation
+    ? FOCUS_FR_TOP_SPACER
+    : schedulePresentation
+      ? WOW_FR_TOP_SPACER
+      : FR_TOP_SPACER;
+  const topIllustrationFr = focusPresentation
+    ? FOCUS_FR_ILLUSTRATION
+    : schedulePresentation
+      ? WOW_FR_ILLUSTRATION
+      : FR_ILLUSTRATION;
+  const innerTopGridRows = `minmax(0, ${topSpacerFr}fr) minmax(0, ${topIllustrationFr}fr)`;
 
   if (focusPresentation) {
     return (
@@ -1314,50 +1322,26 @@ export function GeneratedPixtoCard({
         </div>
       ) : null}
 
-      {/* Top block — white field + 531×648 illustration frame; Focus gets extra depth here. */}
-      <div className="relative min-h-0 bg-white">
+      {/* Top block — white field + illustration slot (531×648 / focus 531×663). */}
+      <div className="relative h-full min-h-0 overflow-hidden bg-white">
         {(focusPresentation || schedulePresentation) ? (
           <IllustrationExpandedTopDiagnosticLine
             illustrationWidthPct={illustrationWidthPct}
           />
         ) : null}
-        <div className="flex h-full min-h-0 w-full flex-col">
-          <div
-            className="min-h-0 shrink-0"
-            style={{
-              flex: `${
-                focusPresentation
-                  ? FOCUS_FR_TOP_SPACER
-                  : schedulePresentation
-                    ? WOW_FR_TOP_SPACER
-                  : FR_TOP_SPACER
-              } 1 0`,
-            }}
-            aria-hidden
-          />
-          <div
-            className="relative flex h-full w-full min-h-0 shrink-0 items-start justify-center"
-            style={{
-              flex: `${
-                focusPresentation
-                  ? FOCUS_FR_ILLUSTRATION
-                  : schedulePresentation
-                    ? WOW_FR_ILLUSTRATION
-                    : FR_ILLUSTRATION
-              } 1 0`,
-            }}
-          >
+        <div
+          className="grid h-full min-h-0 w-full"
+          style={{ gridTemplateRows: innerTopGridRows }}
+        >
+          <div aria-hidden />
+          <div className="relative flex min-h-0 items-center justify-center">
             <div
               className={cn(
-                "relative mx-auto w-full min-h-0 shrink-0",
+                "relative h-full min-h-0 w-full",
                 showFrameGuide &&
                   "bg-[rgba(0,180,120,0.08)] ring-2 ring-inset ring-[rgba(0,180,120,0.9)]",
               )}
-              style={{
-                width: illustrationWidthPct,
-                aspectRatio: illustrationAspect,
-                maxHeight: "100%",
-              }}
+              style={{ maxWidth: illustrationWidthPct }}
             >
               {showFrameGuide ? (
                 <span className="pointer-events-none absolute left-1 top-1 z-20 rounded bg-[rgba(0,180,120,0.92)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-white">
