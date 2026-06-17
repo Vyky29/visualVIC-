@@ -6,6 +6,7 @@ import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
+import { isTailoredSchedulesPackMarkUrl, tailoredSchedulesPackMarkTintMaskUrl } from "@/lib/cards/tailored-schedules-shared";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
@@ -110,6 +111,90 @@ export const GENERATED_PIXTO_FOCUS_COMPANY_MARK = { w: 91, h: 91 } as const;
 
 /** If `iconUrl` (e.g. pack `pixtolearn-mark.png`) 404s, show full-colour brand mark. */
 const PACK_MARK_FALLBACK_SRC = "/brand/pixtolearn-logo.png";
+
+function CategoryColouredPackMark({
+  src,
+  colour,
+  className,
+  onError,
+}: {
+  src: string;
+  colour: string;
+  className?: string;
+  onError: () => void;
+}) {
+  const maskSrc = tailoredSchedulesPackMarkTintMaskUrl(src);
+
+  return (
+    <div className={cn("relative h-full w-full", className)}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={maskSrc}
+        alt=""
+        className="pointer-events-none absolute h-0 w-0 opacity-0"
+        onError={onError}
+        aria-hidden
+      />
+      <div
+        className="h-full w-full"
+        style={{
+          backgroundColor: colour,
+          WebkitMaskImage: `url("${maskSrc}")`,
+          maskImage: `url("${maskSrc}")`,
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+        }}
+        aria-hidden
+      />
+    </div>
+  );
+}
+
+export function GeneratedPixtoPackMark({
+  src,
+  categoryColour,
+  sizes,
+  onError,
+  className,
+}: {
+  src: string;
+  categoryColour: string;
+  sizes: string;
+  onError: () => void;
+  className?: string;
+}) {
+  if (isTailoredSchedulesPackMarkUrl(src)) {
+    return (
+      <CategoryColouredPackMark
+        src={src}
+        colour={categoryColour}
+        onError={onError}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      className={cn("object-contain p-0", className)}
+      sizes={sizes}
+      onError={onError}
+      unoptimized={
+        src.startsWith("/") ||
+        src.includes("/cards/") ||
+        /\.jpe?g$/i.test(src) ||
+        /\.png$/i.test(src)
+      }
+    />
+  );
+}
 const SHOW_GENERATED_PIXTO_DEBUG_GUIDES = false;
 
 /** Full green slot box — off (visible during NOW card flip). */
@@ -1017,19 +1102,11 @@ function GeneratedPixtoFocusFixedZoneCard({
               height: z.packMarkSize,
             }}
           >
-            <Image
+            <GeneratedPixtoPackMark
               src={markSrc}
-              alt=""
-              fill
-              className="object-contain"
+              categoryColour={categoryColour}
               sizes={`${z.packMarkSize}px`}
               onError={onMarkError}
-              unoptimized={
-                markSrc.startsWith("/") ||
-                markSrc.includes("/cards/") ||
-                /\.jpe?g$/i.test(markSrc) ||
-                /\.png$/i.test(markSrc)
-              }
             />
           </div>
         ) : null}
@@ -1305,19 +1382,11 @@ export function GeneratedPixtoCard({
           }}
           aria-hidden
         >
-          <Image
+          <GeneratedPixtoPackMark
             src={markSrc}
-            alt=""
-            fill
-            className="object-contain p-0"
+            categoryColour={categoryColour}
             sizes={`${markRef.w}px`}
             onError={onMarkError}
-            unoptimized={
-              markSrc.startsWith("/") ||
-              markSrc.includes("/cards/") ||
-              /\.jpe?g$/i.test(markSrc) ||
-              /\.png$/i.test(markSrc)
-            }
           />
         </div>
       ) : null}

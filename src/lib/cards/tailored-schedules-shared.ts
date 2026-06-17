@@ -15,6 +15,30 @@ export function tailoredSchedulesPackMarkUrl(): string {
   return `${TAILORED_SCHEDULES_PUBLIC_DIR}/logo-tailored.png`;
 }
 
+/** Alpha silhouette of `logo-tailored.png` — use with CSS `mask-image` + `categoryColour`. */
+export function tailoredSchedulesPackMarkMaskUrl(): string {
+  return `${TAILORED_SCHEDULES_PUBLIC_DIR}/logo-tailored-mask.png`;
+}
+
+export function tailoredSchedulesPackMarkTintMaskUrl(
+  packMarkUrl: string,
+): string {
+  return isTailoredSchedulesPackMarkUrl(packMarkUrl)
+    ? tailoredSchedulesPackMarkMaskUrl()
+    : packMarkUrl;
+}
+
 export function tailoredSchedulesBackCardUrl(): string {
   return `${TAILORED_SCHEDULES_PUBLIC_DIR}/backcard-tailored.png`;
+}
+
+/** Shared cards icon — tint in UI with each pack's `categoryColour`. */
+export function isTailoredSchedulesPackMarkUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return (
+    u.includes("logo-tailored") ||
+    u.includes("logo-day-centre-ikram") ||
+    u.includes("logo-day-centre-serine")
+  );
 }

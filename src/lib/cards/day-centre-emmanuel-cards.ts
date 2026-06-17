@@ -8,15 +8,14 @@ import {
   dayCentreEmmanuelSceneFocusUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelAvatarUrl,
+  dayCentreEmmanuelPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
 /** Dark navy — Emmanuel tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
 export const DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR = "#1E4A73" as const;
 
-export {
-  dayCentreEmmanuelAvatarUrl as dayCentreEmmanuelPackMarkUrl,
-};
+export { dayCentreEmmanuelPackMarkUrl, dayCentreEmmanuelAvatarUrl };
 
 export type DayCentreEmmanuelStep = {
   id: string;

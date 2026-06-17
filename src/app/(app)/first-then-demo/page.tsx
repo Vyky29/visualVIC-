@@ -24,6 +24,7 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   FocusRoutineIllustrationImage,
+  GeneratedPixtoPackMark,
   type GeneratedPixtoCardProps,
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
@@ -363,13 +364,11 @@ function MiniDigitalWowCard({
               }}
             >
               <div className="relative h-full w-full">
-                <Image
+                <GeneratedPixtoPackMark
                   src={card.iconUrl}
-                  alt=""
-                  fill
-                  className="object-contain"
+                  categoryColour={card.categoryColour}
                   sizes={`${GENERATED_PIXTO_WOW_COMPANY_MARK.w}px`}
-                  unoptimized
+                  onError={() => {}}
                 />
               </div>
             </div>
@@ -501,13 +500,11 @@ function FirstThenFocusSpecCard({
             height: FOCUS_LANDSCAPE.packMarkSize,
           }}
         >
-          <Image
+          <GeneratedPixtoPackMark
             src={card.iconUrl}
-            alt=""
-            fill
-            className="object-contain"
+            categoryColour={card.categoryColour}
             sizes={`${FOCUS_LANDSCAPE.packMarkSize}px`}
-            unoptimized
+            onError={() => {}}
           />
         </div>
       ) : null}

@@ -57,6 +57,7 @@ import {
   dayCentreAyaanImageUrlForStep,
   dayCentreAyaanScheduleFocusImageUrlForStep,
   dayCentreAyaanScheduleImageUrlForStep,
+  dayCentreAyaanPackMarkUrl,
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
@@ -68,14 +69,13 @@ import {
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelScheduleFocusImageUrlForStep,
   dayCentreEmmanuelScheduleImageUrlForStep,
+  dayCentreEmmanuelPackMarkUrl,
   type DayCentreEmmanuelStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
-  dayCentreSerineAvatarUrl,
-  dayCentreAyaanAvatarUrl,
-  dayCentreEmmanuelAvatarUrl,
+  dayCentreSerinePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
@@ -236,7 +236,7 @@ function serineGeneratedCardProps(step: DayCentreSerineStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
-    iconUrl: dayCentreSerineAvatarUrl(),
+    iconUrl: dayCentreSerinePackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -251,7 +251,7 @@ function serineScheduleGeneratedCardProps(step: DayCentreSerineStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
-    iconUrl: dayCentreSerineAvatarUrl(),
+    iconUrl: dayCentreSerinePackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -268,7 +268,7 @@ function ayaanGeneratedCardProps(step: DayCentreAyaanStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
-    iconUrl: dayCentreAyaanAvatarUrl(),
+    iconUrl: dayCentreAyaanPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -283,7 +283,7 @@ function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
-    iconUrl: dayCentreAyaanAvatarUrl(),
+    iconUrl: dayCentreAyaanPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -300,7 +300,7 @@ function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
-    iconUrl: dayCentreEmmanuelAvatarUrl(),
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -316,7 +316,7 @@ function emmanuelScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
-    iconUrl: dayCentreEmmanuelAvatarUrl(),
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }

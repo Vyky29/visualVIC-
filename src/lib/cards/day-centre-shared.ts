@@ -1,5 +1,7 @@
 /** Shared Day Centre pack constants (red ribbon). */
 
+import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
+
 const DAY_CENTRE_DIR_SEG = encodeURIComponent("day centre");
 
 export const DAY_CENTRE_PUBLIC_DIR = `/cards/${DAY_CENTRE_DIR_SEG}`;
@@ -33,7 +35,7 @@ export function dayCentreIkramAvatarLeopardUrl(): string {
 }
 
 export function dayCentreIkramPackMarkUrl(): string {
-  return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre-ikram.png`;
+  return tailoredSchedulesPackMarkUrl();
 }
 
 export function dayCentreBackCardUrl(): string {
@@ -74,7 +76,15 @@ export function dayCentreSerineAvatar3dUrl(): string {
 }
 
 export function dayCentreSerinePackMarkUrl(): string {
-  return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre-serine.png`;
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreAyaanPackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreEmmanuelPackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
 }
 
 export function dayCentreSerineImageUrl(slug: string): string {

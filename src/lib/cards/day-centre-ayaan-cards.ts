@@ -8,15 +8,14 @@ import {
   dayCentreAyaanSceneFocusUrl,
   dayCentreAyaanSceneUrl,
   dayCentreAyaanAvatarUrl,
+  dayCentreAyaanPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
 /** Dark navy — Ayaan tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
 export const DAY_CENTRE_AYAAN_CATEGORY_COLOUR = "#1E4A73" as const;
 
-export {
-  dayCentreAyaanAvatarUrl as dayCentreAyaanPackMarkUrl,
-};
+export { dayCentreAyaanPackMarkUrl, dayCentreAyaanAvatarUrl };
 
 export type DayCentreAyaanStep = {
   id: string;
