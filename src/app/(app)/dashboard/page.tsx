@@ -533,8 +533,18 @@ function DashboardRoutineTile({
             </div>
           )}
         </div>
-        <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
-          <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
+        <div
+          className={cn(
+            "flex flex-1 flex-col px-2 pb-2 pt-1.5",
+            titleOverride ? "items-center justify-center text-center" : "justify-end",
+          )}
+        >
+          <p
+            className={cn(
+              "line-clamp-2 font-semibold leading-tight text-ink",
+              titleOverride ? "text-[15px]" : "text-[13px]",
+            )}
+          >
             {titleOverride ??
               stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
           </p>
@@ -572,6 +582,7 @@ function HomeRoutinePreviewMedia({
   if (!imageUrl) return null;
   const pixto = isPixtoLearnBundledCardUrl(imageUrl);
   const tailoredAvatar = isDayCentreTailoredPackIconUrl(imageUrl);
+  const faceCloseUp = tailoredAvatar && fillFrame;
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(imageUrl);
   const fullBleedPixto = isPixtoLearnFullBleedCardUrl(imageUrl);
   return (
@@ -591,20 +602,32 @@ function HomeRoutinePreviewMedia({
         sizes={sizes}
         priority={priority}
         decoding="async"
+        unoptimized={tailoredAvatar}
         className={cn(
-          tailoredAvatar
-            ? "object-contain object-center p-1"
-            : fillFrame || !illustrationOnly
-              ? "object-cover object-center"
-              : "object-contain object-center",
+          faceCloseUp
+            ? cn(
+                "object-cover object-[center_22%] w-full",
+                "!h-[158%] !max-h-none",
+              )
+            : tailoredAvatar
+              ? "object-contain object-center p-1"
+              : fillFrame || !illustrationOnly
+                ? "object-cover object-center"
+                : "object-contain object-center",
           fullBleedPixto
             ? cn(
                 pixtoBundledCardObjectPositionTopClass,
                 "!h-[132%] !max-h-none w-full",
               )
-            : "object-center",
+            : !faceCloseUp && "object-center",
         )}
-        style={fullBleedPixto ? { top: 0, bottom: "auto" } : undefined}
+        style={
+          fullBleedPixto
+            ? { top: 0, bottom: "auto" }
+            : faceCloseUp
+              ? { top: "-12%", bottom: "auto" }
+              : undefined
+        }
       />
     </div>
   );
