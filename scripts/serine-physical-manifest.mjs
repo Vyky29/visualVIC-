@@ -39,9 +39,9 @@ export const SERINE_PHYSICAL_SCHEDULE = [
   },
   {
     slug: "sandbag-carry",
-    title: "Carry sandbag",
+    title: "Walk with sandbag",
     scene:
-      "standing on a black plyo box holding a black sandbag with red straps and number 5, both hands on handles",
+      "walking forward in a gym carrying a large sandbag with orange ends and black middle, both hands on strap handles, mid-stride, white t-shirt, dark grey joggers, pink trainers, green lanyard",
   },
   {
     slug: "weights-on-bosu",

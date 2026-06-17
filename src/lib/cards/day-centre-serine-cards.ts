@@ -47,7 +47,7 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
     { id: "dcs-treadmill", slug: "treadmill", title: "Treadmill" },
     { id: "dcs-row-machine", slug: "row-machine", title: "Row machine" },
     { id: "dcs-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
-    { id: "dcs-sandbag-carry", slug: "sandbag-carry", title: "Carry sandbag" },
+    { id: "dcs-sandbag-carry", slug: "sandbag-carry", title: "Walk with sandbag" },
     {
       id: "dcs-weights-on-bosu",
       slug: "weights-on-bosu",
