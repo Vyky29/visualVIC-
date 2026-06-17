@@ -32,9 +32,7 @@ import {
   PHYSICAL_LIBRARY_GROUP_ORDER,
   physicalLibraryGroupFromPickNamespace,
 } from "@/lib/cards/physical-library-groups";
-import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
-import { dayCentreIkramPackMarkUrl } from "@/lib/cards/day-centre-ikram-cards";
-import { dayCentreSerinePackMarkUrl } from "@/lib/cards/day-centre-serine-cards";
+import { dayCentrePackMarkUrl, dayCentreIkramAvatarUrl, dayCentreSerineAvatarUrl } from "@/lib/cards/day-centre-shared";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -109,9 +107,11 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   core: coreImageUrl("wash-hands"),
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
-  daycentre: dayCentrePackMarkUrl(),
-  dcikram: dayCentreIkramPackMarkUrl(),
-  dcserine: dayCentreSerinePackMarkUrl(),
+  daycentre:
+    DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[0]?.illustrationUrl ??
+    dayCentrePackMarkUrl(),
+  dcikram: dayCentreIkramAvatarUrl(),
+  dcserine: dayCentreSerineAvatarUrl(),
   physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),

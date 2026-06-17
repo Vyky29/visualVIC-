@@ -46,12 +46,12 @@ import {
   dayCentreSerineImageUrlForStep,
   dayCentreSerineScheduleFocusImageUrlForStep,
   dayCentreSerineScheduleImageUrlForStep,
-  dayCentreSerinePackMarkUrl,
   type DayCentreSerineStep,
 } from "@/lib/cards/day-centre-serine-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
+  dayCentreSerineAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
@@ -212,7 +212,7 @@ function serineGeneratedCardProps(step: DayCentreSerineStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
-    iconUrl: dayCentreSerinePackMarkUrl(),
+    iconUrl: dayCentreSerineAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -227,7 +227,7 @@ function serineScheduleGeneratedCardProps(step: DayCentreSerineStep) {
     title: lc(step.title),
     category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
-    iconUrl: dayCentreSerinePackMarkUrl(),
+    iconUrl: dayCentreSerineAvatarUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }

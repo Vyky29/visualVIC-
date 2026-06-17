@@ -51,14 +51,14 @@ export function dayCentreIkramSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_IKRAM_DIR}/scenes/${slug}-focus.png`;
 }
 
-/** Serine 2D cartoon avatar (primary until 3D avatar is published). */
+/** Serine portrait — white background, black studio mat removed. */
 export function dayCentreSerineAvatarUrl(): string {
-  return "/avatars/serine-cartoon-2d.png";
+  return "/avatars/serine-cartoon.png";
 }
 
-/** Serine 3D cartoon avatar. */
+/** Alias when explicit 3D cartoon art ships. */
 export function dayCentreSerineAvatar3dUrl(): string {
-  return "/avatars/serine-cartoon.png";
+  return dayCentreSerineAvatarUrl();
 }
 
 export function dayCentreSerinePackMarkUrl(): string {
