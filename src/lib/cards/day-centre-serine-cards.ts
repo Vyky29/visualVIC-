@@ -48,6 +48,11 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
     { id: "dcs-row-machine", slug: "row-machine", title: "Row machine" },
     { id: "dcs-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
     { id: "dcs-sandbag-carry", slug: "sandbag-carry", title: "Carry sandbag" },
+    {
+      id: "dcs-weights-on-bosu",
+      slug: "weights-on-bosu",
+      title: "Weights on BOSU",
+    },
     { id: "dcs-toilet", slug: "toilet", title: "Toilet" },
     { id: "dcs-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
     { id: "dcs-skierg", slug: "skierg", title: "Ski machine" },

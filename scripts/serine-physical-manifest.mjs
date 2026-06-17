@@ -44,6 +44,12 @@ export const SERINE_PHYSICAL_SCHEDULE = [
       "standing on a black plyo box holding a black sandbag with red straps and number 5, both hands on handles",
   },
   {
+    slug: "weights-on-bosu",
+    title: "Weights on BOSU",
+    scene:
+      "standing balanced on a blue BOSU ball, holding a 2kg dumbbell in each hand at shoulder height, white t-shirt, dark grey joggers, pink trainers, green sunflower lanyard, gym setting",
+  },
+  {
     slug: "toilet",
     title: "Toilet",
     scene: "sitting on toilet in a clean bathroom, modest and respectful framing",
