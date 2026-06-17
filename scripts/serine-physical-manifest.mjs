@@ -63,6 +63,12 @@ export const SERINE_PHYSICAL_SCHEDULE = [
       "stepping up onto a black 20-inch plyometric box with knee raised, right foot on box, left foot on floor, side view, light t-shirt, dark grey EA7 joggers, pink trainers, green lanyard, red therapy ball nearby, gym setting",
   },
   {
+    slug: "weight-ball",
+    title: "Weight ball",
+    scene:
+      "standing in a gym holding a large black weight ball overhead with both arms extended straight up, teal-grey tracksuit hoodie and joggers, white trainers with red accents, glasses",
+  },
+  {
     slug: "toilet",
     title: "Toilet",
     scene: "sitting on toilet in a clean bathroom, modest and respectful framing",

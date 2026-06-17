@@ -185,6 +185,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "knees up on box",
     es: "rodilla arriba al cajón",
   },
+  "weight-ball": { en: "weight ball", es: "balón de peso" },
   "therapy-ball": { en: "therapy ball", es: "pelota terapéutica" },
   skierg: { en: "ski machine", es: "máquina de esquí" },
   stretching: { en: "stretching", es: "estiramientos" },
