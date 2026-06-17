@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
@@ -49,13 +51,27 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
 };
 
 export default function PlayerIndexPage() {
+  const router = useRouter();
+  const { isRestricted, status: staffStatus } = useStaffAccess();
   const cardUiLang = useCardUiLanguage();
-  /** Single-pack catalog routines only — hide modular demos until image API ships. */
   const stockRoutines = useMemo(
     () => mockRoutines.filter(isStockPackRoutine),
     [],
   );
   const sortedRoutines = useSchedulePlayerRecentOrder(stockRoutines);
+
+  useEffect(() => {
+    if (staffStatus === "loading") return;
+    if (isRestricted) router.replace("/dashboard");
+  }, [isRestricted, router, staffStatus]);
+
+  if (staffStatus === "loading" || isRestricted) {
+    return (
+      <div className="flex min-h-[40dvh] items-center justify-center px-6 text-[14px] text-ink-subtle">
+        …
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -15,6 +15,7 @@ import {
   pixtoBundledCardObjectPositionTopClass,
 } from "@/lib/utils/visual-card-url";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { Routine } from "@/lib/types/routine";
 import { cn } from "@/lib/utils/cn";
@@ -26,7 +27,6 @@ import {
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   accordionOpenCloseAria,
-  bottomNavLabel,
   dashboardAllRoutinesLink,
   dashboardContinueLabel,
   dashboardExtrasSectionTitle,
@@ -39,10 +39,7 @@ import {
   dashboardPackCategoryTitle,
   dashboardQuickBuilderEyebrow,
   dashboardQuickBuilderTitle,
-  dashboardQuickLibraryTitle,
-  dashboardQuickPlannerEyebrow,
-  dashboardQuickPlannerHint,
-  dashboardQuickPlannerTitle,
+  dashboardQuickSchedulesEyebrow,
   dashboardQuickTemplatesTitle,
   dashboardRoutineCountLabel,
   dashboardRoutinesSectionTitle,
@@ -270,99 +267,6 @@ function FirstThenQuickIcon() {
   );
 }
 
-function LibraryQuickIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-      <rect
-        x="4.5"
-        y="4.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <rect
-        x="13.5"
-        y="4.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <rect
-        x="4.5"
-        y="13.5"
-        width="6"
-        height="6"
-        rx="1.8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M14 15.5h5.5M14 18.5h4"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function TemplatesQuickIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-      <path
-        d="M8.5 5.5h9a1.5 1.5 0 0 1 1.5 1.5v11a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 7 18V7a1.5 1.5 0 0 1 1.5-1.5Z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M9.25 9.25h5.5M9.25 12h5.5M9.25 14.75h3.5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="M5.75 8.25V17a1.25 1.25 0 0 0 1.25 1.25H15"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function PlannerQuickIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-      <rect
-        x="4.5"
-        y="5"
-        width="15"
-        height="14.5"
-        rx="2.2"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M8 3.75v3M16 3.75v3M4.5 10h15"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="m9.5 13.5 1.75 1.75L15 11.5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function ActivitySectionIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
@@ -402,18 +306,26 @@ function DashboardCenteredIntro({
   iconClassName,
   category,
   title,
+  compact = false,
 }: {
   icon: React.ReactNode;
   ringClass: string;
   iconClassName?: string;
   category: string;
   title: string;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center px-2 pb-1 pt-1 text-center">
+    <div
+      className={cn(
+        "flex flex-col items-center text-center",
+        compact ? "px-0.5 py-0" : "px-2 pb-1 pt-1",
+      )}
+    >
       <span
         className={cn(
-          "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas sm:h-11 sm:w-11",
+          "relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas",
+          compact ? "h-9 w-9 sm:h-10 sm:w-10" : "h-10 w-10 sm:h-11 sm:w-11",
           ringClass,
         )}
       >
@@ -426,10 +338,24 @@ function DashboardCenteredIntro({
           {icon}
         </span>
       </span>
-      <p className="mt-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-faint">
+      <p
+        className={cn(
+          "font-semibold uppercase text-ink-faint",
+          compact
+            ? "mt-1.5 line-clamp-2 text-[8px] leading-snug tracking-[0.1em]"
+            : "mt-2.5 text-[10px] tracking-[0.16em]",
+        )}
+      >
         {category}
       </p>
-      <p className="mt-1.5 text-[18px] font-semibold leading-tight text-ink sm:text-[19px]">
+      <p
+        className={cn(
+          "font-semibold leading-tight text-ink",
+          compact
+            ? "mt-1 line-clamp-2 text-[11px] sm:text-[12px]"
+            : "mt-1.5 text-[18px] sm:text-[19px]",
+        )}
+      >
         {title}
       </p>
     </div>
@@ -633,6 +559,7 @@ export default function DashboardPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
   const prefersFineHover = usePrefersFineHover();
+  const { isRestricted, canAccessTailoredParticipant } = useStaffAccess();
   const primary = mockRoutines[0];
   /** Same set as Schedule Player index — includes locally saved custom routines first. */
   const dashboardRoutines = useMemo(() => {
@@ -665,8 +592,23 @@ export default function DashboardPage() {
         routines: dashboardRoutines.filter(
           (r) => isStockPackRoutine(r) && group.routineIds.has(r.id),
         ),
-      })).filter((group) => group.routines.length > 0 || group.extraTileCount > 0),
-    [dashboardRoutines],
+      }))
+        .map((group) => {
+          if (group.key !== "home::tailored" || !isRestricted) return group;
+          return {
+            ...group,
+            routines: group.routines.filter((routine) => {
+              const participantId =
+                tailoredParticipantFromStockRoutineId(routine.id);
+              return (
+                participantId !== undefined &&
+                canAccessTailoredParticipant(participantId)
+              );
+            }),
+          };
+        })
+        .filter((group) => group.routines.length > 0 || group.extraTileCount > 0),
+    [dashboardRoutines, isRestricted, canAccessTailoredParticipant],
   );
   const [openCategoryKeys, setOpenCategoryKeys] = useState<Set<string>>(
     () => new Set(),
@@ -738,6 +680,7 @@ export default function DashboardPage() {
           </Link>
         </div>
 
+        {!isRestricted ? (
         <section className="space-y-4">
           <SectionHeader
             title={dashboardSchedulePlayerTitle(cardUiLang)}
@@ -788,8 +731,11 @@ export default function DashboardPage() {
             </Card>
           </Link>
         </section>
+        ) : null}
 
         <section className="space-y-3">
+          {!isRestricted ? (
+            <>
           <SectionHeader
             title={dashboardRoutinesSectionTitle(cardUiLang)}
             icon={<RoutinesSectionIcon />}
@@ -887,6 +833,8 @@ export default function DashboardPage() {
               );
             })}
           </div>
+            </>
+          ) : null}
 
           {extraPackGroups.map((group) => {
             const accordionKey = group.key;
@@ -1003,7 +951,7 @@ export default function DashboardPage() {
                           />
                         );
                       })}
-                      {group.key === "home::tailored" ? (
+                      {group.key === "home::tailored" && !isRestricted ? (
                         <Link
                           href="/first-then?pack=ikram-home"
                           className="col-span-2 block"
@@ -1048,32 +996,13 @@ export default function DashboardPage() {
           })}
         </section>
 
+        {!isRestricted ? (
         <section className="space-y-3">
-          <Link href="/planner" className="block">
-            <Card className="border border-[#1E4A73]/20 bg-gradient-to-r from-[#e8eef5] to-white px-4 py-3.5 transition hover:shadow-soft">
-              <div className="flex items-center gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-[#1E4A73] shadow-sm ring-2 ring-[#1E4A73]/35 ring-offset-2 ring-offset-cream">
-                  <PlannerQuickIcon />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1E4A73]">
-                    {dashboardQuickPlannerEyebrow(cardUiLang)}
-                  </p>
-                  <p className="text-[16px] font-semibold leading-snug text-ink">
-                    {dashboardQuickPlannerTitle(cardUiLang)}
-                  </p>
-                  <p className="mt-0.5 text-[12px] leading-snug text-ink-subtle">
-                    {dashboardQuickPlannerHint(cardUiLang)}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </Link>
-
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2">
           <Link href="/first-then?pack=ikram-home">
-            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+            <Card className="flex h-full min-h-[104px] flex-col items-center justify-center border border-ink/5 px-1 py-3 transition hover:shadow-soft">
               <DashboardCenteredIntro
+                compact
                 icon={<FirstThenQuickIcon />}
                 ringClass="ring-[#E05C9A]/75"
                 iconClassName="text-[#E05C9A]"
@@ -1083,8 +1012,9 @@ export default function DashboardPage() {
             </Card>
           </Link>
           <Link href="/builder">
-            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+            <Card className="flex h-full min-h-[104px] flex-col items-center justify-center border border-ink/5 px-1 py-3 transition hover:shadow-soft">
               <DashboardCenteredIntro
+                compact
                 icon={<BuilderQuickIcon />}
                 ringClass="ring-[#6b8f9e]/75"
                 iconClassName="text-[#5f8392]"
@@ -1093,30 +1023,21 @@ export default function DashboardPage() {
               />
             </Card>
           </Link>
-          <Link href="/library">
-            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+          <Link href="/player">
+            <Card className="flex h-full min-h-[104px] flex-col items-center justify-center border border-ink/5 px-1 py-3 transition hover:shadow-soft">
               <DashboardCenteredIntro
-                icon={<LibraryQuickIcon />}
-                ringClass="ring-accent/70"
-                iconClassName="text-accent"
-                category={bottomNavLabel("library", cardUiLang)}
-                title={dashboardQuickLibraryTitle(cardUiLang)}
-              />
-            </Card>
-          </Link>
-          <Link href="/templates">
-            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
-              <DashboardCenteredIntro
-                icon={<TemplatesQuickIcon />}
-                ringClass="ring-[#cf9a1b]/75"
-                iconClassName="text-[#cf9a1b]"
-                category={bottomNavLabel("templates", cardUiLang)}
+                compact
+                icon={<ScheduleSectionIcon />}
+                ringClass="ring-sage/70"
+                iconClassName="text-sage"
+                category={dashboardQuickSchedulesEyebrow(cardUiLang)}
                 title={dashboardQuickTemplatesTitle(cardUiLang)}
               />
             </Card>
           </Link>
           </div>
         </section>
+        ) : null}
       </div>
     </div>
   );

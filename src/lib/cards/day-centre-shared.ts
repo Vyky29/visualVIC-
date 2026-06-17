@@ -19,9 +19,9 @@ export function dayCentrePackMarkUrl(): string {
   return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre.png`;
 }
 
-/** Hub room photo — Library accordion icon for Day centre section. */
+/** Hub room illustration — Home tile + Day centre section icon (2D flat style). */
 export function dayCentreHubRoomImageUrl(): string {
-  return `${DAY_CENTRE_PUBLIC_DIR}/hub-room.png`;
+  return `${DAY_CENTRE_PUBLIC_DIR}/hub-room-2d.png`;
 }
 
 /** Ikram library icon — pink sweatshirt + black cat on sofa. */

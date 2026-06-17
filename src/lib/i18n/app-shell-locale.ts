@@ -189,6 +189,7 @@ export type LibraryPackSectionId =
   | "dcfoldercooking"
   | "dcfoldercommunity"
   | "dcfoldermixed"
+  | "dcfolderpremium"
   | "dcikram"
   | "dcserine"
   | "dcayaan"
@@ -213,6 +214,8 @@ export function libraryPackSectionTitle(
     return libraryDayCentreFolderLabel("community", lang);
   if (section === "dcfoldermixed")
     return libraryDayCentreFolderLabel("mixed", lang);
+  if (section === "dcfolderpremium")
+    return libraryDayCentreFolderLabel("premium", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
@@ -429,6 +432,10 @@ export function dashboardQuickLibraryTitle(lang: CardLanguageCode): string {
 }
 
 export function dashboardQuickTemplatesTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Serie y guardadas" : "Stock & saved";
+}
+
+export function dashboardQuickSchedulesEyebrow(lang: CardLanguageCode): string {
   return isEs(lang) ? "Inicios rápidos" : "Quick starts";
 }
 

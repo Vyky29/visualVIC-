@@ -17,25 +17,43 @@ export type PlannerLibrarySectionId =
   | "airport"
   | "hotel"
   | "daycentre"
+  | "dcfolderminigym"
+  | "dcfolderbouldering"
+  | "dcfoldercooking"
+  | "dcfoldercommunity"
+  | "dcfoldermixed"
+  | "dcfolderpremium"
   | "dcikram"
   | "dcserine"
   | "dcayaan"
   | "dcemmanuel"
   | "physical";
 
-export const PLANNER_UNIVERSAL_SECTIONS: readonly PlannerLibrarySectionId[] = [
-  "core",
-  "shower",
-  "dress-on",
-  "dress-off",
+/** Day centre folders visible to assigned staff (Premium replaces core/shower/dress). */
+export const PLANNER_STAFF_DAY_CENTRE_SECTIONS: readonly PlannerLibrarySectionId[] = [
+  "dcfolderminigym",
+  "dcfolderbouldering",
+  "dcfoldercooking",
+  "dcfoldercommunity",
+  "dcfoldermixed",
+  "dcfolderpremium",
 ];
 
 export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
-  ...PLANNER_UNIVERSAL_SECTIONS,
   "bt",
+  "shower",
+  "dress-on",
+  "dress-off",
+  "core",
   "airport",
   "hotel",
   "daycentre",
+  "dcfolderminigym",
+  "dcfolderbouldering",
+  "dcfoldercooking",
+  "dcfoldercommunity",
+  "dcfoldermixed",
+  "dcfolderpremium",
   "dcikram",
   "dcserine",
   "dcayaan",
@@ -63,7 +81,9 @@ export type StaffProfileRow = {
   is_active: boolean | null;
 };
 
-export function normalizePortalAppRole(raw: string | null | undefined): PortalAppRole | null {
+export function normalizePortalAppRole(
+  raw: string | null | undefined,
+): PortalAppRole | null {
   const r = raw?.trim().toLowerCase();
   if (r === "staff" || r === "lead" || r === "admin" || r === "ceo") return r;
   return null;
@@ -81,22 +101,35 @@ export function parseParticipantSlug(raw: string): ParticipantSlug | null {
   return null;
 }
 
+export function participantSlugToLibrarySection(
+  slug: ParticipantSlug,
+): PlannerLibrarySectionId {
+  return PARTICIPANT_TO_SECTION[slug];
+}
+
 export function resolvePlannerLibrarySections(
   appRole: PortalAppRole,
   participantSlugs: readonly ParticipantSlug[],
-): ReadonlySet<PlannerLibrarySectionId> {
+): ReadonlySet<PlannerLibrarySectionId> | null {
   if (isPlannerElevatedRole(appRole)) {
-    return new Set(PLANNER_FULL_SECTIONS);
+    return null;
   }
 
-  const tailored = participantSlugs
-    .map((slug) => PARTICIPANT_TO_SECTION[slug])
-    .filter(Boolean);
+  const tailored = participantSlugs.map((slug) => PARTICIPANT_TO_SECTION[slug]);
 
-  return new Set([...PLANNER_UNIVERSAL_SECTIONS, ...tailored]);
+  return new Set([...PLANNER_STAFF_DAY_CENTRE_SECTIONS, ...tailored]);
 }
 
 export function staffMayUsePlanner(profile: StaffProfileRow | null): boolean {
   if (!profile || profile.is_active === false) return false;
   return normalizePortalAppRole(profile.app_role) !== null;
+}
+
+export function staffCanAccessParticipantSlug(
+  appRole: PortalAppRole,
+  participantSlugs: readonly ParticipantSlug[],
+  slug: ParticipantSlug,
+): boolean {
+  if (isPlannerElevatedRole(appRole)) return true;
+  return participantSlugs.includes(slug);
 }

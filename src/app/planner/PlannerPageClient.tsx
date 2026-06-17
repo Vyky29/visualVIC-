@@ -109,7 +109,10 @@ export function PlannerPageClient() {
     );
   }
 
-  const allowedSections = gate.access.allowedSections as ReadonlySet<LibrarySectionId>;
+  const allowedSections = gate.access.allowedSections as
+    | ReadonlySet<LibrarySectionId>
+    | null
+    | undefined;
 
   return (
     <div>
@@ -127,7 +130,7 @@ export function PlannerPageClient() {
         </Button>
       </div>
       <LibraryPageClient
-        allowedSections={allowedSections}
+        allowedSections={allowedSections ?? undefined}
         headerTitleKey="planner"
         introBlurbText={plannerIntroBlurb(lang)}
         routineNewHref="/planner/routine-new"

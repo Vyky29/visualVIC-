@@ -3,9 +3,11 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { use, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/navigation/Header";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import {
   playerBackToSchedule,
   playerLoadingSchedule,
@@ -46,7 +48,16 @@ export function PlayerDetailClient({
   const { id } = use(params);
   const { routines: custom } = useCustomRoutines();
   const cardUiLang = useCardUiLanguage();
+  const router = useRouter();
+  const { mayOpenRoutine, playerBackHref, status: staffStatus } = useStaffAccess();
   const routine = resolveAnyRoutine(id, custom);
+
+  useEffect(() => {
+    if (staffStatus === "loading" || !routine) return;
+    if (!mayOpenRoutine(routine)) {
+      router.replace("/dashboard");
+    }
+  }, [mayOpenRoutine, routine, router, staffStatus]);
 
   useEffect(() => {
     if (routine) touchSchedulePlayerRoutine(id);
@@ -55,13 +66,13 @@ export function PlayerDetailClient({
   if (!routine) {
     return (
       <div className="pb-6">
-        <TranslatedHeader titleKey="routine" backHref="/player" />
+        <TranslatedHeader titleKey="routine" backHref={playerBackHref} />
         <div className="px-5 py-16 text-center">
           <p className="text-[15px] text-ink-subtle">
             {playerNotFound(cardUiLang)}
           </p>
           <Link
-            href="/player"
+            href={playerBackHref}
             className="mt-5 inline-block text-[14px] font-medium text-sage underline-offset-4 hover:underline"
           >
             {playerBackToSchedule(cardUiLang)}
@@ -71,14 +82,18 @@ export function PlayerDetailClient({
     );
   }
 
+  if (staffStatus !== "loading" && routine && !mayOpenRoutine(routine)) {
+    return null;
+  }
+
   return (
     <div className="pb-6">
       <Header
         title={stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
-        backHref="/player"
+        backHref={playerBackHref}
         backAriaLabel={shellBackAria(cardUiLang)}
       />
-      <SchedulePlayerWithProfileRoutine routine={routine} backHref="/player" />
+      <SchedulePlayerWithProfileRoutine routine={routine} backHref={playerBackHref} />
     </div>
   );
 }

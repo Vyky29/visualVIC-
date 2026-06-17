@@ -52,6 +52,11 @@ import {
   dayCentreEmmanuelImageUrlForStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
+import {
+  DAY_CENTRE_PREMIUM_PICKS,
+  type DayCentrePremiumSourcePack,
+} from "@/lib/cards/day-centre-premium-cards";
 import {
   PHYSICAL_3D_GYM_SEQUENCE,
   PHYSICAL_3D_SEQUENCE,
@@ -90,6 +95,7 @@ export type PickablePackId =
   | "dcserine"
   | "dcayaan"
   | "dcemmanuel"
+  | "dcpremium"
   | "phy2d"
   | "phy3d"
   | "phy3g";
@@ -110,6 +116,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dcserine" ||
     ns === "dcayaan" ||
     ns === "dcemmanuel" ||
+    ns === "dcpremium" ||
     ns === "phy2d" ||
     ns === "phy3d" ||
     ns === "phy3g"
@@ -173,6 +180,15 @@ function appendExtraCardsFromFiles(params: {
       category,
     });
   }
+}
+
+function premiumPickImageUrl(
+  sourcePack: DayCentrePremiumSourcePack,
+  slug: string,
+): string {
+  if (sourcePack === "dress") return gettingDressUndressImageUrl(slug);
+  if (sourcePack === "shower") return showerImageUrl(slug);
+  return swimmingImageUrl(slug);
 }
 
 /** All Pixto cards users can add to a custom routine (V1 — local registries). */
@@ -504,6 +520,15 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       label: card.title,
       imageUrl: card.imageUrl,
       category: "self-care",
+    });
+  }
+
+  for (const pick of DAY_CENTRE_PREMIUM_PICKS) {
+    out.push({
+      pickId: pid("dcpremium", pick.slug),
+      label: pick.title,
+      imageUrl: premiumPickImageUrl(pick.sourcePack, pick.slug),
+      category: "home",
     });
   }
 

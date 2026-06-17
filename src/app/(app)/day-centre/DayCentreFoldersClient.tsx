@@ -25,6 +25,7 @@ const FOLDER_RING_CLASS: Record<DayCentreFolderId, string> = {
   cooking: "ring-[#E53935]/75",
   community: "ring-[#E53935]/75",
   mixed: "ring-[#E53935]/75",
+  premium: "ring-[#E53935]/75",
 };
 
 export function DayCentreFoldersClient() {

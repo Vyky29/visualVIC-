@@ -1,5 +1,5 @@
-import { LibraryPageClient } from "./LibraryPageClient";
+import { LibraryPageWithStaffGate } from "./LibraryPageWithStaffGate";
 
 export default function LibraryPage() {
-  return <LibraryPageClient />;
+  return <LibraryPageWithStaffGate />;
 }

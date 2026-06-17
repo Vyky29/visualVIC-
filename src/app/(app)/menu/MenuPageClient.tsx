@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import {
   bottomNavLabel,
   menuFocusModeAfterSavedLink,
@@ -32,6 +35,21 @@ const PROTOTYPE_LINKS: { href: string; key: MenuLinkKey }[] = [
 
 export function MenuPageClient() {
   const lang = useCardUiLanguage();
+  const router = useRouter();
+  const { isRestricted, status } = useStaffAccess();
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (isRestricted) router.replace("/dashboard");
+  }, [isRestricted, router, status]);
+
+  if (status === "loading" || isRestricted) {
+    return (
+      <div className="flex min-h-[40dvh] items-center justify-center px-6 text-[14px] text-ink-subtle">
+        …
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-white">

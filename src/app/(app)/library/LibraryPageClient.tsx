@@ -98,7 +98,7 @@ const groups = ["self-care", "home", "activity"] as const;
 export type LibrarySectionId =
   | Exclude<
       PickablePackId,
-      "dress" | "phy2d" | "phy3d" | "phy3g" | "daycentre"
+      "dress" | "phy2d" | "phy3d" | "phy3g" | "daycentre" | "dcpremium"
     >
   | "dress-on"
   | "dress-off"
@@ -107,7 +107,8 @@ export type LibrarySectionId =
   | "dcfolderbouldering"
   | "dcfoldercooking"
   | "dcfoldercommunity"
-  | "dcfoldermixed";
+  | "dcfoldermixed"
+  | "dcfolderpremium";
 
 const SECTION_ORDER_BY_CATEGORY: Record<
   (typeof groups)[number],
@@ -123,6 +124,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "dcfoldercooking",
     "dcfoldercommunity",
     "dcfoldermixed",
+    "dcfolderpremium",
     "dcikram",
     "dcserine",
     "dcayaan",
@@ -145,6 +147,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   dcfoldercooking: dayCentreFolderIconUrl("cooking"),
   dcfoldercommunity: dayCentreFolderIconUrl("community"),
   dcfoldermixed: dayCentreFolderIconUrl("mixed"),
+  dcfolderpremium: dayCentreFolderIconUrl("premium"),
   dcikram: dayCentreIkramLibraryPackIconUrl(),
   dcserine: dayCentreSerineLibraryPackIconUrl(),
   dcayaan: dayCentreAyaanLibraryPackIconUrl(),
@@ -168,6 +171,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   dcfoldercooking: "ring-[#E53935]/75",
   dcfoldercommunity: "ring-[#E53935]/75",
   dcfoldermixed: "ring-[#E53935]/75",
+  dcfolderpremium: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
   dcayaan: "ring-[#1E4A73]/75",
@@ -192,6 +196,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dcserine: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   dcayaan: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcemmanuel: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
+  dcpremium: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
   phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
   phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
@@ -217,6 +222,7 @@ function librarySectionFromCard(
     const slug = c.pickId.split("::")[1] ?? "";
     return dayCentreFolderLibrarySectionId(dayCentreFolderForSlug(slug));
   }
+  if (pack === "dcpremium") return "dcfolderpremium";
   if (pack === "climb") {
     const slug = c.pickId.split("::")[1] ?? "";
     if (isDayCentreBoulderingClimbSlug(slug)) return "dcfolderbouldering";

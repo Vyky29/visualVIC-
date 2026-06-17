@@ -4,6 +4,7 @@ import {
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { dayCentreFolderForSlug } from "@/lib/cards/day-centre-folder-groups";
 
 export const DAY_CENTRE_FOLDER_IDS = [
@@ -12,6 +13,7 @@ export const DAY_CENTRE_FOLDER_IDS = [
   "cooking",
   "community",
   "mixed",
+  "premium",
 ] as const;
 
 export type DayCentreFolderId = (typeof DAY_CENTRE_FOLDER_IDS)[number];
@@ -25,6 +27,7 @@ export const DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS: Record<
   cooking: ["dc-cooking"],
   community: ["dc-community"],
   mixed: ["dc-mixed"],
+  premium: [],
 };
 
 const STOCK_ROUTINE_TO_FOLDER = Object.fromEntries(
@@ -102,6 +105,8 @@ export function dayCentreFolderDisplayName(
       return "Community";
     case "mixed":
       return "Mixed";
+    case "premium":
+      return "Premium";
   }
 }
 
@@ -110,7 +115,8 @@ export type DayCentreFolderLibrarySectionId =
   | "dcfolderbouldering"
   | "dcfoldercooking"
   | "dcfoldercommunity"
-  | "dcfoldermixed";
+  | "dcfoldermixed"
+  | "dcfolderpremium";
 
 export function dayCentreFolderLibrarySectionId(
   folderId: DayCentreFolderId,
@@ -126,6 +132,8 @@ export function dayCentreFolderLibrarySectionId(
       return "dcfoldercommunity";
     case "mixed":
       return "dcfoldermixed";
+    case "premium":
+      return "dcfolderpremium";
   }
 }
 
@@ -143,6 +151,8 @@ export function dayCentreFolderFromLibrarySectionId(
       return "community";
     case "dcfoldermixed":
       return "mixed";
+    case "dcfolderpremium":
+      return "premium";
     default:
       return undefined;
   }
@@ -161,6 +171,8 @@ export function dayCentreFolderIconUrl(folderId: DayCentreFolderId): string {
       return dayCentreGeneralImageUrl("westfield");
     case "mixed":
       return dayCentreHubRoomImageUrl();
+    case "premium":
+      return showerImageUrl("shampoo");
   }
 }
 

@@ -361,7 +361,7 @@ export function libraryTailoredParticipantFolderLabel(
 }
 
 export function libraryDayCentreFolderLabel(
-  folder: "mini-gym" | "bouldering" | "cooking" | "community" | "mixed",
+  folder: "mini-gym" | "bouldering" | "cooking" | "community" | "mixed" | "premium",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -371,6 +371,7 @@ export function libraryDayCentreFolderLabel(
     cooking: "Cooking Folder",
     community: "Community Folder",
     mixed: "Mixed Folder",
+    premium: "Premium Folder",
   };
   const es: Record<typeof folder, string> = {
     "mini-gym": "Carpeta mini gym",
@@ -378,6 +379,7 @@ export function libraryDayCentreFolderLabel(
     cooking: "Carpeta cocina",
     community: "Carpeta comunidad",
     mixed: "Carpeta mixta",
+    premium: "Carpeta Premium",
   };
   return ui === "es" ? es[folder] : en[folder];
 }

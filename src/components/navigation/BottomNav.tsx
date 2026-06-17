@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { bottomNavLabel, type BottomNavKey } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
@@ -21,7 +22,7 @@ const items: NavItem[] = [
     groupPrefixes: ["/dashboard"],
   },
   { href: "/library", labelKey: "library", icon: "◎" },
-  { href: "/templates", labelKey: "templates", icon: "☷" },
+  { href: "/player", labelKey: "templates", icon: "☷", groupPrefixes: ["/player", "/templates"] },
   { href: "/saved", labelKey: "saved", icon: "✦" },
   {
     href: "/menu",
@@ -52,6 +53,11 @@ function isActive(pathname: string, item: NavItem): boolean {
 export function BottomNav() {
   const pathname = usePathname();
   const lang = useCardUiLanguage();
+  const { isRestricted } = useStaffAccess();
+
+  const visibleItems = isRestricted
+    ? items.filter((item) => item.labelKey === "home" || item.labelKey === "library")
+    : items;
 
   return (
     <nav
@@ -59,7 +65,7 @@ export function BottomNav() {
       aria-label="Primary"
     >
       <div className="flex justify-around px-1 pt-1">
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}

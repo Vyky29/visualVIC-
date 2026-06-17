@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { use, useMemo } from "react";
-import { notFound } from "next/navigation";
+import { use, useEffect, useMemo } from "react";
+import { notFound, useRouter } from "next/navigation";
 import { Header } from "@/components/navigation/Header";
 import { Card } from "@/components/ui/Card";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
@@ -59,22 +60,47 @@ type Props = { params: Promise<{ participant: string }> };
 export function TailoredParticipantSchedulesClient({ params }: Props) {
   const { participant: participantParam } = use(params);
   const cardUiLang = useCardUiLanguage();
+  const router = useRouter();
+  const { canAccessTailoredParticipant, status: staffStatus } = useStaffAccess();
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
 
-  if (!isTailoredParticipantId(participantParam)) {
-    notFound();
-  }
-
-  const participantId = participantParam;
-  const participantName = tailoredParticipantDisplayName(participantId);
+  const participantId = isTailoredParticipantId(participantParam)
+    ? participantParam
+    : null;
 
   const schedules = useMemo(() => {
+    if (!participantId) return [];
     const catalog = customHydrated
       ? [...customRoutines, ...mockRoutines]
       : mockRoutines;
     return resolveTailoredParticipantSchedules(participantId, catalog);
   }, [customHydrated, customRoutines, participantId]);
+
+  useEffect(() => {
+    if (!participantId || staffStatus === "loading") return;
+    if (!canAccessTailoredParticipant(participantId)) {
+      router.replace("/dashboard");
+    }
+  }, [
+    canAccessTailoredParticipant,
+    participantId,
+    router,
+    staffStatus,
+  ]);
+
+  if (!participantId) {
+    notFound();
+  }
+
+  if (
+    staffStatus !== "loading" &&
+    !canAccessTailoredParticipant(participantId)
+  ) {
+    return null;
+  }
+
+  const participantName = tailoredParticipantDisplayName(participantId);
 
   return (
     <div>

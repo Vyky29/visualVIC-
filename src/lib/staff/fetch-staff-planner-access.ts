@@ -12,7 +12,7 @@ export type StaffPlannerAccess = {
   profile: StaffProfileRow;
   appRole: NonNullable<ReturnType<typeof normalizePortalAppRole>>;
   participantSlugs: ParticipantSlug[];
-  allowedSections: ReadonlySet<PlannerLibrarySectionId>;
+  allowedSections: ReadonlySet<PlannerLibrarySectionId> | null;
 };
 
 export type StaffPlannerAccessResult =
