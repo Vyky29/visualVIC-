@@ -236,6 +236,7 @@ export function libraryObjectCountBadge(count: number, lang: CardLanguageCode): 
 export type ShellHeaderKey =
   | "home"
   | "library"
+  | "planner"
   | "schedulePlayer"
   | "menu"
   | "savedLibrary"
@@ -253,6 +254,7 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
     const en: Record<ShellHeaderKey, string> = {
       home: "Home",
       library: "Library",
+      planner: "Planner",
       schedulePlayer: "Schedule Player",
       menu: "Menu",
       savedLibrary: "Saved library",
@@ -270,6 +272,7 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
   const es: Record<ShellHeaderKey, string> = {
     home: "Inicio",
     library: "Biblioteca",
+    planner: "Planner",
     schedulePlayer: "Reproductor de rutina",
     menu: "Menú",
     savedLibrary: "Guardados",
@@ -420,6 +423,46 @@ export function libraryIntroBlurb(lang: CardLanguageCode): string {
   return isEs(lang)
     ? "Toca las tarjetas para elegirlas en orden (como fotos). Toca la fila de una rutina para abrirla; permanece abierta hasta que pulses la chevron a la derecha. Usa «Nueva rutina» abajo para poner nombre y guardar sin elegir tarjetas aquí primero."
     : "Tap cards to select them in order (like photos). Tap a routine row to open it; it stays open until you tap the chevron on the right. Use New routine below to name and save without picking cards here first.";
+}
+
+export function plannerIntroBlurb(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Elige tarjetas para montar una rutina. Solo ves los packs de tu rol: core, ducha, vestirse y los participantes asignados."
+    : "Pick cards to build a routine. You only see packs for your role: core, shower, dress, and your assigned participants.";
+}
+
+export function plannerLoginTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Planner — staff" : "Planner — staff";
+}
+
+export function plannerLoginBlurb(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Usa el mismo email y contraseña del portal staff (Supabase Portal)."
+    : "Use the same email and password as the staff portal (Supabase Portal).";
+}
+
+export function plannerLoginSubmit(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Entrar" : "Sign in";
+}
+
+export function plannerLoginPortalLink(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Abrir portal staff" : "Open staff portal";
+}
+
+export function plannerAccessDenied(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "No tienes acceso al planner. Contacta con un administrador."
+    : "You do not have access to the planner. Contact an administrator.";
+}
+
+export function plannerSupabaseMissing(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Supabase no está configurado en esta app. Añade las variables de entorno en Vercel."
+    : "Supabase is not configured for this app. Add environment variables in Vercel.";
+}
+
+export function plannerSignOut(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Salir" : "Sign out";
 }
 
 export function libraryNewRoutineButton(lang: CardLanguageCode): string {

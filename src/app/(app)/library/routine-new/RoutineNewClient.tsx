@@ -41,7 +41,11 @@ import type { Routine } from "@/lib/types/routine";
 
 type DraftRow = { pickId: string; label: string; imageUrl: string };
 
-export function RoutineNewClient() {
+export function RoutineNewClient({
+  backHref = "/library",
+}: {
+  backHref?: string;
+} = {}) {
   const router = useRouter();
   const cardUiLang = useCardUiLanguage();
   const { addRoutine } = useCustomRoutines();
@@ -112,7 +116,7 @@ export function RoutineNewClient() {
 
   return (
     <div className="pb-28">
-      <TranslatedHeader titleKey="newRoutine" backHref="/library" />
+      <TranslatedHeader titleKey="newRoutine" backHref={backHref} />
       <div className="border-b border-ink/5 px-4 py-3">
         <p className="text-[18px] font-semibold leading-tight text-ink">
           {shellHeaderTitle("newRoutine", cardUiLang)}
@@ -126,7 +130,7 @@ export function RoutineNewClient() {
           <Card className="border border-ink/5 p-4 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
             {routineNewEmptyLead(cardUiLang)}{" "}
             <Link
-              href="/library"
+              href={backHref}
               className="font-medium text-sage underline-offset-4 hover:underline"
             >
               {bottomNavLabel("library", cardUiLang)}
@@ -232,7 +236,7 @@ export function RoutineNewClient() {
           <Button
             type="button"
             variant="secondary"
-            onClick={() => router.push("/library")}
+            onClick={() => router.push(backHref)}
             className="w-full"
           >
             {routineNewBackToLibrary(cardUiLang)}

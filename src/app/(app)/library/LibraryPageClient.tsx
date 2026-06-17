@@ -85,7 +85,7 @@ import {
 
 const groups = ["self-care", "home", "activity"] as const;
 
-type LibrarySectionId =
+export type LibrarySectionId =
   | Exclude<PickablePackId, "dress" | "phy2d" | "phy3d" | "phy3g">
   | "dress-on"
   | "dress-off"
@@ -518,7 +518,20 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
   );
 }
 
-export function LibraryPageClient() {
+export function LibraryPageClient({
+  allowedSections,
+  headerTitleKey = "library",
+  introBlurbText,
+  routineNewHref = "/library/routine-new",
+  bottomBarBottomClass = "calc(3.5rem + env(safe-area-inset-bottom, 0px))",
+}: {
+  /** When set, only these library accordion sections are shown (Planner). */
+  allowedSections?: ReadonlySet<LibrarySectionId>;
+  headerTitleKey?: "library" | "planner";
+  introBlurbText?: string;
+  routineNewHref?: string;
+  bottomBarBottomClass?: string;
+} = {}) {
   const router = useRouter();
   const cardUiLang = useCardUiLanguage();
   const prefersFineHover = usePrefersFineHover();
@@ -574,8 +587,8 @@ export function LibraryPageClient() {
     if (orderedPickIds.length === 0) return;
     writeLibrarySelectionDraft(orderedPickIds);
     setOrderedPickIds([]);
-    router.push("/library/routine-new");
-  }, [orderedPickIds, router]);
+    router.push(routineNewHref);
+  }, [orderedPickIds, router, routineNewHref]);
 
   const selectedSet = useMemo(
     () => new Set(orderedPickIds),
@@ -587,7 +600,7 @@ export function LibraryPageClient() {
       <div
         className="fixed left-1/2 z-30 w-full max-w-lg -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md"
         style={{
-          bottom: "calc(3.5rem + env(safe-area-inset-bottom, 0px))",
+          bottom: bottomBarBottomClass,
         }}
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -613,18 +626,18 @@ export function LibraryPageClient() {
           "pb-[calc(9rem+env(safe-area-inset-bottom))]",
       )}
     >
-      <TranslatedHeader titleKey="library" />
+      <TranslatedHeader titleKey={headerTitleKey} />
       <div className="space-y-8 px-4 pb-10 pt-3">
         <div className="space-y-4">
           <p className="break-words px-1 text-center text-[15px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
-            {libraryIntroBlurb(cardUiLang)}
+            {introBlurbText ?? libraryIntroBlurb(cardUiLang)}
           </p>
           <div className="flex justify-center px-1">
             <Button
               type="button"
               variant="secondary"
               className="!min-h-11 w-full max-w-sm !px-4 !py-2.5 text-[14px] sm:text-[15px]"
-              onClick={() => router.push("/library/routine-new")}
+              onClick={() => router.push(routineNewHref)}
             >
               {libraryNewRoutineButton(cardUiLang)}
             </Button>
@@ -634,7 +647,12 @@ export function LibraryPageClient() {
         {groups.map((cat) => {
           const inner = grouped.get(cat);
           if (!inner) return null;
-          const hasAny = [...inner.values()].some((l) => l.length > 0);
+          const sectionOrder = SECTION_ORDER_BY_CATEGORY[cat].filter(
+            (section) => !allowedSections || allowedSections.has(section),
+          );
+          const hasAny = sectionOrder.some(
+            (section) => (inner.get(section) ?? []).length > 0,
+          );
           if (!hasAny) return null;
 
           return (
@@ -643,7 +661,7 @@ export function LibraryPageClient() {
                 {dashboardPackCategoryTitle(cat as DashboardPackCategory, cardUiLang)}
               </h2>
               <div className="space-y-2">
-                {SECTION_ORDER_BY_CATEGORY[cat].map((section) => {
+                {sectionOrder.map((section) => {
                   const cards = inner.get(section) ?? [];
                   if (cards.length === 0) return null;
                   const accordionKey = `${cat}::${section}`;

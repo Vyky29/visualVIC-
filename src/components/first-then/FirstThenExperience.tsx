@@ -1367,13 +1367,13 @@ export function FirstThenExperience() {
 function FirstThenExperienceClient() {
   const lang = useCardUiLanguage();
   const searchParams = useSearchParams();
+  const sessionPayload = useMemo(() => readFirstThenSession(), []);
   const packId = parseFirstThenDemoPackId(
     searchParams.get("pack") ?? (sessionPayload ? null : "ikram-home"),
   );
   const layout = parseFirstThenDemoLayout(searchParams.get("layout"));
   const fromRoutine = searchParams.get("from");
   const onlyFirstThen = parseFirstThenDemoOnlyFirstThen(searchParams.get("onlyFirstThen"));
-  const sessionPayload = useMemo(() => readFirstThenSession(), []);
   const routineHref = useMemo(() => {
     if (sessionPayload) return sessionPayload.routineHref;
     return resolveFirstThenDemoRoutineHref(packId, {
