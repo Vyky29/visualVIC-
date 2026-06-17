@@ -36,6 +36,7 @@ import {
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
+import { dayCentreHubRoomImageUrl } from "@/lib/cards/day-centre-shared";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
 import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
@@ -239,9 +240,8 @@ export const mockRoutines: Routine[] = [
     name: "Day centre",
     description:
       "Mixed illustrated cards — breakfast, activities, cooking, outing and relaxation",
-    tags: ["home", "activity"],
-    homePreviewImageUrl:
-      DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreHubRoomImageUrl(),
     steps: routineStepsFromGeneratedCardProps(
       "at-the-day-centre",
       DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,

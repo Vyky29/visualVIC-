@@ -52,7 +52,7 @@ import {
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
-import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
+import { dayCentrePackMarkUrl, dayCentreHubRoomImageUrl } from "@/lib/cards/day-centre-shared";
 import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import { isDayCentreTailoredPackIconUrl } from "@/lib/cards/day-centre-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
@@ -66,7 +66,7 @@ import {
   tailoredParticipantPickerHref,
 } from "@/lib/routines/tailored-participants";
 import {
-  DAY_CENTRE_FOLDER_IDS,
+  DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS,
   dayCentreFolderDisplayName,
   dayCentreFolderFromStockRoutineId,
   dayCentreFolderIconUrl,
@@ -93,13 +93,7 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
 const HOME_EXTRA_PACK_GROUPS = [
   {
     key: "home::day-centre",
-    routineIds: new Set([
-      "dc-mini-gym",
-      "dc-bouldering",
-      "dc-cooking",
-      "dc-community",
-      "dc-mixed",
-    ]),
+    routineIds: new Set(["at-the-day-centre"]),
     ringClass: "ring-[#E53935]/80",
     logoUrl: dayCentrePackMarkUrl,
     title: dashboardExtrasSectionTitle,
@@ -115,9 +109,10 @@ const HOME_EXTRA_PACK_GROUPS = [
   },
 ] as const;
 
-const HOME_EXTRA_PACK_ROUTINE_IDS = new Set(
-  HOME_EXTRA_PACK_GROUPS.flatMap((g) => [...g.routineIds]),
-);
+const HOME_EXTRA_PACK_ROUTINE_IDS = new Set([
+  ...HOME_EXTRA_PACK_GROUPS.flatMap((g) => [...g.routineIds]),
+  ...Object.values(DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS).flat(),
+]);
 
 function dashboardCategoryForRoutine(
   routine: Routine,
@@ -954,25 +949,16 @@ export default function DashboardPage() {
                 >
                   <div className="min-h-0 overflow-hidden">
                     <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
-                      {group.routines
-                        .slice()
-                        .sort((a, b) => {
-                          if (group.key !== "home::day-centre") return 0;
-                          const folderA = dayCentreFolderFromStockRoutineId(a.id);
-                          const folderB = dayCentreFolderFromStockRoutineId(b.id);
-                          if (!folderA || !folderB) return 0;
-                          return (
-                            DAY_CENTRE_FOLDER_IDS.indexOf(folderA) -
-                            DAY_CENTRE_FOLDER_IDS.indexOf(folderB)
-                          );
-                        })
-                        .map((routine) => {
+                      {group.routines.map((routine) => {
                         const participantId =
                           group.key === "home::tailored"
                             ? tailoredParticipantFromStockRoutineId(routine.id)
                             : undefined;
+                        const isDayCentreHub =
+                          group.key === "home::day-centre" &&
+                          routine.id === "at-the-day-centre";
                         const folderId =
-                          group.key === "home::day-centre"
+                          group.key === "home::day-centre" && !isDayCentreHub
                             ? dayCentreFolderFromStockRoutineId(routine.id)
                             : undefined;
                         return (
@@ -982,9 +968,11 @@ export default function DashboardPage() {
                             previewUrl={
                               group.key === "home::tailored"
                                 ? resolveTailoredScheduleHomePreviewUrl(routine)
-                                : folderId
-                                  ? dayCentreFolderIconUrl(folderId)
-                                  : undefined
+                                : isDayCentreHub
+                                  ? dayCentreHubRoomImageUrl()
+                                  : folderId
+                                    ? dayCentreFolderIconUrl(folderId)
+                                    : undefined
                             }
                             previewFillFrame={
                               group.key === "home::tailored" ||
@@ -993,16 +981,20 @@ export default function DashboardPage() {
                             href={
                               participantId
                                 ? tailoredParticipantPickerHref(participantId)
-                                : folderId
-                                  ? dayCentreFolderPickerHref(folderId)
-                                  : undefined
+                                : isDayCentreHub
+                                  ? "/day-centre"
+                                  : folderId
+                                    ? dayCentreFolderPickerHref(folderId)
+                                    : undefined
                             }
                             titleOverride={
                               participantId
                                 ? tailoredParticipantDisplayName(participantId)
-                                : folderId
-                                  ? dayCentreFolderDisplayName(folderId)
-                                  : undefined
+                                : isDayCentreHub
+                                  ? dashboardExtrasSectionTitle(cardUiLang)
+                                  : folderId
+                                    ? dayCentreFolderDisplayName(folderId)
+                                    : undefined
                             }
                             hideStepCount={
                               group.key === "home::tailored" ||

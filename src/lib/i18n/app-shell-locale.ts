@@ -96,6 +96,13 @@ export function dayCentreFolderSchedulesIntro(
   return `Elige una rutina de ${folderName}. Se irán añadiendo más con el tiempo.`;
 }
 
+export function dayCentreFoldersIntro(lang: CardLanguageCode): string {
+  if (!isEs(lang)) {
+    return "Choose a folder — mini gym, bouldering, cooking, community outings, or mixed days.";
+  }
+  return "Elige una carpeta — mini gym, boulder, cocina, salidas a la comunidad o días mixtos.";
+}
+
 export function dashboardPhysicalActivitySectionTitle(
   lang: CardLanguageCode,
 ): string {
