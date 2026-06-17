@@ -16,7 +16,7 @@ import {
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { cn } from "@/lib/utils/cn";
-import { APP_SHELL_WIDTH_CLASS, SCHEDULE_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
+import { SCHEDULE_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardFirstThenCardEyebrow,
