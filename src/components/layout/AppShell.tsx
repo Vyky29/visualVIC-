@@ -9,6 +9,7 @@ import {
   getFirstThenDemoFocusActive,
   subscribeFirstThenDemoFocus,
 } from "@/lib/experimental/first-then-demo-focus-nav";
+import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
 import { lockScreenPortrait } from "@/lib/utils/orientation-lock";
 
 /**
@@ -37,7 +38,7 @@ export function AppShell({
   const effectiveShowNav = showNav && !navHiddenByRoute;
 
   useEffect(() => {
-    if (firstThenDemoFocusActive) return;
+    if (!shouldApplyOrientationLock() || firstThenDemoFocusActive) return;
     void lockScreenPortrait();
   }, [firstThenDemoFocusActive, pathname]);
 

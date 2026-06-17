@@ -36,9 +36,12 @@ import {
   focusModeSupportCalmCard,
   focusModeSupportRepeatInstruction,
   focusModeSupportSimplified,
+  schedulePlayerCloseCta,
+  schedulePlayerDone,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
+import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 
@@ -231,6 +234,7 @@ function useTapZone(onTap: () => void) {
 export function FocusMode({ routine, exitHref }: Props) {
   const router = useRouter();
   const lang = useCardUiLanguage();
+  const prefersFineHover = usePrefersFineHover();
   const { enabled: expandedCards, toggle: toggleExpandedCards } =
     useFocusExpandedCards();
   const {
@@ -288,6 +292,42 @@ export function FocusMode({ routine, exitHref }: Props) {
     : undefined;
 
   useEffect(() => {
+    if (!prefersFineHover) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        exit();
+        return;
+      }
+      if (isComplete || !nowStep) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrevious();
+      }
+      if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        skipCurrent();
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        completeCurrent();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [
+    completeCurrent,
+    exit,
+    goPrevious,
+    isComplete,
+    nowStep,
+    prefersFineHover,
+    skipCurrent,
+  ]);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const scrollY = window.scrollY;
@@ -331,7 +371,14 @@ export function FocusMode({ routine, exitHref }: Props) {
   }, []);
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
+    <div
+      className={cn(
+        "fixed top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream",
+        prefersFineHover
+          ? "left-1/2 w-full max-w-lg -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+          : "left-0 right-0",
+      )}
+    >
       {stepPositionLabel ? (
         <div
           aria-live="polite"
@@ -496,6 +543,46 @@ export function FocusMode({ routine, exitHref }: Props) {
           </div>
         </div>
       </div>
+      ) : null}
+
+      {prefersFineHover && !isComplete && nowStep ? (
+        <div className="pointer-events-auto absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-[65] flex w-[min(100%,22rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-2 rounded-2xl bg-white/95 px-3 py-2.5 shadow-soft ring-1 ring-ink/10">
+          <button
+            type="button"
+            onClick={goPrevious}
+            className="rounded-xl bg-canvas-muted px-3 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas"
+          >
+            ← {focusModeAriaPreviousStep(lang)}
+          </button>
+          <button
+            type="button"
+            onClick={completeCurrent}
+            className="rounded-xl bg-sage px-3 py-2 text-[13px] font-semibold text-cream transition hover:opacity-90"
+          >
+            {schedulePlayerDone(lang)}
+          </button>
+          <button
+            type="button"
+            onClick={skipCurrent}
+            className="rounded-xl bg-canvas-muted px-3 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas"
+          >
+            {focusModeAriaSkipNext(lang)} →
+          </button>
+          <button
+            type="button"
+            onClick={() => setSheet("options")}
+            className="rounded-xl bg-canvas-muted px-3 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas"
+          >
+            {focusModeAriaOptions(lang)}
+          </button>
+          <button
+            type="button"
+            onClick={exit}
+            className="rounded-xl border border-ink/10 px-3 py-2 text-[13px] font-medium text-[#C84C57] transition hover:bg-canvas-muted"
+          >
+            {schedulePlayerCloseCta(lang)}
+          </button>
+        </div>
       ) : null}
 
       <Sheet

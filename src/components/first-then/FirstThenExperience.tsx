@@ -57,10 +57,12 @@ import {
   shellBackAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import {
   lockScreenLandscape,
   lockScreenPortrait,
 } from "@/lib/utils/orientation-lock";
+import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
 import { cn } from "@/lib/utils/cn";
 
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
@@ -1425,6 +1427,8 @@ function FirstThenExperienceClient() {
     return resolveFirstThenDemoPack(packId, lang);
   }, [sessionPayload, packId, lang]);
   const isMobileLandscape = useMobileLandscape();
+  const prefersFineHover = usePrefersFineHover();
+  const showLandscapeFocus = isMobileLandscape || prefersFineHover;
   const [showFocusMode, setShowFocusMode] = useState(false);
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1439,6 +1443,7 @@ function FirstThenExperienceClient() {
   }, [showFocusMode]);
 
   useEffect(() => {
+    if (!shouldApplyOrientationLock()) return;
     if (showFocusMode) {
       void lockScreenLandscape();
       return;
@@ -1461,7 +1466,7 @@ function FirstThenExperienceClient() {
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
-      {isMobileLandscape ? (
+      {showLandscapeFocus ? (
         <FirstThenFocusLandscapeLayout
           firstCard={first}
           secondCard={second}

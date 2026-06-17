@@ -25,6 +25,7 @@ import {
   schedulePlayerDone,
   schedulePlayerDoneCountLabel,
   schedulePlayerDoubleTapHint,
+  schedulePlayerDesktopFocusHint,
   schedulePlayerFocusModeCta,
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
@@ -34,6 +35,7 @@ import {
   schedulePlayerRunAgain,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
 type Props = {
   routine: Routine;
@@ -125,6 +127,7 @@ export function SchedulePlayer({
 
   const showFirstThen = routine.tags?.includes("first-then") ?? false;
   const cardUiLang = useCardUiLanguage();
+  const prefersFinePointer = usePrefersFineHover();
 
   const openFocus = () => {
     if (!nowStep) return;
@@ -256,7 +259,9 @@ export function SchedulePlayer({
               accentRings={accentRings}
             />
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
-              {schedulePlayerDoubleTapHint(cardUiLang)}
+              {prefersFinePointer
+                ? schedulePlayerDesktopFocusHint(cardUiLang)
+                : schedulePlayerDoubleTapHint(cardUiLang)}
             </p>
           </motion.section>
         ) : null}

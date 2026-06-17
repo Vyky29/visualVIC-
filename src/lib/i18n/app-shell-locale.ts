@@ -1088,6 +1088,12 @@ export function schedulePlayerDoubleTapHint(lang: CardLanguageCode): string {
     : "Double tap to flip, or swipe right";
 }
 
+export function schedulePlayerDesktopFocusHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Doble clic en la tarjeta, o usa el botón Focus mode abajo"
+    : "Double-click the card, or use Focus mode below";
+}
+
 export function schedulePlayerRoutineCompleteTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Rutina terminada" : "Routine complete";
 }
