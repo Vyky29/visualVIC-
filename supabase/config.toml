@@ -1,0 +1,5 @@
+# Minimal config for `supabase link` + remote SQL (Portal project).
+project_id = "cklpnwhlqsulpmkipmqb"
+
+[db]
+major_version = 15

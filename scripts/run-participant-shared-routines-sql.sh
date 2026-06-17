@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 # Apply participant_shared_routines migration to Portal Supabase.
-# Requires one of:
-#   - supabase login (npx supabase login)
-#   - SUPABASE_ACCESS_TOKEN in env
-#   - SUPABASE_DB_PASSWORD in env (direct postgres)
+#
+# Option B (recommended):
+#   npx supabase login
+#   npx supabase link --project-ref cklpnwhlqsulpmkipmqb
+#   ./scripts/run-participant-shared-routines-sql.sh
+#
+# Alternative: SUPABASE_DB_PASSWORD='…' ./scripts/run-participant-shared-routines-sql.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -24,10 +27,11 @@ if [[ -n "${SUPABASE_DB_PASSWORD:-}" ]]; then
     echo "Done (psql)."
     exit 0
   fi
+  npx supabase db query --db-url "$DB_URL" --file "$SQL_FILE"
+  echo "Done (supabase db query --db-url)."
+  exit 0
 fi
 
-npx supabase db execute \
-  --project-ref "$PROJECT_REF" \
-  --file "$SQL_FILE"
+npx supabase db query --linked --file "$SQL_FILE"
 
-echo "Done (supabase CLI)."
+echo "Done (supabase db query --linked)."
