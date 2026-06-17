@@ -41,10 +41,21 @@ import {
 } from "@/lib/cards/day-centre-ikram-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import {
+  PHYSICAL_3D_GYM_SEQUENCE,
+  PHYSICAL_3D_SEQUENCE,
+  PHYSICAL_SEQUENCE,
+  physical3dGymImageUrlForStep,
+  physical3dImageUrlForStep,
+  physicalImageUrlForStep,
+} from "@/lib/cards/physical-cards";
+import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
+  PHYSICAL_3D_GENERATED_CARD_PROPS,
+  PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
+  PHYSICAL_GENERATED_CARD_PROPS,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
 const SEP = "::";
@@ -60,7 +71,10 @@ export type PickablePackId =
   | "airport"
   | "hotel"
   | "daycentre"
-  | "dcikram";
+  | "dcikram"
+  | "phy2d"
+  | "phy3d"
+  | "phy3g";
 
 export function pickablePackFromPickId(pickId: string): PickablePackId | null {
   const ns = pickId.split(SEP)[0]?.toLowerCase() ?? "";
@@ -74,7 +88,10 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "airport" ||
     ns === "hotel" ||
     ns === "daycentre" ||
-    ns === "dcikram"
+    ns === "dcikram" ||
+    ns === "phy2d" ||
+    ns === "phy3d" ||
+    ns === "phy3g"
   ) {
     return ns as PickablePackId;
   }
@@ -332,6 +349,66 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
             iconUrl: gp.iconUrl,
             cardType: gp.cardType,
             focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  PHYSICAL_SEQUENCE.forEach((s, i) => {
+    const gp = PHYSICAL_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("phy2d", s.slug),
+      label: s.title,
+      imageUrl: physicalImageUrlForStep(s),
+      category: "activity",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+          }
+        : undefined,
+    });
+  });
+
+  PHYSICAL_3D_SEQUENCE.forEach((s, i) => {
+    const gp = PHYSICAL_3D_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("phy3d", s.slug),
+      label: s.title,
+      imageUrl: physical3dImageUrlForStep(s),
+      category: "activity",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+          }
+        : undefined,
+    });
+  });
+
+  PHYSICAL_3D_GYM_SEQUENCE.forEach((s, i) => {
+    const gp = PHYSICAL_3D_GYM_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("phy3g", s.slug),
+      label: s.title,
+      imageUrl: physical3dGymImageUrlForStep(s),
+      category: "activity",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
           }
         : undefined,
     });

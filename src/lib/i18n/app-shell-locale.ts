@@ -5,6 +5,8 @@ import {
   libraryDayCentreIkramLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
+import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
+import type { PhysicalLibraryGroup } from "@/lib/cards/physical-library-groups";
 import type { RoutineVisualTone } from "@/lib/utils/routine-accent";
 
 function isEs(lang: CardLanguageCode): boolean {
@@ -147,6 +149,7 @@ export type LibraryPackSectionId =
   | "hotel"
   | "daycentre"
   | "dcikram"
+  | "physical"
   | "climb"
   | "swim";
 
@@ -158,6 +161,9 @@ export function libraryPackSectionTitle(
   if (section === "hotel") return libraryAirportHotelLabel("hotel", lang);
   if (section === "daycentre") return libraryAirportHotelLabel("daycentre", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
+  if (section === "physical") {
+    return isEs(lang) ? "Actividad física" : "Physical Activity";
+  }
   if (isEs(lang)) {
     switch (section) {
       case "bt":
@@ -462,6 +468,40 @@ export function dayCentreLibraryGroupLabel(
     "food-drink": "Comida y bebida",
     communication: "Comunicación",
     "places-extras": "Lugares y extras",
+  };
+  return isEs(lang) ? es[group] : en[group];
+}
+
+export function physicalLibraryGroupLabel(
+  group: PhysicalLibraryGroup,
+  lang: CardLanguageCode,
+): string {
+  const en: Record<PhysicalLibraryGroup, string> = {
+    "2d": "2D illustrations",
+    "3d": "3D equipment",
+    "3d-gym": "3D gym & machines",
+  };
+  const es: Record<PhysicalLibraryGroup, string> = {
+    "2d": "Ilustraciones 2D",
+    "3d": "Equipamiento 3D",
+    "3d-gym": "3D gimnasio y máquinas",
+  };
+  return isEs(lang) ? es[group] : en[group];
+}
+
+export function ikramLibraryGroupLabel(
+  group: IkramLibraryGroup,
+  lang: CardLanguageCode,
+): string {
+  const en: Record<IkramLibraryGroup, string> = {
+    "scene-cards": "Scene cards (PECS grid)",
+    "saturday-schedule": "Saturday schedule",
+    "photo-cards": "Photo library",
+  };
+  const es: Record<IkramLibraryGroup, string> = {
+    "scene-cards": "Tarjetas escena (PECS)",
+    "saturday-schedule": "Rutina del sábado",
+    "photo-cards": "Biblioteca de fotos",
   };
   return isEs(lang) ? es[group] : en[group];
 }

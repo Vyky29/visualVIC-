@@ -5,30 +5,23 @@ import Image from "next/image";
 import { useMemo } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
-import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
-import { mockTemplates } from "@/lib/mock/templates";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardStepsWord,
-  formatListWithAnd,
   playerIndexIntro,
   playerKindRoutine,
-  playerKindTemplate,
-  playerRoutineToneShortLabel,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
+  isStockPackRoutine,
   routineSchedulePlayerIndexCardClass,
   routineVisualTone,
-  stepCardVisualTone,
   type RoutineVisualTone,
 } from "@/lib/utils/routine-accent";
 import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
-import type { Routine } from "@/lib/types/routine";
-import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 
 const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   brushing: "border-[#91C24C]/30 bg-sage-mist/85 text-[#6a8f3a]",
@@ -47,37 +40,12 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   default: "border-sage/18 bg-sage-mist/70 text-sage",
 };
 
-function templateCardsSummary(
-  routine: Routine,
-  lang: CardLanguageCode,
-): string {
-  const labels: string[] = [];
-  const seen = new Set<string>();
-
-  for (const step of routine.steps) {
-    const tone = stepCardVisualTone(step);
-    const label = playerRoutineToneShortLabel(tone, lang);
-    if (!label || seen.has(label)) continue;
-    seen.add(label);
-    labels.push(label);
-  }
-
-  return labels.length > 0 ? formatListWithAnd(labels, lang) : routine.name;
-}
-
 export default function PlayerIndexPage() {
-  const { routines: customRoutines, hydrated: customHydrated } =
-    useCustomRoutines();
   const cardUiLang = useCardUiLanguage();
-  const combined = useMemo(
-    () => [
-      ...(customHydrated
-        ? customRoutines.map((r) => ({ ...r, kind: "Routine" as const }))
-        : []),
-      ...mockRoutines.map((r) => ({ ...r, kind: "Routine" as const })),
-      ...mockTemplates.map((r) => ({ ...r, kind: "Template" as const })),
-    ],
-    [customHydrated, customRoutines],
+  /** Single-pack catalog routines only — hide modular demos until image API ships. */
+  const stockRoutines = useMemo(
+    () => mockRoutines.filter(isStockPackRoutine),
+    [],
   );
 
   return (
@@ -88,21 +56,13 @@ export default function PlayerIndexPage() {
           {playerIndexIntro(cardUiLang)}
         </p>
         <ul className="flex flex-col gap-3">
-          {combined.map((r) => {
+          {stockRoutines.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
             const previewPixto =
               Boolean(previewUrl) &&
               (isPixtoLearnBundledCardUrl(previewUrl) ||
                 Boolean(r.steps[0]?.generatedPixto));
             const tone = routineVisualTone(r);
-            const kindLabel =
-              r.kind === "Template"
-                ? playerKindTemplate(cardUiLang)
-                : playerKindRoutine(cardUiLang);
-            const title =
-              r.kind === "Template"
-                ? templateCardsSummary(r, cardUiLang)
-                : stockRoutineDisplayName(r.id, r.name, cardUiLang);
             return (
               <li key={r.id} className="group">
                 <Card
@@ -134,10 +94,10 @@ export default function PlayerIndexPage() {
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
                       <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-                        {kindLabel}
+                        {playerKindRoutine(cardUiLang)}
                       </p>
                       <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                        {title}
+                        {stockRoutineDisplayName(r.id, r.name, cardUiLang)}
                       </p>
                       <span
                         className={cn(

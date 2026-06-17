@@ -10,6 +10,7 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  generatedPixtoCategoryOutlineStyle,
   generatedPixtoCornerRadiusPx,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
@@ -22,6 +23,7 @@ export {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_PX,
   GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  generatedPixtoCategoryOutlineStyle,
   generatedPixtoCornerRadiusPx,
   GENERATED_PIXTO_FOCUS_DESIGN_H,
   GENERATED_PIXTO_FOCUS_DESIGN_W,
@@ -983,13 +985,16 @@ function GeneratedPixtoFocusFixedZoneCard({
       className={cn(
         "relative flex min-h-0 flex-col overflow-hidden bg-white touch-manipulation",
         GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
-        suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
+        suppressNeutralRing ? "shadow-none ring-0" : "shadow-none ring-0",
         className,
       )}
       style={{
         width: z.w,
         height: z.h,
         ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+        ...generatedPixtoCategoryOutlineStyle(categoryColour, {
+          cardShadow: !suppressNeutralRing,
+        }),
       }}
       aria-label={title}
     >
@@ -1261,14 +1266,16 @@ export function GeneratedPixtoCard({
       className={cn(
         "relative grid w-full max-w-[min(100%,17.75rem)] min-h-0 overflow-hidden",
         GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
-        "bg-white touch-manipulation",
-        suppressNeutralRing ? "shadow-none ring-0" : "shadow-card ring-1 ring-ink/[0.08]",
+        "bg-white touch-manipulation shadow-none ring-0",
         className,
       )}
       style={{
         aspectRatio: cardAspect,
         gridTemplateRows,
         ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+        ...generatedPixtoCategoryOutlineStyle(categoryColour, {
+          cardShadow: !suppressNeutralRing,
+        }),
       }}
     >
       {SHOW_GENERATED_PIXTO_DEBUG_GUIDES ? (

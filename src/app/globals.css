@@ -42,6 +42,6 @@ body {
 @layer utilities {
   /** GENERATED_PIXTO_CARD_CORNER_RADIUS_PX @ GENERATED_PIXTO_CARD_DESIGN_W × H */
   .pixto-card-shell-radius {
-    border-radius: calc(100% * 24 / 744) / calc(100% * 24 / 1054);
+    border-radius: calc(100% * 40 / 744) / calc(100% * 40 / 1054);
   }
 }

@@ -17,12 +17,15 @@ import {
   PHYSICAL_3D_SEQUENCE,
   PHYSICAL_CATEGORY_COLOUR,
   PHYSICAL_CATEGORY_LABEL,
+  PHYSICAL_SCHEDULE_SEQUENCE,
   PHYSICAL_SEQUENCE,
   physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
   physicalBackCardUrl,
+  physicalImageUrlForScheduleStep,
   physicalImageUrlForStep,
   physicalPackMarkUrl,
+  type PhysicalScheduleStep,
 } from "@/lib/cards/physical-cards";
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
@@ -139,6 +142,20 @@ export const PHYSICAL_3D_GYM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: physicalPackMarkUrl(),
   }));
+
+function physicalScheduleGeneratedCardProps(step: PhysicalScheduleStep) {
+  return {
+    illustrationUrl: physicalImageUrlForScheduleStep(step),
+    title: lc(step.title),
+    category: lc(PHYSICAL_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: physicalPackMarkUrl(),
+  };
+}
+
+/** Physical Activity — mixed 2D / 3D / gym schedule for Schedule Player. */
+export const PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  PHYSICAL_SCHEDULE_SEQUENCE.map((s) => physicalScheduleGeneratedCardProps(s));
 
 /** @deprecated Use {@link PHYSICAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_FITNESS_GENERATED_CARD_PROPS = PHYSICAL_GENERATED_CARD_PROPS;

@@ -13,8 +13,8 @@ import {
 import type { RoutineStep } from "@/lib/types/routine";
 import {
   DEFAULT_ROUTINE_ACCENT_RINGS,
+  stepCategoryOutlineColour,
   stepCardAccentRings,
-  stepCardVisualTone,
   type RoutineAccentRings,
 } from "@/lib/utils/routine-accent";
 import { cn } from "@/lib/utils/cn";
@@ -39,6 +39,7 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   GENERATED_PIXTO_SCHEDULE_NEXT_W,
   GENERATED_PIXTO_SCHEDULE_NOW_W,
+  generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
@@ -87,26 +88,6 @@ const focusPixtoPngInsetStyle: CSSProperties = {
 const GENERATED_WOW_NOW_CARD_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
 const GENERATED_WOW_NEXT_CARD_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
 
-const STEP_OUTLINE_HEX: Record<
-  ReturnType<typeof stepCardVisualTone>,
-  string
-> = {
-  brushing: "#D4E1C2",
-  shower: "#A6C1F4",
-  climbing: "#E9AE2E",
-  dress: "#A194BE",
-  core: "#CBCBC9",
-  swimming: "#B8E3F4",
-  airport: "#F9DD9F",
-  hotel: "#EBA29C",
-  daycentre: "#E53935",
-  tailored: "#E05C9A",
-  physical: "#43A047",
-  finish: "#9aa3a8",
-  custom: "#1c2420",
-  default: "#7d9b87",
-};
-
 /** Shared clip + radius for 3D flip faces (front and back must match exactly). */
 const FLIP_CARD_RADIUS_CLASS = GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS;
 const FLIP_FACE_MEDIA_CLASS = "absolute inset-0";
@@ -140,6 +121,14 @@ export function SwipeableStepCard({
   const rings = useMemo(
     () => stepCardAccentRings(step, accentRings),
     [step.id, step.imageUrl, step.generatedPixto, accentRings],
+  );
+
+  const categoryOutlineStyle = useMemo(
+    () =>
+      generatedPixtoCategoryOutlineStyle(stepCategoryOutlineColour(step), {
+        cardShadow: false,
+      }),
+    [step],
   );
 
   const hasGeneratedPixto = Boolean(step.generatedPixto);
@@ -490,16 +479,6 @@ export function SwipeableStepCard({
         ? "origin-center scale-[1.082]"
         : "origin-center scale-[1.06]";
   const focusGeneratedBorderStyle = undefined;
-  const nextOutlineStyle =
-    variant === "next" && !hasGeneratedPixto
-      ? (() => {
-          const tone = stepCardVisualTone(step);
-          const stroke = STEP_OUTLINE_HEX[tone];
-          return {
-            boxShadow: `0 0 0 2px ${stroke}, 0 6px 22px -12px rgba(28,36,32,0.16)`,
-          } satisfies CSSProperties;
-        })()
-      : undefined;
   const scheduleGeneratedWidthStyle =
     scheduleGeneratedPixto && !focusGenerated
       ? variant === "hero" && isNow
@@ -519,7 +498,10 @@ export function SwipeableStepCard({
   const cardStyle = {
     ...(scheduleGeneratedWidthStyle ?? {}),
     ...(scheduleNextWidthStyle ?? {}),
-    ...(nextOutlineStyle ?? focusGeneratedBorderStyle ?? {}),
+    ...(focusGeneratedBorderStyle ?? {}),
+    ...(!hasGeneratedPixto && !suppressCompletionOutline
+      ? categoryOutlineStyle
+      : {}),
   } satisfies CSSProperties;
   const focusCardAspectRatio =
     variant === "focus"
@@ -671,6 +653,7 @@ export function SwipeableStepCard({
                 style={{
                   transform: "translateZ(1px)",
                   ...flipFacePreserve3dStyle,
+                  ...(!gp ? categoryOutlineStyle : {}),
                 }}
               >
                 {gp ? (
@@ -953,6 +936,7 @@ export function SwipeableStepCard({
               schedulePixtoBleed ? (
                 <div
                   className={cn("absolute inset-0 overflow-hidden", FLIP_CARD_RADIUS_CLASS)}
+                  style={categoryOutlineStyle}
                 >
                   <div
                     className={cn(

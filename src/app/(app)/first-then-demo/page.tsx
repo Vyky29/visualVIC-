@@ -28,6 +28,7 @@ import {
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import {
   parseFirstThenDemoLayout,
@@ -309,7 +310,9 @@ function MiniDigitalWowCard({
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
         gridTemplateRows: `${GENERATED_PIXTO_WOW_TOP_LAYOUT_H}fr ${GENERATED_PIXTO_WOW_TITLE_ZONE_H}fr ${GENERATED_PIXTO_CATEGORY_BAND_H}fr`,
-        boxShadow: `0 0 0 1px ${card.categoryColour}`,
+        ...generatedPixtoCategoryOutlineStyle(card.categoryColour, {
+          cardShadow: false,
+        }),
       }}
     >
       <div className="relative flex min-h-0 flex-col bg-white">

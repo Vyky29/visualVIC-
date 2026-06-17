@@ -31,8 +31,6 @@ const STOCK_PACK_IDS = new Set<string>([
   "at-the-hotel",
   "at-the-day-centre",
   "physical",
-  "physical-3d",
-  "physical-3d-gym",
   "ikram-day-centre",
 ]);
 
@@ -472,6 +470,31 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   return "default";
 }
 
+/** Category stroke colour for 1px card outlines (matches schedule chrome hues). */
+const CATEGORY_OUTLINE_HEX: Record<RoutineVisualTone, string> = {
+  brushing: "#D4E1C2",
+  shower: "#A6C1F4",
+  climbing: "#E9AE2E",
+  dress: "#A194BE",
+  core: "#CBCBC9",
+  swimming: "#B8E3F4",
+  airport: "#F9DD9F",
+  hotel: "#EBA29C",
+  daycentre: "#E53935",
+  tailored: "#E05C9A",
+  physical: "#43A047",
+  finish: "#9aa3a8",
+  custom: "#1c2420",
+  default: "#7d9b87",
+};
+
+export function stepCategoryOutlineColour(step: RoutineStep): string {
+  if (step.generatedPixto?.categoryColour) {
+    return step.generatedPixto.categoryColour;
+  }
+  return CATEGORY_OUTLINE_HEX[stepCardVisualTone(step)];
+}
+
 /** Ring palette for this step; uses URL category, else `fallback` (e.g. routine-level). */
 export function stepCardAccentRings(
   step: RoutineStep,
@@ -554,9 +577,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
 
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (id === "physical" || id === "physical-3d" || id === "physical-3d-gym") {
-    return "physical";
-  }
+  if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
 
@@ -606,9 +627,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   }
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
-  if (id === "physical" || id === "physical-3d" || id === "physical-3d-gym") {
-    return "physical";
-  }
+  if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id.includes("core")) return "core";

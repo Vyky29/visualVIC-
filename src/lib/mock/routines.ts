@@ -21,12 +21,10 @@ import {
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
-  PHYSICAL_3D_GENERATED_CARD_PROPS,
-  PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
-  PHYSICAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
+  PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
@@ -181,36 +179,12 @@ export const mockRoutines: Routine[] = [
     id: "physical",
     name: "Physical Activity",
     description:
-      "Physical activity — equipment and stretching PixtoLearn cards",
+      "Mixed 2D and 3D fitness cards — equipment, gym and stretching",
     tags: ["activity"],
-    homePreviewImageUrl: PHYSICAL_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "physical",
-      PHYSICAL_GENERATED_CARD_PROPS,
-    ),
-  },
-  {
-    id: "physical-3d",
-    name: "Physical Activity · 3D",
-    description:
-      "Physical activity — soft 3D equipment cards including BOSU and extras",
-    tags: ["activity"],
-    homePreviewImageUrl: PHYSICAL_3D_GENERATED_CARD_PROPS[0].illustrationUrl,
-    steps: routineStepsFromGeneratedCardProps(
-      "physical-3d",
-      PHYSICAL_3D_GENERATED_CARD_PROPS,
-    ),
-  },
-  {
-    id: "physical-3d-gym",
-    name: "Physical Activity · 3D gym",
-    description:
-      "Gym machines, benches and accessories — 3D equipment sheet (25 cards)",
-    tags: ["activity"],
-    homePreviewImageUrl: PHYSICAL_3D_GYM_GENERATED_CARD_PROPS[0].illustrationUrl,
-    steps: routineStepsFromGeneratedCardProps(
-      "physical-3d-gym",
-      PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
+      PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {

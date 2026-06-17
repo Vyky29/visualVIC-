@@ -36,6 +36,44 @@ export type PhysicalStep = {
   title: string;
 };
 
+export type PhysicalIllustrationLibrary = "2d" | "3d" | "3d-gym";
+
+export type PhysicalScheduleStep = PhysicalStep & {
+  library: PhysicalIllustrationLibrary;
+};
+
+export function physicalImageUrlForScheduleStep(
+  step: PhysicalScheduleStep,
+): string {
+  switch (step.library) {
+    case "2d":
+      return physicalImageUrl(step.slug);
+    case "3d":
+      return physical3dImageUrl(step.slug);
+    case "3d-gym":
+      return physical3dGymImageUrl(step.slug);
+  }
+}
+
+/**
+ * Mixed 2D + 3D + gym sample for Schedule Player (curation TBD).
+ * Mirrors Day centre — one routine, varied card sources.
+ */
+export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
+  { id: "phs-therapy-ball", slug: "therapy-ball", title: "Therapy ball", library: "2d" },
+  { id: "phs-trampoline", slug: "trampoline", title: "Trampoline", library: "2d" },
+  { id: "phs-bosu", slug: "bosu", title: "BOSU", library: "3d" },
+  { id: "phs-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
+  { id: "phs-kettlebell", slug: "kettlebell", title: "Kettlebell", library: "3d" },
+  { id: "phs-weights", slug: "weights", title: "Weights", library: "2d" },
+  { id: "phs-leg-press", slug: "leg-press", title: "Leg press", library: "3d-gym" },
+  { id: "phs-aerobic-step", slug: "aerobic-step", title: "Aerobic step", library: "3d-gym" },
+  { id: "phs-exercise-mat", slug: "exercise-mat", title: "Exercise mat", library: "2d" },
+  { id: "phs-resistance-bands", slug: "resistance-bands", title: "Resistance bands", library: "2d" },
+  { id: "phs-jump-rope", slug: "jump-rope", title: "Jump rope", library: "3d" },
+  { id: "phs-stretching", slug: "stretching", title: "Stretching", library: "2d" },
+] as const;
+
 export function physicalImageUrl(slug: string): string {
   return `${PHYSICAL_LIBRARY_DIR}/${slug}.png`;
 }

@@ -26,9 +26,26 @@ export const GENERATED_PIXTO_SCHEDULE_NEXT_W = 218 as const;
 
 /**
  * Uniform outer corner radius for all Pixto card shells (NOW, NEXT, Focus, demos).
- * 24px at the master 744×1054 design frame — scales with rendered width/height.
+ * 40px at the master 744×1054 design frame — scales with rendered width/height.
  */
-export const GENERATED_PIXTO_CARD_CORNER_RADIUS_PX = 24 as const;
+export const GENERATED_PIXTO_CARD_CORNER_RADIUS_PX = 40 as const;
+
+/** 1px category-colour stroke on the card shell (all surfaces). */
+export const GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX = 1 as const;
+
+/** @see {@link generatedPixtoCategoryOutlineStyle} */
+export function generatedPixtoCategoryOutlineStyle(
+  categoryColour: string,
+  options?: { cardShadow?: boolean },
+): { boxShadow: string } {
+  const outline = `0 0 0 ${GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX}px ${categoryColour}`;
+  if (options?.cardShadow === false) {
+    return { boxShadow: outline };
+  }
+  return {
+    boxShadow: `${outline}, 0 4px 14px -4px rgba(28, 36, 32, 0.12)`,
+  };
+}
 
 /** Master generated-card design frame (px). */
 export const GENERATED_PIXTO_CARD_DESIGN_W = 744 as const;

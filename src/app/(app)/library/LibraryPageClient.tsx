@@ -24,8 +24,17 @@ import {
   DAY_CENTRE_LIBRARY_GROUP_ORDER,
   dayCentreLibraryGroupForSlug,
 } from "@/lib/cards/day-centre-library-groups";
+import {
+  IKRAM_LIBRARY_GROUP_ORDER,
+  ikramLibraryGroupForSlug,
+} from "@/lib/cards/ikram-library-groups";
+import {
+  PHYSICAL_LIBRARY_GROUP_ORDER,
+  physicalLibraryGroupFromPickNamespace,
+} from "@/lib/cards/physical-library-groups";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { dayCentreIkramPackMarkUrl } from "@/lib/cards/day-centre-ikram-cards";
+import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
@@ -48,11 +57,14 @@ import {
   librarySelectionSummary,
   libraryStepCountBadge,
   dayCentreLibraryGroupLabel,
+  ikramLibraryGroupLabel,
+  physicalLibraryGroupLabel,
   librarySubheadingObjects,
   librarySubheadingSteps,
   type DashboardPackCategory,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 import {
   PICKABLE_LIBRARY_CARDS,
   pickablePackFromPickId,
@@ -60,7 +72,10 @@ import {
   type PickablePackId,
 } from "@/lib/library/pickable-library-cards";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
-import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
+import {
+  GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+  generatedPixtoCategoryOutlineStyle,
+} from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -70,9 +85,10 @@ import {
 const groups = ["self-care", "home", "activity"] as const;
 
 type LibrarySectionId =
-  | Exclude<PickablePackId, "dress">
+  | Exclude<PickablePackId, "dress" | "phy2d" | "phy3d" | "phy3g">
   | "dress-on"
-  | "dress-off";
+  | "dress-off"
+  | "physical";
 
 const SECTION_ORDER_BY_CATEGORY: Record<
   (typeof groups)[number],
@@ -80,7 +96,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
 > = {
   "self-care": ["bt", "shower", "dress-on", "dress-off"],
   home: ["core", "airport", "hotel", "daycentre", "dcikram"],
-  activity: ["climb", "swim"],
+  activity: ["climb", "swim", "physical"],
 };
 
 /** Thumbnail in each pack accordion header (same assets as the tiles). */
@@ -94,6 +110,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   daycentre: dayCentrePackMarkUrl(),
   dcikram: dayCentreIkramPackMarkUrl(),
+  physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
 };
@@ -109,6 +126,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   hotel: "ring-[#8C1E2E]/70",
   daycentre: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
+  physical: "ring-[#43A047]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
 };
@@ -125,6 +143,9 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   hotel: "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink",
   daycentre: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   dcikram: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
+  phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
+  phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
+  phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
 };
 
 function libraryRibbonClassForPickId(pickId: string): string {
@@ -142,6 +163,7 @@ function librarySectionFromCard(
 ): LibrarySectionId | null {
   const pack = pickablePackFromPickId(c.pickId);
   if (!pack) return null;
+  if (pack === "phy2d" || pack === "phy3d" || pack === "phy3g") return "physical";
   if (pack !== "dress") return pack;
 
   const slug = c.pickId.split("::")[1] ?? "";
@@ -245,6 +267,107 @@ function groupByCategoryAndSection(): Map<
   return out;
 }
 
+function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
+  return (
+    section === "daycentre" ||
+    section === "physical" ||
+    section === "dcikram"
+  );
+}
+
+function LibraryPackThematicSubgroups({
+  section,
+  cards,
+  selectedSet,
+  onToggle,
+  cardUiLang,
+}: {
+  section: LibrarySectionId;
+  cards: readonly PickableLibraryCard[];
+  selectedSet: ReadonlySet<string>;
+  onToggle: (pickId: string) => void;
+  cardUiLang: CardLanguageCode;
+}) {
+  if (section === "daycentre") {
+    return DAY_CENTRE_LIBRARY_GROUP_ORDER.map((groupId) => {
+      const groupCards = cards.filter((v) => {
+        const slug = v.pickId.split("::")[1] ?? "";
+        return dayCentreLibraryGroupForSlug(slug) === groupId;
+      });
+      if (groupCards.length === 0) return null;
+      return (
+        <section key={groupId} className="space-y-1.5">
+          <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+            {dayCentreLibraryGroupLabel(groupId, cardUiLang)}
+          </p>
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+            {groupCards.map((v) => (
+              <LibraryPickTile
+                key={v.pickId}
+                v={v}
+                selected={selectedSet.has(v.pickId)}
+                onToggle={onToggle}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  }
+
+  if (section === "physical") {
+    return PHYSICAL_LIBRARY_GROUP_ORDER.map((groupId) => {
+      const groupCards = cards.filter((v) => {
+        const ns = v.pickId.split("::")[0] ?? "";
+        return physicalLibraryGroupFromPickNamespace(ns) === groupId;
+      });
+      if (groupCards.length === 0) return null;
+      return (
+        <section key={groupId} className="space-y-1.5">
+          <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+            {physicalLibraryGroupLabel(groupId, cardUiLang)}
+          </p>
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+            {groupCards.map((v) => (
+              <LibraryPickTile
+                key={v.pickId}
+                v={v}
+                selected={selectedSet.has(v.pickId)}
+                onToggle={onToggle}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  }
+
+  return IKRAM_LIBRARY_GROUP_ORDER.map((groupId) => {
+    const groupCards = cards.filter((v) => {
+      const slug = v.pickId.split("::")[1] ?? "";
+      return ikramLibraryGroupForSlug(slug) === groupId;
+    });
+    if (groupCards.length === 0) return null;
+    return (
+      <section key={groupId} className="space-y-1.5">
+        <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+          {ikramLibraryGroupLabel(groupId, cardUiLang)}
+        </p>
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+          {groupCards.map((v) => (
+            <LibraryPickTile
+              key={v.pickId}
+              v={v}
+              selected={selectedSet.has(v.pickId)}
+              onToggle={onToggle}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  });
+}
+
 type LibraryPickTileProps = {
   v: PickableLibraryCard;
   selected: boolean;
@@ -254,6 +377,11 @@ type LibraryPickTileProps = {
 function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
   const unopt = cardImageUnoptimized(v.imageUrl);
   const pixto = isPixtoLearnBundledCardUrl(v.imageUrl);
+  const categoryOutlineStyle = v.generatedPixto?.categoryColour
+    ? generatedPixtoCategoryOutlineStyle(v.generatedPixto.categoryColour, {
+        cardShadow: false,
+      })
+    : undefined;
   return (
     <button
       type="button"
@@ -267,8 +395,10 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
       <div
         className={cn(
           "relative aspect-[5/6] w-full shrink-0 overflow-hidden bg-canvas-muted",
+          pixto && GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
           pixto ? "bg-white" : "bg-canvas-muted",
         )}
+        style={pixto ? categoryOutlineStyle : undefined}
       >
         <Image
           src={v.imageUrl}
@@ -463,7 +593,9 @@ export function LibraryPageClient() {
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
                   const cropHeaderIcon =
-                    section !== "daycentre" && section !== "dcikram";
+                    section !== "daycentre" &&
+                    section !== "dcikram" &&
+                    section !== "physical";
 
                   return (
                     <div
@@ -548,40 +680,14 @@ export function LibraryPageClient() {
                       >
                         <div className="min-h-0 overflow-hidden">
                           <div className="space-y-3 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
-                            {section === "daycentre" ? (
-                              DAY_CENTRE_LIBRARY_GROUP_ORDER.map((groupId) => {
-                                const groupCards = cards.filter((v) => {
-                                  const slug = v.pickId.split("::")[1] ?? "";
-                                  return (
-                                    dayCentreLibraryGroupForSlug(slug) ===
-                                    groupId
-                                  );
-                                });
-                                if (groupCards.length === 0) return null;
-                                return (
-                                  <section
-                                    key={groupId}
-                                    className="space-y-1.5"
-                                  >
-                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-                                      {dayCentreLibraryGroupLabel(
-                                        groupId,
-                                        cardUiLang,
-                                      )}
-                                    </p>
-                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                                      {groupCards.map((v) => (
-                                        <LibraryPickTile
-                                          key={v.pickId}
-                                          v={v}
-                                          selected={selectedSet.has(v.pickId)}
-                                          onToggle={togglePick}
-                                        />
-                                      ))}
-                                    </div>
-                                  </section>
-                                );
-                              })
+                            {libraryPackUsesThematicSubgroups(section) ? (
+                              <LibraryPackThematicSubgroups
+                                section={section}
+                                cards={cards}
+                                selectedSet={selectedSet}
+                                onToggle={togglePick}
+                                cardUiLang={cardUiLang}
+                              />
                             ) : (
                               <>
                                 {objectCards.length > 0 ? (
