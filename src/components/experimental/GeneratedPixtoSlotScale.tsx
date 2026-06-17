@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { GENERATED_PIXTO_CARD_SIZE } from "@/components/experimental/GeneratedPixtoCard";
+import { GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX } from "@/lib/constants/generated-pixto-card-sizes";
 
 type Props = { children: ReactNode };
 
@@ -20,8 +21,9 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     const update = () => {
       const { width: W, height: H } = outer.getBoundingClientRect();
       if (W <= 0 || H <= 0) return;
-      const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2;
+      const sx = (W - bleed) / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = (H - bleed) / GENERATED_PIXTO_CARD_SIZE.h;
       const s = Math.min(sx, sy);
       setScale(Number.isFinite(s) && s > 0 ? s : 1);
     };
@@ -32,8 +34,9 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     return () => ro.disconnect();
   }, []);
 
-  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
-  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
 
   return (
     <div
@@ -42,7 +45,7 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     >
       <div
         className="relative mx-auto shrink-0 will-change-transform"
-        style={{ width: slotW, height: slotH }}
+        style={{ width: slotW, height: slotH, padding: bleed }}
       >
         <div
           className="absolute left-0 top-0 origin-top-left"

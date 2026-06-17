@@ -11,7 +11,11 @@ import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undres
 import { atTheAirportBackCardUrl } from "@/lib/cards/at-the-airport-cards";
 import { dayCentreBackCardUrl } from "@/lib/cards/day-centre-cards";
 import { physicalBackCardUrl } from "@/lib/cards/physical-cards";
-import { tailoredSchedulesBackCardUrl, tailoredSchedulesBackCardUrlForCategoryColour } from "@/lib/cards/tailored-schedules-shared";
+import {
+  tailoredSchedulesBackCardUrl,
+  tailoredSchedulesBackCardUrlForCategoryColour,
+  tailoredSchedulesNavyBackCardUrl,
+} from "@/lib/cards/tailored-schedules-shared";
 import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
 import { stepCardVisualTone } from "@/lib/utils/routine-accent";
 
@@ -33,7 +37,10 @@ export function resolveCategoryBackCardUrl(
     return atTheHotelBackCardUrl();
   }
   if (path.includes("day%20centre")) {
-    if (path.includes("/ikram") || path.includes("/serine") || path.includes("/ayaan") || path.includes("/emmanuel")) {
+    if (path.includes("/ayaan") || path.includes("/emmanuel")) {
+      return tailoredSchedulesNavyBackCardUrl();
+    }
+    if (path.includes("/ikram") || path.includes("/serine")) {
       return tailoredSchedulesBackCardUrl();
     }
     return dayCentreBackCardUrl();
@@ -87,6 +94,7 @@ export function resolveCategoryBackCardUrlForStep(
     case "daycentre":
       return dayCentreBackCardUrl();
     case "tailored":
+    case "ayaan":
       return tailoredSchedulesBackCardUrlForCategoryColour(
         step.generatedPixto?.categoryColour,
       );

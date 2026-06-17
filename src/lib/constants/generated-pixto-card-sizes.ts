@@ -30,20 +30,24 @@ export const GENERATED_PIXTO_SCHEDULE_NEXT_W = 218 as const;
  */
 export const GENERATED_PIXTO_CARD_CORNER_RADIUS_PX = 40 as const;
 
-/** 1px category-colour stroke on the card shell (all surfaces). */
-export const GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX = 1 as const;
+/** 2.5px category-colour stroke on the card shell (all surfaces). */
+export const GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX = 2.5 as const;
+
+/** Padding around scaled shells so borders are not clipped by overflow/transform. */
+export const GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX = 2 as const;
 
 /** @see {@link generatedPixtoCategoryOutlineStyle} */
 export function generatedPixtoCategoryOutlineStyle(
   categoryColour: string,
   options?: { cardShadow?: boolean },
-): { boxShadow: string } {
-  const outline = `0 0 0 ${GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX}px ${categoryColour}`;
+): { border: string; boxShadow: string } {
+  const border = `${GENERATED_PIXTO_CATEGORY_OUTLINE_WIDTH_PX}px solid ${categoryColour}`;
   if (options?.cardShadow === false) {
-    return { boxShadow: outline };
+    return { border, boxShadow: "none" };
   }
   return {
-    boxShadow: `${outline}, 0 4px 14px -4px rgba(28, 36, 32, 0.12)`,
+    border,
+    boxShadow: `0 4px 14px -4px rgba(28, 36, 32, 0.12)`,
   };
 }
 

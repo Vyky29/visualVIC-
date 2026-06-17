@@ -29,6 +29,7 @@ import {
 } from "@/components/experimental/GeneratedPixtoCard";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
+  GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import {
@@ -487,7 +488,9 @@ function FirstThenFocusSpecCard({
         width: FOCUS_LANDSCAPE.cardW,
         height: FOCUS_LANDSCAPE.cardH,
         ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
-        border: `1px solid ${card.categoryColour}`,
+        ...generatedPixtoCategoryOutlineStyle(card.categoryColour, {
+          cardShadow: false,
+        }),
       }}
       aria-label={`${slotLabel} — ${displayTitle}`}
     >
@@ -741,12 +744,13 @@ function FirstThenFocusLandscapeLayout({
 
   const slotW = FOCUS_LANDSCAPE.cardW * scale;
   const slotH = FOCUS_LANDSCAPE.cardH * scale;
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
 
   const renderFocusCard = (slot: "first" | "then", card: GeneratedPixtoCardProps) => (
     <div
       key={slot}
       className="relative shrink-0"
-      style={{ width: slotW, height: slotH }}
+      style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
     >
       <div
         className="absolute left-0 top-0 origin-top-left"
@@ -940,6 +944,7 @@ function FirstThenPortraitCardScaled({
   const renderScale = scale * trimFactor;
   const slotW = GENERATED_PIXTO_CARD_SIZE.w * renderScale;
   const slotH = GENERATED_PIXTO_CARD_SIZE.h * renderScale;
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
 
   return (
     <div
@@ -948,8 +953,9 @@ function FirstThenPortraitCardScaled({
         enterAnimation && "first-then-portrait-card-enter",
       )}
       style={{
-        width: slotW,
-        height: slotH,
+        width: slotW + bleed * 2,
+        height: slotH + bleed * 2,
+        padding: bleed,
         animationDelay: enterAnimation && enterDelayMs > 0 ? `${enterDelayMs}ms` : undefined,
       }}
     >
@@ -1011,8 +1017,11 @@ function FirstThenPortraitLabeledRow({
       if (W <= 0 || H <= 0) return;
 
       const labelReservePx = SLOT_LABEL_COLUMN_W_PX + SLOT_LABEL_TO_CARD_GAP_PX;
-      const sx = (W - labelReservePx - actionReservePx) / GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2;
+      const sx =
+        (W - labelReservePx - actionReservePx - bleed) /
+        GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = (H - bleed) / GENERATED_PIXTO_CARD_SIZE.h;
       const next = Math.min(sx, sy) * scaleMultiplier;
       if (!Number.isFinite(next) || next <= 0) return;
 
@@ -1053,7 +1062,6 @@ function FirstThenPortraitLabeledRow({
             card={card}
             scale={scale}
             readableTitle={readableTitle}
-            sizeTrimPx={1}
           />
         ) : null}
         {actionReservePx > 0 ? (
@@ -1081,6 +1089,7 @@ function FirstThenPortraitCardCell({
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.28);
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
 
   useLayoutEffect(() => {
     const outer = outerRef.current;
@@ -1091,8 +1100,9 @@ function FirstThenPortraitCardCell({
       const H = outer.clientHeight;
       if (W <= 0 || H <= 0) return;
 
-      const sx = W / GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = H / GENERATED_PIXTO_CARD_SIZE.h;
+      const bleedTotal = bleed * 2;
+      const sx = (W - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = (H - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.h;
       const next = Math.min(sx, sy) * scaleMultiplier;
       setScale(Number.isFinite(next) && next > 0 ? next : 0.28 * scaleMultiplier);
     };
@@ -1101,10 +1111,10 @@ function FirstThenPortraitCardCell({
     const ro = new ResizeObserver(update);
     ro.observe(outer);
     return () => ro.disconnect();
-  }, [scaleMultiplier]);
+  }, [bleed, scaleMultiplier]);
 
-  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale;
-  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale;
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
 
   return (
     <div
@@ -1114,7 +1124,10 @@ function FirstThenPortraitCardCell({
         align === "end" ? "justify-end" : "justify-center",
       )}
     >
-      <div className="relative shrink-0" style={{ width: slotW, height: slotH }}>
+      <div
+        className="relative shrink-0"
+        style={{ width: slotW, height: slotH, padding: bleed }}
+      >
         <div
           className="absolute left-0 top-0 origin-top-left"
           style={{
