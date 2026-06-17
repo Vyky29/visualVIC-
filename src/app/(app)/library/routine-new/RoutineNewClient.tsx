@@ -35,26 +35,68 @@ import {
   routineNewStepOrdinal,
   routineNewStepsHeading,
   shellHeaderTitle,
+  tailoredAddCardsFromLibrary,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import type { GeneratedPixtoRoutineStepData } from "@/lib/types/routine";
 import type { Routine } from "@/lib/types/routine";
 import { resolveFeaturedRoutineHomePreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
+import {
+  tailoredParticipantTag,
+} from "@/lib/routines/tailored-routine-meta";
+import type { TailoredParticipantId } from "@/lib/routines/tailored-participants";
 
-type DraftRow = { pickId: string; label: string; imageUrl: string };
+type DraftRow = {
+  pickId: string;
+  label: string;
+  imageUrl: string;
+  generatedPixto?: GeneratedPixtoRoutineStepData;
+};
 
 export function RoutineNewClient({
   backHref = "/library",
+  returnTo,
+  participantId,
+  participantName,
+  editRoutineId,
 }: {
   backHref?: string;
+  returnTo?: string;
+  participantId?: TailoredParticipantId;
+  participantName?: string;
+  editRoutineId?: string;
 } = {}) {
   const router = useRouter();
   const cardUiLang = useCardUiLanguage();
-  const { addRoutine } = useCustomRoutines();
+  const { addRoutine, replaceRoutine, routines, hydrated } = useCustomRoutines();
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [name, setName] = useState("My routine");
-  const [hydrated, setHydrated] = useState(false);
+  const [hydratedDraft, setHydratedDraft] = useState(false);
+  const isEdit = Boolean(editRoutineId);
 
   useEffect(() => {
+    if (!hydrated) return;
+
+    if (editRoutineId) {
+      const existing = routines.find((r) => r.id === editRoutineId);
+      if (existing) {
+        setName(existing.name);
+        setRows(
+          existing.steps.map((step) => ({
+            pickId: step.id,
+            label: step.title,
+            imageUrl:
+              step.imageUrl ??
+              step.generatedPixto?.illustrationUrl ??
+              "",
+            generatedPixto: step.generatedPixto,
+          })),
+        );
+        setHydratedDraft(true);
+        return;
+      }
+    }
+
     const pickIds = readLibrarySelectionDraft();
     const built: DraftRow[] = [];
     for (const pickId of pickIds) {
@@ -64,11 +106,12 @@ export function RoutineNewClient({
           pickId,
           label: card.label,
           imageUrl: card.imageUrl,
+          generatedPixto: card.generatedPixto,
         });
     }
     setRows(built);
-    setHydrated(true);
-  }, []);
+    setHydratedDraft(true);
+  }, [editRoutineId, hydrated, routines]);
 
   const moveUp = useCallback((index: number) => {
     if (index <= 0) return;
@@ -96,15 +139,31 @@ export function RoutineNewClient({
 
   const save = useCallback(() => {
     if (!canSave) return;
-    const steps = rows.flatMap((row, i) =>
-      routineStepsFromLibraryPick(row.pickId, i),
-    );
-    const id = `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+    const steps = rows.flatMap((row, i) => {
+      const fromPick = routineStepsFromLibraryPick(row.pickId, i);
+      if (fromPick.length > 0) return fromPick;
+      return [
+        {
+          id: row.pickId || `lib-step-${i}-saved`,
+          title: row.label,
+          imageUrl: row.imageUrl || undefined,
+          ...(row.generatedPixto ? { generatedPixto: row.generatedPixto } : {}),
+        },
+      ];
+    });
+
+    const id =
+      editRoutineId ??
+      `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+
+    const tags = new Set<string>(["custom", "library"]);
+    if (participantId) tags.add(tailoredParticipantTag(participantId));
+
     const routine: Routine = {
       id,
       name: name.trim(),
       description: routineFromLibraryDescription(cardUiLang),
-      tags: ["custom", "library"],
+      tags: [...tags],
       homePreviewImageUrl: resolveFeaturedRoutineHomePreviewUrl({
         id,
         name: name.trim(),
@@ -112,12 +171,26 @@ export function RoutineNewClient({
       }),
       steps,
     };
-    addRoutine(routine);
-    clearLibrarySelectionDraft();
-    router.push(`/player/${id}`);
-  }, [addRoutine, canSave, name, rows, router, cardUiLang]);
 
-  const empty = hydrated && rows.length === 0;
+    if (editRoutineId) replaceRoutine(routine);
+    else addRoutine(routine);
+
+    clearLibrarySelectionDraft();
+    router.push(returnTo ?? `/player/${id}`);
+  }, [
+    addRoutine,
+    canSave,
+    cardUiLang,
+    editRoutineId,
+    name,
+    participantId,
+    replaceRoutine,
+    returnTo,
+    router,
+    rows,
+  ]);
+
+  const empty = hydratedDraft && rows.length === 0;
 
   return (
     <div className="pb-28">
@@ -132,24 +205,47 @@ export function RoutineNewClient({
       </div>
       <div className="space-y-5 px-4 pt-4">
         {empty ? (
-          <Card className="border border-ink/5 p-4 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
-            {routineNewEmptyLead(cardUiLang)}{" "}
-            <Link
-              href={backHref}
-              className="font-medium text-sage underline-offset-4 hover:underline"
-            >
-              {bottomNavLabel("library", cardUiLang)}
-            </Link>
-            {routineNewEmptyAfterLibrary(cardUiLang)}{" "}
-            <span className="font-medium text-ink">
-              {routineNewEmptySelectWord(cardUiLang)}
-            </span>
-            {routineNewEmptyAfterSelect(cardUiLang)}{" "}
-            <span className="font-medium text-ink">
-              {routineNewEmptyCreateWord(cardUiLang)}
-            </span>
-            .
+          <Card className="space-y-3 border border-ink/5 p-4 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+            <p>
+              {routineNewEmptyLead(cardUiLang)}{" "}
+              <Link
+                href={backHref}
+                className="font-medium text-sage underline-offset-4 hover:underline"
+              >
+                {participantName ?? bottomNavLabel("library", cardUiLang)}
+              </Link>
+              {routineNewEmptyAfterLibrary(cardUiLang)}{" "}
+              <span className="font-medium text-ink">
+                {routineNewEmptySelectWord(cardUiLang)}
+              </span>
+              {routineNewEmptyAfterSelect(cardUiLang)}{" "}
+              <span className="font-medium text-ink">
+                {routineNewEmptyCreateWord(cardUiLang)}
+              </span>
+              .
+            </p>
+            {participantId ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={() => router.push(backHref)}
+              >
+                {tailoredAddCardsFromLibrary(cardUiLang)}
+              </Button>
+            ) : null}
           </Card>
+        ) : null}
+
+        {!empty && participantId && !isEdit ? (
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full"
+            onClick={() => router.push(backHref)}
+          >
+            {tailoredAddCardsFromLibrary(cardUiLang)}
+          </Button>
         ) : null}
 
         <label className="block px-1">
@@ -174,17 +270,19 @@ export function RoutineNewClient({
               <li key={`${row.pickId}-${index}`}>
                 <Card className="flex gap-3 border border-ink/5 p-3">
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-canvas-muted">
-                    <Image
-                      src={row.imageUrl}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="64px"
-                      unoptimized={
-                        row.imageUrl.startsWith("/cards/") ||
-                        row.imageUrl.includes("/cards/")
-                      }
-                    />
+                    {row.imageUrl ? (
+                      <Image
+                        src={row.imageUrl}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                        unoptimized={
+                          row.imageUrl.startsWith("/cards/") ||
+                          row.imageUrl.includes("/cards/")
+                        }
+                      />
+                    ) : null}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[15px] font-semibold text-ink">
@@ -241,7 +339,7 @@ export function RoutineNewClient({
           <Button
             type="button"
             variant="secondary"
-            onClick={() => router.push(backHref)}
+            onClick={() => router.push(returnTo ?? backHref)}
             className="w-full"
           >
             {routineNewBackToLibrary(cardUiLang)}

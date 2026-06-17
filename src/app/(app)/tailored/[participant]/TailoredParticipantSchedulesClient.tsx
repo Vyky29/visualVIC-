@@ -6,6 +6,7 @@ import { use, useEffect, useMemo } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { Header } from "@/components/navigation/Header";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { mockRoutines } from "@/lib/mock/routines";
@@ -15,8 +16,15 @@ import {
   playerKindFirstThen,
   playerKindRoutine,
   shellBackAria,
+  tailoredAddScheduleButton,
+  tailoredEditScheduleButton,
   tailoredParticipantSchedulesIntro,
 } from "@/lib/i18n/app-shell-locale";
+import {
+  canEditTailoredParticipantSchedule,
+  tailoredParticipantEditScheduleHref,
+  tailoredParticipantLibraryHref,
+} from "@/lib/routines/tailored-routine-meta";
 import {
   IKRAM_FIRST_THEN_PACKS,
   ikramFirstThenPackDisplayTitle,
@@ -122,6 +130,16 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {tailoredParticipantSchedulesIntro(participantName, cardUiLang)}
         </p>
+        <div className="px-1">
+          <Button
+            type="button"
+            variant="secondary"
+            className="w-full"
+            onClick={() => router.push(tailoredParticipantLibraryHref(participantId))}
+          >
+            {tailoredAddScheduleButton(cardUiLang)}
+          </Button>
+        </div>
         <ul className="flex flex-col gap-3">
           {ikramFirstThenPacks.map((pack) => {
             const previewUrl = ikramFirstThenPackPreviewUrl(pack.id);
@@ -209,6 +227,10 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
             const sceneIllustration = isPixtoLearnIllustrationOnlyUrl(previewUrl);
             const fillSquareIcon = fullBleedPixto || sceneIllustration;
             const tone = routineVisualTone(routine);
+            const editable = canEditTailoredParticipantSchedule(
+              routine,
+              participantId,
+            );
 
             return (
               <li key={routine.id} className="group">
@@ -219,9 +241,10 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
                     routineSchedulePlayerIndexCardClass(routine),
                   )}
                 >
+                  <div className="flex items-stretch">
                   <Link
                     href={`/player/${routine.id}`}
-                    className="flex gap-4 p-4 transition hover:bg-white/60"
+                    className="flex min-w-0 flex-1 gap-4 p-4 transition hover:bg-white/60"
                   >
                     <div
                       className={cn(
@@ -272,10 +295,22 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
                         {routine.steps.length} {dashboardStepsWord(cardUiLang)}
                       </span>
                     </div>
-                    <span className="self-center text-ink-faint" aria-hidden>
+                    <span className="self-center pr-1 text-ink-faint" aria-hidden>
                       →
                     </span>
                   </Link>
+                  {editable ? (
+                    <Link
+                      href={tailoredParticipantEditScheduleHref(
+                        participantId,
+                        routine.id,
+                      )}
+                      className="flex w-14 shrink-0 flex-col items-center justify-center border-l border-ink/8 text-[11px] font-semibold uppercase tracking-wide text-sage transition hover:bg-sage/5 active:bg-sage/10"
+                    >
+                      {tailoredEditScheduleButton(cardUiLang)}
+                    </Link>
+                  ) : null}
+                  </div>
                 </Card>
               </li>
             );

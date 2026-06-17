@@ -54,8 +54,13 @@ import {
   firstThenDemoRotateForFocusTitle,
   firstThenSlotLabel,
   playerKindRoutine,
+  shellBackAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import {
+  lockScreenLandscape,
+  lockScreenPortrait,
+} from "@/lib/utils/orientation-lock";
 import { cn } from "@/lib/utils/cn";
 
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
@@ -1153,10 +1158,12 @@ const PORTRAIT_MAIN_MIN_H =
 function FirstThenIntroPortraitShell({
   lang,
   children,
+  backHref,
   flushRight = false,
 }: {
   lang: ReturnType<typeof useCardUiLanguage>;
   children: ReactNode;
+  backHref?: string;
   flushRight?: boolean;
 }) {
   return (
@@ -1168,7 +1175,16 @@ function FirstThenIntroPortraitShell({
         PORTRAIT_MAIN_MIN_H,
       )}
     >
-      <header className="flex shrink-0 flex-col items-center gap-1.5 pb-2 pt-0.5 text-center">
+      <header className="relative flex shrink-0 flex-col items-center gap-1.5 pb-2 pt-0.5 text-center">
+        {backHref ? (
+          <Link
+            href={backHref}
+            className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-xl text-[22px] text-ink-subtle transition hover:bg-ink/5 active:bg-ink/10"
+            aria-label={shellBackAria(lang)}
+          >
+            ←
+          </Link>
+        ) : null}
         <PixtoLearnIconMark className="h-10 w-10 rounded-[0.95rem]" />
         <h1 className="text-[1.12rem] font-semibold tracking-tight text-ink">
           {firstThenDemoPageTitle(lang)}
@@ -1187,17 +1203,19 @@ function FirstThenIntroLayout1({
   secondCard,
   lang,
   onFocusMode,
+  backHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
+  backHref?: string;
 }) {
   const firstLabel = firstThenSlotLabel("first", lang);
   const thenLabel = firstThenSlotLabel("then", lang);
 
   return (
-    <FirstThenIntroPortraitShell lang={lang}>
+    <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
       <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1">
         <FirstThenPortraitLabeledRow
           slot="first"
@@ -1237,14 +1255,16 @@ function FirstThenIntroLayout2({
   secondCard,
   lang,
   onFocusMode,
+  backHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
+  backHref?: string;
 }) {
   return (
-    <FirstThenIntroPortraitShell lang={lang}>
+    <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
       <div className="relative w-full max-w-[min(100%,240px)] px-1">
         <FirstThenFocusEntryButton
           lang={lang}
@@ -1270,17 +1290,19 @@ function FirstThenIntroLayout3({
   secondCard,
   lang,
   onFocusMode,
+  backHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
+  backHref?: string;
 }) {
   const firstLabel = firstThenSlotLabel("first", lang);
   const thenLabel = firstThenSlotLabel("then", lang);
 
   return (
-    <FirstThenIntroPortraitShell lang={lang}>
+    <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
       <div className="relative flex w-full max-w-[min(100%,360px)] flex-1 flex-col items-center justify-center px-1 pb-12">
         <div className="flex w-full flex-col items-center gap-3">
           <div className="h-[min(32dvh,272px)] w-full min-h-0">
@@ -1314,14 +1336,16 @@ function FirstThenIntroPortraitScreen({
   secondCard,
   lang,
   onFocusMode,
+  backHref,
 }: {
   layout: FirstThenDemoLayoutId;
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
+  backHref?: string;
 }) {
-  const props = { firstCard, secondCard, lang, onFocusMode };
+  const props = { firstCard, secondCard, lang, onFocusMode, backHref };
   if (layout === "2") return <FirstThenIntroLayout2 {...props} />;
   if (layout === "3") return <FirstThenIntroLayout3 {...props} />;
   return <FirstThenIntroLayout1 {...props} />;
@@ -1403,6 +1427,8 @@ function FirstThenExperienceClient() {
   const isMobileLandscape = useMobileLandscape();
   const [showFocusMode, setShowFocusMode] = useState(false);
 
+  const backHref = fromRoutine?.trim() || routineHref;
+
   useEffect(() => {
     setShowFocusMode(false);
   }, [packId, layout]);
@@ -1413,20 +1439,11 @@ function FirstThenExperienceClient() {
   }, [showFocusMode]);
 
   useEffect(() => {
-    if (!showFocusMode) return;
-
-    const orientation = screen.orientation as ScreenOrientation & {
-      lock?: (orientation: string) => Promise<void>;
-    };
-    if (typeof orientation?.lock !== "function") return;
-
-    void orientation.lock("landscape").catch(() => {
-      /* iOS / some browsers block lock outside installed PWA */
-    });
-
-    return () => {
-      orientation.unlock();
-    };
+    if (showFocusMode) {
+      void lockScreenLandscape();
+      return;
+    }
+    void lockScreenPortrait();
   }, [showFocusMode]);
 
   if (!showFocusMode) {
@@ -1436,6 +1453,7 @@ function FirstThenExperienceClient() {
         firstCard={first}
         secondCard={second}
         lang={lang}
+        backHref={backHref}
         onFocusMode={() => setShowFocusMode(true)}
       />
     );

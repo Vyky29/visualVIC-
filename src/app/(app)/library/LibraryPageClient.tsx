@@ -7,7 +7,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Button } from "@/components/ui/Button";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
@@ -561,6 +561,8 @@ export function LibraryPageClient({
   introBlurbText,
   routineNewHref = "/library/routine-new",
   bottomBarBottomClass = "calc(3.5rem + env(safe-area-inset-bottom, 0px))",
+  focusSection,
+  returnTo,
 }: {
   /** When set, only these library accordion sections are shown (Planner). */
   allowedSections?: ReadonlySet<LibrarySectionId>;
@@ -568,6 +570,9 @@ export function LibraryPageClient({
   introBlurbText?: string;
   routineNewHref?: string;
   bottomBarBottomClass?: string;
+  /** Open this participant / folder section on first paint. */
+  focusSection?: LibrarySectionId;
+  returnTo?: string;
 } = {}) {
   const router = useRouter();
   const cardUiLang = useCardUiLanguage();
@@ -607,6 +612,26 @@ export function LibraryPageClient({
       return next;
     });
   }, []);
+
+  useEffect(() => {
+    if (!focusSection) return;
+    for (const cat of groups) {
+      const inner = grouped.get(cat);
+      if (!inner) continue;
+      for (const section of SECTION_ORDER_BY_CATEGORY[cat]) {
+        if (section !== focusSection) continue;
+        if ((inner.get(section) ?? []).length === 0) continue;
+        const accordionKey = `${cat}::${section}`;
+        setOpenAccordionKeys((prev) => {
+          if (prev.has(accordionKey)) return prev;
+          const next = new Set(prev);
+          next.add(accordionKey);
+          return next;
+        });
+        return;
+      }
+    }
+  }, [focusSection, grouped, groups]);
 
   const togglePick = useCallback((pickId: string) => {
     setOrderedPickIds((prev) => {

@@ -1,5 +1,5 @@
-import { LibraryPageWithStaffGate } from "./LibraryPageWithStaffGate";
+import { LibraryPageWithQuery } from "./LibraryPageWithQuery";
 
 export default function LibraryPage() {
-  return <LibraryPageWithStaffGate />;
+  return <LibraryPageWithQuery />;
 }

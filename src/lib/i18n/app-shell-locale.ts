@@ -887,6 +887,28 @@ export function routineNewSaveButton(lang: CardLanguageCode): string {
   return isEs(lang) ? "Guardar rutina en el dispositivo" : "Save routine locally";
 }
 
+export function tailoredAddScheduleButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Añadir rutina" : "Add schedule";
+}
+
+export function tailoredEditScheduleButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Editar" : "Edit";
+}
+
+export function tailoredPickCardsHint(
+  participantName: string,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    return `Pick cards in ${participantName}'s library folder, then name and save — or edit a saved schedule below.`;
+  }
+  return `Elige tarjetas en la carpeta de ${participantName}, pon nombre y guarda — o edita una rutina guardada abajo.`;
+}
+
+export function tailoredAddCardsFromLibrary(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Elegir tarjetas en biblioteca" : "Pick cards in library";
+}
+
 export function routineNewBackToLibrary(lang: CardLanguageCode): string {
   return isEs(lang) ? "Volver a la biblioteca" : "Back to library";
 }

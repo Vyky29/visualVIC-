@@ -1,5 +1,5 @@
-import { RoutineNewClient } from "./RoutineNewClient";
+import { RoutineNewPageClient } from "./RoutineNewPageClient";
 
 export default function LibraryRoutineNewPage() {
-  return <RoutineNewClient />;
+  return <RoutineNewPageClient />;
 }

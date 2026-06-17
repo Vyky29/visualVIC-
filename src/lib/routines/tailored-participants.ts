@@ -3,6 +3,10 @@ import {
   TAILORED_STOCK_ROUTINE_IDS,
   type TailoredStockRoutineId,
 } from "@/lib/routines/resolve-routine-home-preview";
+import {
+  parseTailoredParticipantTag,
+  routineBelongsToTailoredParticipant,
+} from "@/lib/routines/tailored-routine-meta";
 
 export const TAILORED_PARTICIPANT_IDS = [
   "ikram",
@@ -110,7 +114,8 @@ export function resolveTailoredParticipantSchedules(
   for (const routine of routines) {
     const matchesParticipant =
       stockIds.has(routine.id) ||
-      detectTailoredParticipantFromRoutine(routine) === participantId;
+      parseTailoredParticipantTag(routine.tags) === participantId ||
+      routineBelongsToTailoredParticipant(routine, participantId);
     if (matchesParticipant) byId.set(routine.id, routine);
   }
 

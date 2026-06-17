@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 import { BottomNav } from "@/components/navigation/BottomNav";
@@ -8,6 +9,7 @@ import {
   getFirstThenDemoFocusActive,
   subscribeFirstThenDemoFocus,
 } from "@/lib/experimental/first-then-demo-focus-nav";
+import { lockScreenPortrait } from "@/lib/utils/orientation-lock";
 
 /**
  * Mobile-first shell: single column, max width ~phone, safe-area padding for nav.
@@ -27,11 +29,17 @@ export function AppShell({
   );
   const isFirstThenDemo =
     pathname === "/first-then-demo" || pathname.startsWith("/first-then-demo/");
+  const isFirstThenRoute =
+    pathname === "/first-then" || pathname.startsWith("/first-then/");
   const navHiddenByRoute =
-    pathname === "/first-then" ||
-    pathname.startsWith("/first-then/") ||
+    (isFirstThenRoute && firstThenDemoFocusActive) ||
     (isFirstThenDemo && firstThenDemoFocusActive);
   const effectiveShowNav = showNav && !navHiddenByRoute;
+
+  useEffect(() => {
+    if (firstThenDemoFocusActive) return;
+    void lockScreenPortrait();
+  }, [firstThenDemoFocusActive, pathname]);
 
   const phoneShell = (
     <div className="relative mx-auto min-h-dvh w-full max-w-lg bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
