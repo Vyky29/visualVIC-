@@ -15,6 +15,7 @@ import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-
 import { SwipeableStepCard } from "@/components/schedule/SwipeableStepCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
+import { FOCUS_CARD_STAGE_CLASS } from "@/lib/constants/app-shell-layout";
 import { routineAccentRings } from "@/lib/utils/routine-accent";
 import {
   focusModeAllFinishedTitle,
@@ -92,7 +93,10 @@ function Sheet({
             animate={{ y: 0 }}
             exit={{ y: 16 }}
             transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto w-full max-w-lg rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10"
+            className={cn(
+              "mx-auto w-full rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10",
+              "max-w-lg tablet:max-w-3xl",
+            )}
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[14px] font-medium text-ink/90">{title}</p>
@@ -156,8 +160,8 @@ function FocusCardStage({
         className={cn(
           "relative mx-auto h-full min-h-0 w-full",
           expandedCards
-            ? "max-w-[min(94vw,540px)]"
-            : "max-w-[min(100%,28rem)]",
+            ? FOCUS_CARD_STAGE_CLASS.expanded
+            : FOCUS_CARD_STAGE_CLASS.default,
         )}
       >
         {children}
@@ -392,7 +396,10 @@ export function FocusMode({ routine, exitHref }: Props) {
       className={cn(
         "fixed top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream",
         prefersFineHover
-          ? "left-1/2 w-full max-w-lg -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
+          ? cn(
+              "left-1/2 w-full -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]",
+              "max-w-lg tablet:max-w-3xl",
+            )
           : "left-0 right-0",
       )}
     >

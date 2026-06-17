@@ -38,12 +38,11 @@ import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/Generate
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
-  GENERATED_PIXTO_SCHEDULE_NEXT_W,
-  GENERATED_PIXTO_SCHEDULE_NOW_W,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { useScheduleCardLayout } from "@/lib/hooks/useScheduleCardLayout";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
 
@@ -85,9 +84,6 @@ const focusPixtoPngInsetStyle: CSSProperties = {
   bottom: FOCUS_PIXTO_PNG_INSET_PX,
   left: FOCUS_PIXTO_PNG_INSET_PX,
 };
-
-const GENERATED_WOW_NOW_CARD_W = GENERATED_PIXTO_SCHEDULE_NOW_W;
-const GENERATED_WOW_NEXT_CARD_W = GENERATED_PIXTO_SCHEDULE_NEXT_W;
 
 /** Shared clip + radius for 3D flip faces (front and back must match exactly). */
 const FLIP_CARD_RADIUS_CLASS = GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS;
@@ -135,6 +131,7 @@ export function SwipeableStepCard({
   const hasGeneratedPixto = Boolean(step.generatedPixto);
   const gp = step.generatedPixto;
   const cardUiLang = useCardUiLanguage();
+  const { nowCardMaxW, nextCardMaxW } = useScheduleCardLayout();
   const digitalStepTitle = useMemo(() => {
     if (!gp) return step.title;
     return resolveDigitalPixtoStrings(
@@ -485,7 +482,7 @@ export function SwipeableStepCard({
       ? variant === "hero" && isNow
         ? ({
             width: "100%",
-            maxWidth: `${GENERATED_WOW_NOW_CARD_W}px`,
+            maxWidth: `${nowCardMaxW}px`,
           } satisfies CSSProperties)
         : undefined
       : undefined;
@@ -493,7 +490,7 @@ export function SwipeableStepCard({
     variant === "next"
       ? ({
           width: "100%",
-          maxWidth: `${GENERATED_WOW_NEXT_CARD_W}px`,
+          maxWidth: `${nextCardMaxW}px`,
         } satisfies CSSProperties)
       : undefined;
   const cardStyle = {

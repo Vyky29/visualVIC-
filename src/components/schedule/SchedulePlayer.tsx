@@ -16,6 +16,7 @@ import {
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { cn } from "@/lib/utils/cn";
+import { APP_SHELL_WIDTH_CLASS, SCHEDULE_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardFirstThenCardEyebrow,
@@ -248,7 +249,7 @@ export function SchedulePlayer({
         ) : null}
       </div>
 
-      <div className="mx-auto w-full max-w-[min(100%,21rem)] space-y-6">
+      <div className={cn("mx-auto w-full space-y-6", SCHEDULE_COLUMN_CLASS)}>
         {nowStep ? (
           <motion.section
             initial={{ opacity: 0.92, y: 6 }}
@@ -363,7 +364,10 @@ export function SchedulePlayer({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto w-full max-w-[min(100%,21rem)] rounded-3xl bg-gradient-to-br from-accent-soft/50 to-cream px-5 py-6 text-center ring-1 ring-accent/25"
+          className={cn(
+            "mx-auto w-full rounded-3xl bg-gradient-to-br from-accent-soft/50 to-cream px-5 py-6 text-center ring-1 ring-accent/25",
+            SCHEDULE_COLUMN_CLASS,
+          )}
         >
           <p className="text-[18px] font-semibold text-ink">
             {schedulePlayerRoutineCompleteTitle(cardUiLang)}

@@ -11,6 +11,8 @@ import {
 } from "@/lib/experimental/first-then-demo-focus-nav";
 import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
 import { lockScreenPortrait } from "@/lib/utils/orientation-lock";
+import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
+import { cn } from "@/lib/utils/cn";
 
 /**
  * Mobile-first shell: single column, max width ~phone, safe-area padding for nav.
@@ -43,7 +45,7 @@ export function AppShell({
   }, [firstThenDemoFocusActive, pathname]);
 
   const phoneShell = (
-    <div className="relative mx-auto min-h-dvh w-full max-w-lg bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]">
+    <div className={cn("relative mx-auto min-h-dvh w-full bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]", APP_SHELL_WIDTH_CLASS)}>
       <div
         className={
           effectiveShowNav

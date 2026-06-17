@@ -6,6 +6,7 @@ import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { bottomNavLabel, type BottomNavKey } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
+import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
 
 type NavItem = {
   href: string;
@@ -61,7 +62,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 z-20 w-full max-w-lg -translate-x-1/2 border-t border-ink/5 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md"
+      className={cn(
+        "fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 border-t border-ink/5 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md",
+        APP_SHELL_WIDTH_CLASS,
+      )}
       aria-label="Primary"
     >
       <div className="flex justify-around px-1 pt-1">

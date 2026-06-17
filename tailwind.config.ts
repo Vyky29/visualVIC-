@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        /** iPad Mini portrait (744px) — below default Tailwind `md` (768). */
+        tablet: "740px",
+      },
       colors: {
         canvas: {
           DEFAULT: "#f4f6f4",

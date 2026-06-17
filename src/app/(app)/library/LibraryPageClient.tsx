@@ -85,6 +85,7 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
+import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -660,7 +661,10 @@ export function LibraryPageClient({
   const bottomBar =
     orderedPickIds.length > 0 ? (
       <div
-        className="fixed left-1/2 z-30 w-full max-w-lg -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md"
+        className={cn(
+          "fixed left-1/2 z-30 w-full -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md",
+          APP_SHELL_WIDTH_CLASS,
+        )}
         style={{
           bottom: bottomBarBottomClass,
         }}
