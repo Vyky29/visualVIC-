@@ -445,8 +445,12 @@ export function SwipeableStepCard({
     (variant === "hero" || variant === "focus") &&
     Boolean(completionBackImageUrl) &&
     isNow;
+  const flipCategoryColour = gp?.categoryColour;
   const flipFaceBgClass =
-    variant === "focus" ? "bg-transparent" : "bg-white";
+    variant === "focus" && !flipCategoryColour ? "bg-transparent" : "bg-white";
+  const flipFaceShellStyle = flipCategoryColour
+    ? ({ backgroundColor: flipCategoryColour } satisfies CSSProperties)
+    : undefined;
   const suppressCompletionOutline =
     completionAnimating && completionFlip && !hasGeneratedPixto;
 
@@ -638,7 +642,12 @@ export function SwipeableStepCard({
         {completionFlip ? (
           <div
             className="absolute inset-0 overflow-hidden [perspective:900px]"
-            style={{ perspectiveOrigin: "50% 50%" }}
+            style={{
+              perspectiveOrigin: "50% 50%",
+              ...(flipCategoryColour
+                ? { backgroundColor: flipCategoryColour }
+                : {}),
+            }}
           >
             <motion.div
               initial={false}
@@ -654,6 +663,7 @@ export function SwipeableStepCard({
                 style={{
                   transform: "translateZ(1px)",
                   ...flipFacePreserve3dStyle,
+                  ...flipFaceShellStyle,
                   ...(!gp ? categoryOutlineStyle : {}),
                 }}
               >
@@ -666,7 +676,7 @@ export function SwipeableStepCard({
                     )}
                   >
                     {variant === "focus" ? (
-                      <GeneratedPixtoFocusSlotScale>
+                      <GeneratedPixtoFocusSlotScale categoryOutlineBleed={false}>
                         <GeneratedPixtoCard
                           illustrationUrl={gp.illustrationUrl}
                           title={gp.title}
@@ -682,7 +692,7 @@ export function SwipeableStepCard({
                         />
                       </GeneratedPixtoFocusSlotScale>
                     ) : (
-                      <GeneratedPixtoSlotScale>
+                      <GeneratedPixtoSlotScale categoryOutlineBleed={false}>
                         <GeneratedPixtoCard
                           illustrationUrl={gp.illustrationUrl}
                           title={gp.title}
@@ -795,13 +805,14 @@ export function SwipeableStepCard({
                 style={{
                   transform: "rotateY(180deg) translateZ(1px)",
                   ...flipFacePreserve3dStyle,
+                  ...flipFaceShellStyle,
                 }}
               >
                 {completionBackImageUrl ? (
                   gp ? (
                     <div className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden">
                       {variant === "focus" ? (
-                        <GeneratedPixtoFocusSlotScale>
+                        <GeneratedPixtoFocusSlotScale categoryOutlineBleed={false}>
                           <GeneratedPixtoFlipBackFace
                             backImageUrl={completionBackImageUrl}
                             variant="focus"
@@ -809,7 +820,7 @@ export function SwipeableStepCard({
                           />
                         </GeneratedPixtoFocusSlotScale>
                       ) : (
-                        <GeneratedPixtoSlotScale>
+                        <GeneratedPixtoSlotScale categoryOutlineBleed={false}>
                           <GeneratedPixtoFlipBackFace
                             backImageUrl={completionBackImageUrl}
                             variant="schedule"

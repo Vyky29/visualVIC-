@@ -20,6 +20,22 @@ import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
 import { stepCardVisualTone } from "@/lib/utils/routine-accent";
 
 const CORE_FALLBACK = coreBackCardUrl();
+const TAILORED_NAVY_FALLBACK = "#1E4A73";
+
+function inferTailoredColourFromStep(step: RoutineStep): string | undefined {
+  const haystack = `${step.imageUrl ?? ""} ${step.generatedPixto?.illustrationUrl ?? ""}`.toLowerCase();
+  if (haystack.includes("/ayaan") || haystack.includes("/emmanuel")) {
+    return TAILORED_NAVY_FALLBACK;
+  }
+  if (
+    haystack.includes("/ikram") ||
+    haystack.includes("/serine") ||
+    haystack.includes("tailored")
+  ) {
+    return undefined;
+  }
+  return undefined;
+}
 
 export function resolveCategoryBackCardUrl(
   imageUrl?: string,
@@ -94,9 +110,15 @@ export function resolveCategoryBackCardUrlForStep(
     case "daycentre":
       return dayCentreBackCardUrl();
     case "tailored":
+      return tailoredSchedulesBackCardUrlForCategoryColour(
+        step.generatedPixto?.categoryColour ??
+          inferTailoredColourFromStep(step),
+      );
     case "ayaan":
       return tailoredSchedulesBackCardUrlForCategoryColour(
-        step.generatedPixto?.categoryColour,
+        step.generatedPixto?.categoryColour ??
+          inferTailoredColourFromStep(step) ??
+          TAILORED_NAVY_FALLBACK,
       );
     case "physical":
       return physicalBackCardUrl();

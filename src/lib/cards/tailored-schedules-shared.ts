@@ -39,10 +39,18 @@ export function tailoredSchedulesNavyBackCardUrl(): string {
 
 const TAILORED_NAVY_CATEGORY_COLOUR = "#1E4A73";
 
+function normalizeCategoryHex(colour?: string): string {
+  return colour?.trim().toUpperCase() ?? "";
+}
+
 export function tailoredSchedulesBackCardUrlForCategoryColour(
   categoryColour?: string,
 ): string {
-  if (categoryColour?.trim().toUpperCase() === TAILORED_NAVY_CATEGORY_COLOUR) {
+  const normalized = normalizeCategoryHex(categoryColour);
+  if (
+    normalized === TAILORED_NAVY_CATEGORY_COLOUR ||
+    normalized === "#143D66"
+  ) {
     return tailoredSchedulesNavyBackCardUrl();
   }
   return tailoredSchedulesBackCardUrl();

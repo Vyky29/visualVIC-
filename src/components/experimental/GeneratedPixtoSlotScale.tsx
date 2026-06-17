@@ -4,13 +4,16 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { GENERATED_PIXTO_CARD_SIZE } from "@/components/experimental/GeneratedPixtoCard";
 import { GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX } from "@/lib/constants/generated-pixto-card-sizes";
 
-type Props = { children: ReactNode };
+type Props = { children: ReactNode; categoryOutlineBleed?: boolean };
 
 /**
  * Fits the 744×1054 generated card inside whatever rectangle the parent gives
  * (e.g. schedule NOW 48/65 or Next 510/676 — same footprint as bundled PNG slots).
  */
-export function GeneratedPixtoSlotScale({ children }: Props) {
+export function GeneratedPixtoSlotScale({
+  children,
+  categoryOutlineBleed = true,
+}: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
@@ -21,7 +24,9 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     const update = () => {
       const { width: W, height: H } = outer.getBoundingClientRect();
       if (W <= 0 || H <= 0) return;
-      const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2;
+      const bleed = categoryOutlineBleed
+        ? GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2
+        : 0;
       const sx = (W - bleed) / GENERATED_PIXTO_CARD_SIZE.w;
       const sy = (H - bleed) / GENERATED_PIXTO_CARD_SIZE.h;
       const s = Math.min(sx, sy);
@@ -32,9 +37,11 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     const ro = new ResizeObserver(update);
     ro.observe(outer);
     return () => ro.disconnect();
-  }, []);
+  }, [categoryOutlineBleed]);
 
-  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+  const bleed = categoryOutlineBleed
+    ? GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX
+    : 0;
   const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
   const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
 
@@ -45,7 +52,11 @@ export function GeneratedPixtoSlotScale({ children }: Props) {
     >
       <div
         className="relative mx-auto shrink-0 will-change-transform"
-        style={{ width: slotW, height: slotH, padding: bleed }}
+        style={{
+          width: slotW,
+          height: slotH,
+          ...(bleed > 0 ? { padding: bleed } : {}),
+        }}
       >
         <div
           className="absolute left-0 top-0 origin-top-left"

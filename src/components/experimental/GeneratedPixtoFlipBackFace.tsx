@@ -20,8 +20,8 @@ type Props = {
 };
 
 /**
- * Flip back face — same design frame as the front GeneratedPixto card shell
- * (Focus 384×560 or schedule 744×1054), with rounded corners and object-contain.
+ * Flip back face — fills the same shell as the front; category colour behind
+ * the PNG so 3D flip never shows white gaps against Focus black.
  */
 export function GeneratedPixtoFlipBackFace({
   backImageUrl,
@@ -36,12 +36,13 @@ export function GeneratedPixtoFlipBackFace({
   return (
     <article
       className={cn(
-        "relative overflow-hidden bg-white",
+        "relative overflow-hidden",
         GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
       )}
       style={{
         width: size.w,
         height: size.h,
+        backgroundColor: categoryColour ?? "#ffffff",
         ...GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
         ...(categoryColour
           ? generatedPixtoCategoryOutlineStyle(categoryColour, {
@@ -55,7 +56,7 @@ export function GeneratedPixtoFlipBackFace({
         alt=""
         fill
         unoptimized={isPixtoLearnBundledCardUrl(backImageUrl)}
-        className="object-contain object-center select-none"
+        className="object-cover object-center select-none"
         sizes={`${size.w}px`}
         draggable={false}
       />
