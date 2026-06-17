@@ -33,6 +33,7 @@ import {
   GENERATED_PIXTO_CARD_SIZE,
   GENERATED_PIXTO_FOCUS_CARD_SIZE,
 } from "@/components/experimental/GeneratedPixtoCard";
+import { GeneratedPixtoFlipBackFace } from "@/components/experimental/GeneratedPixtoFlipBackFace";
 import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/GeneratedPixtoFocusSlotScale";
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
@@ -801,35 +802,19 @@ export function SwipeableStepCard({
                     <div className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden">
                       {variant === "focus" ? (
                         <GeneratedPixtoFocusSlotScale>
-                          <div className="relative h-full w-full overflow-hidden">
-                            <Image
-                              src={completionBackImageUrl}
-                              alt=""
-                              fill
-                              unoptimized={isPixtoLearnBundledCardUrl(
-                                completionBackImageUrl,
-                              )}
-                              className="object-cover object-center select-none"
-                              sizes="(max-width: 512px) 100vw, 512px"
-                              draggable={false}
-                            />
-                          </div>
+                          <GeneratedPixtoFlipBackFace
+                            backImageUrl={completionBackImageUrl}
+                            variant="focus"
+                            categoryColour={gp.categoryColour}
+                          />
                         </GeneratedPixtoFocusSlotScale>
                       ) : (
                         <GeneratedPixtoSlotScale>
-                          <div className="relative h-full w-full overflow-hidden">
-                            <Image
-                              src={completionBackImageUrl}
-                              alt=""
-                              fill
-                              unoptimized={isPixtoLearnBundledCardUrl(
-                                completionBackImageUrl,
-                              )}
-                              className="object-cover object-center select-none"
-                              sizes="(max-width: 512px) 100vw, 512px"
-                              draggable={false}
-                            />
-                          </div>
+                          <GeneratedPixtoFlipBackFace
+                            backImageUrl={completionBackImageUrl}
+                            variant="schedule"
+                            categoryColour={gp.categoryColour}
+                          />
                         </GeneratedPixtoSlotScale>
                       )}
                     </div>

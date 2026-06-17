@@ -39,16 +39,16 @@ async function publish(style, src, outDir) {
   }
 
   await fitIllustrationToCard(src, path.join(outDir, `${slug}.png`), {
-    fit: "cover-padded",
+    fit: "contain",
   });
   await fitIllustrationToCard(src, path.join(outDir, `${slug}-focus.png`), {
-    fit: "cover-padded",
+    fit: "contain",
     height: FOCUS_H,
   });
 
   if (style === "3d") {
     await fitIllustrationToCard(src, path.join(emmanuelDir, `${slug}.png`), {
-      fit: "cover-padded",
+      fit: "contain",
     });
   }
 

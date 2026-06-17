@@ -46,6 +46,17 @@ const PACKS = {
       "backcard-tailored.png",
     ),
   },
+  "tailored-navy": {
+    main: { r: 30, g: 74, b: 115 },
+    tint: { r: 232, g: 240, b: 248 },
+    out: path.join(
+      root,
+      "public",
+      "cards",
+      "tailored schedules",
+      "backcard-tailored-navy.png",
+    ),
+  },
 };
 
 function lum(r, g, b) {

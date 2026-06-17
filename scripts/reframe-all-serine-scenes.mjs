@@ -65,14 +65,14 @@ async function main() {
     }
 
     await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`), {
-      fit: "cover-padded",
+      fit: "contain",
     });
     await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
-      fit: "cover-padded",
+      fit: "contain",
       height: FOCUS_H,
     });
     await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`), {
-      fit: "cover-padded",
+      fit: "contain",
     });
 
     console.log("ok:", slug);

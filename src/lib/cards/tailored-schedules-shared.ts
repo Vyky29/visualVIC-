@@ -32,6 +32,22 @@ export function tailoredSchedulesBackCardUrl(): string {
   return `${TAILORED_SCHEDULES_PUBLIC_DIR}/backcard-tailored.png`;
 }
 
+/** Navy tailored back — Ayaan & Emmanuel (`#1E4A73`). */
+export function tailoredSchedulesNavyBackCardUrl(): string {
+  return `${TAILORED_SCHEDULES_PUBLIC_DIR}/backcard-tailored-navy.png`;
+}
+
+const TAILORED_NAVY_CATEGORY_COLOUR = "#1E4A73";
+
+export function tailoredSchedulesBackCardUrlForCategoryColour(
+  categoryColour?: string,
+): string {
+  if (categoryColour?.trim().toUpperCase() === TAILORED_NAVY_CATEGORY_COLOUR) {
+    return tailoredSchedulesNavyBackCardUrl();
+  }
+  return tailoredSchedulesBackCardUrl();
+}
+
 /** Shared cards icon — tint in UI with each pack's `categoryColour`. */
 export function isTailoredSchedulesPackMarkUrl(url: string | undefined): boolean {
   if (!url) return false;
