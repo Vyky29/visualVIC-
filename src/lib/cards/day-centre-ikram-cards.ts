@@ -30,6 +30,13 @@ export const DAY_CENTRE_IKRAM_CATEGORY_LABEL =
 
 export const DAY_CENTRE_IKRAM_PARTICIPANT_LABEL = "Ikram" as const;
 
+/** Schedule Player + Home tile — participant-specific Saturday outing. */
+export const DAY_CENTRE_IKRAM_ROUTINE_NAME = "Ikram · Saturday outing" as const;
+
+/** Pink ribbon on Ikram cards — participant name + tailored schedules. */
+export const DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL =
+  `${DAY_CENTRE_IKRAM_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
+
 /**
  * 4×6 PECS grid — Ikram in pink sweatshirt, one activity per card (reference board).
  * Order matches the shipped photo grid row by row.
@@ -62,11 +69,16 @@ export const DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE: readonly DayCentreIkramStep[] 
   { id: "dci-stop", slug: "stop", title: "Stop" },
 ] as const;
 
-/** Ikram's Saturday schedule (photo 1) — stock routine order. */
+/**
+ * Ikram's Saturday schedule — morning at centre, get ready, Westfield outing, cab home.
+ * All steps use personalised `ikram/scenes/` art in Schedule Player.
+ */
 export const DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] = [
-  { id: "dci-music", slug: "music", title: "Music" },
+  { id: "dci-music", slug: "music", title: "Music at day centre" },
   { id: "dci-cafe", slug: "cafe", title: "Cafe" },
-  { id: "dci-bus", slug: "bus", title: "Bus" },
+  { id: "dci-socks-on", slug: "socks-on", title: "Put socks on" },
+  { id: "dci-shoes-on", slug: "shoes-on", title: "Put shoes on" },
+  { id: "dci-bus", slug: "bus", title: "Bus to Westfield" },
   { id: "dci-westfield", slug: "westfield", title: "Westfield" },
   {
     id: "dci-nail-varnish",
@@ -74,9 +86,9 @@ export const DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] =
     title: "Buy black nail varnish",
   },
   { id: "dci-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
-  { id: "dci-bus-return", slug: "bus-return", title: "Bus" },
+  { id: "dci-bus-return", slug: "bus-return", title: "Bus to day centre" },
   { id: "dci-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
-  { id: "dci-cab", slug: "cab", title: "Cab" },
+  { id: "dci-cab", slug: "cab", title: "Cab home" },
   { id: "dci-home", slug: "home", title: "Home" },
 ] as const;
 
@@ -94,7 +106,7 @@ export const DAY_CENTRE_IKRAM_SEQUENCE: readonly DayCentreIkramStep[] = [
     title: "Buy black nail varnish",
   },
   { id: "dci-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
-  { id: "dci-bus-return", slug: "bus-return", title: "Bus" },
+  { id: "dci-bus-return", slug: "bus-return", title: "Bus to day centre" },
   { id: "dci-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
   { id: "dci-cab", slug: "cab", title: "Cab" },
   { id: "dci-get-dressed", slug: "get-dressed", title: "Get dressed" },
@@ -161,7 +173,7 @@ export function dayCentreIkramFocusImageUrlForStep(step: DayCentreIkramStep): st
   return dayCentreIkramSceneFocusUrl(step.slug);
 }
 
-/** Ikram · day centre routine — all 10 steps use personalised `ikram/scenes/` art. */
+/** Ikram · Saturday routine — schedule steps use personalised `ikram/scenes/` art. */
 export function dayCentreIkramScheduleImageUrlForStep(step: DayCentreIkramStep): string {
   if (IKRAM_SCHEDULE_SCENE_SLUGS.has(step.slug)) {
     return dayCentreIkramSceneUrl(step.slug);

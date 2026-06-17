@@ -155,6 +155,31 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   shops: { en: "shops", es: "tiendas" },
   playground: { en: "playground", es: "parque infantil" },
   "swimming-pool": { en: "swimming pool", es: "piscina" },
+  "bus-return": { en: "bus to day centre", es: "autobús al centro de día" },
+  "bean-bag": { en: "relaxation bean bag", es: "puff de relajación" },
+  "black-nail-varnish": {
+    en: "buy black nail varnish",
+    es: "comprar esmalte negro",
+  },
+  mcdonalds: { en: "mcdonald's", es: "mcdonald's" },
+  cab: { en: "cab home", es: "taxi a casa" },
+  "jigsaw-puzzle": { en: "jigsaw puzzle", es: "puzzle" },
+  "mixing-bowl": { en: "mixing bowl", es: "bol de mezclar" },
+  pizza: { en: "pizza", es: "pizza" },
+  painting: { en: "painting", es: "pintar" },
+  market: { en: "market", es: "mercado" },
+  "therapy-ball-bouncing": {
+    en: "bounce on therapy ball",
+    es: "rebotar en la pelota terapéutica",
+  },
+  treadmill: { en: "treadmill", es: "cinta de correr" },
+  "row-machine": { en: "row machine", es: "máquina de remo" },
+  "exercise-bike": { en: "exercise bike", es: "bici estática" },
+  "sandbag-carry": { en: "carry sandbag", es: "cargar saco de arena" },
+  "therapy-ball": { en: "therapy ball", es: "pelota terapéutica" },
+  skierg: { en: "ski machine", es: "máquina de esquí" },
+  stretching: { en: "stretching", es: "estiramientos" },
+  finished: { en: "finished", es: "terminado" },
 };
 
 type DigitalPackId = "airport" | "hotel" | "daycentre";
@@ -211,6 +236,10 @@ export function resolveDigitalPixtoStrings(
       nextCategory = lc(
         ui === "es" ? "ikram · rutinas a medida" : "ikram · tailored schedules",
       );
+    } else if (category.toLowerCase().includes("serine")) {
+      nextCategory = lc(
+        ui === "es" ? "serine · rutinas a medida" : "serine · tailored schedules",
+      );
     } else if (category.toLowerCase().includes("tailored")) {
       nextCategory = lc(
         ui === "es" ? "rutinas a medida" : "tailored schedules",
@@ -242,8 +271,12 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Centro de día",
   },
   "ikram-day-centre": {
-    en: "Ikram · tailored schedules",
-    es: "Ikram · rutinas a medida",
+    en: "Ikram · Saturday outing",
+    es: "Ikram · salida del sábado",
+  },
+  "serine-day-centre": {
+    en: "Serine · Physical activity",
+    es: "Serine · actividad física",
   },
   physical: {
     en: "Physical Activity",
@@ -263,6 +296,14 @@ export function libraryDayCentreIkramLabel(language: CardLanguageCode): string {
   return stockRoutineDisplayName(
     "ikram-day-centre",
     "Ikram · tailored schedules",
+    language,
+  );
+}
+
+export function libraryDayCentreSerineLabel(language: CardLanguageCode): string {
+  return stockRoutineDisplayName(
+    "serine-day-centre",
+    "Serine · Physical activity",
     language,
   );
 }

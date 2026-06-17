@@ -68,7 +68,7 @@ export function resolveFirstThenDemoPack(
 
 /** Player route to return to after Focus (schedule context). */
 export function firstThenDemoPackRoutineHref(packId: FirstThenDemoPackId): string {
-  return packId === "ikram-home" ? "/player/at-the-day-centre" : "/player/at-the-hotel";
+  return packId === "ikram-home" ? "/player/ikram-day-centre" : "/player/at-the-hotel";
 }
 
 /**

@@ -39,6 +39,10 @@ import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   dayCentreIkramImageUrlForStep,
 } from "@/lib/cards/day-centre-ikram-cards";
+import {
+  DAY_CENTRE_SERINE_LIBRARY_SEQUENCE,
+  dayCentreSerineImageUrlForStep,
+} from "@/lib/cards/day-centre-serine-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import {
   PHYSICAL_3D_GYM_SEQUENCE,
@@ -52,6 +56,7 @@ import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
+  DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
@@ -72,6 +77,7 @@ export type PickablePackId =
   | "hotel"
   | "daycentre"
   | "dcikram"
+  | "dcserine"
   | "phy2d"
   | "phy3d"
   | "phy3g";
@@ -89,6 +95,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "hotel" ||
     ns === "daycentre" ||
     ns === "dcikram" ||
+    ns === "dcserine" ||
     ns === "phy2d" ||
     ns === "phy3d" ||
     ns === "phy3g"
@@ -339,6 +346,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcikram", s.slug),
       label: s.title,
       imageUrl: dayCentreIkramImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_SERINE_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_SERINE_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcserine", s.slug),
+      label: s.title,
+      imageUrl: dayCentreSerineImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

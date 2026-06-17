@@ -23,10 +23,13 @@ import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
+import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
+import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
 
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
@@ -166,7 +169,7 @@ export const mockRoutines: Routine[] = [
     id: "at-the-day-centre",
     name: "Day centre",
     description:
-      "Saturday outing — illustrated PixtoLearn cards (general day centre pack)",
+      "Mixed illustrated cards — breakfast, activities, cooking, outing and relaxation",
     tags: ["home", "activity"],
     homePreviewImageUrl:
       DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
@@ -189,14 +192,26 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "ikram-day-centre",
-    name: "Ikram · tailored schedules",
+    name: DAY_CENTRE_IKRAM_ROUTINE_NAME,
     description:
-      "Ikram's Saturday schedule — personalised photo cards (Tailored schedules pilot)",
+      "Saturday at day centre — cafe, Westfield shopping, McDonald's, cab home (personalised photos)",
     tags: ["extra"],
     homePreviewImageUrl: DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "ikram-day-centre",
       DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "serine-day-centre",
+    name: DAY_CENTRE_SERINE_ROUTINE_NAME,
+    description:
+      "Gym routine — therapy ball, treadmill, rower, bike, sandbags, stretching (personalised cartoon)",
+    tags: ["extra"],
+    homePreviewImageUrl: DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "serine-day-centre",
+      DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
 ];

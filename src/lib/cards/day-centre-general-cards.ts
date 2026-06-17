@@ -240,20 +240,18 @@ export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgf-stretching", slug: "stretching", title: "Stretching" },
 ] as const;
 
-/** Saturday schedule (photo 1) — general illustrations; return bus reuses `bus` art. */
+/** Mixed illustrated day — personal care, activities, cooking, outing (Schedule Player). */
 export const DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgs-breakfast", slug: "breakfast", title: "Breakfast" },
+  { id: "dcgs-wash-hands", slug: "wash-hands", title: "Wash hands" },
   { id: "dcgs-music", slug: "music", title: "Music" },
+  { id: "dcgs-jigsaw", slug: "jigsaw-puzzle", title: "Jigsaw puzzle" },
+  { id: "dcgs-mixing-bowl", slug: "mixing-bowl", title: "Mixing bowl" },
+  { id: "dcgs-pizza", slug: "pizza", title: "Pizza" },
+  { id: "dcgs-painting", slug: "painting", title: "Painting" },
+  { id: "dcgs-bus", slug: "bus", title: "Bus to town" },
+  { id: "dcgs-market", slug: "market", title: "Market" },
   { id: "dcgs-cafe", slug: "cafe", title: "Cafe" },
-  { id: "dcgs-bus", slug: "bus", title: "Bus" },
-  { id: "dcgs-westfield", slug: "westfield", title: "Westfield" },
-  {
-    id: "dcgs-nail-varnish",
-    slug: "black-nail-varnish",
-    title: "Buy black nail varnish",
-  },
-  { id: "dcgs-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
-  { id: "dcgs-bus-return", slug: "bus", title: "Bus" },
   { id: "dcgs-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
-  { id: "dcgs-cab", slug: "cab", title: "Cab" },
   { id: "dcgs-home", slug: "home", title: "Home" },
 ] as const;

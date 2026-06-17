@@ -42,13 +42,15 @@ import {
   dashboardRoutineCountLabel,
   dashboardRoutinesSectionTitle,
   dashboardSchedulePlayerTitle,
+  dashboardPhysicalActivitySectionTitle,
   dashboardStepsWord,
   dashboardTailoredSchedulesSectionTitle,
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
-import { dayCentreIkramPackMarkUrl } from "@/lib/cards/day-centre-ikram-cards";
+import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
+import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
@@ -78,10 +80,18 @@ const HOME_EXTRA_PACK_GROUPS = [
     extraTileCount: 0,
   },
   {
+    key: "home::physical",
+    routineIds: new Set(["physical"]),
+    ringClass: "ring-[#43A047]/80",
+    logoUrl: physicalPackMarkUrl,
+    title: dashboardPhysicalActivitySectionTitle,
+    extraTileCount: 0,
+  },
+  {
     key: "home::tailored",
-    routineIds: new Set(["ikram-day-centre"]),
+    routineIds: new Set(["ikram-day-centre", "serine-day-centre"]),
     ringClass: "ring-[#E05C9A]/80",
-    logoUrl: dayCentreIkramPackMarkUrl,
+    logoUrl: tailoredSchedulesPackMarkUrl,
     title: dashboardTailoredSchedulesSectionTitle,
     extraTileCount: 1,
   },
@@ -211,6 +221,101 @@ function BuilderQuickIcon() {
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function FirstThenQuickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <rect
+        x="5"
+        y="4.5"
+        width="6.5"
+        height="8.5"
+        rx="1.6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="12.5"
+        y="11"
+        width="6.5"
+        height="8.5"
+        rx="1.6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M8.25 8.25h0M17.75 14.75h0"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function LibraryQuickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <rect
+        x="4.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="13.5"
+        y="4.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <rect
+        x="4.5"
+        y="13.5"
+        width="6"
+        height="6"
+        rx="1.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M14 15.5h5.5M14 18.5h4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function TemplatesQuickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <path
+        d="M8.5 5.5h9a1.5 1.5 0 0 1 1.5 1.5v11a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 7 18V7a1.5 1.5 0 0 1 1.5-1.5Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M9.25 9.25h5.5M9.25 12h5.5M9.25 14.75h3.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M5.75 8.25V17a1.25 1.25 0 0 0 1.25 1.25H15"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -679,7 +784,7 @@ export default function DashboardPage() {
           {extraPackGroups.map((group) => {
             const accordionKey = group.key;
             const open = isAccordionOpen(accordionKey);
-            const routineCount = group.routines.length + group.extraTileCount;
+            const routineCount = group.routines.length;
 
             return (
               <div
@@ -787,13 +892,14 @@ export default function DashboardPage() {
 
         <section className="grid grid-cols-2 gap-3">
           <Link href="/first-then">
-            <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
-                {dashboardFirstThenCardEyebrow(cardUiLang)}
-              </p>
-              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                {dashboardFirstThenCardTitle(cardUiLang)}
-              </p>
+            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+              <DashboardCenteredIntro
+                icon={<FirstThenQuickIcon />}
+                ringClass="ring-[#E05C9A]/75"
+                iconClassName="text-[#E05C9A]"
+                category={dashboardFirstThenCardEyebrow(cardUiLang)}
+                title={dashboardFirstThenCardTitle(cardUiLang)}
+              />
             </Card>
           </Link>
           <Link href="/builder">
@@ -801,29 +907,32 @@ export default function DashboardPage() {
               <DashboardCenteredIntro
                 icon={<BuilderQuickIcon />}
                 ringClass="ring-[#6b8f9e]/75"
+                iconClassName="text-[#5f8392]"
                 category={dashboardQuickBuilderEyebrow(cardUiLang)}
                 title={dashboardQuickBuilderTitle(cardUiLang)}
               />
             </Card>
           </Link>
           <Link href="/library">
-            <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
-                {bottomNavLabel("library", cardUiLang)}
-              </p>
-              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                {dashboardQuickLibraryTitle(cardUiLang)}
-              </p>
+            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+              <DashboardCenteredIntro
+                icon={<LibraryQuickIcon />}
+                ringClass="ring-accent/70"
+                iconClassName="text-accent"
+                category={bottomNavLabel("library", cardUiLang)}
+                title={dashboardQuickLibraryTitle(cardUiLang)}
+              />
             </Card>
           </Link>
           <Link href="/templates">
-            <Card className="flex h-full min-h-[108px] flex-col justify-center border border-ink/5 p-4 transition hover:shadow-soft">
-              <p className="line-clamp-2 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere]">
-                {bottomNavLabel("templates", cardUiLang)}
-              </p>
-              <p className="mt-2 line-clamp-2 break-words text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                {dashboardQuickTemplatesTitle(cardUiLang)}
-              </p>
+            <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
+              <DashboardCenteredIntro
+                icon={<TemplatesQuickIcon />}
+                ringClass="ring-[#cf9a1b]/75"
+                iconClassName="text-[#cf9a1b]"
+                category={bottomNavLabel("templates", cardUiLang)}
+                title={dashboardQuickTemplatesTitle(cardUiLang)}
+              />
             </Card>
           </Link>
         </section>

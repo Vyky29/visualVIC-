@@ -12,6 +12,7 @@ import {
   playerIndexIntro,
   playerKindRoutine,
 } from "@/lib/i18n/app-shell-locale";
+import { useSchedulePlayerRecentOrder } from "@/lib/preferences/use-schedule-player-recent-order";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
@@ -47,6 +48,7 @@ export default function PlayerIndexPage() {
     () => mockRoutines.filter(isStockPackRoutine),
     [],
   );
+  const sortedRoutines = useSchedulePlayerRecentOrder(stockRoutines);
 
   return (
     <div>
@@ -56,7 +58,7 @@ export default function PlayerIndexPage() {
           {playerIndexIntro(cardUiLang)}
         </p>
         <ul className="flex flex-col gap-3">
-          {stockRoutines.map((r) => {
+          {sortedRoutines.map((r) => {
             const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
             const previewPixto =
               Boolean(previewUrl) &&

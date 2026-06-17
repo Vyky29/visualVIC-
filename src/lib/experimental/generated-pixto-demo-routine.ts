@@ -30,7 +30,7 @@ import {
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
-  DAY_CENTRE_IKRAM_CATEGORY_LABEL,
+  DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
   dayCentreIkramFocusImageUrlForStep,
   dayCentreIkramImageUrlForStep,
   dayCentreIkramScheduleFocusImageUrlForStep,
@@ -38,6 +38,17 @@ import {
   dayCentreIkramPackMarkUrl,
   type DayCentreIkramStep,
 } from "@/lib/cards/day-centre-ikram-cards";
+import {
+  DAY_CENTRE_SERINE_LIBRARY_SEQUENCE,
+  DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL,
+  dayCentreSerineFocusImageUrlForStep,
+  dayCentreSerineImageUrlForStep,
+  dayCentreSerineScheduleFocusImageUrlForStep,
+  dayCentreSerineScheduleImageUrlForStep,
+  dayCentreSerinePackMarkUrl,
+  type DayCentreSerineStep,
+} from "@/lib/cards/day-centre-serine-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
@@ -166,7 +177,7 @@ function ikramGeneratedCardProps(step: DayCentreIkramStep) {
   return {
     illustrationUrl: dayCentreIkramImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_IKRAM_CATEGORY_LABEL),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -182,7 +193,7 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
   return {
     illustrationUrl: dayCentreIkramScheduleImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_IKRAM_CATEGORY_LABEL),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -192,6 +203,38 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
 /** Day Centre · Ikram — Saturday schedule routine (personalised scenes only). */
 export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => ikramScheduleGeneratedCardProps(s));
+
+/** Tailored schedules · Serine — physical activity library. */
+function serineGeneratedCardProps(step: DayCentreSerineStep) {
+  const focusIllustrationUrl = dayCentreSerineFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreSerineImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreSerinePackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_SERINE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_SERINE_LIBRARY_SEQUENCE.map((s) => serineGeneratedCardProps(s));
+
+function serineScheduleGeneratedCardProps(step: DayCentreSerineStep) {
+  const focusIllustrationUrl = dayCentreSerineScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreSerineScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreSerinePackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Serine · Physical activity — gym schedule (personalised cartoon scenes). */
+export const DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE.map((s) => serineScheduleGeneratedCardProps(s));
 
 /** @deprecated Use {@link DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_GENERATED_CARD_PROPS = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS;

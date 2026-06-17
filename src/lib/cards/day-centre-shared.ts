@@ -6,6 +6,7 @@ export const DAY_CENTRE_PUBLIC_DIR = `/cards/${DAY_CENTRE_DIR_SEG}`;
 
 export const DAY_CENTRE_GENERAL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/general` as const;
 export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
+export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -48,4 +49,30 @@ export function dayCentreIkramSceneUrl(slug: string): string {
 /** Ikram scene illustration — Focus mode (531×663). */
 export function dayCentreIkramSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_IKRAM_DIR}/scenes/${slug}-focus.png`;
+}
+
+/** Serine 2D cartoon avatar (primary until 3D avatar is published). */
+export function dayCentreSerineAvatarUrl(): string {
+  return "/avatars/serine-cartoon-2d.png";
+}
+
+/** Serine 3D cartoon avatar. */
+export function dayCentreSerineAvatar3dUrl(): string {
+  return "/avatars/serine-cartoon.png";
+}
+
+export function dayCentreSerinePackMarkUrl(): string {
+  return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre-serine.png`;
+}
+
+export function dayCentreSerineImageUrl(slug: string): string {
+  return `${DAY_CENTRE_SERINE_DIR}/${slug}.png`;
+}
+
+export function dayCentreSerineSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_SERINE_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreSerineSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_SERINE_DIR}/scenes/${slug}-focus.png`;
 }

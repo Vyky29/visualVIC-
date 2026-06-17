@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { use } from "react";
+import { use, useEffect } from "react";
 import { Header } from "@/components/navigation/Header";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
@@ -15,6 +15,7 @@ import {
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
+import { touchSchedulePlayerRoutine } from "@/lib/preferences/schedule-player-recent-preference";
 
 function SchedulePlayerLoadingLine() {
   const lang = useCardUiLanguage();
@@ -46,6 +47,10 @@ export function PlayerDetailClient({
   const { routines: custom } = useCustomRoutines();
   const cardUiLang = useCardUiLanguage();
   const routine = resolveAnyRoutine(id, custom);
+
+  useEffect(() => {
+    if (routine) touchSchedulePlayerRoutine(id);
+  }, [id, routine]);
 
   if (!routine) {
     return (

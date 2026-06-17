@@ -34,6 +34,7 @@ import {
 } from "@/lib/cards/physical-library-groups";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { dayCentreIkramPackMarkUrl } from "@/lib/cards/day-centre-ikram-cards";
+import { dayCentreSerinePackMarkUrl } from "@/lib/cards/day-centre-serine-cards";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -95,7 +96,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
   readonly LibrarySectionId[]
 > = {
   "self-care": ["bt", "shower", "dress-on", "dress-off"],
-  home: ["core", "airport", "hotel", "daycentre", "dcikram"],
+  home: ["core", "airport", "hotel", "daycentre", "dcikram", "dcserine"],
   activity: ["climb", "swim", "physical"],
 };
 
@@ -110,6 +111,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   daycentre: dayCentrePackMarkUrl(),
   dcikram: dayCentreIkramPackMarkUrl(),
+  dcserine: dayCentreSerinePackMarkUrl(),
   physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
@@ -126,6 +128,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   hotel: "ring-[#8C1E2E]/70",
   daycentre: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
+  dcserine: "ring-[#E05C9A]/75",
   physical: "ring-[#43A047]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
@@ -143,6 +146,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   hotel: "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink",
   daycentre: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   dcikram: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
+  dcserine: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
   phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
   phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
@@ -275,18 +279,67 @@ function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
   );
 }
 
+function LibrarySubgroupHeader({
+  label,
+  iconUrl,
+  ringClass,
+}: {
+  label: string;
+  iconUrl?: string;
+  ringClass: string;
+}) {
+  const unopt = iconUrl ? cardImageUnoptimized(iconUrl) : false;
+  const cropIcon =
+    iconUrl &&
+    !iconUrl.includes("day%20centre") &&
+    !iconUrl.includes("/physical/") &&
+    !iconUrl.includes("tailored%20schedules") &&
+    !iconUrl.includes("/images/library");
+
+  return (
+    <div className="flex min-w-0 items-center gap-2 px-0.5">
+      {iconUrl ? (
+        <span
+          className={cn(
+            "relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1px] ring-offset-cream/40 sm:h-8 sm:w-8",
+            ringClass,
+          )}
+        >
+          <Image
+            src={iconUrl}
+            alt=""
+            fill
+            unoptimized={unopt}
+            className={cn(
+              cropIcon
+                ? "object-cover object-top scale-[1.22]"
+                : "object-contain p-0.5",
+            )}
+            sizes="32px"
+          />
+        </span>
+      ) : null}
+      <p className="min-w-0 flex-1 break-words text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+        {label}
+      </p>
+    </div>
+  );
+}
+
 function LibraryPackThematicSubgroups({
   section,
   cards,
   selectedSet,
   onToggle,
   cardUiLang,
+  ringClass,
 }: {
   section: LibrarySectionId;
   cards: readonly PickableLibraryCard[];
   selectedSet: ReadonlySet<string>;
   onToggle: (pickId: string) => void;
   cardUiLang: CardLanguageCode;
+  ringClass: string;
 }) {
   if (section === "daycentre") {
     return DAY_CENTRE_LIBRARY_GROUP_ORDER.map((groupId) => {
@@ -297,9 +350,11 @@ function LibraryPackThematicSubgroups({
       if (groupCards.length === 0) return null;
       return (
         <section key={groupId} className="space-y-1.5">
-          <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-            {dayCentreLibraryGroupLabel(groupId, cardUiLang)}
-          </p>
+          <LibrarySubgroupHeader
+            label={dayCentreLibraryGroupLabel(groupId, cardUiLang)}
+            iconUrl={groupCards[0]?.imageUrl}
+            ringClass={ringClass}
+          />
           <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
             {groupCards.map((v) => (
               <LibraryPickTile
@@ -324,9 +379,11 @@ function LibraryPackThematicSubgroups({
       if (groupCards.length === 0) return null;
       return (
         <section key={groupId} className="space-y-1.5">
-          <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-            {physicalLibraryGroupLabel(groupId, cardUiLang)}
-          </p>
+          <LibrarySubgroupHeader
+            label={physicalLibraryGroupLabel(groupId, cardUiLang)}
+            iconUrl={groupCards[0]?.imageUrl}
+            ringClass={ringClass}
+          />
           <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
             {groupCards.map((v) => (
               <LibraryPickTile
@@ -350,9 +407,11 @@ function LibraryPackThematicSubgroups({
     if (groupCards.length === 0) return null;
     return (
       <section key={groupId} className="space-y-1.5">
-        <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-          {ikramLibraryGroupLabel(groupId, cardUiLang)}
-        </p>
+        <LibrarySubgroupHeader
+          label={ikramLibraryGroupLabel(groupId, cardUiLang)}
+          iconUrl={groupCards[0]?.imageUrl}
+          ringClass={ringClass}
+        />
         <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
           {groupCards.map((v) => (
             <LibraryPickTile
@@ -595,6 +654,7 @@ export function LibraryPageClient() {
                   const cropHeaderIcon =
                     section !== "daycentre" &&
                     section !== "dcikram" &&
+                    section !== "dcserine" &&
                     section !== "physical";
 
                   return (
@@ -687,14 +747,17 @@ export function LibraryPageClient() {
                                 selectedSet={selectedSet}
                                 onToggle={togglePick}
                                 cardUiLang={cardUiLang}
+                                ringClass={ringClass}
                               />
                             ) : (
                               <>
                                 {objectCards.length > 0 ? (
                                   <section className="space-y-1.5">
-                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
-                                      {librarySubheadingObjects(cardUiLang)}
-                                    </p>
+                                    <LibrarySubgroupHeader
+                                      label={librarySubheadingObjects(cardUiLang)}
+                                      iconUrl={SECTION_HEADER_ICON[section]}
+                                      ringClass={ringClass}
+                                    />
                                     <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                                       {objectCards.map((v) => (
                                         <LibraryPickTile
@@ -709,9 +772,14 @@ export function LibraryPageClient() {
                                 ) : null}
                                 {stepCards.length > 0 ? (
                                   <section className="space-y-1.5">
-                                    <p className="break-words px-0.5 text-[10px] font-semibold uppercase leading-snug tracking-[0.16em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
-                                      {librarySubheadingSteps(cardUiLang)}
-                                    </p>
+                                    <LibrarySubgroupHeader
+                                      label={librarySubheadingSteps(cardUiLang)}
+                                      iconUrl={
+                                        stepCards[0]?.imageUrl ??
+                                        SECTION_HEADER_ICON[section]
+                                      }
+                                      ringClass={ringClass}
+                                    />
                                     <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                                       {stepCards.map((v) => (
                                         <LibraryPickTile

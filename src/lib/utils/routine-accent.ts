@@ -32,6 +32,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "at-the-day-centre",
   "physical",
   "ikram-day-centre",
+  "serine-day-centre",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -295,6 +296,7 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
     if (c.includes("physical activity")) return "physical";
     if (c.includes("tailored")) return "tailored";
     if (c.includes("ikram")) return "tailored";
+    if (c.includes("serine")) return "tailored";
     if (c.includes("day centre")) return "daycentre";
     if (c.includes("hotel")) return "hotel";
     if (c.includes("airport")) return "airport";
@@ -461,7 +463,7 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   ) {
     return "physical";
   }
-  if (includesAny(haystack, ["/day centre/ikram", "/ikram/"])) {
+  if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/"])) {
     return "tailored";
   }
   if (includesAny(haystack, ["day centre", "day%20centre", "daycentre"])) {
@@ -580,6 +582,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
+  if (id === "serine-day-centre") return "tailored";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -630,6 +633,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
+  if (id === "serine-day-centre") return "tailored";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);

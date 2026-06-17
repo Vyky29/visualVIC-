@@ -3,6 +3,7 @@ import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preferen
 import {
   libraryAirportHotelLabel,
   libraryDayCentreIkramLabel,
+  libraryDayCentreSerineLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
@@ -70,6 +71,12 @@ export function dashboardTailoredSchedulesSectionTitle(
   lang: CardLanguageCode,
 ): string {
   return isEs(lang) ? "Rutinas a medida" : "Tailored schedules";
+}
+
+export function dashboardPhysicalActivitySectionTitle(
+  lang: CardLanguageCode,
+): string {
+  return isEs(lang) ? "Actividad física" : "Physical Activity";
 }
 
 export function dashboardSchedulePlayerTitle(lang: CardLanguageCode): string {
@@ -149,6 +156,7 @@ export type LibraryPackSectionId =
   | "hotel"
   | "daycentre"
   | "dcikram"
+  | "dcserine"
   | "physical"
   | "climb"
   | "swim";
@@ -161,6 +169,7 @@ export function libraryPackSectionTitle(
   if (section === "hotel") return libraryAirportHotelLabel("hotel", lang);
   if (section === "daycentre") return libraryAirportHotelLabel("daycentre", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
+  if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";
   }
