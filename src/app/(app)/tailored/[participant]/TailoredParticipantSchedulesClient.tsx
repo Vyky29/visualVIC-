@@ -12,10 +12,17 @@ import { mockRoutines } from "@/lib/mock/routines";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardStepsWord,
+  playerKindFirstThen,
   playerKindRoutine,
   shellBackAria,
   tailoredParticipantSchedulesIntro,
 } from "@/lib/i18n/app-shell-locale";
+import {
+  IKRAM_FIRST_THEN_PACKS,
+  ikramFirstThenPackDisplayTitle,
+  ikramFirstThenPackHref,
+  ikramFirstThenPackPreviewUrl,
+} from "@/lib/routines/ikram-first-then-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
@@ -101,6 +108,8 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
   }
 
   const participantName = tailoredParticipantDisplayName(participantId);
+  const ikramFirstThenPacks =
+    participantId === "ikram" ? IKRAM_FIRST_THEN_PACKS : [];
 
   return (
     <div>
@@ -114,6 +123,82 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
           {tailoredParticipantSchedulesIntro(participantName, cardUiLang)}
         </p>
         <ul className="flex flex-col gap-3">
+          {ikramFirstThenPacks.map((pack) => {
+            const previewUrl = ikramFirstThenPackPreviewUrl(pack.id);
+            const previewPixto =
+              Boolean(previewUrl) &&
+              (isPixtoLearnBundledCardUrl(previewUrl) ||
+                isPixtoLearnIllustrationOnlyUrl(previewUrl));
+            const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
+            const sceneIllustration = isPixtoLearnIllustrationOnlyUrl(previewUrl);
+            const fillSquareIcon = fullBleedPixto || sceneIllustration;
+
+            return (
+              <li key={pack.id} className="group">
+                <Card
+                  omitInsetRing
+                  className={cn(
+                    "overflow-hidden p-0 shadow-card transition-shadow duration-200",
+                    "border-[#E05C9A]/24 bg-[#fde8f4]/95 text-[#E05C9A]",
+                  )}
+                >
+                  <Link
+                    href={ikramFirstThenPackHref(pack.id)}
+                    className="flex gap-4 p-4 transition hover:bg-white/60"
+                  >
+                    <div
+                      className={cn(
+                        "relative h-[72px] w-[72px] shrink-0 overflow-hidden",
+                        previewPixto
+                          ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
+                          : "bg-canvas-muted",
+                      )}
+                    >
+                      {previewUrl ? (
+                        <Image
+                          src={previewUrl}
+                          alt=""
+                          fill
+                          unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
+                          className={cn(
+                            "object-cover object-center",
+                            fillSquareIcon &&
+                              cn(
+                                pixtoBundledCardObjectPositionTopClass,
+                                "!h-[132%] !max-h-none w-full",
+                              ),
+                          )}
+                          style={
+                            fillSquareIcon ? { top: 0, bottom: "auto" } : undefined
+                          }
+                          sizes="72px"
+                        />
+                      ) : null}
+                    </div>
+                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                      <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+                        {playerKindFirstThen(cardUiLang)}
+                      </p>
+                      <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                        {ikramFirstThenPackDisplayTitle(pack.id, cardUiLang)}
+                      </p>
+                      <span
+                        className={cn(
+                          "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
+                          STEP_CHIP_CLASS.tailored,
+                        )}
+                      >
+                        2 {dashboardStepsWord(cardUiLang)}
+                      </span>
+                    </div>
+                    <span className="self-center text-ink-faint" aria-hidden>
+                      →
+                    </span>
+                  </Link>
+                </Card>
+              </li>
+            );
+          })}
           {schedules.map((routine) => {
             const previewUrl = resolveSchedulePlayerIndexPreviewUrl(routine);
             const previewPixto =

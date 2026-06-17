@@ -1,13 +1,15 @@
 import type { GeneratedPixtoCardProps } from "@/components/experimental/GeneratedPixtoCard";
-import { DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE } from "@/lib/cards/day-centre-ikram-cards";
-import {
-  DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
-  HOTEL_GENERATED_CARD_PROPS,
-} from "@/lib/experimental/generated-pixto-demo-routine";
+import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
-import { firstThenDemoIkramHomeThenTitle } from "@/lib/i18n/app-shell-locale";
+import {
+  IKRAM_FIRST_THEN_PACK_IDS,
+  isIkramFirstThenPackId,
+  normalizeIkramFirstThenPackId,
+  resolveIkramFirstThenPack,
+  type IkramFirstThenPackId,
+} from "@/lib/routines/ikram-first-then-packs";
 
-export type FirstThenDemoPackId = "hotel" | "ikram-home";
+export type FirstThenDemoPackId = "hotel" | IkramFirstThenPackId;
 
 export type FirstThenDemoLayoutId = "1" | "2" | "3";
 
@@ -25,50 +27,36 @@ export type FirstThenDemoPack = {
   second: GeneratedPixtoCardProps;
 };
 
-function ikramScheduleCard(slug: string): GeneratedPixtoCardProps {
-  const index = DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.findIndex((s) => s.slug === slug);
-  const card = DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[index];
-  if (!card) {
-    throw new Error(`Missing Ikram schedule card for slug: ${slug}`);
-  }
-  return card;
-}
-
-function lc(s: string): string {
-  return s.toLowerCase();
-}
-
 export function parseFirstThenDemoPackId(
   raw: string | null | undefined,
 ): FirstThenDemoPackId {
-  return raw === "ikram-home" ? "ikram-home" : "hotel";
+  if (raw === "hotel") return "hotel";
+  const ikram = normalizeIkramFirstThenPackId(raw);
+  if (ikram) return ikram;
+  return "ikram-cab-home";
 }
 
 export function resolveFirstThenDemoPack(
   packId: FirstThenDemoPackId,
   lang: CardLanguageCode,
 ): FirstThenDemoPack {
-  if (packId === "ikram-home") {
+  if (packId === "hotel") {
     return {
-      id: "ikram-home",
-      first: ikramScheduleCard("cab"),
-      second: {
-        ...ikramScheduleCard("home"),
-        title: lc(firstThenDemoIkramHomeThenTitle(lang)),
-      },
+      id: "hotel",
+      first: HOTEL_GENERATED_CARD_PROPS[3],
+      second: HOTEL_GENERATED_CARD_PROPS[4],
     };
   }
 
-  return {
-    id: "hotel",
-    first: HOTEL_GENERATED_CARD_PROPS[3],
-    second: HOTEL_GENERATED_CARD_PROPS[4],
-  };
+  const { first, second } = resolveIkramFirstThenPack(packId, lang);
+  return { id: packId, first, second };
 }
 
 /** Player route to return to after Focus (schedule context). */
 export function firstThenDemoPackRoutineHref(packId: FirstThenDemoPackId): string {
-  return packId === "ikram-home" ? "/player/ikram-day-centre" : "/player/at-the-hotel";
+  return isIkramFirstThenPackId(packId)
+    ? "/tailored/ikram"
+    : "/player/at-the-hotel";
 }
 
 /**
@@ -83,7 +71,19 @@ export function resolveFirstThenDemoRoutineHref(
     onlyFirstThen?: boolean;
   },
 ): string {
-  if (options?.onlyFirstThen) return "/dashboard";
+  if (options?.onlyFirstThen) {
+    const from = options?.from?.trim();
+    if (
+      from &&
+      (/^\/tailored\/[\w-]+$/.test(from) ||
+        from === "/dashboard" ||
+        from.startsWith("/day-centre"))
+    ) {
+      return from;
+    }
+    if (isIkramFirstThenPackId(packId)) return "/tailored/ikram";
+    return "/dashboard";
+  }
   const from = options?.from?.trim();
   if (from && /^\/player\/[\w-]+$/.test(from)) return from;
   return firstThenDemoPackRoutineHref(packId);
@@ -99,3 +99,5 @@ export function parseFirstThenDemoOnlyFirstThen(
 export function firstThenDemoPackPreviewUrl(packId: FirstThenDemoPackId): string {
   return resolveFirstThenDemoPack(packId, "en").second.illustrationUrl;
 }
+
+export { IKRAM_FIRST_THEN_PACK_IDS, type IkramFirstThenPackId };

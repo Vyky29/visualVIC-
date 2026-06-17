@@ -953,7 +953,7 @@ export default function DashboardPage() {
                       })}
                       {group.key === "home::tailored" && !isRestricted ? (
                         <Link
-                          href="/first-then?pack=ikram-home"
+                          href="/first-then?pack=ikram-cab-home"
                           className="col-span-2 block"
                         >
                           <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
@@ -965,7 +965,7 @@ export default function DashboardPage() {
                                 )}
                               >
                                 <Image
-                                  src={firstThenDemoPackPreviewUrl("ikram-home")}
+                                  src={firstThenDemoPackPreviewUrl("ikram-cab-home")}
                                   alt=""
                                   fill
                                   className="object-contain object-center"
@@ -999,7 +999,7 @@ export default function DashboardPage() {
         {!isRestricted ? (
         <section className="space-y-3">
           <div className="grid grid-cols-3 gap-2">
-          <Link href="/first-then?pack=ikram-home">
+          <Link href="/first-then?pack=ikram-cab-home">
             <Card className="flex h-full min-h-[104px] flex-col items-center justify-center border border-ink/5 px-1 py-3 transition hover:shadow-soft">
               <DashboardCenteredIntro
                 compact

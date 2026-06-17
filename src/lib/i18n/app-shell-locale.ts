@@ -167,6 +167,23 @@ export function firstThenDemoIkramHomeThenTitle(lang: CardLanguageCode): string 
   return isEs(lang) ? "casa con muchie" : "home with muchie";
 }
 
+export function ikramFirstThenPackTitle(
+  packId: "ikram-sit-walk" | "ikram-toilet-hub" | "ikram-cab-home",
+  lang: CardLanguageCode,
+): string {
+  if (packId === "ikram-sit-walk") {
+    return isEs(lang) ? "Sentarse → Caminar" : "Sit down → Walk";
+  }
+  if (packId === "ikram-toilet-hub") {
+    return isEs(lang) ? "Baño → Sala hub" : "Toilet → Hub room";
+  }
+  return isEs(lang) ? "Taxi → Casa con Muchie" : "Cab → Home with Muchie";
+}
+
+export function playerKindFirstThen(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Primero / Después" : "First & Then";
+}
+
 export function dashboardNoPreview(lang: CardLanguageCode): string {
   return isEs(lang) ? "Sin vista previa" : "No preview";
 }
