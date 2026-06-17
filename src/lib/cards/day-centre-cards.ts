@@ -57,8 +57,23 @@ export {
 } from "@/lib/cards/day-centre-serine-cards";
 
 export {
+  DAY_CENTRE_AYAAN_CATEGORY_LABEL,
+  DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE,
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_AYAAN_SEQUENCE,
+  dayCentreAyaanFocusImageUrlForStep,
+  dayCentreAyaanImageUrlForStep,
+  dayCentreAyaanScheduleFocusImageUrlForStep,
+  dayCentreAyaanScheduleImageUrlForStep,
+  type DayCentreAyaanStep,
+} from "@/lib/cards/day-centre-ayaan-cards";
+
+export {
   DAY_CENTRE_PUBLIC_DIR,
   dayCentreBackCardUrl,
+  dayCentreAyaanAvatarUrl,
+  dayCentreAyaanSceneFocusUrl,
+  dayCentreAyaanSceneUrl,
   dayCentreIkramAvatarLeopardUrl,
   dayCentreIkramAvatarUrl,
   dayCentreIkramPackMarkUrl,
@@ -66,8 +81,10 @@ export {
   dayCentreIkramSceneUrl,
   dayCentreSerineAvatar3dUrl,
   dayCentreSerineAvatarUrl,
+  dayCentreSerineLibraryAvatarUrl,
   dayCentreSerinePackMarkUrl,
   dayCentreSerineSceneFocusUrl,
   dayCentreSerineSceneUrl,
+  dayCentreHubRoomImageUrl,
   dayCentrePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";

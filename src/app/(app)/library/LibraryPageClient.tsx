@@ -32,7 +32,7 @@ import {
   PHYSICAL_LIBRARY_GROUP_ORDER,
   physicalLibraryGroupFromPickNamespace,
 } from "@/lib/cards/physical-library-groups";
-import { dayCentrePackMarkUrl, dayCentreIkramAvatarUrl, dayCentreSerineAvatarUrl } from "@/lib/cards/day-centre-shared";
+import { dayCentreHubRoomImageUrl, dayCentreIkramAvatarUrl, dayCentreSerineLibraryAvatarUrl, dayCentreAyaanAvatarUrl } from "@/lib/cards/day-centre-shared";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -94,7 +94,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
   readonly LibrarySectionId[]
 > = {
   "self-care": ["bt", "shower", "dress-on", "dress-off"],
-  home: ["core", "airport", "hotel", "daycentre", "dcikram", "dcserine"],
+  home: ["core", "airport", "hotel", "daycentre", "dcikram", "dcserine", "dcayaan"],
   activity: ["climb", "swim", "physical"],
 };
 
@@ -107,11 +107,10 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   core: coreImageUrl("wash-hands"),
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
-  daycentre:
-    DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[0]?.illustrationUrl ??
-    dayCentrePackMarkUrl(),
+  daycentre: dayCentreHubRoomImageUrl(),
   dcikram: dayCentreIkramAvatarUrl(),
-  dcserine: dayCentreSerineAvatarUrl(),
+  dcserine: dayCentreSerineLibraryAvatarUrl(),
+  dcayaan: dayCentreAyaanAvatarUrl(),
   physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
@@ -129,6 +128,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   daycentre: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
+  dcayaan: "ring-[#E05C9A]/75",
   physical: "ring-[#43A047]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
@@ -147,6 +147,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   daycentre: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   dcikram: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   dcserine: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
+  dcayaan: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
   phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
   phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
@@ -655,6 +656,7 @@ export function LibraryPageClient() {
                     section !== "daycentre" &&
                     section !== "dcikram" &&
                     section !== "dcserine" &&
+                    section !== "dcayaan" &&
                     section !== "physical";
 
                   return (

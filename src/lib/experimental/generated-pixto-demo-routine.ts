@@ -49,9 +49,20 @@ import {
   type DayCentreSerineStep,
 } from "@/lib/cards/day-centre-serine-cards";
 import {
+  DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE,
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL,
+  dayCentreAyaanFocusImageUrlForStep,
+  dayCentreAyaanImageUrlForStep,
+  dayCentreAyaanScheduleFocusImageUrlForStep,
+  dayCentreAyaanScheduleImageUrlForStep,
+  type DayCentreAyaanStep,
+} from "@/lib/cards/day-centre-ayaan-cards";
+import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
   dayCentreSerineAvatarUrl,
+  dayCentreAyaanAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
@@ -235,6 +246,38 @@ function serineScheduleGeneratedCardProps(step: DayCentreSerineStep) {
 /** Serine · Physical activity — gym schedule (personalised cartoon scenes). */
 export const DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE.map((s) => serineScheduleGeneratedCardProps(s));
+
+/** Tailored schedules · Ayaan — physical activity library. */
+function ayaanGeneratedCardProps(step: DayCentreAyaanStep) {
+  const focusIllustrationUrl = dayCentreAyaanFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreAyaanImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreAyaanAvatarUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE.map((s) => ayaanGeneratedCardProps(s));
+
+function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
+  const focusIllustrationUrl = dayCentreAyaanScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreAyaanScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreAyaanAvatarUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Ayaan · Physical activity — gym schedule (personalised cartoon scenes). */
+export const DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => ayaanScheduleGeneratedCardProps(s));
 
 /** @deprecated Use {@link DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_GENERATED_CARD_PROPS = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS;

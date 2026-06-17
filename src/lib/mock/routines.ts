@@ -24,12 +24,14 @@ import {
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
+import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
 
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
@@ -212,6 +214,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "serine-day-centre",
       DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ayaan-day-centre",
+    name: DAY_CENTRE_AYAAN_ROUTINE_NAME,
+    description:
+      "Gym routine — therapy ball, elastic band, sandbag, weights, weight ball, BOSU, treadmill (personalised cartoon)",
+    tags: ["extra"],
+    homePreviewImageUrl: DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    steps: routineStepsFromGeneratedCardProps(
+      "ayaan-day-centre",
+      DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
 ];

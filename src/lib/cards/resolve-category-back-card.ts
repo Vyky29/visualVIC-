@@ -33,7 +33,7 @@ export function resolveCategoryBackCardUrl(
     return atTheHotelBackCardUrl();
   }
   if (path.includes("day%20centre")) {
-    if (path.includes("/ikram") || path.includes("/serine")) {
+    if (path.includes("/ikram") || path.includes("/serine") || path.includes("/ayaan")) {
       return tailoredSchedulesBackCardUrl();
     }
     return dayCentreBackCardUrl();

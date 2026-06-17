@@ -4,6 +4,7 @@ import {
   libraryAirportHotelLabel,
   libraryDayCentreIkramLabel,
   libraryDayCentreSerineLabel,
+  libraryDayCentreAyaanLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
@@ -157,6 +158,7 @@ export type LibraryPackSectionId =
   | "daycentre"
   | "dcikram"
   | "dcserine"
+  | "dcayaan"
   | "physical"
   | "climb"
   | "swim";
@@ -170,6 +172,7 @@ export function libraryPackSectionTitle(
   if (section === "daycentre") return libraryAirportHotelLabel("daycentre", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
+  if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";
   }

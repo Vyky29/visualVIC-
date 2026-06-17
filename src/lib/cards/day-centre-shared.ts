@@ -7,6 +7,7 @@ export const DAY_CENTRE_PUBLIC_DIR = `/cards/${DAY_CENTRE_DIR_SEG}`;
 export const DAY_CENTRE_GENERAL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/general` as const;
 export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
 export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
+export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -15,9 +16,14 @@ export function dayCentrePackMarkUrl(): string {
   return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre.png`;
 }
 
-/** Ikram 3D cartoon avatar (32, pink) — profile + pack mark fallback. */
+/** Hub room photo — Library accordion icon for Day centre section. */
+export function dayCentreHubRoomImageUrl(): string {
+  return `${DAY_CENTRE_PUBLIC_DIR}/hub-room.png`;
+}
+
+/** Ikram library icon — pink sweatshirt + black cat on sofa. */
 export function dayCentreIkramAvatarUrl(): string {
-  return "/avatars/ikram-cartoon.png";
+  return "/avatars/ikram-library.png";
 }
 
 /** Ikram 3D cartoon variant (32, leopard print). */
@@ -56,6 +62,11 @@ export function dayCentreSerineAvatarUrl(): string {
   return "/avatars/serine-cartoon.png";
 }
 
+/** Serine 2D close-up — Library accordion icon. */
+export function dayCentreSerineLibraryAvatarUrl(): string {
+  return "/avatars/serine-cartoon-2d.png";
+}
+
 /** Alias when explicit 3D cartoon art ships. */
 export function dayCentreSerineAvatar3dUrl(): string {
   return dayCentreSerineAvatarUrl();
@@ -75,4 +86,21 @@ export function dayCentreSerineSceneUrl(slug: string): string {
 
 export function dayCentreSerineSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_SERINE_DIR}/scenes/${slug}-focus.png`;
+}
+
+/** Ayaan 3D cartoon avatar — library header + pack mark. */
+export function dayCentreAyaanAvatarUrl(): string {
+  return "/avatars/ayaan-cartoon.png";
+}
+
+export function dayCentreAyaanImageUrl(slug: string): string {
+  return `${DAY_CENTRE_AYAAN_DIR}/${slug}.png`;
+}
+
+export function dayCentreAyaanSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_AYAAN_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreAyaanSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_AYAAN_DIR}/scenes/${slug}-focus.png`;
 }

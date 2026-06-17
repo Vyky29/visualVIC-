@@ -42,14 +42,12 @@ import {
   dashboardRoutineCountLabel,
   dashboardRoutinesSectionTitle,
   dashboardSchedulePlayerTitle,
-  dashboardPhysicalActivitySectionTitle,
   dashboardStepsWord,
   dashboardTailoredSchedulesSectionTitle,
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
-import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
@@ -80,16 +78,8 @@ const HOME_EXTRA_PACK_GROUPS = [
     extraTileCount: 0,
   },
   {
-    key: "home::physical",
-    routineIds: new Set(["physical"]),
-    ringClass: "ring-[#43A047]/80",
-    logoUrl: physicalPackMarkUrl,
-    title: dashboardPhysicalActivitySectionTitle,
-    extraTileCount: 0,
-  },
-  {
     key: "home::tailored",
-    routineIds: new Set(["ikram-day-centre", "serine-day-centre"]),
+    routineIds: new Set(["ikram-day-centre", "serine-day-centre", "ayaan-day-centre"]),
     ringClass: "ring-[#E05C9A]/80",
     logoUrl: tailoredSchedulesPackMarkUrl,
     title: dashboardTailoredSchedulesSectionTitle,

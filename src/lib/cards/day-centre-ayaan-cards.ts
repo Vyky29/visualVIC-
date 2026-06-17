@@ -1,0 +1,89 @@
+/**
+ * Ayaan · Physical activity — personalised cartoon pack (2D + 3D).
+ * Drop scene PNGs into `public/cards/day centre/ayaan/scenes/{slug}.png`.
+ */
+
+import {
+  dayCentreAyaanImageUrl,
+  dayCentreAyaanSceneFocusUrl,
+  dayCentreAyaanSceneUrl,
+  dayCentreAyaanAvatarUrl,
+} from "@/lib/cards/day-centre-shared";
+import {
+  TAILORED_SCHEDULES_CATEGORY_COLOUR,
+  TAILORED_SCHEDULES_CATEGORY_LABEL,
+} from "@/lib/cards/tailored-schedules-shared";
+
+export {
+  TAILORED_SCHEDULES_CATEGORY_COLOUR as DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
+  dayCentreAyaanAvatarUrl as dayCentreAyaanPackMarkUrl,
+};
+
+export type DayCentreAyaanStep = {
+  id: string;
+  slug: string;
+  title: string;
+};
+
+export const DAY_CENTRE_AYAAN_CATEGORY_LABEL =
+  TAILORED_SCHEDULES_CATEGORY_LABEL;
+
+export const DAY_CENTRE_AYAAN_PARTICIPANT_LABEL = "Ayaan" as const;
+
+export const DAY_CENTRE_AYAAN_ROUTINE_NAME =
+  "Ayaan · Physical activity" as const;
+
+export const DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL =
+  `${DAY_CENTRE_AYAAN_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
+
+/** Gym / PE schedule — Ayaan in every illustration. */
+export const DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE: readonly DayCentreAyaanStep[] =
+  [
+    { id: "dca-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+    { id: "dca-elastic-band", slug: "elastic-band", title: "Elastic band" },
+    { id: "dca-sandbag", slug: "sandbag", title: "Sandbag" },
+    { id: "dca-weights", slug: "weights", title: "Weights" },
+    { id: "dca-weight-ball", slug: "weight-ball", title: "Weight ball" },
+    {
+      id: "dca-throwing-ball-on-bosu",
+      slug: "throwing-ball-on-bosu",
+      title: "Throwing ball on BOSU",
+    },
+    { id: "dca-treadmill", slug: "treadmill", title: "Treadmill" },
+  ] as const;
+
+export const DAY_CENTRE_AYAAN_SEQUENCE: readonly DayCentreAyaanStep[] =
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE;
+
+export const DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE: readonly DayCentreAyaanStep[] =
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE;
+
+const AYAAN_SCENE_SLUGS = new Set(
+  DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => s.slug),
+);
+
+export function dayCentreAyaanImageUrlForStep(step: DayCentreAyaanStep): string {
+  if (AYAAN_SCENE_SLUGS.has(step.slug)) {
+    return dayCentreAyaanSceneUrl(step.slug);
+  }
+  return dayCentreAyaanImageUrl(step.slug);
+}
+
+export function dayCentreAyaanFocusImageUrlForStep(
+  step: DayCentreAyaanStep,
+): string | undefined {
+  if (!AYAAN_SCENE_SLUGS.has(step.slug)) return undefined;
+  return dayCentreAyaanSceneFocusUrl(step.slug);
+}
+
+export function dayCentreAyaanScheduleImageUrlForStep(
+  step: DayCentreAyaanStep,
+): string {
+  return dayCentreAyaanSceneUrl(step.slug);
+}
+
+export function dayCentreAyaanScheduleFocusImageUrlForStep(
+  step: DayCentreAyaanStep,
+): string | undefined {
+  return dayCentreAyaanSceneFocusUrl(step.slug);
+}
