@@ -32,7 +32,14 @@ import {
   PHYSICAL_LIBRARY_GROUP_ORDER,
   physicalLibraryGroupFromPickNamespace,
 } from "@/lib/cards/physical-library-groups";
-import { dayCentreHubRoomImageUrl, dayCentreIkramAvatarUrl, dayCentreSerineLibraryAvatarUrl, dayCentreAyaanLibraryAvatarUrl, dayCentreEmmanuelLibraryAvatarUrl } from "@/lib/cards/day-centre-shared";
+import {
+  dayCentreAyaanLibraryPackIconUrl,
+  dayCentreEmmanuelLibraryPackIconUrl,
+  dayCentreHubRoomImageUrl,
+  dayCentreIkramLibraryPackIconUrl,
+  dayCentreSerineLibraryPackIconUrl,
+  isDayCentreTailoredPackIconUrl,
+} from "@/lib/cards/day-centre-shared";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -110,10 +117,10 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   daycentre: dayCentreHubRoomImageUrl(),
-  dcikram: dayCentreIkramAvatarUrl(),
-  dcserine: dayCentreSerineLibraryAvatarUrl(),
-  dcayaan: dayCentreAyaanLibraryAvatarUrl(),
-  dcemmanuel: dayCentreEmmanuelLibraryAvatarUrl(),
+  dcikram: dayCentreIkramLibraryPackIconUrl(),
+  dcserine: dayCentreSerineLibraryPackIconUrl(),
+  dcayaan: dayCentreAyaanLibraryPackIconUrl(),
+  dcemmanuel: dayCentreEmmanuelLibraryPackIconUrl(),
   physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
@@ -275,6 +282,19 @@ function groupByCategoryAndSection(): Map<
     if (list) list.push(c);
   }
   return out;
+}
+
+function libraryPackHeaderImageClass(
+  iconSrc: string,
+  cropHeaderIcon: boolean,
+): string {
+  if (isDayCentreTailoredPackIconUrl(iconSrc)) {
+    return "object-cover object-center";
+  }
+  if (cropHeaderIcon) {
+    return "object-cover object-top scale-[1.26]";
+  }
+  return "object-contain p-1.5 sm:p-1.5";
 }
 
 function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
@@ -678,11 +698,8 @@ export function LibraryPageClient({
                   const iconSrc = SECTION_HEADER_ICON[section];
                   const iconUnopt = cardImageUnoptimized(iconSrc);
                   const cropHeaderIcon =
+                    !isDayCentreTailoredPackIconUrl(iconSrc) &&
                     section !== "daycentre" &&
-                    section !== "dcikram" &&
-                    section !== "dcserine" &&
-                    section !== "dcayaan" &&
-                    section !== "dcemmanuel" &&
                     section !== "physical";
 
                   return (
@@ -714,10 +731,9 @@ export function LibraryPageClient({
                                 alt=""
                                 fill
                                 unoptimized={iconUnopt}
-                                className={cn(
-                                  cropHeaderIcon
-                                    ? "object-cover object-top scale-[1.26]"
-                                    : "object-contain p-1.5 sm:p-1.5",
+                                className={libraryPackHeaderImageClass(
+                                  iconSrc,
+                                  cropHeaderIcon,
                                 )}
                                 style={
                                   cropHeaderIcon

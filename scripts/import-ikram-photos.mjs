@@ -33,6 +33,7 @@ const PHOTOS = {
   pinkShirt: "image-6ed93bd2-2d4b-40ca-beb0-60b8e36b5361.png",
   cartoonPink: "ikram-cartoon-pink-adult.png",
   cartoonLeopard: "ikram-cartoon-leopard-adult.png",
+  cartoonLeopard2d: "ikram-cartoon-leopard-2d-adult.png",
 };
 
 /** Activity-matched real photos (slug → asset key). */
@@ -91,6 +92,18 @@ async function main() {
       .png()
       .toFile(path.join(avatarDir, "ikram-cartoon-leopard.png"));
     console.log("avatar variant (leopard adult)");
+  }
+
+  const cartoonLeopard2dSrc = path.join(assets, PHOTOS.cartoonLeopard2d);
+  if (fs.existsSync(cartoonLeopard2dSrc)) {
+    await sharp(cartoonLeopard2dSrc)
+      .png()
+      .toFile(path.join(avatarDir, "ikram-cartoon-leopard-2d.png"));
+    fs.copyFileSync(
+      cartoonLeopard2dSrc,
+      path.join(avatarDir, "_references", PHOTOS.cartoonLeopard2d),
+    );
+    console.log("avatar variant (leopard 2D adult)");
   }
 
   const photoSrc = {};

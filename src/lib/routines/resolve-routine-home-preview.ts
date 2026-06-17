@@ -1,15 +1,19 @@
 import {
-  dayCentreAyaanAvatarUrl,
   dayCentreAyaanSceneUrl,
-  dayCentreEmmanuelAvatarUrl,
+  dayCentreAyaanTailoredHomeAvatarUrl,
   dayCentreEmmanuelSceneUrl,
-  dayCentreIkramAvatarUrl,
+  dayCentreEmmanuelTailoredHomeAvatarUrl,
+  dayCentreHubRoomImageUrl,
   dayCentreIkramSceneUrl,
-  dayCentreSerineAvatarUrl,
+  dayCentreIkramTailoredHomeAvatarUrl,
   dayCentreSerineSceneUrl,
+  dayCentreSerineTailoredHomeAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
-import { isPixtoLearnIllustrationOnlyUrl } from "@/lib/utils/visual-card-url";
+import {
+  isPixtoLearnFullBleedCardUrl,
+  isPixtoLearnIllustrationOnlyUrl,
+} from "@/lib/utils/visual-card-url";
 
 /** Tailored stock routine ids on Home. */
 export const TAILORED_STOCK_ROUTINE_IDS = [
@@ -27,13 +31,13 @@ export function tailoredScheduleCloseUpPreviewUrl(
 ): string | undefined {
   switch (routineId as TailoredStockRoutineId) {
     case "ikram-day-centre":
-      return dayCentreIkramAvatarUrl();
+      return dayCentreIkramTailoredHomeAvatarUrl();
     case "serine-day-centre":
-      return dayCentreSerineAvatarUrl();
+      return dayCentreSerineTailoredHomeAvatarUrl();
     case "ayaan-day-centre":
-      return dayCentreAyaanAvatarUrl();
+      return dayCentreAyaanTailoredHomeAvatarUrl();
     case "emmanuel-day-centre":
-      return dayCentreEmmanuelAvatarUrl();
+      return dayCentreEmmanuelTailoredHomeAvatarUrl();
     default:
       return undefined;
   }
@@ -104,4 +108,40 @@ export function resolveTailoredScheduleHomePreviewUrl(
     routine.homePreviewImageUrl ??
     stepPreviewUrl(routine.steps[0] ?? ({} as RoutineStep))
   );
+}
+
+/**
+ * Schedule Player index — square icon fills like airport / hotel (cover crop).
+ * Uses action scenes for tailored packs, not avatar close-ups.
+ */
+export function resolveSchedulePlayerIndexPreviewUrl(
+  routine: Routine,
+): string | undefined {
+  const tailoredAction = tailoredScheduleActionPreviewUrl(routine.id);
+  if (tailoredAction) return tailoredAction;
+
+  if (routine.id === "at-the-day-centre") {
+    return dayCentreHubRoomImageUrl();
+  }
+
+  for (const step of routine.steps) {
+    const url = stepPreviewUrl(step);
+    if (!url || url.startsWith("/avatars/")) continue;
+    if (
+      isPixtoLearnIllustrationOnlyUrl(url) ||
+      isPixtoLearnFullBleedCardUrl(url)
+    ) {
+      return url;
+    }
+  }
+
+  const fallback =
+    routine.homePreviewImageUrl ??
+    stepPreviewUrl(routine.steps[0] ?? ({} as RoutineStep));
+
+  if (fallback?.startsWith("/avatars/")) {
+    return stepPreviewUrl(routine.steps[0] ?? ({} as RoutineStep)) ?? fallback;
+  }
+
+  return fallback;
 }

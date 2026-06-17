@@ -22,7 +22,13 @@ import {
   routineVisualTone,
   type RoutineVisualTone,
 } from "@/lib/utils/routine-accent";
-import { isPixtoLearnBundledCardUrl } from "@/lib/utils/visual-card-url";
+import {
+  isPixtoLearnBundledCardUrl,
+  isPixtoLearnFullBleedCardUrl,
+  isPixtoLearnIllustrationOnlyUrl,
+  pixtoBundledCardObjectPositionTopClass,
+} from "@/lib/utils/visual-card-url";
+import { resolveSchedulePlayerIndexPreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
 
 const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   brushing: "border-[#91C24C]/30 bg-sage-mist/85 text-[#6a8f3a]",
@@ -60,11 +66,14 @@ export default function PlayerIndexPage() {
         </p>
         <ul className="flex flex-col gap-3">
           {sortedRoutines.map((r) => {
-            const previewUrl = r.homePreviewImageUrl ?? r.steps[0]?.imageUrl;
+            const previewUrl = resolveSchedulePlayerIndexPreviewUrl(r);
             const previewPixto =
               Boolean(previewUrl) &&
               (isPixtoLearnBundledCardUrl(previewUrl) ||
                 Boolean(r.steps[0]?.generatedPixto));
+            const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
+            const sceneIllustration = isPixtoLearnIllustrationOnlyUrl(previewUrl);
+            const fillSquareIcon = fullBleedPixto || sceneIllustration;
             const tone = routineVisualTone(r);
             return (
               <li key={r.id} className="group">
@@ -81,8 +90,10 @@ export default function PlayerIndexPage() {
                   >
                     <div
                       className={cn(
-                        "relative h-[72px] w-[72px] shrink-0 overflow-hidden bg-canvas-muted",
-                        previewPixto && GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+                        "relative h-[72px] w-[72px] shrink-0 overflow-hidden",
+                        previewPixto
+                          ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
+                          : "bg-canvas-muted",
                       )}
                     >
                       {previewUrl ? (
@@ -90,7 +101,18 @@ export default function PlayerIndexPage() {
                           src={previewUrl}
                           alt=""
                           fill
-                          className="object-cover"
+                          unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
+                          className={cn(
+                            "object-cover object-center",
+                            fillSquareIcon &&
+                              cn(
+                                pixtoBundledCardObjectPositionTopClass,
+                                "!h-[132%] !max-h-none w-full",
+                              ),
+                          )}
+                          style={
+                            fillSquareIcon ? { top: 0, bottom: "auto" } : undefined
+                          }
                           sizes="72px"
                         />
                       ) : null}
