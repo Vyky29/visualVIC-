@@ -44,6 +44,12 @@ export const SERINE_PHYSICAL_SCHEDULE = [
       "walking forward in a gym carrying a large sandbag with orange ends and black middle, both hands on strap handles, mid-stride, white t-shirt, dark grey joggers, pink trainers, green lanyard",
   },
   {
+    slug: "sandbag-shoulders",
+    title: "Sandbag on shoulders",
+    scene:
+      "walking forward in a gym with a large pink sandbag across shoulders and neck, both hands gripping black handles near head, mid-stride, white t-shirt, dark grey joggers, pink trainers, green lanyard",
+  },
+  {
     slug: "weights-on-bosu",
     title: "Weights on BOSU",
     scene:

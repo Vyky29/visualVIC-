@@ -49,6 +49,11 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
     { id: "dcs-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
     { id: "dcs-sandbag-carry", slug: "sandbag-carry", title: "Walk with sandbag" },
     {
+      id: "dcs-sandbag-shoulders",
+      slug: "sandbag-shoulders",
+      title: "Sandbag on shoulders",
+    },
+    {
       id: "dcs-weights-on-bosu",
       slug: "weights-on-bosu",
       title: "Weights on BOSU",
