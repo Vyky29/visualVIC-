@@ -57,8 +57,7 @@ import {
   shellBackAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
-import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
+import { useFirstThenLandscapeFocus } from "@/lib/hooks/useFirstThenLandscapeFocus";
 import {
   lockScreenLandscape,
   lockScreenPortrait,
@@ -71,7 +70,6 @@ const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
 /** Digital WOW schedule type at 744×1054 — CSS scale on the card keeps text in sync with size. */
 const DIGITAL_WOW_TITLE_FONT_PX = 60;
 const DIGITAL_WOW_RIBBON_FONT_PX = 50;
-const MOBILE_LANDSCAPE_MQ = "(orientation: landscape) and (max-height: 500px)";
 
 /** Focus landscape — wireframe: 384×560 cards + sidebar (category accent from pack). */
 const FOCUS_LANDSCAPE = {
@@ -114,24 +112,6 @@ const FOCUS_LANDSCAPE_SCENE_W =
 const FOCUS_LANDSCAPE_SCENE_H = FOCUS_LANDSCAPE.cardH;
 /** Screen px between landscape cards — fixed so card scale stays unchanged. */
 const FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX = 40;
-
-function useMobileLandscape() {
-  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_LANDSCAPE_MQ);
-    const update = () => setIsMobileLandscape(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    window.addEventListener("resize", update);
-    return () => {
-      mq.removeEventListener("change", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-
-  return isMobileLandscape;
-}
 
 function IconFirst({
   categoryColour,
@@ -1428,11 +1408,7 @@ function FirstThenExperienceClient() {
     }
     return resolveFirstThenDemoPack(packId, lang);
   }, [sessionPayload, packId, lang]);
-  const isMobileLandscape = useMobileLandscape();
-  const prefersFineHover = usePrefersFineHover();
-  const isTabletTouch = useTabletTouchLayout();
-  const showLandscapeFocus =
-    isMobileLandscape || prefersFineHover || isTabletTouch;
+  const showLandscapeFocus = useFirstThenLandscapeFocus();
   const [showFocusMode, setShowFocusMode] = useState(false);
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1449,9 +1425,7 @@ function FirstThenExperienceClient() {
   useEffect(() => {
     if (!shouldApplyOrientationLock()) return;
     if (showFocusMode) {
-      if (!isTabletTouch) {
-        void lockScreenLandscape();
-      }
+      void lockScreenLandscape();
       return () => {
         unlockScreenOrientation();
       };
@@ -1462,7 +1436,7 @@ function FirstThenExperienceClient() {
     return () => {
       unlockScreenOrientation();
     };
-  }, [isTabletTouch, showFocusMode]);
+  }, [showFocusMode]);
 
   if (!showFocusMode) {
     return (

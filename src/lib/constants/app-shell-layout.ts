@@ -9,6 +9,13 @@
 export const TABLET_TOUCH_MEDIA =
   "(min-width: 740px) and (pointer: coarse)" as const;
 
+/**
+ * First & Then focus — horizontal two-card layout.
+ * Phone: landscape with short height. Tablet/iPad: wide viewport (744px portrait counts).
+ */
+export const FIRST_THEN_FOCUS_LANDSCAPE_MEDIA =
+  "(min-width: 740px), (orientation: landscape) and (max-height: 500px)" as const;
+
 /** Shared shell width — phone column → near-full tablet width. */
 export const APP_SHELL_WIDTH_CLASS = "max-w-lg tablet:max-w-3xl";
 
