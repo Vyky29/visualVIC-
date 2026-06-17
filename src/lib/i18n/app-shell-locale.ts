@@ -5,6 +5,7 @@ import {
   libraryDayCentreIkramLabel,
   libraryDayCentreSerineLabel,
   libraryDayCentreAyaanLabel,
+  libraryDayCentreEmmanuelLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
@@ -159,6 +160,7 @@ export type LibraryPackSectionId =
   | "dcikram"
   | "dcserine"
   | "dcayaan"
+  | "dcemmanuel"
   | "physical"
   | "climb"
   | "swim";
@@ -173,6 +175,7 @@ export function libraryPackSectionTitle(
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
+  if (section === "dcemmanuel") return libraryDayCentreEmmanuelLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";
   }
@@ -453,7 +456,6 @@ export function dayCentreLibraryGroupLabel(
 ): string {
   const en: Record<DayCentreLibraryGroup, string> = {
     "mini-gym": "Mini gym",
-    "fitness-stretching": "Fitness — stretching",
     "fitness-held": "Fitness — held",
     "materials-kitchen": "Materials — kitchen",
     "materials-art": "Materials — art & craft",
@@ -469,7 +471,6 @@ export function dayCentreLibraryGroupLabel(
   };
   const es: Record<DayCentreLibraryGroup, string> = {
     "mini-gym": "Mini gym",
-    "fitness-stretching": "Fitness — estiramientos",
     "fitness-held": "Fitness — reservado",
     "materials-kitchen": "Materiales — cocina",
     "materials-art": "Materiales — arte y manualidades",

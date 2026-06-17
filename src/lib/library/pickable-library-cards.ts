@@ -47,6 +47,10 @@ import {
   DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE,
   dayCentreAyaanImageUrlForStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
+import {
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
+  dayCentreEmmanuelImageUrlForStep,
+} from "@/lib/cards/day-centre-emmanuel-cards";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import {
   PHYSICAL_3D_GYM_SEQUENCE,
@@ -62,6 +66,7 @@ import {
   DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
@@ -84,6 +89,7 @@ export type PickablePackId =
   | "dcikram"
   | "dcserine"
   | "dcayaan"
+  | "dcemmanuel"
   | "phy2d"
   | "phy3d"
   | "phy3g";
@@ -103,6 +109,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dcikram" ||
     ns === "dcserine" ||
     ns === "dcayaan" ||
+    ns === "dcemmanuel" ||
     ns === "phy2d" ||
     ns === "phy3d" ||
     ns === "phy3g"
@@ -395,6 +402,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcayaan", s.slug),
       label: s.title,
       imageUrl: dayCentreAyaanImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcemmanuel", s.slug),
+      label: s.title,
+      imageUrl: dayCentreEmmanuelImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

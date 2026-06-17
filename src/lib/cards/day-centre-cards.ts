@@ -69,11 +69,28 @@ export {
 } from "@/lib/cards/day-centre-ayaan-cards";
 
 export {
+  DAY_CENTRE_EMMANUEL_CATEGORY_LABEL,
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_SEQUENCE,
+  dayCentreEmmanuelFocusImageUrlForStep,
+  dayCentreEmmanuelImageUrlForStep,
+  dayCentreEmmanuelScheduleFocusImageUrlForStep,
+  dayCentreEmmanuelScheduleImageUrlForStep,
+  type DayCentreEmmanuelStep,
+} from "@/lib/cards/day-centre-emmanuel-cards";
+
+export {
   DAY_CENTRE_PUBLIC_DIR,
   dayCentreBackCardUrl,
   dayCentreAyaanAvatarUrl,
+  dayCentreAyaanLibraryAvatarUrl,
   dayCentreAyaanSceneFocusUrl,
   dayCentreAyaanSceneUrl,
+  dayCentreEmmanuelAvatarUrl,
+  dayCentreEmmanuelLibraryAvatarUrl,
+  dayCentreEmmanuelSceneFocusUrl,
+  dayCentreEmmanuelSceneUrl,
   dayCentreIkramAvatarLeopardUrl,
   dayCentreIkramAvatarUrl,
   dayCentreIkramPackMarkUrl,

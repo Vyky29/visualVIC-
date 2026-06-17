@@ -8,6 +8,7 @@ export const DAY_CENTRE_GENERAL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/general` as cons
 export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
 export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
 export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
+export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -88,9 +89,14 @@ export function dayCentreSerineSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_SERINE_DIR}/scenes/${slug}-focus.png`;
 }
 
-/** Ayaan 3D cartoon avatar — library header + pack mark. */
+/** Ayaan 3D cartoon avatar — pack mark on schedule cards. */
 export function dayCentreAyaanAvatarUrl(): string {
   return "/avatars/ayaan-cartoon.png";
+}
+
+/** Ayaan 2D close-up — Library accordion icon. */
+export function dayCentreAyaanLibraryAvatarUrl(): string {
+  return "/avatars/ayaan-cartoon-2d.png";
 }
 
 export function dayCentreAyaanImageUrl(slug: string): string {
@@ -103,4 +109,26 @@ export function dayCentreAyaanSceneUrl(slug: string): string {
 
 export function dayCentreAyaanSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_AYAAN_DIR}/scenes/${slug}-focus.png`;
+}
+
+/** Emmanuel 3D cartoon avatar — pack mark on schedule cards. */
+export function dayCentreEmmanuelAvatarUrl(): string {
+  return "/avatars/emmanuel-cartoon.png";
+}
+
+/** Emmanuel 2D close-up — Library accordion icon. */
+export function dayCentreEmmanuelLibraryAvatarUrl(): string {
+  return "/avatars/emmanuel-cartoon-2d.png";
+}
+
+export function dayCentreEmmanuelImageUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/${slug}.png`;
+}
+
+export function dayCentreEmmanuelSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreEmmanuelSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}-focus.png`;
 }

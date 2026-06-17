@@ -59,10 +59,21 @@ import {
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+  dayCentreEmmanuelFocusImageUrlForStep,
+  dayCentreEmmanuelImageUrlForStep,
+  dayCentreEmmanuelScheduleFocusImageUrlForStep,
+  dayCentreEmmanuelScheduleImageUrlForStep,
+  type DayCentreEmmanuelStep,
+} from "@/lib/cards/day-centre-emmanuel-cards";
+import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
   dayCentreSerineAvatarUrl,
   dayCentreAyaanAvatarUrl,
+  dayCentreEmmanuelAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
@@ -278,6 +289,41 @@ function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
 /** Ayaan · Physical activity — gym schedule (personalised cartoon scenes). */
 export const DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => ayaanScheduleGeneratedCardProps(s));
+
+/** Tailored schedules · Emmanuel — physical activity library. */
+function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
+  const focusIllustrationUrl = dayCentreEmmanuelFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelAvatarUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.map((s) => emmanuelGeneratedCardProps(s));
+
+function emmanuelScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
+  const focusIllustrationUrl =
+    dayCentreEmmanuelScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreEmmanuelScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelAvatarUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Emmanuel · Physical activity — gym schedule (personalised cartoon scenes). */
+export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE.map((s) =>
+    emmanuelScheduleGeneratedCardProps(s),
+  );
 
 /** @deprecated Use {@link DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_GENERATED_CARD_PROPS = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS;

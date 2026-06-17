@@ -198,6 +198,8 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "throwing ball on BOSU",
     es: "lanzar balón en BOSU",
   },
+  "cross-trainer": { en: "cross trainer", es: "elíptica" },
+  basketball: { en: "basketball", es: "baloncesto" },
   skierg: { en: "ski machine", es: "máquina de esquí" },
   stretching: { en: "stretching", es: "estiramientos" },
   finished: { en: "finished", es: "terminado" },
@@ -303,6 +305,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Ayaan · Physical activity",
     es: "Ayaan · actividad física",
   },
+  "emmanuel-day-centre": {
+    en: "Emmanuel · Physical activity",
+    es: "Emmanuel · actividad física",
+  },
   physical: {
     en: "Physical Activity",
     es: "Actividad física",
@@ -337,6 +343,14 @@ export function libraryDayCentreAyaanLabel(language: CardLanguageCode): string {
   return stockRoutineDisplayName(
     "ayaan-day-centre",
     "Ayaan · Physical activity",
+    language,
+  );
+}
+
+export function libraryDayCentreEmmanuelLabel(language: CardLanguageCode): string {
+  return stockRoutineDisplayName(
+    "emmanuel-day-centre",
+    "Emmanuel · Physical activity",
     language,
   );
 }
