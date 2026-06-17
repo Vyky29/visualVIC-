@@ -50,6 +50,12 @@ export const SERINE_PHYSICAL_SCHEDULE = [
       "standing balanced on a blue BOSU ball, holding a 2kg dumbbell in each hand at shoulder height, white t-shirt, dark grey joggers, pink trainers, green sunflower lanyard, gym setting",
   },
   {
+    slug: "step-up-box",
+    title: "Step up on box",
+    scene:
+      "stepping up onto a black 20-inch plyometric box, right foot on box, left foot on floor, knee raised, side view, light t-shirt, dark grey EA7 joggers, pink trainers, green lanyard, red therapy ball nearby, gym setting",
+  },
+  {
     slug: "toilet",
     title: "Toilet",
     scene: "sitting on toilet in a clean bathroom, modest and respectful framing",
