@@ -4,13 +4,20 @@
  */
 
 import {
-  DAY_CENTRE_CATEGORY_COLOUR,
   dayCentreIkramImageUrl,
   dayCentreIkramSceneFocusUrl,
   dayCentreIkramSceneUrl,
+  dayCentreIkramPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
+import {
+  TAILORED_SCHEDULES_CATEGORY_COLOUR,
+  TAILORED_SCHEDULES_CATEGORY_LABEL,
+} from "@/lib/cards/tailored-schedules-shared";
 
-export { DAY_CENTRE_CATEGORY_COLOUR };
+export {
+  TAILORED_SCHEDULES_CATEGORY_COLOUR as DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
+  dayCentreIkramPackMarkUrl,
+};
 
 export type DayCentreIkramStep = {
   id: string;
@@ -18,7 +25,10 @@ export type DayCentreIkramStep = {
   title: string;
 };
 
-export const DAY_CENTRE_IKRAM_CATEGORY_LABEL = "Ikram · day centre" as const;
+export const DAY_CENTRE_IKRAM_CATEGORY_LABEL =
+  TAILORED_SCHEDULES_CATEGORY_LABEL;
+
+export const DAY_CENTRE_IKRAM_PARTICIPANT_LABEL = "Ikram" as const;
 
 /**
  * 4×6 PECS grid — Ikram in pink sweatshirt, one activity per card (reference board).

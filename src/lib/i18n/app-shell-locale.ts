@@ -44,14 +44,14 @@ export function dashboardPackCategoryTitle(
     const en: Record<DashboardPackCategory, string> = {
       "self-care": "Self care",
       home: "Home",
-      activity: "Activity",
+      activity: "Sports",
     };
     return en[cat];
   }
   const es: Record<DashboardPackCategory, string> = {
     "self-care": "Cuidado personal",
     home: "Casa",
-    activity: "Actividad",
+    activity: "Deportes",
   };
   return es[cat];
 }
@@ -62,6 +62,12 @@ export function dashboardRoutinesSectionTitle(lang: CardLanguageCode): string {
 
 export function dashboardExtrasSectionTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Centro de día" : "Day centre";
+}
+
+export function dashboardTailoredSchedulesSectionTitle(
+  lang: CardLanguageCode,
+): string {
+  return isEs(lang) ? "Rutinas a medida" : "Tailored schedules";
 }
 
 export function dashboardSchedulePlayerTitle(lang: CardLanguageCode): string {
@@ -588,6 +594,8 @@ export function playerRoutineToneShortLabel(
       airport: "Airport",
       hotel: "Hotel",
       daycentre: "Day centre",
+      tailored: "Tailored schedules",
+      physical: "Physical Activity",
       finish: "Finish",
       custom: "Custom",
       default: "Routine",
@@ -604,6 +612,8 @@ export function playerRoutineToneShortLabel(
     airport: "Aeropuerto",
     hotel: "Hotel",
     daycentre: "Centro de día",
+    tailored: "Rutinas a medida",
+    physical: "Actividad física",
     finish: "Fin",
     custom: "Personalizado",
     default: "Rutina",

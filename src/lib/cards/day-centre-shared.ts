@@ -1,4 +1,4 @@
-/** Shared Day Centre pack constants (pink ribbon). */
+/** Shared Day Centre pack constants (red ribbon). */
 
 const DAY_CENTRE_DIR_SEG = encodeURIComponent("day centre");
 
@@ -7,8 +7,8 @@ export const DAY_CENTRE_PUBLIC_DIR = `/cards/${DAY_CENTRE_DIR_SEG}`;
 export const DAY_CENTRE_GENERAL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/general` as const;
 export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
 
-/** Pink ribbon — Day Centre (hotel pack uses red #8C1E2E). */
-export const DAY_CENTRE_CATEGORY_COLOUR = "#E05C9A" as const;
+/** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
+export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
 
 export function dayCentrePackMarkUrl(): string {
   return `${DAY_CENTRE_PUBLIC_DIR}/logo-day-centre.png`;

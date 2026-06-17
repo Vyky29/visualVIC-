@@ -27,16 +27,21 @@ import {
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_IKRAM_CATEGORY_LABEL,
   dayCentreIkramFocusImageUrlForStep,
   dayCentreIkramImageUrlForStep,
   dayCentreIkramScheduleFocusImageUrlForStep,
   dayCentreIkramScheduleImageUrlForStep,
+  dayCentreIkramPackMarkUrl,
   type DayCentreIkramStep,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentrePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
+import {
+  TAILORED_SCHEDULES_CATEGORY_COLOUR,
+} from "@/lib/cards/tailored-schedules-shared";
 import {
   AT_THE_HOTEL_SEQUENCE,
   atTheHotelImageUrl,
@@ -53,9 +58,13 @@ export const GENERATED_PIXTO_AIRPORT_CATEGORY_COLOUR = "#F9DD9E" as const;
 /** Hotel category accent — ribbon + schedule chrome. */
 export const GENERATED_PIXTO_HOTEL_CATEGORY_COLOUR = "#8C1E2E" as const;
 
-/** Day Centre category accent — pink ribbon + schedule chrome. */
+/** Day Centre category accent — red ribbon + schedule chrome. */
 export const GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR =
   DAY_CENTRE_CATEGORY_COLOUR;
+
+/** Tailored schedules category accent — pink ribbon + schedule chrome. */
+export const GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR =
+  TAILORED_SCHEDULES_CATEGORY_COLOUR;
 
 function lc(s: string): string {
   return s.toLowerCase();
@@ -134,15 +143,15 @@ export const PHYSICAL_3D_GYM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
 /** @deprecated Use {@link PHYSICAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_FITNESS_GENERATED_CARD_PROPS = PHYSICAL_GENERATED_CARD_PROPS;
 
-/** Day Centre · Ikram — full photo library. */
+/** Tailored schedules · Ikram — full photo library. */
 function ikramGeneratedCardProps(step: DayCentreIkramStep) {
   const focusIllustrationUrl = dayCentreIkramFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreIkramImageUrlForStep(step),
     title: lc(step.title),
-    category: lc("Ikram · day centre"),
-    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
+    category: lc(DAY_CENTRE_IKRAM_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
@@ -156,9 +165,9 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
   return {
     illustrationUrl: dayCentreIkramScheduleImageUrlForStep(step),
     title: lc(step.title),
-    category: lc("Ikram · day centre"),
-    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
+    category: lc(DAY_CENTRE_IKRAM_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }

@@ -182,7 +182,7 @@ export const mockRoutines: Routine[] = [
     name: "Physical Activity",
     description:
       "Physical activity — equipment and stretching PixtoLearn cards",
-    tags: ["extra", "activity"],
+    tags: ["activity"],
     homePreviewImageUrl: PHYSICAL_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "physical",
@@ -194,7 +194,7 @@ export const mockRoutines: Routine[] = [
     name: "Physical Activity · 3D",
     description:
       "Physical activity — soft 3D equipment cards including BOSU and extras",
-    tags: ["extra", "activity"],
+    tags: ["activity"],
     homePreviewImageUrl: PHYSICAL_3D_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "physical-3d",
@@ -206,7 +206,7 @@ export const mockRoutines: Routine[] = [
     name: "Physical Activity · 3D gym",
     description:
       "Gym machines, benches and accessories — 3D equipment sheet (25 cards)",
-    tags: ["extra", "activity"],
+    tags: ["activity"],
     homePreviewImageUrl: PHYSICAL_3D_GYM_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
       "physical-3d-gym",
@@ -215,9 +215,9 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "ikram-day-centre",
-    name: "Ikram · day centre",
+    name: "Ikram · tailored schedules",
     description:
-      "Ikram's Saturday schedule — personalised photo cards for the day centre",
+      "Ikram's Saturday schedule — personalised photo cards (Tailored schedules pilot)",
     tags: ["extra"],
     homePreviewImageUrl: DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(

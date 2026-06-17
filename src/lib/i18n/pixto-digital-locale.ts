@@ -209,7 +209,11 @@ export function resolveDigitalPixtoStrings(
   if (pack) {
     if (category.toLowerCase().includes("ikram")) {
       nextCategory = lc(
-        ui === "es" ? "ikram · centro de día" : "ikram · day centre",
+        ui === "es" ? "ikram · rutinas a medida" : "ikram · tailored schedules",
+      );
+    } else if (category.toLowerCase().includes("tailored")) {
+      nextCategory = lc(
+        ui === "es" ? "rutinas a medida" : "tailored schedules",
       );
     } else {
       const c = CATEGORY_STRIP[pack];
@@ -238,8 +242,8 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Centro de día",
   },
   "ikram-day-centre": {
-    en: "Ikram · day centre",
-    es: "Ikram · centro de día",
+    en: "Ikram · tailored schedules",
+    es: "Ikram · rutinas a medida",
   },
   physical: {
     en: "Physical Activity",
@@ -256,7 +260,11 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
 };
 
 export function libraryDayCentreIkramLabel(language: CardLanguageCode): string {
-  return stockRoutineDisplayName("ikram-day-centre", "Ikram · day centre", language);
+  return stockRoutineDisplayName(
+    "ikram-day-centre",
+    "Ikram · tailored schedules",
+    language,
+  );
 }
 
 export function stockRoutineDisplayName(

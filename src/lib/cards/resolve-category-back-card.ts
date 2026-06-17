@@ -11,6 +11,7 @@ import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undres
 import { atTheAirportBackCardUrl } from "@/lib/cards/at-the-airport-cards";
 import { dayCentreBackCardUrl } from "@/lib/cards/day-centre-cards";
 import { physicalBackCardUrl } from "@/lib/cards/physical-cards";
+import { tailoredSchedulesBackCardUrl } from "@/lib/cards/tailored-schedules-shared";
 import { atTheHotelBackCardUrl } from "@/lib/cards/at-the-hotel-cards";
 import { stepCardVisualTone } from "@/lib/utils/routine-accent";
 
@@ -32,6 +33,9 @@ export function resolveCategoryBackCardUrl(
     return atTheHotelBackCardUrl();
   }
   if (path.includes("day%20centre")) {
+    if (path.includes("/ikram")) {
+      return tailoredSchedulesBackCardUrl();
+    }
     return dayCentreBackCardUrl();
   }
   if (
@@ -82,6 +86,8 @@ export function resolveCategoryBackCardUrlForStep(
       return atTheHotelBackCardUrl();
     case "daycentre":
       return dayCentreBackCardUrl();
+    case "tailored":
+      return tailoredSchedulesBackCardUrl();
     case "physical":
       return physicalBackCardUrl();
     case "core":

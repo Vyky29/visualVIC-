@@ -25,6 +25,7 @@ import {
   dayCentreLibraryGroupForSlug,
 } from "@/lib/cards/day-centre-library-groups";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
+import { dayCentreIkramPackMarkUrl } from "@/lib/cards/day-centre-ikram-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
@@ -92,7 +93,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   daycentre: dayCentrePackMarkUrl(),
-  dcikram: dayCentrePackMarkUrl(),
+  dcikram: dayCentreIkramPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
 };
@@ -106,7 +107,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   core: "ring-accent/70",
   airport: "ring-[#e0b030]/90",
   hotel: "ring-[#8C1E2E]/70",
-  daycentre: "ring-[#E05C9A]/75",
+  daycentre: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
@@ -122,7 +123,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   swim: "border-t border-[#4a8fa8]/30 bg-[#e8f3f6] text-ink",
   airport: "border-t border-[#e0b030]/40 bg-[#F9DD9E]/95 text-ink",
   hotel: "border-t border-[#8C1E2E]/45 bg-[#fdecee] text-ink",
-  daycentre: "border-t border-[#E05C9A]/45 bg-[#fde8f4] text-ink",
+  daycentre: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   dcikram: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
 };
 
