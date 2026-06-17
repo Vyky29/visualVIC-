@@ -301,6 +301,7 @@ export function menuSectionTitle(key: MenuSectionKey, lang: CardLanguageCode): s
 }
 
 export type MenuLinkKey =
+  | "planner"
   | "schedulePlayer"
   | "routineBuilder"
   | "firstThen"
@@ -313,6 +314,7 @@ export type MenuLinkKey =
 export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string {
   if (!isEs(lang)) {
     const en: Record<MenuLinkKey, string> = {
+      planner: "Staff Planner",
       schedulePlayer: "Schedule Player",
       routineBuilder: "Routine builder",
       firstThen: "First & Then",
@@ -325,6 +327,7 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
     return en[key];
   }
   const es: Record<MenuLinkKey, string> = {
+    planner: "Planner staff",
     schedulePlayer: "Reproductor de rutina",
     routineBuilder: "Editor de rutinas",
     firstThen: "Primero / Después",
@@ -340,6 +343,7 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
 export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
   if (!isEs(lang)) {
     const en: Record<MenuLinkKey, string> = {
+      planner: "Filtered library · build routines for your participants",
       schedulePlayer: "Pick a routine · vertical flow",
       routineBuilder: "Mock steps & titles",
       firstThen: "Two-card strip",
@@ -352,6 +356,7 @@ export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
     return en[key];
   }
   const es: Record<MenuLinkKey, string> = {
+    planner: "Biblioteca filtrada · monta rutinas para tus participantes",
     schedulePlayer: "Elige una rutina · flujo vertical",
     routineBuilder: "Pasos y títulos de prueba",
     firstThen: "Tira de dos tarjetas",
@@ -384,6 +389,20 @@ export function dashboardQuickLibraryTitle(lang: CardLanguageCode): string {
 
 export function dashboardQuickTemplatesTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Inicios rápidos" : "Quick starts";
+}
+
+export function dashboardQuickPlannerEyebrow(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Staff" : "Staff";
+}
+
+export function dashboardQuickPlannerTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Planner" : "Planner";
+}
+
+export function dashboardQuickPlannerHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Biblioteca filtrada por participante · mismo login que el Portal"
+    : "Library filtered by participant · same login as Portal";
 }
 
 export function shellBackAria(lang: CardLanguageCode): string {

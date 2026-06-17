@@ -40,6 +40,9 @@ import {
   dashboardQuickBuilderEyebrow,
   dashboardQuickBuilderTitle,
   dashboardQuickLibraryTitle,
+  dashboardQuickPlannerEyebrow,
+  dashboardQuickPlannerHint,
+  dashboardQuickPlannerTitle,
   dashboardQuickTemplatesTitle,
   dashboardRoutineCountLabel,
   dashboardRoutinesSectionTitle,
@@ -308,6 +311,35 @@ function TemplatesQuickIcon() {
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function PlannerQuickIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
+      <rect
+        x="4.5"
+        y="5"
+        width="15"
+        height="14.5"
+        rx="2.2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M8 3.75v3M16 3.75v3M4.5 10h15"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="m9.5 13.5 1.75 1.75L15 11.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -884,7 +916,29 @@ export default function DashboardPage() {
           })}
         </section>
 
-        <section className="grid grid-cols-2 gap-3">
+        <section className="space-y-3">
+          <Link href="/planner" className="block">
+            <Card className="border border-[#1E4A73]/20 bg-gradient-to-r from-[#e8eef5] to-white px-4 py-3.5 transition hover:shadow-soft">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-[#1E4A73] shadow-sm ring-2 ring-[#1E4A73]/35 ring-offset-2 ring-offset-cream">
+                  <PlannerQuickIcon />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#1E4A73]">
+                    {dashboardQuickPlannerEyebrow(cardUiLang)}
+                  </p>
+                  <p className="text-[16px] font-semibold leading-snug text-ink">
+                    {dashboardQuickPlannerTitle(cardUiLang)}
+                  </p>
+                  <p className="mt-0.5 text-[12px] leading-snug text-ink-subtle">
+                    {dashboardQuickPlannerHint(cardUiLang)}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          <div className="grid grid-cols-2 gap-3">
           <Link href="/first-then?pack=ikram-home">
             <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
               <DashboardCenteredIntro
@@ -929,6 +983,7 @@ export default function DashboardPage() {
               />
             </Card>
           </Link>
+          </div>
         </section>
       </div>
     </div>
