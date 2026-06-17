@@ -55,6 +55,10 @@ import {
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
+import {
+  resolveFeaturedRoutineHomePreviewUrl,
+  resolveTailoredScheduleHomePreviewUrl,
+} from "@/lib/routines/resolve-routine-home-preview";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
@@ -458,8 +462,21 @@ function SectionHeader({
   );
 }
 
-function DashboardRoutineTile({ routine }: { routine: Routine }) {
-  const previewUrl = routine.homePreviewImageUrl ?? routine.steps[0]?.imageUrl;
+function DashboardRoutineTile({
+  routine,
+  previewUrl,
+  previewFillFrame = false,
+}: {
+  routine: Routine;
+  previewUrl?: string;
+  /** Action / portrait previews should cover the tile (not letterbox). */
+  previewFillFrame?: boolean;
+}) {
+  const resolvedPreview =
+    previewUrl ??
+    routine.homePreviewImageUrl ??
+    routine.steps[0]?.generatedPixto?.illustrationUrl ??
+    routine.steps[0]?.imageUrl;
   const cardUiLang = useCardUiLanguage();
 
   return (
@@ -476,11 +493,12 @@ function DashboardRoutineTile({ routine }: { routine: Routine }) {
         )}
       >
         <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
-          {previewUrl ? (
+          {resolvedPreview ? (
             <HomeRoutinePreviewMedia
-              imageUrl={previewUrl}
+              imageUrl={resolvedPreview}
               frameClassName="h-full w-full"
               sizes="(max-width: 512px) 45vw, 240px"
+              fillFrame={previewFillFrame}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center px-2 text-center text-[11px] text-ink-faint">
@@ -511,12 +529,15 @@ function HomeRoutinePreviewMedia({
   frameClassName,
   sizes,
   priority,
+  fillFrame = false,
 }: {
   imageUrl: string | undefined;
   frameClassName: string;
   sizes: string;
   /** First tile only — faster LCP on Home */
   priority?: boolean;
+  /** Home grid tiles — fill frame with object-cover (avatars + 3D scenes). */
+  fillFrame?: boolean;
 }) {
   if (!imageUrl) return null;
   const pixto = isPixtoLearnBundledCardUrl(imageUrl);
@@ -538,7 +559,9 @@ function HomeRoutinePreviewMedia({
         priority={priority}
         decoding="async"
         className={cn(
-          illustrationOnly ? "object-contain object-center" : "object-cover",
+          fillFrame || !illustrationOnly
+            ? "object-cover object-center"
+            : "object-contain object-center",
           fullBleedPixto
             ? cn(
                 pixtoBundledCardObjectPositionTopClass,
@@ -723,7 +746,12 @@ export default function DashboardPage() {
           {featuredRoutines.length > 0 ? (
             <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
               {featuredRoutines.map((r) => (
-                <DashboardRoutineTile key={r.id} routine={r} />
+                <DashboardRoutineTile
+                  key={r.id}
+                  routine={r}
+                  previewUrl={resolveFeaturedRoutineHomePreviewUrl(r)}
+                  previewFillFrame
+                />
               ))}
             </div>
           ) : null}
@@ -869,7 +897,16 @@ export default function DashboardPage() {
                   <div className="min-h-0 overflow-hidden">
                     <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
                       {group.routines.map((routine) => (
-                        <DashboardRoutineTile key={routine.id} routine={routine} />
+                        <DashboardRoutineTile
+                          key={routine.id}
+                          routine={routine}
+                          previewUrl={
+                            group.key === "home::tailored"
+                              ? resolveTailoredScheduleHomePreviewUrl(routine)
+                              : undefined
+                          }
+                          previewFillFrame={group.key === "home::tailored"}
+                        />
                       ))}
                       {group.key === "home::tailored" ? (
                         <Link

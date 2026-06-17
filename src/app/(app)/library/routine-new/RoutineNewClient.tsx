@@ -38,6 +38,7 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import type { Routine } from "@/lib/types/routine";
+import { resolveFeaturedRoutineHomePreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
 
 type DraftRow = { pickId: string; label: string; imageUrl: string };
 
@@ -104,7 +105,11 @@ export function RoutineNewClient({
       name: name.trim(),
       description: routineFromLibraryDescription(cardUiLang),
       tags: ["custom", "library"],
-      homePreviewImageUrl: steps[0]?.imageUrl,
+      homePreviewImageUrl: resolveFeaturedRoutineHomePreviewUrl({
+        id,
+        name: name.trim(),
+        steps,
+      }),
       steps,
     };
     addRoutine(routine);

@@ -34,6 +34,9 @@ import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-card
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
 import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
 import { DAY_CENTRE_EMMANUEL_ROUTINE_NAME } from "@/lib/cards/day-centre-emmanuel-cards";
+import {
+  tailoredScheduleCloseUpPreviewUrl,
+} from "@/lib/routines/resolve-routine-home-preview";
 
 /** V1 mock routines — calm, visual-first sequences */
 export const mockRoutines: Routine[] = [
@@ -200,7 +203,7 @@ export const mockRoutines: Routine[] = [
     description:
       "Saturday at day centre — cafe, Westfield shopping, McDonald's, cab home (personalised photos)",
     tags: ["extra"],
-    homePreviewImageUrl: DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ikram-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "ikram-day-centre",
       DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
@@ -212,7 +215,7 @@ export const mockRoutines: Routine[] = [
     description:
       "Gym routine — therapy ball, treadmill, rower, bike, sandbags, stretching (personalised cartoon)",
     tags: ["extra"],
-    homePreviewImageUrl: DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("serine-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "serine-day-centre",
       DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
@@ -224,7 +227,7 @@ export const mockRoutines: Routine[] = [
     description:
       "Gym routine — therapy ball, elastic band, sandbag, weights, weight ball, BOSU, treadmill (personalised cartoon)",
     tags: ["extra"],
-    homePreviewImageUrl: DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ayaan-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "ayaan-day-centre",
       DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
@@ -236,8 +239,7 @@ export const mockRoutines: Routine[] = [
     description:
       "Gym routine — cross trainer and basketball (personalised cartoon)",
     tags: ["extra"],
-    homePreviewImageUrl:
-      DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre",
       DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,

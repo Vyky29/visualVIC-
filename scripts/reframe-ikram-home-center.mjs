@@ -49,7 +49,7 @@ async function main() {
     fs.copyFileSync(src, rawLocal);
   }
 
-  const fitOpts = { fit: "contain", position: "centre" };
+  const fitOpts = { fit: "cover-padded", position: "north" };
   await fitIllustrationToCard(src, path.join(scenesDir, "home.png"), fitOpts);
   await fitIllustrationToCard(src, path.join(scenesDir, "home-focus.png"), {
     ...fitOpts,
@@ -57,7 +57,7 @@ async function main() {
   });
   await fitIllustrationToCard(src, path.join(ikramDir, "home.png"), fitOpts);
 
-  console.log("Done — home reframed (contain), Ikram + black cat.");
+  console.log("Done — home reframed (cover-padded), Ikram + black cat.");
 }
 
 main().catch((err) => {

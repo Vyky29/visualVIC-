@@ -81,11 +81,18 @@ async function main() {
       fs.copyFileSync(src, rawLocal);
     }
 
-    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`));
-    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
-      height: FOCUS_H,
-    });
-    await fitIllustrationToCard(src, path.join(ikramDir, `${slug}.png`));
+    const fitOpts = { fit: "cover-padded", position: "north" };
+    await fitIllustrationToCard(
+      src,
+      path.join(scenesDir, `${slug}.png`),
+      fitOpts,
+    );
+    await fitIllustrationToCard(
+      src,
+      path.join(scenesDir, `${slug}-focus.png`),
+      { ...fitOpts, height: FOCUS_H },
+    );
+    await fitIllustrationToCard(src, path.join(ikramDir, `${slug}.png`), fitOpts);
 
     console.log("ok:", slug);
     ok++;

@@ -445,12 +445,8 @@ export function SwipeableStepCard({
     (variant === "hero" || variant === "focus") &&
     Boolean(completionBackImageUrl) &&
     isNow;
-  const flipCategoryColour = gp?.categoryColour;
   const flipFaceBgClass =
-    variant === "focus" && !flipCategoryColour ? "bg-transparent" : "bg-white";
-  const flipFaceShellStyle = flipCategoryColour
-    ? ({ backgroundColor: flipCategoryColour } satisfies CSSProperties)
-    : undefined;
+    variant === "focus" ? "bg-transparent" : "bg-white";
   const suppressCompletionOutline =
     completionAnimating && completionFlip && !hasGeneratedPixto;
 
@@ -642,12 +638,7 @@ export function SwipeableStepCard({
         {completionFlip ? (
           <div
             className="absolute inset-0 overflow-hidden [perspective:900px]"
-            style={{
-              perspectiveOrigin: "50% 50%",
-              ...(flipCategoryColour
-                ? { backgroundColor: flipCategoryColour }
-                : {}),
-            }}
+            style={{ perspectiveOrigin: "50% 50%" }}
           >
             <motion.div
               initial={false}
@@ -663,7 +654,6 @@ export function SwipeableStepCard({
                 style={{
                   transform: "translateZ(1px)",
                   ...flipFacePreserve3dStyle,
-                  ...flipFaceShellStyle,
                   ...(!gp ? categoryOutlineStyle : {}),
                 }}
               >
@@ -805,7 +795,6 @@ export function SwipeableStepCard({
                 style={{
                   transform: "rotateY(180deg) translateZ(1px)",
                   ...flipFacePreserve3dStyle,
-                  ...flipFaceShellStyle,
                 }}
               >
                 {completionBackImageUrl ? (

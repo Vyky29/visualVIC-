@@ -30,17 +30,34 @@ async function main() {
   fs.mkdirSync(scenesDir, { recursive: true });
 
   for (const { slug } of SERINE_PHYSICAL_SCHEDULE) {
+    const rawScene = path.join(scenesDir, `_raw-${slug}.png`);
+    if (fs.existsSync(rawScene)) {
+      console.log("skip — 3D raw exists:", slug);
+      continue;
+    }
+
     const src = refForSlug(slug);
     if (!fs.existsSync(src)) {
       console.warn("skip — missing ref for", slug);
       continue;
     }
 
-    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`));
-    await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
-      height: FOCUS_H,
-    });
-    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`));
+    const fitOpts = {
+      fit: "cover-padded",
+      position: "north",
+      background: "#000000",
+    };
+    await fitIllustrationToCard(
+      src,
+      path.join(scenesDir, `${slug}.png`),
+      fitOpts,
+    );
+    await fitIllustrationToCard(
+      src,
+      path.join(scenesDir, `${slug}-focus.png`),
+      { ...fitOpts, height: FOCUS_H },
+    );
+    await fitIllustrationToCard(src, path.join(serineDir, `${slug}.png`), fitOpts);
 
     console.log("preview:", slug);
   }
