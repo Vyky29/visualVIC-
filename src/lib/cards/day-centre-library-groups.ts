@@ -4,8 +4,9 @@
  */
 
 export type DayCentreLibraryGroup =
-  | "fitness-equipment"
+  | "mini-gym"
   | "fitness-stretching"
+  | "fitness-held"
   | "materials-kitchen"
   | "materials-art"
   | "activities-cognitive"
@@ -20,7 +21,7 @@ export type DayCentreLibraryGroup =
 
 /** Display order in Library → Home → Day centre accordion. */
 export const DAY_CENTRE_LIBRARY_GROUP_ORDER: readonly DayCentreLibraryGroup[] = [
-  "fitness-equipment",
+  "mini-gym",
   "fitness-stretching",
   "materials-kitchen",
   "materials-art",
@@ -36,16 +37,20 @@ export const DAY_CENTRE_LIBRARY_GROUP_ORDER: readonly DayCentreLibraryGroup[] = 
 ] as const;
 
 const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
-  // Fitness — equipment
-  "therapy-ball": "fitness-equipment",
-  trampoline: "fitness-equipment",
-  "step-platform": "fitness-equipment",
-  treadmill: "fitness-equipment",
-  "exercise-machine": "fitness-equipment",
-  weights: "fitness-equipment",
-  "row-machine": "fitness-equipment",
-  skis: "fitness-equipment",
-  "exercise-bike": "fitness-equipment",
+  // Mini gym
+  "therapy-ball": "mini-gym",
+  trampoline: "mini-gym",
+  treadmill: "mini-gym",
+  cones: "mini-gym",
+  "step-platform": "mini-gym",
+  rope: "mini-gym",
+  weights: "mini-gym",
+  "exercise-bike": "mini-gym",
+  bells: "mini-gym",
+  // Held — more Physical Activity items may join later
+  "exercise-machine": "fitness-held",
+  "row-machine": "fitness-held",
+  skis: "fitness-held",
   // Fitness — stretching
   "exercise-mat": "fitness-stretching",
   "resistance-bands": "fitness-stretching",

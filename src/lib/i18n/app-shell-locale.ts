@@ -449,8 +449,9 @@ export function dayCentreLibraryGroupLabel(
   lang: CardLanguageCode,
 ): string {
   const en: Record<DayCentreLibraryGroup, string> = {
-    "fitness-equipment": "Fitness — equipment",
+    "mini-gym": "Mini gym",
     "fitness-stretching": "Fitness — stretching",
+    "fitness-held": "Fitness — held",
     "materials-kitchen": "Materials — kitchen",
     "materials-art": "Materials — art & craft",
     "activities-cognitive": "Activities — puzzles & matching",
@@ -464,8 +465,9 @@ export function dayCentreLibraryGroupLabel(
     "places-extras": "Places & extras",
   };
   const es: Record<DayCentreLibraryGroup, string> = {
-    "fitness-equipment": "Fitness — equipamiento",
+    "mini-gym": "Mini gym",
     "fitness-stretching": "Fitness — estiramientos",
+    "fitness-held": "Fitness — reservado",
     "materials-kitchen": "Materiales — cocina",
     "materials-art": "Materiales — arte y manualidades",
     "activities-cognitive": "Actividades — puzzles y clasificación",

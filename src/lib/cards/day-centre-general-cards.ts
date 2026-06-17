@@ -96,16 +96,20 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "cooking.png",
   "painting.png",
   "peeling.png",
-  // Fitness — equipment
+  // Mini gym
   "therapy-ball.png",
   "trampoline.png",
-  "step-platform.png",
   "treadmill.png",
-  "exercise-machine.png",
+  "cones.png",
+  "step-platform.png",
+  "rope.png",
   "weights.png",
+  "exercise-bike.png",
+  "bells.png",
+  // Held — not shown in Library until more Physical Activity items are added
+  "exercise-machine.png",
   "row-machine.png",
   "skis.png",
-  "exercise-bike.png",
   // Fitness — stretching
   "exercise-mat.png",
   "resistance-bands.png",
@@ -193,16 +197,20 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-cooking", slug: "cooking", title: "Cooking" },
   { id: "dcg-painting", slug: "painting", title: "Painting" },
   { id: "dcg-peeling", slug: "peeling", title: "Peeling" },
-  // Fitness — equipment
+  // Mini gym
   { id: "dcg-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
   { id: "dcg-trampoline", slug: "trampoline", title: "Trampoline" },
-  { id: "dcg-step-platform", slug: "step-platform", title: "Steps" },
   { id: "dcg-treadmill", slug: "treadmill", title: "Treadmill" },
-  { id: "dcg-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcg-cones", slug: "cones", title: "Cones" },
+  { id: "dcg-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcg-rope", slug: "rope", title: "Rope" },
   { id: "dcg-weights", slug: "weights", title: "Weights" },
+  { id: "dcg-exercise-bike", slug: "exercise-bike", title: "Mini bikes" },
+  { id: "dcg-bells", slug: "bells", title: "Bells" },
+  // Held — more Physical Activity items may join Mini gym later
+  { id: "dcg-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
   { id: "dcg-row-machine", slug: "row-machine", title: "Row machine" },
   { id: "dcg-skis", slug: "skis", title: "Skis" },
-  { id: "dcg-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
   // Fitness — stretching
   { id: "dcg-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcg-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
@@ -223,17 +231,17 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-birthday-party", slug: "birthday-party", title: "Birthday party" },
 ] as const;
 
-/** Fitness routine — equipment then stretching (531×648 illustrations). */
+/** Mini gym routine — equipment only (531×648 illustrations). */
 export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgf-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
   { id: "dcgf-trampoline", slug: "trampoline", title: "Trampoline" },
-  { id: "dcgf-step-platform", slug: "step-platform", title: "Steps" },
   { id: "dcgf-treadmill", slug: "treadmill", title: "Treadmill" },
-  { id: "dcgf-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
+  { id: "dcgf-cones", slug: "cones", title: "Cones" },
+  { id: "dcgf-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcgf-rope", slug: "rope", title: "Rope" },
   { id: "dcgf-weights", slug: "weights", title: "Weights" },
-  { id: "dcgf-row-machine", slug: "row-machine", title: "Row machine" },
-  { id: "dcgf-skis", slug: "skis", title: "Skis" },
-  { id: "dcgf-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
+  { id: "dcgf-exercise-bike", slug: "exercise-bike", title: "Mini bikes" },
+  { id: "dcgf-bells", slug: "bells", title: "Bells" },
   { id: "dcgf-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcgf-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
   { id: "dcgf-foam-roller", slug: "foam-roller", title: "Foam roller" },
