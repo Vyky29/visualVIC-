@@ -58,11 +58,13 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
+import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
 import {
   lockScreenLandscape,
   lockScreenPortrait,
+  unlockScreenOrientation,
 } from "@/lib/utils/orientation-lock";
-import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
+import { shouldApplyOrientationLock, shouldLockPortraitInAppShell } from "@/lib/utils/device-input";
 import { cn } from "@/lib/utils/cn";
 
 const WOW_TEXT_BOX_SIZE = { w: 252, h: 56.55 } as const;
@@ -1428,7 +1430,9 @@ function FirstThenExperienceClient() {
   }, [sessionPayload, packId, lang]);
   const isMobileLandscape = useMobileLandscape();
   const prefersFineHover = usePrefersFineHover();
-  const showLandscapeFocus = isMobileLandscape || prefersFineHover;
+  const isTabletTouch = useTabletTouchLayout();
+  const showLandscapeFocus =
+    isMobileLandscape || prefersFineHover || isTabletTouch;
   const [showFocusMode, setShowFocusMode] = useState(false);
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1445,11 +1449,20 @@ function FirstThenExperienceClient() {
   useEffect(() => {
     if (!shouldApplyOrientationLock()) return;
     if (showFocusMode) {
-      void lockScreenLandscape();
-      return;
+      if (!isTabletTouch) {
+        void lockScreenLandscape();
+      }
+      return () => {
+        unlockScreenOrientation();
+      };
     }
-    void lockScreenPortrait();
-  }, [showFocusMode]);
+    if (shouldLockPortraitInAppShell()) {
+      void lockScreenPortrait();
+    }
+    return () => {
+      unlockScreenOrientation();
+    };
+  }, [isTabletTouch, showFocusMode]);
 
   if (!showFocusMode) {
     return (

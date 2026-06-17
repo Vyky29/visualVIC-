@@ -43,11 +43,22 @@ import {
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
+import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
+import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
+import {
+  lockScreenLandscape,
+  unlockScreenOrientation,
+} from "@/lib/utils/orientation-lock";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
+import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
+import {
+  focusModeOptTimerHint,
+  routineTimerStepLabel,
+} from "@/lib/i18n/app-shell-locale";
 
 type Props = {
   routine: Routine;
@@ -242,6 +253,7 @@ export function FocusMode({ routine, exitHref }: Props) {
   const router = useRouter();
   const lang = useCardUiLanguage();
   const prefersFineHover = usePrefersFineHover();
+  const isTabletTouch = useTabletTouchLayout();
   const { enabled: expandedCards, toggle: toggleExpandedCards } =
     useFocusExpandedCards();
   const {
@@ -277,6 +289,7 @@ export function FocusMode({ routine, exitHref }: Props) {
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 
   const [sheet, setSheet] = useState<"support" | "options" | null>(null);
+  const [sessionTimerSec, setSessionTimerSec] = useState<number | undefined>();
 
   const exit = useCallback(() => router.push(exitHref), [router, exitHref]);
 
@@ -298,19 +311,35 @@ export function FocusMode({ routine, exitHref }: Props) {
     ? resolveCategoryBackCardUrlForStep(nowStep)
     : undefined;
 
-  const nowTimerSec = nowStep
+  const savedTimerSec = nowStep
     ? resolveStepTimerSec(nowStep, routine)
     : undefined;
+  const activeTimerSec =
+    sessionTimerSec === 0
+      ? undefined
+      : sessionTimerSec ?? savedTimerSec;
   const {
     remaining: nowTimerRemaining,
     totalSeconds: nowTimerTotal,
     hasTimer: nowHasTimer,
     finished: nowTimerFinished,
   } = useStepCountdown(
-    nowTimerSec,
+    activeTimerSec,
     nowStep?.id ?? "none",
     Boolean(nowStep && !isComplete),
   );
+
+  useEffect(() => {
+    setSessionTimerSec(undefined);
+  }, [nowStep?.id]);
+
+  useEffect(() => {
+    if (!shouldApplyOrientationLock() || !isTabletTouch) return;
+    void lockScreenLandscape();
+    return () => {
+      unlockScreenOrientation();
+    };
+  }, [isTabletTouch]);
 
   useEffect(() => {
     if (!prefersFineHover) return;
@@ -640,7 +669,23 @@ export function FocusMode({ routine, exitHref }: Props) {
         title={focusModeSheetOptionsTitle(lang)}
         onClose={() => setSheet(null)}
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
+          <div className="space-y-2 rounded-xl bg-canvas-muted/60 px-3 py-3 ring-1 ring-ink/[0.07]">
+            <p className="text-[13px] font-medium text-ink">
+              {routineTimerStepLabel(lang)}
+            </p>
+            <p className="text-[12px] leading-snug text-ink-subtle">
+              {focusModeOptTimerHint(lang)}
+            </p>
+            <TimerPresetPicker
+              value={
+                sessionTimerSec === 0
+                  ? undefined
+                  : sessionTimerSec ?? savedTimerSec
+              }
+              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
+            />
+          </div>
           {sheetToggleRow(
             focusModeOptExpandedCards(lang),
             expandedCards,

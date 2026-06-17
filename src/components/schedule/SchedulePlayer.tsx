@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
@@ -31,6 +31,9 @@ import {
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
   schedulePlayerResetCta,
+  schedulePlayerTimerButton,
+  routineTimerStepLabel,
+  focusModeOptTimerHint,
   schedulePlayerRoutineCompleteBody,
   schedulePlayerRoutineCompleteTitle,
   schedulePlayerRunAgain,
@@ -40,6 +43,7 @@ import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
+import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 
 type Props = {
   routine: Routine;
@@ -132,16 +136,31 @@ export function SchedulePlayer({
   const showFirstThen = routine.tags?.includes("first-then") ?? false;
   const cardUiLang = useCardUiLanguage();
   const prefersFinePointer = usePrefersFineHover();
+  const [showTimerPanel, setShowTimerPanel] = useState(false);
+  const [sessionTimerSec, setSessionTimerSec] = useState<number | undefined>();
 
-  const nowTimerSec = nowStep
+  const savedTimerSec = nowStep
     ? resolveStepTimerSec(nowStep, routine)
     : undefined;
+  const activeTimerSec =
+    sessionTimerSec === 0
+      ? undefined
+      : sessionTimerSec ?? savedTimerSec;
   const {
     remaining: nowTimerRemaining,
     totalSeconds: nowTimerTotal,
     hasTimer: nowHasTimer,
     finished: nowTimerFinished,
-  } = useStepCountdown(nowTimerSec, nowStep?.id ?? "none", Boolean(nowStep && !isComplete));
+  } = useStepCountdown(
+    activeTimerSec,
+    nowStep?.id ?? "none",
+    Boolean(nowStep && !isComplete),
+  );
+
+  useEffect(() => {
+    setSessionTimerSec(undefined);
+    setShowTimerPanel(false);
+  }, [nowStep?.id]);
 
   const openFocus = () => {
     if (!nowStep) return;
@@ -225,6 +244,16 @@ export function SchedulePlayer({
           </Button>
           <Button
             type="button"
+            variant="secondary"
+            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
+            onClick={() => setShowTimerPanel((v) => !v)}
+            aria-pressed={showTimerPanel || nowHasTimer}
+          >
+            <span aria-hidden>⏱</span>
+            <span className="truncate">{schedulePlayerTimerButton(cardUiLang)}</span>
+          </Button>
+          <Button
+            type="button"
             variant="ghost"
             className="min-h-touch shrink-0 gap-2 px-4"
             onClick={() => router.push(backHref)}
@@ -235,6 +264,25 @@ export function SchedulePlayer({
             <span>{schedulePlayerCloseCta(cardUiLang)}</span>
           </Button>
         </div>
+
+        {showTimerPanel && nowStep && !isComplete ? (
+          <div className="space-y-2 rounded-2xl border border-ink/10 bg-white/80 px-3 py-3">
+            <p className="text-[13px] font-medium text-ink">
+              {routineTimerStepLabel(cardUiLang)}
+            </p>
+            <p className="text-[12px] leading-snug text-ink-subtle">
+              {focusModeOptTimerHint(cardUiLang)}
+            </p>
+            <TimerPresetPicker
+              value={
+                sessionTimerSec === 0
+                  ? undefined
+                  : sessionTimerSec ?? savedTimerSec
+              }
+              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
+            />
+          </div>
+        ) : null}
 
         {showFirstThen ? (
           <div className="flex justify-center px-1">

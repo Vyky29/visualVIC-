@@ -34,7 +34,7 @@ export function StepTimerBadge({
     <div
       className={cn(
         "pointer-events-none absolute z-[12] flex items-center justify-center",
-        isFocus ? "bottom-4 right-4 sm:bottom-5 sm:right-5" : "bottom-3 right-3",
+        isFocus ? "bottom-4 right-4 tablet:bottom-5 tablet:right-5" : "bottom-3 right-3 tablet:bottom-4 tablet:right-4",
         className,
       )}
       aria-live="polite"
@@ -52,7 +52,7 @@ export function StepTimerBadge({
             : { duration: 0.2 }
         }
         className={cn(
-          "relative flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-full shadow-soft ring-1 backdrop-blur-sm",
+          "relative flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-full shadow-soft ring-1 backdrop-blur-sm tablet:h-[4.25rem] tablet:w-[4.25rem]",
           isFocus
             ? "bg-black/55 text-cream ring-white/20"
             : "bg-white/92 text-ink ring-ink/10",

@@ -871,6 +871,16 @@ export function routineTimerStepLabel(lang: CardLanguageCode): string {
   return isEs(lang) ? "Temporizador" : "Timer";
 }
 
+export function focusModeOptTimerHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Temporizador de este paso (esquina inferior derecha de la tarjeta)"
+    : "Timer for this step (bottom-right of the card)";
+}
+
+export function schedulePlayerTimerButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Temporizador" : "Timer";
+}
+
 export function routineTimerOffLabel(lang: CardLanguageCode): string {
   return isEs(lang) ? "Sin tiempo" : "Off";
 }

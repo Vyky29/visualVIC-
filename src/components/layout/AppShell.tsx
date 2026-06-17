@@ -9,8 +9,8 @@ import {
   getFirstThenDemoFocusActive,
   subscribeFirstThenDemoFocus,
 } from "@/lib/experimental/first-then-demo-focus-nav";
-import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
-import { lockScreenPortrait } from "@/lib/utils/orientation-lock";
+import { shouldLockPortraitInAppShell } from "@/lib/utils/device-input";
+import { lockScreenPortrait, unlockScreenOrientation } from "@/lib/utils/orientation-lock";
 import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 
@@ -40,8 +40,11 @@ export function AppShell({
   const effectiveShowNav = showNav && !navHiddenByRoute;
 
   useEffect(() => {
-    if (!shouldApplyOrientationLock() || firstThenDemoFocusActive) return;
+    if (!shouldLockPortraitInAppShell() || firstThenDemoFocusActive) return;
     void lockScreenPortrait();
+    return () => {
+      unlockScreenOrientation();
+    };
   }, [firstThenDemoFocusActive, pathname]);
 
   const phoneShell = (
