@@ -25,7 +25,8 @@ export const SERINE_PHYSICAL_SCHEDULE = [
   {
     slug: "treadmill",
     title: "Treadmill",
-    scene: "walking on a treadmill in a gym, side view, machine clearly visible",
+    scene:
+      "walking on a black gym treadmill, side three-quarter view, looking back over shoulder with a smile, white t-shirt, dark grey joggers, pink trainers, green lanyard, treadmill console visible",
   },
   {
     slug: "row-machine",
