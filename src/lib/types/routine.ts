@@ -31,6 +31,8 @@ export type Routine = {
   tags?: string[];
   /** Home / Schedule Player list preview when different from `steps[0].imageUrl` */
   homePreviewImageUrl?: string;
+  /** Optional countdown (seconds) applied to every step unless a step sets its own. */
+  defaultTimerSec?: number;
 };
 
 export type VisualAsset = {

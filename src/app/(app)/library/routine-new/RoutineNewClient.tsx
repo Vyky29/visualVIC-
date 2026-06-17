@@ -34,9 +34,12 @@ import {
   routineNewSaveButton,
   routineNewStepOrdinal,
   routineNewStepsHeading,
+  routineTimerDefaultLabel,
+  routineTimerStepLabel,
   shellHeaderTitle,
   tailoredAddCardsFromLibrary,
 } from "@/lib/i18n/app-shell-locale";
+import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import type { GeneratedPixtoRoutineStepData } from "@/lib/types/routine";
 import type { Routine } from "@/lib/types/routine";
@@ -51,6 +54,8 @@ type DraftRow = {
   label: string;
   imageUrl: string;
   generatedPixto?: GeneratedPixtoRoutineStepData;
+  /** Per-step timer override (seconds). Undefined = use routine default. */
+  timerSec?: number;
 };
 
 export function RoutineNewClient({
@@ -71,6 +76,7 @@ export function RoutineNewClient({
   const { addRoutine, replaceRoutine, routines, hydrated } = useCustomRoutines();
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [name, setName] = useState("My routine");
+  const [defaultTimerSec, setDefaultTimerSec] = useState<number | undefined>();
   const [hydratedDraft, setHydratedDraft] = useState(false);
   const isEdit = Boolean(editRoutineId);
 
@@ -81,6 +87,7 @@ export function RoutineNewClient({
       const existing = routines.find((r) => r.id === editRoutineId);
       if (existing) {
         setName(existing.name);
+        setDefaultTimerSec(existing.defaultTimerSec);
         setRows(
           existing.steps.map((step) => ({
             pickId: step.id,
@@ -90,6 +97,7 @@ export function RoutineNewClient({
               step.generatedPixto?.illustrationUrl ??
               "",
             generatedPixto: step.generatedPixto,
+            timerSec: step.durationHintSec,
           })),
         );
         setHydratedDraft(true);
@@ -148,6 +156,9 @@ export function RoutineNewClient({
           title: row.label,
           imageUrl: row.imageUrl || undefined,
           ...(row.generatedPixto ? { generatedPixto: row.generatedPixto } : {}),
+          ...(row.timerSec && row.timerSec > 0
+            ? { durationHintSec: row.timerSec }
+            : {}),
         },
       ];
     });
@@ -164,6 +175,9 @@ export function RoutineNewClient({
       name: name.trim(),
       description: routineFromLibraryDescription(cardUiLang),
       tags: [...tags],
+      ...(defaultTimerSec && defaultTimerSec > 0
+        ? { defaultTimerSec }
+        : {}),
       homePreviewImageUrl: resolveFeaturedRoutineHomePreviewUrl({
         id,
         name: name.trim(),
@@ -181,6 +195,7 @@ export function RoutineNewClient({
     addRoutine,
     canSave,
     cardUiLang,
+    defaultTimerSec,
     editRoutineId,
     name,
     participantId,
@@ -189,6 +204,12 @@ export function RoutineNewClient({
     router,
     rows,
   ]);
+
+  const setRowTimer = useCallback((index: number, timerSec: number | undefined) => {
+    setRows((prev) =>
+      prev.map((row, i) => (i === index ? { ...row, timerSec } : row)),
+    );
+  }, []);
 
   const empty = hydratedDraft && rows.length === 0;
 
@@ -261,6 +282,16 @@ export function RoutineNewClient({
           />
         </label>
 
+        <div className="space-y-2 px-1">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
+            {routineTimerDefaultLabel(cardUiLang)}
+          </span>
+          <TimerPresetPicker
+            value={defaultTimerSec}
+            onChange={setDefaultTimerSec}
+          />
+        </div>
+
         <section className="space-y-2">
           <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
             {routineNewStepsHeading(rows.length, cardUiLang)}
@@ -291,6 +322,17 @@ export function RoutineNewClient({
                     <p className="text-[11px] text-ink-faint">
                       {routineNewStepOrdinal(index + 1, cardUiLang)}
                     </p>
+                    <div className="mt-2 space-y-1">
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-ink-faint">
+                        {routineTimerStepLabel(cardUiLang)}
+                      </span>
+                      <TimerPresetPicker
+                        value={row.timerSec}
+                        onChange={(sec) => setRowTimer(index, sec)}
+                        allowDefault={Boolean(defaultTimerSec && defaultTimerSec > 0)}
+                        compact
+                      />
+                    </div>
                   </div>
                   <div className="flex shrink-0 flex-col gap-1 self-center">
                     <button

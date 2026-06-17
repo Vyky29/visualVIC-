@@ -36,6 +36,9 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
+import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
+import { useStepCountdown } from "@/hooks/useStepCountdown";
+import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
 type Props = {
   routine: Routine;
@@ -128,6 +131,16 @@ export function SchedulePlayer({
   const showFirstThen = routine.tags?.includes("first-then") ?? false;
   const cardUiLang = useCardUiLanguage();
   const prefersFinePointer = usePrefersFineHover();
+
+  const nowTimerSec = nowStep
+    ? resolveStepTimerSec(nowStep, routine)
+    : undefined;
+  const {
+    remaining: nowTimerRemaining,
+    totalSeconds: nowTimerTotal,
+    hasTimer: nowHasTimer,
+    finished: nowTimerFinished,
+  } = useStepCountdown(nowTimerSec, nowStep?.id ?? "none", Boolean(nowStep && !isComplete));
 
   const openFocus = () => {
     if (!nowStep) return;
@@ -249,15 +262,25 @@ export function SchedulePlayer({
                 {schedulePlayerNowLabel(cardUiLang)}
               </h3>
             </div>
-            <SwipeableStepCard
-              step={nowStep}
-              status={stepStatus(nowStep)}
-              variant="hero"
-              onSwipeComplete={() => completeCurrent()}
-              doubleTapCompletes
-              completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
-              accentRings={accentRings}
-            />
+            <div className="relative">
+              <SwipeableStepCard
+                step={nowStep}
+                status={stepStatus(nowStep)}
+                variant="hero"
+                onSwipeComplete={() => completeCurrent()}
+                doubleTapCompletes
+                completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
+                accentRings={accentRings}
+              />
+              {nowHasTimer ? (
+                <StepTimerBadge
+                  remainingSec={nowTimerRemaining}
+                  totalSec={nowTimerTotal}
+                  variant="schedule"
+                  finished={nowTimerFinished}
+                />
+              ) : null}
+            </div>
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
               {prefersFinePointer
                 ? schedulePlayerDesktopFocusHint(cardUiLang)

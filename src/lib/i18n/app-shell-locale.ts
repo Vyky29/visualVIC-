@@ -861,6 +861,40 @@ export function routineNewNamePlaceholder(lang: CardLanguageCode): string {
   return isEs(lang) ? "Nombre" : "Name";
 }
 
+export function routineTimerDefaultLabel(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Temporizador por defecto (todos los pasos)"
+    : "Default timer (all steps)";
+}
+
+export function routineTimerStepLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Temporizador" : "Timer";
+}
+
+export function routineTimerOffLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Sin tiempo" : "Off";
+}
+
+export function routineTimerUseDefaultLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Por defecto" : "Default";
+}
+
+export function scheduleStepTimerAria(
+  remainingSec: number,
+  lang: CardLanguageCode,
+): string {
+  const mins = Math.floor(Math.max(0, remainingSec) / 60);
+  const secs = Math.max(0, remainingSec) % 60;
+  if (!isEs(lang)) {
+    if (remainingSec <= 0) return "Timer finished";
+    if (mins > 0) return `${mins} minutes ${secs} seconds remaining`;
+    return `${secs} seconds remaining`;
+  }
+  if (remainingSec <= 0) return "Temporizador terminado";
+  if (mins > 0) return `${mins} minutos y ${secs} segundos restantes`;
+  return `${secs} segundos restantes`;
+}
+
 export function routineNewStepsHeading(count: number, lang: CardLanguageCode): string {
   if (!isEs(lang)) return `Steps (${count})`;
   return `Pasos (${count})`;

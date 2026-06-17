@@ -44,6 +44,9 @@ import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-card
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
+import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
+import { useStepCountdown } from "@/hooks/useStepCountdown";
+import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
 type Props = {
   routine: Routine;
@@ -291,6 +294,20 @@ export function FocusMode({ routine, exitHref }: Props) {
     ? resolveCategoryBackCardUrlForStep(nowStep)
     : undefined;
 
+  const nowTimerSec = nowStep
+    ? resolveStepTimerSec(nowStep, routine)
+    : undefined;
+  const {
+    remaining: nowTimerRemaining,
+    totalSeconds: nowTimerTotal,
+    hasTimer: nowHasTimer,
+    finished: nowTimerFinished,
+  } = useStepCountdown(
+    nowTimerSec,
+    nowStep?.id ?? "none",
+    Boolean(nowStep && !isComplete),
+  );
+
   useEffect(() => {
     if (!prefersFineHover) return;
 
@@ -405,15 +422,25 @@ export function FocusMode({ routine, exitHref }: Props) {
               className="absolute inset-0 flex min-h-0 w-full flex-col"
             >
               <FocusCardStage expandedCards={expandedCards}>
-                <SwipeableStepCard
-                  step={nowStep}
-                  status={stepStatus(nowStep)}
-                  variant="focus"
-                  onSwipeComplete={completeCurrent}
-                  doubleTapCompletes
-                  completionBackImageUrl={nowStepBackCardUrl}
-                  accentRings={accentRings}
-                />
+                <div className="relative h-full min-h-0 w-full">
+                  <SwipeableStepCard
+                    step={nowStep}
+                    status={stepStatus(nowStep)}
+                    variant="focus"
+                    onSwipeComplete={completeCurrent}
+                    doubleTapCompletes
+                    completionBackImageUrl={nowStepBackCardUrl}
+                    accentRings={accentRings}
+                  />
+                  {nowHasTimer ? (
+                    <StepTimerBadge
+                      remainingSec={nowTimerRemaining}
+                      totalSec={nowTimerTotal}
+                      variant="focus"
+                      finished={nowTimerFinished}
+                    />
+                  ) : null}
+                </div>
               </FocusCardStage>
             </motion.div>
           ) : !isComplete && !nowStep ? (
