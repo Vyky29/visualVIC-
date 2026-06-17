@@ -6,6 +6,9 @@ import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
+import {
+  isPixtoLearnIllustrationOnlyUrl,
+} from "@/lib/utils/visual-card-url";
 import { isTailoredSchedulesPackMarkUrl, tailoredSchedulesPackMarkTintMaskUrl } from "@/lib/cards/tailored-schedules-shared";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
@@ -255,6 +258,9 @@ export function FocusRoutineIllustrationImage({
   const widthTrim = leftPx + rightPx;
   const unoptimized =
     src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
+  const objectFitClass = isPixtoLearnIllustrationOnlyUrl(src)
+    ? "object-cover object-center"
+    : objectClass;
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
       <div
@@ -275,7 +281,7 @@ export function FocusRoutineIllustrationImage({
           alt=""
           fill
           sizes={sizes}
-          className={cn(objectClass, "select-none")}
+          className={cn(objectFitClass, "select-none")}
           unoptimized={unoptimized}
           draggable={false}
         />
@@ -1286,10 +1292,25 @@ export function GeneratedPixtoCard({
     showIllustrationFrameGuide ||
     (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
   /**
-   * Illustration slot = 531×648 (schedule) or 531×663 (focus) aspect box.
-   * Pre-framed 531×648 library assets — contain keeps the full illustration visible.
+   * Pre-framed 531×648 scene PNGs fill the slot; other assets stay contained.
    */
-  const illustrationObjectClass = "object-contain object-center";
+  const illustrationOnlyAsset = isPixtoLearnIllustrationOnlyUrl(
+    resolvedIllustrationSrc,
+  );
+  const illustrationObjectClass = illustrationOnlyAsset
+    ? "object-cover object-center"
+    : "object-contain object-center";
+  const lockedDigitalIllustrationSlot =
+    schedulePresentation || focusPresentation;
+  const illustrationTopMarginPct = focusPresentation
+    ? (FOCUS_FR_TOP_SPACER / (FOCUS_FR_TOP_SPACER + FOCUS_FR_ILLUSTRATION)) *
+      100
+    : schedulePresentation
+      ? (WOW_FR_TOP_SPACER / (WOW_FR_TOP_SPACER + WOW_FR_ILLUSTRATION)) * 100
+      : (FR_TOP_SPACER / (FR_TOP_SPACER + FR_ILLUSTRATION)) * 100;
+  const illustrationSlotAspect = focusPresentation
+    ? FOCUS_ILLUSTRATION_FRAME_ASPECT
+    : ILLUSTRATION_FRAME_ASPECT;
 
   /** Schedule NOW/NEXT (not Focus, not dense tile) — larger type, but same base geometry. */
   const scheduleLargeType = !focusPresentation && !schedulePresentation && !isDense;
@@ -1398,49 +1419,78 @@ export function GeneratedPixtoCard({
             illustrationWidthPct={illustrationWidthPct}
           />
         ) : null}
-        <div
-          className="grid h-full min-h-0 w-full"
-          style={{ gridTemplateRows: innerTopGridRows }}
-        >
-          <div aria-hidden />
-          <div className="relative flex min-h-0 items-center justify-center">
-            <div
-              className={cn(
-                "relative h-full min-h-0 w-full",
-                showFrameGuide &&
-                  "bg-[rgba(0,180,120,0.08)] ring-2 ring-inset ring-[rgba(0,180,120,0.9)]",
-              )}
-              style={{ maxWidth: illustrationWidthPct }}
-            >
-              {showFrameGuide ? (
-                <span className="pointer-events-none absolute left-1 top-1 z-20 rounded bg-[rgba(0,180,120,0.92)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-white">
-                  {illustrationFrameRef.w}×{illustrationFrameRef.h}
-                </span>
-              ) : null}
-              <Image
-                src={resolvedIllustrationSrc}
-                alt=""
-                fill
-                sizes="(max-width: 640px) 72vw, 240px"
-                className={cn(illustrationObjectClass, "select-none")}
-                style={
-                  focusPresentation && resolvedFocusIllustrationScale !== 1
-                    ? {
-                        transform: `scale(${resolvedFocusIllustrationScale})`,
-                        transformOrigin: "center center",
-                      }
-                    : undefined
-                }
-                unoptimized={
-                  illustrationUrl.startsWith("/") ||
-                  illustrationUrl.includes("/cards/")
-                }
-                draggable={false}
-              />
-              {!schedulePresentation ? <IllustrationSlotDiagnosticBorder /> : null}
+        {lockedDigitalIllustrationSlot ? (
+          <div
+            className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
+            style={{
+              top: `${illustrationTopMarginPct}%`,
+              width: illustrationWidthPct,
+              aspectRatio: illustrationSlotAspect,
+            }}
+          >
+            {showFrameGuide ? (
+              <span className="pointer-events-none absolute left-1 top-1 z-20 rounded bg-[rgba(0,180,120,0.92)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-white">
+                {illustrationFrameRef.w}×{illustrationFrameRef.h}
+              </span>
+            ) : null}
+            <Image
+              src={resolvedIllustrationSrc}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 72vw, 240px"
+              className={cn(illustrationObjectClass, "select-none")}
+              style={
+                focusPresentation && resolvedFocusIllustrationScale !== 1
+                  ? {
+                      transform: `scale(${resolvedFocusIllustrationScale})`,
+                      transformOrigin: "center center",
+                    }
+                  : undefined
+              }
+              unoptimized={
+                illustrationUrl.startsWith("/") ||
+                illustrationUrl.includes("/cards/")
+              }
+              draggable={false}
+            />
+          </div>
+        ) : (
+          <div
+            className="grid h-full min-h-0 w-full"
+            style={{ gridTemplateRows: innerTopGridRows }}
+          >
+            <div aria-hidden />
+            <div className="relative flex min-h-0 items-center justify-center">
+              <div
+                className={cn(
+                  "relative h-full min-h-0 w-full",
+                  showFrameGuide &&
+                    "bg-[rgba(0,180,120,0.08)] ring-2 ring-inset ring-[rgba(0,180,120,0.9)]",
+                )}
+                style={{ maxWidth: illustrationWidthPct }}
+              >
+                {showFrameGuide ? (
+                  <span className="pointer-events-none absolute left-1 top-1 z-20 rounded bg-[rgba(0,180,120,0.92)] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.06em] text-white">
+                    {illustrationFrameRef.w}×{illustrationFrameRef.h}
+                  </span>
+                ) : null}
+                <Image
+                  src={resolvedIllustrationSrc}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 72vw, 240px"
+                  className={cn(illustrationObjectClass, "select-none")}
+                  unoptimized={
+                    illustrationUrl.startsWith("/") ||
+                    illustrationUrl.includes("/cards/")
+                  }
+                  draggable={false}
+                />
+                <IllustrationSlotDiagnosticBorder />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <TitleBand

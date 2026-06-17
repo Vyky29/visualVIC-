@@ -56,7 +56,10 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
 
   if (fit === "cover-padded") {
     const resized = await img
-      .resize(maxW, maxH, { fit: "cover", position: opts.position ?? "centre" })
+      .resize(maxW, maxH, {
+        fit: "cover",
+        position: opts.position ?? "north",
+      })
       .png()
       .toBuffer();
     await sharp({
