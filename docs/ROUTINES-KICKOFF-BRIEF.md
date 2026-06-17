@@ -104,6 +104,11 @@ Login Planner uses the same Supabase project and email/password as Portal; cooki
 |---|------|-------|--------|
 | 1 | Vercel **visualVIC** Production env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_STAFF_PORTAL_URL=https://portalvic.vercel.app` — then **redeploy** | visualVIC | ☐ confirm |
 | 2 | Supabase `staff_participant_access` table + seeds | Portal | ✅ done |
-| 3 | Portal dashboards — **Plan** button → `/planner` | Portal | ✅ done |
+| 3 | Supabase `participant_shared_routines` table + RLS — [`docs/portal/sql/participant_shared_routines.sql`](./portal/sql/participant_shared_routines.sql) | Portal | ☐ run SQL |
+| 4 | Portal dashboards — **Plan** button → `/planner` | Portal | ✅ done |
 
 After item 1: Sandra/Youssef sign in at `/planner/login`, library filtered by role + assignments.
+
+### Shared participant schedules
+
+Custom schedules saved from a participant folder (`/tailored/ikram`, etc.) sync to Supabase (`participant_shared_routines`). Any staff with access to that participant (or ceo/admin) sees the same list on any device once signed in. Stock schedules (e.g. `ikram-day-centre`) and First & Then packs remain bundled in the app.
