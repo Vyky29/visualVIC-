@@ -19,8 +19,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 const ROUTINE_LINKS: { href: string; key: MenuLinkKey }[] = [
   { href: "/player", key: "schedulePlayer" },
   { href: "/builder", key: "routineBuilder" },
-  { href: "/first-then", key: "firstThen" },
-  { href: "/first-then-demo", key: "firstThenDemo" },
+  { href: "/first-then?pack=ikram-home", key: "firstThen" },
   { href: "/generated-card-demo", key: "generatedCardDemo" },
 ];
 

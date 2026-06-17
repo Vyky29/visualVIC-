@@ -1,5 +1,5 @@
-import { FirstThenPageClient } from "@/app/(app)/first-then/FirstThenPageClient";
+import { FirstThenExperience } from "@/components/first-then/FirstThenExperience";
 
 export default function FirstThenPage() {
-  return <FirstThenPageClient />;
+  return <FirstThenExperience />;
 }

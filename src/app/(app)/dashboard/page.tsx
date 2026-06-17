@@ -841,7 +841,7 @@ export default function DashboardPage() {
                       ))}
                       {group.key === "home::tailored" ? (
                         <Link
-                          href="/first-then-demo?pack=ikram-home"
+                          href="/first-then?pack=ikram-home"
                           className="col-span-2 block"
                         >
                           <Card className="overflow-hidden border border-ink/5 p-0 transition hover:shadow-soft">
@@ -885,7 +885,7 @@ export default function DashboardPage() {
         </section>
 
         <section className="grid grid-cols-2 gap-3">
-          <Link href="/first-then">
+          <Link href="/first-then?pack=ikram-home">
             <Card className="flex h-full min-h-[128px] flex-col items-center justify-center border border-ink/5 px-3 py-4 transition hover:shadow-soft">
               <DashboardCenteredIntro
                 icon={<FirstThenQuickIcon />}

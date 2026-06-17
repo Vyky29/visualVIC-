@@ -39,6 +39,8 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
+import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
+import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 
 type Props = {
   routine: Routine;
@@ -232,7 +234,9 @@ export function FocusMode({ routine, exitHref }: Props) {
   const { enabled: expandedCards, toggle: toggleExpandedCards } =
     useFocusExpandedCards();
   const {
+    steps,
     nowStep,
+    nextStep,
     nowIndex,
     totalSteps,
     isComplete,
@@ -245,6 +249,19 @@ export function FocusMode({ routine, exitHref }: Props) {
     syncSession: true,
     appendFinishStep: true,
   });
+
+  const openFirstThen = useCallback(() => {
+    if (!nowStep) return;
+    const thenStep = nextStep ?? steps[nowIndex + 1];
+    if (!thenStep) return;
+    writeFirstThenSession({
+      first: routineStepToGeneratedPixtoCard(nowStep),
+      second: routineStepToGeneratedPixtoCard(thenStep),
+      routineHref: exitHref,
+    });
+    setSheet(null);
+    router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
+  }, [nowStep, nextStep, steps, nowIndex, exitHref, router]);
 
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 
@@ -513,10 +530,7 @@ export function FocusMode({ routine, exitHref }: Props) {
             setSheet(null);
             exit();
           }, "opt-back")}
-          {sheetRow(focusModeOptFirstThen(lang), () => {
-            setSheet(null);
-            router.push("/first-then");
-          }, "opt-ft")}
+          {sheetRow(focusModeOptFirstThen(lang), openFirstThen, "opt-ft")}
           {sheetRow(focusModeOptRestartRoutine(lang), () => {
             setSheet(null);
             reset();

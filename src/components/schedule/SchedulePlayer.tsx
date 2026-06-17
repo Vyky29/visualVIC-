@@ -13,6 +13,8 @@ import {
   routineAccentRings,
   routineSchedulePlayerChrome,
 } from "@/lib/utils/routine-accent";
+import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
+import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { cn } from "@/lib/utils/cn";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
@@ -102,6 +104,7 @@ export function SchedulePlayer({
   );
   const {
     nowStep,
+    nextStep,
     finishedSteps,
     upcomingSteps,
     isComplete,
@@ -111,6 +114,7 @@ export function SchedulePlayer({
     completedCount,
     totalSteps,
     nowIndex,
+    steps,
   } = useRoutinePlayback(routine, {
     syncSession: true,
     appendFinishStep: true,
@@ -128,6 +132,18 @@ export function SchedulePlayer({
       ? getFocusHref({ routine, nowStep, nowIndex })
       : `/focus/${routine.id}`;
     router.push(focusHref);
+  };
+
+  const openFirstThen = () => {
+    if (!nowStep) return;
+    const thenStep = nextStep ?? steps[nowIndex + 1];
+    if (!thenStep) return;
+    writeFirstThenSession({
+      first: routineStepToGeneratedPixtoCard(nowStep),
+      second: routineStepToGeneratedPixtoCard(thenStep),
+      routineHref: `/player/${routine.id}`,
+    });
+    router.push(`/first-then?from=${encodeURIComponent(`/player/${routine.id}`)}`);
   };
 
   return (
@@ -205,12 +221,13 @@ export function SchedulePlayer({
 
         {showFirstThen ? (
           <div className="flex justify-center px-1">
-            <Link
-              href="/first-then"
+            <button
+              type="button"
+              onClick={openFirstThen}
               className="touch-manipulation text-[13px] font-medium text-sage underline-offset-4 transition active:underline active:opacity-90 [@media(hover:hover)_and_(pointer:fine)]:hover:underline"
             >
               {dashboardFirstThenCardEyebrow(cardUiLang)}
-            </Link>
+            </button>
           </div>
         ) : null}
       </div>
