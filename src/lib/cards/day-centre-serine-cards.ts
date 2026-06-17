@@ -9,6 +9,7 @@ import {
   dayCentreSerineSceneUrl,
   dayCentreSerinePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
+import { coreImageUrl } from "@/lib/cards/core-cards";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
   TAILORED_SCHEDULES_CATEGORY_LABEL,
@@ -82,12 +83,27 @@ export const DAY_CENTRE_SERINE_SEQUENCE: readonly DayCentreSerineStep[] =
 export const DAY_CENTRE_SERINE_LIBRARY_SEQUENCE: readonly DayCentreSerineStep[] =
   DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE;
 
-const SERINE_SCENE_SLUGS = new Set(
-  DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE.map((s) => s.slug),
+/** Generic core visuals — not personalised Serine scenes. */
+const SERINE_CORE_BORROWED_SLUGS: Readonly<Record<string, string>> = {
+  toilet: "toilet",
+  finished: "finish",
+};
+
+const SERINE_PERSONALISED_SCENE_SLUGS = new Set(
+  DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE.map((s) => s.slug).filter(
+    (slug) => !(slug in SERINE_CORE_BORROWED_SLUGS),
+  ),
 );
 
+function serineCoreBorrowedImageUrl(slug: string): string | undefined {
+  const coreSlug = SERINE_CORE_BORROWED_SLUGS[slug];
+  return coreSlug ? coreImageUrl(coreSlug) : undefined;
+}
+
 export function dayCentreSerineImageUrlForStep(step: DayCentreSerineStep): string {
-  if (SERINE_SCENE_SLUGS.has(step.slug)) {
+  const borrowed = serineCoreBorrowedImageUrl(step.slug);
+  if (borrowed) return borrowed;
+  if (SERINE_PERSONALISED_SCENE_SLUGS.has(step.slug)) {
     return dayCentreSerineSceneUrl(step.slug);
   }
   return dayCentreSerineImageUrl(step.slug);
@@ -96,18 +112,22 @@ export function dayCentreSerineImageUrlForStep(step: DayCentreSerineStep): strin
 export function dayCentreSerineFocusImageUrlForStep(
   step: DayCentreSerineStep,
 ): string | undefined {
-  if (!SERINE_SCENE_SLUGS.has(step.slug)) return undefined;
+  if (step.slug in SERINE_CORE_BORROWED_SLUGS) return undefined;
+  if (!SERINE_PERSONALISED_SCENE_SLUGS.has(step.slug)) return undefined;
   return dayCentreSerineSceneFocusUrl(step.slug);
 }
 
 export function dayCentreSerineScheduleImageUrlForStep(
   step: DayCentreSerineStep,
 ): string {
+  const borrowed = serineCoreBorrowedImageUrl(step.slug);
+  if (borrowed) return borrowed;
   return dayCentreSerineSceneUrl(step.slug);
 }
 
 export function dayCentreSerineScheduleFocusImageUrlForStep(
   step: DayCentreSerineStep,
 ): string | undefined {
+  if (step.slug in SERINE_CORE_BORROWED_SLUGS) return undefined;
   return dayCentreSerineSceneFocusUrl(step.slug);
 }
