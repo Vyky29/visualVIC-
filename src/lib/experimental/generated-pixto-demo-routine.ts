@@ -9,7 +9,12 @@ import {
   DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_GENERAL_SEQUENCE,
   dayCentreGeneralImageUrlForStep,
+  type DayCentreGeneralStep,
 } from "@/lib/cards/day-centre-general-cards";
+import {
+  CORE_CATEGORY_COLOUR,
+  CORE_CATEGORY_LABEL,
+} from "@/lib/cards/core-cards";
 import {
   PHYSICAL_3D_CATEGORY_LABEL,
   PHYSICAL_3D_GYM_CATEGORY_LABEL,
@@ -128,25 +133,38 @@ export const HOTEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     iconUrl: atTheHotelPackMarkUrl(),
   }));
 
-/** Day Centre · General — illustrated library. */
-export const DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_GENERAL_SEQUENCE.map((s) => ({
+/** Slugs borrowed from Core pack — grey ribbon inside Day centre routines. */
+const DAY_CENTRE_CORE_BORROWED_SLUGS = new Set(["wash-hands"]);
+
+function dayCentreGeneralGeneratedCardProps(
+  s: DayCentreGeneralStep,
+): GeneratedPixtoCardProps {
+  const shared = {
     illustrationUrl: dayCentreGeneralImageUrlForStep(s),
     title: lc(s.title),
+    iconUrl: dayCentrePackMarkUrl(),
+  };
+  if (DAY_CENTRE_CORE_BORROWED_SLUGS.has(s.slug)) {
+    return {
+      ...shared,
+      category: lc(CORE_CATEGORY_LABEL),
+      categoryColour: CORE_CATEGORY_COLOUR,
+    };
+  }
+  return {
+    ...shared,
     category: lc("At the day centre"),
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
-  }));
+  };
+}
+
+/** Day Centre · General — illustrated library. */
+export const DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_GENERAL_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
 /** Day Centre · General — Saturday schedule routine (photo 1). */
 export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE.map((s) => ({
-    illustrationUrl: dayCentreGeneralImageUrlForStep(s),
-    title: lc(s.title),
-    category: lc("At the day centre"),
-    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
-    iconUrl: dayCentrePackMarkUrl(),
-  }));
+  DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
 /** Physical — equipment + stretching (2D library illustrations). */
 export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =

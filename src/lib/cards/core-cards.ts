@@ -5,6 +5,10 @@
 
 export const CORE_PUBLIC_DIR = "/cards/core";
 
+/** Grey ribbon — core self-care cues (wash hands, toilet, etc.). */
+export const CORE_CATEGORY_LABEL = "Core" as const;
+export const CORE_CATEGORY_COLOUR = "#CBCBC9" as const;
+
 /** Back-of-card for swipe flip in this category (not a routine step). */
 export const CORE_BACK_CARD_FILE = "backcard1.png" as const;
 

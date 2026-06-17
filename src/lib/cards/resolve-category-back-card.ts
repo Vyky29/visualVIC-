@@ -123,6 +123,7 @@ export function resolveCategoryBackCardUrlForStep(
     case "physical":
       return physicalBackCardUrl();
     case "core":
+      return coreBackCardUrl();
     case "swimming":
     case "custom":
     case "default":

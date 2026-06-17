@@ -311,6 +311,7 @@ function isFinishLikeStepData(step: RoutineStep, haystack: string): boolean {
 export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (step.generatedPixto) {
     const c = step.generatedPixto.category.toLowerCase();
+    if (c.includes("core")) return "core";
     if (c.includes("physical activity")) return "physical";
     if (c.includes("ayaan")) return "ayaan";
     if (c.includes("emmanuel")) return "ayaan";
@@ -339,6 +340,9 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (id.startsWith("swim-")) return "swimming";
   if (id.startsWith("gd-dressed-") || id.startsWith("gd-undressed-")) {
     return "dress";
+  }
+  if (id.startsWith("dcgs-wash-hands") || id.startsWith("dcg-wash-hands")) {
+    return "core";
   }
 
   if (

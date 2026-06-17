@@ -11,20 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const outDir = path.join(root, "public", "cards", "day centre", "general");
 
-/** Grid-sourced cards — run `import-day-centre-general-reference-grid.mjs` after reframe. */
-const GRID_SLUGS = new Set([
-  "music",
-  "cafe",
-  "black-nail-varnish",
-  "bus",
-  "westfield",
-  "mcdonalds",
-  "bean-bag",
-  "cab",
-  "home",
-  "finished",
-]);
-
 async function main() {
   const raws = fs
     .readdirSync(outDir)
@@ -37,23 +23,14 @@ async function main() {
   }
 
   let ok = 0;
-  let skip = 0;
 
   for (const raw of raws) {
     const slug = raw.slice(5, -4);
-    if (GRID_SLUGS.has(slug)) {
-      skip++;
-      continue;
-    }
     const src = path.join(outDir, raw);
     const dest = path.join(outDir, `${slug}.png`);
     await fitIllustrationToCard(src, dest);
     console.log("ok:", slug);
     ok++;
-  }
-
-  if (skip) {
-    console.log(`skip: ${skip} grid cards (run import-day-centre-general-reference-grid.mjs)`);
   }
 
   console.log(`Done — ${ok} cards reframed → ${outDir}`);
