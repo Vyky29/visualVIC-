@@ -64,6 +64,11 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
       title: "Knees up on box",
     },
     { id: "dcs-weight-ball", slug: "weight-ball", title: "Weight ball" },
+    {
+      id: "dcs-weight-ball-on-bench",
+      slug: "weight-ball-on-bench",
+      title: "Weight ball on bench",
+    },
     { id: "dcs-toilet", slug: "toilet", title: "Toilet" },
     { id: "dcs-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
     { id: "dcs-skierg", slug: "skierg", title: "Ski machine" },

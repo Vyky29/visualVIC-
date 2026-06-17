@@ -69,6 +69,12 @@ export const SERINE_PHYSICAL_SCHEDULE = [
       "standing in a gym holding a large black weight ball overhead with both arms extended straight up, teal-grey tracksuit hoodie and joggers, white trainers with red accents, glasses",
   },
   {
+    slug: "weight-ball-on-bench",
+    title: "Weight ball on bench",
+    scene:
+      "sitting on a brown padded gym bench holding a black medicine ball with handles at chest, black BT21 t-shirt, dark navy leggings, white trainers, headphones, glasses, side view",
+  },
+  {
     slug: "toilet",
     title: "Toilet",
     scene: "sitting on toilet in a clean bathroom, modest and respectful framing",
