@@ -45,9 +45,14 @@ const CARTOON = {
   "3d": { asset: "serine-cartoon-3d-adult.png", avatar: "serine-cartoon.png" },
 };
 
-async function maybeAvatar(src, destName) {
+async function maybeAvatar(src, destName, style) {
   if (!fs.existsSync(src)) return false;
-  await fitIllustrationToCard(src, path.join(avatarDir, destName));
+  const dest = path.join(avatarDir, destName);
+  if (style === "2d") {
+    await sharp(src).png().toFile(dest);
+  } else {
+    await fitIllustrationToCard(src, dest);
+  }
   fs.copyFileSync(src, path.join(refDir, path.basename(src)));
   return true;
 }
@@ -68,7 +73,7 @@ async function main() {
 
   for (const [style, { asset, avatar }] of Object.entries(CARTOON)) {
     const src = path.join(assets, asset);
-    if (await maybeAvatar(src, avatar)) {
+    if (await maybeAvatar(src, avatar, style)) {
       console.log("avatar:", style, "→", avatar);
     } else {
       console.warn("missing cartoon:", asset, `(phase ${style})`);

@@ -54,6 +54,7 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { dayCentrePackMarkUrl } from "@/lib/cards/day-centre-shared";
 import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
+import { isDayCentreTailoredPackIconUrl } from "@/lib/cards/day-centre-shared";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import {
   resolveFeaturedRoutineHomePreviewUrl,
@@ -541,13 +542,16 @@ function HomeRoutinePreviewMedia({
 }) {
   if (!imageUrl) return null;
   const pixto = isPixtoLearnBundledCardUrl(imageUrl);
+  const tailoredAvatar = isDayCentreTailoredPackIconUrl(imageUrl);
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(imageUrl);
   const fullBleedPixto = isPixtoLearnFullBleedCardUrl(imageUrl);
   return (
     <div
       className={cn(
         "relative overflow-hidden",
-        pixto ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS) : "bg-canvas-muted",
+        pixto || tailoredAvatar
+          ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
+          : "bg-canvas-muted",
         frameClassName,
       )}
     >

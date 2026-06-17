@@ -29,9 +29,9 @@ export function dayCentreIkramAvatarUrl(): string {
   return "/avatars/ikram-library.png";
 }
 
-/** Home · Tailored schedules — 3D face close-up (fills tile). */
+/** Home · Tailored schedules — 2D face portrait (white background). */
 export function dayCentreIkramTailoredHomeAvatarUrl(): string {
-  return "/avatars/ikram-cartoon-home.png";
+  return dayCentreIkramAvatarLeopard2dUrl();
 }
 
 /** Library pack accordion — same 3D face close-ups, fill the icon square. */
@@ -80,9 +80,9 @@ export function dayCentreSerineAvatarUrl(): string {
   return "/avatars/serine-cartoon.png";
 }
 
-/** Home · Tailored schedules — 3D face close-up (fills tile). */
+/** Home · Tailored schedules — 2D face portrait (white background). */
 export function dayCentreSerineTailoredHomeAvatarUrl(): string {
-  return "/avatars/serine-cartoon-home.png";
+  return dayCentreSerineLibraryAvatarUrl();
 }
 
 /** Serine 2D close-up — card pack marks / legacy. */
@@ -129,9 +129,9 @@ export function dayCentreAyaanAvatarUrl(): string {
   return "/avatars/ayaan-cartoon.png";
 }
 
-/** Home · Tailored schedules — 3D face close-up (fills tile). */
+/** Home · Tailored schedules — 2D face portrait (white background). */
 export function dayCentreAyaanTailoredHomeAvatarUrl(): string {
-  return "/avatars/ayaan-cartoon-home.png";
+  return dayCentreAyaanLibraryAvatarUrl();
 }
 
 /** Ayaan 2D close-up — card pack marks / legacy. */
@@ -161,9 +161,9 @@ export function dayCentreEmmanuelAvatarUrl(): string {
   return "/avatars/emmanuel-cartoon.png";
 }
 
-/** Home · Tailored schedules — 3D face close-up (fills tile). */
+/** Home · Tailored schedules — 2D face portrait (white background). */
 export function dayCentreEmmanuelTailoredHomeAvatarUrl(): string {
-  return "/avatars/emmanuel-cartoon-home.png";
+  return dayCentreEmmanuelLibraryAvatarUrl();
 }
 
 /** Emmanuel 2D close-up — card pack marks / legacy. */
@@ -188,7 +188,12 @@ export function dayCentreEmmanuelSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}-focus.png`;
 }
 
-/** Square 3D face crops — Home tailored tiles + Library pack headers. */
+/** Square 2D / home tile avatars — Tailored schedules + Library pack headers. */
 export function isDayCentreTailoredPackIconUrl(url: string): boolean {
-  return url.includes("/avatars/") && url.endsWith("-cartoon-home.png");
+  return (
+    url.includes("/avatars/") &&
+    (url.endsWith("-cartoon-2d.png") ||
+      url.endsWith("-cartoon-leopard-2d.png") ||
+      url.endsWith("-cartoon-home.png"))
+  );
 }

@@ -1,6 +1,5 @@
 /**
- * Home · Tailored schedules — square face close-ups (Ikram reference).
- * Crops 3D portrait sources to fill tile previews with object-cover.
+ * Home · Tailored schedules — square 2D face tiles (contain, full head visible).
  *
  *   node scripts/prepare-tailored-home-avatars.mjs
  */
@@ -11,81 +10,32 @@ import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-
-const assets =
-  process.env.TAILORED_HOME_ASSETS_DIR ??
-  path.join(
-    process.env.HOME ?? "/Users/victor",
-    ".cursor",
-    "projects",
-    "Users-victor-cursor-visualVIC",
-    "assets",
-  );
-
 const avatarDir = path.join(root, "public", "avatars");
-const refDir = path.join(avatarDir, "_references");
 
-/** @type {{ dest: string; candidates: string[]; position?: string }[]} */
+/** @type {{ dest: string; src: string }[]} */
 const AVATARS = [
   {
     dest: "ikram-cartoon-home.png",
-    candidates: [
-      path.join(assets, "ikram-cartoon-pink-adult.png"),
-      path.join(assets, "ikram-cartoon-avatar.png"),
-      path.join(avatarDir, "ikram-cartoon.png"),
-    ],
-    position: "north",
+    src: path.join(avatarDir, "ikram-cartoon-leopard-2d.png"),
   },
   {
     dest: "serine-cartoon-home.png",
-    candidates: [
-      path.join(assets, "serine-cartoon-3d-adult.png"),
-      path.join(refDir, "serine-cartoon-3d-adult.png"),
-      path.join(
-        root,
-        "public",
-        "cards",
-        "day centre",
-        "serine",
-        "_references",
-        "serine-cartoon-3d-adult.png",
-      ),
-    ],
-    position: "north",
+    src: path.join(avatarDir, "serine-cartoon-2d.png"),
   },
   {
     dest: "ayaan-cartoon-home.png",
-    candidates: [
-      path.join(assets, "ayaan-cartoon-3d-adult.png"),
-      path.join(refDir, "ayaan-cartoon-3d-adult.png"),
-      path.join(avatarDir, "ayaan-cartoon.png"),
-    ],
-    position: "north",
+    src: path.join(avatarDir, "ayaan-cartoon-2d.png"),
   },
   {
     dest: "emmanuel-cartoon-home.png",
-    candidates: [
-      path.join(assets, "emmanuel-cartoon-3d-adult.png"),
-      path.join(refDir, "emmanuel-cartoon-3d-adult.png"),
-      path.join(avatarDir, "emmanuel-cartoon.png"),
-    ],
-    position: "north",
+    src: path.join(avatarDir, "emmanuel-cartoon-2d.png"),
   },
 ];
 
-function resolveSrc(candidates) {
-  for (const p of candidates) {
-    if (fs.existsSync(p)) return p;
-  }
-  return null;
-}
+const SIZE = 960;
+const PAD = 20;
 
-/**
- * @param {string} src
- * @param {string} dest
- * @param {string} position
- */
-async function exportHomeAvatar(src, dest, position) {
+async function exportHomeAvatar(src, dest) {
   let img = sharp(src);
   try {
     img = img.trim({ threshold: 20 });
@@ -93,23 +43,27 @@ async function exportHomeAvatar(src, dest, position) {
     // keep original
   }
 
-  await img
-    .resize(960, 960, { fit: "cover", position })
+  const max = SIZE - 2 * PAD;
+  const resized = await img
+    .resize(max, max, { fit: "inside" })
+    .png()
+    .toBuffer();
+
+  await sharp({
+    create: { width: SIZE, height: SIZE, channels: 3, background: "#ffffff" },
+  })
+    .composite([{ input: resized, gravity: "centre" }])
     .png()
     .toFile(dest);
 }
 
 async function main() {
-  fs.mkdirSync(avatarDir, { recursive: true });
-
-  for (const { dest, candidates, position = "north" } of AVATARS) {
-    const src = resolveSrc(candidates);
-    if (!src) {
-      console.warn("missing source for", dest);
+  for (const { dest, src } of AVATARS) {
+    if (!fs.existsSync(src)) {
+      console.warn("missing:", src);
       continue;
     }
-    const out = path.join(avatarDir, dest);
-    await exportHomeAvatar(src, out, position);
+    await exportHomeAvatar(src, path.join(avatarDir, dest));
     console.log("home avatar:", path.basename(src), "→", dest);
   }
 }
