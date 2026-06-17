@@ -263,3 +263,43 @@ export const DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep
   { id: "dcgs-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
   { id: "dcgs-home", slug: "home", title: "Home" },
 ] as const;
+
+/** Mini gym — equipment-only schedule. */
+export const DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] =
+  DAY_CENTRE_FITNESS_SEQUENCE;
+
+/** Cooking activity — kitchen materials and food prep. */
+export const DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccc-apron", slug: "apron", title: "Apron" },
+  { id: "dccc-wash-hands", slug: "wash-hands", title: "Wash hands" },
+  { id: "dccc-mixing-bowl", slug: "mixing-bowl", title: "Mixing bowl" },
+  { id: "dccc-wooden-spoon", slug: "wooden-spoon", title: "Wooden spoon" },
+  { id: "dccc-pizza", slug: "pizza", title: "Pizza" },
+  { id: "dccc-cooking", slug: "cooking", title: "Cooking" },
+  { id: "dccc-peeling", slug: "peeling", title: "Peeling" },
+] as const;
+
+/** Community outing — Westfield, McDonald's and transport. */
+export const DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccc-bus", slug: "bus", title: "Bus to town" },
+  { id: "dccc-westfield", slug: "westfield", title: "Westfield" },
+  { id: "dccc-shopping", slug: "shopping", title: "Shopping" },
+  { id: "dccc-queue", slug: "queue", title: "Queue" },
+  { id: "dccc-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
+  { id: "dccc-taxi", slug: "taxi", title: "Taxi" },
+  { id: "dccc-cab", slug: "cab", title: "Cab" },
+] as const;
+
+/** Mixed day — composite schedules (karaoke, cafe, swimming, choosing, cab, home, …). */
+export const DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcmx-karaoke", slug: "karaoke", title: "Karaoke" },
+  { id: "dcmx-walk", slug: "walk", title: "Walking" },
+  { id: "dcmx-cafe", slug: "cafe", title: "Cafe" },
+  { id: "dcmx-swimming", slug: "swimming-pool", title: "Swimming" },
+  { id: "dcmx-eat", slug: "eat", title: "Lunch" },
+  { id: "dcmx-sorting", slug: "sorting-trays", title: "Choosing" },
+  { id: "dcmx-bean-bag", slug: "bean-bag", title: "Relaxation" },
+  { id: "dcmx-music", slug: "music", title: "Music" },
+  { id: "dcmx-cab", slug: "cab", title: "Cab" },
+  { id: "dcmx-home", slug: "home", title: "Home" },
+] as const;

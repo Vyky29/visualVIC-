@@ -293,6 +293,26 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Day centre",
     es: "Centro de día",
   },
+  "dc-mini-gym": {
+    en: "Mini Gym Routine",
+    es: "Rutina mini gym",
+  },
+  "dc-bouldering": {
+    en: "Bouldering Routine",
+    es: "Rutina boulder",
+  },
+  "dc-cooking": {
+    en: "Cooking Activity",
+    es: "Actividad cocina",
+  },
+  "dc-community": {
+    en: "Community Outing",
+    es: "Salida comunidad",
+  },
+  "dc-mixed": {
+    en: "Mixed Day",
+    es: "Día mixto",
+  },
   "ikram-day-centre": {
     en: "Ikram · Saturday outing",
     es: "Ikram · salida del sábado",
@@ -323,36 +343,59 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
   },
 };
 
+export function libraryTailoredParticipantFolderLabel(
+  participant: "ikram" | "serine" | "ayaan" | "emmanuel",
+  language: CardLanguageCode,
+): string {
+  const ui = effectiveDigitalUiLang(language);
+  const name =
+    participant === "ikram"
+      ? "Ikram"
+      : participant === "serine"
+        ? "Serine"
+        : participant === "ayaan"
+          ? "Ayaan"
+          : "Emmanuel";
+  if (ui === "es") return `Carpeta de ${name}`;
+  return `${name}'s Folder`;
+}
+
+export function libraryDayCentreFolderLabel(
+  folder: "mini-gym" | "bouldering" | "cooking" | "community" | "mixed",
+  language: CardLanguageCode,
+): string {
+  const ui = effectiveDigitalUiLang(language);
+  const en: Record<typeof folder, string> = {
+    "mini-gym": "Mini Gym Folder",
+    bouldering: "Bouldering Folder",
+    cooking: "Cooking Folder",
+    community: "Community Folder",
+    mixed: "Mixed Folder",
+  };
+  const es: Record<typeof folder, string> = {
+    "mini-gym": "Carpeta mini gym",
+    bouldering: "Carpeta boulder",
+    cooking: "Carpeta cocina",
+    community: "Carpeta comunidad",
+    mixed: "Carpeta mixta",
+  };
+  return ui === "es" ? es[folder] : en[folder];
+}
+
 export function libraryDayCentreIkramLabel(language: CardLanguageCode): string {
-  return stockRoutineDisplayName(
-    "ikram-day-centre",
-    "Ikram · tailored schedules",
-    language,
-  );
+  return libraryTailoredParticipantFolderLabel("ikram", language);
 }
 
 export function libraryDayCentreSerineLabel(language: CardLanguageCode): string {
-  return stockRoutineDisplayName(
-    "serine-day-centre",
-    "Serine · Physical activity",
-    language,
-  );
+  return libraryTailoredParticipantFolderLabel("serine", language);
 }
 
 export function libraryDayCentreAyaanLabel(language: CardLanguageCode): string {
-  return stockRoutineDisplayName(
-    "ayaan-day-centre",
-    "Ayaan · Physical activity",
-    language,
-  );
+  return libraryTailoredParticipantFolderLabel("ayaan", language);
 }
 
 export function libraryDayCentreEmmanuelLabel(language: CardLanguageCode): string {
-  return stockRoutineDisplayName(
-    "emmanuel-day-centre",
-    "Emmanuel · Physical activity",
-    language,
-  );
+  return libraryTailoredParticipantFolderLabel("emmanuel", language);
 }
 
 export function stockRoutineDisplayName(

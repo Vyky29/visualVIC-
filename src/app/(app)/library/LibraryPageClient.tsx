@@ -21,10 +21,6 @@ import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-c
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import {
-  DAY_CENTRE_LIBRARY_GROUP_ORDER,
-  dayCentreLibraryGroupForSlug,
-} from "@/lib/cards/day-centre-library-groups";
-import {
   IKRAM_LIBRARY_GROUP_ORDER,
   ikramLibraryGroupForSlug,
 } from "@/lib/cards/ikram-library-groups";
@@ -35,11 +31,19 @@ import {
 import {
   dayCentreAyaanLibraryPackIconUrl,
   dayCentreEmmanuelLibraryPackIconUrl,
-  dayCentreHubRoomImageUrl,
   dayCentreIkramLibraryPackIconUrl,
   dayCentreSerineLibraryPackIconUrl,
   isDayCentreTailoredPackIconUrl,
+  isDayCentreTailoredParticipantLibraryIconUrl,
 } from "@/lib/cards/day-centre-shared";
+import {
+  dayCentreFolderForSlug,
+  isDayCentreBoulderingClimbSlug,
+} from "@/lib/cards/day-centre-folder-groups";
+import {
+  dayCentreFolderIconUrl,
+  dayCentreFolderLibrarySectionId,
+} from "@/lib/routines/day-centre-folders";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -62,7 +66,6 @@ import {
   libraryPackSectionTitle,
   librarySelectionSummary,
   libraryStepCountBadge,
-  dayCentreLibraryGroupLabel,
   ikramLibraryGroupLabel,
   physicalLibraryGroupLabel,
   librarySubheadingObjects,
@@ -93,17 +96,38 @@ import {
 const groups = ["self-care", "home", "activity"] as const;
 
 export type LibrarySectionId =
-  | Exclude<PickablePackId, "dress" | "phy2d" | "phy3d" | "phy3g">
+  | Exclude<
+      PickablePackId,
+      "dress" | "phy2d" | "phy3d" | "phy3g" | "daycentre"
+    >
   | "dress-on"
   | "dress-off"
-  | "physical";
+  | "physical"
+  | "dcfolderminigym"
+  | "dcfolderbouldering"
+  | "dcfoldercooking"
+  | "dcfoldercommunity"
+  | "dcfoldermixed";
 
 const SECTION_ORDER_BY_CATEGORY: Record<
   (typeof groups)[number],
   readonly LibrarySectionId[]
 > = {
   "self-care": ["bt", "shower", "dress-on", "dress-off"],
-  home: ["core", "airport", "hotel", "daycentre", "dcikram", "dcserine", "dcayaan", "dcemmanuel"],
+  home: [
+    "core",
+    "airport",
+    "hotel",
+    "dcfolderminigym",
+    "dcfolderbouldering",
+    "dcfoldercooking",
+    "dcfoldercommunity",
+    "dcfoldermixed",
+    "dcikram",
+    "dcserine",
+    "dcayaan",
+    "dcemmanuel",
+  ],
   activity: ["climb", "swim", "physical"],
 };
 
@@ -116,7 +140,11 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   core: coreImageUrl("wash-hands"),
   airport: AIRPORT_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
-  daycentre: dayCentreHubRoomImageUrl(),
+  dcfolderminigym: dayCentreFolderIconUrl("mini-gym"),
+  dcfolderbouldering: dayCentreFolderIconUrl("bouldering"),
+  dcfoldercooking: dayCentreFolderIconUrl("cooking"),
+  dcfoldercommunity: dayCentreFolderIconUrl("community"),
+  dcfoldermixed: dayCentreFolderIconUrl("mixed"),
   dcikram: dayCentreIkramLibraryPackIconUrl(),
   dcserine: dayCentreSerineLibraryPackIconUrl(),
   dcayaan: dayCentreAyaanLibraryPackIconUrl(),
@@ -135,7 +163,11 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   core: "ring-accent/70",
   airport: "ring-[#e0b030]/90",
   hotel: "ring-[#8C1E2E]/70",
-  daycentre: "ring-[#E53935]/75",
+  dcfolderminigym: "ring-[#E53935]/75",
+  dcfolderbouldering: "ring-[#E53935]/75",
+  dcfoldercooking: "ring-[#E53935]/75",
+  dcfoldercommunity: "ring-[#E53935]/75",
+  dcfoldermixed: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
   dcayaan: "ring-[#1E4A73]/75",
@@ -181,6 +213,15 @@ function librarySectionFromCard(
   const pack = pickablePackFromPickId(c.pickId);
   if (!pack) return null;
   if (pack === "phy2d" || pack === "phy3d" || pack === "phy3g") return "physical";
+  if (pack === "daycentre") {
+    const slug = c.pickId.split("::")[1] ?? "";
+    return dayCentreFolderLibrarySectionId(dayCentreFolderForSlug(slug));
+  }
+  if (pack === "climb") {
+    const slug = c.pickId.split("::")[1] ?? "";
+    if (isDayCentreBoulderingClimbSlug(slug)) return "dcfolderbouldering";
+    return "climb";
+  }
   if (pack !== "dress") return pack;
 
   const slug = c.pickId.split("::")[1] ?? "";
@@ -291,18 +332,17 @@ function libraryPackHeaderImageClass(
   if (isDayCentreTailoredPackIconUrl(iconSrc)) {
     return "object-contain object-center p-0.5";
   }
-  if (cropHeaderIcon) {
+  if (
+    isDayCentreTailoredParticipantLibraryIconUrl(iconSrc) ||
+    cropHeaderIcon
+  ) {
     return "object-cover object-top scale-[1.26]";
   }
   return "object-contain p-1.5 sm:p-1.5";
 }
 
 function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
-  return (
-    section === "daycentre" ||
-    section === "physical" ||
-    section === "dcikram"
-  );
+  return section === "physical" || section === "dcikram";
 }
 
 function LibrarySubgroupHeader({
@@ -367,35 +407,6 @@ function LibraryPackThematicSubgroups({
   cardUiLang: CardLanguageCode;
   ringClass: string;
 }) {
-  if (section === "daycentre") {
-    return DAY_CENTRE_LIBRARY_GROUP_ORDER.map((groupId) => {
-      const groupCards = cards.filter((v) => {
-        const slug = v.pickId.split("::")[1] ?? "";
-        return dayCentreLibraryGroupForSlug(slug) === groupId;
-      });
-      if (groupCards.length === 0) return null;
-      return (
-        <section key={groupId} className="space-y-1.5">
-          <LibrarySubgroupHeader
-            label={dayCentreLibraryGroupLabel(groupId, cardUiLang)}
-            iconUrl={groupCards[0]?.imageUrl}
-            ringClass={ringClass}
-          />
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-            {groupCards.map((v) => (
-              <LibraryPickTile
-                key={v.pickId}
-                v={v}
-                selected={selectedSet.has(v.pickId)}
-                onToggle={onToggle}
-              />
-            ))}
-          </div>
-        </section>
-      );
-    });
-  }
-
   if (section === "physical") {
     return PHYSICAL_LIBRARY_GROUP_ORDER.map((groupId) => {
       const groupCards = cards.filter((v) => {
@@ -699,7 +710,7 @@ export function LibraryPageClient({
                   const iconUnopt = cardImageUnoptimized(iconSrc);
                   const cropHeaderIcon =
                     !isDayCentreTailoredPackIconUrl(iconSrc) &&
-                    section !== "daycentre" &&
+                    !isDayCentreTailoredParticipantLibraryIconUrl(iconSrc) &&
                     section !== "physical";
 
                   return (
@@ -736,7 +747,10 @@ export function LibraryPageClient({
                                   cropHeaderIcon,
                                 )}
                                 style={
-                                  cropHeaderIcon
+                                  cropHeaderIcon ||
+                                  isDayCentreTailoredParticipantLibraryIconUrl(
+                                    iconSrc,
+                                  )
                                     ? {
                                         top: "-6%",
                                         bottom: "auto",

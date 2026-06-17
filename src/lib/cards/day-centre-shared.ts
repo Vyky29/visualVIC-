@@ -34,9 +34,9 @@ export function dayCentreIkramTailoredHomeAvatarUrl(): string {
   return dayCentreIkramAvatarLeopard2dUrl();
 }
 
-/** Library pack accordion — same 2D face portraits, white background. */
+/** Library pack accordion — 3D face close-up, fill icon square. */
 export function dayCentreIkramLibraryPackIconUrl(): string {
-  return dayCentreIkramTailoredHomeAvatarUrl();
+  return dayCentreIkramAvatarLeopardUrl();
 }
 
 /** Ikram 3D cartoon variant (32, leopard print). */
@@ -92,7 +92,7 @@ export function dayCentreSerineLibraryAvatarUrl(): string {
 
 /** Library pack accordion — 3D face close-up, fill icon square. */
 export function dayCentreSerineLibraryPackIconUrl(): string {
-  return dayCentreSerineTailoredHomeAvatarUrl();
+  return dayCentreSerineAvatarUrl();
 }
 
 /** Alias when explicit 3D cartoon art ships. */
@@ -141,7 +141,7 @@ export function dayCentreAyaanLibraryAvatarUrl(): string {
 
 /** Library pack accordion — 3D face close-up, fill icon square. */
 export function dayCentreAyaanLibraryPackIconUrl(): string {
-  return dayCentreAyaanTailoredHomeAvatarUrl();
+  return dayCentreAyaanAvatarUrl();
 }
 
 export function dayCentreAyaanImageUrl(slug: string): string {
@@ -173,7 +173,7 @@ export function dayCentreEmmanuelLibraryAvatarUrl(): string {
 
 /** Library pack accordion — 3D face close-up, fill icon square. */
 export function dayCentreEmmanuelLibraryPackIconUrl(): string {
-  return dayCentreEmmanuelTailoredHomeAvatarUrl();
+  return dayCentreEmmanuelAvatarUrl();
 }
 
 export function dayCentreEmmanuelImageUrl(slug: string): string {
@@ -188,12 +188,23 @@ export function dayCentreEmmanuelSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}-focus.png`;
 }
 
-/** Square 2D / home tile avatars — Tailored schedules + Library pack headers. */
+/** Square 2D avatars — Home · Tailored schedules tiles only. */
 export function isDayCentreTailoredPackIconUrl(url: string): boolean {
   return (
     url.includes("/avatars/") &&
     (url.endsWith("-cartoon-2d.png") ||
       url.endsWith("-cartoon-leopard-2d.png") ||
       url.endsWith("-cartoon-home.png"))
+  );
+}
+
+/** 3D participant avatars — Library tailored folder headers. */
+export function isDayCentreTailoredParticipantLibraryIconUrl(
+  url: string,
+): boolean {
+  return (
+    url.includes("/avatars/") &&
+    (url.endsWith("-cartoon.png") ||
+      url.endsWith("-cartoon-leopard.png"))
   );
 }

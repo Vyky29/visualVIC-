@@ -21,8 +21,13 @@ import {
 import { mockTemplates } from "@/lib/mock/templates";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
+  DAY_CENTRE_BOULDERING_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
@@ -30,6 +35,7 @@ import {
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
+import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
 import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
@@ -170,6 +176,62 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "at-the-hotel",
       HOTEL_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym",
+    name: "Mini Gym Routine",
+    description: "Mini gym equipment — therapy ball, treadmill, weights and stretching",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("mini-gym"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym",
+      DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-bouldering",
+    name: "Bouldering Routine",
+    description: "Boulder wall — shoes, holds and climbing steps",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("bouldering"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-bouldering",
+      DAY_CENTRE_BOULDERING_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-cooking",
+    name: "Cooking Activity",
+    description: "Kitchen materials and food preparation",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("cooking"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-cooking",
+      DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-community",
+    name: "Community Outing",
+    description: "Westfield, McDonald's and community transport",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("community"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-community",
+      DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mixed",
+    name: "Mixed Day",
+    description:
+      "Composite schedule — karaoke, cafe, swimming, choosing, cab and home",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("mixed"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mixed",
+      DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {

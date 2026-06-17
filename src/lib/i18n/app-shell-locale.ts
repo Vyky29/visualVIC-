@@ -6,6 +6,7 @@ import {
   libraryDayCentreSerineLabel,
   libraryDayCentreAyaanLabel,
   libraryDayCentreEmmanuelLabel,
+  libraryDayCentreFolderLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
@@ -73,6 +74,26 @@ export function dashboardTailoredSchedulesSectionTitle(
   lang: CardLanguageCode,
 ): string {
   return isEs(lang) ? "Rutinas a medida" : "Tailored schedules";
+}
+
+export function tailoredParticipantSchedulesIntro(
+  participantName: string,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    return `Choose a schedule for ${participantName}. More can be added over time.`;
+  }
+  return `Elige una rutina para ${participantName}. Se irán añadiendo más con el tiempo.`;
+}
+
+export function dayCentreFolderSchedulesIntro(
+  folderName: string,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    return `Choose a ${folderName} schedule. More can be added over time.`;
+  }
+  return `Elige una rutina de ${folderName}. Se irán añadiendo más con el tiempo.`;
 }
 
 export function dashboardPhysicalActivitySectionTitle(
@@ -156,7 +177,11 @@ export type LibraryPackSectionId =
   | "core"
   | "airport"
   | "hotel"
-  | "daycentre"
+  | "dcfolderminigym"
+  | "dcfolderbouldering"
+  | "dcfoldercooking"
+  | "dcfoldercommunity"
+  | "dcfoldermixed"
   | "dcikram"
   | "dcserine"
   | "dcayaan"
@@ -171,7 +196,16 @@ export function libraryPackSectionTitle(
 ): string {
   if (section === "airport") return libraryAirportHotelLabel("airport", lang);
   if (section === "hotel") return libraryAirportHotelLabel("hotel", lang);
-  if (section === "daycentre") return libraryAirportHotelLabel("daycentre", lang);
+  if (section === "dcfolderminigym")
+    return libraryDayCentreFolderLabel("mini-gym", lang);
+  if (section === "dcfolderbouldering")
+    return libraryDayCentreFolderLabel("bouldering", lang);
+  if (section === "dcfoldercooking")
+    return libraryDayCentreFolderLabel("cooking", lang);
+  if (section === "dcfoldercommunity")
+    return libraryDayCentreFolderLabel("community", lang);
+  if (section === "dcfoldermixed")
+    return libraryDayCentreFolderLabel("mixed", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);

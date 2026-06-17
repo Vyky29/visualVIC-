@@ -31,6 +31,11 @@ const STOCK_PACK_IDS = new Set<string>([
   "at-the-airport",
   "at-the-hotel",
   "at-the-day-centre",
+  "dc-mini-gym",
+  "dc-bouldering",
+  "dc-cooking",
+  "dc-community",
+  "dc-mixed",
   "physical",
   "ikram-day-centre",
   "serine-day-centre",
@@ -609,6 +614,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-hotel") return "hotel";
   if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
+  if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "serine-day-centre") return "tailored";
   if (id === "ayaan-day-centre") return "ayaan";
@@ -662,6 +668,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-hotel") return "hotel";
   if (id === "physical") return "physical";
   if (id === "at-the-day-centre") return "daycentre";
+  if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "serine-day-centre") return "tailored";
   if (id === "ayaan-day-centre") return "ayaan";

@@ -60,6 +60,18 @@ import {
   resolveFeaturedRoutineHomePreviewUrl,
   resolveTailoredScheduleHomePreviewUrl,
 } from "@/lib/routines/resolve-routine-home-preview";
+import {
+  tailoredParticipantDisplayName,
+  tailoredParticipantFromStockRoutineId,
+  tailoredParticipantPickerHref,
+} from "@/lib/routines/tailored-participants";
+import {
+  DAY_CENTRE_FOLDER_IDS,
+  dayCentreFolderDisplayName,
+  dayCentreFolderFromStockRoutineId,
+  dayCentreFolderIconUrl,
+  dayCentreFolderPickerHref,
+} from "@/lib/routines/day-centre-folders";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 
@@ -81,7 +93,13 @@ const HIDE_FROM_HOME_FEATURED_IDS = new Set([
 const HOME_EXTRA_PACK_GROUPS = [
   {
     key: "home::day-centre",
-    routineIds: new Set(["at-the-day-centre"]),
+    routineIds: new Set([
+      "dc-mini-gym",
+      "dc-bouldering",
+      "dc-cooking",
+      "dc-community",
+      "dc-mixed",
+    ]),
     ringClass: "ring-[#E53935]/80",
     logoUrl: dayCentrePackMarkUrl,
     title: dashboardExtrasSectionTitle,
@@ -467,11 +485,19 @@ function DashboardRoutineTile({
   routine,
   previewUrl,
   previewFillFrame = false,
+  href,
+  titleOverride,
+  hideStepCount = false,
 }: {
   routine: Routine;
   previewUrl?: string;
   /** Action / portrait previews should cover the tile (not letterbox). */
   previewFillFrame?: boolean;
+  /** Override default `/player/:id` link (e.g. tailored participant picker). */
+  href?: string;
+  /** Replace routine title (e.g. participant name only on Home). */
+  titleOverride?: string;
+  hideStepCount?: boolean;
 }) {
   const resolvedPreview =
     previewUrl ??
@@ -483,7 +509,7 @@ function DashboardRoutineTile({
   return (
     <Link
       key={routine.id}
-      href={`/player/${routine.id}`}
+      href={href ?? `/player/${routine.id}`}
       className="group flex h-full min-h-0 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
     >
       <Card
@@ -509,11 +535,14 @@ function DashboardRoutineTile({
         </div>
         <div className="flex flex-1 flex-col justify-end px-2 pb-2 pt-1.5">
           <p className="line-clamp-2 text-[13px] font-semibold leading-tight text-ink">
-            {stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
+            {titleOverride ??
+              stockRoutineDisplayName(routine.id, routine.name, cardUiLang)}
           </p>
-          <p className="mt-0.5 text-[10px] text-ink-subtle">
-            {routine.steps.length} {dashboardStepsWord(cardUiLang)}
-          </p>
+          {!hideStepCount ? (
+            <p className="mt-0.5 text-[10px] text-ink-subtle">
+              {routine.steps.length} {dashboardStepsWord(cardUiLang)}
+            </p>
+          ) : null}
         </div>
       </Card>
     </Link>
@@ -902,18 +931,63 @@ export default function DashboardPage() {
                 >
                   <div className="min-h-0 overflow-hidden">
                     <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
-                      {group.routines.map((routine) => (
-                        <DashboardRoutineTile
-                          key={routine.id}
-                          routine={routine}
-                          previewUrl={
-                            group.key === "home::tailored"
-                              ? resolveTailoredScheduleHomePreviewUrl(routine)
-                              : undefined
-                          }
-                          previewFillFrame={group.key === "home::tailored"}
-                        />
-                      ))}
+                      {group.routines
+                        .slice()
+                        .sort((a, b) => {
+                          if (group.key !== "home::day-centre") return 0;
+                          const folderA = dayCentreFolderFromStockRoutineId(a.id);
+                          const folderB = dayCentreFolderFromStockRoutineId(b.id);
+                          if (!folderA || !folderB) return 0;
+                          return (
+                            DAY_CENTRE_FOLDER_IDS.indexOf(folderA) -
+                            DAY_CENTRE_FOLDER_IDS.indexOf(folderB)
+                          );
+                        })
+                        .map((routine) => {
+                        const participantId =
+                          group.key === "home::tailored"
+                            ? tailoredParticipantFromStockRoutineId(routine.id)
+                            : undefined;
+                        const folderId =
+                          group.key === "home::day-centre"
+                            ? dayCentreFolderFromStockRoutineId(routine.id)
+                            : undefined;
+                        return (
+                          <DashboardRoutineTile
+                            key={routine.id}
+                            routine={routine}
+                            previewUrl={
+                              group.key === "home::tailored"
+                                ? resolveTailoredScheduleHomePreviewUrl(routine)
+                                : folderId
+                                  ? dayCentreFolderIconUrl(folderId)
+                                  : undefined
+                            }
+                            previewFillFrame={
+                              group.key === "home::tailored" ||
+                              group.key === "home::day-centre"
+                            }
+                            href={
+                              participantId
+                                ? tailoredParticipantPickerHref(participantId)
+                                : folderId
+                                  ? dayCentreFolderPickerHref(folderId)
+                                  : undefined
+                            }
+                            titleOverride={
+                              participantId
+                                ? tailoredParticipantDisplayName(participantId)
+                                : folderId
+                                  ? dayCentreFolderDisplayName(folderId)
+                                  : undefined
+                            }
+                            hideStepCount={
+                              group.key === "home::tailored" ||
+                              group.key === "home::day-centre"
+                            }
+                          />
+                        );
+                      })}
                       {group.key === "home::tailored" ? (
                         <Link
                           href="/first-then?pack=ikram-home"

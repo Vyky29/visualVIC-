@@ -6,11 +6,19 @@ import {
   atTheAirportPackMarkUrl,
 } from "@/lib/cards/at-the-airport-cards";
 import {
+  DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE,
   DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_GENERAL_SEQUENCE,
+  DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE,
   dayCentreGeneralImageUrlForStep,
   type DayCentreGeneralStep,
 } from "@/lib/cards/day-centre-general-cards";
+import {
+  DAY_CENTRE_BOULDERING_SCHEDULE_SEQUENCE,
+  dayCentreBoulderingImageUrlForStep,
+} from "@/lib/cards/day-centre-bouldering-cards";
 import {
   CORE_CATEGORY_COLOUR,
   CORE_CATEGORY_LABEL,
@@ -165,6 +173,27 @@ export const DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] 
 /** Day Centre · General — Saturday schedule routine (photo 1). */
 export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_BOULDERING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_BOULDERING_SCHEDULE_SEQUENCE.map((s) => ({
+    illustrationUrl: dayCentreBoulderingImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc("At the day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
 
 /** Physical — equipment + stretching (2D library illustrations). */
 export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
