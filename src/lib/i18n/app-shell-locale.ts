@@ -456,8 +456,20 @@ export function plannerLoginTitle(lang: CardLanguageCode): string {
 
 export function plannerLoginBlurb(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Usa el mismo email y contraseña del portal staff (Supabase Portal)."
-    : "Use the same email and password as the staff portal (Supabase Portal).";
+    ? "Si entras desde el Portal con el botón Plan, no hace falta volver a escribir la contraseña. Solo usa este formulario si abres el Planner directamente."
+    : "If you open Planner from the Portal Plan button, you should not need to sign in again. Use this form only when opening Planner directly.";
+}
+
+export function plannerHandoffSigningIn(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Entrando con tu sesión del Portal…"
+    : "Signing in with your Portal session…";
+}
+
+export function plannerHandoffFailed(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "No se pudo usar la sesión del Portal. Prueba de nuevo desde el botón Plan o entra con email y contraseña."
+    : "Could not use your Portal session. Try again from the Plan button, or sign in with email and password.";
 }
 
 export function plannerLoginSubmit(lang: CardLanguageCode): string {

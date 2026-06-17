@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { MobileScreen } from "@/components/layout/MobileScreen";
@@ -31,6 +31,21 @@ function PlannerLoginForm() {
   const [loading, setLoading] = useState(false);
 
   const returnTo = searchParams.get("return") ?? "/planner";
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    const supabase = createBrowserSupabase();
+    if (!supabase) return;
+
+    let cancelled = false;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (cancelled || !data.session) return;
+      router.replace(returnTo.startsWith("/") ? returnTo : "/planner");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [returnTo, router]);
 
   if (!isSupabaseConfigured()) {
     return (

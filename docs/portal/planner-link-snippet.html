@@ -1,9 +1,42 @@
-<!-- Add to staff_dashboard.html / lead_dashboard.html (Portal repo) -->
-<a
-  href="https://visual-vic.vercel.app/planner"
-  class="your-dashboard-button-class"
-  target="_blank"
-  rel="noopener noreferrer"
->
+<!-- Portal staff/lead dashboard — open Planner with existing Supabase session (no second login) -->
+<!-- Requires: Portal already loads Supabase client for cklpnwhlqsulpmkipmqb -->
+
+<button type="button" id="open-planner-btn" class="your-dashboard-button-class">
   Planner
-</a>
+</button>
+
+<script>
+  (function () {
+    var PLANNER_HANDOFF = "https://visual-vic.vercel.app/planner/auth/handoff";
+
+    async function openPlanner() {
+      if (typeof supabase === "undefined" || !supabase.auth) {
+        window.open("https://visual-vic.vercel.app/planner/login", "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      var result = await supabase.auth.getSession();
+      var session = result.data && result.data.session;
+
+      if (!session) {
+        window.open("https://visual-vic.vercel.app/planner/login", "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      var hash = new URLSearchParams({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      }).toString();
+
+      window.open(PLANNER_HANDOFF + "#" + hash, "_blank", "noopener,noreferrer");
+    }
+
+    var btn = document.getElementById("open-planner-btn");
+    if (btn) btn.addEventListener("click", function () { openPlanner(); });
+  })();
+</script>
+
+<!-- Fallback link if JS disabled -->
+<noscript>
+  <a href="https://visual-vic.vercel.app/planner/login" target="_blank" rel="noopener noreferrer">Planner</a>
+</noscript>

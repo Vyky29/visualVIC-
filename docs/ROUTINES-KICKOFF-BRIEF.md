@@ -69,7 +69,19 @@ Inactive profiles (`is_active = false`) → no access.
 
 ## Auth note (cross-domain)
 
-Portal and Routines are different origins. Session cookies are **not** shared. Staff may sign in again on `/planner/login` with the same corporate email/password. v2: SSO or magic-link handoff.
+Portal (`portalvic.vercel.app`) and Routines (`visual-vic.vercel.app`) are **different origins**. Browser cookies are not shared.
+
+**v1 handoff (no second login):** Portal **Plan** button must open:
+
+```text
+https://visual-vic.vercel.app/planner/auth/handoff#access_token=…&refresh_token=…
+```
+
+Tokens come from `supabase.auth.getSession()` on Portal (hash fragment — not logged server-side). visualVIC calls `setSession` and opens `/planner`.
+
+Snippet: [`docs/portal/planner-link-snippet.html`](./portal/planner-link-snippet.html)
+
+**Fallback:** `/planner/login` (email/password) when staff open Planner directly from Home or bookmark.
 
 ## Roster
 
