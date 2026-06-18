@@ -1,26 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import {
-  GENERATED_PIXTO_SCHEDULE_NEXT_TABLET_W,
   GENERATED_PIXTO_SCHEDULE_NEXT_W,
-  GENERATED_PIXTO_SCHEDULE_NOW_TABLET_W,
   GENERATED_PIXTO_SCHEDULE_NOW_W,
-  TABLET_TOUCH_MEDIA,
-} from "@/lib/constants/app-shell-layout";
+} from "@/lib/constants/generated-pixto-card-sizes";
+import { TABLET_TOUCH_MEDIA } from "@/lib/constants/app-shell-layout";
+
+function subscribeTabletTouch(onChange: () => void) {
+  const mq = window.matchMedia(TABLET_TOUCH_MEDIA);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getTabletTouchSnapshot() {
+  return window.matchMedia(TABLET_TOUCH_MEDIA).matches;
+}
 
 export function useTabletTouchLayout(): boolean {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia(TABLET_TOUCH_MEDIA);
-    const apply = () => setMatches(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  return matches;
+  return useSyncExternalStore(
+    subscribeTabletTouch,
+    getTabletTouchSnapshot,
+    () => false,
+  );
 }
 
 export function useScheduleCardLayout() {
@@ -28,11 +30,8 @@ export function useScheduleCardLayout() {
 
   return {
     isTabletTouch,
-    nowCardMaxW: isTabletTouch
-      ? GENERATED_PIXTO_SCHEDULE_NOW_TABLET_W
-      : GENERATED_PIXTO_SCHEDULE_NOW_W,
-    nextCardMaxW: isTabletTouch
-      ? GENERATED_PIXTO_SCHEDULE_NEXT_TABLET_W
-      : GENERATED_PIXTO_SCHEDULE_NEXT_W,
+    /** Same caps as phone — preserves 744×1054 card proportions on tablet. */
+    nowCardMaxW: GENERATED_PIXTO_SCHEDULE_NOW_W,
+    nextCardMaxW: GENERATED_PIXTO_SCHEDULE_NEXT_W,
   };
 }

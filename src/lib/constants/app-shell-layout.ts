@@ -11,17 +11,20 @@ export const TABLET_TOUCH_MEDIA =
 
 /**
  * First & Then focus — horizontal two-card layout.
- * Phone: landscape with short height. Tablet/iPad: wide viewport (744px portrait counts).
+ * Tablet: landscape only. Phone: landscape with short viewport height.
  */
 export const FIRST_THEN_FOCUS_LANDSCAPE_MEDIA =
-  "(min-width: 740px), (orientation: landscape) and (max-height: 500px)" as const;
+  "(min-width: 740px) and (orientation: landscape), (max-width: 739px) and (orientation: landscape) and (max-height: 500px)" as const;
+
+/** Phone-width content column inside wider tablet shell. */
+export const TABLET_CONTENT_COLUMN_CLASS = "mx-auto w-full max-w-[min(100%,24rem)]";
 
 /** Shared shell width — phone column → near-full tablet width. */
 export const APP_SHELL_WIDTH_CLASS = "max-w-lg tablet:max-w-3xl";
 
-/** Schedule Player card column max width. */
+/** Schedule Player card column max width — same proportions as phone on all touch devices. */
 export const SCHEDULE_COLUMN_CLASS =
-  "max-w-[min(100%,21rem)] tablet:max-w-[min(100%,32rem)]";
+  "max-w-[min(100%,21rem)] mx-auto";
 
 /** Phone caps — see generated-pixto-card-sizes.ts */
 export {

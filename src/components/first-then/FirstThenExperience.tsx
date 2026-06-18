@@ -30,6 +30,7 @@ import {
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_STYLE,
   GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import {
@@ -58,6 +59,8 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFirstThenLandscapeFocus } from "@/lib/hooks/useFirstThenLandscapeFocus";
+import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
+import { TABLET_CONTENT_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
 import {
   lockScreenLandscape,
   lockScreenPortrait,
@@ -325,13 +328,14 @@ function MiniDigitalWowCard({
 
         <div className="relative min-h-0 flex-1">
           <div
-            className="absolute left-1/2 -translate-x-1/2 overflow-hidden"
+            className="absolute inset-x-0 mx-auto overflow-hidden"
             style={{
               top: slotHeaderLabel
                 ? "2%"
                 : `${(GENERATED_PIXTO_WOW_TOP_MARGIN_ABOVE_ILLUSTRATION / GENERATED_PIXTO_WOW_TOP_LAYOUT_H) * 100}%`,
               width: `${(GENERATED_PIXTO_ILLUSTRATION_FRAME.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
               aspectRatio: `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}`,
+              maxHeight: "72%",
             }}
           >
             <Image
@@ -529,10 +533,11 @@ function FirstThenFocusSpecCard({
           }}
         >
           <div
-            className="relative flex h-full w-full min-h-0 items-end justify-center overflow-hidden"
+            className="relative mx-auto flex h-full w-full min-h-[120px] max-h-full min-w-0 items-end justify-center overflow-hidden"
             style={{
               border: `${FOCUS_LANDSCAPE.illustBorder}px solid ${FOCUS_LANDSCAPE.illustBorderColor}`,
               borderRadius: 6,
+              maxHeight: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px`,
             }}
           >
             <FocusRoutineIllustrationImage
@@ -1200,7 +1205,7 @@ function FirstThenIntroLayout1({
 
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1">
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1 tablet:mx-auto tablet:max-w-[min(100%,26rem)]">
         <FirstThenPortraitLabeledRow
           slot="first"
           label={firstLabel}
@@ -1249,7 +1254,7 @@ function FirstThenIntroLayout2({
 }) {
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className="relative w-full max-w-[min(100%,240px)] px-1">
+      <div className={cn("relative w-full px-1", TABLET_CONTENT_COLUMN_CLASS)}>
         <FirstThenFocusEntryButton
           lang={lang}
           onFocusMode={onFocusMode}
@@ -1287,7 +1292,7 @@ function FirstThenIntroLayout3({
 
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className="relative flex w-full max-w-[min(100%,360px)] flex-1 flex-col items-center justify-center px-1 pb-12">
+      <div className={cn("relative flex w-full flex-1 flex-col items-center justify-center px-1 pb-12", TABLET_CONTENT_COLUMN_CLASS)}>
         <div className="flex w-full flex-col items-center gap-3">
           <div className="h-[min(32dvh,272px)] w-full min-h-0">
             <FirstThenPortraitCardCell
@@ -1311,6 +1316,53 @@ function FirstThenIntroLayout3({
         />
       </div>
     </FirstThenIntroPortraitShell>
+  );
+}
+
+function FirstThenFocusPortraitStack({
+  firstCard,
+  secondCard,
+  lang,
+  onExitFocus,
+}: {
+  firstCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps;
+  lang: ReturnType<typeof useCardUiLanguage>;
+  onExitFocus: () => void;
+}) {
+  const firstLabel = firstThenSlotLabel("first", lang);
+  const thenLabel = firstThenSlotLabel("then", lang);
+
+  return (
+    <div className="flex h-full min-h-0 w-full flex-col bg-black px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className={cn("mx-auto flex min-h-0 w-full flex-1 flex-col gap-3", TABLET_CONTENT_COLUMN_CLASS)}>
+        <div className="min-h-0 flex-1">
+          <FirstThenPortraitCardCell
+            card={firstCard}
+            scaleMultiplier={0.96}
+            slotHeaderLabel={firstLabel}
+            readableTitle
+          />
+        </div>
+        <div className="min-h-0 flex-1">
+          <FirstThenPortraitCardCell
+            card={secondCard}
+            scaleMultiplier={0.96}
+            slotHeaderLabel={thenLabel}
+            readableTitle
+          />
+        </div>
+      </div>
+      <div className="flex shrink-0 justify-center pt-3">
+        <button
+          type="button"
+          onClick={onExitFocus}
+          className={cn(introFooterActionClass, "mx-auto")}
+        >
+          {firstThenDemoFocusModeCta(lang)}
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -1409,6 +1461,7 @@ function FirstThenExperienceClient() {
     return resolveFirstThenDemoPack(packId, lang);
   }, [sessionPayload, packId, lang]);
   const showLandscapeFocus = useFirstThenLandscapeFocus();
+  const isTabletTouch = useTabletTouchLayout();
   const [showFocusMode, setShowFocusMode] = useState(false);
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1459,6 +1512,13 @@ function FirstThenExperienceClient() {
           secondCard={second}
           lang={lang}
           routineHref={routineHref}
+        />
+      ) : isTabletTouch ? (
+        <FirstThenFocusPortraitStack
+          firstCard={first}
+          secondCard={second}
+          lang={lang}
+          onExitFocus={() => setShowFocusMode(false)}
         />
       ) : (
         <div className="flex h-full min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">
