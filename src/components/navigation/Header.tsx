@@ -26,7 +26,7 @@ export function Header({
   return (
     <header
       className={cn(
-        "sticky top-0 z-10 flex items-center gap-3 overflow-hidden border-b border-ink/5 bg-canvas/90 px-4 backdrop-blur-md",
+        "sticky top-0 z-10 flex items-center gap-3 overflow-hidden border-b border-ink/5 bg-canvas/90 px-4 backdrop-blur-md tablet:px-6",
         compact
           ? "min-h-[44px] pb-2 pt-[max(0.45rem,env(safe-area-inset-top))]"
           : "min-h-[52px] pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]",

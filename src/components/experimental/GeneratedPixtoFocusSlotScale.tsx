@@ -8,8 +8,7 @@ type Props = { children: ReactNode; categoryOutlineBleed?: boolean };
 
 /**
  * Fits the Focus 3-zone card into the stage. Width-first: fills the stage
- * width (up to 28rem), then uses remaining height — illustration zone grows
- * inside the card; text/footer stay fixed px.
+ * width, then uses remaining height — illustration zone grows inside the card.
  */
 export function GeneratedPixtoFocusSlotScale({
   children,

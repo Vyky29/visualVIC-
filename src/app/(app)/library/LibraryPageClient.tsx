@@ -7,7 +7,7 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Button } from "@/components/ui/Button";
 import { brushingTeethImageUrl } from "@/lib/cards/brushing-teeth-cards";
@@ -76,6 +76,8 @@ import {
   libraryStepCountBadge,
   ikramLibraryGroupLabel,
   physicalLibraryGroupLabel,
+  miniGymLibraryGroupLabel,
+  libraryPickRibbonCategory,
   librarySubheadingObjects,
   librarySubheadingSteps,
   type DashboardPackCategory,
@@ -93,13 +95,13 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
-import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
+import { APP_SHELL_TABLET_INSET_CLASS, shellClassForPathname } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
   isPixtoLearnFullBleedCardUrl,
   isPixtoLearnIllustrationOnlyUrl,
-  pixtoBundledCardObjectPositionTopClass,
+  pixtoBundledCardThumbnailClipPath,
 } from "@/lib/utils/visual-card-url";
 
 const groups = ["self-care", "home", "activity"] as const;
@@ -454,7 +456,7 @@ function LibraryPackThematicSubgroups({
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />
-          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
             {groupCards.map((v) => (
               <LibraryPickTile
                 key={v.pickId}
@@ -479,11 +481,11 @@ function LibraryPackThematicSubgroups({
       return (
         <section key={groupId} className="space-y-1.5">
           <LibrarySubgroupHeader
-            label={physicalLibraryGroupLabel(groupId, cardUiLang)}
+            label={miniGymLibraryGroupLabel(groupId, cardUiLang)}
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />
-          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
             {groupCards.map((v) => (
               <LibraryPickTile
                 key={v.pickId}
@@ -512,7 +514,7 @@ function LibraryPackThematicSubgroups({
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />
-          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
             {groupCards.map((v) => (
               <LibraryPickTile
                 key={v.pickId}
@@ -540,7 +542,7 @@ function LibraryPackThematicSubgroups({
           iconUrl={groupCards[0]?.imageUrl}
           ringClass={ringClass}
         />
-        <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+        <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
           {groupCards.map((v) => (
             <LibraryPickTile
               key={v.pickId}
@@ -562,10 +564,14 @@ type LibraryPickTileProps = {
 };
 
 function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
+  const cardUiLang = useCardUiLanguage();
+  const [imgFailed, setImgFailed] = useState(false);
   const unopt = cardImageUnoptimized(v.imageUrl);
   const pixto = isPixtoLearnBundledCardUrl(v.imageUrl);
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(v.imageUrl);
   const fullBleedPixto = isPixtoLearnFullBleedCardUrl(v.imageUrl);
+  const ribbonCategory = libraryPickRibbonCategory(v.pickId, cardUiLang);
+  const showImage = Boolean(v.imageUrl) && !imgFailed;
   const categoryOutlineStyle = v.generatedPixto?.categoryColour
     ? generatedPixtoCategoryOutlineStyle(v.generatedPixto.categoryColour, {
         cardShadow: false,
@@ -583,36 +589,35 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
     >
       <div
         className={cn(
-          "relative aspect-[5/6] w-full shrink-0 overflow-hidden bg-canvas-muted",
-          pixto && GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
-          pixto ? "bg-white" : "bg-canvas-muted",
+          "relative aspect-[5/6] w-full shrink-0 overflow-hidden",
+          pixto || illustrationOnly
+            ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
+            : "bg-canvas-muted",
         )}
-        style={pixto ? categoryOutlineStyle : undefined}
+        style={{
+          ...(pixto ? categoryOutlineStyle : undefined),
+          ...(fullBleedPixto
+            ? { clipPath: pixtoBundledCardThumbnailClipPath }
+            : undefined),
+        }}
       >
-        <Image
-          src={v.imageUrl}
-          alt=""
-          fill
-          sizes="(max-width: 512px) 23vw, 120px"
-          unoptimized={unopt}
-          className={cn(
-            illustrationOnly ? "object-contain object-center" : "object-cover",
-            fullBleedPixto
-              ? cn(
-                  pixtoBundledCardObjectPositionTopClass,
-                  "!h-[120%] !max-h-none w-full",
-                )
-              : "object-center",
-          )}
-          style={
-            fullBleedPixto
-              ? {
-                  top: "7%",
-                  bottom: "auto",
-                }
-              : undefined
-          }
-        />
+        {showImage ? (
+          <Image
+            src={v.imageUrl}
+            alt=""
+            fill
+            sizes="(max-width: 739px) 23vw, 14vw"
+            unoptimized={unopt}
+            onError={() => setImgFailed(true)}
+            className={cn(
+              illustrationOnly
+                ? "object-contain object-center"
+                : "object-cover object-center",
+            )}
+          />
+        ) : (
+          <div className="h-full w-full bg-white" aria-hidden />
+        )}
         {selected ? (
           <div
             className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-sage text-[12px] font-bold text-cream shadow-card ring-1 ring-white/90 sm:right-1.5 sm:top-1.5 sm:h-7 sm:w-7 sm:text-[13px]"
@@ -627,11 +632,16 @@ function LibraryPickTile({ v, selected, onToggle }: LibraryPickTileProps) {
       </div>
       <div
         className={cn(
-          "isolate flex w-full shrink-0 flex-col justify-center px-1.5 pb-1.5 pt-1 sm:px-2 sm:pb-1.5 sm:pt-1",
-          "min-h-[2.75rem] sm:min-h-[2.95rem]",
+          "isolate flex w-full shrink-0 flex-col justify-center gap-0.5 px-1.5 pb-1.5 pt-1 sm:px-2 sm:pb-1.5 sm:pt-1",
+          ribbonCategory ? "min-h-[3.1rem] sm:min-h-[3.25rem]" : "min-h-[2.75rem] sm:min-h-[2.95rem]",
           libraryRibbonClassForPickId(v.pickId),
         )}
       >
+        {ribbonCategory ? (
+          <p className="line-clamp-2 text-balance text-center text-[8px] font-semibold uppercase leading-[1.05] tracking-[0.06em] text-ink-subtle sm:text-[9px]">
+            {ribbonCategory}
+          </p>
+        ) : null}
         <p className="line-clamp-2 text-balance text-center text-[10px] font-semibold leading-[1.06] sm:text-[11px] sm:leading-[1.08]">
           {v.label}
         </p>
@@ -778,7 +788,7 @@ export function LibraryPageClient({
       )}
     >
       <TranslatedHeader titleKey={headerTitleKey} />
-      <div className="space-y-8 px-4 pb-10 pt-3">
+      <div className={cn("space-y-8 px-4 pb-10 pt-3", APP_SHELL_TABLET_INSET_CLASS)}>
         <div className="space-y-4">
           <p className="break-words px-1 text-center text-[15px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
             {introBlurbText ?? libraryIntroBlurb(cardUiLang)}
@@ -936,7 +946,7 @@ export function LibraryPageClient({
                                       iconUrl={SECTION_HEADER_ICON[section]}
                                       ringClass={ringClass}
                                     />
-                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
                                       {objectCards.map((v) => (
                                         <LibraryPickTile
                                           key={v.pickId}
@@ -958,7 +968,7 @@ export function LibraryPageClient({
                                       }
                                       ringClass={ringClass}
                                     />
-                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
                                       {stepCards.map((v) => (
                                         <LibraryPickTile
                                           key={v.pickId}

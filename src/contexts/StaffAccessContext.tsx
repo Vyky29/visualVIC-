@@ -21,6 +21,7 @@ import {
   staffMayOpenRoutine,
   staffPlayerBackHref,
 } from "@/lib/staff/staff-app-access";
+import { isStaffPortalSession } from "@/lib/staff/staff-portal-session";
 import type { TailoredParticipantId } from "@/lib/routines/tailored-participants";
 import type { Routine } from "@/lib/types/routine";
 import type { PlannerLibrarySectionId } from "@/lib/staff/planner-access";
@@ -41,6 +42,7 @@ const StaffAccessContext = createContext<StaffAccessContextValue | null>(null);
 export function StaffAccessProvider({ children }: { children: ReactNode }) {
   const [access, setAccess] = useState<StaffPlannerAccess | null>(null);
   const [status, setStatus] = useState<StaffAccessContextValue["status"]>("loading");
+  const [portalSession, setPortalSession] = useState(false);
 
   const refresh = useCallback(async () => {
     if (!isSupabaseConfigured()) {
@@ -80,6 +82,10 @@ export function StaffAccessProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   useEffect(() => {
+    setPortalSession(isStaffPortalSession());
+  }, []);
+
+  useEffect(() => {
     if (!isSupabaseConfigured()) return;
     const supabase = createBrowserSupabase();
     if (!supabase) return;
@@ -94,19 +100,25 @@ export function StaffAccessProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const value = useMemo<StaffAccessContextValue>(() => {
-    const isRestricted = isRestrictedStaffAccess(access);
+    const staffUiActive =
+      portalSession && isRestrictedStaffAccess(access);
     return {
       status,
       access,
-      isRestricted,
-      allowedLibrarySections: staffAllowedLibrarySections(access),
+      isRestricted: staffUiActive,
+      allowedLibrarySections: staffUiActive
+        ? staffAllowedLibrarySections(access)
+        : undefined,
       canAccessTailoredParticipant: (participantId) =>
-        staffCanAccessTailoredParticipant(access, participantId),
-      mayOpenRoutine: (routine) => staffMayOpenRoutine(access, routine),
-      playerBackHref: staffPlayerBackHref(access),
+        staffUiActive
+          ? staffCanAccessTailoredParticipant(access, participantId)
+          : true,
+      mayOpenRoutine: (routine) =>
+        staffUiActive ? staffMayOpenRoutine(access, routine) : true,
+      playerBackHref: staffUiActive ? staffPlayerBackHref(access) : "/player",
       refresh,
     };
-  }, [access, refresh, status]);
+  }, [access, portalSession, refresh, status]);
 
   return (
     <StaffAccessContext.Provider value={value}>{children}</StaffAccessContext.Provider>

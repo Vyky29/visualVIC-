@@ -10,6 +10,7 @@ import {
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
+import type { MiniGymLibraryDimension } from "@/lib/cards/mini-gym-library-groups";
 import type { PhysicalLibraryGroup } from "@/lib/cards/physical-library-groups";
 import type { DayCentreFolderId } from "@/lib/routines/day-centre-folders";
 import type { RoutineVisualTone } from "@/lib/utils/routine-accent";
@@ -654,16 +655,47 @@ export function physicalLibraryGroupLabel(
   lang: CardLanguageCode,
 ): string {
   const en: Record<PhysicalLibraryGroup, string> = {
-    "2d": "2D illustrations",
-    "3d": "3D equipment",
+    "2d": "Physical Activity (2D)",
+    "3d": "Physical Activity (3D)",
     "3d-gym": "3D gym & machines",
   };
   const es: Record<PhysicalLibraryGroup, string> = {
-    "2d": "Ilustraciones 2D",
-    "3d": "Equipamiento 3D",
+    "2d": "Actividad física (2D)",
+    "3d": "Actividad física (3D)",
     "3d-gym": "3D gimnasio y máquinas",
   };
   return isEs(lang) ? es[group] : en[group];
+}
+
+/** Library pick tile footer — pack dimension ribbon (Physical · Mini gym · …). */
+export function libraryPickRibbonCategory(
+  pickId: string,
+  lang: CardLanguageCode,
+): string | null {
+  const ns = pickId.split("::")[0]?.toLowerCase() ?? "";
+  if (ns === "phy2d") return physicalLibraryGroupLabel("2d", lang);
+  if (ns === "phy3d") return physicalLibraryGroupLabel("3d", lang);
+  if (ns === "mg2d") return miniGymLibraryGroupLabel("2d", lang);
+  if (ns === "mg3d") return miniGymLibraryGroupLabel("3d", lang);
+  return null;
+}
+
+/** @deprecated Use {@link libraryPickRibbonCategory}. */
+export const physicalLibraryPickRibbonCategory = libraryPickRibbonCategory;
+
+export function miniGymLibraryGroupLabel(
+  dimension: MiniGymLibraryDimension,
+  lang: CardLanguageCode,
+): string {
+  const en: Record<MiniGymLibraryDimension, string> = {
+    "2d": "Mini Gym (2D)",
+    "3d": "Mini Gym (3D)",
+  };
+  const es: Record<MiniGymLibraryDimension, string> = {
+    "2d": "Mini gym (2D)",
+    "3d": "Mini gym (3D)",
+  };
+  return isEs(lang) ? es[dimension] : en[dimension];
 }
 
 export function ikramLibraryGroupLabel(

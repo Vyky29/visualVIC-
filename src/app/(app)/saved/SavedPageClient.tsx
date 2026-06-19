@@ -15,6 +15,8 @@ import {
   templatesPageLinkWord,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
+import { cn } from "@/lib/utils/cn";
 
 export function SavedPageClient() {
   const lang = useCardUiLanguage();
@@ -37,7 +39,7 @@ export function SavedPageClient() {
   return (
     <div>
       <TranslatedHeader titleKey="savedLibrary" />
-      <div className="space-y-4 px-4 pb-8 pt-2">
+      <div className={cn("space-y-4 px-4 pb-8 pt-2", APP_SHELL_TABLET_INSET_CLASS)}>
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {savedIntroBlurb(lang)}
         </p>

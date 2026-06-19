@@ -15,7 +15,7 @@ import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Mobile-first shell: single column, max width ~phone, safe-area padding for nav.
+ * Mobile-first shell: phone column on small screens; full tablet width on iPad.
  */
 export function AppShell({
   children,
@@ -49,24 +49,25 @@ export function AppShell({
 
   const shellClass = shellClassForPathname(pathname);
 
-  const phoneShell = (
-    <div className={cn("relative mx-auto min-h-dvh w-full bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]", shellClass)}>
-      <div
-        className={
-          effectiveShowNav
-            ? "min-h-dvh pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
-            : "min-h-dvh"
-        }
-      >
-        {children}
-      </div>
-      {effectiveShowNav ? <BottomNav /> : null}
-    </div>
-  );
-
   return (
-    <div className="min-h-dvh w-full bg-black">
-      {phoneShell}
+    <div className="min-h-dvh w-full bg-canvas">
+      <div
+        className={cn(
+          "relative mx-auto min-h-dvh w-full bg-canvas text-ink",
+          shellClass,
+        )}
+      >
+        <div
+          className={
+            effectiveShowNav
+              ? "min-h-dvh pb-[calc(3.5rem+env(safe-area-inset-bottom))]"
+              : "min-h-dvh"
+          }
+        >
+          {children}
+        </div>
+        {effectiveShowNav ? <BottomNav /> : null}
+      </div>
     </div>
   );
 }

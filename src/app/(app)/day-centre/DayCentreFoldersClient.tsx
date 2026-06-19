@@ -12,6 +12,7 @@ import {
 import { libraryDayCentreFolderLabel } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
+import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import {
   DAY_CENTRE_FOLDER_IDS,
   dayCentreFolderIconUrl,
@@ -38,7 +39,7 @@ export function DayCentreFoldersClient() {
         backHref="/dashboard"
         backAriaLabel={shellBackAria(cardUiLang)}
       />
-      <div className="space-y-4 px-4 pb-8 pt-2">
+      <div className={cn("space-y-4 px-4 pb-8 pt-2", APP_SHELL_TABLET_INSET_CLASS)}>
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {dayCentreFoldersIntro(cardUiLang)}
         </p>

@@ -16,7 +16,7 @@ import {
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { cn } from "@/lib/utils/cn";
-import { SCHEDULE_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
+import { SCHEDULE_COLUMN_CLASS, APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardFirstThenCardEyebrow,
@@ -183,7 +183,7 @@ export function SchedulePlayer({
   };
 
   return (
-    <div className="flex flex-col gap-6 px-5 pb-10 pt-1">
+    <div className={cn("flex flex-col gap-6 px-5 pb-10 pt-1", APP_SHELL_TABLET_INSET_CLASS)}>
       <header className="space-y-3">
         <div className="flex items-end justify-between gap-3 px-0.5">
           <div>

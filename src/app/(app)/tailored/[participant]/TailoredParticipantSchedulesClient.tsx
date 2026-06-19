@@ -34,6 +34,7 @@ import {
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
+import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { resolveSchedulePlayerIndexPreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
 import {
   isTailoredParticipantId,
@@ -126,7 +127,7 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
         backHref="/dashboard"
         backAriaLabel={shellBackAria(cardUiLang)}
       />
-      <div className="space-y-4 px-4 pb-8 pt-2">
+      <div className={cn("space-y-4 px-4 pb-8 pt-2", APP_SHELL_TABLET_INSET_CLASS)}>
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {tailoredParticipantSchedulesIntro(participantName, cardUiLang)}
         </p>

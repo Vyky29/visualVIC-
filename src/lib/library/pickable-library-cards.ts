@@ -57,6 +57,7 @@ import {
   MINI_GYM_2D_LIBRARY_SEQUENCE,
   MINI_GYM_3D_LIBRARY_SEQUENCE,
   MINI_GYM_LIBRARY_SLUGS,
+  miniGymLibraryCategoryLabel,
 } from "@/lib/cards/mini-gym-library-groups";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
@@ -70,9 +71,9 @@ import {
   type DayCentrePremiumSourcePack,
 } from "@/lib/cards/day-centre-premium-cards";
 import {
+  PHYSICAL_2D_LIBRARY_SEQUENCE,
   PHYSICAL_3D_GYM_SEQUENCE,
-  PHYSICAL_3D_SEQUENCE,
-  PHYSICAL_SEQUENCE,
+  PHYSICAL_3D_LIBRARY_SEQUENCE,
   physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
   physicalImageUrlForStep,
@@ -86,9 +87,9 @@ import {
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
+  PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
-  PHYSICAL_GENERATED_CARD_PROPS,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
 const SEP = "::";
@@ -202,14 +203,14 @@ function appendExtraCardsFromFiles(params: {
 }
 
 function miniGymLibraryGeneratedPixto(
-  slug: string,
+  dimension: "2d" | "3d",
   title: string,
   illustrationUrl: string,
 ): GeneratedPixtoRoutineStepData {
   return {
     illustrationUrl,
     title,
-    category: DAY_CENTRE_GENERAL_CATEGORY_LABEL,
+    category: miniGymLibraryCategoryLabel(dimension),
     categoryColour: DAY_CENTRE_CATEGORY_COLOUR,
     iconUrl: dayCentrePackMarkUrl(),
   };
@@ -422,15 +423,17 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   });
 
   MINI_GYM_2D_LIBRARY_SEQUENCE.forEach((s) => {
-    const illustrationUrl = dayCentreGeneralImageUrl(s.slug);
+    const illustrationUrl = physicalImageUrlForStep(s);
     out.push({
       pickId: pid("mg2d", s.slug),
       label: s.title,
       imageUrl: illustrationUrl,
       category: "home",
-      generatedPixto:
-        generalGeneratedPixtoBySlug(s.slug) ??
-        miniGymLibraryGeneratedPixto(s.slug, s.title, illustrationUrl),
+      generatedPixto: miniGymLibraryGeneratedPixto(
+        "2d",
+        s.title,
+        illustrationUrl,
+      ),
     });
   });
 
@@ -442,7 +445,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       imageUrl: illustrationUrl,
       category: "home",
       generatedPixto: miniGymLibraryGeneratedPixto(
-        s.slug,
+        "3d",
         s.title,
         illustrationUrl,
       ),
@@ -554,8 +557,8 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     });
   });
 
-  PHYSICAL_SEQUENCE.forEach((s, i) => {
-    const gp = PHYSICAL_GENERATED_CARD_PROPS[i];
+  PHYSICAL_2D_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS[i];
     out.push({
       pickId: pid("phy2d", s.slug),
       label: s.title,
@@ -574,7 +577,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     });
   });
 
-  PHYSICAL_3D_SEQUENCE.forEach((s, i) => {
+  PHYSICAL_3D_LIBRARY_SEQUENCE.forEach((s, i) => {
     const gp = PHYSICAL_3D_GENERATED_CARD_PROPS[i];
     out.push({
       pickId: pid("phy3d", s.slug),

@@ -98,7 +98,10 @@ function Sheet({
             animate={{ y: 0 }}
             exit={{ y: 16 }}
             transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto w-full max-w-lg rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10"
+            className={cn(
+              "mx-auto w-full max-w-lg rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10",
+              "tablet:max-w-[min(100%,36rem)]",
+            )}
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[14px] font-medium text-ink/90">{title}</p>
@@ -157,7 +160,7 @@ function FocusCardStage({
   expandedCards: boolean;
 }) {
   return (
-    <div className="pointer-events-auto flex h-full min-h-0 w-full flex-col px-1 py-0.5 sm:px-1.5">
+    <div className="pointer-events-auto flex h-full min-h-0 w-full flex-col px-1 py-0.5 sm:px-1.5 tablet:px-4">
       <div
         className={cn(
           "relative mx-auto h-full min-h-0 w-full",
@@ -404,12 +407,7 @@ export function FocusMode({ routine, exitHref }: Props) {
 
   return (
     <div
-      className={cn(
-        "fixed top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream",
-        prefersFineHover
-          ? "left-1/2 w-full max-w-lg -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
-          : "left-0 right-0",
-      )}
+      className="fixed top-0 left-0 right-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 w-full flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream"
     >
       {stepPositionLabel ? (
         <div

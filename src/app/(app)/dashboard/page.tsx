@@ -12,13 +12,14 @@ import {
   isPixtoLearnBundledCardUrl,
   isPixtoLearnFullBleedCardUrl,
   isPixtoLearnIllustrationOnlyUrl,
-  pixtoBundledCardObjectPositionTopClass,
+  pixtoBundledCardThumbnailClipPath,
 } from "@/lib/utils/visual-card-url";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { Routine } from "@/lib/types/routine";
 import { cn } from "@/lib/utils/cn";
+import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import {
   isStockPackRoutine,
   routineDashboardHomeGridTileClass,
@@ -436,16 +437,16 @@ function DashboardRoutineTile({
       <Card
         omitInsetRing
         className={cn(
-          "flex h-full min-h-[15.75rem] w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
+          "flex h-full w-full flex-col overflow-hidden border-0 p-0 shadow-card transition-shadow duration-200",
           routineDashboardHomeGridTileClass(routine),
         )}
       >
-        <div className="relative h-[11.25rem] w-full shrink-0 overflow-hidden bg-canvas-muted">
+        <div className="relative aspect-[10/13] w-full shrink-0 overflow-hidden bg-canvas-muted">
           {resolvedPreview ? (
             <HomeRoutinePreviewMedia
               imageUrl={resolvedPreview}
               frameClassName="h-full w-full"
-              sizes="(max-width: 512px) 45vw, 240px"
+              sizes="(max-width: 739px) 45vw, 33vw"
               fillFrame={previewFillFrame}
             />
           ) : (
@@ -463,7 +464,7 @@ function DashboardRoutineTile({
           <p
             className={cn(
               "line-clamp-2 font-semibold leading-tight text-ink",
-              titleOverride ? "text-[15px]" : "text-[13px]",
+              titleOverride ? "text-[15px] tablet:text-[16px]" : "text-[13px] tablet:text-[15px]",
             )}
           >
             {titleOverride ??
@@ -515,6 +516,11 @@ function HomeRoutinePreviewMedia({
           : "bg-canvas-muted",
         frameClassName,
       )}
+      style={
+        fullBleedPixto
+          ? { clipPath: pixtoBundledCardThumbnailClipPath }
+          : undefined
+      }
     >
       <Image
         src={imageUrl}
@@ -535,19 +541,9 @@ function HomeRoutinePreviewMedia({
               : fillFrame || !illustrationOnly
                 ? "object-cover object-center"
                 : "object-contain object-center",
-          fullBleedPixto
-            ? cn(
-                pixtoBundledCardObjectPositionTopClass,
-                "!h-[132%] !max-h-none w-full",
-              )
-            : !faceCloseUp && "object-center",
         )}
         style={
-          fullBleedPixto
-            ? { top: 0, bottom: "auto" }
-            : faceCloseUp
-              ? { top: "-12%", bottom: "auto" }
-              : undefined
+          faceCloseUp ? { top: "-12%", bottom: "auto" } : undefined
         }
       />
     </div>
@@ -645,7 +641,7 @@ export default function DashboardPage() {
   return (
     <div>
       <TranslatedHeader titleKey="home" />
-      <div className="space-y-8 px-4 pb-8 pt-4">
+      <div className={cn("space-y-8 px-4 pb-8 pt-4", APP_SHELL_TABLET_INSET_CLASS)}>
         <div className="flex justify-center px-2">
           <Link
             href="/onboarding/profile"
@@ -704,23 +700,23 @@ export default function DashboardPage() {
                 routineDashboardScheduleContinueCardClass(primary),
               )}
             >
-              <div className="flex gap-4 p-4">
+              <div className="flex gap-4 p-4 tablet:gap-5 tablet:p-5">
                 <HomeRoutinePreviewMedia
                   imageUrl={
                     primary.homePreviewImageUrl ?? primary.steps[0]?.imageUrl
                   }
                   frameClassName={cn(
-                    "aspect-[10/13] w-[4.25rem] shrink-0 bg-white shadow-card",
+                    "aspect-[10/13] w-[4.25rem] shrink-0 bg-white shadow-card tablet:w-[6.25rem]",
                     GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
                   )}
-                  sizes="96px"
+                  sizes="(max-width: 739px) 96px, 120px"
                   priority
                 />
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-subtle">
                     {dashboardContinueLabel(cardUiLang)}
                   </p>
-                  <p className="truncate text-[19px] font-semibold leading-tight text-ink">
+                  <p className="truncate text-[19px] font-semibold leading-tight text-ink tablet:text-[21px]">
                     {stockRoutineDisplayName(primary.id, primary.name, cardUiLang)}
                   </p>
                   <p className="text-[13px] text-ink-subtle">
@@ -743,7 +739,7 @@ export default function DashboardPage() {
             iconClassName="text-[#5f8392]"
           />
           {featuredRoutines.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 [grid-auto-rows:1fr]">
+            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 tablet:gap-4 [grid-auto-rows:1fr]">
               {featuredRoutines.map((r) => (
                 <DashboardRoutineTile
                   key={r.id}
@@ -819,7 +815,7 @@ export default function DashboardPage() {
                     )}
                   >
                     <div className="min-h-0 overflow-hidden">
-                      <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                      <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 tablet:gap-4 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
                         {routines.map((routine) => (
                           <DashboardRoutineTile
                             key={routine.id}
@@ -896,7 +892,7 @@ export default function DashboardPage() {
                   )}
                 >
                   <div className="min-h-0 overflow-hidden">
-                    <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                    <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 tablet:gap-4 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
                       {group.routines.map((routine) => {
                         const participantId =
                           group.key === "home::tailored"

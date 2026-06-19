@@ -253,21 +253,39 @@ export function FocusRoutineIllustrationImage({
   objectClass: string;
   scale?: number;
 }) {
-  const { topPx, leftPx, rightPx, bottomPx } =
-    GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
+  const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(src);
+  const insets = illustrationOnly
+    ? { topPx: 8, leftPx: 4, rightPx: 12, bottomPx: 0 }
+    : GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
+  const { topPx, leftPx, rightPx, bottomPx } = insets;
   const widthTrim = leftPx + rightPx;
   const unoptimized =
     src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
-  const objectFitClass = isPixtoLearnIllustrationOnlyUrl(src)
-    ? "object-cover object-center"
+  const objectFitClass = illustrationOnly
+    ? "object-contain object-center"
     : objectClass;
   return (
-    <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+    <div
+      className="relative flex h-full w-full items-center justify-center overflow-hidden"
+      style={{
+        paddingTop: topPx,
+        paddingLeft: leftPx,
+        paddingRight: rightPx,
+        paddingBottom: bottomPx,
+      }}
+    >
       <div
-        className="relative mx-auto shrink-0"
+        className={cn(
+          "relative mx-auto min-h-0 w-full",
+          illustrationOnly ? "h-full max-h-full" : "shrink-0",
+        )}
         style={{
-          width: `max(0px, calc(100% - ${widthTrim}px))`,
-          height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px`,
+          width: illustrationOnly
+            ? "100%"
+            : `max(0px, calc(100% - ${widthTrim}px))`,
+          ...(illustrationOnly
+            ? undefined
+            : { height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px` }),
           ...(scale !== 1
             ? {
                 transform: `scale(${scale})`,
@@ -1292,14 +1310,18 @@ export function GeneratedPixtoCard({
     showIllustrationFrameGuide ||
     (SHOW_GENERATED_PIXTO_DEBUG_GUIDES && focusPresentation);
   /**
-   * Pre-framed 531×648 scene PNGs fill the slot; other assets stay contained.
+   * Pre-framed scene PNGs: contain in Schedule/Focus so wide scenes are not
+   * side-cropped; cover only in smaller dense/home shells.
    */
   const illustrationOnlyAsset = isPixtoLearnIllustrationOnlyUrl(
     resolvedIllustrationSrc,
   );
-  const illustrationObjectClass = illustrationOnlyAsset
-    ? "object-cover object-center"
-    : "object-contain object-center";
+  const illustrationObjectClass =
+    illustrationOnlyAsset &&
+    !schedulePresentation &&
+    !focusPresentation
+      ? "object-cover object-center"
+      : "object-contain object-center";
   const lockedDigitalIllustrationSlot =
     schedulePresentation || focusPresentation;
   const illustrationTopMarginPct = focusPresentation

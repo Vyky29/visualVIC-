@@ -1208,7 +1208,7 @@ function FirstThenIntroLayout1({
 
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1 tablet:mx-auto tablet:max-w-[min(100%,26rem)]">
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1 tablet:max-w-none">
         <FirstThenPortraitLabeledRow
           slot="first"
           label={firstLabel}

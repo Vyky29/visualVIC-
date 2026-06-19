@@ -43,14 +43,15 @@ import {
   CORE_CATEGORY_LABEL,
 } from "@/lib/cards/core-cards";
 import {
+  PHYSICAL_2D_CATEGORY_LABEL,
   PHYSICAL_3D_CATEGORY_LABEL,
   PHYSICAL_3D_GYM_CATEGORY_LABEL,
+  PHYSICAL_2D_LIBRARY_SEQUENCE,
   PHYSICAL_3D_GYM_SEQUENCE,
-  PHYSICAL_3D_SEQUENCE,
+  PHYSICAL_3D_LIBRARY_SEQUENCE,
   PHYSICAL_CATEGORY_COLOUR,
   PHYSICAL_CATEGORY_LABEL,
   PHYSICAL_SCHEDULE_SEQUENCE,
-  PHYSICAL_SEQUENCE,
   physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
   physicalBackCardUrl,
@@ -296,18 +297,21 @@ export const DAY_CENTRE_PREMIUM_DRESS_GENERATED_CARD_PROPS: GeneratedPixtoCardPr
   premiumGeneratedCardProps(DAY_CENTRE_PREMIUM_DRESS_SEQUENCE);
 
 /** Physical — equipment + stretching (2D library illustrations). */
-export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  PHYSICAL_SEQUENCE.map((s) => ({
+export const PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  PHYSICAL_2D_LIBRARY_SEQUENCE.map((s) => ({
     illustrationUrl: physicalImageUrlForStep(s),
     title: lc(s.title),
-    category: lc(PHYSICAL_CATEGORY_LABEL),
+    category: lc(PHYSICAL_2D_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: physicalPackMarkUrl(),
   }));
 
-/** Physical · 3D — soft 3D library + BOSU and extra equipment (20 steps). */
+/** @deprecated Use {@link PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS}. */
+export const PHYSICAL_GENERATED_CARD_PROPS = PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS;
+
+/** Physical · 3D — soft 3D equipment + sports (`library-3d/`). */
 export const PHYSICAL_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  PHYSICAL_3D_SEQUENCE.map((s) => ({
+  PHYSICAL_3D_LIBRARY_SEQUENCE.map((s) => ({
     illustrationUrl: physical3dImageUrlForStep(s),
     title: lc(s.title),
     category: lc(PHYSICAL_3D_CATEGORY_LABEL),

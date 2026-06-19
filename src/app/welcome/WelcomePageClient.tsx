@@ -123,7 +123,7 @@ function WelcomeZoomablePreview({
     <button
       type="button"
       className={cn(
-        "mx-auto flex h-full max-h-full w-auto max-w-[min(100%,15.5rem)] cursor-zoom-in touch-manipulation appearance-none border-0 bg-transparent p-0 text-left [@media(max-height:700px)]:max-w-[13.5rem] sm:max-w-[17.25rem] tablet:max-w-none",
+        "mx-auto block w-full max-w-[min(100%,15.5rem)] cursor-zoom-in touch-manipulation appearance-none border-0 bg-transparent p-0 text-left [@media(max-height:700px)]:max-w-[13.5rem] sm:max-w-[17.25rem] tablet:max-w-[7.5rem]",
         className,
       )}
       aria-label={expandHint}
@@ -135,8 +135,8 @@ function WelcomeZoomablePreview({
       }}
       onPointerUp={handlePointerUp}
     >
-      <WelcomePhoneDeviceChrome className="h-full">
-        <div className="relative h-full w-auto min-w-0 aspect-[37/72] bg-[#f6f6f4]">
+      <WelcomePhoneDeviceChrome className="w-full">
+        <div className="relative w-full aspect-[37/72] bg-[#f6f6f4]">
           <Image
             key={src}
             src={src}
@@ -260,7 +260,7 @@ export function WelcomePageClient() {
         <CardLanguageFlagButtons afterSelect="stay" />
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-hidden px-1 pt-1 sm:gap-2 sm:px-0 sm:pt-1.5 tablet:gap-1">
+      <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-hidden px-1 pt-1 sm:gap-2 sm:px-0 sm:pt-1.5 tablet:justify-between tablet:gap-2">
         <div className="shrink-0 space-y-1.5 text-center tablet:space-y-1">
           <PixtoLearnLockup
             variant="hero"
@@ -275,11 +275,11 @@ export function WelcomePageClient() {
           </div>
         </div>
 
-        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-1.5 overflow-hidden sm:gap-2 tablet:gap-1.5">
+        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-1.5 overflow-hidden sm:gap-2 tablet:flex-none tablet:gap-2">
           {FEATURES.map((feature) => (
             <section
               key={feature.slot}
-              className="flex h-full min-h-0 flex-col overflow-hidden rounded-[1.1rem] border border-ink/[0.06] bg-white shadow-soft sm:rounded-[1.25rem]"
+              className="flex h-full min-h-0 flex-col overflow-hidden rounded-[1.1rem] border border-ink/[0.06] bg-white shadow-soft sm:rounded-[1.25rem] tablet:h-auto"
             >
               <div className={WELCOME_TEXT_BAND}>
                 <div
@@ -296,7 +296,7 @@ export function WelcomePageClient() {
                 </p>
               </div>
 
-              <div className="flex min-h-0 flex-1 flex-col items-center justify-end overflow-hidden px-1 pb-1 pt-0 sm:px-1.5 sm:pb-1.5">
+              <div className="flex min-h-0 flex-1 flex-col items-center justify-end overflow-hidden px-1 pb-1 pt-0 sm:px-1.5 sm:pb-1.5 tablet:flex-none tablet:justify-center tablet:py-1.5">
                 <WelcomeZoomablePreview
                   src={welcomeFeaturePreviewSrc(feature.slot, lang)}
                   alt={welcomeFeaturePreviewAlt(feature.slot, lang)}

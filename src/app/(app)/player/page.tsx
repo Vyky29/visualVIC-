@@ -17,6 +17,7 @@ import {
 import { useSchedulePlayerRecentOrder } from "@/lib/preferences/use-schedule-player-recent-order";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
+import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 import {
   isStockPackRoutine,
@@ -27,8 +28,7 @@ import {
 import {
   isPixtoLearnBundledCardUrl,
   isPixtoLearnFullBleedCardUrl,
-  isPixtoLearnIllustrationOnlyUrl,
-  pixtoBundledCardObjectPositionTopClass,
+  pixtoBundledCardThumbnailClipPath,
 } from "@/lib/utils/visual-card-url";
 import { resolveSchedulePlayerIndexPreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
 
@@ -76,7 +76,7 @@ export default function PlayerIndexPage() {
   return (
     <div>
       <TranslatedHeader titleKey="schedulePlayer" backHref="/dashboard" />
-      <div className="space-y-4 px-4 pb-8 pt-2">
+      <div className={cn("space-y-4 px-4 pb-8 pt-2", APP_SHELL_TABLET_INSET_CLASS)}>
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {playerIndexIntro(cardUiLang)}
         </p>
@@ -88,8 +88,6 @@ export default function PlayerIndexPage() {
               (isPixtoLearnBundledCardUrl(previewUrl) ||
                 Boolean(r.steps[0]?.generatedPixto));
             const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
-            const sceneIllustration = isPixtoLearnIllustrationOnlyUrl(previewUrl);
-            const fillSquareIcon = fullBleedPixto || sceneIllustration;
             const tone = routineVisualTone(r);
             return (
               <li key={r.id} className="group">
@@ -111,6 +109,11 @@ export default function PlayerIndexPage() {
                           ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
                           : "bg-canvas-muted",
                       )}
+                      style={
+                        fullBleedPixto
+                          ? { clipPath: pixtoBundledCardThumbnailClipPath }
+                          : undefined
+                      }
                     >
                       {previewUrl ? (
                         <Image
@@ -118,17 +121,7 @@ export default function PlayerIndexPage() {
                           alt=""
                           fill
                           unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
-                          className={cn(
-                            "object-cover object-center",
-                            fillSquareIcon &&
-                              cn(
-                                pixtoBundledCardObjectPositionTopClass,
-                                "!h-[132%] !max-h-none w-full",
-                              ),
-                          )}
-                          style={
-                            fillSquareIcon ? { top: 0, bottom: "auto" } : undefined
-                          }
+                          className="object-cover object-center"
                           sizes="72px"
                         />
                       ) : null}

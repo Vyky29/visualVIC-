@@ -5,33 +5,46 @@ import {
   GENERATED_PIXTO_SCHEDULE_NEXT_W,
   GENERATED_PIXTO_SCHEDULE_NOW_W,
 } from "@/lib/constants/generated-pixto-card-sizes";
-import { TABLET_TOUCH_MEDIA } from "@/lib/constants/app-shell-layout";
+import {
+  TABLET_LAYOUT_MEDIA,
+  TABLET_SCHEDULE_NEXT_CARD_MAX_W_PX,
+  TABLET_SCHEDULE_NOW_CARD_MAX_W_PX,
+} from "@/lib/constants/app-shell-layout";
 
-function subscribeTabletTouch(onChange: () => void) {
-  const mq = window.matchMedia(TABLET_TOUCH_MEDIA);
+function subscribeTabletLayout(onChange: () => void) {
+  const mq = window.matchMedia(TABLET_LAYOUT_MEDIA);
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 }
 
-function getTabletTouchSnapshot() {
-  return window.matchMedia(TABLET_TOUCH_MEDIA).matches;
+function getTabletLayoutSnapshot() {
+  return window.matchMedia(TABLET_LAYOUT_MEDIA).matches;
 }
 
-export function useTabletTouchLayout(): boolean {
+export function useTabletLayout(): boolean {
   return useSyncExternalStore(
-    subscribeTabletTouch,
-    getTabletTouchSnapshot,
+    subscribeTabletLayout,
+    getTabletLayoutSnapshot,
     () => false,
   );
 }
 
+/** @deprecated Prefer {@link useTabletLayout}. */
+export function useTabletTouchLayout(): boolean {
+  return useTabletLayout();
+}
+
 export function useScheduleCardLayout() {
-  const isTabletTouch = useTabletTouchLayout();
+  const isTabletLayout = useTabletLayout();
 
   return {
-    isTabletTouch,
-    /** Same caps as phone — preserves 744×1054 card proportions on tablet. */
-    nowCardMaxW: GENERATED_PIXTO_SCHEDULE_NOW_W,
-    nextCardMaxW: GENERATED_PIXTO_SCHEDULE_NEXT_W,
+    isTabletTouch: isTabletLayout,
+    isTabletLayout,
+    nowCardMaxW: isTabletLayout
+      ? TABLET_SCHEDULE_NOW_CARD_MAX_W_PX
+      : GENERATED_PIXTO_SCHEDULE_NOW_W,
+    nextCardMaxW: isTabletLayout
+      ? TABLET_SCHEDULE_NEXT_CARD_MAX_W_PX
+      : GENERATED_PIXTO_SCHEDULE_NEXT_W,
   };
 }
