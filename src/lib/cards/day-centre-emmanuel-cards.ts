@@ -42,7 +42,21 @@ export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly DayCentreEmmanuelSt
       slug: "cross-trainer",
       title: "Cross trainer",
     },
+    {
+      id: "dce-gym-with-michelle",
+      slug: "gym-with-michelle",
+      title: "Gym with Michelle",
+    },
     { id: "dce-basketball", slug: "basketball", title: "Basketball" },
+    { id: "dce-cruzigramas", slug: "cruzigramas", title: "Cruzigramas" },
+    { id: "dce-spelling", slug: "spelling", title: "Spelling" },
+    { id: "dce-handwriting", slug: "handwriting", title: "Handwriting" },
+    { id: "dce-maths", slug: "maths", title: "Maths" },
+    {
+      id: "dce-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+    },
   ] as const;
 
 export const DAY_CENTRE_EMMANUEL_SEQUENCE: readonly DayCentreEmmanuelStep[] =

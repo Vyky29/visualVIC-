@@ -112,6 +112,9 @@ export const PHYSICAL_3D_EXTRA_SEQUENCE: readonly PhysicalStep[] = [
   { id: "phy3-punching-bag", slug: "punching-bag", title: "Punching bag" },
   { id: "phy3-agility-ladder", slug: "agility-ladder", title: "Agility ladder" },
   { id: "phy3-balance-board", slug: "balance-board", title: "Balance board" },
+  { id: "phy3-football", slug: "football", title: "Football" },
+  { id: "phy3-badminton", slug: "badminton", title: "Badminton" },
+  { id: "phy3-basketball", slug: "basketball", title: "Basketball" },
 ] as const;
 
 /** Full 3D fitness catalogue — core Physical steps + extras. */

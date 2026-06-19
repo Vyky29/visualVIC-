@@ -38,11 +38,12 @@ import { GeneratedPixtoFocusSlotScale } from "@/components/experimental/Generate
 import { GeneratedPixtoSlotScale } from "@/components/experimental/GeneratedPixtoSlotScale";
 import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+  GENERATED_PIXTO_SCHEDULE_NEXT_W,
+  GENERATED_PIXTO_SCHEDULE_NOW_W,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
-import { useScheduleCardLayout } from "@/lib/hooks/useScheduleCardLayout";
 
 export type TimelineVariant = "compact" | "hero" | "next" | "focus";
 
@@ -131,7 +132,6 @@ export function SwipeableStepCard({
   const hasGeneratedPixto = Boolean(step.generatedPixto);
   const gp = step.generatedPixto;
   const cardUiLang = useCardUiLanguage();
-  const { nowCardMaxW, nextCardMaxW } = useScheduleCardLayout();
   const digitalStepTitle = useMemo(() => {
     if (!gp) return step.title;
     return resolveDigitalPixtoStrings(
@@ -482,7 +482,7 @@ export function SwipeableStepCard({
       ? variant === "hero" && isNow
         ? ({
             width: "100%",
-            maxWidth: `${nowCardMaxW}px`,
+            maxWidth: `${GENERATED_PIXTO_SCHEDULE_NOW_W}px`,
           } satisfies CSSProperties)
         : undefined
       : undefined;
@@ -490,7 +490,7 @@ export function SwipeableStepCard({
     variant === "next"
       ? ({
           width: "100%",
-          maxWidth: `${nextCardMaxW}px`,
+          maxWidth: `${GENERATED_PIXTO_SCHEDULE_NEXT_W}px`,
         } satisfies CSSProperties)
       : undefined;
   const cardStyle = {

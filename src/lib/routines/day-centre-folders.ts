@@ -6,6 +6,7 @@ import {
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { dayCentreFolderForSlug } from "@/lib/cards/day-centre-folder-groups";
+import { isDayCentreMixedStaffRoutine } from "@/lib/routines/day-centre-mixed-routines";
 
 export const DAY_CENTRE_FOLDER_IDS = [
   "mini-gym",
@@ -22,12 +23,36 @@ export const DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS: Record<
   DayCentreFolderId,
   readonly string[]
 > = {
-  "mini-gym": ["dc-mini-gym"],
-  bouldering: ["dc-bouldering"],
-  cooking: ["dc-cooking"],
-  community: ["dc-community"],
-  mixed: ["dc-mixed"],
-  premium: [],
+  "mini-gym": [
+    "dc-mini-gym",
+    "dc-mini-gym-3d",
+    "dc-mini-gym-warmup",
+    "dc-mini-gym-cardio",
+    "dc-mini-gym-strength",
+    "dc-mini-gym-3d-warmup",
+  ],
+  bouldering: [
+    "dc-bouldering",
+    "dc-bouldering-prep",
+    "dc-bouldering-wall",
+  ],
+  cooking: [
+    "dc-cooking",
+    "dc-cooking-prep",
+    "dc-cooking-bake",
+  ],
+  community: [
+    "dc-community",
+    "dc-community-market",
+    "dc-community-park",
+  ],
+  /** Staff-built schedules only — see `day-centre-mixed-routines`. */
+  mixed: [],
+  premium: [
+    "dc-premium-shower",
+    "dc-premium-swim",
+    "dc-premium-dress",
+  ],
 };
 
 const STOCK_ROUTINE_TO_FOLDER = Object.fromEntries(
@@ -180,6 +205,12 @@ export function resolveDayCentreFolderSchedules(
   folderId: DayCentreFolderId,
   routines: readonly Routine[],
 ): Routine[] {
+  if (folderId === "mixed") {
+    return routines
+      .filter(isDayCentreMixedStaffRoutine)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   const stockIds = new Set<string>(
     DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS[folderId],
   );
@@ -187,10 +218,16 @@ export function resolveDayCentreFolderSchedules(
   const byId = new Map<string, Routine>();
 
   for (const routine of routines) {
-    const matchesFolder =
-      stockIds.has(routine.id) ||
-      detectDayCentreFolderFromRoutine(routine) === folderId;
-    if (matchesFolder) byId.set(routine.id, routine);
+    if (isDayCentreMixedStaffRoutine(routine)) continue;
+    if (stockIds.has(routine.id)) {
+      byId.set(routine.id, routine);
+      continue;
+    }
+    // Mini gym — stock object routines only (no participant auto-match).
+    if (folderId === "mini-gym") continue;
+    if (detectDayCentreFolderFromRoutine(routine) === folderId) {
+      byId.set(routine.id, routine);
+    }
   }
 
   const orderedStock = stockOrder

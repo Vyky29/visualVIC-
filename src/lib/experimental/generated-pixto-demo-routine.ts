@@ -7,18 +7,37 @@ import {
 } from "@/lib/cards/at-the-airport-cards";
 import {
   DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_COMMUNITY_MARKET_SEQUENCE,
+  DAY_CENTRE_COMMUNITY_PARK_SEQUENCE,
   DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_COOKING_PREP_SEQUENCE,
+  DAY_CENTRE_COOKING_BAKE_SEQUENCE,
   DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_GENERAL_SEQUENCE,
   DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE,
+  DAY_CENTRE_MINI_GYM_CARDIO_SEQUENCE,
+  DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE,
+  DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE,
   DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE,
   dayCentreGeneralImageUrlForStep,
   type DayCentreGeneralStep,
 } from "@/lib/cards/day-centre-general-cards";
 import {
   DAY_CENTRE_BOULDERING_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_BOULDERING_PREP_SEQUENCE,
+  DAY_CENTRE_BOULDERING_WALL_SEQUENCE,
   dayCentreBoulderingImageUrlForStep,
+  type DayCentreBoulderingStep,
 } from "@/lib/cards/day-centre-bouldering-cards";
+import {
+  DAY_CENTRE_PREMIUM_DRESS_SEQUENCE,
+  DAY_CENTRE_PREMIUM_SHOWER_SEQUENCE,
+  DAY_CENTRE_PREMIUM_SWIM_SEQUENCE,
+  dayCentrePremiumPickImageUrl,
+  type DayCentrePremiumPickSpec,
+} from "@/lib/cards/day-centre-premium-cards";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
 import {
   CORE_CATEGORY_COLOUR,
   CORE_CATEGORY_LABEL,
@@ -177,11 +196,51 @@ export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCar
 export const DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
+function miniGym3dGeneratedCardProps(
+  sequence: readonly DayCentreGeneralStep[],
+): GeneratedPixtoCardProps[] {
+  return sequence.map((s) => ({
+    illustrationUrl: physical3dImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc(PHYSICAL_3D_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: physicalPackMarkUrl(),
+  }));
+}
+
+/** Mini gym · 3D — same steps, soft 3D object library (`library-3d/`). */
+export const DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  miniGym3dGeneratedCardProps(DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE);
+
+export const DAY_CENTRE_MINI_GYM_WARMUP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_MINI_GYM_CARDIO_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  miniGym3dGeneratedCardProps(DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE);
+
 export const DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
+export const DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COOKING_PREP_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_COOKING_BAKE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COOKING_BAKE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
 export const DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_COMMUNITY_MARKET_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COMMUNITY_MARKET_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
+
+export const DAY_CENTRE_COMMUNITY_PARK_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_COMMUNITY_PARK_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
 export const DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
@@ -194,6 +253,45 @@ export const DAY_CENTRE_BOULDERING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixto
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
     iconUrl: dayCentrePackMarkUrl(),
   }));
+
+function boulderingGeneratedCardProps(
+  sequence: readonly DayCentreBoulderingStep[],
+): GeneratedPixtoCardProps[] {
+  return sequence.map((s) => ({
+    illustrationUrl: dayCentreBoulderingImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc("At the day centre"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  }));
+}
+
+export const DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  boulderingGeneratedCardProps(DAY_CENTRE_BOULDERING_PREP_SEQUENCE);
+
+export const DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  boulderingGeneratedCardProps(DAY_CENTRE_BOULDERING_WALL_SEQUENCE);
+
+function premiumGeneratedCardProps(
+  sequence: readonly DayCentrePremiumPickSpec[],
+): GeneratedPixtoCardProps[] {
+  return sequence.map((pick) => ({
+    illustrationUrl: dayCentrePremiumPickImageUrl(pick),
+    title: lc(pick.title),
+    category: lc("Day centre · Premium"),
+    categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: showerImageUrl("shampoo"),
+  }));
+}
+
+export const DAY_CENTRE_PREMIUM_SHOWER_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  premiumGeneratedCardProps(DAY_CENTRE_PREMIUM_SHOWER_SEQUENCE);
+
+export const DAY_CENTRE_PREMIUM_SWIM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  premiumGeneratedCardProps(DAY_CENTRE_PREMIUM_SWIM_SEQUENCE);
+
+export const DAY_CENTRE_PREMIUM_DRESS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  premiumGeneratedCardProps(DAY_CENTRE_PREMIUM_DRESS_SEQUENCE);
 
 /** Physical — equipment + stretching (2D library illustrations). */
 export const PHYSICAL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =

@@ -11,7 +11,7 @@ import {
 } from "@/lib/experimental/first-then-demo-focus-nav";
 import { shouldLockPortraitInAppShell } from "@/lib/utils/device-input";
 import { lockScreenPortrait, unlockScreenOrientation } from "@/lib/utils/orientation-lock";
-import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
+import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -47,8 +47,10 @@ export function AppShell({
     };
   }, [firstThenDemoFocusActive, pathname]);
 
+  const shellClass = shellClassForPathname(pathname);
+
   const phoneShell = (
-    <div className={cn("relative mx-auto min-h-dvh w-full bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]", APP_SHELL_WIDTH_CLASS)}>
+    <div className={cn("relative mx-auto min-h-dvh w-full bg-canvas text-ink shadow-[0_0_0_1px_rgba(255,255,255,0.12)]", shellClass)}>
       <div
         className={
           effectiveShowNav

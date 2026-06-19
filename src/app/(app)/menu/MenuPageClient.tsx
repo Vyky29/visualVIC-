@@ -63,7 +63,7 @@ export function MenuPageClient() {
           <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
             {menuSectionTitle("routines", lang)}
           </h2>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2 tablet:grid tablet:grid-cols-2 tablet:gap-3">
             {ROUTINE_LINKS.map((link) => (
               <li key={link.href}>
                 <Link href={link.href}>
@@ -85,7 +85,7 @@ export function MenuPageClient() {
           <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
             {menuSectionTitle("prototype", lang)}
           </h2>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2 tablet:grid tablet:grid-cols-2 tablet:gap-3">
             {PROTOTYPE_LINKS.map((link) => (
               <li key={link.href}>
                 <Link href={link.href}>

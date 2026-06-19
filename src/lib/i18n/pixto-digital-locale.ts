@@ -199,7 +199,21 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     es: "lanzar balón en BOSU",
   },
   "cross-trainer": { en: "cross trainer", es: "elíptica" },
+  "gym-with-michelle": {
+    en: "gym with Michelle",
+    es: "gimnasio con Michelle",
+  },
   basketball: { en: "basketball", es: "baloncesto" },
+  football: { en: "football", es: "fútbol" },
+  badminton: { en: "badminton", es: "bádminton" },
+  cruzigramas: { en: "crosswords", es: "cruzigramas" },
+  spelling: { en: "spelling", es: "deletreo" },
+  handwriting: { en: "handwriting", es: "escritura" },
+  maths: { en: "maths", es: "matemáticas" },
+  "circle-time": {
+    en: "circle time",
+    es: "tiempo de círculo",
+  },
   skierg: { en: "ski machine", es: "máquina de esquí" },
   stretching: { en: "stretching", es: "estiramientos" },
   finished: { en: "finished", es: "terminado" },
@@ -294,20 +308,76 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Centro de día",
   },
   "dc-mini-gym": {
-    en: "Mini Gym Routine",
-    es: "Rutina mini gym",
+    en: "Mini Gym · 2D",
+    es: "Mini gym · 2D",
+  },
+  "dc-mini-gym-3d": {
+    en: "Mini Gym · 3D",
+    es: "Mini gym · 3D",
+  },
+  "dc-mini-gym-warmup": {
+    en: "Mini Gym · Warm-up",
+    es: "Mini gym · calentamiento",
+  },
+  "dc-mini-gym-cardio": {
+    en: "Mini Gym · Cardio",
+    es: "Mini gym · cardio",
+  },
+  "dc-mini-gym-strength": {
+    en: "Mini Gym · Strength",
+    es: "Mini gym · fuerza",
+  },
+  "dc-mini-gym-3d-warmup": {
+    en: "Mini Gym · 3D warm-up",
+    es: "Mini gym · calentamiento 3D",
   },
   "dc-bouldering": {
-    en: "Bouldering Routine",
-    es: "Rutina boulder",
+    en: "Bouldering · Full",
+    es: "Boulder · completa",
+  },
+  "dc-bouldering-prep": {
+    en: "Bouldering · Get ready",
+    es: "Boulder · preparación",
+  },
+  "dc-bouldering-wall": {
+    en: "Bouldering · On the wall",
+    es: "Boulder · en el muro",
   },
   "dc-cooking": {
-    en: "Cooking Activity",
-    es: "Actividad cocina",
+    en: "Cooking · Pizza day",
+    es: "Cocina · día pizza",
+  },
+  "dc-cooking-prep": {
+    en: "Cooking · Kitchen prep",
+    es: "Cocina · preparación",
+  },
+  "dc-cooking-bake": {
+    en: "Cooking · Bake & mix",
+    es: "Cocina · hornear y mezclar",
   },
   "dc-community": {
-    en: "Community Outing",
-    es: "Salida comunidad",
+    en: "Community · Westfield",
+    es: "Comunidad · Westfield",
+  },
+  "dc-community-market": {
+    en: "Community · Market day",
+    es: "Comunidad · día de mercado",
+  },
+  "dc-community-park": {
+    en: "Community · Park outing",
+    es: "Comunidad · salida al parque",
+  },
+  "dc-premium-shower": {
+    en: "Premium · Shower",
+    es: "Premium · ducha",
+  },
+  "dc-premium-swim": {
+    en: "Premium · Swim changing",
+    es: "Premium · cambiarse para nadar",
+  },
+  "dc-premium-dress": {
+    en: "Premium · Get dressed",
+    es: "Premium · vestirse",
   },
   "dc-mixed": {
     en: "Mixed Day",

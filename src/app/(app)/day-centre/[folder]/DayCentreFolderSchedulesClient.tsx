@@ -3,17 +3,22 @@
 import Link from "next/link";
 import Image from "next/image";
 import { use, useMemo } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { Header } from "@/components/navigation/Header";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { mockRoutines } from "@/lib/mock/routines";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardStepsWord,
   dayCentreFolderSchedulesIntro,
+  dayCentreMixedDeleteScheduleButton,
+  dayCentreMixedFolderEmptyLead,
+  dayCentreMixedOpenPlannerButton,
   playerKindRoutine,
   shellBackAria,
+  tailoredEditScheduleButton,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
@@ -24,6 +29,10 @@ import {
   isDayCentreFolderId,
   resolveDayCentreFolderSchedules,
 } from "@/lib/routines/day-centre-folders";
+import {
+  canDeleteDayCentreMixedRoutine,
+  dayCentreMixedEditHref,
+} from "@/lib/routines/day-centre-mixed-routines";
 import {
   routineSchedulePlayerIndexCardClass,
   routineVisualTone,
@@ -58,8 +67,9 @@ type Props = { params: Promise<{ folder: string }> };
 
 export function DayCentreFolderSchedulesClient({ params }: Props) {
   const { folder: folderParam } = use(params);
+  const router = useRouter();
   const cardUiLang = useCardUiLanguage();
-  const { routines: customRoutines, hydrated: customHydrated } =
+  const { routines: customRoutines, hydrated: customHydrated, removeRoutine } =
     useCustomRoutines();
 
   if (!isDayCentreFolderId(folderParam)) {
@@ -85,10 +95,25 @@ export function DayCentreFolderSchedulesClient({ params }: Props) {
       />
       <div className="space-y-4 px-4 pb-8 pt-2">
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
-          {dayCentreFolderSchedulesIntro(folderName, cardUiLang)}
+          {dayCentreFolderSchedulesIntro(folderName, cardUiLang, folderId)}
         </p>
+        {folderId === "mixed" && schedules.length === 0 ? (
+          <Card className="space-y-4 border border-ink/5 p-4 text-[14px] leading-relaxed text-ink-subtle">
+            <p>{dayCentreMixedFolderEmptyLead(cardUiLang)}</p>
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              onClick={() => router.push("/planner")}
+            >
+              {dayCentreMixedOpenPlannerButton(cardUiLang)}
+            </Button>
+          </Card>
+        ) : null}
         <ul className="flex flex-col gap-3">
           {schedules.map((routine) => {
+            const deletable = canDeleteDayCentreMixedRoutine(routine);
+            const editable = deletable;
             const previewUrl = resolveSchedulePlayerIndexPreviewUrl(routine);
             const previewPixto =
               Boolean(previewUrl) &&
@@ -96,7 +121,12 @@ export function DayCentreFolderSchedulesClient({ params }: Props) {
                 Boolean(routine.steps[0]?.generatedPixto));
             const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
             const sceneIllustration = isPixtoLearnIllustrationOnlyUrl(previewUrl);
-            const fillSquareIcon = fullBleedPixto || sceneIllustration;
+            const libraryObject =
+              previewUrl != null &&
+              (previewUrl.includes("/images/library") ||
+                previewUrl.includes("/day%20centre/general/"));
+            const fillSquareIcon =
+              (fullBleedPixto || sceneIllustration) && !libraryObject;
             const tone = routineVisualTone(routine);
 
             return (
@@ -108,9 +138,10 @@ export function DayCentreFolderSchedulesClient({ params }: Props) {
                     routineSchedulePlayerIndexCardClass(routine),
                   )}
                 >
+                  <div className="flex items-stretch">
                   <Link
                     href={`/player/${routine.id}`}
-                    className="flex gap-4 p-4 transition hover:bg-white/60"
+                    className="flex min-w-0 flex-1 gap-4 p-4 transition hover:bg-white/60"
                   >
                     <div
                       className={cn(
@@ -127,7 +158,9 @@ export function DayCentreFolderSchedulesClient({ params }: Props) {
                           fill
                           unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
                           className={cn(
-                            "object-cover object-center",
+                            libraryObject
+                              ? "object-contain object-center p-1.5"
+                              : "object-cover object-center",
                             fillSquareIcon &&
                               cn(
                                 pixtoBundledCardObjectPositionTopClass,
@@ -161,10 +194,28 @@ export function DayCentreFolderSchedulesClient({ params }: Props) {
                         {routine.steps.length} {dashboardStepsWord(cardUiLang)}
                       </span>
                     </div>
-                    <span className="self-center text-ink-faint" aria-hidden>
+                    <span className="self-center pr-1 text-ink-faint" aria-hidden>
                       →
                     </span>
                   </Link>
+                  {editable ? (
+                    <Link
+                      href={dayCentreMixedEditHref(routine.id)}
+                      className="flex w-14 shrink-0 flex-col items-center justify-center border-l border-ink/8 text-[11px] font-semibold uppercase tracking-wide text-sage transition hover:bg-sage/5 active:bg-sage/10"
+                    >
+                      {tailoredEditScheduleButton(cardUiLang)}
+                    </Link>
+                  ) : null}
+                  {deletable ? (
+                    <button
+                      type="button"
+                      onClick={() => removeRoutine(routine.id)}
+                      className="flex w-14 shrink-0 flex-col items-center justify-center border-l border-ink/8 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle transition hover:bg-ink/5 active:bg-ink/10"
+                    >
+                      {dayCentreMixedDeleteScheduleButton(cardUiLang)}
+                    </button>
+                  ) : null}
+                  </div>
                 </Card>
               </li>
             );

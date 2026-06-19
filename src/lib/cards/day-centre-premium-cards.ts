@@ -2,6 +2,10 @@
  * Day Centre · Premium — curated core / dress / shower / swim vocabulary for staff.
  */
 
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
+
 export type DayCentrePremiumSourcePack = "dress" | "shower" | "swim";
 
 export type DayCentrePremiumPickSpec = {
@@ -9,6 +13,14 @@ export type DayCentrePremiumPickSpec = {
   title: string;
   sourcePack: DayCentrePremiumSourcePack;
 };
+
+export function dayCentrePremiumPickImageUrl(
+  pick: DayCentrePremiumPickSpec,
+): string {
+  if (pick.sourcePack === "dress") return gettingDressUndressImageUrl(pick.slug);
+  if (pick.sourcePack === "shower") return showerImageUrl(pick.slug);
+  return swimmingImageUrl(pick.slug);
+}
 
 /** Premium folder library — changing, shower basics, swim essentials. */
 export const DAY_CENTRE_PREMIUM_PICKS: readonly DayCentrePremiumPickSpec[] = [
@@ -47,3 +59,30 @@ export const DAY_CENTRE_PREMIUM_PICKS: readonly DayCentrePremiumPickSpec[] = [
 export const DAY_CENTRE_PREMIUM_SLUGS = new Set(
   DAY_CENTRE_PREMIUM_PICKS.map((p) => p.slug),
 );
+
+/** Premium · shower routine. */
+export const DAY_CENTRE_PREMIUM_SHOWER_SEQUENCE: readonly DayCentrePremiumPickSpec[] = [
+  { slug: "squeeze-shampoo", title: "Shampoo in hair", sourcePack: "shower" },
+  { slug: "sponge", title: "Rub with sponge", sourcePack: "shower" },
+  { slug: "rinse-hair", title: "Rinse hair", sourcePack: "shower" },
+  { slug: "dry-body", title: "Dry body", sourcePack: "shower" },
+  { slug: "dry-hair", title: "Dry hair", sourcePack: "shower" },
+] as const;
+
+/** Premium · swim pool changing. */
+export const DAY_CENTRE_PREMIUM_SWIM_SEQUENCE: readonly DayCentrePremiumPickSpec[] = [
+  { slug: "shoes-off", title: "Take shoes off", sourcePack: "dress" },
+  { slug: "socks-off", title: "Take socks off", sourcePack: "dress" },
+  { slug: "trunks-on", title: "Put trunks on", sourcePack: "dress" },
+  { slug: "wearing-flip-flops", title: "Wear flip-flops", sourcePack: "swim" },
+  { slug: "goggles-on", title: "Goggles on", sourcePack: "swim" },
+] as const;
+
+/** Premium · get dressed (morning). */
+export const DAY_CENTRE_PREMIUM_DRESS_SEQUENCE: readonly DayCentrePremiumPickSpec[] = [
+  { slug: "pants-on", title: "Put pants on", sourcePack: "dress" },
+  { slug: "socks-on", title: "Put socks on", sourcePack: "dress" },
+  { slug: "trousers-on", title: "Put trousers on", sourcePack: "dress" },
+  { slug: "tshirt-on", title: "Put t-shirt on", sourcePack: "dress" },
+  { slug: "shoes-on", title: "Put shoes on", sourcePack: "dress" },
+] as const;

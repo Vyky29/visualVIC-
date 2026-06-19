@@ -290,6 +290,82 @@ export const DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE: readonly DayCentreGeneralSt
   { id: "dccc-cab", slug: "cab", title: "Cab" },
 ] as const;
 
+/** Mini gym · warm-up (2D objects). */
+export const DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgw-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+  { id: "dcgw-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
+  { id: "dcgw-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
+  { id: "dcgw-stretching", slug: "stretching", title: "Stretching" },
+] as const;
+
+/** Mini gym · cardio stations (2D). */
+export const DAY_CENTRE_MINI_GYM_CARDIO_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgc-treadmill", slug: "treadmill", title: "Treadmill" },
+  { id: "dcgc-exercise-bike", slug: "exercise-bike", title: "Mini bikes" },
+  { id: "dcgc-trampoline", slug: "trampoline", title: "Trampoline" },
+  { id: "dcgc-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcgc-rope", slug: "rope", title: "Rope" },
+] as const;
+
+/** Mini gym · strength (2D). */
+export const DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcgs-weights", slug: "weights", title: "Weights" },
+  { id: "dcgs-bells", slug: "bells", title: "Bells" },
+  { id: "dcgs-step-platform", slug: "step-platform", title: "Steps" },
+  { id: "dcgs-foam-roller", slug: "foam-roller", title: "Foam roller" },
+] as const;
+
+/** Mini gym · 3D warm-up. */
+export const DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dcg3w-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+  { id: "dcg3w-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
+  { id: "dcg3w-bosu", slug: "bosu", title: "BOSU" },
+  { id: "dcg3w-stretching", slug: "stretching", title: "Stretching" },
+] as const;
+
+/** Cooking · kitchen prep (materials). */
+export const DAY_CENTRE_COOKING_PREP_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccp-apron", slug: "apron", title: "Apron" },
+  { id: "dccp-wash-hands", slug: "wash-hands", title: "Wash hands" },
+  { id: "dccp-chopping-board", slug: "chopping-board", title: "Chopping board" },
+  { id: "dccp-vegetable-peeler", slug: "vegetable-peeler", title: "Vegetable peeler" },
+  { id: "dccp-tomato-sauce", slug: "tomato-sauce", title: "Tomato sauce" },
+  { id: "dccp-peeling", slug: "peeling", title: "Peeling" },
+] as const;
+
+/** Cooking · bake / mix (pizza day). */
+export const DAY_CENTRE_COOKING_BAKE_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccb-apron", slug: "apron", title: "Apron" },
+  { id: "dccb-wash-hands", slug: "wash-hands", title: "Wash hands" },
+  { id: "dccb-mixing-bowl", slug: "mixing-bowl", title: "Mixing bowl" },
+  { id: "dccb-wooden-spoon", slug: "wooden-spoon", title: "Wooden spoon" },
+  { id: "dccb-rolling-pin", slug: "rolling-pin", title: "Rolling pin" },
+  { id: "dccb-pizza", slug: "pizza", title: "Pizza" },
+  { id: "dccb-cooking", slug: "cooking", title: "Cooking" },
+] as const;
+
+/** Community · market day. */
+export const DAY_CENTRE_COMMUNITY_MARKET_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccm-bus", slug: "bus", title: "Bus to town" },
+  { id: "dccm-market", slug: "market", title: "Market" },
+  { id: "dccm-shopping-basket", slug: "shopping-basket", title: "Basket" },
+  { id: "dccm-pay", slug: "pay", title: "Pay" },
+  { id: "dccm-snack", slug: "snack", title: "Snack" },
+  { id: "dccm-bus-stop", slug: "bus-stop", title: "Bus stop" },
+  { id: "dccm-home", slug: "home", title: "Home" },
+] as const;
+
+/** Community · park outing. */
+export const DAY_CENTRE_COMMUNITY_PARK_SEQUENCE: readonly DayCentreGeneralStep[] = [
+  { id: "dccp-walk", slug: "walk", title: "Walking" },
+  { id: "dccp-park", slug: "park", title: "Park" },
+  { id: "dccp-playground", slug: "playground", title: "Playground" },
+  { id: "dccp-cafe", slug: "cafe", title: "Cafe" },
+  { id: "dccp-wait", slug: "wait", title: "Waiting" },
+  { id: "dccp-taxi", slug: "taxi", title: "Taxi" },
+  { id: "dccp-home", slug: "home", title: "Home" },
+] as const;
+
 /** Mixed day — composite schedules (karaoke, cafe, swimming, choosing, cab, home, …). */
 export const DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcmx-karaoke", slug: "karaoke", title: "Karaoke" },

@@ -43,10 +43,10 @@ for (const slug of slugs) {
     continue;
   }
   await fitIllustrationToCard(src, dest, {
-    minPad: 24,
+    minPad: 28,
     background: "#ffffff",
-    trim: true,
-    trimThreshold: 20,
+    trim: false,
+    fit: "contain",
   });
   console.log("ok:", slug);
 }

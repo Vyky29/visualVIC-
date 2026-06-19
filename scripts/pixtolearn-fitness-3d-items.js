@@ -135,6 +135,26 @@ const FITNESS_3D_ITEMS = [
     title: "Balance board",
     object: "a wooden wobble balance board on a curved base, soft 3D rendered style",
   },
+  {
+    file: "football.png",
+    slug: "football",
+    title: "Football",
+    object:
+      "a classic black-and-white pentagon pattern soccer football on grass patch, soft 3D rendered style",
+  },
+  {
+    file: "badminton.png",
+    slug: "badminton",
+    title: "Badminton",
+    object:
+      "a badminton racket and white feather shuttlecock, soft 3D rendered style",
+  },
+  {
+    file: "basketball.png",
+    slug: "basketball",
+    title: "Basketball",
+    object: "an orange basketball with black ribs, soft 3D rendered style",
+  },
 ];
 
 const PROMPT_3D_TEMPLATE =

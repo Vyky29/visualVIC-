@@ -743,7 +743,7 @@ export default function DashboardPage() {
             iconClassName="text-[#5f8392]"
           />
           {featuredRoutines.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 [grid-auto-rows:1fr]">
+            <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 [grid-auto-rows:1fr]">
               {featuredRoutines.map((r) => (
                 <DashboardRoutineTile
                   key={r.id}
@@ -819,7 +819,7 @@ export default function DashboardPage() {
                     )}
                   >
                     <div className="min-h-0 overflow-hidden">
-                      <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                      <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
                         {routines.map((routine) => (
                           <DashboardRoutineTile
                             key={routine.id}
@@ -896,7 +896,7 @@ export default function DashboardPage() {
                   )}
                 >
                   <div className="min-h-0 overflow-hidden">
-                    <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                    <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
                       {group.routines.map((routine) => {
                         const participantId =
                           group.key === "home::tailored"

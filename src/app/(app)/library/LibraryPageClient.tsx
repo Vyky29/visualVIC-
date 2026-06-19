@@ -6,7 +6,7 @@
  */
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Button } from "@/components/ui/Button";
@@ -85,7 +85,7 @@ import {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
   generatedPixtoCategoryOutlineStyle,
 } from "@/lib/constants/generated-pixto-card-sizes";
-import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
+import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnBundledCardUrl,
@@ -428,7 +428,7 @@ function LibraryPackThematicSubgroups({
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
             {groupCards.map((v) => (
               <LibraryPickTile
                 key={v.pickId}
@@ -456,7 +456,7 @@ function LibraryPackThematicSubgroups({
           iconUrl={groupCards[0]?.imageUrl}
           ringClass={ringClass}
         />
-        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
           {groupCards.map((v) => (
             <LibraryPickTile
               key={v.pickId}
@@ -576,6 +576,7 @@ export function LibraryPageClient({
   returnTo?: string;
 } = {}) {
   const router = useRouter();
+  const pathname = usePathname();
   const cardUiLang = useCardUiLanguage();
   const prefersFineHover = usePrefersFineHover();
   const [orderedPickIds, setOrderedPickIds] = useState<string[]>([]);
@@ -663,7 +664,7 @@ export function LibraryPageClient({
       <div
         className={cn(
           "fixed left-1/2 z-30 w-full -translate-x-1/2 border-t border-ink/10 bg-canvas/95 px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(28,36,32,0.18)] backdrop-blur-md",
-          APP_SHELL_WIDTH_CLASS,
+          shellClassForPathname(pathname),
         )}
         style={{
           bottom: bottomBarBottomClass,
@@ -851,7 +852,7 @@ export function LibraryPageClient({
                                       iconUrl={SECTION_HEADER_ICON[section]}
                                       ringClass={ringClass}
                                     />
-                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
                                       {objectCards.map((v) => (
                                         <LibraryPickTile
                                           key={v.pickId}
@@ -873,7 +874,7 @@ export function LibraryPageClient({
                                       }
                                       ringClass={ringClass}
                                     />
-                                    <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+                                    <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
                                       {stepCards.map((v) => (
                                         <LibraryPickTile
                                           key={v.pickId}

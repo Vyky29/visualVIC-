@@ -27,6 +27,20 @@ import {
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_WARMUP_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
+  DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS,
+  DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COOKING_BAKE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COMMUNITY_MARKET_GENERATED_CARD_PROPS,
+  DAY_CENTRE_COMMUNITY_PARK_GENERATED_CARD_PROPS,
+  DAY_CENTRE_PREMIUM_SHOWER_GENERATED_CARD_PROPS,
+  DAY_CENTRE_PREMIUM_SWIM_GENERATED_CARD_PROPS,
+  DAY_CENTRE_PREMIUM_DRESS_GENERATED_CARD_PROPS,
   DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
@@ -36,7 +50,8 @@ import {
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
-import { dayCentreHubRoomImageUrl } from "@/lib/cards/day-centre-shared";
+import { physical3dImageUrl } from "@/lib/cards/physical-cards";
+import { dayCentreHubRoomImageUrl, dayCentreGeneralImageUrl } from "@/lib/cards/day-centre-shared";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
 import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
@@ -181,8 +196,8 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "dc-mini-gym",
-    name: "Mini Gym Routine",
-    description: "Mini gym equipment — therapy ball, treadmill, weights and stretching",
+    name: "Mini Gym · 2D",
+    description: "Mini gym equipment — flat 2D objects only (no people)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreFolderIconUrl("mini-gym"),
     steps: routineStepsFromGeneratedCardProps(
@@ -191,9 +206,64 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
+    id: "dc-mini-gym-3d",
+    name: "Mini Gym · 3D",
+    description: "Mini gym equipment — soft 3D objects only (no people)",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-3d",
+      DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-warmup",
+    name: "Mini Gym · Warm-up",
+    description: "Therapy ball, mat, bands and stretching — 2D objects",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreFolderIconUrl("mini-gym"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-warmup",
+      DAY_CENTRE_MINI_GYM_WARMUP_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-cardio",
+    name: "Mini Gym · Cardio",
+    description: "Treadmill, bike, trampoline and steps — 2D objects",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("treadmill"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-cardio",
+      DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-strength",
+    name: "Mini Gym · Strength",
+    description: "Weights, bells, steps and foam roller — 2D objects",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("weights"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-strength",
+      DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-3d-warmup",
+    name: "Mini Gym · 3D warm-up",
+    description: "Therapy ball, bands, BOSU and stretching — 3D objects",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("bosu"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-3d-warmup",
+      DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
     id: "dc-bouldering",
-    name: "Bouldering Routine",
-    description: "Boulder wall — shoes, holds and climbing steps",
+    name: "Bouldering · Full",
+    description: "Shoes, chalk, holds and boulder wall — full sequence",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreFolderIconUrl("bouldering"),
     steps: routineStepsFromGeneratedCardProps(
@@ -202,9 +272,31 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
+    id: "dc-bouldering-prep",
+    name: "Bouldering · Get ready",
+    description: "Climbing shoes, magnesium and rub palms",
+    tags: ["extra"],
+    homePreviewImageUrl: climbingImageUrl("put-climbing-shoes-on"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-bouldering-prep",
+      DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-bouldering-wall",
+    name: "Bouldering · On the wall",
+    description: "Boulder wall, holds, grab and step on holds",
+    tags: ["extra"],
+    homePreviewImageUrl: climbingImageUrl("boulder-wall"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-bouldering-wall",
+      DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
     id: "dc-cooking",
-    name: "Cooking Activity",
-    description: "Kitchen materials and food preparation",
+    name: "Cooking · Pizza day",
+    description: "Apron, wash hands, mix and cook pizza",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreFolderIconUrl("cooking"),
     steps: routineStepsFromGeneratedCardProps(
@@ -213,14 +305,91 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
+    id: "dc-cooking-prep",
+    name: "Cooking · Kitchen prep",
+    description: "Chopping board, peeler and tomato sauce",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("chopping-board"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-cooking-prep",
+      DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-cooking-bake",
+    name: "Cooking · Bake & mix",
+    description: "Mixing bowl, rolling pin and pizza in the oven",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("pizza"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-cooking-bake",
+      DAY_CENTRE_COOKING_BAKE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
     id: "dc-community",
-    name: "Community Outing",
-    description: "Westfield, McDonald's and community transport",
+    name: "Community · Westfield",
+    description: "Bus, Westfield shopping, McDonald's and taxi home",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreFolderIconUrl("community"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-community",
       DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-community-market",
+    name: "Community · Market day",
+    description: "Bus to market, basket, pay and home",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("market"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-community-market",
+      DAY_CENTRE_COMMUNITY_MARKET_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-community-park",
+    name: "Community · Park outing",
+    description: "Walk to park, playground, cafe and taxi home",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("park"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-community-park",
+      DAY_CENTRE_COMMUNITY_PARK_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-premium-shower",
+    name: "Premium · Shower",
+    description: "Shampoo, sponge, rinse and dry — shower basics",
+    tags: ["extra"],
+    homePreviewImageUrl: showerImageUrl("squeeze-shampoo"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-premium-shower",
+      DAY_CENTRE_PREMIUM_SHOWER_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-premium-swim",
+    name: "Premium · Swim changing",
+    description: "Shoes off, trunks, flip-flops and goggles",
+    tags: ["extra"],
+    homePreviewImageUrl: swimmingImageUrl("goggles-on"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-premium-swim",
+      DAY_CENTRE_PREMIUM_SWIM_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-premium-dress",
+    name: "Premium · Get dressed",
+    description: "Pants, socks, trousers, t-shirt and shoes",
+    tags: ["extra"],
+    homePreviewImageUrl: gettingDressUndressImageUrl("tshirt-on"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-premium-dress",
+      DAY_CENTRE_PREMIUM_DRESS_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -299,7 +468,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
     description:
-      "Gym routine — cross trainer and basketball (personalised cartoon)",
+      "Day centre — cross trainer, basketball, crosswords, spelling, handwriting, maths, group activity (personalised cartoon)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(

@@ -50,7 +50,7 @@ const FEATURES: readonly {
 
 /** Text band above previews — compact so phones sit closer to the copy. */
 const WELCOME_TEXT_BAND =
-  "flex h-[6.1rem] shrink-0 flex-col items-center px-1 pb-0.5 pt-0.5 text-center sm:h-[6.45rem]";
+  "flex h-[6.1rem] shrink-0 flex-col items-center px-1 pb-0.5 pt-0.5 text-center sm:h-[6.45rem] tablet:h-[4.6rem]";
 
 /** Shared “phone” chrome so zoom lightbox matches the small preview outline. */
 function WelcomePhoneDeviceChrome({
@@ -83,12 +83,14 @@ function WelcomeZoomablePreview({
   fit,
   expandHint,
   onOpen,
+  className,
 }: {
   src: string;
   alt: string;
   fit: "contain" | "cover";
   expandHint: string;
   onOpen: () => void;
+  className?: string;
 }) {
   const lastTapRef = useRef(0);
   const imageClass =
@@ -120,7 +122,10 @@ function WelcomeZoomablePreview({
   return (
     <button
       type="button"
-      className="mx-auto w-full max-w-[min(100%,15.5rem)] cursor-zoom-in touch-manipulation appearance-none border-0 bg-transparent p-0 text-left [@media(max-height:700px)]:max-w-[13.5rem] sm:max-w-[17.25rem]"
+      className={cn(
+        "mx-auto flex h-full max-h-full w-auto max-w-[min(100%,15.5rem)] cursor-zoom-in touch-manipulation appearance-none border-0 bg-transparent p-0 text-left [@media(max-height:700px)]:max-w-[13.5rem] sm:max-w-[17.25rem] tablet:max-w-none",
+        className,
+      )}
       aria-label={expandHint}
       title={expandHint}
       onClick={handleClick}
@@ -130,8 +135,8 @@ function WelcomeZoomablePreview({
       }}
       onPointerUp={handlePointerUp}
     >
-      <WelcomePhoneDeviceChrome>
-        <div className="relative aspect-[37/72] w-full bg-[#f6f6f4]">
+      <WelcomePhoneDeviceChrome className="h-full">
+        <div className="relative h-full w-auto min-w-0 aspect-[37/72] bg-[#f6f6f4]">
           <Image
             key={src}
             src={src}
@@ -233,33 +238,44 @@ export function WelcomePageClient() {
     return [parts[0]?.trim() ?? "", parts[1]?.trim() ?? ""] as const;
   })();
 
+  useEffect(() => {
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
+  }, []);
+
   return (
-    <MobileScreen className="flex min-h-dvh w-full !max-w-2xl flex-col gap-0 bg-white !px-3 !pb-[max(1rem,env(safe-area-inset-bottom))] !pt-0 sm:!px-5">
+    <MobileScreen
+      withChrome={false}
+      className="flex h-dvh max-h-dvh w-full !max-w-2xl flex-col gap-0 overflow-hidden bg-white !px-3 !pb-[max(0.5rem,env(safe-area-inset-bottom))] !pt-0 sm:!px-5"
+    >
       <header
-        className="sticky top-0 z-20 flex shrink-0 justify-end border-b border-ink/5 bg-white/90 px-1 py-2 backdrop-blur-md supports-[backdrop-filter]:bg-white/80"
+        className="flex shrink-0 justify-end border-b border-ink/5 bg-white/90 px-1 py-1.5 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 tablet:py-1"
         style={{
-          paddingTop: "max(0.5rem, env(safe-area-inset-top))",
+          paddingTop: "max(0.35rem, env(safe-area-inset-top))",
         }}
       >
         <CardLanguageFlagButtons afterSelect="stay" />
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-2 px-1 pt-1.5 sm:gap-3 sm:px-0 sm:pt-2">
-        <div className="shrink-0 space-y-2.5 text-center">
+      <div className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-hidden px-1 pt-1 sm:gap-2 sm:px-0 sm:pt-1.5 tablet:gap-1">
+        <div className="shrink-0 space-y-1.5 text-center tablet:space-y-1">
           <PixtoLearnLockup
             variant="hero"
             layout="stacked"
             className="mx-auto w-full max-w-sm [@media(max-height:700px)]:gap-2"
           />
-          <div className="mx-auto w-full max-w-[16.25rem] text-center sm:max-w-[17.5rem]">
-            <h1 className="text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
+          <div className="mx-auto w-full max-w-[16.25rem] text-center sm:max-w-[17.5rem] tablet:max-w-[15rem]">
+            <h1 className="text-[clamp(1.2rem,4.8vw,1.7rem)] font-semibold leading-[1.12] tracking-tight text-ink tablet:text-[1.15rem] [@media(max-height:700px)]:text-[clamp(1.05rem,4vw,1.35rem)]">
               <span className="block">{heroLine1}</span>
               {heroLine2 ? <span className="block">{heroLine2}</span> : null}
             </h1>
           </div>
         </div>
 
-        <div className="mt-4 grid min-h-0 w-full flex-1 grid-cols-2 gap-2 sm:mt-5 sm:gap-3">
+        <div className="grid min-h-0 w-full flex-1 grid-cols-2 gap-1.5 overflow-hidden sm:gap-2 tablet:gap-1.5">
           {FEATURES.map((feature) => (
             <section
               key={feature.slot}
@@ -267,20 +283,20 @@ export function WelcomePageClient() {
             >
               <div className={WELCOME_TEXT_BAND}>
                 <div
-                  className="mb-1.5 h-1 w-11 shrink-0 rounded-full opacity-95 sm:w-12"
+                  className="mb-1 h-1 w-11 shrink-0 rounded-full opacity-95 sm:mb-1.5 sm:w-12 tablet:mb-0.5"
                   style={{
                     backgroundImage: `linear-gradient(to right, ${feature.from}, ${feature.to})`,
                   }}
                 />
-                <p className="line-clamp-2 shrink-0 text-balance text-[0.78rem] font-semibold leading-tight text-ink sm:text-[0.86rem]">
+                <p className="line-clamp-2 shrink-0 text-balance text-[0.78rem] font-semibold leading-tight text-ink sm:text-[0.86rem] tablet:text-[0.72rem]">
                   {welcomeFeatureTitle(feature.slot, lang)}
                 </p>
-                <p className="mx-auto mt-1 line-clamp-4 max-h-[3.6rem] min-h-0 w-full max-w-[11.75rem] text-pretty text-[0.64rem] leading-[1.35] text-ink-subtle sm:max-h-[3.85rem] sm:max-w-[12.5rem] sm:text-[0.72rem] sm:leading-[1.38]">
+                <p className="mx-auto mt-0.5 line-clamp-3 max-h-[3.6rem] min-h-0 w-full max-w-[11.75rem] text-pretty text-[0.64rem] leading-[1.35] text-ink-subtle sm:mt-1 sm:max-h-[3.85rem] sm:max-w-[12.5rem] sm:text-[0.72rem] sm:leading-[1.38] tablet:mt-0.5 tablet:max-h-[2.35rem] tablet:text-[0.62rem] tablet:leading-[1.3]">
                   {welcomeFeatureBody(feature.slot, lang)}
                 </p>
               </div>
 
-              <div className="flex min-h-0 flex-1 flex-col items-center justify-start px-1 pb-1.5 pt-0 sm:px-1.5 sm:pb-2">
+              <div className="flex min-h-0 flex-1 flex-col items-center justify-end overflow-hidden px-1 pb-1 pt-0 sm:px-1.5 sm:pb-1.5">
                 <WelcomeZoomablePreview
                   src={welcomeFeaturePreviewSrc(feature.slot, lang)}
                   alt={welcomeFeaturePreviewAlt(feature.slot, lang)}
@@ -293,7 +309,7 @@ export function WelcomePageClient() {
           ))}
         </div>
 
-        <div className="mt-auto shrink-0 pt-0">
+        <div className="shrink-0 pt-0">
           <WelcomeFooter />
         </div>
       </div>

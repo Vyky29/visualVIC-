@@ -6,7 +6,7 @@ import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import { bottomNavLabel, type BottomNavKey } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
-import { APP_SHELL_WIDTH_CLASS } from "@/lib/constants/app-shell-layout";
+import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
 
 type NavItem = {
   href: string;
@@ -55,6 +55,7 @@ export function BottomNav() {
   const pathname = usePathname();
   const lang = useCardUiLanguage();
   const { isRestricted } = useStaffAccess();
+  const shellClass = shellClassForPathname(pathname);
 
   const visibleItems = isRestricted
     ? items.filter((item) => item.labelKey === "home" || item.labelKey === "library")
@@ -64,7 +65,7 @@ export function BottomNav() {
     <nav
       className={cn(
         "fixed bottom-0 left-1/2 z-20 w-full -translate-x-1/2 border-t border-ink/5 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md",
-        APP_SHELL_WIDTH_CLASS,
+        shellClass,
       )}
       aria-label="Primary"
     >

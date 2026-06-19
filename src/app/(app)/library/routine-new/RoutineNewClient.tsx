@@ -47,6 +47,7 @@ import { resolveFeaturedRoutineHomePreviewUrl } from "@/lib/routines/resolve-rou
 import {
   tailoredParticipantTag,
 } from "@/lib/routines/tailored-routine-meta";
+import { DAY_CENTRE_MIXED_ROUTINE_TAG } from "@/lib/routines/day-centre-mixed-routines";
 import type { TailoredParticipantId } from "@/lib/routines/tailored-participants";
 
 type DraftRow = {
@@ -64,12 +65,15 @@ export function RoutineNewClient({
   participantId,
   participantName,
   editRoutineId,
+  dayCentreMixedSchedule = false,
 }: {
   backHref?: string;
   returnTo?: string;
   participantId?: TailoredParticipantId;
   participantName?: string;
   editRoutineId?: string;
+  /** Planner → Mixed folder schedules (staff, deletable). */
+  dayCentreMixedSchedule?: boolean;
 } = {}) {
   const router = useRouter();
   const cardUiLang = useCardUiLanguage();
@@ -169,6 +173,7 @@ export function RoutineNewClient({
 
     const tags = new Set<string>(["custom", "library"]);
     if (participantId) tags.add(tailoredParticipantTag(participantId));
+    if (dayCentreMixedSchedule) tags.add(DAY_CENTRE_MIXED_ROUTINE_TAG);
 
     const routine: Routine = {
       id,
@@ -196,6 +201,7 @@ export function RoutineNewClient({
     canSave,
     cardUiLang,
     defaultTimerSec,
+    dayCentreMixedSchedule,
     editRoutineId,
     name,
     participantId,

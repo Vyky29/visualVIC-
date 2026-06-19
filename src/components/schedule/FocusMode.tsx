@@ -43,12 +43,6 @@ import {
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
-import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
-import { shouldApplyOrientationLock } from "@/lib/utils/device-input";
-import {
-  lockScreenLandscape,
-  unlockScreenOrientation,
-} from "@/lib/utils/orientation-lock";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
@@ -104,10 +98,7 @@ function Sheet({
             animate={{ y: 0 }}
             exit={{ y: 16 }}
             transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-            className={cn(
-              "mx-auto w-full rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10",
-              "max-w-lg tablet:max-w-3xl",
-            )}
+            className="mx-auto w-full max-w-lg rounded-t-[1.5rem] bg-cream px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-soft ring-1 ring-ink/10"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[14px] font-medium text-ink/90">{title}</p>
@@ -253,7 +244,6 @@ export function FocusMode({ routine, exitHref }: Props) {
   const router = useRouter();
   const lang = useCardUiLanguage();
   const prefersFineHover = usePrefersFineHover();
-  const isTabletTouch = useTabletTouchLayout();
   const { enabled: expandedCards, toggle: toggleExpandedCards } =
     useFocusExpandedCards();
   const {
@@ -332,14 +322,6 @@ export function FocusMode({ routine, exitHref }: Props) {
   useEffect(() => {
     setSessionTimerSec(undefined);
   }, [nowStep?.id]);
-
-  useEffect(() => {
-    if (!shouldApplyOrientationLock() || !isTabletTouch) return;
-    void lockScreenLandscape();
-    return () => {
-      unlockScreenOrientation();
-    };
-  }, [isTabletTouch]);
 
   useEffect(() => {
     if (!prefersFineHover) return;
@@ -425,10 +407,7 @@ export function FocusMode({ routine, exitHref }: Props) {
       className={cn(
         "fixed top-0 z-50 flex h-[100svh] max-h-[100svh] min-h-0 flex-col overflow-hidden overscroll-none bg-black touch-manipulation text-cream",
         prefersFineHover
-          ? cn(
-              "left-1/2 w-full -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]",
-              "max-w-lg tablet:max-w-3xl",
-            )
+          ? "left-1/2 w-full max-w-lg -translate-x-1/2 shadow-[0_0_0_1px_rgba(255,255,255,0.08)]"
           : "left-0 right-0",
       )}
     >

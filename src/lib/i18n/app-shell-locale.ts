@@ -11,6 +11,7 @@ import {
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
 import type { PhysicalLibraryGroup } from "@/lib/cards/physical-library-groups";
+import type { DayCentreFolderId } from "@/lib/routines/day-centre-folders";
 import type { RoutineVisualTone } from "@/lib/utils/routine-accent";
 
 function isEs(lang: CardLanguageCode): boolean {
@@ -89,18 +90,40 @@ export function tailoredParticipantSchedulesIntro(
 export function dayCentreFolderSchedulesIntro(
   folderName: string,
   lang: CardLanguageCode,
+  folderId?: DayCentreFolderId,
 ): string {
+  if (folderId === "mixed") {
+    if (!isEs(lang)) {
+      return "Schedules built in Planner by staff. You can delete them at any time.";
+    }
+    return "Rutinas creadas en el Planner por el equipo. Se pueden borrar en cualquier momento.";
+  }
   if (!isEs(lang)) {
     return `Choose a ${folderName} schedule. More can be added over time.`;
   }
   return `Elige una rutina de ${folderName}. Se irán añadiendo más con el tiempo.`;
 }
 
+export function dayCentreMixedFolderEmptyLead(lang: CardLanguageCode): string {
+  if (!isEs(lang)) {
+    return "No staff schedules yet. Open Planner, pick cards from the library, and save a routine — it will appear here.";
+  }
+  return "Aún no hay rutinas del equipo. Abre el Planner, elige tarjetas en la biblioteca y guarda — aparecerá aquí.";
+}
+
+export function dayCentreMixedOpenPlannerButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Abrir Planner" : "Open Planner";
+}
+
+export function dayCentreMixedDeleteScheduleButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Borrar" : "Delete";
+}
+
 export function dayCentreFoldersIntro(lang: CardLanguageCode): string {
   if (!isEs(lang)) {
-    return "Choose a folder — mini gym, bouldering, cooking, community outings, or mixed days.";
+    return "Choose a folder — mini gym, bouldering, cooking, community outings, or staff schedules in Mixed.";
   }
-  return "Elige una carpeta — mini gym, boulder, cocina, salidas a la comunidad o días mixtos.";
+  return "Elige una carpeta — mini gym, boulder, cocina, salidas a la comunidad, o rutinas del equipo en Mixta.";
 }
 
 export function dashboardPhysicalActivitySectionTitle(

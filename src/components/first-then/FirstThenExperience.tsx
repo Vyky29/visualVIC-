@@ -59,8 +59,7 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFirstThenLandscapeFocus } from "@/lib/hooks/useFirstThenLandscapeFocus";
-import { useTabletTouchLayout } from "@/lib/hooks/useScheduleCardLayout";
-import { TABLET_CONTENT_COLUMN_CLASS } from "@/lib/constants/app-shell-layout";
+import { TABLET_CONTENT_COLUMN_CLASS, TABLET_TOUCH_MEDIA } from "@/lib/constants/app-shell-layout";
 import {
   lockScreenLandscape,
   lockScreenPortrait,
@@ -726,7 +725,11 @@ function FirstThenFocusLandscapeLayout({
         FOCUS_LANDSCAPE.sidebarW + FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX * 2;
       const sx = (W - centerHubPx) / (FOCUS_LANDSCAPE.cardW * 2);
       const sy = H / FOCUS_LANDSCAPE.cardH;
-      const next = Math.min(sx, sy, 1);
+      const next = Math.min(
+        sx,
+        sy,
+        window.matchMedia(TABLET_TOUCH_MEDIA).matches ? 1.2 : 1,
+      );
       setScale(Number.isFinite(next) && next > 0 ? next : 0.5);
     };
 
@@ -1319,53 +1322,6 @@ function FirstThenIntroLayout3({
   );
 }
 
-function FirstThenFocusPortraitStack({
-  firstCard,
-  secondCard,
-  lang,
-  onExitFocus,
-}: {
-  firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
-  lang: ReturnType<typeof useCardUiLanguage>;
-  onExitFocus: () => void;
-}) {
-  const firstLabel = firstThenSlotLabel("first", lang);
-  const thenLabel = firstThenSlotLabel("then", lang);
-
-  return (
-    <div className="flex h-full min-h-0 w-full flex-col bg-black px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))]">
-      <div className={cn("mx-auto flex min-h-0 w-full flex-1 flex-col gap-3", TABLET_CONTENT_COLUMN_CLASS)}>
-        <div className="min-h-0 flex-1">
-          <FirstThenPortraitCardCell
-            card={firstCard}
-            scaleMultiplier={0.96}
-            slotHeaderLabel={firstLabel}
-            readableTitle
-          />
-        </div>
-        <div className="min-h-0 flex-1">
-          <FirstThenPortraitCardCell
-            card={secondCard}
-            scaleMultiplier={0.96}
-            slotHeaderLabel={thenLabel}
-            readableTitle
-          />
-        </div>
-      </div>
-      <div className="flex shrink-0 justify-center pt-3">
-        <button
-          type="button"
-          onClick={onExitFocus}
-          className={cn(introFooterActionClass, "mx-auto")}
-        >
-          {firstThenDemoFocusModeCta(lang)}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function FirstThenIntroPortraitScreen({
   layout,
   firstCard,
@@ -1461,7 +1417,6 @@ function FirstThenExperienceClient() {
     return resolveFirstThenDemoPack(packId, lang);
   }, [sessionPayload, packId, lang]);
   const showLandscapeFocus = useFirstThenLandscapeFocus();
-  const isTabletTouch = useTabletTouchLayout();
   const [showFocusMode, setShowFocusMode] = useState(false);
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1512,13 +1467,6 @@ function FirstThenExperienceClient() {
           secondCard={second}
           lang={lang}
           routineHref={routineHref}
-        />
-      ) : isTabletTouch ? (
-        <FirstThenFocusPortraitStack
-          firstCard={first}
-          secondCard={second}
-          lang={lang}
-          onExitFocus={() => setShowFocusMode(false)}
         />
       ) : (
         <div className="flex h-full min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">

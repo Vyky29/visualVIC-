@@ -27,7 +27,7 @@ export function PixtoLearnLockup({
       className={cn(
         "flex justify-center",
         stacked
-          ? "flex-col items-center gap-3"
+          ? "flex-col items-center gap-3 tablet:gap-1.5"
           : "flex-row items-center gap-2.5",
         hero && !stacked && "gap-3.5",
         className,
@@ -38,7 +38,7 @@ export function PixtoLearnLockup({
           "flex shrink-0 items-center justify-center rounded-2xl bg-white ring-1 ring-ink/[0.08]",
           "shadow-[0_1px_0_rgba(28,36,32,0.04),0_4px_12px_-4px_rgba(28,36,32,0.1)]",
           stacked &&
-            "h-[clamp(5.35rem,23dvh,8rem)] w-[clamp(5.35rem,23dvh,8rem)] rounded-[1.35rem] p-3 sm:h-[clamp(5.85rem,21dvh,8.5rem)] sm:w-[clamp(5.85rem,21dvh,8.5rem)] sm:p-4 [@media(max-height:640px)]:h-[clamp(4.25rem,17dvh,6rem)] [@media(max-height:640px)]:w-[clamp(4.25rem,17dvh,6rem)] [@media(max-height:640px)]:p-2.5",
+            "h-[clamp(5.35rem,23dvh,8rem)] w-[clamp(5.35rem,23dvh,8rem)] rounded-[1.35rem] p-3 sm:h-[clamp(5.85rem,21dvh,8.5rem)] sm:w-[clamp(5.85rem,21dvh,8.5rem)] sm:p-4 tablet:h-[3.65rem] tablet:w-[3.65rem] tablet:p-2 [@media(max-height:640px)]:h-[clamp(4.25rem,17dvh,6rem)] [@media(max-height:640px)]:w-[clamp(4.25rem,17dvh,6rem)] [@media(max-height:640px)]:p-2.5",
           hero &&
             !stacked &&
             "h-[3.35rem] w-[3.35rem] p-2 sm:h-[3.75rem] sm:w-[3.75rem] sm:p-2.5",
@@ -58,7 +58,7 @@ export function PixtoLearnLockup({
         className={cn(
           "select-none text-center font-semibold tracking-[-0.03em] text-ink",
           stacked
-            ? "whitespace-normal text-[clamp(1.62rem,6vw,2.28rem)] leading-tight [@media(max-height:640px)]:text-[clamp(1.32rem,5.1vw,1.78rem)]"
+            ? "whitespace-normal text-[clamp(1.62rem,6vw,2.28rem)] leading-tight tablet:text-[1.45rem] [@media(max-height:640px)]:text-[clamp(1.32rem,5.1vw,1.78rem)]"
             : "whitespace-nowrap leading-none",
           hero && !stacked && "text-[clamp(1.2rem,4.6vw,1.7rem)]",
           !hero && "text-[0.94rem] sm:text-[1.02rem]",
