@@ -33,6 +33,7 @@ import {
 import {
   DAY_CENTRE_GENERAL_CARD_FILES,
   DAY_CENTRE_GENERAL_SEQUENCE,
+  DAY_CENTRE_GENERAL_CATEGORY_LABEL,
   dayCentreGeneralImageUrlForStep,
 } from "@/lib/cards/day-centre-general-cards";
 import {
@@ -50,7 +51,18 @@ import {
 import {
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   dayCentreEmmanuelImageUrlForStep,
+  dayCentreEmmanuelLibrary2dImageUrlForStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
+import {
+  MINI_GYM_2D_LIBRARY_SEQUENCE,
+  MINI_GYM_3D_LIBRARY_SEQUENCE,
+  MINI_GYM_LIBRARY_SLUGS,
+} from "@/lib/cards/mini-gym-library-groups";
+import {
+  DAY_CENTRE_CATEGORY_COLOUR,
+  dayCentreGeneralImageUrl,
+  dayCentrePackMarkUrl,
+} from "@/lib/cards/day-centre-shared";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import {
@@ -72,6 +84,7 @@ import {
   DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GYM_GENERATED_CARD_PROPS,
@@ -95,7 +108,10 @@ export type PickablePackId =
   | "dcserine"
   | "dcayaan"
   | "dcemmanuel"
+  | "dcemmanuel2d"
   | "dcpremium"
+  | "mg2d"
+  | "mg3d"
   | "phy2d"
   | "phy3d"
   | "phy3g";
@@ -116,7 +132,10 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dcserine" ||
     ns === "dcayaan" ||
     ns === "dcemmanuel" ||
+    ns === "dcemmanuel2d" ||
     ns === "dcpremium" ||
+    ns === "mg2d" ||
+    ns === "mg3d" ||
     ns === "phy2d" ||
     ns === "phy3d" ||
     ns === "phy3g"
@@ -180,6 +199,37 @@ function appendExtraCardsFromFiles(params: {
       category,
     });
   }
+}
+
+function miniGymLibraryGeneratedPixto(
+  slug: string,
+  title: string,
+  illustrationUrl: string,
+): GeneratedPixtoRoutineStepData {
+  return {
+    illustrationUrl,
+    title,
+    category: DAY_CENTRE_GENERAL_CATEGORY_LABEL,
+    categoryColour: DAY_CENTRE_CATEGORY_COLOUR,
+    iconUrl: dayCentrePackMarkUrl(),
+  };
+}
+
+function generalGeneratedPixtoBySlug(
+  slug: string,
+): GeneratedPixtoRoutineStepData | undefined {
+  const index = DAY_CENTRE_GENERAL_SEQUENCE.findIndex((s) => s.slug === slug);
+  if (index < 0) return undefined;
+  const gp = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[index];
+  if (!gp) return undefined;
+  return {
+    illustrationUrl: gp.illustrationUrl,
+    title: gp.title,
+    category: gp.category,
+    categoryColour: gp.categoryColour,
+    iconUrl: gp.iconUrl,
+    cardType: gp.cardType,
+  };
 }
 
 function premiumPickImageUrl(
@@ -342,6 +392,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   });
 
   DAY_CENTRE_GENERAL_SEQUENCE.forEach((s, i) => {
+    if (MINI_GYM_LIBRARY_SLUGS.has(s.slug)) return;
     const gp = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[i];
     out.push({
       pickId: pid("daycentre", s.slug),
@@ -368,6 +419,34 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     imageUrlForSlug: (slug) =>
       dayCentreGeneralImageUrlForStep({ id: slug, slug, title: slug }),
     titleMap: dayCentreGeneralTitleMap,
+  });
+
+  MINI_GYM_2D_LIBRARY_SEQUENCE.forEach((s) => {
+    const illustrationUrl = dayCentreGeneralImageUrl(s.slug);
+    out.push({
+      pickId: pid("mg2d", s.slug),
+      label: s.title,
+      imageUrl: illustrationUrl,
+      category: "home",
+      generatedPixto:
+        generalGeneratedPixtoBySlug(s.slug) ??
+        miniGymLibraryGeneratedPixto(s.slug, s.title, illustrationUrl),
+    });
+  });
+
+  MINI_GYM_3D_LIBRARY_SEQUENCE.forEach((s) => {
+    const illustrationUrl = physical3dImageUrlForStep(s);
+    out.push({
+      pickId: pid("mg3d", s.slug),
+      label: s.title,
+      imageUrl: illustrationUrl,
+      category: "home",
+      generatedPixto: miniGymLibraryGeneratedPixto(
+        s.slug,
+        s.title,
+        illustrationUrl,
+      ),
+    });
   });
 
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE.forEach((s, i) => {
@@ -439,6 +518,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcemmanuel", s.slug),
       label: s.title,
       imageUrl: dayCentreEmmanuelImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcemmanuel2d", s.slug),
+      label: s.title,
+      imageUrl: dayCentreEmmanuelLibrary2dImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

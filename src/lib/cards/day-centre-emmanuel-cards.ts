@@ -5,6 +5,8 @@
 
 import {
   dayCentreEmmanuelImageUrl,
+  dayCentreEmmanuelScene2dFocusUrl,
+  dayCentreEmmanuelScene2dUrl,
   dayCentreEmmanuelSceneFocusUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelAvatarUrl,
@@ -95,4 +97,16 @@ export function dayCentreEmmanuelScheduleFocusImageUrlForStep(
   step: DayCentreEmmanuelStep,
 ): string | undefined {
   return dayCentreEmmanuelSceneFocusUrl(step.slug);
+}
+
+export function dayCentreEmmanuelLibrary2dImageUrlForStep(
+  step: DayCentreEmmanuelStep,
+): string {
+  return dayCentreEmmanuelScene2dUrl(step.slug);
+}
+
+export function dayCentreEmmanuelLibrary2dFocusImageUrlForStep(
+  step: DayCentreEmmanuelStep,
+): string | undefined {
+  return dayCentreEmmanuelScene2dFocusUrl(step.slug);
 }

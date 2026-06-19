@@ -99,6 +99,8 @@ import {
   DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
   dayCentreEmmanuelFocusImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
+  dayCentreEmmanuelLibrary2dFocusImageUrlForStep,
+  dayCentreEmmanuelLibrary2dImageUrlForStep,
   dayCentreEmmanuelScheduleFocusImageUrlForStep,
   dayCentreEmmanuelScheduleImageUrlForStep,
   dayCentreEmmanuelPackMarkUrl,
@@ -452,6 +454,24 @@ function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
 
 export const DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.map((s) => emmanuelGeneratedCardProps(s));
+
+function emmanuelLibrary2dGeneratedCardProps(step: DayCentreEmmanuelStep) {
+  const focusIllustrationUrl =
+    dayCentreEmmanuelLibrary2dFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreEmmanuelLibrary2dImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.map((s) =>
+    emmanuelLibrary2dGeneratedCardProps(s),
+  );
 
 function emmanuelScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
   const focusIllustrationUrl =

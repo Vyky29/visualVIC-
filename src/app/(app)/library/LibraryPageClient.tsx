@@ -25,6 +25,14 @@ import {
   ikramLibraryGroupForSlug,
 } from "@/lib/cards/ikram-library-groups";
 import {
+  EMMANUEL_LIBRARY_DIMENSION_ORDER,
+  emmanuelLibraryDimensionFromPickNamespace,
+} from "@/lib/cards/emmanuel-library-groups";
+import {
+  MINI_GYM_LIBRARY_DIMENSION_ORDER,
+  miniGymLibraryDimensionFromPickNamespace,
+} from "@/lib/cards/mini-gym-library-groups";
+import {
   PHYSICAL_LIBRARY_GROUP_ORDER,
   physicalLibraryGroupFromPickNamespace,
 } from "@/lib/cards/physical-library-groups";
@@ -99,7 +107,15 @@ const groups = ["self-care", "home", "activity"] as const;
 export type LibrarySectionId =
   | Exclude<
       PickablePackId,
-      "dress" | "phy2d" | "phy3d" | "phy3g" | "daycentre" | "dcpremium"
+      | "dress"
+      | "phy2d"
+      | "phy3d"
+      | "phy3g"
+      | "daycentre"
+      | "dcpremium"
+      | "mg2d"
+      | "mg3d"
+      | "dcemmanuel2d"
     >
   | "dress-on"
   | "dress-off"
@@ -197,7 +213,10 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dcserine: "border-t border-[#E05C9A]/55 bg-[#fce0ef] text-ink",
   dcayaan: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcemmanuel: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
+  dcemmanuel2d: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcpremium: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
+  mg2d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
+  mg3d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
   phy3d: "border-t border-[#43A047]/45 bg-[#e8f5e9] text-ink",
   phy3g: "border-t border-[#43A047]/50 bg-[#e8f5e9] text-ink",
@@ -219,6 +238,8 @@ function librarySectionFromCard(
   const pack = pickablePackFromPickId(c.pickId);
   if (!pack) return null;
   if (pack === "phy2d" || pack === "phy3d" || pack === "phy3g") return "physical";
+  if (pack === "mg2d" || pack === "mg3d") return "dcfolderminigym";
+  if (pack === "dcemmanuel2d") return "dcemmanuel";
   if (pack === "daycentre") {
     const slug = c.pickId.split("::")[1] ?? "";
     return dayCentreFolderLibrarySectionId(dayCentreFolderForSlug(slug));
@@ -349,7 +370,12 @@ function libraryPackHeaderImageClass(
 }
 
 function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
-  return section === "physical" || section === "dcikram";
+  return (
+    section === "physical" ||
+    section === "dcikram" ||
+    section === "dcfolderminigym" ||
+    section === "dcemmanuel"
+  );
 }
 
 function LibrarySubgroupHeader({
@@ -419,6 +445,64 @@ function LibraryPackThematicSubgroups({
       const groupCards = cards.filter((v) => {
         const ns = v.pickId.split("::")[0] ?? "";
         return physicalLibraryGroupFromPickNamespace(ns) === groupId;
+      });
+      if (groupCards.length === 0) return null;
+      return (
+        <section key={groupId} className="space-y-1.5">
+          <LibrarySubgroupHeader
+            label={physicalLibraryGroupLabel(groupId, cardUiLang)}
+            iconUrl={groupCards[0]?.imageUrl}
+            ringClass={ringClass}
+          />
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+            {groupCards.map((v) => (
+              <LibraryPickTile
+                key={v.pickId}
+                v={v}
+                selected={selectedSet.has(v.pickId)}
+                onToggle={onToggle}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  }
+
+  if (section === "dcfolderminigym") {
+    return MINI_GYM_LIBRARY_DIMENSION_ORDER.map((groupId) => {
+      const groupCards = cards.filter((v) => {
+        const ns = v.pickId.split("::")[0] ?? "";
+        return miniGymLibraryDimensionFromPickNamespace(ns) === groupId;
+      });
+      if (groupCards.length === 0) return null;
+      return (
+        <section key={groupId} className="space-y-1.5">
+          <LibrarySubgroupHeader
+            label={physicalLibraryGroupLabel(groupId, cardUiLang)}
+            iconUrl={groupCards[0]?.imageUrl}
+            ringClass={ringClass}
+          />
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-2">
+            {groupCards.map((v) => (
+              <LibraryPickTile
+                key={v.pickId}
+                v={v}
+                selected={selectedSet.has(v.pickId)}
+                onToggle={onToggle}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  }
+
+  if (section === "dcemmanuel") {
+    return EMMANUEL_LIBRARY_DIMENSION_ORDER.map((groupId) => {
+      const groupCards = cards.filter((v) => {
+        const ns = v.pickId.split("::")[0] ?? "";
+        return emmanuelLibraryDimensionFromPickNamespace(ns) === groupId;
       });
       if (groupCards.length === 0) return null;
       return (

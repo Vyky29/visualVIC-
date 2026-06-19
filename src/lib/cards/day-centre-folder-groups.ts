@@ -4,25 +4,7 @@
  */
 
 import type { DayCentreFolderId } from "@/lib/routines/day-centre-folders";
-
-const MINI_GYM_SLUGS = new Set([
-  "therapy-ball",
-  "trampoline",
-  "treadmill",
-  "cones",
-  "step-platform",
-  "rope",
-  "weights",
-  "exercise-bike",
-  "bells",
-  "exercise-mat",
-  "resistance-bands",
-  "foam-roller",
-  "stretching",
-  "exercise-machine",
-  "row-machine",
-  "skis",
-]);
+import { MINI_GYM_LIBRARY_SLUGS } from "@/lib/cards/mini-gym-library-groups";
 
 const COOKING_SLUGS = new Set([
   "apron",
@@ -79,7 +61,7 @@ export const DAY_CENTRE_BOULDERING_CLIMB_SLUGS = new Set([
 ]);
 
 export function dayCentreFolderForSlug(slug: string): DayCentreFolderId {
-  if (MINI_GYM_SLUGS.has(slug)) return "mini-gym";
+  if (MINI_GYM_LIBRARY_SLUGS.has(slug)) return "mini-gym";
   if (COOKING_SLUGS.has(slug)) return "cooking";
   if (COMMUNITY_SLUGS.has(slug)) return "community";
   return "mixed";

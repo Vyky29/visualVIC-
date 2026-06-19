@@ -188,6 +188,14 @@ export function dayCentreEmmanuelSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}-focus.png`;
 }
 
+export function dayCentreEmmanuelScene2dUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/scenes-2d/${slug}.png`;
+}
+
+export function dayCentreEmmanuelScene2dFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/scenes-2d/${slug}-focus.png`;
+}
+
 /** Square 2D avatars — Home · Tailored schedules tiles only. */
 export function isDayCentreTailoredPackIconUrl(url: string): boolean {
   return (
