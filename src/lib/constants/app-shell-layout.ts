@@ -30,10 +30,8 @@ export const APP_SHELL_TABLET_INSET_CLASS = "tablet:px-6";
 /** Schedule NOW card max width on tablet (px) — scales up from phone caps. */
 export const TABLET_SCHEDULE_NOW_CARD_MAX_W_PX = 500 as const;
 
-/** Schedule NEXT card max width on tablet — same ratio as phone NOW/NEXT. */
-export const TABLET_SCHEDULE_NEXT_CARD_MAX_W_PX = Math.round(
-  (TABLET_SCHEDULE_NOW_CARD_MAX_W_PX * 218) / 288,
-) as const;
+/** Schedule NEXT card max width on tablet — same ratio as phone NOW/NEXT (500×218/288). */
+export const TABLET_SCHEDULE_NEXT_CARD_MAX_W_PX = 378 as const;
 
 /** Schedule Player column — full width on tablet; cards scale inside. */
 export const SCHEDULE_COLUMN_CLASS =
