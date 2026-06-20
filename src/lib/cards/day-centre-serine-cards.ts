@@ -40,14 +40,8 @@ export const DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL =
 /** Gym / PE schedule — Serine in every illustration. */
 export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[] =
   [
-    {
-      id: "dcs-therapy-ball-bouncing",
-      slug: "therapy-ball-bouncing",
-      title: "Bounce on therapy ball",
-    },
     { id: "dcs-treadmill", slug: "treadmill", title: "Treadmill" },
     { id: "dcs-row-machine", slug: "row-machine", title: "Row machine" },
-    { id: "dcs-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
     { id: "dcs-sandbag-carry", slug: "sandbag-carry", title: "Walk with sandbag" },
     {
       id: "dcs-sandbag-shoulders",
@@ -70,11 +64,6 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
       slug: "weight-ball-on-bench",
       title: "Weight ball on bench",
     },
-    { id: "dcs-toilet", slug: "toilet", title: "Toilet" },
-    { id: "dcs-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
-    { id: "dcs-skierg", slug: "skierg", title: "Ski machine" },
-    { id: "dcs-stretching", slug: "stretching", title: "Stretching" },
-    { id: "dcs-finished", slug: "finished", title: "Finished" },
   ] as const;
 
 export const DAY_CENTRE_SERINE_SEQUENCE: readonly DayCentreSerineStep[] =
@@ -84,10 +73,7 @@ export const DAY_CENTRE_SERINE_LIBRARY_SEQUENCE: readonly DayCentreSerineStep[] 
   DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE;
 
 /** Generic core visuals — not personalised Serine scenes. */
-const SERINE_CORE_BORROWED_SLUGS: Readonly<Record<string, string>> = {
-  toilet: "toilet",
-  finished: "finish",
-};
+const SERINE_CORE_BORROWED_SLUGS: Readonly<Record<string, string>> = {};
 
 const SERINE_PERSONALISED_SCENE_SLUGS = new Set(
   DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE.map((s) => s.slug).filter(

@@ -444,7 +444,7 @@ export const mockRoutines: Routine[] = [
     id: "serine-day-centre",
     name: DAY_CENTRE_SERINE_ROUTINE_NAME,
     description:
-      "Gym routine — therapy ball, treadmill, rower, bike, sandbags, stretching (personalised cartoon)",
+      "Gym routine — treadmill, rower, sandbags, weights and weight ball (personalised cartoon)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("serine-day-centre"),
     steps: routineStepsFromGeneratedCardProps(

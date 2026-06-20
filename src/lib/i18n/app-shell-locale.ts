@@ -675,7 +675,6 @@ export function libraryPickRibbonCategory(
   const ns = pickId.split("::")[0]?.toLowerCase() ?? "";
   if (ns === "phy2d") return physicalLibraryGroupLabel("2d", lang);
   if (ns === "phy3d") return physicalLibraryGroupLabel("3d", lang);
-  if (ns === "mg2d") return miniGymLibraryGroupLabel("2d", lang);
   if (ns === "mg3d") return miniGymLibraryGroupLabel("3d", lang);
   return null;
 }
@@ -684,18 +683,10 @@ export function libraryPickRibbonCategory(
 export const physicalLibraryPickRibbonCategory = libraryPickRibbonCategory;
 
 export function miniGymLibraryGroupLabel(
-  dimension: MiniGymLibraryDimension,
+  _dimension: MiniGymLibraryDimension,
   lang: CardLanguageCode,
 ): string {
-  const en: Record<MiniGymLibraryDimension, string> = {
-    "2d": "Mini Gym (2D)",
-    "3d": "Mini Gym (3D)",
-  };
-  const es: Record<MiniGymLibraryDimension, string> = {
-    "2d": "Mini gym (2D)",
-    "3d": "Mini gym (3D)",
-  };
-  return isEs(lang) ? es[dimension] : en[dimension];
+  return isEs(lang) ? "Mini gym (3D)" : "Mini Gym (3D)";
 }
 
 export function ikramLibraryGroupLabel(

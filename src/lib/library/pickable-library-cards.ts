@@ -203,14 +203,13 @@ function appendExtraCardsFromFiles(params: {
 }
 
 function miniGymLibraryGeneratedPixto(
-  dimension: "2d" | "3d",
   title: string,
   illustrationUrl: string,
 ): GeneratedPixtoRoutineStepData {
   return {
     illustrationUrl,
     title,
-    category: miniGymLibraryCategoryLabel(dimension),
+    category: miniGymLibraryCategoryLabel("3d"),
     categoryColour: DAY_CENTRE_CATEGORY_COLOUR,
     iconUrl: dayCentrePackMarkUrl(),
   };
@@ -429,11 +428,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       label: s.title,
       imageUrl: illustrationUrl,
       category: "home",
-      generatedPixto: miniGymLibraryGeneratedPixto(
-        "2d",
-        s.title,
-        illustrationUrl,
-      ),
+      generatedPixto: miniGymLibraryGeneratedPixto(s.title, illustrationUrl),
     });
   });
 
@@ -444,11 +439,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       label: s.title,
       imageUrl: illustrationUrl,
       category: "home",
-      generatedPixto: miniGymLibraryGeneratedPixto(
-        "3d",
-        s.title,
-        illustrationUrl,
-      ),
+      generatedPixto: miniGymLibraryGeneratedPixto(s.title, illustrationUrl),
     });
   });
 
