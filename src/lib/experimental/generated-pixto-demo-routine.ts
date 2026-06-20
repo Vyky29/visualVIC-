@@ -18,7 +18,6 @@ import {
   DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE,
   DAY_CENTRE_MINI_GYM_CARDIO_SEQUENCE,
   DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE,
-  DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE,
   DAY_CENTRE_MIXED_SCHEDULE_SEQUENCE,
   dayCentreGeneralImageUrlForStep,
   type DayCentreGeneralStep,
@@ -199,21 +198,21 @@ export const DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCar
 export const DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
-function miniGym3dGeneratedCardProps(
-  sequence: readonly DayCentreGeneralStep[],
+function physical3dGymGeneratedCardProps(
+  sequence: typeof PHYSICAL_3D_GYM_SEQUENCE,
 ): GeneratedPixtoCardProps[] {
   return sequence.map((s) => ({
-    illustrationUrl: physical3dImageUrlForStep(s),
+    illustrationUrl: physical3dGymImageUrlForStep(s),
     title: lc(s.title),
-    category: lc(PHYSICAL_3D_CATEGORY_LABEL),
+    category: lc(PHYSICAL_3D_GYM_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: physicalPackMarkUrl(),
   }));
 }
 
-/** Mini gym · 3D — same steps, soft 3D object library (`library-3d/`). */
+/** Mini gym · 3D — only assets on disk in `library-3d-gym/`. */
 export const DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  miniGym3dGeneratedCardProps(DAY_CENTRE_MINI_GYM_SCHEDULE_SEQUENCE);
+  physical3dGymGeneratedCardProps(PHYSICAL_3D_GYM_SEQUENCE);
 
 export const DAY_CENTRE_MINI_GYM_WARMUP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
@@ -224,8 +223,9 @@ export const DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS: GeneratedPixtoCard
 export const DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
+/** Mini gym · 3D warm-up — same curated gym assets until `library-3d/` is re-exported. */
 export const DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  miniGym3dGeneratedCardProps(DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE);
+  physical3dGymGeneratedCardProps(PHYSICAL_3D_GYM_SEQUENCE);
 
 export const DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);

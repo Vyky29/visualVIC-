@@ -50,7 +50,7 @@ import {
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
-import { physical3dImageUrl } from "@/lib/cards/physical-cards";
+import { physical3dGymImageUrl } from "@/lib/cards/physical-cards";
 import { dayCentreHubRoomImageUrl, dayCentreGeneralImageUrl } from "@/lib/cards/day-centre-shared";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
@@ -208,9 +208,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d",
     name: "Mini Gym · 3D",
-    description: "Mini gym equipment — soft 3D objects only (no people)",
+    description: "Mini gym sandbags — soft 3D objects (curated on disk)",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
+    homePreviewImageUrl: physical3dGymImageUrl("sandbag-blue"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d",
       DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
@@ -252,9 +252,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d-warmup",
     name: "Mini Gym · 3D warm-up",
-    description: "Therapy ball, bands, BOSU and stretching — 3D objects",
+    description: "Sandbag warm-up — 3D gym objects on disk",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dImageUrl("bosu"),
+    homePreviewImageUrl: physical3dGymImageUrl("sandbag-stack"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d-warmup",
       DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,

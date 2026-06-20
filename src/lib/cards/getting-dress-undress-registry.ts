@@ -44,7 +44,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "bra",
     title: "Bra",
-    filename: "18_bra.png",
+    filename: "bra.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "female",
@@ -53,7 +53,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "bra-on",
     title: "Put bra on",
-    filename: "35_braon.png",
+    filename: "bra-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "female",
@@ -62,7 +62,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "bra-off",
     title: "Take bra off",
-    filename: "36_braoff.png",
+    filename: "bra-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "female",
@@ -71,7 +71,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "knickers",
     title: "Knickers",
-    filename: "19_knickers.png",
+    filename: "knickers.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "female",
@@ -80,7 +80,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "knickers-on",
     title: "Put knickers on",
-    filename: "37_knickerson.png",
+    filename: "knickers-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "female",
@@ -89,7 +89,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "knickers-off",
     title: "Take knickers off",
-    filename: "38_knickersoff.png",
+    filename: "knickers-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "female",
@@ -98,7 +98,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "swimsuit",
     title: "Swimsuit",
-    filename: "17_swimsuit.png",
+    filename: "swimsuit.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "female",
@@ -107,7 +107,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "swimsuit-on",
     title: "Put swimsuit on",
-    filename: "33_swimsuiton.png",
+    filename: "swimsuit-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "female",
@@ -116,7 +116,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "swimsuit-off",
     title: "Take swimsuit off",
-    filename: "34_swimsuitoff.png",
+    filename: "swimsuit-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "female",
@@ -126,7 +126,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "trunks",
     title: "Trunks",
-    filename: "16_trunks.png",
+    filename: "trunks.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "male",
@@ -135,7 +135,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "trunks-on",
     title: "Put trunks on",
-    filename: "31_trunkson.png",
+    filename: "trunks-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "male",
@@ -144,7 +144,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "trunks-off",
     title: "Take trunks off",
-    filename: "32_trunksoff.png",
+    filename: "trunks-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "male",
@@ -154,7 +154,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "gloves",
     title: "Gloves",
-    filename: "14_gloves.png",
+    filename: "gloves.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "all",
@@ -163,7 +163,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "gloves-on",
     title: "Put gloves on",
-    filename: "27_gloveson.png",
+    filename: "gloves-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -172,7 +172,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "gloves-off",
     title: "Take gloves off",
-    filename: "28_glovesoff.png",
+    filename: "gloves-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -190,7 +190,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "hat-on",
     title: "Put hat on",
-    filename: "21_haton.png",
+    filename: "hat-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -199,7 +199,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "hat-off",
     title: "Take hat off",
-    filename: "22_hatoff.png",
+    filename: "hat-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -208,7 +208,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "cap-off",
     title: "Take cap off",
-    filename: "20_capoff.png",
+    filename: "cap-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -217,7 +217,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "cap-on",
     title: "Put cap on",
-    filename: "19_capon.png",
+    filename: "cap-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -226,7 +226,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "scarf",
     title: "Scarf",
-    filename: "15_scarf.png",
+    filename: "scarf.png",
     itemType: "object",
     actionType: "object",
     appliesTo: "all",
@@ -235,7 +235,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "scarf-on",
     title: "Put scarf on",
-    filename: "29_scarfon.png",
+    filename: "scarf-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -244,7 +244,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "scarf-off",
     title: "Take scarf off",
-    filename: "30_scarfoff.png",
+    filename: "scarf-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -262,7 +262,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "jacket-on",
     title: "Put jacket on",
-    filename: "17_jacketon.png",
+    filename: "jacket-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -271,7 +271,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "jacket-off",
     title: "Take jacket off",
-    filename: "18_jacketoff.png",
+    filename: "jacket-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -289,7 +289,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "jumper-on",
     title: "Put jumper on",
-    filename: "15_jumperon.png",
+    filename: "jumper-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -298,7 +298,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "jumper-off",
     title: "Take jumper off",
-    filename: "16_jumperoff.png",
+    filename: "jumper-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -352,7 +352,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "shirt-off",
     title: "Take shirt off",
-    filename: "14_shirtoff.png",
+    filename: "shirt-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -397,7 +397,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "shorts-on",
     title: "Put shorts on",
-    filename: "23_shortson.png",
+    filename: "shorts-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -406,7 +406,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "shorts-off",
     title: "Take shorts off",
-    filename: "24_shortsoff.png",
+    filename: "shorts-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
@@ -532,7 +532,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "trainers-on",
     title: "Put trainers on",
-    filename: "25_trainerson.png",
+    filename: "trainers-on.png",
     itemType: "action",
     actionType: "on",
     appliesTo: "all",
@@ -541,7 +541,7 @@ const DEFS: readonly DefInput[] = [
   {
     slug: "trainers-off",
     title: "Take trainers off",
-    filename: "26_trainersoff.png",
+    filename: "trainers-off.png",
     itemType: "action",
     actionType: "off",
     appliesTo: "all",
