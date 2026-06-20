@@ -287,8 +287,9 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     titleMap: coreTitleMap,
   });
   for (const s of SHOWER_SEQUENCE) {
+    const pickKey = s.id.startsWith("shower-") ? s.id.slice("shower-".length) : s.id;
     out.push({
-      pickId: pid("shower", s.slug),
+      pickId: pid("shower", pickKey),
       label: s.title,
       imageUrl: showerImageUrl(s.slug),
       category: "self-care",

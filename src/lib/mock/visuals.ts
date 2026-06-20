@@ -49,7 +49,7 @@ export const mockVisualLibrary: VisualAsset[] = [
     id: "v-swim",
     label: "Swimming",
     category: "activity",
-    thumbnailUrl: swimmingImageUrl("pool"),
+    thumbnailUrl: swimmingImageUrl("goggles-on"),
   },
   {
     id: "v-hands",

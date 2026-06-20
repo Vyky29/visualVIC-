@@ -299,13 +299,9 @@ const SECTION_OBJECT_SLUGS: Partial<Record<LibrarySectionId, readonly string[]>>
     "boulder-wall",
   ],
   swim: [
-    "changing-room",
-    "flip-flops",
-    "googles",
-    "pool",
-    "sinkers",
-    "swim-cap",
-    "swimming-costume",
+    "goggles-on",
+    "swim-cap-on",
+    "wearing-flip-flops",
   ],
 };
 
