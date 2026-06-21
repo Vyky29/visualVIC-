@@ -468,7 +468,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
     description:
-      "Day centre — cross trainer, basketball, crosswords, spelling, handwriting, maths, group activity (personalised cartoon)",
+      "Day centre — cross trainer, basketball, cruzigramas, maths and circle time (personalised cartoon)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
