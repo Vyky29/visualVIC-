@@ -20,6 +20,7 @@ export const CORE_CARD_FILES = [
   "drink.png",
   "eat.png",
   "finish.png",
+  "finish3D.png",
   "get.png",
   "give.png",
   "help.png",
@@ -47,6 +48,11 @@ export type CoreCardFile = (typeof CORE_CARD_FILES)[number];
 export function coreImageUrl(slug: string): string {
   const base = slug.replace(/\.png$/i, "");
   return `${CORE_PUBLIC_DIR}/${base}.png`;
+}
+
+/** Retouched 531×648 finish illustration — used by playback finish step. */
+export function coreFinishIllustrationUrl(): string {
+  return coreImageUrl("finish3D");
 }
 
 export function coreBackCardUrl(): string {
@@ -81,6 +87,6 @@ export const CORE_SEQUENCE = [
   { id: "core-choose", slug: "choose", title: "Choose" },
   { id: "core-more", slug: "more", title: "More" },
   { id: "core-break", slug: "break", title: "Break" },
-  { id: "core-finish", slug: "finish", title: "Finish" },
+  { id: "core-finish", slug: "finish3D", title: "Finish" },
   { id: "core-welldone", slug: "welldone", title: "Well done" },
 ] as const;

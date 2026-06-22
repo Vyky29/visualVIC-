@@ -321,7 +321,11 @@ function isFinishLikeStepData(step: RoutineStep, haystack: string): boolean {
     id === "__playback-finish__" ||
     id === "core-finish" ||
     title === "finish" ||
-    includesAny(haystack, ["/cards/core/finish.png", " core finish "])
+    includesAny(haystack, [
+      "/cards/core/finish3d.png",
+      "/cards/core/finish.png",
+      " core finish ",
+    ])
   );
 }
 

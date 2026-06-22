@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { coreImageUrl } from "@/lib/cards/core-cards";
+import { coreFinishIllustrationUrl } from "@/lib/cards/core-cards";
+import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import type {
   GeneratedPixtoRoutineStepData,
   Routine,
@@ -54,21 +55,22 @@ function saveSnapshot(key: string, snapshot: PlaybackSnapshot) {
 const PLAYBACK_FINISH_CATEGORY_COLOUR = "#9aa3a8" as const;
 
 const PLAYBACK_FINISH_GENERATED_PIXTO: GeneratedPixtoRoutineStepData = {
-  illustrationUrl: coreImageUrl("finish"),
+  illustrationUrl: coreFinishIllustrationUrl(),
   title: "finish",
   category: "finish",
   categoryColour: PLAYBACK_FINISH_CATEGORY_COLOUR,
+  iconUrl: tailoredSchedulesPackMarkUrl(),
 };
 
 const PLAYBACK_FINISH_STEP: RoutineStep = {
   id: "__playback-finish__",
   title: "Finish",
-  imageUrl: coreImageUrl("finish"),
+  imageUrl: coreFinishIllustrationUrl(),
 };
 
 /**
  * Last routine step. Digital routines use the same WOW shell as NOW/NEXT (288/218)
- * but always `core/finish.png` + grey finish ribbon — not the routine category.
+ * but always `core/finish3D.png` + grey finish ribbon — not the routine category.
  */
 function buildPlaybackFinishStep(routine: Routine): RoutineStep {
   const usesDigitalShell = routine.steps.some((s) => s.generatedPixto);
@@ -88,6 +90,7 @@ function isFinishLikeStep(step: RoutineStep): boolean {
     id === PLAYBACK_FINISH_STEP.id ||
     id === "core-finish" ||
     title === "finish" ||
+    imageUrl.endsWith("/cards/core/finish3D.png") ||
     imageUrl.endsWith("/cards/core/finish.png")
   );
 }

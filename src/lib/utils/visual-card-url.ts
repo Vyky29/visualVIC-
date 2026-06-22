@@ -31,6 +31,7 @@ export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolea
   return (
     u.includes("/scenes/") ||
     u.includes("/scenes-2d/") ||
+    u.includes("/cards/core/finish3d.png") ||
     isPixtoLearnLibraryStockImageUrl(url)
   );
 }
