@@ -96,12 +96,13 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "weights", title: "Dumbbells" },
 ] as const;
 
-/** Library → machines — 16 curated picks from designer gym sheet (531×648 each). */
+/** Library → machines — curated gym picks (531×648 each). */
 export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "aerobic-step", title: "Aerobic step" },
   { slug: "sandbag-stack", title: "Sandbags" },
   { slug: "leg-press", title: "Leg press" },
   { slug: "chest-press", title: "Chest press" },
+  { slug: "pec-deck", title: "Pec deck" },
   { slug: "lat-pulldown", title: "Lat pulldown" },
   { slug: "cable-crossover", title: "Cable crossover" },
   { slug: "smith-machine", title: "Smith machine" },

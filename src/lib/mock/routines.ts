@@ -463,7 +463,7 @@ export const mockRoutines: Routine[] = [
     id: "physical",
     name: "Physical Activity",
     description:
-      "Full 3D library — fitness equipment and 16 gym machines (30 steps)",
+      "Full 3D library — fitness equipment and 17 gym machines (31 steps)",
     tags: ["activity"],
     homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(
