@@ -44,17 +44,21 @@ import {
   DAY_CENTRE_MIXED_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
-import { physical3dGymImageUrl } from "@/lib/cards/physical-cards";
+import { physical3dGymImageUrl, physical3dImageUrl } from "@/lib/cards/physical-cards";
 import { dayCentreHubRoomImageUrl, dayCentreGeneralImageUrl } from "@/lib/cards/day-centre-shared";
 import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
 import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
-import { DAY_CENTRE_AYAAN_ROUTINE_NAME } from "@/lib/cards/day-centre-ayaan-cards";
+import {
+  DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
+  DAY_CENTRE_AYAAN_ROUTINE_NAME,
+} from "@/lib/cards/day-centre-ayaan-cards";
 import { DAY_CENTRE_EMMANUEL_ROUTINE_NAME } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   tailoredScheduleCloseUpPreviewUrl,
@@ -456,12 +460,24 @@ export const mockRoutines: Routine[] = [
     id: "ayaan-day-centre",
     name: DAY_CENTRE_AYAAN_ROUTINE_NAME,
     description:
-      "Gym routine — therapy ball, elastic band, sandbag, weights, weight ball, BOSU, treadmill (personalised cartoon)",
+      "Gym with Ayaan — therapy ball, elastic band, sandbag, weights, BOSU, treadmill (3D personalised cartoon)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ayaan-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "ayaan-day-centre",
       DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ayaan-gym-equipment-3d",
+    name: DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
+    description:
+      "Gym equipment only — therapy ball, elastic bands, steps, bike, rower, weights, BOSU (soft 3D objects)",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ayaan-gym-equipment-3d",
+      DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
     ),
   },
   {

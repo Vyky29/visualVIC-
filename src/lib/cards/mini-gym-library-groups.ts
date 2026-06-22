@@ -19,8 +19,15 @@ export type MiniGymLibraryStep = {
   title: string;
 };
 
-const MINI_GYM_LIBRARY_CATALOG: readonly Omit<MiniGymLibraryStep, "id">[] =
-  [] as const;
+const MINI_GYM_LIBRARY_CATALOG: readonly Omit<MiniGymLibraryStep, "id">[] = [
+  { slug: "therapy-ball", title: "Therapy ball" },
+  { slug: "resistance-bands", title: "Elastic bands" },
+  { slug: "step-platform", title: "Steps" },
+  { slug: "exercise-bike", title: "Exercise bike" },
+  { slug: "row-machine", title: "Row machine" },
+  { slug: "weights", title: "Weights" },
+  { slug: "bosu", title: "BOSU" },
+] as const;
 
 function miniGymLibrarySteps(
   idPrefix: "mg2" | "mg3",

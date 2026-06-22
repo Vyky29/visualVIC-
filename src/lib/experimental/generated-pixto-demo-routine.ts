@@ -82,9 +82,11 @@ import {
 } from "@/lib/cards/day-centre-serine-cards";
 import {
   DAY_CENTRE_AYAAN_LIBRARY_SEQUENCE,
+  DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE,
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE,
   DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL,
   DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
+  dayCentreAyaanMachinery3dImageUrlForStep,
   dayCentreAyaanFocusImageUrlForStep,
   dayCentreAyaanImageUrlForStep,
   dayCentreAyaanScheduleFocusImageUrlForStep,
@@ -442,6 +444,22 @@ function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
 /** Ayaan · Physical activity — gym schedule (personalised cartoon scenes). */
 export const DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => ayaanScheduleGeneratedCardProps(s));
+
+function ayaanMachinery3dGeneratedCardProps(step: DayCentreAyaanStep) {
+  return {
+    illustrationUrl: dayCentreAyaanMachinery3dImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(PHYSICAL_3D_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: dayCentreAyaanPackMarkUrl(),
+  };
+}
+
+/** Ayaan · Gym equipment — soft 3D objects only (`library-3d/`). */
+export const DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE.map((s) =>
+    ayaanMachinery3dGeneratedCardProps(s),
+  );
 
 /** Tailored schedules · Emmanuel — physical activity library. */
 function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {

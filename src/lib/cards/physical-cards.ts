@@ -75,6 +75,25 @@ export function physical3dGymImageUrl(slug: string): string {
   return `${PHYSICAL_3D_GYM_LIBRARY_DIR}/${slug}.png`;
 }
 
+/** Library catalogue — synced to `public/images/library-3d/`. */
+const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
+  { slug: "therapy-ball", title: "Therapy ball" },
+  { slug: "resistance-bands", title: "Elastic bands" },
+  { slug: "step-platform", title: "Steps" },
+  { slug: "exercise-bike", title: "Exercise bike" },
+  { slug: "row-machine", title: "Row machine" },
+  { slug: "weights", title: "Weights" },
+  { slug: "bosu", title: "BOSU" },
+] as const;
+
+function physical3dLibrarySteps(): readonly PhysicalStep[] {
+  return PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
+    id: `phy3-${item.slug}`,
+    slug: item.slug,
+    title: item.title,
+  }));
+}
+
 /** Library catalogue — synced to `public/images/library-3d/` (empty until re-export). */
 const PHYSICAL_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = [] as const;
 
@@ -92,9 +111,9 @@ function physicalLibrarySteps(
 export const PHYSICAL_2D_LIBRARY_SEQUENCE: readonly PhysicalStep[] =
   physicalLibrarySteps("phy2");
 
-/** Library → Physical Activity (3D) — empty until new `library-3d/` exports land. */
+/** Library → Physical Activity (3D) — `public/images/library-3d/`. */
 export const PHYSICAL_3D_LIBRARY_SEQUENCE: readonly PhysicalStep[] =
-  physicalLibrarySteps("phy3");
+  physical3dLibrarySteps();
 
 /** @deprecated Use {@link PHYSICAL_3D_LIBRARY_SEQUENCE}. */
 export const PHYSICAL_SEQUENCE: readonly PhysicalStep[] =

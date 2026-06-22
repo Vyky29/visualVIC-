@@ -10,6 +10,7 @@ import {
   dayCentreAyaanAvatarUrl,
   dayCentreAyaanPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
+import { physical3dImageUrl } from "@/lib/cards/physical-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
 /** Dark navy — Ayaan tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
@@ -29,7 +30,10 @@ export const DAY_CENTRE_AYAAN_CATEGORY_LABEL =
 export const DAY_CENTRE_AYAAN_PARTICIPANT_LABEL = "Ayaan" as const;
 
 export const DAY_CENTRE_AYAAN_ROUTINE_NAME =
-  "Ayaan · Physical activity" as const;
+  "Ayaan · Gym · 3D with Ayaan" as const;
+
+export const DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME =
+  "Ayaan · Gym equipment · 3D" as const;
 
 export const DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_AYAAN_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
@@ -48,6 +52,22 @@ export const DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE: readonly DayCentreAyaanStep[] =
       title: "Throwing ball on BOSU",
     },
     { id: "dca-treadmill", slug: "treadmill", title: "Treadmill" },
+  ] as const;
+
+/** Gym equipment only — soft 3D objects (`library-3d/`), no Ayaan character. */
+export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanStep[] =
+  [
+    { id: "dcam-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
+    {
+      id: "dcam-resistance-bands",
+      slug: "resistance-bands",
+      title: "Elastic bands",
+    },
+    { id: "dcam-step-platform", slug: "step-platform", title: "Steps" },
+    { id: "dcam-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
+    { id: "dcam-row-machine", slug: "row-machine", title: "Row machine" },
+    { id: "dcam-weights", slug: "weights", title: "Weights" },
+    { id: "dcam-bosu", slug: "bosu", title: "BOSU" },
   ] as const;
 
 export const DAY_CENTRE_AYAAN_SEQUENCE: readonly DayCentreAyaanStep[] =
@@ -84,4 +104,10 @@ export function dayCentreAyaanScheduleFocusImageUrlForStep(
   step: DayCentreAyaanStep,
 ): string | undefined {
   return dayCentreAyaanSceneFocusUrl(step.slug);
+}
+
+export function dayCentreAyaanMachinery3dImageUrlForStep(
+  step: DayCentreAyaanStep,
+): string {
+  return physical3dImageUrl(step.slug);
 }
