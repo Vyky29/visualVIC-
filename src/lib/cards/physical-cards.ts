@@ -1,6 +1,12 @@
 /**
  * Physical activity pack — PixtoLearn library illustrations (531×648).
- * Assets: `public/images/library-3d/` and `public/images/library-3d-gym/`.
+ *
+ * Assets live in flat folders (no subfolders):
+ *   `public/images/library-3d/{slug}.png`
+ *   `public/images/library-3d-gym/{slug}.png`
+ *
+ * The app serves only those root PNGs. Which slugs are active is defined by
+ * {@link PHYSICAL_3D_LIBRARY_CATALOG} and {@link PHYSICAL_3D_GYM_CATALOG} below.
  */
 
 /** Soft 3D fitness illustrations — separate from flat 2D library. */

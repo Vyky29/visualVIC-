@@ -26,7 +26,6 @@ const defaultSrc = path.join(
 
 const srcPath = process.argv[2] ?? defaultSrc;
 const outDir = path.join(root, "public", "images", "library-3d");
-const rawDir = path.join(outDir, "_raw");
 
 /** 3 columns × 4 rows on the reference sheet. */
 const GRID_COLS = 3;
@@ -72,16 +71,13 @@ async function main() {
   }
 
   fs.mkdirSync(outDir, { recursive: true });
-  fs.mkdirSync(rawDir, { recursive: true });
 
   const meta = await sharp(srcPath).metadata();
   console.log(`Grid ${meta.width}×${meta.height} → cell ~${Math.floor(meta.width / GRID_COLS)}×${Math.floor(meta.height / GRID_ROWS)}`);
 
   for (const cell of CELLS) {
-    const rawDest = path.join(rawDir, `${cell.slug}.png`);
     const dest = path.join(outDir, `${cell.slug}.png`);
     const buf = await extractCell(meta, cell);
-    fs.writeFileSync(rawDest, buf);
     await fitIllustrationToCard(buf, dest, {
       minPad: 36,
       fit: "contain",

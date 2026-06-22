@@ -25,7 +25,6 @@ const defaultSrc = path.join(
 
 const srcPath = process.argv[2] ?? defaultSrc;
 const outDir = path.join(root, "public", "images", "library-3d-gym");
-const rawDir = path.join(outDir, "_raw");
 
 const COLS = 5;
 const ROWS = 5;
@@ -37,7 +36,6 @@ async function main() {
   }
 
   fs.mkdirSync(outDir, { recursive: true });
-  fs.mkdirSync(rawDir, { recursive: true });
 
   const meta = await sharp(srcPath).metadata();
   const cellW = Math.floor(meta.width / COLS);
@@ -64,9 +62,7 @@ async function main() {
       .png()
       .toBuffer();
 
-    const rawDest = path.join(rawDir, `${slug}.png`);
     const dest = path.join(outDir, `${slug}.png`);
-    fs.writeFileSync(rawDest, buf);
     await fitIllustrationToCard(buf, dest, {
       minPad: 36,
       fit: "contain",
