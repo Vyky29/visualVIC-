@@ -1,5 +1,5 @@
 /**
- * Library sub-sections for Day centre (general pack).
+ * Thematic groups for Day centre illustrated library cards.
  * New thematic groups are listed first so cooking/fitness cards are easy to find.
  */
 

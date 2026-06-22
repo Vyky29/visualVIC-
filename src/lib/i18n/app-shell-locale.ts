@@ -1,5 +1,9 @@
-import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
-import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
+import type { DayCentreLibrarySectionId } from "@/lib/cards/day-centre-library-sections";
+import { dayCentreLibraryGroupFromSectionId } from "@/lib/cards/day-centre-library-sections";
+import {
+  effectiveDigitalUiLang,
+  type CardLanguageCode,
+} from "@/lib/preferences/card-language-preference";
 import {
   libraryAirportHotelLabel,
   libraryDayCentreIkramLabel,
@@ -227,10 +231,8 @@ export type LibraryPackSectionId =
   | "hotel"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfoldercooking"
-  | "dcfoldercommunity"
-  | "dcfoldermixed"
   | "dcfolderpremium"
+  | DayCentreLibrarySectionId
   | "dcikram"
   | "dcserine"
   | "dcayaan"
@@ -249,12 +251,8 @@ export function libraryPackSectionTitle(
     return libraryDayCentreFolderLabel("mini-gym", lang);
   if (section === "dcfolderbouldering")
     return libraryDayCentreFolderLabel("bouldering", lang);
-  if (section === "dcfoldercooking")
-    return libraryDayCentreFolderLabel("cooking", lang);
-  if (section === "dcfoldercommunity")
-    return libraryDayCentreFolderLabel("community", lang);
-  if (section === "dcfoldermixed")
-    return libraryDayCentreFolderLabel("mixed", lang);
+  const dayCentreGroup = dayCentreLibraryGroupFromSectionId(section);
+  if (dayCentreGroup) return dayCentreLibraryGroupLabel(dayCentreGroup, lang);
   if (section === "dcfolderpremium")
     return libraryDayCentreFolderLabel("premium", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);

@@ -46,13 +46,17 @@ import {
   isDayCentreTailoredParticipantLibraryIconUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
-  dayCentreFolderForSlug,
   isDayCentreBoulderingClimbSlug,
 } from "@/lib/cards/day-centre-folder-groups";
 import {
   dayCentreFolderIconUrl,
-  dayCentreFolderLibrarySectionId,
 } from "@/lib/routines/day-centre-folders";
+import {
+  DAY_CENTRE_LIBRARY_SECTION_IDS,
+  dayCentreLibrarySectionIconUrl,
+  dayCentreLibrarySectionIdForSlug,
+  type DayCentreLibrarySectionId as DayCentreThematicSectionId,
+} from "@/lib/cards/day-centre-library-sections";
 import { physicalPackMarkUrl } from "@/lib/cards/physical-cards";
 import {
   AIRPORT_GENERATED_CARD_PROPS,
@@ -125,10 +129,24 @@ export type LibrarySectionId =
   | "physical"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfoldercooking"
-  | "dcfoldercommunity"
-  | "dcfoldermixed"
-  | "dcfolderpremium";
+  | "dcfolderpremium"
+  | DayCentreThematicSectionId;
+
+const DAY_CENTRE_THEMATIC_SECTION_HEADER_ICONS = Object.fromEntries(
+  DAY_CENTRE_LIBRARY_SECTION_IDS.map((id) => [
+    id,
+    dayCentreLibrarySectionIconUrl(
+      id.slice(4) as Parameters<typeof dayCentreLibrarySectionIconUrl>[0],
+    ),
+  ]),
+) as Record<DayCentreThematicSectionId, string>;
+
+const DAY_CENTRE_THEMATIC_SECTION_RING: Record<
+  DayCentreThematicSectionId,
+  string
+> = Object.fromEntries(
+  DAY_CENTRE_LIBRARY_SECTION_IDS.map((id) => [id, "ring-[#E53935]/75"]),
+) as Record<DayCentreThematicSectionId, string>;
 
 const SECTION_ORDER_BY_CATEGORY: Record<
   (typeof groups)[number],
@@ -141,9 +159,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "hotel",
     "dcfolderminigym",
     "dcfolderbouldering",
-    "dcfoldercooking",
-    "dcfoldercommunity",
-    "dcfoldermixed",
+    ...DAY_CENTRE_LIBRARY_SECTION_IDS,
     "dcfolderpremium",
     "dcikram",
     "dcserine",
@@ -164,9 +180,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   hotel: HOTEL_GENERATED_CARD_PROPS[0]?.illustrationUrl ?? "",
   dcfolderminigym: dayCentreFolderIconUrl("mini-gym"),
   dcfolderbouldering: dayCentreFolderIconUrl("bouldering"),
-  dcfoldercooking: dayCentreFolderIconUrl("cooking"),
-  dcfoldercommunity: dayCentreFolderIconUrl("community"),
-  dcfoldermixed: dayCentreFolderIconUrl("mixed"),
+  ...DAY_CENTRE_THEMATIC_SECTION_HEADER_ICONS,
   dcfolderpremium: dayCentreFolderIconUrl("premium"),
   dcikram: dayCentreIkramLibraryPackIconUrl(),
   dcserine: dayCentreSerineLibraryPackIconUrl(),
@@ -188,9 +202,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   hotel: "ring-[#8C1E2E]/70",
   dcfolderminigym: "ring-[#E53935]/75",
   dcfolderbouldering: "ring-[#E53935]/75",
-  dcfoldercooking: "ring-[#E53935]/75",
-  dcfoldercommunity: "ring-[#E53935]/75",
-  dcfoldermixed: "ring-[#E53935]/75",
+  ...DAY_CENTRE_THEMATIC_SECTION_RING,
   dcfolderpremium: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
@@ -245,7 +257,7 @@ function librarySectionFromCard(
   if (pack === "dcemmanuel2d") return "dcemmanuel";
   if (pack === "daycentre") {
     const slug = c.pickId.split("::")[1] ?? "";
-    return dayCentreFolderLibrarySectionId(dayCentreFolderForSlug(slug));
+    return dayCentreLibrarySectionIdForSlug(slug);
   }
   if (pack === "dcpremium") return "dcfolderpremium";
   if (pack === "climb") {

@@ -33,9 +33,9 @@ import {
 import {
   DAY_CENTRE_GENERAL_CARD_FILES,
   DAY_CENTRE_GENERAL_SEQUENCE,
-  DAY_CENTRE_GENERAL_CATEGORY_LABEL,
   dayCentreGeneralImageUrlForStep,
 } from "@/lib/cards/day-centre-general-cards";
+import { dayCentreLibraryGroupForSlug } from "@/lib/cards/day-centre-library-groups";
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   dayCentreIkramImageUrlForStep,
@@ -400,6 +400,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
 
   DAY_CENTRE_GENERAL_SEQUENCE.forEach((s, i) => {
     if (MINI_GYM_LIBRARY_SLUGS.has(s.slug)) return;
+    if (dayCentreLibraryGroupForSlug(s.slug) === "fitness-held") return;
     const gp = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[i];
     out.push({
       pickId: pid("daycentre", s.slug),
@@ -421,7 +422,9 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   appendExtraCardsFromFiles({
     out,
     ns: "daycentre",
-    files: DAY_CENTRE_GENERAL_CARD_FILES,
+    files: DAY_CENTRE_GENERAL_CARD_FILES.filter(
+      (file) => dayCentreLibraryGroupForSlug(file.replace(/\.png$/, "")) !== "fitness-held",
+    ),
     category: "home",
     imageUrlForSlug: (slug) =>
       dayCentreGeneralImageUrlForStep({ id: slug, slug, title: slug }),

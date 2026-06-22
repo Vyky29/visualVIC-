@@ -2,6 +2,8 @@
  * Staff Planner — library section filter from Portal `staff_profiles` + assignments.
  */
 
+import { DAY_CENTRE_LIBRARY_SECTION_IDS } from "@/lib/cards/day-centre-library-sections";
+
 export type PortalAppRole = "staff" | "lead" | "admin" | "ceo";
 
 export type ParticipantSlug = "ikram" | "serine" | "ayaan" | "emmanuel";
@@ -19,9 +21,7 @@ export type PlannerLibrarySectionId =
   | "daycentre"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfoldercooking"
-  | "dcfoldercommunity"
-  | "dcfoldermixed"
+  | (typeof DAY_CENTRE_LIBRARY_SECTION_IDS)[number]
   | "dcfolderpremium"
   | "dcikram"
   | "dcserine"
@@ -33,9 +33,7 @@ export type PlannerLibrarySectionId =
 export const PLANNER_STAFF_DAY_CENTRE_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dcfolderminigym",
   "dcfolderbouldering",
-  "dcfoldercooking",
-  "dcfoldercommunity",
-  "dcfoldermixed",
+  ...DAY_CENTRE_LIBRARY_SECTION_IDS,
   "dcfolderpremium",
 ];
 
@@ -50,9 +48,7 @@ export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "daycentre",
   "dcfolderminigym",
   "dcfolderbouldering",
-  "dcfoldercooking",
-  "dcfoldercommunity",
-  "dcfoldermixed",
+  ...DAY_CENTRE_LIBRARY_SECTION_IDS,
   "dcfolderpremium",
   "dcikram",
   "dcserine",
