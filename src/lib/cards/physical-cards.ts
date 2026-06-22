@@ -83,6 +83,7 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "therapy-ball", title: "Therapy ball" },
   { slug: "trampoline", title: "Trampoline" },
   { slug: "step-platform", title: "Steps" },
+  { slug: "plyo-box", title: "Plyo box" },
   { slug: "treadmill", title: "Treadmill" },
   { slug: "resistance-bands", title: "Resistance bands" },
   { slug: "bosu", title: "BOSU" },
