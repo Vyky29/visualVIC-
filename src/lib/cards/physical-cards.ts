@@ -7,6 +7,9 @@
  *
  * The app serves only those root PNGs. Which slugs are active is defined by
  * {@link PHYSICAL_3D_LIBRARY_CATALOG} and {@link PHYSICAL_3D_GYM_CATALOG} below.
+ *
+ * Import designer PNGs (~531×648) with:
+ *   node scripts/import-physical-3d-asset.mjs library-3d <slug> /path/to.png
  */
 
 /** Soft 3D fitness illustrations — separate from flat 2D library. */

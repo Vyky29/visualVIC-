@@ -101,3 +101,15 @@ export async function trimIllustrationOnly(src, dest, opts = {}) {
   }
   await img.png().toFile(dest);
 }
+
+/** Designer PNG already framed for PixtoLearn — scale to 531×648, no trim, no extra pad. */
+export async function importDesignerIllustration531x648(src, dest, opts = {}) {
+  await fitIllustrationToCard(src, dest, {
+    width: NOW_W,
+    height: NOW_H,
+    minPad: 0,
+    fit: "contain",
+    background: opts.background ?? "#ffffff",
+    trim: false,
+  });
+}
