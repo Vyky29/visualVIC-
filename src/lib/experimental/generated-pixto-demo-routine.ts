@@ -92,6 +92,7 @@ import {
   dayCentreAyaanScheduleFocusImageUrlForStep,
   dayCentreAyaanScheduleImageUrlForStep,
   dayCentreAyaanPackMarkUrl,
+  type DayCentreAyaanMachineryStep,
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
@@ -445,7 +446,7 @@ function ayaanScheduleGeneratedCardProps(step: DayCentreAyaanStep) {
 export const DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => ayaanScheduleGeneratedCardProps(s));
 
-function ayaanMachinery3dGeneratedCardProps(step: DayCentreAyaanStep) {
+function ayaanMachinery3dGeneratedCardProps(step: DayCentreAyaanMachineryStep) {
   return {
     illustrationUrl: dayCentreAyaanMachinery3dImageUrlForStep(step),
     title: lc(step.title),

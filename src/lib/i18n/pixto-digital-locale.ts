@@ -395,6 +395,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Ayaan · Physical activity",
     es: "Ayaan · actividad física",
   },
+  "ayaan-gym-equipment-3d": {
+    en: "Ayaan · 3D machinery only",
+    es: "Ayaan · solo maquinaria 3D",
+  },
   "emmanuel-day-centre": {
     en: "Emmanuel · Physical activity",
     es: "Emmanuel · actividad física",

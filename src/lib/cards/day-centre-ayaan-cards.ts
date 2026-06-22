@@ -9,12 +9,11 @@ import {
   dayCentreAyaanSceneUrl,
   dayCentreAyaanAvatarUrl,
   dayCentreAyaanPackMarkUrl,
+  dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   physical3dGymImageUrl,
   physical3dImageUrl,
-  PHYSICAL_3D_GYM_CATALOG,
-  PHYSICAL_3D_LIBRARY_CATALOG,
 } from "@/lib/cards/physical-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
@@ -38,7 +37,7 @@ export const DAY_CENTRE_AYAAN_ROUTINE_NAME =
   "Ayaan · Gym · 3D with Ayaan" as const;
 
 export const DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME =
-  "Ayaan · Gym equipment · 3D" as const;
+  "Ayaan · 3D machinery only" as const;
 
 export const DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_AYAAN_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
@@ -59,19 +58,51 @@ export const DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE: readonly DayCentreAyaanStep[] =
     { id: "dca-treadmill", slug: "treadmill", title: "Treadmill" },
   ] as const;
 
-/** Gym equipment only — soft 3D objects + machines (`library-3d/` + `library-3d-gym/`). */
-export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanStep[] =
+export type DayCentreAyaanMachineryStep = {
+  id: string;
+  slug: string;
+  title: string;
+  library: "3d" | "3d-gym" | "general";
+};
+
+/** Gym equipment only — 3D objects + machines (no Ayaan character). Finish auto-appended in player. */
+export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanMachineryStep[] =
   [
-    ...PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
-      id: `dcam-${item.slug}`,
-      slug: item.slug,
-      title: item.title,
-    })),
-    ...PHYSICAL_3D_GYM_CATALOG.map((item) => ({
-      id: `dcam-gym-${item.slug}`,
-      slug: item.slug,
-      title: item.title,
-    })),
+    { id: "dcam-snack", slug: "snack", title: "Snack", library: "general" },
+    { id: "dcam-treadmill-1", slug: "treadmill", title: "Treadmill", library: "3d" },
+    {
+      id: "dcam-therapy-ball-1",
+      slug: "therapy-ball",
+      title: "Therapy ball",
+      library: "3d",
+    },
+    {
+      id: "dcam-sandbags",
+      slug: "sandbag-stack",
+      title: "Sandbags",
+      library: "3d-gym",
+    },
+    { id: "dcam-treadmill-2", slug: "treadmill", title: "Treadmill", library: "3d" },
+    {
+      id: "dcam-therapy-ball-2",
+      slug: "therapy-ball",
+      title: "Therapy ball",
+      library: "3d",
+    },
+    { id: "dcam-dumbbells", slug: "weights", title: "Dumbbells", library: "3d" },
+    { id: "dcam-steps", slug: "step-platform", title: "Steps", library: "3d" },
+    {
+      id: "dcam-therapy-ball-3",
+      slug: "therapy-ball",
+      title: "Therapy ball",
+      library: "3d",
+    },
+    {
+      id: "dcam-weight-ball",
+      slug: "medicine-ball",
+      title: "Weight ball",
+      library: "3d",
+    },
   ] as const;
 
 export const DAY_CENTRE_AYAAN_SEQUENCE: readonly DayCentreAyaanStep[] =
@@ -110,15 +141,15 @@ export function dayCentreAyaanScheduleFocusImageUrlForStep(
   return dayCentreAyaanSceneFocusUrl(step.slug);
 }
 
-const AYAAN_MACHINERY_GYM_SLUGS = new Set(
-  PHYSICAL_3D_GYM_CATALOG.map((item) => item.slug),
-);
-
 export function dayCentreAyaanMachinery3dImageUrlForStep(
-  step: DayCentreAyaanStep,
+  step: DayCentreAyaanMachineryStep,
 ): string {
-  if (AYAAN_MACHINERY_GYM_SLUGS.has(step.slug)) {
-    return physical3dGymImageUrl(step.slug);
+  switch (step.library) {
+    case "general":
+      return dayCentreGeneralImageUrl(step.slug);
+    case "3d-gym":
+      return physical3dGymImageUrl(step.slug);
+    case "3d":
+      return physical3dImageUrl(step.slug);
   }
-  return physical3dImageUrl(step.slug);
 }

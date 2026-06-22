@@ -20,6 +20,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "ikram-day-centre",
   "serine-day-centre",
   "ayaan-day-centre",
+  "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
 ] as const;
 
@@ -36,6 +37,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreSerineTailoredHomeAvatarUrl();
     case "ayaan-day-centre":
       return dayCentreAyaanTailoredHomeAvatarUrl();
+    case "ayaan-gym-equipment-3d":
+      return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
     default:
@@ -54,6 +57,8 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreSerineSceneUrl("row-machine");
     case "ayaan-day-centre":
       return dayCentreAyaanSceneUrl("therapy-ball");
+    case "ayaan-gym-equipment-3d":
+      return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelSceneUrl("cross-trainer");
     default:

@@ -24,7 +24,7 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
 > = {
   ikram: ["ikram-day-centre"],
   serine: ["serine-day-centre"],
-  ayaan: ["ayaan-day-centre"],
+  ayaan: ["ayaan-day-centre", "ayaan-gym-equipment-3d"],
   emmanuel: ["emmanuel-day-centre"],
 };
 
