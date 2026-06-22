@@ -75,7 +75,7 @@ export type DayCentreAyaanMachineryStep = {
 /** Gym equipment only — 3D objects + machines (no Ayaan character). Finish auto-appended in player. */
 export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanMachineryStep[] =
   [
-    { id: "dcam-snack", slug: "snack", title: "Snack", library: "ayaan" },
+    { id: "dcam-snack", slug: "snack-item", title: "Snack", library: "ayaan" },
     { id: "dcam-treadmill-1", slug: "treadmill", title: "Treadmill", library: "3d" },
     {
       id: "dcam-therapy-ball-1",
