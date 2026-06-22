@@ -9,7 +9,6 @@ import {
   dayCentreAyaanSceneUrl,
   dayCentreAyaanAvatarUrl,
   dayCentreAyaanPackMarkUrl,
-  dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import {
   physical3dGymImageUrl,
@@ -62,13 +61,13 @@ export type DayCentreAyaanMachineryStep = {
   id: string;
   slug: string;
   title: string;
-  library: "3d" | "3d-gym" | "general";
+  library: "3d" | "3d-gym" | "ayaan";
 };
 
 /** Gym equipment only — 3D objects + machines (no Ayaan character). Finish auto-appended in player. */
 export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanMachineryStep[] =
   [
-    { id: "dcam-snack", slug: "snack", title: "Snack", library: "general" },
+    { id: "dcam-snack", slug: "snack", title: "Snack", library: "ayaan" },
     { id: "dcam-treadmill-1", slug: "treadmill", title: "Treadmill", library: "3d" },
     {
       id: "dcam-therapy-ball-1",
@@ -145,11 +144,18 @@ export function dayCentreAyaanMachinery3dImageUrlForStep(
   step: DayCentreAyaanMachineryStep,
 ): string {
   switch (step.library) {
-    case "general":
-      return dayCentreGeneralImageUrl(step.slug);
+    case "ayaan":
+      return dayCentreAyaanSceneUrl(step.slug);
     case "3d-gym":
       return physical3dGymImageUrl(step.slug);
     case "3d":
       return physical3dImageUrl(step.slug);
   }
+}
+
+export function dayCentreAyaanMachinery3dFocusImageUrlForStep(
+  step: DayCentreAyaanMachineryStep,
+): string | undefined {
+  if (step.library !== "ayaan") return undefined;
+  return dayCentreAyaanSceneFocusUrl(step.slug);
 }

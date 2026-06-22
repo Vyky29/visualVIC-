@@ -87,6 +87,7 @@ import {
   DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL,
   DAY_CENTRE_AYAAN_CATEGORY_COLOUR,
   dayCentreAyaanMachinery3dImageUrlForStep,
+  dayCentreAyaanMachinery3dFocusImageUrlForStep,
   dayCentreAyaanFocusImageUrlForStep,
   dayCentreAyaanImageUrlForStep,
   dayCentreAyaanScheduleFocusImageUrlForStep,
@@ -447,12 +448,14 @@ export const DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardP
   DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE.map((s) => ayaanScheduleGeneratedCardProps(s));
 
 function ayaanMachinery3dGeneratedCardProps(step: DayCentreAyaanMachineryStep) {
+  const focusIllustrationUrl = dayCentreAyaanMachinery3dFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreAyaanMachinery3dImageUrlForStep(step),
     title: lc(step.title),
     category: lc(PHYSICAL_3D_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: dayCentreAyaanPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
 
