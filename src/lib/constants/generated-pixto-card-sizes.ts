@@ -80,15 +80,21 @@ export function generatedPixtoCornerRadiusPx(renderWidthPx: number): number {
 }
 
 /**
- * Focus only — shrink the illustration render box inside its slot.
- * Clears the top-right pack mark; bottom stays on the title/action band.
+ * Focus only — symmetric inset; pack mark sits in the parent slot margin.
+ * Clears a sliver under the top-right glyph without shifting the PNG off-centre.
  */
 export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET = {
-  topPx: 24,
-  leftPx: 8,
-  rightPx: 18,
+  topPx: 12,
+  leftPx: 0,
+  rightPx: 0,
   bottomPx: 0,
 } as const;
+
+/**
+ * Schedule / Focus — subtle contain zoom for 531×648 illustration slots.
+ * Box size unchanged; PNG scales up inside `overflow-hidden` without cropping.
+ */
+export const GENERATED_PIXTO_DIGITAL_ILLUSTRATION_CONTAIN_ZOOM = 1.07 as const;
 
 /** Focus action band before 3-line expansion — locks illustration render height (px). */
 export const GENERATED_PIXTO_FOCUS_ACTION_H_BASE = 72 as const;

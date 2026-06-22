@@ -8,6 +8,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 import {
   isPixtoLearnIllustrationOnlyUrl,
+  shouldApplyDigitalIllustrationContainZoom,
 } from "@/lib/utils/visual-card-url";
 import { isTailoredSchedulesPackMarkUrl, tailoredSchedulesPackMarkTintMaskUrl } from "@/lib/cards/tailored-schedules-shared";
 import {
@@ -21,6 +22,7 @@ import {
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
+  GENERATED_PIXTO_DIGITAL_ILLUSTRATION_CONTAIN_ZOOM,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
@@ -256,15 +258,21 @@ export function FocusRoutineIllustrationImage({
 }) {
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(src);
   const insets = illustrationOnly
-    ? { topPx: 8, leftPx: 4, rightPx: 12, bottomPx: 0 }
+    ? { topPx: 8, leftPx: 0, rightPx: 0, bottomPx: 0 }
     : GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
   const { topPx, leftPx, rightPx, bottomPx } = insets;
-  const widthTrim = leftPx + rightPx;
   const unoptimized =
     src.startsWith("/") || src.includes("/cards/") || /\.png$/i.test(src);
   const objectFitClass = illustrationOnly
     ? "object-contain object-center"
     : objectClass;
+  const containZoom = shouldApplyDigitalIllustrationContainZoom(src)
+    ? GENERATED_PIXTO_DIGITAL_ILLUSTRATION_CONTAIN_ZOOM
+    : 1;
+  const effectiveScale = scale !== 1 ? scale : containZoom;
+  const illustrationAspect =
+    `${GENERATED_PIXTO_ILLUSTRATION_FRAME.w} / ${GENERATED_PIXTO_ILLUSTRATION_FRAME.h}` as const;
+
   return (
     <div
       className="relative flex h-full w-full items-center justify-center overflow-hidden"
@@ -276,20 +284,12 @@ export function FocusRoutineIllustrationImage({
       }}
     >
       <div
-        className={cn(
-          "relative mx-auto min-h-0 w-full",
-          illustrationOnly ? "h-full max-h-full" : "shrink-0",
-        )}
+        className="relative max-h-full w-full max-w-full"
         style={{
-          width: illustrationOnly
-            ? "100%"
-            : `max(0px, calc(100% - ${widthTrim}px))`,
-          ...(illustrationOnly
-            ? undefined
-            : { height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px` }),
-          ...(scale !== 1
+          aspectRatio: illustrationAspect,
+          ...(effectiveScale !== 1
             ? {
-                transform: `scale(${scale})`,
+                transform: `scale(${effectiveScale})`,
                 transformOrigin: "center center",
               }
             : {}),
@@ -1299,6 +1299,10 @@ export function GeneratedPixtoCard({
     focusPresentation && focusIllustrationUrl
       ? focusIllustrationUrl
       : illustrationUrl;
+  const digitalIllustrationContainZoom =
+    shouldApplyDigitalIllustrationContainZoom(resolvedIllustrationSrc)
+      ? GENERATED_PIXTO_DIGITAL_ILLUSTRATION_CONTAIN_ZOOM
+      : 1;
   const focusTitleLayout = useMemo(
     () => (focusPresentation ? resolveFocusTitleLayout(i18nTitle) : null),
     [focusPresentation, i18nTitle],
@@ -1527,9 +1531,9 @@ export function GeneratedPixtoCard({
               sizes="(max-width: 640px) 72vw, 240px"
               className={cn(illustrationObjectClass, "select-none")}
               style={
-                focusPresentation && resolvedFocusIllustrationScale !== 1
+                digitalIllustrationContainZoom !== 1
                   ? {
-                      transform: `scale(${resolvedFocusIllustrationScale})`,
+                      transform: `scale(${digitalIllustrationContainZoom})`,
                       transformOrigin: "center center",
                     }
                   : undefined

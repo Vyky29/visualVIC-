@@ -31,9 +31,20 @@ export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolea
   return (
     u.includes("/scenes/") ||
     u.includes("/scenes-2d/") ||
+    u.includes("/cards/day centre/general/") ||
+    u.includes("/cards/day%20centre/general/") ||
     u.includes("/cards/core/finish3d.png") ||
     isPixtoLearnLibraryStockImageUrl(url)
   );
+}
+
+/** Schedule / Focus contain zoom — skip full WOW pack cards (embedded title strip). */
+export function shouldApplyDigitalIllustrationContainZoom(
+  url: string | undefined,
+): boolean {
+  if (!url) return false;
+  if (isPixtoLearnFullBleedCardUrl(url)) return false;
+  return isPixtoLearnIllustrationOnlyUrl(url);
 }
 
 /** Full designer PNG cards with embedded title strip — thumbnails may cover-crop. */
