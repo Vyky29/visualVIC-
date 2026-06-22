@@ -66,7 +66,7 @@ export function physicalImageUrlForScheduleStep(
 /** Sample schedule — only assets present on disk (curated locally). */
 export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
   { id: "phs-sandbag-blue", slug: "sandbag-blue", title: "Sandbag (blue)", library: "3d-gym" },
-  { id: "phs-sandbag-stack", slug: "sandbag-stack", title: "Sandbag stack", library: "3d-gym" },
+  { id: "phs-sandbag-stack", slug: "sandbag-stack", title: "Sandbags", library: "3d-gym" },
 ] as const;
 
 export function physicalImageUrl(slug: string): string {
@@ -94,6 +94,7 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "kettlebell", title: "Kettlebell" },
   { slug: "medicine-ball", title: "Weight ball" },
   { slug: "balance-board", title: "Balance board" },
+  { slug: "foam-roller", title: "Foam roller" },
 ] as const;
 
 /** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
