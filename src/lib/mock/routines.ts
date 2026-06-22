@@ -523,7 +523,7 @@ export const mockRoutines: Routine[] = [
     id: "ayaan-gym-equipment-3d",
     name: DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
     description:
-      "Physical activity items only — day centre snack, treadmill, therapy ball, sandbags, dumbbells, steps, weight ball (3D library)",
+      "Physical activity items only — Ayaan snack (metal tupperware), treadmill, therapy ball, sandbags, dumbbells, steps, weight ball (3D library)",
     tags: ["extra"],
     homePreviewImageUrl: physical3dGymImageUrl("sandbag-stack"),
     steps: routineStepsFromGeneratedCardProps(

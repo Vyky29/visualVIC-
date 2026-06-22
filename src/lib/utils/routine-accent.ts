@@ -645,7 +645,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
-  if (id === "ayaan-gym-equipment-3d") return "physical";
+  if (id === "ayaan-gym-equipment-3d") return "ayaan";
   if (id === "emmanuel-day-centre") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
 
@@ -703,7 +703,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
-  if (id === "ayaan-gym-equipment-3d") return "physical";
+  if (id === "ayaan-gym-equipment-3d") return "ayaan";
   if (id === "emmanuel-day-centre") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id.includes("core")) return "core";
