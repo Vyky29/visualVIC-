@@ -90,16 +90,6 @@ export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET = {
   bottomPx: 0,
 } as const;
 
-/** Focus — snack card only (`/cards/day centre/general/snack.png`). */
-export const GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE = 1.22 as const;
-
-/** Outer slot padding for snack focus — more canvas for the PNG. */
-export const GENERATED_PIXTO_FOCUS_SNACK_SLOT_PAD = {
-  top: 20,
-  x: 18,
-  bottom: 0,
-} as const;
-
 /** Focus action band before 3-line expansion — locks illustration render height (px). */
 export const GENERATED_PIXTO_FOCUS_ACTION_H_BASE = 72 as const;
 

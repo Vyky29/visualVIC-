@@ -414,6 +414,7 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
       "hydratate-body",
       "body-lotion",
       "brush-hair",
+      "brush-hair-3d",
     ])
   ) {
     return "shower";

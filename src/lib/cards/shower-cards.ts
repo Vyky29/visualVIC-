@@ -11,6 +11,7 @@ export const SHOWER_BACK_CARD_FILE = "backcard4.png" as const;
 /** Every PNG under public/cards/shower/ except the back card (sorted A–Z). */
 export const SHOWER_CARD_FILES = [
   "body-lotion.png",
+  "brush-hair-3d.png",
   "brush-hair.png",
   "brush.png",
   "comb.png",
@@ -69,6 +70,7 @@ export const SHOWER_SEQUENCE = [
   { id: "shower-towel", slug: "towel", title: "Towel" },
   { id: "shower-dry-hair", slug: "dry-hair", title: "Dry hair" },
   { id: "shower-brush-hair", slug: "brush-hair", title: "Brush hair" },
+  { id: "shower-brush-hair-3d", slug: "brush-hair-3d", title: "Brush hair (3D)" },
   { id: "shower-comb", slug: "comb", title: "Comb" },
   { id: "shower-hair-dryer", slug: "hair-dryer", title: "Hair dryer" },
   { id: "shower-squeeze-gel", slug: "squeeze-gel", title: "Squeeze gel" },

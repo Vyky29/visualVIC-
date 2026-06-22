@@ -36,16 +36,6 @@ export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolea
   );
 }
 
-/** Day centre general snack — illustration-only PNG needs a focus zoom boost. */
-export function isDayCentreGeneralSnackUrl(url: string | undefined): boolean {
-  if (!url) return false;
-  const u = decodeURIComponent(url).toLowerCase();
-  return (
-    u.includes("/cards/day centre/general/snack.png") ||
-    u.includes("/cards/day%20centre/general/snack.png")
-  );
-}
-
 /** Full designer PNG cards with embedded title strip — thumbnails may cover-crop. */
 export function isPixtoLearnFullBleedCardUrl(url: string | undefined): boolean {
   return isPixtoLearnBundledCardUrl(url) && !isPixtoLearnIllustrationOnlyUrl(url);
