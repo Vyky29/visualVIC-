@@ -93,6 +93,7 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
 export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "sandbag-blue", title: "Sandbag (blue)" },
   { slug: "sandbag-stack", title: "Sandbag stack" },
+  { slug: "arms-machine", title: "Arms machine" },
 ] as const;
 
 function physical3dLibrarySteps(): readonly PhysicalStep[] {
