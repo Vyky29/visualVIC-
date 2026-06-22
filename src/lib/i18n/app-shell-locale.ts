@@ -785,8 +785,26 @@ export function authTermsPlaceholder(lang: CardLanguageCode): string {
 
 export function playerIndexIntro(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Elige una rutina de prueba. Cada una abre el reproductor vertical con Ahora / Siguiente / Hecho y desliza para completar."
-    : "Choose a mock routine. Each opens the vertical player with Now / Next / Finished and swipe to complete.";
+    ? "Rutinas que has abierto en este dispositivo. Toca una para continuar o usa ✕ para quitarla de la lista."
+    : "Routines you have opened on this device. Tap one to continue, or use ✕ to remove it from the list.";
+}
+
+export function playerIndexEmptyTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Aún no hay rutinas" : "No routines yet";
+}
+
+export function playerIndexEmptyBody(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Abre una rutina desde Inicio o la Biblioteca. Aparecerá aquí la próxima vez."
+    : "Open a routine from Home or the Library. It will show up here next time.";
+}
+
+export function playerRemoveFromListAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Quitar de la lista" : "Remove from list";
+}
+
+export function playerIndexEmptyHomeLink(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Ir a Inicio" : "Go to Home";
 }
 
 export function playerKindTemplate(lang: CardLanguageCode): string {

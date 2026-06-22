@@ -2,25 +2,29 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
-import { mockRoutines } from "@/lib/mock/routines";
+import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardStepsWord,
+  playerIndexEmptyBody,
+  playerIndexEmptyHomeLink,
+  playerIndexEmptyTitle,
   playerIndexIntro,
   playerKindRoutine,
+  playerRemoveFromListAria,
 } from "@/lib/i18n/app-shell-locale";
-import { useSchedulePlayerRecentOrder } from "@/lib/preferences/use-schedule-player-recent-order";
+import { useSchedulePlayerUsedRoutines } from "@/lib/preferences/use-schedule-player-recent-order";
+import { removeSchedulePlayerRoutine } from "@/lib/preferences/schedule-player-recent-preference";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 import {
-  isStockPackRoutine,
   routineSchedulePlayerIndexCardClass,
   routineVisualTone,
   type RoutineVisualTone,
@@ -50,15 +54,38 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   default: "border-sage/18 bg-sage-mist/70 text-sage",
 };
 
+function RemoveRoutineButton({
+  routineId,
+  ariaLabel,
+}: {
+  routineId: string;
+  ariaLabel: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-ink/10 bg-white/95 text-[18px] leading-none text-ink-subtle shadow-sm transition hover:border-ink/20 hover:bg-white hover:text-ink"
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        removeSchedulePlayerRoutine(routineId);
+      }}
+    >
+      <span aria-hidden>×</span>
+    </button>
+  );
+}
+
 export default function PlayerIndexPage() {
   const router = useRouter();
-  const { isRestricted, status: staffStatus } = useStaffAccess();
+  const { isRestricted, mayOpenRoutine, status: staffStatus } = useStaffAccess();
+  const { routines: customRoutines } = useCustomRoutines();
   const cardUiLang = useCardUiLanguage();
-  const stockRoutines = useMemo(
-    () => mockRoutines.filter(isStockPackRoutine),
-    [],
+  const usedRoutines = useSchedulePlayerUsedRoutines(
+    customRoutines,
+    mayOpenRoutine,
   );
-  const sortedRoutines = useSchedulePlayerRecentOrder(stockRoutines);
 
   useEffect(() => {
     if (staffStatus === "loading") return;
@@ -80,77 +107,98 @@ export default function PlayerIndexPage() {
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {playerIndexIntro(cardUiLang)}
         </p>
-        <ul className="flex flex-col gap-3">
-          {sortedRoutines.map((r) => {
-            const previewUrl = resolveSchedulePlayerIndexPreviewUrl(r);
-            const previewPixto =
-              Boolean(previewUrl) &&
-              (isPixtoLearnBundledCardUrl(previewUrl) ||
-                Boolean(r.steps[0]?.generatedPixto));
-            const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
-            const tone = routineVisualTone(r);
-            return (
-              <li key={r.id} className="group">
-                <Card
-                  omitInsetRing
-                  className={cn(
-                    "overflow-hidden p-0 shadow-card transition-shadow duration-200",
-                    routineSchedulePlayerIndexCardClass(r),
-                  )}
-                >
-                  <Link
-                    href={`/player/${r.id}`}
-                    className="flex gap-4 p-4 transition hover:bg-white/60"
+        {usedRoutines.length === 0 ? (
+          <Card className="px-5 py-8 text-center">
+            <p className="text-[16px] font-semibold text-ink">
+              {playerIndexEmptyTitle(cardUiLang)}
+            </p>
+            <p className="mt-2 text-[14px] leading-relaxed text-ink-subtle">
+              {playerIndexEmptyBody(cardUiLang)}
+            </p>
+            <Link
+              href="/dashboard"
+              className="mt-5 inline-block text-[14px] font-medium text-sage underline-offset-4 hover:underline"
+            >
+              {playerIndexEmptyHomeLink(cardUiLang)}
+            </Link>
+          </Card>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {usedRoutines.map((r) => {
+              const previewUrl = resolveSchedulePlayerIndexPreviewUrl(r);
+              const previewPixto =
+                Boolean(previewUrl) &&
+                (isPixtoLearnBundledCardUrl(previewUrl) ||
+                  Boolean(r.steps[0]?.generatedPixto));
+              const fullBleedPixto = isPixtoLearnFullBleedCardUrl(previewUrl);
+              const tone = routineVisualTone(r);
+              return (
+                <li key={r.id} className="group">
+                  <Card
+                    omitInsetRing
+                    className={cn(
+                      "relative overflow-hidden p-0 shadow-card transition-shadow duration-200",
+                      routineSchedulePlayerIndexCardClass(r),
+                    )}
                   >
-                    <div
-                      className={cn(
-                        "relative h-[72px] w-[72px] shrink-0 overflow-hidden",
-                        previewPixto
-                          ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
-                          : "bg-canvas-muted",
-                      )}
-                      style={
-                        fullBleedPixto
-                          ? { clipPath: pixtoBundledCardThumbnailClipPath }
-                          : undefined
-                      }
+                    <RemoveRoutineButton
+                      routineId={r.id}
+                      ariaLabel={playerRemoveFromListAria(cardUiLang)}
+                    />
+                    <Link
+                      href={`/player/${r.id}`}
+                      className="flex gap-4 p-4 pr-12 transition hover:bg-white/60"
                     >
-                      {previewUrl ? (
-                        <Image
-                          src={previewUrl}
-                          alt=""
-                          fill
-                          unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
-                          className="object-cover object-center"
-                          sizes="72px"
-                        />
-                      ) : null}
-                    </div>
-                    <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
-                      <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
-                        {playerKindRoutine(cardUiLang)}
-                      </p>
-                      <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                        {stockRoutineDisplayName(r.id, r.name, cardUiLang)}
-                      </p>
-                      <span
+                      <div
                         className={cn(
-                          "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
-                          STEP_CHIP_CLASS[tone],
+                          "relative h-[72px] w-[72px] shrink-0 overflow-hidden",
+                          previewPixto
+                            ? cn("bg-white", GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS)
+                            : "bg-canvas-muted",
                         )}
+                        style={
+                          fullBleedPixto
+                            ? { clipPath: pixtoBundledCardThumbnailClipPath }
+                            : undefined
+                        }
                       >
-                        {r.steps.length} {dashboardStepsWord(cardUiLang)}
+                        {previewUrl ? (
+                          <Image
+                            src={previewUrl}
+                            alt=""
+                            fill
+                            unoptimized={isPixtoLearnBundledCardUrl(previewUrl)}
+                            className="object-cover object-center"
+                            sizes="72px"
+                          />
+                        ) : null}
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                        <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+                          {playerKindRoutine(cardUiLang)}
+                        </p>
+                        <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                          {stockRoutineDisplayName(r.id, r.name, cardUiLang)}
+                        </p>
+                        <span
+                          className={cn(
+                            "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
+                            STEP_CHIP_CLASS[tone],
+                          )}
+                        >
+                          {r.steps.length} {dashboardStepsWord(cardUiLang)}
+                        </span>
+                      </div>
+                      <span className="self-center text-ink-faint" aria-hidden>
+                        →
                       </span>
-                    </div>
-                    <span className="self-center text-ink-faint" aria-hidden>
-                      →
-                    </span>
-                  </Link>
-                </Card>
-              </li>
-            );
-          })}
-        </ul>
+                    </Link>
+                  </Card>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );

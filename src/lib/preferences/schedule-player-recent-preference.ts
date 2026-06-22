@@ -43,6 +43,33 @@ export function touchSchedulePlayerRoutine(routineId: string) {
   );
 }
 
+export function removeSchedulePlayerRoutine(routineId: string) {
+  if (typeof window === "undefined" || !routineId.trim()) return;
+  const map = readSchedulePlayerRecentMap();
+  if (!(routineId in map)) return;
+  delete map[routineId];
+  try {
+    window.localStorage.setItem(
+      SCHEDULE_PLAYER_RECENT_STORAGE_KEY,
+      JSON.stringify(map),
+    );
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(
+    new CustomEvent(SCHEDULE_PLAYER_RECENT_CHANGE_EVENT, { detail: routineId }),
+  );
+}
+
+/** Routine ids opened on this device, most recent first. */
+export function listSchedulePlayerRecentRoutineIds(
+  recentMap: SchedulePlayerRecentMap = readSchedulePlayerRecentMap(),
+): string[] {
+  return Object.entries(recentMap)
+    .sort(([, a], [, b]) => b - a)
+    .map(([id]) => id);
+}
+
 /** Most recently opened first; never-opened routines keep catalog order at the bottom. */
 export function sortRoutinesBySchedulePlayerRecent<T extends { id: string }>(
   routines: readonly T[],
