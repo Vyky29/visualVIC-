@@ -84,7 +84,7 @@ const ITEMS = [
   {
     library: "library-3d-gym",
     slug: "sandbag-stack",
-    src: "image-63da78e5-ee7e-4835-ad24-f520df908a80.png",
+    src: "image-cd6dec96-cf7f-459a-868e-f9078f1fe1c5.png",
   },
   {
     library: "library-3d",
