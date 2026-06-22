@@ -1,6 +1,7 @@
 /**
  * Ayaan · Physical activity — personalised cartoon pack (2D + 3D).
  * Drop scene PNGs into `public/cards/day centre/ayaan/scenes/{slug}.png`.
+ * Snack 3D source: `ayaansnack3d.png` → `node scripts/import-ayaan-scene.mjs snack`
  */
 
 import {
