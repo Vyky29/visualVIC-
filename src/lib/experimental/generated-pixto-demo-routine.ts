@@ -352,12 +352,12 @@ export const PHYSICAL_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
     iconUrl: physicalPackMarkUrl(),
   }));
 
-/** Physical · 3D gym — 5×5 machines & accessories sheet (25 steps). */
+/** Physical · 3D gym — machines & accessories (`library-3d-gym/`). */
 export const PHYSICAL_3D_GYM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   PHYSICAL_3D_GYM_SEQUENCE.map((s) => ({
     illustrationUrl: physical3dGymImageUrlForStep(s),
     title: lc(s.title),
-    category: lc(PHYSICAL_3D_GYM_CATEGORY_LABEL),
+    category: lc(PHYSICAL_3D_CATEGORY_LABEL),
     categoryColour: PHYSICAL_CATEGORY_COLOUR,
     iconUrl: physicalPackMarkUrl(),
   }));

@@ -96,11 +96,9 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "weights", title: "Dumbbells" },
 ] as const;
 
-/** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
+/** Library → machines — 16 curated picks from designer gym sheet (531×648 each). */
 export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "aerobic-step", title: "Aerobic step" },
-  { slug: "adjustable-step", title: "Adjustable step" },
-  { slug: "sandbag-pink", title: "Sandbag (pink)" },
   { slug: "sandbag-stack", title: "Sandbags" },
   { slug: "leg-press", title: "Leg press" },
   { slug: "chest-press", title: "Chest press" },
@@ -116,14 +114,12 @@ export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "stair-climber", title: "Stair climber" },
   { slug: "skierg", title: "SkiErg" },
   { slug: "air-bike", title: "Air bike" },
-  { slug: "air-bike-2", title: "Air bike" },
-  { slug: "lifting-belt", title: "Lifting belt" },
-  { slug: "dip-belt", title: "Dip belt" },
-  { slug: "lifting-straps", title: "Lifting straps" },
-  { slug: "wraps", title: "Wraps" },
-  { slug: "lifting-belt-2", title: "Lifting belt" },
-  { slug: "arms-machine", title: "Arms machine" },
 ] as const;
+
+/** Filenames under `public/images/library-3d-gym/` — synced to {@link PHYSICAL_3D_GYM_CATALOG}. */
+export const PHYSICAL_3D_GYM_CARD_FILES = PHYSICAL_3D_GYM_CATALOG.map(
+  (item) => `${item.slug}.png` as const,
+);
 
 /** Home / Sports — full 3D library on disk (`library-3d/` + `library-3d-gym/`). */
 export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
@@ -190,9 +186,15 @@ export const PHYSICAL_3D_EXTRA_SEQUENCE: readonly PhysicalStep[] =
 export const PHYSICAL_3D_SEQUENCE: readonly PhysicalStep[] =
   PHYSICAL_3D_LIBRARY_SEQUENCE;
 
-/** Library → Physical Activity · 3D gym — sandbags only (curated on disk). */
+/** Library → Physical Activity · 3D gym — machines & accessories (`library-3d-gym/`). */
 export const PHYSICAL_3D_GYM_SEQUENCE: readonly PhysicalStep[] =
   physical3dGymLibrarySteps();
+
+/** Library + Home — all 3D fitness objects (`library-3d/` + `library-3d-gym/`). */
+export const PHYSICAL_ALL_3D_LIBRARY_SEQUENCE: readonly PhysicalStep[] = [
+  ...PHYSICAL_3D_LIBRARY_SEQUENCE,
+  ...PHYSICAL_3D_GYM_SEQUENCE,
+] as const;
 
 export function physicalImageUrlForStep(step: PhysicalStep): string {
   return physicalImageUrl(step.slug);

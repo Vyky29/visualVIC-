@@ -72,8 +72,10 @@ import {
 } from "@/lib/cards/day-centre-premium-cards";
 import {
   PHYSICAL_2D_LIBRARY_SEQUENCE,
+  PHYSICAL_3D_GYM_CARD_FILES,
   PHYSICAL_3D_GYM_SEQUENCE,
   PHYSICAL_3D_LIBRARY_SEQUENCE,
+  physical3dGymImageUrl,
   physical3dGymImageUrlForStep,
   physical3dImageUrlForStep,
   physicalImageUrlForStep,
@@ -247,6 +249,10 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   const brushingTitleMap = titleMapFromSequence(BRUSHING_TEETH_SEQUENCE);
   const coreTitleMap = titleMapFromSequence(CORE_SEQUENCE);
   const showerTitleMap = titleMapFromSequence(SHOWER_SEQUENCE);
+  const physical3dTitleMap = titleMapFromSequence([
+    ...PHYSICAL_3D_LIBRARY_SEQUENCE,
+    ...PHYSICAL_3D_GYM_SEQUENCE,
+  ]);
   const climbTitleMap = titleMapFromSequence(CLIMBING_SEQUENCE);
   const swimTitleMap = titleMapFromSequence(SWIMMING_SEQUENCE);
   const airportTitleMap = titleMapFromSequence(AT_THE_AIRPORT_SEQUENCE);
@@ -592,7 +598,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   PHYSICAL_3D_GYM_SEQUENCE.forEach((s, i) => {
     const gp = PHYSICAL_3D_GYM_GENERATED_CARD_PROPS[i];
     out.push({
-      pickId: pid("phy3g", s.slug),
+      pickId: pid("phy3d", s.slug),
       label: s.title,
       imageUrl: physical3dGymImageUrlForStep(s),
       category: "activity",
@@ -607,6 +613,14 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
           }
         : undefined,
     });
+  });
+  appendExtraCardsFromFiles({
+    out,
+    ns: "phy3d",
+    files: PHYSICAL_3D_GYM_CARD_FILES,
+    category: "activity",
+    imageUrlForSlug: (slug) => physical3dGymImageUrl(slug),
+    titleMap: physical3dTitleMap,
   });
 
   for (const card of GETTING_DRESS_REGISTRY) {
