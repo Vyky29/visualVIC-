@@ -65,7 +65,6 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "stop.png",
   "supermarket.png",
   "swimming-pool.png",
-  "taxi.png",
   "toilet.png",
   "wait.png",
   "walk.png",
@@ -133,7 +132,6 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-hair-care", slug: "hair-care", title: "Hair care" },
   // Community access
   { id: "dcg-bus", slug: "bus", title: "Bus" },
-  { id: "dcg-taxi", slug: "taxi", title: "Taxi" },
   { id: "dcg-cab", slug: "cab", title: "Cab" },
   { id: "dcg-walk", slug: "walk", title: "Walking" },
   { id: "dcg-cross-road", slug: "cross-road", title: "Crossing road" },
@@ -287,7 +285,6 @@ export const DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE: readonly DayCentreGeneralSt
   { id: "dccc-shopping", slug: "shopping", title: "Shopping" },
   { id: "dccc-queue", slug: "queue", title: "Queue" },
   { id: "dccc-mcdonalds", slug: "mcdonalds", title: "McDonald's" },
-  { id: "dccc-taxi", slug: "taxi", title: "Taxi" },
   { id: "dccc-cab", slug: "cab", title: "Cab" },
 ] as const;
 
@@ -394,7 +391,7 @@ export const DAY_CENTRE_COMMUNITY_PARK_SEQUENCE: readonly DayCentreGeneralStep[]
   { id: "dccp-playground", slug: "playground", title: "Playground" },
   { id: "dccp-cafe", slug: "cafe", title: "Cafe" },
   { id: "dccp-wait", slug: "wait", title: "Waiting" },
-  { id: "dccp-taxi", slug: "taxi", title: "Taxi" },
+  { id: "dccp-cab", slug: "cab", title: "Cab" },
   { id: "dccp-home", slug: "home", title: "Home" },
 ] as const;
 
