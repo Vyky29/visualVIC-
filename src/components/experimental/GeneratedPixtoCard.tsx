@@ -22,6 +22,7 @@ import {
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
 } from "@/lib/constants/generated-pixto-card-sizes";
+import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
 export {
   GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
@@ -379,6 +380,12 @@ export type GeneratedPixtoCardProps = {
   suppressNeutralRing?: boolean;
   /** Draw the illustration slot (531×648 / 531×663) so layout can be checked. */
   showIllustrationFrameGuide?: boolean;
+  /** Replaces top-right pack mark on schedule NOW cards. */
+  scheduleTimer?: {
+    remainingSec: number;
+    totalSec: number;
+    finished?: boolean;
+  };
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;
@@ -1215,6 +1222,7 @@ export function GeneratedPixtoCard({
   schedulePresentation = false,
   suppressNeutralRing = false,
   showIllustrationFrameGuide = false,
+  scheduleTimer,
 }: GeneratedPixtoCardProps) {
   const isDense = cardType === "dense";
   const cardUiLang = useCardUiLanguage();
@@ -1413,7 +1421,25 @@ export function GeneratedPixtoCard({
         />
       ) : null}
 
-      {markSrc ? (
+      {scheduleTimer && schedulePresentation ? (
+        <div
+          className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center bg-transparent"
+          style={{
+            width: markSize,
+            height: markSize,
+            transform: "translate(-40px, 8px)",
+          }}
+          aria-hidden
+        >
+          <StepTimerBadge
+            remainingSec={scheduleTimer.remainingSec}
+            totalSec={scheduleTimer.totalSec}
+            finished={scheduleTimer.finished}
+            variant="schedule-pack-mark"
+            categoryColour={categoryColour}
+          />
+        </div>
+      ) : markSrc ? (
         <div
           className="pointer-events-none absolute right-0 top-0 z-30 flex items-center justify-center bg-transparent"
           style={{

@@ -30,6 +30,10 @@ import {
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
   schedulePlayerResetCta,
+  schedulePlayerTimerButton,
+  schedulePlayerAddCardButton,
+  routineTimerStepLabel,
+  focusModeOptTimerHint,
   schedulePlayerRoutineCompleteBody,
   schedulePlayerRoutineCompleteTitle,
   schedulePlayerRunAgain,
@@ -38,7 +42,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
-import { ScheduleFlashcardControls } from "@/components/schedule/ScheduleFlashcardControls";
+import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import { ScheduleCardSearchPanel } from "@/components/schedule/ScheduleCardSearchPanel";
 import type { PickableLibraryCard } from "@/lib/library/pickable-library-cards";
 import {
@@ -143,13 +147,11 @@ export function SchedulePlayer({
   const router = useRouter();
   const { routines: customRoutines, replaceRoutine } = useCustomRoutines();
   const [stepsOverride, setStepsOverride] = useState<RoutineStep[] | null>(null);
-  const [stepsHydrated, setStepsHydrated] = useState(false);
   const [showCardSearch, setShowCardSearch] = useState(false);
 
   useEffect(() => {
     const stored = loadScheduleStepsOverride(routine.id);
     setStepsOverride(stored);
-    setStepsHydrated(true);
   }, [routine.id]);
 
   const baseSteps = useMemo(
@@ -338,6 +340,25 @@ export function SchedulePlayer({
           </Button>
           <Button
             type="button"
+            variant="secondary"
+            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
+            onClick={() => setShowTimerPanel((v) => !v)}
+            aria-pressed={showTimerPanel || nowHasTimer}
+          >
+            <span aria-hidden>⏱</span>
+            <span className="truncate">{schedulePlayerTimerButton(cardUiLang)}</span>
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
+            onClick={() => setShowCardSearch(true)}
+          >
+            <span aria-hidden>+</span>
+            <span className="truncate">{schedulePlayerAddCardButton(cardUiLang)}</span>
+          </Button>
+          <Button
+            type="button"
             variant="ghost"
             className="min-h-touch shrink-0 gap-2 px-4"
             onClick={() => router.push(backHref)}
@@ -348,6 +369,25 @@ export function SchedulePlayer({
             <span>{schedulePlayerCloseCta(cardUiLang)}</span>
           </Button>
         </div>
+
+        {showTimerPanel && nowStep && !isComplete ? (
+          <div className="space-y-2 rounded-2xl border border-ink/10 bg-white/80 px-3 py-3">
+            <p className="text-[13px] font-medium text-ink">
+              {routineTimerStepLabel(cardUiLang)}
+            </p>
+            <p className="text-[12px] leading-snug text-ink-subtle">
+              {focusModeOptTimerHint(cardUiLang)}
+            </p>
+            <TimerPresetPicker
+              value={
+                sessionTimerSec === 0
+                  ? undefined
+                  : sessionTimerSec ?? savedTimerSec
+              }
+              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
+            />
+          </div>
+        ) : null}
 
         {showFirstThen ? (
           <div className="flex justify-center px-1">
@@ -385,21 +425,16 @@ export function SchedulePlayer({
                 doubleTapCompletes
                 completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
                 accentRings={accentRings}
+                scheduleTimer={
+                  nowHasTimer
+                    ? {
+                        remainingSec: nowTimerRemaining,
+                        totalSec: nowTimerTotal,
+                        finished: nowTimerFinished,
+                      }
+                    : undefined
+                }
               />
-              {stepsHydrated ? (
-                <ScheduleFlashcardControls
-                  showTimerPanel={showTimerPanel}
-                  onToggleTimerPanel={() => setShowTimerPanel((v) => !v)}
-                  onOpenAddCard={() => setShowCardSearch(true)}
-                  nowHasTimer={nowHasTimer}
-                  nowTimerRemaining={nowTimerRemaining}
-                  nowTimerTotal={nowTimerTotal}
-                  nowTimerFinished={nowTimerFinished}
-                  sessionTimerSec={sessionTimerSec}
-                  savedTimerSec={savedTimerSec}
-                  onTimerChange={(sec) => setSessionTimerSec(sec ?? 0)}
-                />
-              ) : null}
             </div>
             <p className="px-1 text-center text-[11px] leading-snug text-ink-faint">
               {prefersFinePointer

@@ -62,6 +62,12 @@ type Props = {
    * (e.g. remote photo). Otherwise outlines follow **this step’s** card category.
    */
   accentRings?: RoutineAccentRings;
+  /** Active countdown — replaces pack mark on digital schedule NOW cards. */
+  scheduleTimer?: {
+    remainingSec: number;
+    totalSec: number;
+    finished?: boolean;
+  };
 };
 
 const DOUBLE_TAP_MS = 300;
@@ -114,6 +120,7 @@ export function SwipeableStepCard({
   doubleTapCompletes = false,
   completionBackImageUrl,
   accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
+  scheduleTimer,
 }: Props) {
   const rings = useMemo(
     () => stepCardAccentRings(step, accentRings),
@@ -690,6 +697,7 @@ export function SwipeableStepCard({
                           focusIllustrationScale={gp.focusIllustrationScale}
                           focusIllustrationUrl={gp.focusIllustrationUrl}
                           schedulePresentation
+                          scheduleTimer={scheduleTimer}
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
                         />
@@ -903,6 +911,7 @@ export function SwipeableStepCard({
                       focusIllustrationScale={gp.focusIllustrationScale}
                       focusIllustrationUrl={gp.focusIllustrationUrl}
                       schedulePresentation
+                      scheduleTimer={focusGenerated ? undefined : scheduleTimer}
                       focusPresentation={focusGenerated}
                       suppressNeutralRing
                       className="h-full w-full max-w-none"

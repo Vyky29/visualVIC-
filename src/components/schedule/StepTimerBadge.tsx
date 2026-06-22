@@ -9,9 +9,11 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 type Props = {
   remainingSec: number;
   totalSec: number;
-  variant: "focus" | "schedule";
+  variant: "focus" | "schedule" | "schedule-pack-mark";
   finished?: boolean;
   className?: string;
+  /** Schedule pack-mark slot — progress ring matches card category. */
+  categoryColour?: string;
 };
 
 export function StepTimerBadge({
@@ -20,6 +22,7 @@ export function StepTimerBadge({
   variant,
   finished = false,
   className,
+  categoryColour,
 }: Props) {
   const lang = useCardUiLanguage();
   const progress =
@@ -29,12 +32,21 @@ export function StepTimerBadge({
   const dashOffset = circumference * (1 - progress);
 
   const isFocus = variant === "focus";
+  const isPackMark = variant === "schedule-pack-mark";
+  const ringColour = categoryColour ?? (isFocus ? "#f5f0e8" : "#6b9080");
 
   return (
     <div
       className={cn(
-        "pointer-events-none absolute z-[12] flex items-center justify-center",
-        isFocus ? "bottom-4 right-4 tablet:bottom-5 tablet:right-5" : "left-3 top-3 tablet:left-4 tablet:top-4",
+        "pointer-events-none flex items-center justify-center",
+        isPackMark
+          ? "relative h-full w-full"
+          : cn(
+              "absolute z-[12]",
+              isFocus
+                ? "bottom-4 right-4 tablet:bottom-5 tablet:right-5"
+                : "bottom-3 right-3 tablet:bottom-4 tablet:right-4",
+            ),
         className,
       )}
       aria-live="polite"
@@ -52,10 +64,16 @@ export function StepTimerBadge({
             : { duration: 0.2 }
         }
         className={cn(
-          "relative flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-full shadow-soft ring-1 backdrop-blur-sm tablet:h-[4.25rem] tablet:w-[4.25rem]",
-          isFocus
-            ? "bg-black/55 text-cream ring-white/20"
-            : "bg-white/92 text-ink ring-ink/10",
+          "relative flex items-center justify-center rounded-2xl shadow-soft ring-1 backdrop-blur-sm",
+          isPackMark
+            ? "aspect-square h-full w-full rounded-[22%] bg-white/95 ring-ink/10"
+            : cn(
+                "rounded-full",
+                "h-[3.75rem] w-[3.75rem] tablet:h-[4.25rem] tablet:w-[4.25rem]",
+                isFocus
+                  ? "bg-black/55 text-cream ring-white/20"
+                  : "bg-white/92 text-ink ring-ink/10",
+              ),
         )}
       >
         <svg
@@ -68,7 +86,7 @@ export function StepTimerBadge({
             cy="26"
             r={radius}
             fill="none"
-            className={isFocus ? "stroke-white/15" : "stroke-ink/10"}
+            stroke={isFocus ? "rgba(255,255,255,0.15)" : "rgba(28,36,32,0.1)"}
             strokeWidth="3"
           />
           <circle
@@ -76,10 +94,9 @@ export function StepTimerBadge({
             cy="26"
             r={radius}
             fill="none"
-            className={cn(
-              "transition-[stroke-dashoffset] duration-1000 ease-linear",
-              isFocus ? "stroke-cream/85" : "stroke-sage",
-            )}
+            stroke={ringColour}
+            strokeOpacity={isFocus ? 0.85 : 1}
+            className="transition-[stroke-dashoffset] duration-1000 ease-linear"
             strokeWidth="3"
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -88,8 +105,15 @@ export function StepTimerBadge({
         </svg>
         <span
           className={cn(
-            "relative tabular-nums tracking-tight",
-            totalSec >= 600 ? "text-[15px] font-bold" : "text-[17px] font-bold",
+            "relative tabular-nums tracking-tight text-ink",
+            isPackMark
+              ? totalSec >= 600
+                ? "text-[9px] font-bold sm:text-[10px]"
+                : "text-[10px] font-bold sm:text-[11px]"
+              : totalSec >= 600
+                ? "text-[15px] font-bold"
+                : "text-[17px] font-bold",
+            isFocus && !isPackMark && "text-cream",
           )}
         >
           {formatTimerDisplay(remainingSec)}

@@ -930,8 +930,8 @@ export function routineTimerStepLabel(lang: CardLanguageCode): string {
 
 export function focusModeOptTimerHint(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Temporizador de este paso (esquina superior izquierda de la tarjeta)"
-    : "Timer for this step (top-left of the card)";
+    ? "Sustituye el logo de la tarjeta (arriba a la derecha) con el color de la categoría"
+    : "Replaces the card logo (top-right) using the category colour";
 }
 
 export function schedulePlayerAddCardButton(lang: CardLanguageCode): string {
