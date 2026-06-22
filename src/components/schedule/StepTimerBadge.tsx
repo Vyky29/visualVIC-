@@ -34,7 +34,7 @@ export function StepTimerBadge({
     <div
       className={cn(
         "pointer-events-none absolute z-[12] flex items-center justify-center",
-        isFocus ? "bottom-4 right-4 tablet:bottom-5 tablet:right-5" : "bottom-3 right-3 tablet:bottom-4 tablet:right-4",
+        isFocus ? "bottom-4 right-4 tablet:bottom-5 tablet:right-5" : "left-3 top-3 tablet:left-4 tablet:top-4",
         className,
       )}
       aria-live="polite"

@@ -930,8 +930,39 @@ export function routineTimerStepLabel(lang: CardLanguageCode): string {
 
 export function focusModeOptTimerHint(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Temporizador de este paso (esquina inferior derecha de la tarjeta)"
-    : "Timer for this step (bottom-right of the card)";
+    ? "Temporizador de este paso (esquina superior izquierda de la tarjeta)"
+    : "Timer for this step (top-left of the card)";
+}
+
+export function schedulePlayerAddCardButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Añadir" : "Add";
+}
+
+export function scheduleCardSearchTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Añadir tarjeta" : "Add card";
+}
+
+export function scheduleCardSearchHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Escribe una palabra (p. ej. snack, toilet, treadmill…)"
+    : "Type a word (e.g. snack, toilet, treadmill…)";
+}
+
+export function scheduleCardSearchPlaceholder(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Buscar tarjeta…" : "Search cards…";
+}
+
+export function scheduleCardSearchEmpty(
+  lang: CardLanguageCode,
+  query: string,
+): string {
+  return isEs(lang)
+    ? `Ninguna tarjeta para «${query}»`
+    : `No cards for “${query}”`;
+}
+
+export function scheduleCardSearchClose(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cerrar" : "Close";
 }
 
 export function schedulePlayerTimerButton(lang: CardLanguageCode): string {

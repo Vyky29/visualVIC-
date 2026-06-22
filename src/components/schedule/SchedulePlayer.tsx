@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 import { resolveCategoryBackCardUrlForStep } from "@/lib/cards/resolve-category-back-card";
@@ -31,9 +30,6 @@ import {
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
   schedulePlayerResetCta,
-  schedulePlayerTimerButton,
-  routineTimerStepLabel,
-  focusModeOptTimerHint,
   schedulePlayerRoutineCompleteBody,
   schedulePlayerRoutineCompleteTitle,
   schedulePlayerRunAgain,
@@ -42,8 +38,20 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
-import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
-import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
+import { ScheduleFlashcardControls } from "@/components/schedule/ScheduleFlashcardControls";
+import { ScheduleCardSearchPanel } from "@/components/schedule/ScheduleCardSearchPanel";
+import type { PickableLibraryCard } from "@/lib/library/pickable-library-cards";
+import {
+  routineStepsFromLibraryPick,
+} from "@/lib/library/pickable-library-cards";
+import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { resolveRoutineById } from "@/lib/mock/routines";
+import {
+  isDeviceCustomRoutineId,
+  loadScheduleStepsOverride,
+  routineStepsWithoutFinishLike,
+  saveScheduleStepsOverride,
+} from "@/lib/preferences/schedule-steps-override";
 
 type Props = {
   routine: Routine;
@@ -101,16 +109,87 @@ function CloseButtonIcon() {
   );
 }
 
+function pickToRoutineStep(card: PickableLibraryCard, index: number): RoutineStep {
+  const fromPick = routineStepsFromLibraryPick(card.pickId, index)[0];
+  if (fromPick) {
+    return {
+      ...fromPick,
+      id: `sched-add-${Date.now().toString(36)}-${index}-${card.pickId.replace(/[^a-zA-Z0-9]+/g, "-")}`,
+    };
+  }
+  return {
+    id: `sched-add-${Date.now().toString(36)}-${index}`,
+    title: card.label,
+    imageUrl: card.imageUrl,
+    ...(card.generatedPixto ? { generatedPixto: card.generatedPixto } : {}),
+  };
+}
+
+function insertStepAfterIndex(
+  steps: readonly RoutineStep[],
+  index: number,
+  newStep: RoutineStep,
+): RoutineStep[] {
+  const next = [...steps];
+  next.splice(Math.max(0, index + 1), 0, newStep);
+  return next;
+}
+
 export function SchedulePlayer({
   routine,
   backHref,
   getFocusHref,
 }: Props) {
   const router = useRouter();
-  const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
+  const { routines: customRoutines, replaceRoutine } = useCustomRoutines();
+  const [stepsOverride, setStepsOverride] = useState<RoutineStep[] | null>(null);
+  const [stepsHydrated, setStepsHydrated] = useState(false);
+  const [showCardSearch, setShowCardSearch] = useState(false);
+
+  useEffect(() => {
+    const stored = loadScheduleStepsOverride(routine.id);
+    setStepsOverride(stored);
+    setStepsHydrated(true);
+  }, [routine.id]);
+
+  const baseSteps = useMemo(
+    () => routineStepsWithoutFinishLike(stepsOverride ?? routine.steps),
+    [routine.steps, stepsOverride],
+  );
+
+  const playbackRoutine = useMemo(
+    (): Routine => ({
+      ...routine,
+      steps: baseSteps,
+    }),
+    [routine, baseSteps],
+  );
+
+  const persistScheduleSteps = useCallback(
+    (nextSteps: RoutineStep[]) => {
+      const withoutFinish = routineStepsWithoutFinishLike(nextSteps);
+      setStepsOverride(withoutFinish);
+      saveScheduleStepsOverride(routine.id, withoutFinish);
+
+      const isCustom = isDeviceCustomRoutineId(routine.id, customRoutines);
+      const isStock = Boolean(resolveRoutineById(routine.id));
+      if (isCustom && !isStock) {
+        replaceRoutine({
+          ...routine,
+          steps: withoutFinish,
+        });
+      }
+    },
+    [customRoutines, replaceRoutine, routine],
+  );
+
+  const accentRings = useMemo(
+    () => routineAccentRings(playbackRoutine),
+    [playbackRoutine],
+  );
   const scheduleChrome = useMemo(
-    () => routineSchedulePlayerChrome(routine),
-    [routine],
+    () => routineSchedulePlayerChrome(playbackRoutine),
+    [playbackRoutine],
   );
   const {
     nowStep,
@@ -125,7 +204,7 @@ export function SchedulePlayer({
     totalSteps,
     nowIndex,
     steps,
-  } = useRoutinePlayback(routine, {
+  } = useRoutinePlayback(playbackRoutine, {
     syncSession: true,
     appendFinishStep: true,
   });
@@ -162,6 +241,16 @@ export function SchedulePlayer({
     setShowTimerPanel(false);
   }, [nowStep?.id]);
 
+  const addCardToSchedule = useCallback(
+    (card: PickableLibraryCard) => {
+      if (nowIndex < 0) return;
+      const newStep = pickToRoutineStep(card, nowIndex + 1);
+      const nextSteps = insertStepAfterIndex(baseSteps, nowIndex, newStep);
+      persistScheduleSteps(nextSteps);
+    },
+    [baseSteps, nowIndex, persistScheduleSteps],
+  );
+
   const openFocus = () => {
     if (!nowStep) return;
     const focusHref = getFocusHref
@@ -184,6 +273,11 @@ export function SchedulePlayer({
 
   return (
     <div className={cn("flex flex-col gap-6 px-5 pb-10 pt-1", APP_SHELL_TABLET_INSET_CLASS)}>
+      <ScheduleCardSearchPanel
+        open={showCardSearch}
+        onClose={() => setShowCardSearch(false)}
+        onPick={addCardToSchedule}
+      />
       <header className="space-y-3">
         <div className="flex items-end justify-between gap-3 px-0.5">
           <div>
@@ -244,16 +338,6 @@ export function SchedulePlayer({
           </Button>
           <Button
             type="button"
-            variant="secondary"
-            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
-            onClick={() => setShowTimerPanel((v) => !v)}
-            aria-pressed={showTimerPanel || nowHasTimer}
-          >
-            <span aria-hidden>⏱</span>
-            <span className="truncate">{schedulePlayerTimerButton(cardUiLang)}</span>
-          </Button>
-          <Button
-            type="button"
             variant="ghost"
             className="min-h-touch shrink-0 gap-2 px-4"
             onClick={() => router.push(backHref)}
@@ -264,25 +348,6 @@ export function SchedulePlayer({
             <span>{schedulePlayerCloseCta(cardUiLang)}</span>
           </Button>
         </div>
-
-        {showTimerPanel && nowStep && !isComplete ? (
-          <div className="space-y-2 rounded-2xl border border-ink/10 bg-white/80 px-3 py-3">
-            <p className="text-[13px] font-medium text-ink">
-              {routineTimerStepLabel(cardUiLang)}
-            </p>
-            <p className="text-[12px] leading-snug text-ink-subtle">
-              {focusModeOptTimerHint(cardUiLang)}
-            </p>
-            <TimerPresetPicker
-              value={
-                sessionTimerSec === 0
-                  ? undefined
-                  : sessionTimerSec ?? savedTimerSec
-              }
-              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
-            />
-          </div>
-        ) : null}
 
         {showFirstThen ? (
           <div className="flex justify-center px-1">
@@ -321,12 +386,18 @@ export function SchedulePlayer({
                 completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
                 accentRings={accentRings}
               />
-              {nowHasTimer ? (
-                <StepTimerBadge
-                  remainingSec={nowTimerRemaining}
-                  totalSec={nowTimerTotal}
-                  variant="schedule"
-                  finished={nowTimerFinished}
+              {stepsHydrated ? (
+                <ScheduleFlashcardControls
+                  showTimerPanel={showTimerPanel}
+                  onToggleTimerPanel={() => setShowTimerPanel((v) => !v)}
+                  onOpenAddCard={() => setShowCardSearch(true)}
+                  nowHasTimer={nowHasTimer}
+                  nowTimerRemaining={nowTimerRemaining}
+                  nowTimerTotal={nowTimerTotal}
+                  nowTimerFinished={nowTimerFinished}
+                  sessionTimerSec={sessionTimerSec}
+                  savedTimerSec={savedTimerSec}
+                  onTimerChange={(sec) => setSessionTimerSec(sec ?? 0)}
                 />
               ) : null}
             </div>
