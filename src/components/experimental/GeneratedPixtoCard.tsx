@@ -676,6 +676,16 @@ function resolveLockedTitleLayout(
   };
 }
 
+function lockedDigitalRibbonTypographyStyle(
+  baseRibbonFontPx: number,
+): CSSProperties {
+  return {
+    fontSize: `${baseRibbonFontPx}px`,
+    lineHeight: 1.05,
+    letterSpacing: "-0.01em",
+  };
+}
+
 function resolveSingleLineTypographyStyle(
   raw: string,
   targetWidth: number,
@@ -1221,8 +1231,6 @@ function GeneratedPixtoFocusFixedZoneCard({
                   ...ribbonTypographyStyle,
                   textShadow: "0 1px 2px rgba(0,0,0,0.2)",
                 }),
-            fontSize: z.footerTitleMaxFontPx,
-            lineHeight: 1.1,
           }}
         >
           {i18nCategory}
@@ -1319,6 +1327,10 @@ export function GeneratedPixtoCard({
             : 40;
 
     const baseRibbonFontPx = Math.max(baseTitleFontPx - 10, 24);
+
+    if (schedulePresentation || focusPresentation) {
+      return lockedDigitalRibbonTypographyStyle(baseRibbonFontPx);
+    }
 
     return resolveSingleLineTypographyStyle(
       i18nCategory,
@@ -1587,12 +1599,10 @@ export function GeneratedPixtoCard({
       >
         <span
           className={cn(
-            "block w-full overflow-hidden whitespace-nowrap text-center font-semibold lowercase",
-            focusPresentation
-              ? "max-w-[98%]"
-              : schedulePresentation
-                ? "max-w-full"
-                : "max-w-full",
+            "block w-full overflow-hidden text-center font-semibold lowercase",
+            schedulePresentation || focusPresentation
+              ? "line-clamp-2 max-w-full [overflow-wrap:break-word]"
+              : "max-w-full whitespace-nowrap",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",

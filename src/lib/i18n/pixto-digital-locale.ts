@@ -268,7 +268,12 @@ export function resolveDigitalPixtoStrings(
   }
 
   let nextCategory = category;
-  if (pack) {
+  const categoryNorm = category.toLowerCase().trim();
+  if (categoryNorm === "core" || categoryNorm.includes("core vocabulary")) {
+    nextCategory = lc(
+      ui === "es" ? "vocabulario core" : "core vocabulary",
+    );
+  } else if (pack) {
     if (category.toLowerCase().includes("ikram")) {
       nextCategory = lc(
         ui === "es" ? "ikram · rutinas a medida" : "ikram · tailored schedules",
