@@ -212,9 +212,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d",
     name: "Mini Gym · 3D",
-    description: "Gym machines — air bike, elliptical, leg press, ski erg and more",
+    description: "Sandbags — soft 3D gym objects (curated on disk)",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("air-bike"),
+    homePreviewImageUrl: physical3dGymImageUrl("sandbag-blue"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d",
       DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
@@ -256,9 +256,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d-warmup",
     name: "Mini Gym · 3D warm-up",
-    description: "Soft 3D objects — therapy ball, bands, steps, weights and more",
+    description: "Sandbag warm-up — 3D gym objects on disk",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
+    homePreviewImageUrl: physical3dGymImageUrl("sandbag-stack"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d-warmup",
       DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
@@ -424,7 +424,7 @@ export const mockRoutines: Routine[] = [
     id: "physical",
     name: "Physical Activity",
     description:
-      "All 3D fitness equipment — objects, cardio machines and gym accessories",
+      "Sandbags — 3D gym equipment curated on disk",
     tags: ["activity"],
     homePreviewImageUrl: PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
@@ -472,9 +472,9 @@ export const mockRoutines: Routine[] = [
     id: "ayaan-gym-equipment-3d",
     name: DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
     description:
-      "Gym equipment only — full 3D object and machine library (no Ayaan character)",
+      "Gym equipment only — sandbags (3D, no Ayaan character)",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
+    homePreviewImageUrl: physical3dGymImageUrl("sandbag-blue"),
     steps: routineStepsFromGeneratedCardProps(
       "ayaan-gym-equipment-3d",
       DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,

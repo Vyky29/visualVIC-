@@ -57,6 +57,12 @@ export function physicalImageUrlForScheduleStep(
   }
 }
 
+/** Sample schedule — only assets present on disk (curated locally). */
+export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
+  { id: "phs-sandbag-blue", slug: "sandbag-blue", title: "Sandbag (blue)", library: "3d-gym" },
+  { id: "phs-sandbag-stack", slug: "sandbag-stack", title: "Sandbag stack", library: "3d-gym" },
+] as const;
+
 export function physicalImageUrl(slug: string): string {
   return `${PHYSICAL_LIBRARY_DIR}/${slug}.png`;
 }
@@ -69,61 +75,14 @@ export function physical3dGymImageUrl(slug: string): string {
   return `${PHYSICAL_3D_GYM_LIBRARY_DIR}/${slug}.png`;
 }
 
-/** Library → objects & accessories — order matches `scripts/pixtolearn-fitness-3d-items.js`. */
+/** Library catalogue — synced to `public/images/library-3d/` (empty until re-export). */
 export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] =
-  [
-    { slug: "therapy-ball", title: "Therapy ball" },
-    { slug: "trampoline", title: "Trampoline" },
-    { slug: "step-platform", title: "Steps" },
-    { slug: "treadmill", title: "Treadmill" },
-    { slug: "exercise-machine", title: "Exercise machine" },
-    { slug: "weights", title: "Weights" },
-    { slug: "row-machine", title: "Row machine" },
-    { slug: "skis", title: "Skis" },
-    { slug: "exercise-bike", title: "Static bike" },
-    { slug: "exercise-mat", title: "Exercise mat" },
-    { slug: "resistance-bands", title: "Elastic bands" },
-    { slug: "foam-roller", title: "Foam roller" },
-    { slug: "stretching", title: "Stretching" },
-    { slug: "bosu", title: "BOSU" },
-    { slug: "kettlebell", title: "Kettlebell" },
-    { slug: "medicine-ball", title: "Medicine ball" },
-    { slug: "jump-rope", title: "Jump rope" },
-    { slug: "punching-bag", title: "Punching bag" },
-    { slug: "agility-ladder", title: "Agility ladder" },
-    { slug: "balance-board", title: "Balance board" },
-    { slug: "football", title: "Football" },
-    { slug: "badminton", title: "Badminton" },
-    { slug: "basketball", title: "Basketball" },
-  ] as const;
+  [] as const;
 
-/** Library → machines — order matches `scripts/fitness-3d-gym-sheet-manifest.js`. */
+/** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
 export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
-  { slug: "aerobic-step", title: "Aerobic step" },
-  { slug: "adjustable-step", title: "Adjustable step" },
-  { slug: "sandbag-pink", title: "Sandbag (pink)" },
-  { slug: "sandbag-stack", title: "Sandbag stack" },
   { slug: "sandbag-blue", title: "Sandbag (blue)" },
-  { slug: "leg-press", title: "Leg press" },
-  { slug: "chest-press", title: "Chest press" },
-  { slug: "lat-pulldown", title: "Lat pulldown" },
-  { slug: "cable-crossover", title: "Cable crossover" },
-  { slug: "smith-machine", title: "Smith machine" },
-  { slug: "bench-press", title: "Bench press" },
-  { slug: "incline-bench", title: "Incline bench" },
-  { slug: "squat-rack", title: "Squat rack" },
-  { slug: "power-cage", title: "Power cage" },
-  { slug: "seated-row", title: "Seated row" },
-  { slug: "elliptical", title: "Elliptical" },
-  { slug: "stair-climber", title: "Stair climber" },
-  { slug: "skierg", title: "Ski erg" },
-  { slug: "air-bike", title: "Air bike" },
-  { slug: "air-bike-2", title: "Air bike (alt)" },
-  { slug: "lifting-belt", title: "Lifting belt" },
-  { slug: "dip-belt", title: "Dip belt" },
-  { slug: "lifting-straps", title: "Lifting straps" },
-  { slug: "wraps", title: "Wraps" },
-  { slug: "lifting-belt-2", title: "Lifting belt (alt)" },
+  { slug: "sandbag-stack", title: "Sandbag stack" },
 ] as const;
 
 function physical3dLibrarySteps(): readonly PhysicalStep[] {
@@ -140,26 +99,6 @@ function physical3dGymLibrarySteps(): readonly PhysicalStep[] {
     slug: item.slug,
     title: item.title,
   }));
-}
-
-function physicalScheduleSteps(): readonly PhysicalScheduleStep[] {
-  const objects: PhysicalScheduleStep[] = PHYSICAL_3D_LIBRARY_CATALOG.map(
-    (item) => ({
-      id: `phs-${item.slug}`,
-      slug: item.slug,
-      title: item.title,
-      library: "3d",
-    }),
-  );
-  const machines: PhysicalScheduleStep[] = PHYSICAL_3D_GYM_CATALOG.map(
-    (item) => ({
-      id: `phs-gym-${item.slug}`,
-      slug: item.slug,
-      title: item.title,
-      library: "3d-gym",
-    }),
-  );
-  return [...objects, ...machines];
 }
 
 /** @deprecated Flat 2D fitness PNGs removed. */
@@ -179,7 +118,7 @@ function physicalLibrarySteps(
 export const PHYSICAL_2D_LIBRARY_SEQUENCE: readonly PhysicalStep[] =
   physicalLibrarySteps("phy2");
 
-/** Library → Physical Activity (3D) — `public/images/library-3d/`. */
+/** Library → Physical Activity (3D) — empty until new `library-3d/` exports land. */
 export const PHYSICAL_3D_LIBRARY_SEQUENCE: readonly PhysicalStep[] =
   physical3dLibrarySteps();
 
@@ -195,13 +134,9 @@ export const PHYSICAL_3D_EXTRA_SEQUENCE: readonly PhysicalStep[] =
 export const PHYSICAL_3D_SEQUENCE: readonly PhysicalStep[] =
   PHYSICAL_3D_LIBRARY_SEQUENCE;
 
-/** Library → Physical Activity · 3D gym — `public/images/library-3d-gym/`. */
+/** Library → Physical Activity · 3D gym — sandbags only (curated on disk). */
 export const PHYSICAL_3D_GYM_SEQUENCE: readonly PhysicalStep[] =
   physical3dGymLibrarySteps();
-
-/** Schedule Player — all 3D objects and gym machines on disk. */
-export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] =
-  physicalScheduleSteps();
 
 export function physicalImageUrlForStep(step: PhysicalStep): string {
   return physicalImageUrl(step.slug);
