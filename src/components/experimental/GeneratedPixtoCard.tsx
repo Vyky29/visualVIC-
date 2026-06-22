@@ -1072,6 +1072,7 @@ function GeneratedPixtoFocusFixedZoneCard({
   i18nCategory,
   ribbonTypographyStyle,
   ribbonDarkText,
+  scheduleTimer,
 }: {
   illustrationUrl: string;
   title: string;
@@ -1088,6 +1089,11 @@ function GeneratedPixtoFocusFixedZoneCard({
   i18nCategory: string;
   ribbonTypographyStyle: CSSProperties;
   ribbonDarkText: boolean;
+  scheduleTimer?: {
+    remainingSec: number;
+    totalSec: number;
+    finished?: boolean;
+  };
 }) {
   const z = GENERATED_PIXTO_FOCUS_FIXED_ZONE;
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
@@ -1123,7 +1129,25 @@ function GeneratedPixtoFocusFixedZoneCard({
           paddingLeft: z.illustPadX,
         }}
       >
-        {markSrc ? (
+        {scheduleTimer ? (
+          <div
+            className="absolute z-10"
+            style={{
+              top: z.packMarkTop,
+              right: z.packMarkRight,
+              width: z.packMarkSize,
+              height: z.packMarkSize,
+            }}
+          >
+            <StepTimerBadge
+              remainingSec={scheduleTimer.remainingSec}
+              totalSec={scheduleTimer.totalSec}
+              finished={scheduleTimer.finished}
+              variant="schedule-pack-mark"
+              categoryColour={categoryColour}
+            />
+          </div>
+        ) : markSrc ? (
           <div
             className="absolute z-10"
             style={{
@@ -1391,6 +1415,7 @@ export function GeneratedPixtoCard({
         i18nCategory={i18nCategory}
         ribbonTypographyStyle={ribbonTypographyStyle}
         ribbonDarkText={ribbonDarkText}
+        scheduleTimer={scheduleTimer}
       />
     );
   }

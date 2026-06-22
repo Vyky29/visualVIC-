@@ -47,7 +47,6 @@ import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
-import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import {
   focusModeOptTimerHint,
@@ -444,15 +443,16 @@ export function FocusMode({ routine, exitHref }: Props) {
                     doubleTapCompletes
                     completionBackImageUrl={nowStepBackCardUrl}
                     accentRings={accentRings}
+                    scheduleTimer={
+                      nowHasTimer
+                        ? {
+                            remainingSec: nowTimerRemaining,
+                            totalSec: nowTimerTotal,
+                            finished: nowTimerFinished,
+                          }
+                        : undefined
+                    }
                   />
-                  {nowHasTimer ? (
-                    <StepTimerBadge
-                      remainingSec={nowTimerRemaining}
-                      totalSec={nowTimerTotal}
-                      variant="focus"
-                      finished={nowTimerFinished}
-                    />
-                  ) : null}
                 </div>
               </FocusCardStage>
             </motion.div>

@@ -681,6 +681,7 @@ export function SwipeableStepCard({
                           focusIllustrationScale={gp.focusIllustrationScale}
                           focusIllustrationUrl={gp.focusIllustrationUrl}
                           focusPresentation
+                          scheduleTimer={scheduleTimer}
                           suppressNeutralRing
                           className="h-full w-full max-w-none"
                         />
@@ -895,6 +896,7 @@ export function SwipeableStepCard({
                       focusIllustrationScale={gp.focusIllustrationScale}
                       focusIllustrationUrl={gp.focusIllustrationUrl}
                       focusPresentation
+                      scheduleTimer={scheduleTimer}
                       suppressNeutralRing
                       className="h-full w-full max-w-none"
                     />
