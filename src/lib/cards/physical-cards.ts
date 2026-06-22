@@ -85,6 +85,7 @@ export function physical3dGymImageUrl(slug: string): string {
 export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "therapy-ball", title: "Therapy ball" },
   { slug: "trampoline", title: "Trampoline" },
+  { slug: "step-platform", title: "Steps" },
 ] as const;
 
 /** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
