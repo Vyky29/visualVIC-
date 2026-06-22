@@ -63,7 +63,7 @@ export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE: readonly TailoredItems3d
   [
     {
       id: "dcem-elliptical",
-      slug: "arms-machine",
+      slug: "elliptical",
       title: "Cross trainer",
       library: "3d-gym",
     },

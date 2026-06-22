@@ -98,7 +98,30 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
 
 /** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
 export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
+  { slug: "aerobic-step", title: "Aerobic step" },
+  { slug: "adjustable-step", title: "Adjustable step" },
+  { slug: "sandbag-pink", title: "Sandbag (pink)" },
   { slug: "sandbag-stack", title: "Sandbags" },
+  { slug: "leg-press", title: "Leg press" },
+  { slug: "chest-press", title: "Chest press" },
+  { slug: "lat-pulldown", title: "Lat pulldown" },
+  { slug: "cable-crossover", title: "Cable crossover" },
+  { slug: "smith-machine", title: "Smith machine" },
+  { slug: "bench-press", title: "Bench press" },
+  { slug: "incline-bench", title: "Incline bench" },
+  { slug: "squat-rack", title: "Squat rack" },
+  { slug: "power-cage", title: "Power cage" },
+  { slug: "seated-row", title: "Seated row" },
+  { slug: "elliptical", title: "Elliptical" },
+  { slug: "stair-climber", title: "Stair climber" },
+  { slug: "skierg", title: "SkiErg" },
+  { slug: "air-bike", title: "Air bike" },
+  { slug: "air-bike-2", title: "Air bike" },
+  { slug: "lifting-belt", title: "Lifting belt" },
+  { slug: "dip-belt", title: "Dip belt" },
+  { slug: "lifting-straps", title: "Lifting straps" },
+  { slug: "wraps", title: "Wraps" },
+  { slug: "lifting-belt-2", title: "Lifting belt" },
   { slug: "arms-machine", title: "Arms machine" },
 ] as const;
 
