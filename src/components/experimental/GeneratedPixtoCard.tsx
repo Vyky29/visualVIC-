@@ -21,6 +21,9 @@ import {
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_INSET,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SCALE,
+  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SLOT_PAD,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
@@ -256,7 +259,7 @@ export function FocusRoutineIllustrationImage({
 }) {
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(src);
   const insets = illustrationOnly
-    ? { topPx: 8, leftPx: 4, rightPx: 12, bottomPx: 0 }
+    ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_INSET
     : GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
   const { topPx, leftPx, rightPx, bottomPx } = insets;
   const widthTrim = leftPx + rightPx;
@@ -265,6 +268,10 @@ export function FocusRoutineIllustrationImage({
   const objectFitClass = illustrationOnly
     ? "object-contain object-center"
     : objectClass;
+  const effectiveScale =
+    illustrationOnly && scale === 1
+      ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SCALE
+      : scale;
   return (
     <div
       className="relative flex h-full w-full items-center justify-center overflow-hidden"
@@ -287,9 +294,9 @@ export function FocusRoutineIllustrationImage({
           ...(illustrationOnly
             ? undefined
             : { height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px` }),
-          ...(scale !== 1
+          ...(effectiveScale !== 1
             ? {
-                transform: `scale(${scale})`,
+                transform: `scale(${effectiveScale})`,
                 transformOrigin: "center center",
               }
             : {}),
@@ -1109,6 +1116,12 @@ function GeneratedPixtoFocusFixedZoneCard({
   const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
   const resolvedIllustrationSrc =
     focusIllustrationUrl ?? illustrationUrl;
+  const focusIllustrationOnly = isPixtoLearnIllustrationOnlyUrl(
+    resolvedIllustrationSrc,
+  );
+  const illustSlotPad = focusIllustrationOnly
+    ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SLOT_PAD
+    : { top: z.illustPadTop, x: z.illustPadX, bottom: z.illustPadBottom };
 
   return (
     <article
@@ -1133,10 +1146,10 @@ function GeneratedPixtoFocusFixedZoneCard({
       <div
         className="relative flex min-h-0 flex-1 items-center justify-center"
         style={{
-          paddingTop: z.illustPadTop,
-          paddingRight: z.illustPadX,
-          paddingBottom: z.illustPadBottom,
-          paddingLeft: z.illustPadX,
+          paddingTop: illustSlotPad.top,
+          paddingRight: illustSlotPad.x,
+          paddingBottom: illustSlotPad.bottom,
+          paddingLeft: illustSlotPad.x,
         }}
       >
         {scheduleTimer ? (

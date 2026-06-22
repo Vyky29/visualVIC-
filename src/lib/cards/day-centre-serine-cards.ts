@@ -75,7 +75,6 @@ export const DAY_CENTRE_SERINE_MACHINERY_3D_SEQUENCE: readonly TailoredItems3dSt
   [
     { id: "dcsm-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
     { id: "dcsm-row-machine", slug: "row-machine", title: "Row machine", library: "3d" },
-    { id: "dcsm-sandbag-blue", slug: "sandbag-blue", title: "Sandbag", library: "3d-gym" },
     { id: "dcsm-sandbag-stack", slug: "sandbag-stack", title: "Sandbags", library: "3d-gym" },
     { id: "dcsm-weights", slug: "weights", title: "Weights", library: "3d" },
     { id: "dcsm-bosu", slug: "bosu", title: "BOSU", library: "3d" },
