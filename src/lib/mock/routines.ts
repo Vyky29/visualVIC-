@@ -460,7 +460,7 @@ export const mockRoutines: Routine[] = [
     id: "ayaan-day-centre",
     name: DAY_CENTRE_AYAAN_ROUTINE_NAME,
     description:
-      "Gym with Ayaan — therapy ball, elastic band, sandbag, weights, BOSU, treadmill (3D personalised cartoon)",
+      "Gym with Ayaan — snack, therapy ball, elastic band, sandbag, weights, BOSU, treadmill (3D personalised cartoon)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ayaan-day-centre"),
     steps: routineStepsFromGeneratedCardProps(

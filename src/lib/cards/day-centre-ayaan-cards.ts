@@ -45,6 +45,7 @@ export const DAY_CENTRE_AYAAN_CARD_CATEGORY_LABEL =
 /** Gym / PE schedule — Ayaan in every illustration. */
 export const DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE: readonly DayCentreAyaanStep[] =
   [
+    { id: "dca-snack", slug: "snack", title: "Snack" },
     { id: "dca-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
     { id: "dca-elastic-band", slug: "elastic-band", title: "Elastic band" },
     { id: "dca-sandbag", slug: "sandbag", title: "Sandbag" },
