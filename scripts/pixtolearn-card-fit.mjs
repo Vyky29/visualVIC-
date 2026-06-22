@@ -22,18 +22,19 @@ export const WOW_ILLUSTRATION_EXTRACT = {
   height: NOW_H,
 };
 
-/** Bundled designer PNG (48/65) — thumbnail clip matches Schedule crop. */
+/** Bundled designer PNG (48/65) — drop title band; keep full illustration width. */
 export const BUNDLED_PACK_CARD_INSET = {
-  top: 0.09,
-  right: 0.12,
+  top: 0.095,
+  right: 0,
   bottom: 0.19,
   left: 0.01,
 };
 
-/** Cover residual pack mark after bundled crop (top-right). */
-export const BUNDLED_PACK_MARK_PATCH = {
-  widthFrac: 0.17,
-  heightFrac: 0.12,
+/** Pack mark on bundled card — top-right corner (fractions of full card). */
+export const BUNDLED_PACK_MARK_ON_CARD = {
+  top: 0.012,
+  right: 0.012,
+  size: 0.078,
 };
 
 /** Minimum white padding (px) on every side inside the card frame. */
@@ -170,8 +171,43 @@ export async function extractWowCardIllustration531x648(src) {
 }
 
 /**
+ * White patch rect for pack mark, only where mark intersects the extract region.
+ * @returns {{ left: number; top: number; width: number; height: number } | null}
+ */
+export function bundledPackMarkPatchRect(fullW, fullH) {
+  const inset = BUNDLED_PACK_CARD_INSET;
+  const mark = BUNDLED_PACK_MARK_ON_CARD;
+  const extractLeft = fullW * inset.left;
+  const extractTop = fullH * inset.top;
+  const extractW = fullW * (1 - inset.left - inset.right);
+  const extractH = fullH * (1 - inset.top - inset.bottom);
+
+  const markSize = fullW * mark.size;
+  const markLeft = fullW * (1 - mark.right) - markSize;
+  const markTop = fullH * mark.top;
+  const markRight = markLeft + markSize;
+  const markBottom = markTop + markSize;
+
+  const patchLeft = Math.max(extractLeft, markLeft);
+  const patchTop = Math.max(extractTop, markTop);
+  const patchRight = Math.min(extractLeft + extractW, markRight);
+  const patchBottom = Math.min(extractTop + extractH, markBottom);
+
+  const width = Math.round(patchRight - patchLeft);
+  const height = Math.round(patchBottom - patchTop);
+  if (width <= 0 || height <= 0) return null;
+
+  return {
+    left: Math.round(patchLeft - extractLeft),
+    top: Math.round(patchTop - extractTop),
+    width,
+    height,
+  };
+}
+
+/**
  * Crop illustration from bundled Pixto pack PNG (core / shower — embedded title strip).
- * Strips title band + top-right pack mark (white patch).
+ * Strips title band; tiny logo patch only when mark overlaps the illustration crop.
  * @param {Buffer | string} src
  * @returns {Promise<Buffer>}
  */
@@ -192,25 +228,24 @@ export async function extractBundledPackCardIllustration531x648(src) {
     .png()
     .toBuffer();
 
-  const crop = await sharp(extracted).metadata();
-  const patchW = Math.max(
-    1,
-    Math.round(crop.width * BUNDLED_PACK_MARK_PATCH.widthFrac),
-  );
-  const patchH = Math.max(
-    1,
-    Math.round(crop.height * BUNDLED_PACK_MARK_PATCH.heightFrac),
-  );
-  const patch = await sharp({
-    create: { width: patchW, height: patchH, channels: 3, background: "#ffffff" },
-  })
-    .png()
-    .toBuffer();
+  const patchRect = bundledPackMarkPatchRect(meta.width, meta.height);
+  if (patchRect) {
+    const patch = await sharp({
+      create: {
+        width: patchRect.width,
+        height: patchRect.height,
+        channels: 3,
+        background: "#ffffff",
+      },
+    })
+      .png()
+      .toBuffer();
 
-  extracted = await sharp(extracted)
-    .composite([{ input: patch, left: crop.width - patchW, top: 0 }])
-    .png()
-    .toBuffer();
+    extracted = await sharp(extracted)
+      .composite([{ input: patch, left: patchRect.left, top: patchRect.top }])
+      .png()
+      .toBuffer();
+  }
 
   return extracted;
 }
