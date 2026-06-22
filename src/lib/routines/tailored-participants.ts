@@ -22,10 +22,10 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
   TailoredParticipantId,
   readonly TailoredStockRoutineId[]
 > = {
-  ikram: ["ikram-day-centre"],
-  serine: ["serine-day-centre"],
+  ikram: ["ikram-day-centre", "ikram-day-centre-items"],
+  serine: ["serine-day-centre", "serine-gym-equipment-3d"],
   ayaan: ["ayaan-day-centre", "ayaan-gym-equipment-3d"],
-  emmanuel: ["emmanuel-day-centre"],
+  emmanuel: ["emmanuel-day-centre", "emmanuel-gym-equipment-3d"],
 };
 
 const STOCK_ROUTINE_TO_PARTICIPANT = Object.fromEntries(

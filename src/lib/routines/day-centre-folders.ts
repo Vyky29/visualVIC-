@@ -30,6 +30,8 @@ export const DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS: Record<
     "dc-mini-gym-cardio",
     "dc-mini-gym-strength",
     "dc-mini-gym-3d-warmup",
+    "dc-mini-gym-3d-cardio",
+    "dc-mini-gym-3d-strength",
   ],
   bouldering: [
     "dc-bouldering",

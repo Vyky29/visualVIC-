@@ -1231,6 +1231,8 @@ function GeneratedPixtoFocusFixedZoneCard({
                   ...ribbonTypographyStyle,
                   textShadow: "0 1px 2px rgba(0,0,0,0.2)",
                 }),
+            fontSize: z.footerTitleMaxFontPx,
+            lineHeight: 1.1,
           }}
         >
           {i18nCategory}
@@ -1328,7 +1330,7 @@ export function GeneratedPixtoCard({
 
     const baseRibbonFontPx = Math.max(baseTitleFontPx - 10, 24);
 
-    if (schedulePresentation || focusPresentation) {
+    if (schedulePresentation) {
       return lockedDigitalRibbonTypographyStyle(baseRibbonFontPx);
     }
 
@@ -1600,9 +1602,11 @@ export function GeneratedPixtoCard({
         <span
           className={cn(
             "block w-full overflow-hidden text-center font-semibold lowercase",
-            schedulePresentation || focusPresentation
-              ? "line-clamp-2 max-w-full [overflow-wrap:break-word]"
-              : "max-w-full whitespace-nowrap",
+            focusPresentation
+              ? "max-w-[98%] whitespace-nowrap"
+              : schedulePresentation
+                ? "line-clamp-2 max-w-full [overflow-wrap:break-word]"
+                : "max-w-full whitespace-nowrap",
             ribbonDarkText
               ? "text-ink/90 drop-shadow-none"
               : "text-white/95 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]",

@@ -18,10 +18,13 @@ import {
 /** Tailored stock routine ids on Home. */
 export const TAILORED_STOCK_ROUTINE_IDS = [
   "ikram-day-centre",
+  "ikram-day-centre-items",
   "serine-day-centre",
+  "serine-gym-equipment-3d",
   "ayaan-day-centre",
   "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
+  "emmanuel-gym-equipment-3d",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -33,14 +36,20 @@ export function tailoredScheduleCloseUpPreviewUrl(
   switch (routineId as TailoredStockRoutineId) {
     case "ikram-day-centre":
       return dayCentreIkramTailoredHomeAvatarUrl();
+    case "ikram-day-centre-items":
+      return undefined;
     case "serine-day-centre":
       return dayCentreSerineTailoredHomeAvatarUrl();
+    case "serine-gym-equipment-3d":
+      return undefined;
     case "ayaan-day-centre":
       return dayCentreAyaanTailoredHomeAvatarUrl();
     case "ayaan-gym-equipment-3d":
       return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
+    case "emmanuel-gym-equipment-3d":
+      return undefined;
     default:
       return undefined;
   }
@@ -53,14 +62,20 @@ export function tailoredScheduleActionPreviewUrl(
   switch (routineId as TailoredStockRoutineId) {
     case "ikram-day-centre":
       return dayCentreIkramSceneUrl("music");
+    case "ikram-day-centre-items":
+      return undefined;
     case "serine-day-centre":
       return dayCentreSerineSceneUrl("row-machine");
+    case "serine-gym-equipment-3d":
+      return undefined;
     case "ayaan-day-centre":
       return dayCentreAyaanSceneUrl("therapy-ball");
     case "ayaan-gym-equipment-3d":
       return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelSceneUrl("cross-trainer");
+    case "emmanuel-gym-equipment-3d":
+      return undefined;
     default:
       return undefined;
   }

@@ -7,6 +7,7 @@ import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
+import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
 
 export { DAY_CENTRE_CATEGORY_COLOUR };
 
@@ -315,12 +316,43 @@ export const DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE: readonly DayCentreGeneralSte
   { id: "dcgs-foam-roller", slug: "foam-roller", title: "Foam roller" },
 ] as const;
 
-/** Mini gym · 3D warm-up. */
-export const DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE: readonly DayCentreGeneralStep[] = [
-  { id: "dcg3w-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
-  { id: "dcg3w-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
-  { id: "dcg3w-bosu", slug: "bosu", title: "BOSU" },
-  { id: "dcg3w-stretching", slug: "stretching", title: "Stretching" },
+/** Mini gym · 3D warm-up — objects on disk in `library-3d/`. */
+export const DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE: readonly TailoredItems3dStep[] = [
+  { id: "dcg3w-therapy-ball", slug: "therapy-ball", title: "Therapy ball", library: "3d" },
+  { id: "dcg3w-exercise-mat", slug: "exercise-mat", title: "Exercise mat", library: "3d" },
+  { id: "dcg3w-resistance-bands", slug: "resistance-bands", title: "Resistance bands", library: "3d" },
+  { id: "dcg3w-bosu", slug: "bosu", title: "BOSU", library: "3d" },
+] as const;
+
+/** Mini gym · full 3D equipment schedule (no cones/rope/bells — not on disk). */
+export const DAY_CENTRE_MINI_GYM_3D_FITNESS_SEQUENCE: readonly TailoredItems3dStep[] = [
+  { id: "dc3f-therapy-ball", slug: "therapy-ball", title: "Therapy ball", library: "3d" },
+  { id: "dc3f-trampoline", slug: "trampoline", title: "Trampoline", library: "3d" },
+  { id: "dc3f-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
+  { id: "dc3f-step-platform", slug: "step-platform", title: "Steps", library: "3d" },
+  { id: "dc3f-weights", slug: "weights", title: "Weights", library: "3d" },
+  { id: "dc3f-exercise-bike", slug: "exercise-bike", title: "Mini bikes", library: "3d" },
+  { id: "dc3f-exercise-mat", slug: "exercise-mat", title: "Exercise mat", library: "3d" },
+  { id: "dc3f-resistance-bands", slug: "resistance-bands", title: "Resistance bands", library: "3d" },
+  { id: "dc3f-foam-roller", slug: "foam-roller", title: "Foam roller", library: "3d" },
+] as const;
+
+/** Mini gym · 3D cardio stations. */
+export const DAY_CENTRE_MINI_GYM_3D_CARDIO_SEQUENCE: readonly TailoredItems3dStep[] = [
+  { id: "dc3c-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
+  { id: "dc3c-exercise-bike", slug: "exercise-bike", title: "Mini bikes", library: "3d" },
+  { id: "dc3c-trampoline", slug: "trampoline", title: "Trampoline", library: "3d" },
+  { id: "dc3c-step-platform", slug: "step-platform", title: "Steps", library: "3d" },
+  { id: "dc3c-row-machine", slug: "row-machine", title: "Row machine", library: "3d" },
+] as const;
+
+/** Mini gym · 3D strength. */
+export const DAY_CENTRE_MINI_GYM_3D_STRENGTH_SEQUENCE: readonly TailoredItems3dStep[] = [
+  { id: "dc3s-weights", slug: "weights", title: "Weights", library: "3d" },
+  { id: "dc3s-kettlebell", slug: "kettlebell", title: "Kettlebell", library: "3d" },
+  { id: "dc3s-medicine-ball", slug: "medicine-ball", title: "Weight ball", library: "3d" },
+  { id: "dc3s-step-platform", slug: "step-platform", title: "Steps", library: "3d" },
+  { id: "dc3s-foam-roller", slug: "foam-roller", title: "Foam roller", library: "3d" },
 ] as const;
 
 /** Cooking · kitchen prep (materials). */

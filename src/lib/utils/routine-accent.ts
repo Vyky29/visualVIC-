@@ -37,6 +37,8 @@ const STOCK_PACK_IDS = new Set<string>([
   "dc-mini-gym-cardio",
   "dc-mini-gym-strength",
   "dc-mini-gym-3d-warmup",
+  "dc-mini-gym-3d-cardio",
+  "dc-mini-gym-3d-strength",
   "dc-bouldering",
   "dc-bouldering-prep",
   "dc-bouldering-wall",
@@ -52,10 +54,13 @@ const STOCK_PACK_IDS = new Set<string>([
   "dc-mixed",
   "physical",
   "ikram-day-centre",
+  "ikram-day-centre-items",
   "serine-day-centre",
+  "serine-gym-equipment-3d",
   "ayaan-day-centre",
   "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
+  "emmanuel-gym-equipment-3d",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -635,10 +640,13 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-day-centre") return "daycentre";
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
+  if (id === "ikram-day-centre-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
+  if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
   if (id === "ayaan-gym-equipment-3d") return "physical";
   if (id === "emmanuel-day-centre") return "ayaan";
+  if (id === "emmanuel-gym-equipment-3d") return "physical";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -690,10 +698,13 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "at-the-day-centre") return "daycentre";
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
+  if (id === "ikram-day-centre-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
+  if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
   if (id === "ayaan-gym-equipment-3d") return "physical";
   if (id === "emmanuel-day-centre") return "ayaan";
+  if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);

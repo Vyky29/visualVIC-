@@ -10,6 +10,7 @@ import {
   dayCentreSerinePackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { coreImageUrl } from "@/lib/cards/core-cards";
+import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
 import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
   TAILORED_SCHEDULES_CATEGORY_LABEL,
@@ -32,7 +33,10 @@ export const DAY_CENTRE_SERINE_CATEGORY_LABEL =
 export const DAY_CENTRE_SERINE_PARTICIPANT_LABEL = "Serine" as const;
 
 export const DAY_CENTRE_SERINE_ROUTINE_NAME =
-  "Serine · Physical activity" as const;
+  "Serine Physical Activity (avatar)" as const;
+
+export const DAY_CENTRE_SERINE_MACHINERY_ROUTINE_NAME =
+  "Serine Physical Activity (items)" as const;
 
 export const DAY_CENTRE_SERINE_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_SERINE_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
@@ -63,6 +67,25 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
       id: "dcs-weight-ball-on-bench",
       slug: "weight-ball-on-bench",
       title: "Weight ball on bench",
+    },
+  ] as const;
+
+/** Gym equipment only — 3D objects (no Serine character). */
+export const DAY_CENTRE_SERINE_MACHINERY_3D_SEQUENCE: readonly TailoredItems3dStep[] =
+  [
+    { id: "dcsm-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
+    { id: "dcsm-row-machine", slug: "row-machine", title: "Row machine", library: "3d" },
+    { id: "dcsm-sandbag-blue", slug: "sandbag-blue", title: "Sandbag", library: "3d-gym" },
+    { id: "dcsm-sandbag-stack", slug: "sandbag-stack", title: "Sandbags", library: "3d-gym" },
+    { id: "dcsm-weights", slug: "weights", title: "Weights", library: "3d" },
+    { id: "dcsm-bosu", slug: "bosu", title: "BOSU", library: "3d" },
+    { id: "dcsm-step-platform", slug: "step-platform", title: "Steps", library: "3d" },
+    { id: "dcsm-medicine-ball", slug: "medicine-ball", title: "Weight ball", library: "3d" },
+    {
+      id: "dcsm-bench-press",
+      slug: "arms-machine",
+      title: "Weight ball on bench",
+      library: "3d-gym",
     },
   ] as const;
 

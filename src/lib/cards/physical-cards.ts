@@ -66,12 +66,6 @@ export function physicalImageUrlForScheduleStep(
   }
 }
 
-/** Sample schedule — only assets present on disk (curated locally). */
-export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
-  { id: "phs-sandbag-blue", slug: "sandbag-blue", title: "Sandbag (blue)", library: "3d-gym" },
-  { id: "phs-sandbag-stack", slug: "sandbag-stack", title: "Sandbags", library: "3d-gym" },
-] as const;
-
 export function physicalImageUrl(slug: string): string {
   return `${PHYSICAL_LIBRARY_DIR}/${slug}.png`;
 }
@@ -107,6 +101,22 @@ export const PHYSICAL_3D_GYM_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "sandbag-blue", title: "Sandbag (blue)" },
   { slug: "sandbag-stack", title: "Sandbags" },
   { slug: "arms-machine", title: "Arms machine" },
+] as const;
+
+/** Home / Sports — full 3D library on disk (`library-3d/` + `library-3d-gym/`). */
+export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
+  ...PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
+    id: `phs3-${item.slug}`,
+    slug: item.slug,
+    title: item.title,
+    library: "3d" as const,
+  })),
+  ...PHYSICAL_3D_GYM_CATALOG.map((item) => ({
+    id: `phsg-${item.slug}`,
+    slug: item.slug,
+    title: item.title,
+    library: "3d-gym" as const,
+  })),
 ] as const;
 
 function physical3dLibrarySteps(): readonly PhysicalStep[] {

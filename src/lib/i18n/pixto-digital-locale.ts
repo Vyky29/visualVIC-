@@ -389,12 +389,20 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Día mixto",
   },
   "ikram-day-centre": {
-    en: "Ikram · Saturday outing",
-    es: "Ikram · salida del sábado",
+    en: "Ikram · Saturday outing (avatar)",
+    es: "Ikram · salida del sábado (avatar)",
+  },
+  "ikram-day-centre-items": {
+    en: "Ikram · Day centre (items)",
+    es: "Ikram · centro de día (objetos)",
   },
   "serine-day-centre": {
-    en: "Serine · Physical activity",
-    es: "Serine · actividad física",
+    en: "Serine Physical Activity (avatar)",
+    es: "Serine · actividad física (avatar)",
+  },
+  "serine-gym-equipment-3d": {
+    en: "Serine Physical Activity (items)",
+    es: "Serine · actividad física (objetos)",
   },
   "ayaan-day-centre": {
     en: "Ayaan Physical Activity (avatar)",
@@ -405,8 +413,12 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Ayaan · actividad física (objetos)",
   },
   "emmanuel-day-centre": {
-    en: "Emmanuel · Physical activity",
-    es: "Emmanuel · actividad física",
+    en: "Emmanuel Physical Activity (avatar)",
+    es: "Emmanuel · actividad física (avatar)",
+  },
+  "emmanuel-gym-equipment-3d": {
+    en: "Emmanuel Physical Activity (items)",
+    es: "Emmanuel · actividad física (objetos)",
   },
   physical: {
     en: "Physical Activity",

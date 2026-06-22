@@ -13,6 +13,7 @@ import {
   dayCentreEmmanuelPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
+import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
 
 /** Dark navy — Emmanuel tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
 export const DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR = "#1E4A73" as const;
@@ -31,7 +32,10 @@ export const DAY_CENTRE_EMMANUEL_CATEGORY_LABEL =
 export const DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL = "Emmanuel" as const;
 
 export const DAY_CENTRE_EMMANUEL_ROUTINE_NAME =
-  "Emmanuel · Physical activity" as const;
+  "Emmanuel Physical Activity (avatar)" as const;
+
+export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
+  "Emmanuel Physical Activity (items)" as const;
 
 export const DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
@@ -51,6 +55,41 @@ export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly DayCentreEmmanuelSt
       id: "dce-circle-time",
       slug: "circle-time",
       title: "Circle time",
+    },
+  ] as const;
+
+/** Gym equipment only — 3D objects (no Emmanuel character). */
+export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE: readonly TailoredItems3dStep[] =
+  [
+    {
+      id: "dcem-elliptical",
+      slug: "arms-machine",
+      title: "Cross trainer",
+      library: "3d-gym",
+    },
+    {
+      id: "dcem-exercise-bike",
+      slug: "exercise-bike",
+      title: "Exercise bike",
+      library: "3d",
+    },
+    {
+      id: "dcem-treadmill",
+      slug: "treadmill",
+      title: "Treadmill",
+      library: "3d",
+    },
+    {
+      id: "dcem-exercise-mat",
+      slug: "exercise-mat",
+      title: "Exercise mat",
+      library: "3d",
+    },
+    {
+      id: "dcem-therapy-ball",
+      slug: "therapy-ball",
+      title: "Therapy ball",
+      library: "3d",
     },
   ] as const;
 

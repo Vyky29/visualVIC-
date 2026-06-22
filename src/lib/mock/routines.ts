@@ -32,6 +32,8 @@ import {
   DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_3D_CARDIO_GENERATED_CARD_PROPS,
+  DAY_CENTRE_MINI_GYM_3D_STRENGTH_GENERATED_CARD_PROPS,
   DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS,
   DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS,
   DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS,
@@ -46,20 +48,35 @@ import {
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
   routineStepsFromGeneratedCardProps,
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
 import { physical3dGymImageUrl, physical3dImageUrl } from "@/lib/cards/physical-cards";
-import { dayCentreHubRoomImageUrl, dayCentreGeneralImageUrl } from "@/lib/cards/day-centre-shared";
-import { DAY_CENTRE_IKRAM_ROUTINE_NAME } from "@/lib/cards/day-centre-ikram-cards";
-import { DAY_CENTRE_SERINE_ROUTINE_NAME } from "@/lib/cards/day-centre-serine-cards";
+import {
+  dayCentreGeneralImageUrl,
+  dayCentreHubRoomImageUrl,
+} from "@/lib/cards/day-centre-shared";
+import {
+  DAY_CENTRE_SERINE_MACHINERY_ROUTINE_NAME,
+  DAY_CENTRE_SERINE_ROUTINE_NAME,
+} from "@/lib/cards/day-centre-serine-cards";
 import {
   DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
   DAY_CENTRE_AYAAN_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-ayaan-cards";
-import { DAY_CENTRE_EMMANUEL_ROUTINE_NAME } from "@/lib/cards/day-centre-emmanuel-cards";
+import {
+  DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
+} from "@/lib/cards/day-centre-emmanuel-cards";
+import {
+  DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_ROUTINE_NAME,
+} from "@/lib/cards/day-centre-ikram-cards";
 import {
   tailoredScheduleCloseUpPreviewUrl,
 } from "@/lib/routines/resolve-routine-home-preview";
@@ -212,9 +229,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d",
     name: "Mini Gym · 3D",
-    description: "Sandbags — soft 3D gym objects (curated on disk)",
+    description: "Mini gym equipment — soft 3D objects (`library-3d/`)",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("sandbag-blue"),
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d",
       DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
@@ -256,12 +273,34 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d-warmup",
     name: "Mini Gym · 3D warm-up",
-    description: "Sandbag warm-up — 3D gym objects on disk",
+    description: "Therapy ball, mat, bands and BOSU — 3D library",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("sandbag-stack"),
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d-warmup",
       DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-3d-cardio",
+    name: "Mini Gym · 3D cardio",
+    description: "Treadmill, bike, trampoline, steps and rower — 3D library",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("treadmill"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-3d-cardio",
+      DAY_CENTRE_MINI_GYM_3D_CARDIO_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-mini-gym-3d-strength",
+    name: "Mini Gym · 3D strength",
+    description: "Weights, kettlebell, medicine ball, steps and foam roller — 3D",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("weights"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-mini-gym-3d-strength",
+      DAY_CENTRE_MINI_GYM_3D_STRENGTH_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -424,9 +463,9 @@ export const mockRoutines: Routine[] = [
     id: "physical",
     name: "Physical Activity",
     description:
-      "Sandbags — 3D gym equipment curated on disk",
+      "Full 3D library — therapy ball, treadmill, weights, sandbags, arms machine and more",
     tags: ["activity"],
-    homePreviewImageUrl: PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(
       "physical",
       PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
@@ -448,12 +487,24 @@ export const mockRoutines: Routine[] = [
     id: "serine-day-centre",
     name: DAY_CENTRE_SERINE_ROUTINE_NAME,
     description:
-      "Gym routine — treadmill, rower, sandbags, weights and weight ball (personalised cartoon)",
+      "Gym routine with Serine — treadmill, rower, sandbags, weights and weight ball (3D avatar scenes)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("serine-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "serine-day-centre",
       DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "serine-gym-equipment-3d",
+    name: DAY_CENTRE_SERINE_MACHINERY_ROUTINE_NAME,
+    description:
+      "Physical activity items only — treadmill, rower, sandbags, weights, BOSU and steps (3D library)",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("treadmill"),
+    steps: routineStepsFromGeneratedCardProps(
+      "serine-gym-equipment-3d",
+      DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -484,12 +535,36 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
     description:
-      "Day centre — cross trainer, basketball, cruzigramas, maths and circle time (personalised cartoon)",
+      "Physical activity with Emmanuel — cross trainer, basketball, cruzigramas, maths and circle time (3D avatar)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre",
       DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "emmanuel-gym-equipment-3d",
+    name: DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME,
+    description:
+      "Physical activity items only — cross trainer, bike, treadmill, mat and therapy ball (3D library)",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dGymImageUrl("arms-machine"),
+    steps: routineStepsFromGeneratedCardProps(
+      "emmanuel-gym-equipment-3d",
+      DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-day-centre-items",
+    name: DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
+    description:
+      "Saturday outing — illustrated day centre cards (music, Westfield, McDonald's, cab, home)",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("mcdonalds"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-day-centre-items",
+      DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
 ];

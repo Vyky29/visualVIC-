@@ -13,6 +13,7 @@ import {
   TAILORED_SCHEDULES_CATEGORY_COLOUR,
   TAILORED_SCHEDULES_CATEGORY_LABEL,
 } from "@/lib/cards/tailored-schedules-shared";
+import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
 
 export {
   TAILORED_SCHEDULES_CATEGORY_COLOUR as DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
@@ -31,7 +32,10 @@ export const DAY_CENTRE_IKRAM_CATEGORY_LABEL =
 export const DAY_CENTRE_IKRAM_PARTICIPANT_LABEL = "Ikram" as const;
 
 /** Schedule Player + Home tile — participant-specific Saturday outing. */
-export const DAY_CENTRE_IKRAM_ROUTINE_NAME = "Ikram · Saturday outing" as const;
+export const DAY_CENTRE_IKRAM_ROUTINE_NAME = "Ikram · Saturday outing (avatar)" as const;
+
+export const DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME =
+  "Ikram · Day centre (items)" as const;
 
 /** Pink ribbon on Ikram cards — participant name + tailored schedules. */
 export const DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL =
@@ -90,6 +94,27 @@ export const DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] =
   { id: "dci-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
   { id: "dci-cab", slug: "cab", title: "Cab home" },
   { id: "dci-home", slug: "home", title: "Home" },
+] as const;
+
+/** Same Saturday flow — illustrated day centre objects (no Ikram photos). */
+export const DAY_CENTRE_IKRAM_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] = [
+  { id: "dcii-music", slug: "music", title: "Music at day centre", library: "general" },
+  { id: "dcii-cafe", slug: "cafe", title: "Cafe", library: "general" },
+  { id: "dcii-socks-on", slug: "socks-on", title: "Put socks on", library: "dress" },
+  { id: "dcii-shoes-on", slug: "shoes-on", title: "Put shoes on", library: "dress" },
+  { id: "dcii-bus", slug: "bus", title: "Bus to Westfield", library: "general" },
+  { id: "dcii-westfield", slug: "westfield", title: "Westfield", library: "general" },
+  {
+    id: "dcii-nail-varnish",
+    slug: "black-nail-varnish",
+    title: "Buy black nail varnish",
+    library: "general",
+  },
+  { id: "dcii-mcdonalds", slug: "mcdonalds", title: "McDonald's", library: "general" },
+  { id: "dcii-bus-return", slug: "bus", title: "Bus to day centre", library: "general" },
+  { id: "dcii-bean-bag", slug: "bean-bag", title: "Relaxation bean bag", library: "general" },
+  { id: "dcii-cab", slug: "cab", title: "Cab home", library: "general" },
+  { id: "dcii-home", slug: "home", title: "Home", library: "general" },
 ] as const;
 
 /** Full Ikram library — PECS grid first, then schedule extras + communication. */
