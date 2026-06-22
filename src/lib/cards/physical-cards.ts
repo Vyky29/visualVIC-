@@ -91,6 +91,7 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "exercise-bike", title: "Exercise bike" },
   { slug: "resistance-bands", title: "Resistance bands" },
   { slug: "bosu", title: "BOSU" },
+  { slug: "kettlebell", title: "Kettlebell" },
 ] as const;
 
 /** Library → machines — synced to `public/images/library-3d-gym/*.png`. */
