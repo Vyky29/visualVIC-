@@ -15,16 +15,19 @@ const scenesDir = path.join(ayaanDir, "scenes");
 const scenes2dDir = path.join(ayaanDir, "scenes-2d");
 
 async function reframeFromRaw(slug, src) {
-  await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`), {
+  const base = {
     fit: "cover-padded",
-  });
+    minPad: 0,
+    trim: true,
+    trimThreshold: 18,
+    position: "centre",
+  };
+  await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`), base);
   await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
-    fit: "cover-padded",
+    ...base,
     height: FOCUS_H,
   });
-  await fitIllustrationToCard(src, path.join(ayaanDir, `${slug}.png`), {
-    fit: "cover-padded",
-  });
+  await fitIllustrationToCard(src, path.join(ayaanDir, `${slug}.png`), base);
 
   const raw2d = path.join(scenes2dDir, `_raw-${slug}.png`);
   const src2d = fs.existsSync(raw2d) ? raw2d : src;

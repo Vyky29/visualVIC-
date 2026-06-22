@@ -40,15 +40,27 @@ async function publish(style, src, outDir) {
 
   await fitIllustrationToCard(src, path.join(outDir, `${slug}.png`), {
     fit: "cover-padded",
+    minPad: 0,
+    trim: true,
+    trimThreshold: 18,
+    position: "centre",
   });
   await fitIllustrationToCard(src, path.join(outDir, `${slug}-focus.png`), {
     fit: "cover-padded",
+    minPad: 0,
+    trim: true,
+    trimThreshold: 18,
+    position: "centre",
     height: FOCUS_H,
   });
 
   if (style === "3d") {
     await fitIllustrationToCard(src, path.join(ayaanDir, `${slug}.png`), {
       fit: "cover-padded",
+      minPad: 0,
+      trim: true,
+      trimThreshold: 18,
+      position: "centre",
     });
   }
 
