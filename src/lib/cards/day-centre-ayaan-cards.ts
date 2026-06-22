@@ -10,7 +10,12 @@ import {
   dayCentreAyaanAvatarUrl,
   dayCentreAyaanPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
-import { physical3dImageUrl } from "@/lib/cards/physical-cards";
+import {
+  physical3dGymImageUrl,
+  physical3dImageUrl,
+  PHYSICAL_3D_GYM_CATALOG,
+  PHYSICAL_3D_LIBRARY_CATALOG,
+} from "@/lib/cards/physical-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
 /** Dark navy — Ayaan tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
@@ -54,20 +59,19 @@ export const DAY_CENTRE_AYAAN_SCHEDULE_SEQUENCE: readonly DayCentreAyaanStep[] =
     { id: "dca-treadmill", slug: "treadmill", title: "Treadmill" },
   ] as const;
 
-/** Gym equipment only — soft 3D objects (`library-3d/`), no Ayaan character. */
+/** Gym equipment only — soft 3D objects + machines (`library-3d/` + `library-3d-gym/`). */
 export const DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE: readonly DayCentreAyaanStep[] =
   [
-    { id: "dcam-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
-    {
-      id: "dcam-resistance-bands",
-      slug: "resistance-bands",
-      title: "Elastic bands",
-    },
-    { id: "dcam-step-platform", slug: "step-platform", title: "Steps" },
-    { id: "dcam-exercise-bike", slug: "exercise-bike", title: "Exercise bike" },
-    { id: "dcam-row-machine", slug: "row-machine", title: "Row machine" },
-    { id: "dcam-weights", slug: "weights", title: "Weights" },
-    { id: "dcam-bosu", slug: "bosu", title: "BOSU" },
+    ...PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
+      id: `dcam-${item.slug}`,
+      slug: item.slug,
+      title: item.title,
+    })),
+    ...PHYSICAL_3D_GYM_CATALOG.map((item) => ({
+      id: `dcam-gym-${item.slug}`,
+      slug: item.slug,
+      title: item.title,
+    })),
   ] as const;
 
 export const DAY_CENTRE_AYAAN_SEQUENCE: readonly DayCentreAyaanStep[] =
@@ -106,8 +110,15 @@ export function dayCentreAyaanScheduleFocusImageUrlForStep(
   return dayCentreAyaanSceneFocusUrl(step.slug);
 }
 
+const AYAAN_MACHINERY_GYM_SLUGS = new Set(
+  PHYSICAL_3D_GYM_CATALOG.map((item) => item.slug),
+);
+
 export function dayCentreAyaanMachinery3dImageUrlForStep(
   step: DayCentreAyaanStep,
 ): string {
+  if (AYAAN_MACHINERY_GYM_SLUGS.has(step.slug)) {
+    return physical3dGymImageUrl(step.slug);
+  }
   return physical3dImageUrl(step.slug);
 }

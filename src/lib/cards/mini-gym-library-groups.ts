@@ -1,7 +1,9 @@
 /**
  * Library sub-sections inside Day centre → Mini gym (3D equipment).
- * Synced to `public/images/library-3d/` — empty until new exports land.
+ * Synced to `public/images/library-3d/`.
  */
+
+import { PHYSICAL_3D_LIBRARY_CATALOG } from "@/lib/cards/physical-cards";
 
 export type MiniGymLibraryDimension = "3d";
 
@@ -19,20 +21,10 @@ export type MiniGymLibraryStep = {
   title: string;
 };
 
-const MINI_GYM_LIBRARY_CATALOG: readonly Omit<MiniGymLibraryStep, "id">[] = [
-  { slug: "therapy-ball", title: "Therapy ball" },
-  { slug: "resistance-bands", title: "Elastic bands" },
-  { slug: "step-platform", title: "Steps" },
-  { slug: "exercise-bike", title: "Exercise bike" },
-  { slug: "row-machine", title: "Row machine" },
-  { slug: "weights", title: "Weights" },
-  { slug: "bosu", title: "BOSU" },
-] as const;
-
 function miniGymLibrarySteps(
   idPrefix: "mg2" | "mg3",
 ): readonly MiniGymLibraryStep[] {
-  return MINI_GYM_LIBRARY_CATALOG.map((item) => ({
+  return PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
     id: `${idPrefix}-${item.slug}`,
     slug: item.slug,
     title: item.title,
@@ -48,7 +40,7 @@ export const MINI_GYM_3D_LIBRARY_SEQUENCE: readonly MiniGymLibraryStep[] =
   miniGymLibrarySteps("mg3");
 
 export const MINI_GYM_LIBRARY_SLUGS = new Set(
-  MINI_GYM_LIBRARY_CATALOG.map((s) => s.slug),
+  PHYSICAL_3D_LIBRARY_CATALOG.map((s) => s.slug),
 );
 
 export function miniGymLibraryDimensionFromPickNamespace(

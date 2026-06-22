@@ -212,9 +212,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d",
     name: "Mini Gym · 3D",
-    description: "Mini gym sandbags — soft 3D objects (curated on disk)",
+    description: "Gym machines — air bike, elliptical, leg press, ski erg and more",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("sandbag-blue"),
+    homePreviewImageUrl: physical3dGymImageUrl("air-bike"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d",
       DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
@@ -256,9 +256,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-3d-warmup",
     name: "Mini Gym · 3D warm-up",
-    description: "Sandbag warm-up — 3D gym objects on disk",
+    description: "Soft 3D objects — therapy ball, bands, steps, weights and more",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("sandbag-stack"),
+    homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-mini-gym-3d-warmup",
       DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS,
@@ -424,7 +424,7 @@ export const mockRoutines: Routine[] = [
     id: "physical",
     name: "Physical Activity",
     description:
-      "Mixed 2D and 3D fitness cards — equipment, gym and stretching",
+      "All 3D fitness equipment — objects, cardio machines and gym accessories",
     tags: ["activity"],
     homePreviewImageUrl: PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS[0].illustrationUrl,
     steps: routineStepsFromGeneratedCardProps(
@@ -472,7 +472,7 @@ export const mockRoutines: Routine[] = [
     id: "ayaan-gym-equipment-3d",
     name: DAY_CENTRE_AYAAN_MACHINERY_ROUTINE_NAME,
     description:
-      "Gym equipment only — therapy ball, elastic bands, steps, bike, rower, weights, BOSU (soft 3D objects)",
+      "Gym equipment only — full 3D object and machine library (no Ayaan character)",
     tags: ["extra"],
     homePreviewImageUrl: physical3dImageUrl("therapy-ball"),
     steps: routineStepsFromGeneratedCardProps(

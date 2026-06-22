@@ -212,7 +212,7 @@ function physical3dGymGeneratedCardProps(
   }));
 }
 
-/** Mini gym · 3D — only assets on disk in `library-3d-gym/`. */
+/** Mini gym · 3D — all equipment on disk in `library-3d-gym/`. */
 export const DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   physical3dGymGeneratedCardProps(PHYSICAL_3D_GYM_SEQUENCE);
 
@@ -225,9 +225,15 @@ export const DAY_CENTRE_MINI_GYM_CARDIO_GENERATED_CARD_PROPS: GeneratedPixtoCard
 export const DAY_CENTRE_MINI_GYM_STRENGTH_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_MINI_GYM_STRENGTH_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
 
-/** Mini gym · 3D warm-up — same curated gym assets until `library-3d/` is re-exported. */
+/** Mini gym · 3D warm-up — all soft 3D objects in `library-3d/`. */
 export const DAY_CENTRE_MINI_GYM_3D_WARMUP_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  physical3dGymGeneratedCardProps(PHYSICAL_3D_GYM_SEQUENCE);
+  PHYSICAL_3D_LIBRARY_SEQUENCE.map((s) => ({
+    illustrationUrl: physical3dImageUrlForStep(s),
+    title: lc(s.title),
+    category: lc(PHYSICAL_3D_CATEGORY_LABEL),
+    categoryColour: PHYSICAL_CATEGORY_COLOUR,
+    iconUrl: physicalPackMarkUrl(),
+  }));
 
 export const DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE.map(dayCentreGeneralGeneratedCardProps);
