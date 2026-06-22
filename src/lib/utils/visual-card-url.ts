@@ -31,10 +31,18 @@ export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolea
   return (
     u.includes("/scenes/") ||
     u.includes("/scenes-2d/") ||
-    u.includes("/cards/day centre/general/") ||
-    u.includes("/cards/day%20centre/general/") ||
     u.includes("/cards/core/finish3d.png") ||
     isPixtoLearnLibraryStockImageUrl(url)
+  );
+}
+
+/** Day centre general snack — illustration-only PNG needs a focus zoom boost. */
+export function isDayCentreGeneralSnackUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const u = decodeURIComponent(url).toLowerCase();
+  return (
+    u.includes("/cards/day centre/general/snack.png") ||
+    u.includes("/cards/day%20centre/general/snack.png")
   );
 }
 

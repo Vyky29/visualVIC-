@@ -7,6 +7,7 @@ import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preferen
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { cn } from "@/lib/utils/cn";
 import {
+  isDayCentreGeneralSnackUrl,
   isPixtoLearnIllustrationOnlyUrl,
 } from "@/lib/utils/visual-card-url";
 import { isTailoredSchedulesPackMarkUrl, tailoredSchedulesPackMarkTintMaskUrl } from "@/lib/cards/tailored-schedules-shared";
@@ -21,9 +22,8 @@ import {
   GENERATED_PIXTO_FOCUS_FIXED_ZONE,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H,
   GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET,
-  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_INSET,
-  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SCALE,
-  GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SLOT_PAD,
+  GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE,
+  GENERATED_PIXTO_FOCUS_SNACK_SLOT_PAD,
 } from "@/lib/constants/generated-pixto-card-sizes";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
 
@@ -259,7 +259,7 @@ export function FocusRoutineIllustrationImage({
 }) {
   const illustrationOnly = isPixtoLearnIllustrationOnlyUrl(src);
   const insets = illustrationOnly
-    ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_INSET
+    ? { topPx: 8, leftPx: 4, rightPx: 12, bottomPx: 0 }
     : GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET;
   const { topPx, leftPx, rightPx, bottomPx } = insets;
   const widthTrim = leftPx + rightPx;
@@ -268,10 +268,6 @@ export function FocusRoutineIllustrationImage({
   const objectFitClass = illustrationOnly
     ? "object-contain object-center"
     : objectClass;
-  const effectiveScale =
-    illustrationOnly && scale === 1
-      ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SCALE
-      : scale;
   return (
     <div
       className="relative flex h-full w-full items-center justify-center overflow-hidden"
@@ -294,9 +290,9 @@ export function FocusRoutineIllustrationImage({
           ...(illustrationOnly
             ? undefined
             : { height: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px` }),
-          ...(effectiveScale !== 1
+          ...(scale !== 1
             ? {
-                transform: `scale(${effectiveScale})`,
+                transform: `scale(${scale})`,
                 transformOrigin: "center center",
               }
             : {}),
@@ -1113,14 +1109,14 @@ function GeneratedPixtoFocusFixedZoneCard({
   };
 }) {
   const z = GENERATED_PIXTO_FOCUS_FIXED_ZONE;
-  const resolvedFocusIllustrationScale = focusIllustrationScale ?? 1;
   const resolvedIllustrationSrc =
     focusIllustrationUrl ?? illustrationUrl;
-  const focusIllustrationOnly = isPixtoLearnIllustrationOnlyUrl(
-    resolvedIllustrationSrc,
-  );
-  const illustSlotPad = focusIllustrationOnly
-    ? GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SLOT_PAD
+  const snackFocusBoost = isDayCentreGeneralSnackUrl(resolvedIllustrationSrc);
+  const resolvedFocusIllustrationScale =
+    focusIllustrationScale ??
+    (snackFocusBoost ? GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE : 1);
+  const illustSlotPad = snackFocusBoost
+    ? GENERATED_PIXTO_FOCUS_SNACK_SLOT_PAD
     : { top: z.illustPadTop, x: z.illustPadX, bottom: z.illustPadBottom };
 
   return (

@@ -90,19 +90,11 @@ export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_INSET = {
   bottomPx: 0,
 } as const;
 
-/** Focus — default zoom for 531×648 illustration-only PNGs (general, library, scenes). */
-export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SCALE = 1.22 as const;
+/** Focus — snack card only (`/cards/day centre/general/snack.png`). */
+export const GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE = 1.22 as const;
 
-/** Tighter inset when illustration fills the slot (no WOW title band on asset). */
-export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_INSET = {
-  topPx: 2,
-  leftPx: 0,
-  rightPx: 6,
-  bottomPx: 0,
-} as const;
-
-/** Outer slot padding for illustration-only assets — more canvas for the PNG. */
-export const GENERATED_PIXTO_FOCUS_ILLUSTRATION_ONLY_SLOT_PAD = {
+/** Outer slot padding for snack focus — more canvas for the PNG. */
+export const GENERATED_PIXTO_FOCUS_SNACK_SLOT_PAD = {
   top: 20,
   x: 18,
   bottom: 0,

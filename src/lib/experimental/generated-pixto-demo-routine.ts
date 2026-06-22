@@ -1,5 +1,6 @@
 import type { GeneratedPixtoCardProps } from "@/components/experimental/GeneratedPixtoCard";
 import type { RoutineStep } from "@/lib/types/routine";
+import { GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE } from "@/lib/constants/generated-pixto-card-sizes";
 import {
   AT_THE_AIRPORT_SEQUENCE,
   atTheAirportImageUrl,
@@ -199,6 +200,9 @@ function dayCentreGeneralGeneratedCardProps(
     ...shared,
     category: lc("At the day centre"),
     categoryColour: GENERATED_PIXTO_DAY_CENTRE_CATEGORY_COLOUR,
+    ...(s.slug === "snack"
+      ? { focusIllustrationScale: GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE }
+      : {}),
   };
 }
 
@@ -225,6 +229,9 @@ function dayCentreItems3dGeneratedCardProps(
     category: lc(category),
     categoryColour,
     iconUrl,
+    ...(step.slug === "snack" && step.library === "general"
+      ? { focusIllustrationScale: GENERATED_PIXTO_FOCUS_SNACK_ILLUSTRATION_SCALE }
+      : {}),
   };
 }
 
