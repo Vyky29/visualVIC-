@@ -5,7 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { fitIllustrationToCard } from "./pixtolearn-card-fit.mjs";
+import { importDesignerIllustration531x648 } from "./pixtolearn-card-fit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -18,7 +18,7 @@ async function toCard(srcPath, slug) {
   const dest = path.join(outDir, `${slug}.png`);
 
   fs.copyFileSync(srcPath, rawDest);
-  await fitIllustrationToCard(srcPath, dest);
+  await importDesignerIllustration531x648(srcPath, dest);
 
   console.log("ok:", path.relative(root, dest));
 }

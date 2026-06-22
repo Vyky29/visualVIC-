@@ -5,7 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { fitIllustrationToCard } from "./pixtolearn-card-fit.mjs";
+import { importDesignerIllustration531x648 } from "./pixtolearn-card-fit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -28,7 +28,7 @@ async function main() {
     const slug = raw.slice(5, -4);
     const src = path.join(outDir, raw);
     const dest = path.join(outDir, `${slug}.png`);
-    await fitIllustrationToCard(src, dest);
+    await importDesignerIllustration531x648(src, dest);
     console.log("ok:", slug);
     ok++;
   }
