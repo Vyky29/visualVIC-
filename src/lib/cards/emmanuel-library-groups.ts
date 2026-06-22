@@ -14,3 +14,13 @@ export function emmanuelLibraryDimensionFromPickNamespace(
   if (ns === "dcemmanuel") return "3d";
   return null;
 }
+
+export function emmanuelLibraryGroupLabel(
+  dimension: EmmanuelLibraryDimension,
+  lang: "en" | "es",
+): string {
+  if (dimension === "2d") {
+    return lang === "es" ? "Emmanuel (2D)" : "Emmanuel (2D)";
+  }
+  return lang === "es" ? "Emmanuel (3D)" : "Emmanuel (3D)";
+}

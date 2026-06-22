@@ -27,6 +27,7 @@ import {
 import {
   EMMANUEL_LIBRARY_DIMENSION_ORDER,
   emmanuelLibraryDimensionFromPickNamespace,
+  emmanuelLibraryGroupLabel,
 } from "@/lib/cards/emmanuel-library-groups";
 import {
   MINI_GYM_LIBRARY_DIMENSION_ORDER,
@@ -506,7 +507,7 @@ function LibraryPackThematicSubgroups({
       return (
         <section key={groupId} className="space-y-1.5">
           <LibrarySubgroupHeader
-            label={physicalLibraryGroupLabel(groupId, cardUiLang)}
+            label={emmanuelLibraryGroupLabel(groupId, cardUiLang)}
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />

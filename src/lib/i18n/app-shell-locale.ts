@@ -654,17 +654,10 @@ export function physicalLibraryGroupLabel(
   group: PhysicalLibraryGroup,
   lang: CardLanguageCode,
 ): string {
-  const en: Record<PhysicalLibraryGroup, string> = {
-    "2d": "Physical Activity (2D)",
-    "3d": "Physical Activity (3D)",
-    "3d-gym": "3D gym & machines",
-  };
-  const es: Record<PhysicalLibraryGroup, string> = {
-    "2d": "Actividad física (2D)",
-    "3d": "Actividad física (3D)",
-    "3d-gym": "3D gimnasio y máquinas",
-  };
-  return isEs(lang) ? es[group] : en[group];
+  if (group === "3d") {
+    return isEs(lang) ? "Actividad física (3D)" : "Physical Activity (3D)";
+  }
+  return isEs(lang) ? "Actividad física (3D)" : "Physical Activity (3D)";
 }
 
 /** Library pick tile footer — pack dimension ribbon (Physical · Mini gym · …). */
@@ -673,8 +666,8 @@ export function libraryPickRibbonCategory(
   lang: CardLanguageCode,
 ): string | null {
   const ns = pickId.split("::")[0]?.toLowerCase() ?? "";
-  if (ns === "phy2d") return physicalLibraryGroupLabel("2d", lang);
-  if (ns === "phy3d") return physicalLibraryGroupLabel("3d", lang);
+  if (ns === "phy2d") return physicalLibraryGroupLabel("3d", lang);
+  if (ns === "phy3d" || ns === "phy3g") return physicalLibraryGroupLabel("3d", lang);
   if (ns === "mg3d") return miniGymLibraryGroupLabel("3d", lang);
   return null;
 }
