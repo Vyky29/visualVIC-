@@ -33,9 +33,17 @@ export const DAY_CENTRE_EMMANUEL_CATEGORY_LABEL =
 
 export const DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL = "Emmanuel" as const;
 
-/** Stock schedule — generic activity icons (no Emmanuel in art). */
+/** Stock routine · personalised avatar scenes (Emmanuel in art). */
+export const DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME =
+  "Emmanuel · Day centre (avatar)" as const;
+
+/** Stock routine · activity object icons (no avatar in art). */
+export const DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME =
+  "Emmanuel · Day centre (items)" as const;
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME}. */
 export const DAY_CENTRE_EMMANUEL_ROUTINE_NAME =
-  "Emmanuel · Day centre (icons)" as const;
+  DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME;
 
 export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
   "Emmanuel Physical Activity (items)" as const;

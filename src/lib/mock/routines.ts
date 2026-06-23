@@ -47,7 +47,8 @@ import {
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
@@ -58,6 +59,7 @@ import {
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
 import { physical3dGymImageUrl, physical3dImageUrl } from "@/lib/cards/physical-cards";
 import {
+  dayCentreEmmanuelIconUrl,
   dayCentreGeneralImageUrl,
   dayCentreHubRoomImageUrl,
 } from "@/lib/cards/day-centre-shared";
@@ -70,8 +72,9 @@ import {
   DAY_CENTRE_AYAAN_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
+  DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME,
-  DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
@@ -533,14 +536,26 @@ export const mockRoutines: Routine[] = [
   },
   {
     id: "emmanuel-day-centre",
-    name: DAY_CENTRE_EMMANUEL_ROUTINE_NAME,
+    name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Day centre activity icons — cruzigramas, washing up, table work, spelling, handwriting and maths (no avatar)",
+      "Day centre with Emmanuel — cross trainer, gym with Michelle, basketball, cruzigramas, maths and circle time (3D avatar)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre",
-      DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS,
+      DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "emmanuel-day-centre-items",
+    name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
+    description:
+      "Day centre activity objects — cruzigramas, washing up, table work, spelling, handwriting and maths (no avatar)",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreEmmanuelIconUrl("cruzigramas"),
+    steps: routineStepsFromGeneratedCardProps(
+      "emmanuel-day-centre-items",
+      DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {

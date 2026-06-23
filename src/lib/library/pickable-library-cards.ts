@@ -53,7 +53,6 @@ import {
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   dayCentreEmmanuelIconImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
-  dayCentreEmmanuelLibrary2dImageUrlForStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   MINI_GYM_2D_LIBRARY_SEQUENCE,
@@ -89,7 +88,6 @@ import {
   DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS,
@@ -548,27 +546,6 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcemmanuel", s.slug),
       label: s.title,
       imageUrl: dayCentreEmmanuelImageUrlForStep(s),
-      category: "home",
-      generatedPixto: gp
-        ? {
-            illustrationUrl: gp.illustrationUrl,
-            title: gp.title,
-            category: gp.category,
-            categoryColour: gp.categoryColour,
-            iconUrl: gp.iconUrl,
-            cardType: gp.cardType,
-            focusIllustrationUrl: gp.focusIllustrationUrl,
-          }
-        : undefined,
-    });
-  });
-
-  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.forEach((s, i) => {
-    const gp = DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS[i];
-    out.push({
-      pickId: pid("dcemmanuel2d", s.slug),
-      label: s.title,
-      imageUrl: dayCentreEmmanuelLibrary2dImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

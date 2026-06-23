@@ -25,7 +25,7 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
   ikram: ["ikram-day-centre", "ikram-day-centre-items"],
   serine: ["serine-day-centre", "serine-gym-equipment-3d"],
   ayaan: ["ayaan-day-centre", "ayaan-gym-equipment-3d"],
-  emmanuel: ["emmanuel-day-centre", "emmanuel-gym-equipment-3d"],
+  emmanuel: ["emmanuel-day-centre", "emmanuel-day-centre-items"],
 };
 
 const STOCK_ROUTINE_TO_PARTICIPANT = Object.fromEntries(

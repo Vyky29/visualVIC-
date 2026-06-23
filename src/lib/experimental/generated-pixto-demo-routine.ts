@@ -104,6 +104,7 @@ import {
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
+  DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
@@ -550,7 +551,7 @@ export const DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS: GeneratedPixtoCardProp
     emmanuelLibrary2dGeneratedCardProps(s),
   );
 
-function emmanuelScheduleGeneratedCardProps(step: TailoredItems3dStep) {
+function emmanuelItemsGeneratedCardProps(step: TailoredItems3dStep) {
   return dayCentreItems3dGeneratedCardProps(
     step,
     DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
@@ -559,16 +560,36 @@ function emmanuelScheduleGeneratedCardProps(step: TailoredItems3dStep) {
   );
 }
 
-/** Emmanuel · Day centre — icon schedule (no avatar in art). */
-export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+/** Emmanuel · Day centre (items) — object icons, no avatar in art. */
+export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE.map((s) =>
-    emmanuelScheduleGeneratedCardProps(s),
+    emmanuelItemsGeneratedCardProps(s),
   );
 
-/** Emmanuel · Day centre — icon cards for library picker. */
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS;
+
+/** Emmanuel · Day centre (items) — library picker. */
 export const DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE.map((s) =>
-    emmanuelScheduleGeneratedCardProps(s),
+  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS;
+
+function emmanuelAvatarScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
+  const focusIllustrationUrl = dayCentreEmmanuelFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Emmanuel · Day centre (avatar) — all personalised 3D scenes. */
+export const DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) =>
+    emmanuelAvatarScheduleGeneratedCardProps(s),
   );
 
 /** Emmanuel · Physical activity — 3D gym objects only. */

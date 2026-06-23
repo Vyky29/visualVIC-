@@ -415,8 +415,12 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Ayaan · actividad física (objetos)",
   },
   "emmanuel-day-centre": {
-    en: "Emmanuel · Day centre (icons)",
-    es: "Emmanuel · centro de día (iconos)",
+    en: "Emmanuel · Day centre (avatar)",
+    es: "Emmanuel · centro de día (avatar)",
+  },
+  "emmanuel-day-centre-items": {
+    en: "Emmanuel · Day centre (items)",
+    es: "Emmanuel · centro de día (objetos)",
   },
   "emmanuel-gym-equipment-3d": {
     en: "Emmanuel Physical Activity (items)",
