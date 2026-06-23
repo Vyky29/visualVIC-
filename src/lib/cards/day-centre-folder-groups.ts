@@ -19,6 +19,7 @@ const COOKING_SLUGS = new Set([
   "sweetcorn",
   "mayonnaise",
   "ketchup",
+  "milk",
   "paintbrush",
   "paint-palette",
   "scissors",
