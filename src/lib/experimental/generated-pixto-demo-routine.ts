@@ -105,18 +105,23 @@ import {
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE,
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
-  DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
-  DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE,
   DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
   DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+  dayCentreEmmanuelDailyAvatarFocusImageUrlForStep,
+  dayCentreEmmanuelDailyAvatarImageUrlForStep,
+  dayCentreEmmanuelDailyItemsImageUrlForStep,
   dayCentreEmmanuelFocusImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelLibrary2dFocusImageUrlForStep,
   dayCentreEmmanuelLibrary2dImageUrlForStep,
   dayCentreEmmanuelPackMarkUrl,
   type DayCentreEmmanuelStep,
+  type EmmanuelDailyStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   DAY_CENTRE_CATEGORY_COLOUR,
@@ -518,7 +523,7 @@ export const DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS: GeneratedPixtoC
   );
 
 /** Tailored schedules · Emmanuel — physical activity library. */
-function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
+function emmanuelLibraryAvatarGeneratedCardProps(step: DayCentreEmmanuelStep) {
   const focusIllustrationUrl = dayCentreEmmanuelFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
@@ -530,8 +535,11 @@ function emmanuelGeneratedCardProps(step: DayCentreEmmanuelStep) {
   };
 }
 
+/** Emmanuel · library Avatar subgroup. */
 export const DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.map((s) => emmanuelGeneratedCardProps(s));
+  DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE.map((s) =>
+    emmanuelLibraryAvatarGeneratedCardProps(s),
+  );
 
 function emmanuelLibrary2dGeneratedCardProps(step: DayCentreEmmanuelStep) {
   const focusIllustrationUrl =
@@ -551,7 +559,7 @@ export const DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS: GeneratedPixtoCardProp
     emmanuelLibrary2dGeneratedCardProps(s),
   );
 
-function emmanuelItemsGeneratedCardProps(step: TailoredItems3dStep) {
+function emmanuelLibraryIconGeneratedCardProps(step: TailoredItems3dStep) {
   return dayCentreItems3dGeneratedCardProps(
     step,
     DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
@@ -560,21 +568,60 @@ function emmanuelItemsGeneratedCardProps(step: TailoredItems3dStep) {
   );
 }
 
-/** Emmanuel · Day centre (items) — object icons, no avatar in art. */
-export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+/** Emmanuel · library Items subgroup. */
+export const DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE.map((s) =>
-    emmanuelItemsGeneratedCardProps(s),
+    emmanuelLibraryIconGeneratedCardProps(s),
   );
 
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS}. */
+function emmanuelDailyItemsGeneratedCardProps(step: EmmanuelDailyStep) {
+  return {
+    illustrationUrl: dayCentreEmmanuelDailyItemsImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+  };
+}
+
+/** Emmanuel · Day centre (items) — full weekday schedule. */
+export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+    emmanuelDailyItemsGeneratedCardProps(s),
+  );
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS;
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS;
+  DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS;
 
-/** Emmanuel · Day centre (items) — library picker. */
-export const DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS;
+function emmanuelDailyAvatarGeneratedCardProps(step: EmmanuelDailyStep) {
+  const focusIllustrationUrl =
+    dayCentreEmmanuelDailyAvatarFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreEmmanuelDailyAvatarImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
 
-function emmanuelAvatarScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
+/** Emmanuel · Day centre (avatar) — full weekday schedule. */
+export const DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+    emmanuelDailyAvatarGeneratedCardProps(s),
+  );
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS;
+
+function emmanuelGymAvatarGeneratedCardProps(step: DayCentreEmmanuelStep) {
   const focusIllustrationUrl = dayCentreEmmanuelFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
@@ -586,22 +633,26 @@ function emmanuelAvatarScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
   };
 }
 
-/** Emmanuel · Day centre (avatar) — all personalised 3D scenes. */
-export const DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) =>
-    emmanuelAvatarScheduleGeneratedCardProps(s),
+/** Emmanuel · Gym (avatar) — personalised gym scenes. */
+export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE.map((s) =>
+    emmanuelGymAvatarGeneratedCardProps(s),
   );
 
-/** Emmanuel · Physical activity — 3D gym objects only. */
-export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE.map((s) =>
+/** Emmanuel · Gym (items) — 3D gym objects only. */
+export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
       s,
-      PHYSICAL_3D_CATEGORY_LABEL,
-      PHYSICAL_CATEGORY_COLOUR,
+      DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+      DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
       dayCentreEmmanuelPackMarkUrl(),
     ),
   );
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS;
 
 /** @deprecated Use {@link DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_GENERATED_CARD_PROPS = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS;

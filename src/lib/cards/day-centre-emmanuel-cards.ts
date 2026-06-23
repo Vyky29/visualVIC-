@@ -1,5 +1,5 @@
 /**
- * Emmanuel · Day centre — icon schedule + personalised avatar library.
+ * Emmanuel · Day centre + gym — icon library, avatar scenes, and daily schedules.
  * Icon PNGs: `public/cards/day centre/emmanuel/icons/{slug}.png`
  * Avatar scenes: `public/cards/day centre/emmanuel/scenes/{slug}.png`
  */
@@ -13,9 +13,15 @@ import {
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelAvatarUrl,
   dayCentreEmmanuelPackMarkUrl,
+  dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
+import {
+  physical3dGymImageUrl,
+  physical3dImageUrl,
+} from "@/lib/cards/physical-cards";
 
 /** Dark navy — Emmanuel tailored schedules (distinct from shower #143d66 and swimming #4a8fa8). */
 export const DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR = "#1E4A73" as const;
@@ -28,30 +34,145 @@ export type DayCentreEmmanuelStep = {
   title: string;
 };
 
+export type EmmanuelDailyArtSource =
+  | { type: "general"; slug: string }
+  | { type: "emmanuel-icon"; slug: string }
+  | { type: "emmanuel-scene"; slug: string }
+  | { type: "shower"; slug: string }
+  | { type: "3d"; slug: string }
+  | { type: "3d-gym"; slug: string };
+
+export type EmmanuelDailyStep = {
+  id: string;
+  slug: string;
+  title: string;
+  items: EmmanuelDailyArtSource;
+  avatar: EmmanuelDailyArtSource;
+};
+
 export const DAY_CENTRE_EMMANUEL_CATEGORY_LABEL =
   TAILORED_SCHEDULES_CATEGORY_LABEL;
 
 export const DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL = "Emmanuel" as const;
 
-/** Stock routine · personalised avatar scenes (Emmanuel in art). */
+/** Stock routine · full day with Emmanuel in art where available. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME =
   "Emmanuel · Day centre (avatar)" as const;
 
-/** Stock routine · activity object icons (no avatar in art). */
+/** Stock routine · full day with object / icon art only. */
 export const DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME =
   "Emmanuel · Day centre (items)" as const;
 
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME}. */
-export const DAY_CENTRE_EMMANUEL_ROUTINE_NAME =
-  DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME;
+export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME =
+  "Emmanuel · Gym (avatar)" as const;
 
+export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME =
+  "Emmanuel · Gym (items)" as const;
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME}. */
 export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
-  "Emmanuel Physical Activity (items)" as const;
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME;
 
 export const DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
 
-/** Day centre schedule — icon cards only. Replace PNGs in `emmanuel/icons/`. */
+/** Emmanuel's weekday — same flow in avatar and items stock routines. */
+export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  [
+    {
+      id: "dced-day-centre",
+      slug: "day-centre",
+      title: "Day centre",
+      items: { type: "general", slug: "community-centre" },
+      avatar: { type: "general", slug: "community-centre" },
+    },
+    {
+      id: "dced-cruzigramas-am",
+      slug: "cruzigramas-am",
+      title: "Cruzigramas",
+      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
+    },
+    {
+      id: "dced-snack",
+      slug: "snack",
+      title: "Snack",
+      items: { type: "general", slug: "snack" },
+      avatar: { type: "general", slug: "snack" },
+    },
+    {
+      id: "dced-gym",
+      slug: "gym",
+      title: "Gym",
+      items: { type: "3d-gym", slug: "elliptical" },
+      avatar: { type: "emmanuel-scene", slug: "cross-trainer" },
+    },
+    {
+      id: "dced-swimming",
+      slug: "swimming",
+      title: "Swimming",
+      items: { type: "general", slug: "swimming-pool" },
+      avatar: { type: "general", slug: "swimming-pool" },
+    },
+    {
+      id: "dced-shower",
+      slug: "shower",
+      title: "Shower",
+      items: { type: "shower", slug: "shower" },
+      avatar: { type: "shower", slug: "shower" },
+    },
+    {
+      id: "dced-shampoo",
+      slug: "shampoo",
+      title: "Shampoo",
+      items: { type: "shower", slug: "shampoo" },
+      avatar: { type: "shower", slug: "shampoo" },
+    },
+    {
+      id: "dced-lunch",
+      slug: "lunch",
+      title: "Lunch",
+      items: { type: "general", slug: "eat" },
+      avatar: { type: "general", slug: "eat" },
+    },
+    {
+      id: "dced-maths",
+      slug: "maths",
+      title: "Maths",
+      items: { type: "emmanuel-icon", slug: "maths" },
+      avatar: { type: "emmanuel-scene", slug: "maths" },
+    },
+    {
+      id: "dced-football",
+      slug: "football",
+      title: "Football",
+      items: { type: "3d", slug: "medicine-ball" },
+      avatar: { type: "emmanuel-scene", slug: "basketball" },
+    },
+    {
+      id: "dced-washing-up",
+      slug: "washing-up",
+      title: "Washing up",
+      items: { type: "emmanuel-icon", slug: "washing-up" },
+      avatar: { type: "emmanuel-icon", slug: "washing-up" },
+    },
+    {
+      id: "dced-cruzigramas-pm",
+      slug: "cruzigramas-pm",
+      title: "Cruzigramas",
+      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
+    },
+    {
+      id: "dced-home",
+      slug: "home",
+      title: "Home",
+      items: { type: "general", slug: "home" },
+      avatar: { type: "general", slug: "home" },
+    },
+  ] as const;
+
+/** Library · Items subgroup — activity icons (no avatar). */
 export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
   [
     {
@@ -92,7 +213,7 @@ export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
     },
   ] as const;
 
-/** Personalised avatar scenes — library · 3D / 2D (Emmanuel in illustration). */
+/** Library · Avatar subgroup — personalised 3D scenes. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   [
     {
@@ -115,8 +236,24 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
     },
   ] as const;
 
-/** Gym equipment only — 3D objects (no Emmanuel character). */
-export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE: readonly TailoredItems3dStep[] =
+/** Gym stock routine · Emmanuel in every illustration. */
+export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep[] =
+  [
+    {
+      id: "dceg-cross-trainer",
+      slug: "cross-trainer",
+      title: "Cross trainer",
+    },
+    {
+      id: "dceg-gym-with-michelle",
+      slug: "gym-with-michelle",
+      title: "Gym with Michelle",
+    },
+    { id: "dceg-basketball", slug: "basketball", title: "Basketball" },
+  ] as const;
+
+/** Gym stock routine · equipment only (no Emmanuel). */
+export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
   [
     {
       id: "dcem-elliptical",
@@ -150,21 +287,67 @@ export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE: readonly TailoredItems3d
     },
   ] as const;
 
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_ICON_SEQUENCE} or {@link DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE}. */
-export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly TailoredItems3dStep[] =
-  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE;
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE}. */
+export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE =
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE;
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
+export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly EmmanuelDailyStep[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE;
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE}. */
 export const DAY_CENTRE_EMMANUEL_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE;
 
-/** Library avatar picker — personalised scenes only (not icon schedule). */
+/** Library avatar picker — personalised scenes only. */
 export const DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE;
 
 const EMMANUEL_AVATAR_SCENE_SLUGS = new Set(
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) => s.slug),
 );
+
+export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string {
+  switch (source.type) {
+    case "general":
+      return dayCentreGeneralImageUrl(source.slug);
+    case "emmanuel-icon":
+      return dayCentreEmmanuelIconUrl(source.slug);
+    case "emmanuel-scene":
+      return dayCentreEmmanuelSceneUrl(source.slug);
+    case "shower":
+      return showerImageUrl(source.slug);
+    case "3d-gym":
+      return physical3dGymImageUrl(source.slug);
+    case "3d":
+      return physical3dImageUrl(source.slug);
+  }
+}
+
+export function emmanuelDailyFocusImageUrl(
+  source: EmmanuelDailyArtSource,
+): string | undefined {
+  if (source.type !== "emmanuel-scene") return undefined;
+  return dayCentreEmmanuelSceneFocusUrl(source.slug);
+}
+
+export function dayCentreEmmanuelDailyItemsImageUrlForStep(
+  step: EmmanuelDailyStep,
+): string {
+  return emmanuelDailyArtImageUrl(step.items);
+}
+
+export function dayCentreEmmanuelDailyAvatarImageUrlForStep(
+  step: EmmanuelDailyStep,
+): string {
+  return emmanuelDailyArtImageUrl(step.avatar);
+}
+
+export function dayCentreEmmanuelDailyAvatarFocusImageUrlForStep(
+  step: EmmanuelDailyStep,
+): string | undefined {
+  return emmanuelDailyFocusImageUrl(step.avatar);
+}
 
 export function dayCentreEmmanuelIconImageUrlForStep(
   step: TailoredItems3dStep,
@@ -188,14 +371,15 @@ export function dayCentreEmmanuelFocusImageUrlForStep(
   return dayCentreEmmanuelSceneFocusUrl(step.slug);
 }
 
+/** @deprecated Use daily items helpers. */
 export function dayCentreEmmanuelScheduleImageUrlForStep(
-  step: TailoredItems3dStep,
+  step: EmmanuelDailyStep,
 ): string {
-  return dayCentreEmmanuelIconUrl(step.slug);
+  return dayCentreEmmanuelDailyItemsImageUrlForStep(step);
 }
 
 export function dayCentreEmmanuelScheduleFocusImageUrlForStep(
-  _step: TailoredItems3dStep,
+  _step: EmmanuelDailyStep,
 ): string | undefined {
   return undefined;
 }

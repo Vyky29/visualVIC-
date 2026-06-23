@@ -47,8 +47,10 @@ import {
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
@@ -59,7 +61,6 @@ import {
 import { dayCentreFolderIconUrl } from "@/lib/routines/day-centre-folders";
 import { physical3dGymImageUrl, physical3dImageUrl } from "@/lib/cards/physical-cards";
 import {
-  dayCentreEmmanuelIconUrl,
   dayCentreGeneralImageUrl,
   dayCentreHubRoomImageUrl,
 } from "@/lib/cards/day-centre-shared";
@@ -73,8 +74,9 @@ import {
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
-  DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
   DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
@@ -538,36 +540,48 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Day centre with Emmanuel — cross trainer, gym with Michelle, basketball, cruzigramas, maths and circle time (3D avatar)",
+      "Emmanuel's weekday — day centre, snack, gym, swimming, shower, lunch, maths, football and home (avatar art)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre",
-      DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS,
+      DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS,
     ),
   },
   {
     id: "emmanuel-day-centre-items",
     name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
     description:
-      "Day centre activity objects — cruzigramas, washing up, table work, spelling, handwriting and maths (no avatar)",
+      "Emmanuel's weekday — same flow with object / icon illustrations (no avatar)",
     tags: ["extra"],
-    homePreviewImageUrl: dayCentreEmmanuelIconUrl("cruzigramas"),
+    homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre-items",
-      DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS,
+      DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "emmanuel-gym-avatar",
+    name: DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
+    description:
+      "Gym with Emmanuel — cross trainer, gym with Michelle and basketball (3D avatar)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-gym-avatar"),
+    steps: routineStepsFromGeneratedCardProps(
+      "emmanuel-gym-avatar",
+      DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS,
     ),
   },
   {
     id: "emmanuel-gym-equipment-3d",
-    name: DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME,
+    name: DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
     description:
-      "Physical activity items only — cross trainer, bike, treadmill, mat and therapy ball (3D library)",
+      "Gym equipment only — cross trainer, bike, treadmill, mat and therapy ball (3D objects)",
     tags: ["extra"],
-    homePreviewImageUrl: physical3dGymImageUrl("arms-machine"),
+    homePreviewImageUrl: physical3dGymImageUrl("elliptical"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-gym-equipment-3d",
-      DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
+      DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {

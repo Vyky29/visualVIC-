@@ -6,6 +6,7 @@ import {
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
 import {
   physical3dGymImageUrl,
   physical3dImageUrl,
@@ -16,7 +17,8 @@ export type TailoredItems3dLibrary =
   | "3d-gym"
   | "general"
   | "dress"
-  | "emmanuel-icons";
+  | "emmanuel-icons"
+  | "shower";
 
 export type TailoredItems3dStep = {
   id: string;
@@ -37,5 +39,7 @@ export function tailoredItems3dImageUrlForStep(step: TailoredItems3dStep): strin
       return physical3dGymImageUrl(step.slug);
     case "3d":
       return physical3dImageUrl(step.slug);
+    case "shower":
+      return showerImageUrl(step.slug);
   }
 }

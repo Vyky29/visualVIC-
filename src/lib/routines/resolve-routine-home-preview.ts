@@ -25,6 +25,8 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
   "emmanuel-day-centre-items",
+  "emmanuel-gym-avatar",
+  "emmanuel-gym-equipment-3d",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -49,6 +51,10 @@ export function tailoredScheduleCloseUpPreviewUrl(
     case "emmanuel-day-centre":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
     case "emmanuel-day-centre-items":
+      return undefined;
+    case "emmanuel-gym-avatar":
+      return dayCentreEmmanuelTailoredHomeAvatarUrl();
+    case "emmanuel-gym-equipment-3d":
       return undefined;
     default:
       return undefined;
@@ -75,6 +81,10 @@ export function tailoredScheduleActionPreviewUrl(
     case "emmanuel-day-centre":
       return dayCentreEmmanuelSceneUrl("cross-trainer");
     case "emmanuel-day-centre-items":
+      return undefined;
+    case "emmanuel-gym-avatar":
+      return dayCentreEmmanuelSceneUrl("cross-trainer");
+    case "emmanuel-gym-equipment-3d":
       return undefined;
     default:
       return undefined;
