@@ -260,7 +260,7 @@ export const DAY_CENTRE_GENERAL_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep
   { id: "dcgs-mixing-bowl", slug: "mixing-bowl", title: "Mixing bowl" },
   { id: "dcgs-pizza", slug: "pizza", title: "Pizza" },
   { id: "dcgs-painting", slug: "painting", title: "Painting" },
-  { id: "dcgs-bus", slug: "bus", title: "Bus to town" },
+  { id: "dcgs-bus", slug: "bus", title: "Bus" },
   { id: "dcgs-market", slug: "market", title: "Market" },
   { id: "dcgs-cafe", slug: "cafe", title: "Cafe" },
   { id: "dcgs-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
@@ -284,7 +284,7 @@ export const DAY_CENTRE_COOKING_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep
 
 /** Community outing — Westfield, McDonald's and transport. */
 export const DAY_CENTRE_COMMUNITY_SCHEDULE_SEQUENCE: readonly DayCentreGeneralStep[] = [
-  { id: "dccc-bus", slug: "bus", title: "Bus to town" },
+  { id: "dccc-bus", slug: "bus", title: "Bus" },
   { id: "dccc-westfield", slug: "westfield", title: "Westfield" },
   { id: "dccc-shopping", slug: "shopping", title: "Shopping" },
   { id: "dccc-queue", slug: "queue", title: "Queue" },
@@ -379,7 +379,7 @@ export const DAY_CENTRE_COOKING_BAKE_SEQUENCE: readonly DayCentreGeneralStep[] =
 
 /** Community · market day. */
 export const DAY_CENTRE_COMMUNITY_MARKET_SEQUENCE: readonly DayCentreGeneralStep[] = [
-  { id: "dccm-bus", slug: "bus", title: "Bus to town" },
+  { id: "dccm-bus", slug: "bus", title: "Bus" },
   { id: "dccm-market", slug: "market", title: "Market" },
   { id: "dccm-shopping-basket", slug: "shopping-basket", title: "Basket" },
   { id: "dccm-pay", slug: "pay", title: "Pay" },
