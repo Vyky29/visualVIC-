@@ -108,6 +108,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   // Shopping
   supermarket: "shopping",
   market: "shopping",
+  bakery: "shopping",
   shops: "shopping",
   shopping: "shopping",
   "shopping-basket": "shopping",

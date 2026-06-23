@@ -21,6 +21,7 @@ export const DAY_CENTRE_GENERAL_CATEGORY_LABEL = "At the day centre" as const;
 
 /** Illustrated PNGs under `public/cards/day centre/general/`. */
 export const DAY_CENTRE_GENERAL_CARD_FILES = [
+  "bakery.png",
   "bean-bag.png",
   "birthday-cake.png",
   "birthday-party.png",
@@ -154,6 +155,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   // Shopping & market
   { id: "dcg-supermarket", slug: "supermarket", title: "Supermarket" },
   { id: "dcg-market", slug: "market", title: "Market" },
+  { id: "dcg-bakery", slug: "bakery", title: "Bakery" },
   { id: "dcg-shops", slug: "shops", title: "Shops" },
   { id: "dcg-shopping", slug: "shopping", title: "Shopping" },
   { id: "dcg-shopping-basket", slug: "shopping-basket", title: "Basket" },

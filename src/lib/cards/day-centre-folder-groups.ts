@@ -35,6 +35,7 @@ const COMMUNITY_SLUGS = new Set([
   "mcdonalds",
   "supermarket",
   "market",
+  "bakery",
   "shops",
   "shopping",
   "shopping-basket",
