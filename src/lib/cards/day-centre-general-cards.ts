@@ -82,6 +82,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "vegetable-peeler.png",
   "chopping-board.png",
   "tomato-sauce.png",
+  "tuna.png",
   // Materials — art & craft
   "paintbrush.png",
   "paint-palette.png",
