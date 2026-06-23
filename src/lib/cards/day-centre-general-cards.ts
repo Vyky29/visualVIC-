@@ -61,6 +61,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "music.png",
   "no.png",
   "not-now.png",
+  "onion.png",
   "oven.png",
   "park-and-swing.png",
   "park.png",

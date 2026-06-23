@@ -134,6 +134,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   ice: "food-drink",
   bananas: "food-drink",
   tomato: "food-drink",
+  onion: "food-drink",
   restaurant: "food-drink",
   breakfast: "food-drink",
   dinner: "food-drink",
