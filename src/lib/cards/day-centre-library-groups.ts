@@ -87,6 +87,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "hair-care": "personal-care",
   // Community
   bus: "community",
+  tube: "community",
   cab: "community",
   walk: "community",
   "cross-road": "community",

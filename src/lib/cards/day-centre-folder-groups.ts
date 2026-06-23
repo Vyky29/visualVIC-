@@ -42,6 +42,7 @@ const COMMUNITY_SLUGS = new Set([
   "queue",
   "restaurant",
   "bus",
+  "tube",
   "bus-stop",
   "cross-road",
   "wait",

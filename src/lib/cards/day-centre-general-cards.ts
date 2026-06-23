@@ -30,6 +30,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "bus-stop.png",
   "bus.png",
   "cab.png",
+  "tube.png",
   "cafe.png",
   "community-centre.png",
   "cross-road.png",
@@ -132,6 +133,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-hair-care", slug: "hair-care", title: "Hair care" },
   // Community access
   { id: "dcg-bus", slug: "bus", title: "Bus" },
+  { id: "dcg-tube", slug: "tube", title: "Tube" },
   { id: "dcg-cab", slug: "cab", title: "Cab" },
   { id: "dcg-walk", slug: "walk", title: "Walking" },
   { id: "dcg-cross-road", slug: "cross-road", title: "Crossing road" },
