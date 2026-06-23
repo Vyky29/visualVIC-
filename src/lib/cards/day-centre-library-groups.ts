@@ -59,6 +59,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "wooden-spoon": "materials-kitchen",
   "rolling-pin": "materials-kitchen",
   saucepan: "materials-kitchen",
+  hob: "materials-kitchen",
   "cheese-grater": "materials-kitchen",
   "vegetable-peeler": "materials-kitchen",
   "chopping-board": "materials-kitchen",

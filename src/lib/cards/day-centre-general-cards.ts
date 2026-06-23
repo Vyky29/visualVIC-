@@ -44,6 +44,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "hair-care.png",
   "hair-salon.png",
   "help.png",
+  "hob.png",
   "home.png",
   "ice.png",
   "karaoke.png",

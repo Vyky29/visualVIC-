@@ -12,6 +12,7 @@ const COOKING_SLUGS = new Set([
   "wooden-spoon",
   "rolling-pin",
   "saucepan",
+  "hob",
   "cheese-grater",
   "vegetable-peeler",
   "chopping-board",
