@@ -22,6 +22,7 @@ const COOKING_SLUGS = new Set([
   "tomato-sauce",
   "tomato",
   "onion",
+  "butter",
   "tuna",
   "sweetcorn",
   "mayonnaise",
