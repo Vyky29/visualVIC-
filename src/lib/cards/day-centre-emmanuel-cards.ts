@@ -48,6 +48,11 @@ export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly DayCentreEmmanuelSt
       slug: "cross-trainer",
       title: "Cross trainer",
     },
+    {
+      id: "dce-gym-with-michelle",
+      slug: "gym-with-michelle",
+      title: "Gym with Michelle",
+    },
     { id: "dce-basketball", slug: "basketball", title: "Basketball" },
     { id: "dce-cruzigramas", slug: "cruzigramas", title: "Cruzigramas" },
     { id: "dce-maths", slug: "maths", title: "Maths" },
