@@ -193,6 +193,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-strawberries", slug: "strawberries", title: "Strawberries" },
   { id: "dcg-ice", slug: "ice", title: "Ice" },
   { id: "dcg-bananas", slug: "bananas", title: "Bananas" },
+  { id: "dcg-tomato", slug: "tomato", title: "Tomato" },
   { id: "dcg-restaurant", slug: "restaurant", title: "Restaurant" },
   { id: "dcg-breakfast", slug: "breakfast", title: "Breakfast" },
   { id: "dcg-dinner", slug: "dinner", title: "Dinner" },
@@ -211,7 +212,6 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-chopping-board", slug: "chopping-board", title: "Chopping board" },
   { id: "dcg-knife", slug: "knife", title: "Knife" },
   { id: "dcg-tomato-sauce", slug: "tomato-sauce", title: "Tomato sauce" },
-  { id: "dcg-tomato", slug: "tomato", title: "Tomato" },
   // Materials — art & craft
   { id: "dcg-paintbrush", slug: "paintbrush", title: "Paintbrush" },
   { id: "dcg-paint-palette", slug: "paint-palette", title: "Paint palette" },
