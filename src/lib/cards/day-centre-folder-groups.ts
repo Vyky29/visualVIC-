@@ -14,6 +14,7 @@ const COOKING_SLUGS = new Set([
   "cheese-grater",
   "vegetable-peeler",
   "chopping-board",
+  "knife",
   "tomato-sauce",
   "tuna",
   "sweetcorn",
