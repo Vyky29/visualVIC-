@@ -94,6 +94,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "vegetable-peeler.png",
   "chopping-board.png",
   "tomato-sauce.png",
+  "tomato.png",
   "tuna.png",
   // Materials — art & craft
   "paintbrush.png",
@@ -210,6 +211,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-chopping-board", slug: "chopping-board", title: "Chopping board" },
   { id: "dcg-knife", slug: "knife", title: "Knife" },
   { id: "dcg-tomato-sauce", slug: "tomato-sauce", title: "Tomato sauce" },
+  { id: "dcg-tomato", slug: "tomato", title: "Tomato" },
   // Materials — art & craft
   { id: "dcg-paintbrush", slug: "paintbrush", title: "Paintbrush" },
   { id: "dcg-paint-palette", slug: "paint-palette", title: "Paint palette" },
