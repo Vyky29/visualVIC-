@@ -22,6 +22,7 @@ export const DAY_CENTRE_GENERAL_CATEGORY_LABEL = "At the day centre" as const;
 /** Illustrated PNGs under `public/cards/day centre/general/`. */
 export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "bakery.png",
+  "bananas.png",
   "bean-bag.png",
   "birthday-cake.png",
   "birthday-party.png",
