@@ -1,6 +1,7 @@
 import {
   dayCentreAyaanSceneUrl,
   dayCentreAyaanTailoredHomeAvatarUrl,
+  dayCentreEmmanuelIconUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelTailoredHomeAvatarUrl,
   dayCentreHubRoomImageUrl,
@@ -73,7 +74,7 @@ export function tailoredScheduleActionPreviewUrl(
     case "ayaan-gym-equipment-3d":
       return undefined;
     case "emmanuel-day-centre":
-      return dayCentreEmmanuelSceneUrl("cross-trainer");
+      return dayCentreEmmanuelIconUrl("cruzigramas");
     case "emmanuel-gym-equipment-3d":
       return undefined;
     default:

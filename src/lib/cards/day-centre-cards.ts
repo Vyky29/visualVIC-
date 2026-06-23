@@ -69,11 +69,14 @@ export {
 } from "@/lib/cards/day-centre-ayaan-cards";
 
 export {
+  DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_CATEGORY_LABEL,
+  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_EMMANUEL_SEQUENCE,
   dayCentreEmmanuelFocusImageUrlForStep,
+  dayCentreEmmanuelIconImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelScheduleFocusImageUrlForStep,
   dayCentreEmmanuelScheduleImageUrlForStep,

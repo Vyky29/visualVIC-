@@ -1,14 +1,22 @@
 /**
  * Tailored schedules — items-only steps (3D library objects, no avatar).
  */
-import { dayCentreGeneralImageUrl } from "@/lib/cards/day-centre-shared";
+import {
+  dayCentreEmmanuelIconUrl,
+  dayCentreGeneralImageUrl,
+} from "@/lib/cards/day-centre-shared";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import {
   physical3dGymImageUrl,
   physical3dImageUrl,
 } from "@/lib/cards/physical-cards";
 
-export type TailoredItems3dLibrary = "3d" | "3d-gym" | "general" | "dress";
+export type TailoredItems3dLibrary =
+  | "3d"
+  | "3d-gym"
+  | "general"
+  | "dress"
+  | "emmanuel-icons";
 
 export type TailoredItems3dStep = {
   id: string;
@@ -19,6 +27,8 @@ export type TailoredItems3dStep = {
 
 export function tailoredItems3dImageUrlForStep(step: TailoredItems3dStep): string {
   switch (step.library) {
+    case "emmanuel-icons":
+      return dayCentreEmmanuelIconUrl(step.slug);
     case "general":
       return dayCentreGeneralImageUrl(step.slug);
     case "dress":

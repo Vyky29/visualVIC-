@@ -207,6 +207,8 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   football: { en: "football", es: "fútbol" },
   badminton: { en: "badminton", es: "bádminton" },
   cruzigramas: { en: "crosswords", es: "cruzigramas" },
+  "washing-up": { en: "washing up", es: "fregar platos" },
+  "table-work": { en: "table work", es: "trabajo en mesa" },
   spelling: { en: "spelling", es: "deletreo" },
   handwriting: { en: "handwriting", es: "escritura" },
   maths: { en: "maths", es: "matemáticas" },
@@ -413,8 +415,8 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Ayaan · actividad física (objetos)",
   },
   "emmanuel-day-centre": {
-    en: "Emmanuel Physical Activity (avatar)",
-    es: "Emmanuel · actividad física (avatar)",
+    en: "Emmanuel · Day centre (icons)",
+    es: "Emmanuel · centro de día (iconos)",
   },
   "emmanuel-gym-equipment-3d": {
     en: "Emmanuel Physical Activity (items)",

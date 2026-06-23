@@ -180,6 +180,10 @@ export function dayCentreEmmanuelImageUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/${slug}.png`;
 }
 
+export function dayCentreEmmanuelIconUrl(slug: string): string {
+  return `${DAY_CENTRE_EMMANUEL_DIR}/icons/${slug}.png`;
+}
+
 export function dayCentreEmmanuelSceneUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/scenes/${slug}.png`;
 }

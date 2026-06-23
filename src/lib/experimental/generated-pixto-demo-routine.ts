@@ -104,6 +104,7 @@ import {
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
+  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE,
@@ -113,8 +114,6 @@ import {
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelLibrary2dFocusImageUrlForStep,
   dayCentreEmmanuelLibrary2dImageUrlForStep,
-  dayCentreEmmanuelScheduleFocusImageUrlForStep,
-  dayCentreEmmanuelScheduleImageUrlForStep,
   dayCentreEmmanuelPackMarkUrl,
   type DayCentreEmmanuelStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
@@ -551,22 +550,24 @@ export const DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS: GeneratedPixtoCardProp
     emmanuelLibrary2dGeneratedCardProps(s),
   );
 
-function emmanuelScheduleGeneratedCardProps(step: DayCentreEmmanuelStep) {
-  const focusIllustrationUrl =
-    dayCentreEmmanuelScheduleFocusImageUrlForStep(step);
-  return {
-    illustrationUrl: dayCentreEmmanuelScheduleImageUrlForStep(step),
-    title: lc(step.title),
-    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
-    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
-    iconUrl: dayCentreEmmanuelPackMarkUrl(),
-    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
-  };
+function emmanuelScheduleGeneratedCardProps(step: TailoredItems3dStep) {
+  return dayCentreItems3dGeneratedCardProps(
+    step,
+    DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+    DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    dayCentreEmmanuelPackMarkUrl(),
+  );
 }
 
-/** Emmanuel · Physical activity — gym schedule (personalised cartoon scenes). */
+/** Emmanuel · Day centre — icon schedule (no avatar in art). */
 export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE.map((s) =>
+  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE.map((s) =>
+    emmanuelScheduleGeneratedCardProps(s),
+  );
+
+/** Emmanuel · Day centre — icon cards for library picker. */
+export const DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_ICON_SEQUENCE.map((s) =>
     emmanuelScheduleGeneratedCardProps(s),
   );
 

@@ -123,6 +123,7 @@ export type LibrarySectionId =
       | "mg2d"
       | "mg3d"
       | "dcemmanuel2d"
+      | "dcemmanuel-icons"
     >
   | "dress-on"
   | "dress-off"
@@ -229,6 +230,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dcayaan: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcemmanuel: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcemmanuel2d: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
+  "dcemmanuel-icons": "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcpremium: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg2d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg3d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
@@ -254,7 +256,7 @@ function librarySectionFromCard(
   if (!pack) return null;
   if (pack === "phy2d" || pack === "phy3d" || pack === "phy3g") return "physical";
   if (pack === "mg2d" || pack === "mg3d") return "dcfolderminigym";
-  if (pack === "dcemmanuel2d") return "dcemmanuel";
+  if (pack === "dcemmanuel2d" || pack === "dcemmanuel-icons") return "dcemmanuel";
   if (pack === "daycentre") {
     const slug = c.pickId.split("::")[1] ?? "";
     return dayCentreLibrarySectionIdForSlug(slug);
