@@ -49,6 +49,9 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "resistance-bands": "mini-gym",
   "foam-roller": "mini-gym",
   stretching: "mini-gym",
+  football: "mini-gym",
+  badminton: "mini-gym",
+  basketball: "mini-gym",
   // Held — more Physical Activity items may join later
   "exercise-machine": "fitness-held",
   "row-machine": "fitness-held",

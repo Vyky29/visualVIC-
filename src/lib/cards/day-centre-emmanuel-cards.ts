@@ -146,7 +146,7 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dced-football",
       slug: "football",
       title: "Football",
-      items: { type: "3d", slug: "medicine-ball" },
+      items: { type: "3d", slug: "football" },
       avatar: { type: "emmanuel-scene", slug: "basketball" },
     },
     {

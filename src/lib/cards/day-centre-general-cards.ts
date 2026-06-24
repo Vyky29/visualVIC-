@@ -197,6 +197,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-bananas", slug: "bananas", title: "Bananas" },
   { id: "dcg-tomato", slug: "tomato", title: "Tomato" },
   { id: "dcg-onion", slug: "onion", title: "Onion" },
+  { id: "dcg-butter", slug: "butter", title: "Butter" },
   { id: "dcg-restaurant", slug: "restaurant", title: "Restaurant" },
   { id: "dcg-breakfast", slug: "breakfast", title: "Breakfast" },
   { id: "dcg-dinner", slug: "dinner", title: "Dinner" },
@@ -367,6 +368,9 @@ export const DAY_CENTRE_MINI_GYM_3D_FITNESS_SEQUENCE: readonly TailoredItems3dSt
   { id: "dc3f-exercise-mat", slug: "exercise-mat", title: "Exercise mat", library: "3d" },
   { id: "dc3f-resistance-bands", slug: "resistance-bands", title: "Resistance bands", library: "3d" },
   { id: "dc3f-foam-roller", slug: "foam-roller", title: "Foam roller", library: "3d" },
+  { id: "dc3f-football", slug: "football", title: "Football", library: "3d" },
+  { id: "dc3f-badminton", slug: "badminton", title: "Badminton", library: "3d" },
+  { id: "dc3f-basketball", slug: "basketball", title: "Basketball", library: "3d" },
 ] as const;
 
 /** Mini gym · 3D cardio stations. */
