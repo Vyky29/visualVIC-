@@ -36,6 +36,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "tube.png",
   "cafe.png",
   "community-centre.png",
+  "hub-room.png",
   "cross-road.png",
   "dinner.png",
   "drink.png",
@@ -261,6 +262,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-not-now", slug: "not-now", title: "Not now" },
   // Places & extras
   { id: "dcg-community-centre", slug: "community-centre", title: "Community centre" },
+  { id: "dcg-hub-room", slug: "hub-room", title: "Hub room" },
   { id: "dcg-make-up", slug: "make-up", title: "Make up" },
   { id: "dcg-birthday-cake", slug: "birthday-cake", title: "Birthday cake" },
   { id: "dcg-birthday-party", slug: "birthday-party", title: "Birthday party" },

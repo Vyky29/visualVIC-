@@ -152,6 +152,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   dinner: { en: "dinner", es: "cena" },
   "bus-stop": { en: "bus stop", es: "parada de autobús" },
   "community-centre": { en: "community centre", es: "centro comunitario" },
+  "hub-room": { en: "hub room", es: "sala hub" },
   shops: { en: "shops", es: "tiendas" },
   playground: { en: "playground", es: "parque infantil" },
   "swimming-pool": { en: "swimming pool", es: "piscina" },

@@ -153,6 +153,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "not-now": "communication",
   // Places & extras
   "community-centre": "places-extras",
+  "hub-room": "places-extras",
   "make-up": "places-extras",
   "birthday-cake": "places-extras",
   "birthday-party": "places-extras",
