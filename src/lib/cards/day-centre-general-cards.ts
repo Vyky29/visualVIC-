@@ -262,7 +262,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-no", slug: "no", title: "No" },
   { id: "dcg-not-now", slug: "not-now", title: "Not now" },
   // Places & extras
-  { id: "dcg-community-centre", slug: "community-centre", title: "Community centre" },
+  { id: "dcg-community-centre", slug: "community-centre", title: "Club Sensational" },
   { id: "dcg-hub-room", slug: "hub-room", title: "Hub room" },
   { id: "dcg-make-up", slug: "make-up", title: "Make up" },
   { id: "dcg-birthday-cake", slug: "birthday-cake", title: "Birthday cake" },
