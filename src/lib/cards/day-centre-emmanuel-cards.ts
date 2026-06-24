@@ -80,13 +80,6 @@ export const DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL =
 export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
   [
     {
-      id: "dced-day-centre",
-      slug: "day-centre",
-      title: "Day centre",
-      items: { type: "general", slug: "community-centre" },
-      avatar: { type: "general", slug: "community-centre" },
-    },
-    {
       id: "dced-hub-room",
       slug: "hub-room",
       title: "Hub room",

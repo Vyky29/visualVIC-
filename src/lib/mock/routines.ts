@@ -540,7 +540,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Emmanuel's weekday — day centre, snack, gym, swimming, shower, lunch, maths, football and home (avatar art)",
+      "Emmanuel's weekday — hub room, snack, gym, swimming, shower, lunch, maths, football and home (avatar art)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
