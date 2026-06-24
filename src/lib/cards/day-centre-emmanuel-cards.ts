@@ -83,8 +83,8 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dced-day-centre",
       slug: "day-centre",
       title: "Day centre",
-      items: { type: "general", slug: "community-centre" },
-      avatar: { type: "general", slug: "community-centre" },
+      items: { type: "general", slug: "hub-room" },
+      avatar: { type: "general", slug: "hub-room" },
     },
     {
       id: "dced-cruzigramas-am",
@@ -104,8 +104,8 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dced-gym",
       slug: "gym",
       title: "Gym",
-      items: { type: "3d-gym", slug: "elliptical" },
-      avatar: { type: "emmanuel-scene", slug: "cross-trainer" },
+      items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
+      avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
     },
     {
       id: "dced-swimming",
