@@ -126,6 +126,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "black-nail-varnish": "shopping",
   // Food & drink
   eat: "food-drink",
+  "packed-lunch": "food-drink",
   drink: "food-drink",
   snack: "food-drink",
   tuna: "food-drink",

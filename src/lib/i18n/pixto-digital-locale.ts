@@ -150,6 +150,8 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   library: { en: "library", es: "biblioteca" },
   breakfast: { en: "breakfast", es: "desayuno" },
   dinner: { en: "dinner", es: "cena" },
+  "packed-lunch": { en: "packed lunch", es: "tupper cerrado" },
+  lunch: { en: "lunch", es: "comida" },
   "bus-stop": { en: "bus stop", es: "parada de autobús" },
   "community-centre": { en: "community centre", es: "centro comunitario" },
   "hub-room": { en: "hub room", es: "sala hub" },

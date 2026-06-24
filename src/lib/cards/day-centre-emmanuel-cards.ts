@@ -139,8 +139,8 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dced-lunch",
       slug: "lunch",
       title: "Lunch",
-      items: { type: "general", slug: "eat" },
-      avatar: { type: "general", slug: "eat" },
+      items: { type: "general", slug: "packed-lunch" },
+      avatar: { type: "general", slug: "packed-lunch" },
     },
     {
       id: "dced-maths",
