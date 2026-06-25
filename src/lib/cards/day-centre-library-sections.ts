@@ -52,6 +52,7 @@ const GROUP_REPRESENTATIVE_SLUG: Record<DayCentreLibrarySectionGroup, string> =
     "mini-gym": "therapy-ball",
     "materials-kitchen": "apron",
     "materials-art": "paintbrush",
+    technology: "ipad",
     "activities-cognitive": "jigsaw-puzzle",
     "activities-cooking": "cooking",
     "personal-care": "wash-hands",

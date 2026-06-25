@@ -105,6 +105,10 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "scissors.png",
   "glue-stick.png",
   "coloured-paper.png",
+  // Technology
+  "ipad.png",
+  "whiteboard.png",
+  "laptop.png",
   // Activities — cognitive & sensory
   "jigsaw-puzzle.png",
   "sorting-trays.png",
@@ -224,6 +228,10 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-scissors", slug: "scissors", title: "Scissors" },
   { id: "dcg-glue-stick", slug: "glue-stick", title: "Glue stick" },
   { id: "dcg-coloured-paper", slug: "coloured-paper", title: "Coloured paper" },
+  // Technology
+  { id: "dcg-ipad", slug: "ipad", title: "iPad" },
+  { id: "dcg-whiteboard", slug: "whiteboard", title: "Whiteboard" },
+  { id: "dcg-laptop", slug: "laptop", title: "Laptop" },
   // Activities — puzzles, sorting & matching
   { id: "dcg-jigsaw-puzzle", slug: "jigsaw-puzzle", title: "Jigsaw puzzle" },
   { id: "dcg-sorting-trays", slug: "sorting-trays", title: "Sorting trays" },

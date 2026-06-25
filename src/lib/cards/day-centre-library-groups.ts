@@ -8,6 +8,7 @@ export type DayCentreLibraryGroup =
   | "fitness-held"
   | "materials-kitchen"
   | "materials-art"
+  | "technology"
   | "activities-cognitive"
   | "activities-cooking"
   | "personal-care"
@@ -23,6 +24,7 @@ export const DAY_CENTRE_LIBRARY_GROUP_ORDER: readonly DayCentreLibraryGroup[] = 
   "mini-gym",
   "materials-kitchen",
   "materials-art",
+  "technology",
   "activities-cognitive",
   "activities-cooking",
   "personal-care",
@@ -76,6 +78,10 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   scissors: "materials-art",
   "glue-stick": "materials-art",
   "coloured-paper": "materials-art",
+  // Technology
+  ipad: "technology",
+  whiteboard: "technology",
+  laptop: "technology",
   // Activities — cognitive
   "jigsaw-puzzle": "activities-cognitive",
   "sorting-trays": "activities-cognitive",
