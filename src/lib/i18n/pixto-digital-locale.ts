@@ -156,6 +156,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   "community-centre": { en: "club sensational", es: "club sensational" },
   "hub-room": { en: "hub room", es: "sala hub" },
   ipad: { en: "ipad", es: "ipad" },
+  tablet: { en: "tablet", es: "tablet" },
   whiteboard: { en: "whiteboard", es: "pizarra" },
   laptop: { en: "laptop", es: "portátil" },
   shops: { en: "shops", es: "tiendas" },

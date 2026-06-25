@@ -107,6 +107,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "coloured-paper.png",
   // Technology
   "ipad.png",
+  "tablet.png",
   "whiteboard.png",
   "laptop.png",
   // Activities — cognitive & sensory
@@ -230,6 +231,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-coloured-paper", slug: "coloured-paper", title: "Coloured paper" },
   // Technology
   { id: "dcg-ipad", slug: "ipad", title: "iPad" },
+  { id: "dcg-tablet", slug: "tablet", title: "Tablet" },
   { id: "dcg-whiteboard", slug: "whiteboard", title: "Whiteboard" },
   { id: "dcg-laptop", slug: "laptop", title: "Laptop" },
   // Activities — puzzles, sorting & matching

@@ -80,6 +80,7 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "coloured-paper": "materials-art",
   // Technology
   ipad: "technology",
+  tablet: "technology",
   whiteboard: "technology",
   laptop: "technology",
   // Activities — cognitive
