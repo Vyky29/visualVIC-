@@ -27,6 +27,9 @@ function inferTailoredColourFromStep(step: RoutineStep): string | undefined {
   if (haystack.includes("/ayaan") || haystack.includes("/emmanuel")) {
     return TAILORED_NAVY_FALLBACK;
   }
+  if (haystack.includes("/cyrus")) {
+    return "#2E7D6E";
+  }
   if (
     haystack.includes("/ikram") ||
     haystack.includes("/serine") ||
@@ -55,6 +58,9 @@ export function resolveCategoryBackCardUrl(
   if (path.includes("day%20centre")) {
     if (path.includes("/ayaan") || path.includes("/emmanuel")) {
       return tailoredSchedulesNavyBackCardUrl();
+    }
+    if (path.includes("/cyrus")) {
+      return tailoredSchedulesBackCardUrl();
     }
     if (path.includes("/ikram") || path.includes("/serine")) {
       return tailoredSchedulesBackCardUrl();

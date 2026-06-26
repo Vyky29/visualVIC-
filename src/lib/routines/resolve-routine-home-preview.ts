@@ -1,6 +1,8 @@
 import {
   dayCentreAyaanSceneUrl,
   dayCentreAyaanTailoredHomeAvatarUrl,
+  dayCentreCyrusSceneUrl,
+  dayCentreCyrusTailoredHomeAvatarUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelTailoredHomeAvatarUrl,
   dayCentreHubRoomImageUrl,
@@ -27,6 +29,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "emmanuel-day-centre-items",
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
+  "cyrus-day-centre",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -56,6 +59,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
     case "emmanuel-gym-equipment-3d":
       return undefined;
+    case "cyrus-day-centre":
+      return dayCentreCyrusTailoredHomeAvatarUrl();
     default:
       return undefined;
   }
@@ -86,6 +91,8 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreEmmanuelSceneUrl("cross-trainer");
     case "emmanuel-gym-equipment-3d":
       return undefined;
+    case "cyrus-day-centre":
+      return dayCentreCyrusSceneUrl("motor-skills");
     default:
       return undefined;
   }
@@ -106,6 +113,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/serine")) return "serine-day-centre";
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
   if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
+  if (haystack.includes("/cyrus")) return "cyrus-day-centre";
   return undefined;
 }
 

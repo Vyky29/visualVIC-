@@ -59,7 +59,7 @@ export function canEditTailoredParticipantSchedule(
 
 export function participantLibrarySectionId(
   participantId: TailoredParticipantId,
-): "dcikram" | "dcserine" | "dcayaan" | "dcemmanuel" {
+): "dcikram" | "dcserine" | "dcayaan" | "dcemmanuel" | "dccyrus" {
   switch (participantId) {
     case "ikram":
       return "dcikram";
@@ -69,6 +69,8 @@ export function participantLibrarySectionId(
       return "dcayaan";
     case "emmanuel":
       return "dcemmanuel";
+    case "cyrus":
+      return "dccyrus";
   }
 }
 

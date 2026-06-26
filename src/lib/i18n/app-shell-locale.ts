@@ -10,6 +10,7 @@ import {
   libraryDayCentreSerineLabel,
   libraryDayCentreAyaanLabel,
   libraryDayCentreEmmanuelLabel,
+  libraryDayCentreCyrusLabel,
   libraryDayCentreFolderLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
@@ -237,6 +238,7 @@ export type LibraryPackSectionId =
   | "dcserine"
   | "dcayaan"
   | "dcemmanuel"
+  | "dccyrus"
   | "physical"
   | "climb"
   | "swim";
@@ -259,6 +261,7 @@ export function libraryPackSectionTitle(
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
   if (section === "dcemmanuel") return libraryDayCentreEmmanuelLabel(lang);
+  if (section === "dccyrus") return libraryDayCentreCyrusLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";
   }

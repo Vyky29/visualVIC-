@@ -11,6 +11,7 @@ export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
 export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
 export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
 export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as const;
+export const DAY_CENTRE_CYRUS_DIR = `${DAY_CENTRE_PUBLIC_DIR}/cyrus` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -198,6 +199,40 @@ export function dayCentreEmmanuelScene2dUrl(slug: string): string {
 
 export function dayCentreEmmanuelScene2dFocusUrl(slug: string): string {
   return `${DAY_CENTRE_EMMANUEL_DIR}/scenes-2d/${slug}-focus.png`;
+}
+
+export function dayCentreCyrusPackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreCyrusAvatarUrl(): string {
+  return "/avatars/cyrus-cartoon.png";
+}
+
+/** Home · Tailored schedules — 2D face portrait. */
+export function dayCentreCyrusTailoredHomeAvatarUrl(): string {
+  return "/avatars/cyrus-cartoon-2d.png";
+}
+
+/** Library pack accordion — 3D face close-up, fill icon square. */
+export function dayCentreCyrusLibraryPackIconUrl(): string {
+  return dayCentreCyrusAvatarUrl();
+}
+
+export function dayCentreCyrusSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_CYRUS_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreCyrusSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_CYRUS_DIR}/scenes/${slug}-focus.png`;
+}
+
+export function dayCentreCyrusScene2dUrl(slug: string): string {
+  return `${DAY_CENTRE_CYRUS_DIR}/scenes-2d/${slug}.png`;
+}
+
+export function dayCentreCyrusScene2dFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_CYRUS_DIR}/scenes-2d/${slug}-focus.png`;
 }
 
 /** Square 2D avatars — Home · Tailored schedules tiles only. */

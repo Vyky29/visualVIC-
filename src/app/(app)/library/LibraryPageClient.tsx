@@ -39,6 +39,7 @@ import {
 } from "@/lib/cards/physical-library-groups";
 import {
   dayCentreAyaanLibraryPackIconUrl,
+  dayCentreCyrusLibraryPackIconUrl,
   dayCentreEmmanuelLibraryPackIconUrl,
   dayCentreIkramLibraryPackIconUrl,
   dayCentreSerineLibraryPackIconUrl,
@@ -166,6 +167,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "dcserine",
     "dcayaan",
     "dcemmanuel",
+    "dccyrus",
   ],
   activity: ["climb", "swim", "physical"],
 };
@@ -187,6 +189,7 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   dcserine: dayCentreSerineLibraryPackIconUrl(),
   dcayaan: dayCentreAyaanLibraryPackIconUrl(),
   dcemmanuel: dayCentreEmmanuelLibraryPackIconUrl(),
+  dccyrus: dayCentreCyrusLibraryPackIconUrl(),
   physical: physicalPackMarkUrl(),
   climb: climbingImageUrl("climbing-wall"),
   swim: swimmingImageUrl("goggles-on"),
@@ -209,6 +212,7 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   dcserine: "ring-[#E05C9A]/75",
   dcayaan: "ring-[#1E4A73]/75",
   dcemmanuel: "ring-[#1E4A73]/75",
+  dccyrus: "ring-[#2E7D6E]/75",
   physical: "ring-[#43A047]/75",
   climb: "ring-[#d4a53a]/85",
   swim: "ring-[#4a8fa8]/75",
@@ -231,6 +235,7 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dcemmanuel: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   dcemmanuel2d: "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
   "dcemmanuel-icons": "border-t border-[#1E4A73]/55 bg-[#e4edf5] text-ink",
+  dccyrus: "border-t border-[#2E7D6E]/55 bg-[#e6f4f1] text-ink",
   dcpremium: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg2d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg3d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",

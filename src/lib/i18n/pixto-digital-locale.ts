@@ -437,6 +437,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Emmanuel · Gym (items)",
     es: "Emmanuel · gimnasio (objetos)",
   },
+  "cyrus-day-centre": {
+    en: "Cyrus · Day centre (avatar)",
+    es: "Cyrus · centro de día (avatar)",
+  },
   physical: {
     en: "Physical Activity",
     es: "Actividad física",
@@ -452,7 +456,7 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
 };
 
 export function libraryTailoredParticipantFolderLabel(
-  participant: "ikram" | "serine" | "ayaan" | "emmanuel",
+  participant: "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -463,7 +467,9 @@ export function libraryTailoredParticipantFolderLabel(
         ? "Serine"
         : participant === "ayaan"
           ? "Ayaan"
-          : "Emmanuel";
+          : participant === "emmanuel"
+            ? "Emmanuel"
+            : "Cyrus";
   if (ui === "es") return `Carpeta de ${name}`;
   return `${name}'s Folder`;
 }
@@ -506,6 +512,10 @@ export function libraryDayCentreAyaanLabel(language: CardLanguageCode): string {
 
 export function libraryDayCentreEmmanuelLabel(language: CardLanguageCode): string {
   return libraryTailoredParticipantFolderLabel("emmanuel", language);
+}
+
+export function libraryDayCentreCyrusLabel(language: CardLanguageCode): string {
+  return libraryTailoredParticipantFolderLabel("cyrus", language);
 }
 
 export function stockRoutineDisplayName(

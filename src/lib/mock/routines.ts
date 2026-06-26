@@ -52,6 +52,7 @@ import {
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
+  DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
@@ -78,6 +79,7 @@ import {
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
+import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
 import {
   DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
   DAY_CENTRE_IKRAM_ROUTINE_NAME,
@@ -582,6 +584,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-gym-equipment-3d",
       DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "cyrus-day-centre",
+    name: DAY_CENTRE_CYRUS_ROUTINE_NAME,
+    description:
+      "Cyrus at the day centre — table work, trampoline, mini gym and motor skills (personalised 3D scenes)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("cyrus-day-centre"),
+    steps: routineStepsFromGeneratedCardProps(
+      "cyrus-day-centre",
+      DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {

@@ -99,7 +99,7 @@ const HOME_EXTRA_PACK_GROUPS = [
   },
   {
     key: "home::tailored",
-    routineIds: new Set(["ikram-day-centre", "serine-day-centre", "ayaan-day-centre", "emmanuel-day-centre"]),
+    routineIds: new Set(["ikram-day-centre", "serine-day-centre", "ayaan-day-centre", "emmanuel-day-centre", "cyrus-day-centre"]),
     ringClass: "ring-[#E05C9A]/80",
     logoUrl: tailoredSchedulesPackMarkUrl,
     title: dashboardTailoredSchedulesSectionTitle,

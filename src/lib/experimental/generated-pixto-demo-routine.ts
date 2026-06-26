@@ -104,6 +104,18 @@ import {
   type DayCentreAyaanStep,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
+  DAY_CENTRE_CYRUS_LIBRARY_SEQUENCE,
+  DAY_CENTRE_CYRUS_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_CYRUS_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_CYRUS_CATEGORY_COLOUR,
+  dayCentreCyrusFocusImageUrlForStep,
+  dayCentreCyrusImageUrlForStep,
+  dayCentreCyrusScheduleFocusImageUrlForStep,
+  dayCentreCyrusScheduleImageUrlForStep,
+  dayCentreCyrusPackMarkUrl,
+  type DayCentreCyrusStep,
+} from "@/lib/cards/day-centre-cyrus-cards";
+import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE,
@@ -520,6 +532,38 @@ function ayaanMachinery3dGeneratedCardProps(step: DayCentreAyaanMachineryStep) {
 export const DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_AYAAN_MACHINERY_3D_SEQUENCE.map((s) =>
     ayaanMachinery3dGeneratedCardProps(s),
+  );
+
+function cyrusGeneratedCardProps(step: DayCentreCyrusStep) {
+  const focusIllustrationUrl = dayCentreCyrusFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreCyrusImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_CYRUS_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_CYRUS_CATEGORY_COLOUR,
+    iconUrl: dayCentreCyrusPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_CYRUS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_CYRUS_LIBRARY_SEQUENCE.map((s) => cyrusGeneratedCardProps(s));
+
+function cyrusScheduleGeneratedCardProps(step: DayCentreCyrusStep) {
+  const focusIllustrationUrl = dayCentreCyrusScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreCyrusScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_CYRUS_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_CYRUS_CATEGORY_COLOUR,
+    iconUrl: dayCentreCyrusPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_CYRUS_SCHEDULE_SEQUENCE.map((s) =>
+    cyrusScheduleGeneratedCardProps(s),
   );
 
 /** Tailored schedules · Emmanuel — physical activity library. */

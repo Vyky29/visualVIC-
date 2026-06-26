@@ -6,7 +6,7 @@ import { DAY_CENTRE_LIBRARY_SECTION_IDS } from "@/lib/cards/day-centre-library-s
 
 export type PortalAppRole = "staff" | "lead" | "admin" | "ceo";
 
-export type ParticipantSlug = "ikram" | "serine" | "ayaan" | "emmanuel";
+export type ParticipantSlug = "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus";
 
 export type PlannerLibrarySectionId =
   | "bt"
@@ -27,6 +27,7 @@ export type PlannerLibrarySectionId =
   | "dcserine"
   | "dcayaan"
   | "dcemmanuel"
+  | "dccyrus"
   | "physical";
 
 /** Day centre folders visible to assigned staff (Premium replaces core/shower/dress). */
@@ -54,6 +55,7 @@ export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dcserine",
   "dcayaan",
   "dcemmanuel",
+  "dccyrus",
   "climb",
   "swim",
   "physical",
@@ -67,6 +69,7 @@ const PARTICIPANT_TO_SECTION: Record<
   serine: "dcserine",
   ayaan: "dcayaan",
   emmanuel: "dcemmanuel",
+  cyrus: "dccyrus",
 };
 
 export type StaffProfileRow = {
@@ -91,7 +94,7 @@ export function isPlannerElevatedRole(role: PortalAppRole): boolean {
 
 export function parseParticipantSlug(raw: string): ParticipantSlug | null {
   const s = raw.trim().toLowerCase();
-  if (s === "ikram" || s === "serine" || s === "ayaan" || s === "emmanuel") {
+  if (s === "ikram" || s === "serine" || s === "ayaan" || s === "emmanuel" || s === "cyrus") {
     return s;
   }
   return null;
