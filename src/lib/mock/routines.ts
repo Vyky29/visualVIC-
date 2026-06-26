@@ -566,7 +566,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre-items",
     name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
     description:
-      "Emmanuel's weekday — same flow with object / icon illustrations (no avatar)",
+      "Emmanuel · Mon/Tue/Wed — cruzigramas, circle time, snack, gym (with Michelle), trunks on, swimming, shower, shampoo, lunch, maths, sports, washing up, cruzigramas and home (object / icon art)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
     steps: routineStepsFromGeneratedCardProps(

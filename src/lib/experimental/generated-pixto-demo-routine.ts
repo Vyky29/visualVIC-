@@ -147,6 +147,7 @@ import {
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE,
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
@@ -762,9 +763,9 @@ function emmanuelDailyItemsGeneratedCardProps(step: EmmanuelDailyStep) {
   };
 }
 
-/** Emmanuel · Day centre (items) — full weekday schedule. */
+/** Emmanuel · Day centre (items) — Mon/Tue/Wed schedule (object & icon art). */
 export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+  DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE.map((s) =>
     emmanuelDailyItemsGeneratedCardProps(s),
   );
 

@@ -16,6 +16,7 @@ import {
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
 import {
@@ -39,6 +40,7 @@ export type EmmanuelDailyArtSource =
   | { type: "emmanuel-icon"; slug: string }
   | { type: "emmanuel-scene"; slug: string }
   | { type: "shower"; slug: string }
+  | { type: "dress"; slug: string }
   | { type: "3d"; slug: string }
   | { type: "3d-gym"; slug: string };
 
@@ -165,6 +167,112 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
     },
     {
       id: "dced-home",
+      slug: "home",
+      title: "Home",
+      items: { type: "general", slug: "home" },
+      avatar: { type: "general", slug: "home" },
+    },
+  ] as const;
+
+/**
+ * Items routine · Mon / Tue / Wed — object & icon illustrations (no avatar).
+ * Gym keeps Emmanuel's real photo with Michelle, as requested.
+ */
+export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  [
+    {
+      id: "dcedi-cruzigramas-am",
+      slug: "cruzigramas-am",
+      title: "Cruzigramas",
+      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      avatar: { type: "emmanuel-icon", slug: "cruzigramas" },
+    },
+    {
+      id: "dcedi-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+      items: { type: "general", slug: "circle-time" },
+      avatar: { type: "general", slug: "circle-time" },
+    },
+    {
+      id: "dcedi-snack",
+      slug: "snack",
+      title: "Snack",
+      items: { type: "general", slug: "snack" },
+      avatar: { type: "general", slug: "snack" },
+    },
+    {
+      id: "dcedi-gym",
+      slug: "gym",
+      title: "Gym",
+      items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
+      avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
+    },
+    {
+      id: "dcedi-trunks-on",
+      slug: "trunks-on",
+      title: "Trunks on",
+      items: { type: "dress", slug: "trunks-on" },
+      avatar: { type: "dress", slug: "trunks-on" },
+    },
+    {
+      id: "dcedi-swimming",
+      slug: "swimming",
+      title: "Swimming",
+      items: { type: "general", slug: "swimming-pool" },
+      avatar: { type: "general", slug: "swimming-pool" },
+    },
+    {
+      id: "dcedi-shower",
+      slug: "shower",
+      title: "Shower",
+      items: { type: "shower", slug: "shower" },
+      avatar: { type: "shower", slug: "shower" },
+    },
+    {
+      id: "dcedi-shampoo",
+      slug: "shampoo",
+      title: "Shampoo",
+      items: { type: "shower", slug: "shampoo" },
+      avatar: { type: "shower", slug: "shampoo" },
+    },
+    {
+      id: "dcedi-lunch",
+      slug: "lunch",
+      title: "Lunch",
+      items: { type: "general", slug: "packed-lunch" },
+      avatar: { type: "general", slug: "packed-lunch" },
+    },
+    {
+      id: "dcedi-maths",
+      slug: "maths",
+      title: "Maths",
+      items: { type: "emmanuel-icon", slug: "maths" },
+      avatar: { type: "emmanuel-icon", slug: "maths" },
+    },
+    {
+      id: "dcedi-sports",
+      slug: "sports",
+      title: "Sports",
+      items: { type: "3d", slug: "football" },
+      avatar: { type: "3d", slug: "football" },
+    },
+    {
+      id: "dcedi-washing-up",
+      slug: "washing-up",
+      title: "Washing up",
+      items: { type: "emmanuel-icon", slug: "washing-up" },
+      avatar: { type: "emmanuel-icon", slug: "washing-up" },
+    },
+    {
+      id: "dcedi-cruzigramas-pm",
+      slug: "cruzigramas-pm",
+      title: "Cruzigramas",
+      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      avatar: { type: "emmanuel-icon", slug: "cruzigramas" },
+    },
+    {
+      id: "dcedi-home",
       slug: "home",
       title: "Home",
       items: { type: "general", slug: "home" },
@@ -318,6 +426,8 @@ export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string
       return dayCentreEmmanuelSceneUrl(source.slug);
     case "shower":
       return showerImageUrl(source.slug);
+    case "dress":
+      return gettingDressUndressImageUrl(source.slug);
     case "3d-gym":
       return physical3dGymImageUrl(source.slug);
     case "3d":

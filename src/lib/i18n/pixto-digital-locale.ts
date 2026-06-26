@@ -239,6 +239,8 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "circle time",
     es: "tiempo de círculo",
   },
+  "trunks-on": { en: "trunks on", es: "ponerse el bañador" },
+  sports: { en: "sports", es: "deporte" },
   "sitting-in-the-pool": {
     en: "sitting in the pool",
     es: "sentada en la piscina",
