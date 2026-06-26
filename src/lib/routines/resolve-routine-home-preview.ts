@@ -5,6 +5,8 @@ import {
   dayCentreCyrusTailoredHomeAvatarUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelTailoredHomeAvatarUrl,
+  dayCentreFadiImageUrl,
+  dayCentreFadiTailoredHomeAvatarUrl,
   dayCentreHubRoomImageUrl,
   dayCentreIkramSceneUrl,
   dayCentreIkramTailoredHomeAvatarUrl,
@@ -35,6 +37,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
+  "fadi-day-centre",
   "timi-day-centre",
 ] as const;
 
@@ -73,6 +76,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return undefined;
     case "cyrus-day-centre":
       return dayCentreCyrusTailoredHomeAvatarUrl();
+    case "fadi-day-centre":
+      return dayCentreFadiTailoredHomeAvatarUrl();
     case "timi-day-centre":
       return dayCentreTimiTailoredHomeAvatarUrl();
     default:
@@ -113,6 +118,8 @@ export function tailoredScheduleActionPreviewUrl(
       return undefined;
     case "cyrus-day-centre":
       return dayCentreCyrusSceneUrl("table-work");
+    case "fadi-day-centre":
+      return dayCentreFadiImageUrl("vassims-car");
     case "timi-day-centre":
       return dayCentreGeneralImageUrl("timi-motor-skills");
     default:
@@ -136,6 +143,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
   if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
+  if (haystack.includes("/fadi")) return "fadi-day-centre";
   if (haystack.includes("/timi")) return "timi-day-centre";
   return undefined;
 }

@@ -515,6 +515,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Cyrus · Day centre (avatar)",
     es: "Cyrus · centro de día (avatar)",
   },
+  "fadi-day-centre": {
+    en: "Fadi · Day centre (avatar)",
+    es: "Fadi · centro de día (avatar)",
+  },
   "timi-day-centre": {
     en: "Timi · Day centre (avatar)",
     es: "Timi · centro de día (avatar)",
@@ -534,7 +538,14 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
 };
 
 export function libraryTailoredParticipantFolderLabel(
-  participant: "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus" | "timi",
+  participant:
+    | "ikram"
+    | "serine"
+    | "ayaan"
+    | "emmanuel"
+    | "cyrus"
+    | "fadi"
+    | "timi",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -549,7 +560,9 @@ export function libraryTailoredParticipantFolderLabel(
             ? "Emmanuel"
             : participant === "cyrus"
               ? "Cyrus"
-              : "Timi";
+              : participant === "fadi"
+                ? "Fadi"
+                : "Timi";
   if (ui === "es") return `Carpeta de ${name}`;
   return `${name}'s Folder`;
 }
@@ -596,6 +609,10 @@ export function libraryDayCentreEmmanuelLabel(language: CardLanguageCode): strin
 
 export function libraryDayCentreCyrusLabel(language: CardLanguageCode): string {
   return libraryTailoredParticipantFolderLabel("cyrus", language);
+}
+
+export function libraryDayCentreFadiLabel(language: CardLanguageCode): string {
+  return libraryTailoredParticipantFolderLabel("fadi", language);
 }
 
 export function libraryDayCentreTimiLabel(language: CardLanguageCode): string {

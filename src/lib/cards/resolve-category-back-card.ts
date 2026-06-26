@@ -30,6 +30,9 @@ function inferTailoredColourFromStep(step: RoutineStep): string | undefined {
   if (haystack.includes("/cyrus")) {
     return "#2E7D6E";
   }
+  if (haystack.includes("/fadi")) {
+    return "#8C1E2E";
+  }
   if (haystack.includes("/timi")) {
     return "#C8741C";
   }
@@ -63,6 +66,9 @@ export function resolveCategoryBackCardUrl(
       return tailoredSchedulesNavyBackCardUrl();
     }
     if (path.includes("/cyrus")) {
+      return tailoredSchedulesBackCardUrl();
+    }
+    if (path.includes("/fadi")) {
       return tailoredSchedulesBackCardUrl();
     }
     if (path.includes("/timi")) {

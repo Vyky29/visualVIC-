@@ -53,6 +53,10 @@ import {
   dayCentreCyrusImageUrlForStep,
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
+  DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
+  dayCentreFadiImageUrlForStep,
+} from "@/lib/cards/day-centre-fadi-cards";
+import {
   DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
   dayCentreTimiImageUrlForStep,
 } from "@/lib/cards/day-centre-timi-cards";
@@ -98,6 +102,7 @@ import {
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS,
@@ -125,6 +130,7 @@ export type PickablePackId =
   | "dcemmanuel2d"
   | "dcemmanuel-icons"
   | "dccyrus"
+  | "dcfadi"
   | "dctimi"
   | "dcpremium"
   | "mg2d"
@@ -152,6 +158,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dcemmanuel2d" ||
     ns === "dcemmanuel-icons" ||
     ns === "dccyrus" ||
+    ns === "dcfadi" ||
     ns === "dctimi" ||
     ns === "dcpremium" ||
     ns === "mg2d" ||
@@ -581,6 +588,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dccyrus", s.slug),
       label: s.title,
       imageUrl: dayCentreCyrusImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_FADI_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_FADI_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcfadi", s.slug),
+      label: s.title,
+      imageUrl: dayCentreFadiImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

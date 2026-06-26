@@ -53,6 +53,7 @@ import {
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
@@ -84,6 +85,7 @@ import {
   DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
+import { DAY_CENTRE_FADI_ROUTINE_NAME } from "@/lib/cards/day-centre-fadi-cards";
 import { DAY_CENTRE_TIMI_ROUTINE_NAME } from "@/lib/cards/day-centre-timi-cards";
 import {
   DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
@@ -606,6 +608,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "cyrus-day-centre",
       DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "fadi-day-centre",
+    name: DAY_CENTRE_FADI_ROUTINE_NAME,
+    description:
+      "Fadi's day-centre routine — day centre, swimming, snack, table work, Co-op and Vassim's car",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("fadi-day-centre"),
+    steps: routineStepsFromGeneratedCardProps(
+      "fadi-day-centre",
+      DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {

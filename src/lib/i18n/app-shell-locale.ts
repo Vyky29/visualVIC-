@@ -11,6 +11,7 @@ import {
   libraryDayCentreAyaanLabel,
   libraryDayCentreEmmanuelLabel,
   libraryDayCentreCyrusLabel,
+  libraryDayCentreFadiLabel,
   libraryDayCentreTimiLabel,
   libraryDayCentreFolderLabel,
 } from "@/lib/i18n/pixto-digital-locale";
@@ -240,6 +241,7 @@ export type LibraryPackSectionId =
   | "dcayaan"
   | "dcemmanuel"
   | "dccyrus"
+  | "dcfadi"
   | "dctimi"
   | "physical"
   | "climb"
@@ -264,6 +266,7 @@ export function libraryPackSectionTitle(
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
   if (section === "dcemmanuel") return libraryDayCentreEmmanuelLabel(lang);
   if (section === "dccyrus") return libraryDayCentreCyrusLabel(lang);
+  if (section === "dcfadi") return libraryDayCentreFadiLabel(lang);
   if (section === "dctimi") return libraryDayCentreTimiLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";

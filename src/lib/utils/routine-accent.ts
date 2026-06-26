@@ -67,6 +67,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
+  "fadi-day-centre",
   "timi-day-centre",
 ]);
 
@@ -530,6 +531,9 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (includesAny(haystack, ["/day centre/cyrus", "/cyrus/"])) {
     return "tailored";
   }
+  if (includesAny(haystack, ["/day centre/fadi", "/fadi/"])) {
+    return "tailored";
+  }
   if (includesAny(haystack, ["/general/timi", "timi-"])) {
     return "tailored";
   }
@@ -667,6 +671,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "fadi-day-centre") return "tailored";
   if (id === "timi-day-centre") return "tailored";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
@@ -732,6 +737,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "fadi-day-centre") return "tailored";
   if (id === "timi-day-centre") return "tailored";
   if (id.includes("core")) return "core";
 

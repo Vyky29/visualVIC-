@@ -14,6 +14,7 @@ export const TAILORED_PARTICIPANT_IDS = [
   "ayaan",
   "emmanuel",
   "cyrus",
+  "fadi",
   "timi",
 ] as const;
 
@@ -40,6 +41,7 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
     "emmanuel-gym-equipment-3d",
   ],
   cyrus: ["cyrus-day-centre"],
+  fadi: ["fadi-day-centre"],
   timi: ["timi-day-centre"],
 };
 
@@ -74,6 +76,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
   if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
+  if (haystack.includes("/fadi")) return "fadi-day-centre";
   if (haystack.includes("/timi")) return "timi-day-centre";
   return undefined;
 }
@@ -116,6 +119,8 @@ export function tailoredParticipantDisplayName(
       return "Emmanuel";
     case "cyrus":
       return "Cyrus";
+    case "fadi":
+      return "Fadi";
     case "timi":
       return "Timi";
   }

@@ -6,7 +6,14 @@ import { DAY_CENTRE_LIBRARY_SECTION_IDS } from "@/lib/cards/day-centre-library-s
 
 export type PortalAppRole = "staff" | "lead" | "admin" | "ceo";
 
-export type ParticipantSlug = "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus" | "timi";
+export type ParticipantSlug =
+  | "ikram"
+  | "serine"
+  | "ayaan"
+  | "emmanuel"
+  | "cyrus"
+  | "fadi"
+  | "timi";
 
 export type PlannerLibrarySectionId =
   | "bt"
@@ -28,6 +35,7 @@ export type PlannerLibrarySectionId =
   | "dcayaan"
   | "dcemmanuel"
   | "dccyrus"
+  | "dcfadi"
   | "dctimi"
   | "physical";
 
@@ -57,6 +65,7 @@ export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dcayaan",
   "dcemmanuel",
   "dccyrus",
+  "dcfadi",
   "dctimi",
   "climb",
   "swim",
@@ -72,6 +81,7 @@ const PARTICIPANT_TO_SECTION: Record<
   ayaan: "dcayaan",
   emmanuel: "dcemmanuel",
   cyrus: "dccyrus",
+  fadi: "dcfadi",
   timi: "dctimi",
 };
 
@@ -97,7 +107,15 @@ export function isPlannerElevatedRole(role: PortalAppRole): boolean {
 
 export function parseParticipantSlug(raw: string): ParticipantSlug | null {
   const s = raw.trim().toLowerCase();
-  if (s === "ikram" || s === "serine" || s === "ayaan" || s === "emmanuel" || s === "cyrus" || s === "timi") {
+  if (
+    s === "ikram" ||
+    s === "serine" ||
+    s === "ayaan" ||
+    s === "emmanuel" ||
+    s === "cyrus" ||
+    s === "fadi" ||
+    s === "timi"
+  ) {
     return s;
   }
   return null;
