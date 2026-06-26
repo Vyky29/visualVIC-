@@ -155,6 +155,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   "bus-stop": { en: "bus stop", es: "parada de autobús" },
   "community-centre": { en: "club sensational", es: "club sensational" },
   "hub-room": { en: "hub room", es: "sala hub" },
+  "sensory-room": { en: "sensory room", es: "sala sensorial" },
   ipad: { en: "ipad", es: "ipad" },
   tablet: { en: "tablet", es: "tablet" },
   whiteboard: { en: "whiteboard", es: "pizarra" },
@@ -172,6 +173,21 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   cab: { en: "cab home", es: "taxi a casa" },
   "jigsaw-puzzle": { en: "jigsaw puzzle", es: "puzzle" },
   "mixing-bowl": { en: "mixing bowl", es: "bol de mezclar" },
+  apron: { en: "apron", es: "delantal" },
+  "wooden-spoon": { en: "wooden spoon", es: "cuchara de madera" },
+  "rolling-pin": { en: "rolling pin", es: "rodillo" },
+  flour: { en: "flour", es: "harina" },
+  water: { en: "water", es: "agua" },
+  mix: { en: "mix", es: "mezclar" },
+  knead: { en: "knead", es: "amasar" },
+  "pizza-dough": { en: "pizza dough", es: "masa de pizza" },
+  cheese: { en: "cheese", es: "queso" },
+  chorizo: { en: "chorizo", es: "chorizo" },
+  oven: { en: "oven", es: "horno" },
+  eat: { en: "eat", es: "comer" },
+  "tidy-up": { en: "tidy up", es: "recoger" },
+  peeling: { en: "peeling", es: "pelar" },
+  "tomato-sauce": { en: "tomato sauce", es: "salsa de tomate" },
   pizza: { en: "pizza", es: "pizza" },
   painting: { en: "painting", es: "pintar" },
   market: { en: "market", es: "mercado" },
@@ -223,6 +239,52 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "circle time",
     es: "tiempo de círculo",
   },
+  "sitting-in-the-pool": {
+    en: "sitting in the pool",
+    es: "sentada en la piscina",
+  },
+  "swing-with-luliya": {
+    en: "swing with Luliya",
+    es: "columpio con Luliya",
+  },
+  "timi-fitness": { en: "timi fitness", es: "timi fitness" },
+  "timi-foam": {
+    en: "timi foam",
+    es: "timi espuma",
+  },
+  "timi-motor-skills-with-raul": {
+    en: "timi motor skills with Raul",
+    es: "timi motricidad con Raul",
+  },
+  "timi-motor-skills": {
+    en: "timi motor skills",
+    es: "timi motricidad",
+  },
+  "timi-screwdriver": {
+    en: "timi screwdriver",
+    es: "timi destornillador",
+  },
+  "timi-puzzles-with-raul": {
+    en: "timi puzzles with Raul",
+    es: "timi puzzles con Raul",
+  },
+  "timi-puzzle-2": {
+    en: "timi puzzle 2",
+    es: "timi puzzle 2",
+  },
+  "timi-stacking-cubes": {
+    en: "timi stacking cubes",
+    es: "timi apilando cubos",
+  },
+  "timi-vocational-activity": {
+    en: "timi vocational activity",
+    es: "timi actividad vocacional",
+  },
+  "yellow-bib-walk": {
+    en: "yellow bib walk",
+    es: "caminar con chaleco amarillo",
+  },
+  happy: { en: "happy", es: "contento" },
   skierg: { en: "ski machine", es: "máquina de esquí" },
   stretching: { en: "stretching", es: "estiramientos" },
   finished: { en: "finished", es: "terminado" },
@@ -405,6 +467,18 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Ikram · Day centre (items)",
     es: "Ikram · centro de día (objetos)",
   },
+  "ikram-mon-wed-fri-items": {
+    en: "Ikram · Mon / Wed / Fri (items)",
+    es: "Ikram · lunes / miércoles / viernes (objetos)",
+  },
+  "ikram-mon-wed-fri": {
+    en: "Ikram · Mon / Wed / Fri (avatar)",
+    es: "Ikram · lunes / miércoles / viernes (avatar)",
+  },
+  "ikram-tuesday-items": {
+    en: "Ikram · Tuesday (items)",
+    es: "Ikram · martes (objetos)",
+  },
   "serine-day-centre": {
     en: "Serine Physical Activity (avatar)",
     es: "Serine · actividad física (avatar)",
@@ -441,6 +515,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Cyrus · Day centre (avatar)",
     es: "Cyrus · centro de día (avatar)",
   },
+  "timi-day-centre": {
+    en: "Timi · Day centre (avatar)",
+    es: "Timi · centro de día (avatar)",
+  },
   physical: {
     en: "Physical Activity",
     es: "Actividad física",
@@ -456,7 +534,7 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
 };
 
 export function libraryTailoredParticipantFolderLabel(
-  participant: "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus",
+  participant: "ikram" | "serine" | "ayaan" | "emmanuel" | "cyrus" | "timi",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -469,7 +547,9 @@ export function libraryTailoredParticipantFolderLabel(
           ? "Ayaan"
           : participant === "emmanuel"
             ? "Emmanuel"
-            : "Cyrus";
+            : participant === "cyrus"
+              ? "Cyrus"
+              : "Timi";
   if (ui === "es") return `Carpeta de ${name}`;
   return `${name}'s Folder`;
 }
@@ -516,6 +596,10 @@ export function libraryDayCentreEmmanuelLabel(language: CardLanguageCode): strin
 
 export function libraryDayCentreCyrusLabel(language: CardLanguageCode): string {
   return libraryTailoredParticipantFolderLabel("cyrus", language);
+}
+
+export function libraryDayCentreTimiLabel(language: CardLanguageCode): string {
+  return libraryTailoredParticipantFolderLabel("timi", language);
 }
 
 export function stockRoutineDisplayName(

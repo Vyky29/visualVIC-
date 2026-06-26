@@ -3,6 +3,7 @@
  */
 
 import {
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
 } from "@/lib/cards/day-centre-ikram-cards";
@@ -10,10 +11,12 @@ import {
 export type IkramLibraryGroup =
   | "scene-cards"
   | "saturday-schedule"
+  | "mon-wed-fri-schedule"
   | "photo-cards";
 
 export const IKRAM_LIBRARY_GROUP_ORDER: readonly IkramLibraryGroup[] = [
   "scene-cards",
+  "mon-wed-fri-schedule",
   "saturday-schedule",
   "photo-cards",
 ] as const;
@@ -26,8 +29,15 @@ const SCHEDULE_SLUGS = new Set(
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => s.slug),
 );
 
+const MON_WED_FRI_SCHEDULE_SLUGS = new Set(
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.map((s) => s.slug),
+);
+
 /** Scene art under `ikram/scenes/` — PECS grid cards. */
 export function ikramLibraryGroupForSlug(slug: string): IkramLibraryGroup {
+  if (MON_WED_FRI_SCHEDULE_SLUGS.has(slug) && !PECS_SLUGS.has(slug)) {
+    return "mon-wed-fri-schedule";
+  }
   if (SCHEDULE_SLUGS.has(slug) && !PECS_SLUGS.has(slug)) {
     return "saturday-schedule";
   }

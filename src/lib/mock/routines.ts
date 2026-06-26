@@ -53,7 +53,11 @@ import {
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
@@ -80,9 +84,13 @@ import {
   DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
+import { DAY_CENTRE_TIMI_ROUTINE_NAME } from "@/lib/cards/day-centre-timi-cards";
 import {
   DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME,
   DAY_CENTRE_IKRAM_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
   tailoredScheduleCloseUpPreviewUrl,
@@ -346,9 +354,10 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-cooking",
     name: "Cooking · Pizza day",
-    description: "Apron, wash hands, mix and cook pizza",
+    description:
+      "Wash hands, apron, mix dough, top pizza, bake, eat, tidy up and washing up",
     tags: ["extra"],
-    homePreviewImageUrl: dayCentreFolderIconUrl("cooking"),
+    homePreviewImageUrl: dayCentreGeneralImageUrl("wash-hands"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-cooking",
       DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS,
@@ -357,9 +366,9 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-cooking-prep",
     name: "Cooking · Kitchen prep",
-    description: "Chopping board, peeler and tomato sauce",
+    description: "Wash hands, apron, chopping board, peeler and peeling",
     tags: ["extra"],
-    homePreviewImageUrl: dayCentreGeneralImageUrl("chopping-board"),
+    homePreviewImageUrl: dayCentreGeneralImageUrl("wash-hands"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-cooking-prep",
       DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS,
@@ -368,9 +377,10 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-cooking-bake",
     name: "Cooking · Bake & mix",
-    description: "Mixing bowl, rolling pin and pizza in the oven",
+    description:
+      "Wash hands, apron, flour, water, knead dough, roll, top and bake pizza",
     tags: ["extra"],
-    homePreviewImageUrl: dayCentreGeneralImageUrl("pizza"),
+    homePreviewImageUrl: dayCentreGeneralImageUrl("wash-hands"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-cooking-bake",
       DAY_CENTRE_COOKING_BAKE_GENERATED_CARD_PROPS,
@@ -590,12 +600,60 @@ export const mockRoutines: Routine[] = [
     id: "cyrus-day-centre",
     name: DAY_CENTRE_CYRUS_ROUTINE_NAME,
     description:
-      "Cyrus at the day centre — table work, trampoline, mini gym and motor skills (personalised 3D scenes)",
+      "Cyrus's day-centre items routine — snack, iPad, table work, climbing, basketball and home",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("cyrus-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "cyrus-day-centre",
       DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "timi-day-centre",
+    name: DAY_CENTRE_TIMI_ROUTINE_NAME,
+    description:
+      "Timi's day-centre routine — sensory room, circle time, motor skills, swimming pool, snack, puzzles and home",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("timi-day-centre"),
+    steps: routineStepsFromGeneratedCardProps(
+      "timi-day-centre",
+      DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-mon-wed-fri",
+    name: DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME,
+    description:
+      "Mon / Wed / Fri — karaoke, swimming, shower, cafe, park, birthday party, cab home with munchie",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ikram-mon-wed-fri"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-mon-wed-fri",
+      DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-mon-wed-fri-items",
+    name: DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME,
+    description:
+      "Mon / Wed / Fri — karaoke, swimming, shower, cafe, park, birthday party, cab home with munchie",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("swimming-pool"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-mon-wed-fri-items",
+      DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-tuesday-items",
+    name: DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME,
+    description:
+      "Tuesday — Sam's Cafe, bus, park, swing, birthday cake, ball, cab home with munchi",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("sams-cafe"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-tuesday-items",
+      DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {

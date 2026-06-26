@@ -66,11 +66,16 @@ import {
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_ITEMS_SEQUENCE,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
   dayCentreIkramFocusImageUrlForStep,
   dayCentreIkramImageUrlForStep,
   dayCentreIkramScheduleFocusImageUrlForStep,
+  dayCentreIkramMonWedFriScheduleFocusImageUrlForStep,
+  dayCentreIkramMonWedFriScheduleImageUrlForStep,
   dayCentreIkramScheduleImageUrlForStep,
   dayCentreIkramPackMarkUrl,
   type DayCentreIkramStep,
@@ -115,6 +120,30 @@ import {
   dayCentreCyrusPackMarkUrl,
   type DayCentreCyrusStep,
 } from "@/lib/cards/day-centre-cyrus-cards";
+import {
+  DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
+  DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_TIMI_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_TIMI_CATEGORY_COLOUR,
+  dayCentreTimiFocusImageUrlForStep,
+  dayCentreTimiImageUrlForStep,
+  dayCentreTimiScheduleFocusImageUrlForStep,
+  dayCentreTimiScheduleImageUrlForStep,
+  dayCentreTimiPackMarkUrl,
+  type DayCentreTimiStep,
+} from "@/lib/cards/day-centre-timi-cards";
+import {
+  DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
+  DAY_CENTRE_FADI_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_FADI_CATEGORY_COLOUR,
+  dayCentreFadiFocusImageUrlForStep,
+  dayCentreFadiImageUrlForStep,
+  dayCentreFadiScheduleFocusImageUrlForStep,
+  dayCentreFadiScheduleImageUrlForStep,
+  dayCentreFadiPackMarkUrl,
+  type DayCentreFadiStep,
+} from "@/lib/cards/day-centre-fadi-cards";
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
@@ -430,9 +459,50 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
 export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => ikramScheduleGeneratedCardProps(s));
 
+function ikramMonWedFriScheduleGeneratedCardProps(step: DayCentreIkramStep) {
+  const focusIllustrationUrl =
+    dayCentreIkramMonWedFriScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreIkramMonWedFriScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Ikram · Mon / Wed / Fri — swimming day (avatar). */
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.map((s) =>
+    ikramMonWedFriScheduleGeneratedCardProps(s),
+  );
+
 /** Ikram · Day centre — illustrated objects (no photos). */
 export const DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_ITEMS_SEQUENCE.map((s) =>
+    dayCentreItems3dGeneratedCardProps(
+      s,
+      DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+      GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+      dayCentreIkramPackMarkUrl(),
+    ),
+  );
+
+/** Ikram · Mon / Wed / Fri — illustrated objects. */
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE.map((s) =>
+    dayCentreItems3dGeneratedCardProps(
+      s,
+      DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+      GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+      dayCentreIkramPackMarkUrl(),
+    ),
+  );
+
+/** Ikram · Tuesday — illustrated objects. */
+export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
       s,
       DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
@@ -564,6 +634,70 @@ function cyrusScheduleGeneratedCardProps(step: DayCentreCyrusStep) {
 export const DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_CYRUS_SCHEDULE_SEQUENCE.map((s) =>
     cyrusScheduleGeneratedCardProps(s),
+  );
+
+function timiGeneratedCardProps(step: DayCentreTimiStep) {
+  const focusIllustrationUrl = dayCentreTimiFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreTimiImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_TIMI_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_TIMI_CATEGORY_COLOUR,
+    iconUrl: dayCentreTimiPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_TIMI_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_TIMI_LIBRARY_SEQUENCE.map((s) => timiGeneratedCardProps(s));
+
+function timiScheduleGeneratedCardProps(step: DayCentreTimiStep) {
+  const focusIllustrationUrl = dayCentreTimiScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreTimiScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_TIMI_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_TIMI_CATEGORY_COLOUR,
+    iconUrl: dayCentreTimiPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE.map((s) =>
+    timiScheduleGeneratedCardProps(s),
+  );
+
+function fadiGeneratedCardProps(step: DayCentreFadiStep) {
+  const focusIllustrationUrl = dayCentreFadiFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreFadiImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_FADI_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_LIBRARY_SEQUENCE.map((s) => fadiGeneratedCardProps(s));
+
+function fadiScheduleGeneratedCardProps(step: DayCentreFadiStep) {
+  const focusIllustrationUrl = dayCentreFadiScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreFadiScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_SCHEDULE_SEQUENCE.map((s) =>
+    fadiScheduleGeneratedCardProps(s),
   );
 
 /** Tailored schedules · Emmanuel — physical activity library. */

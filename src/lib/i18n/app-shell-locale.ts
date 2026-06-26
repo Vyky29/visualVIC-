@@ -11,6 +11,7 @@ import {
   libraryDayCentreAyaanLabel,
   libraryDayCentreEmmanuelLabel,
   libraryDayCentreCyrusLabel,
+  libraryDayCentreTimiLabel,
   libraryDayCentreFolderLabel,
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
@@ -239,6 +240,7 @@ export type LibraryPackSectionId =
   | "dcayaan"
   | "dcemmanuel"
   | "dccyrus"
+  | "dctimi"
   | "physical"
   | "climb"
   | "swim";
@@ -262,6 +264,7 @@ export function libraryPackSectionTitle(
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
   if (section === "dcemmanuel") return libraryDayCentreEmmanuelLabel(lang);
   if (section === "dccyrus") return libraryDayCentreCyrusLabel(lang);
+  if (section === "dctimi") return libraryDayCentreTimiLabel(lang);
   if (section === "physical") {
     return isEs(lang) ? "Actividad física" : "Physical Activity";
   }
@@ -691,11 +694,13 @@ export function ikramLibraryGroupLabel(
 ): string {
   const en: Record<IkramLibraryGroup, string> = {
     "scene-cards": "Scene cards (PECS grid)",
+    "mon-wed-fri-schedule": "Mon / Wed / Fri schedule",
     "saturday-schedule": "Saturday schedule",
     "photo-cards": "Photo library",
   };
   const es: Record<IkramLibraryGroup, string> = {
     "scene-cards": "Tarjetas escena (PECS)",
+    "mon-wed-fri-schedule": "Rutina lunes / miércoles / viernes",
     "saturday-schedule": "Rutina del sábado",
     "photo-cards": "Biblioteca de fotos",
   };

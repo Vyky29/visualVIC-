@@ -53,6 +53,10 @@ import {
   dayCentreCyrusImageUrlForStep,
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
+  DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
+  dayCentreTimiImageUrlForStep,
+} from "@/lib/cards/day-centre-timi-cards";
+import {
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   dayCentreEmmanuelIconImageUrlForStep,
@@ -94,6 +98,7 @@ import {
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_TIMI_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS,
   PHYSICAL_3D_GENERATED_CARD_PROPS,
@@ -120,6 +125,7 @@ export type PickablePackId =
   | "dcemmanuel2d"
   | "dcemmanuel-icons"
   | "dccyrus"
+  | "dctimi"
   | "dcpremium"
   | "mg2d"
   | "mg3d"
@@ -146,6 +152,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dcemmanuel2d" ||
     ns === "dcemmanuel-icons" ||
     ns === "dccyrus" ||
+    ns === "dctimi" ||
     ns === "dcpremium" ||
     ns === "mg2d" ||
     ns === "mg3d" ||
@@ -574,6 +581,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dccyrus", s.slug),
       label: s.title,
       imageUrl: dayCentreCyrusImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_TIMI_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_TIMI_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dctimi", s.slug),
+      label: s.title,
+      imageUrl: dayCentreTimiImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

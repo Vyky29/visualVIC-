@@ -12,6 +12,7 @@ export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
 export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
 export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as const;
 export const DAY_CENTRE_CYRUS_DIR = `${DAY_CENTRE_PUBLIC_DIR}/cyrus` as const;
+export const DAY_CENTRE_FADI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/fadi` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -233,6 +234,54 @@ export function dayCentreCyrusScene2dUrl(slug: string): string {
 
 export function dayCentreCyrusScene2dFocusUrl(slug: string): string {
   return `${DAY_CENTRE_CYRUS_DIR}/scenes-2d/${slug}-focus.png`;
+}
+
+export function dayCentreTimiPackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreTimiAvatarUrl(): string {
+  return "/avatars/timi-cartoon.png";
+}
+
+/** Home · Tailored schedules — 2D face portrait. */
+export function dayCentreTimiTailoredHomeAvatarUrl(): string {
+  return "/avatars/timi-cartoon-2d.png";
+}
+
+/** Library pack accordion — 3D face close-up, fill icon square. */
+export function dayCentreTimiLibraryPackIconUrl(): string {
+  return dayCentreTimiAvatarUrl();
+}
+
+export function dayCentreFadiPackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreFadiAvatarUrl(): string {
+  return "/avatars/fadi-cartoon.png";
+}
+
+/** Home · Tailored schedules — 2D face portrait. */
+export function dayCentreFadiTailoredHomeAvatarUrl(): string {
+  return "/avatars/fadi-cartoon-2d.png";
+}
+
+/** Library pack accordion — 3D face close-up, fill icon square. */
+export function dayCentreFadiLibraryPackIconUrl(): string {
+  return dayCentreFadiAvatarUrl();
+}
+
+export function dayCentreFadiSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_FADI_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreFadiImageUrl(slug: string): string {
+  return `${DAY_CENTRE_FADI_DIR}/${slug}.png`;
+}
+
+export function dayCentreFadiSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_FADI_DIR}/scenes/${slug}-focus.png`;
 }
 
 /** Square 2D avatars — Home · Tailored schedules tiles only. */

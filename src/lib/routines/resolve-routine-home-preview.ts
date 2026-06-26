@@ -10,6 +10,8 @@ import {
   dayCentreIkramTailoredHomeAvatarUrl,
   dayCentreSerineSceneUrl,
   dayCentreSerineTailoredHomeAvatarUrl,
+  dayCentreTimiTailoredHomeAvatarUrl,
+  dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 import {
@@ -21,6 +23,9 @@ import {
 export const TAILORED_STOCK_ROUTINE_IDS = [
   "ikram-day-centre",
   "ikram-day-centre-items",
+  "ikram-mon-wed-fri",
+  "ikram-mon-wed-fri-items",
+  "ikram-tuesday-items",
   "serine-day-centre",
   "serine-gym-equipment-3d",
   "ayaan-day-centre",
@@ -30,6 +35,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
+  "timi-day-centre",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -42,6 +48,12 @@ export function tailoredScheduleCloseUpPreviewUrl(
     case "ikram-day-centre":
       return dayCentreIkramTailoredHomeAvatarUrl();
     case "ikram-day-centre-items":
+      return undefined;
+    case "ikram-mon-wed-fri":
+      return dayCentreIkramTailoredHomeAvatarUrl();
+    case "ikram-mon-wed-fri-items":
+      return undefined;
+    case "ikram-tuesday-items":
       return undefined;
     case "serine-day-centre":
       return dayCentreSerineTailoredHomeAvatarUrl();
@@ -61,6 +73,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return undefined;
     case "cyrus-day-centre":
       return dayCentreCyrusTailoredHomeAvatarUrl();
+    case "timi-day-centre":
+      return dayCentreTimiTailoredHomeAvatarUrl();
     default:
       return undefined;
   }
@@ -74,6 +88,12 @@ export function tailoredScheduleActionPreviewUrl(
     case "ikram-day-centre":
       return dayCentreIkramSceneUrl("music");
     case "ikram-day-centre-items":
+      return undefined;
+    case "ikram-mon-wed-fri":
+      return dayCentreIkramSceneUrl("sitting-in-the-pool");
+    case "ikram-mon-wed-fri-items":
+      return undefined;
+    case "ikram-tuesday-items":
       return undefined;
     case "serine-day-centre":
       return dayCentreSerineSceneUrl("row-machine");
@@ -92,7 +112,9 @@ export function tailoredScheduleActionPreviewUrl(
     case "emmanuel-gym-equipment-3d":
       return undefined;
     case "cyrus-day-centre":
-      return dayCentreCyrusSceneUrl("motor-skills");
+      return dayCentreCyrusSceneUrl("table-work");
+    case "timi-day-centre":
+      return dayCentreGeneralImageUrl("timi-motor-skills");
     default:
       return undefined;
   }
@@ -114,6 +136,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
   if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
+  if (haystack.includes("/timi")) return "timi-day-centre";
   return undefined;
 }
 

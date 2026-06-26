@@ -55,6 +55,9 @@ const STOCK_PACK_IDS = new Set<string>([
   "physical",
   "ikram-day-centre",
   "ikram-day-centre-items",
+  "ikram-mon-wed-fri",
+  "ikram-mon-wed-fri-items",
+  "ikram-tuesday-items",
   "serine-day-centre",
   "serine-gym-equipment-3d",
   "ayaan-day-centre",
@@ -64,6 +67,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
+  "timi-day-centre",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -526,6 +530,9 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (includesAny(haystack, ["/day centre/cyrus", "/cyrus/"])) {
     return "tailored";
   }
+  if (includesAny(haystack, ["/general/timi", "timi-"])) {
+    return "tailored";
+  }
   if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/"])) {
     return "tailored";
   }
@@ -648,6 +655,9 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "ikram-day-centre-items") return "daycentre";
+  if (id === "ikram-mon-wed-fri") return "tailored";
+  if (id === "ikram-mon-wed-fri-items") return "daycentre";
+  if (id === "ikram-tuesday-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
@@ -657,6 +667,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "timi-day-centre") return "tailored";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
   if (id.includes("shower")) return "shower";
@@ -709,6 +720,9 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "ikram-day-centre-items") return "daycentre";
+  if (id === "ikram-mon-wed-fri") return "tailored";
+  if (id === "ikram-mon-wed-fri-items") return "daycentre";
+  if (id === "ikram-tuesday-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
@@ -718,6 +732,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "timi-day-centre") return "tailored";
   if (id.includes("core")) return "core";
 
   const fromSteps = dominantToneFromSteps(r);

@@ -98,7 +98,7 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       slug: "snack",
       title: "Snack",
       items: { type: "general", slug: "snack" },
-      avatar: { type: "general", slug: "snack" },
+      avatar: { type: "emmanuel-scene", slug: "snack" },
     },
     {
       id: "dced-gym",
@@ -154,7 +154,7 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       slug: "washing-up",
       title: "Washing up",
       items: { type: "emmanuel-icon", slug: "washing-up" },
-      avatar: { type: "emmanuel-icon", slug: "washing-up" },
+      avatar: { type: "emmanuel-scene", slug: "washing-up" },
     },
     {
       id: "dced-cruzigramas-pm",
@@ -227,6 +227,7 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
       title: "Gym with Michelle",
     },
     { id: "dce-basketball", slug: "basketball", title: "Basketball" },
+    { id: "dce-snack", slug: "snack", title: "Snack" },
     { id: "dce-cruzigramas", slug: "cruzigramas", title: "Cruzigramas" },
     { id: "dce-maths", slug: "maths", title: "Maths" },
     {

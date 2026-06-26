@@ -37,6 +37,15 @@ export const DAY_CENTRE_IKRAM_ROUTINE_NAME = "Ikram · Saturday outing (avatar)"
 export const DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME =
   "Ikram · Day centre (items)" as const;
 
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME =
+  "Ikram · Mon / Wed / Fri (items)" as const;
+
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME =
+  "Ikram · Mon / Wed / Fri (avatar)" as const;
+
+export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME =
+  "Ikram · Tuesday (items)" as const;
+
 /** Pink ribbon on Ikram cards — participant name + tailored schedules. */
 export const DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_IKRAM_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
@@ -117,6 +126,145 @@ export const DAY_CENTRE_IKRAM_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] = [
   { id: "dcii-home", slug: "home", title: "Home", library: "general" },
 ] as const;
 
+/** Mon / Wed / Fri — swimming day (illustrated objects). */
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
+  [
+    { id: "dcimwf-karaoke", slug: "karaoke", title: "Karaoke", library: "general" },
+    {
+      id: "dcimwf-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+      library: "general",
+    },
+    { id: "dcimwf-toilet", slug: "toilet", title: "Toilet", library: "general" },
+    {
+      id: "dcimwf-swimsuit-on",
+      slug: "swimsuit-on",
+      title: "Swimming costume on",
+      library: "dress",
+    },
+    {
+      id: "dcimwf-swimming",
+      slug: "swimming-pool",
+      title: "Swimming",
+      library: "general",
+    },
+    { id: "dcimwf-shower", slug: "shower", title: "Shower", library: "shower" },
+    {
+      id: "dcimwf-dress-on",
+      slug: "tshirt-on",
+      title: "Dress on",
+      library: "dress",
+    },
+    {
+      id: "dcimwf-bean-bag",
+      slug: "bean-bag",
+      title: "Relaxation bean bag",
+      library: "general",
+    },
+    { id: "dcimwf-cafe", slug: "cafe", title: "Cafe", library: "general" },
+    { id: "dcimwf-park", slug: "park", title: "Park", library: "general" },
+    {
+      id: "dcimwf-birthday-party",
+      slug: "birthday-party",
+      title: "Birthday party",
+      library: "general",
+    },
+    { id: "dcimwf-cab", slug: "cab", title: "Cab", library: "general" },
+    {
+      id: "dcimwf-home",
+      slug: "home",
+      title: "Home with munchie",
+      library: "general",
+    },
+  ] as const;
+
+/** Mon / Wed / Fri — swimming day (personalised Ikram scenes). */
+export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] =
+  [
+    { id: "dciwf-karaoke", slug: "karaoke", title: "Karaoke" },
+    {
+      id: "dciwf-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+    },
+    { id: "dciwf-toilet", slug: "toilet", title: "Toilet" },
+    {
+      id: "dciwf-swimsuit-on",
+      slug: "swimsuit-on",
+      title: "Swimming costume on",
+    },
+    {
+      id: "dciwf-sitting-in-pool",
+      slug: "sitting-in-the-pool",
+      title: "Sitting in the pool",
+    },
+    { id: "dciwf-swimming", slug: "swimming", title: "Swimming" },
+    { id: "dciwf-shower", slug: "shower", title: "Shower" },
+    { id: "dciwf-dress-on", slug: "dress-on", title: "Dress on" },
+    {
+      id: "dciwf-bean-bag",
+      slug: "bean-bag",
+      title: "Relaxation bean bag",
+    },
+    { id: "dciwf-cafe", slug: "cafe", title: "Cafe" },
+    { id: "dciwf-park", slug: "park", title: "Park" },
+    {
+      id: "dciwf-birthday-party",
+      slug: "birthday-party",
+      title: "Birthday party",
+    },
+    { id: "dciwf-cab", slug: "cab", title: "Cab" },
+    {
+      id: "dciwf-home",
+      slug: "home",
+      title: "Home with munchie",
+    },
+  ] as const;
+
+/** Tuesday — outing (illustrated objects). */
+export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
+  [
+    { id: "dcitu-karaoke", slug: "karaoke", title: "Karaoke", library: "general" },
+    {
+      id: "dcitu-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+      library: "general",
+    },
+    { id: "dcitu-toilet", slug: "toilet", title: "Toilet", library: "general" },
+    {
+      id: "dcitu-sams-cafe",
+      slug: "sams-cafe",
+      title: "Sam's Cafe",
+      library: "general",
+    },
+    { id: "dcitu-bus", slug: "bus", title: "Bus", library: "general" },
+    { id: "dcitu-park", slug: "park", title: "Park", library: "general" },
+    { id: "dcitu-swing", slug: "swing", title: "Swing", library: "general" },
+    { id: "dcitu-cafe", slug: "cafe", title: "Cafe", library: "general" },
+    {
+      id: "dcitu-birthday-party",
+      slug: "birthday-party",
+      title: "Birthday party",
+      library: "general",
+    },
+    {
+      id: "dcitu-cake",
+      slug: "birthday-cake",
+      title: "Birthday cake",
+      library: "general",
+    },
+    { id: "dcitu-ball", slug: "football", title: "Ball", library: "3d" },
+    { id: "dcitu-cab", slug: "cab", title: "Cab", library: "general" },
+    {
+      id: "dcitu-home",
+      slug: "home",
+      title: "Home with munchi",
+      library: "general",
+    },
+  ] as const;
+
 /** Full Ikram library — PECS grid first, then schedule extras + communication. */
 export const DAY_CENTRE_IKRAM_SEQUENCE: readonly DayCentreIkramStep[] = [
   ...DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE,
@@ -137,8 +285,18 @@ export const DAY_CENTRE_IKRAM_SEQUENCE: readonly DayCentreIkramStep[] = [
   { id: "dci-get-dressed", slug: "get-dressed", title: "Get dressed" },
   { id: "dci-hair-care", slug: "hair-care", title: "Hair care" },
   { id: "dci-bus-stop", slug: "bus-stop", title: "Bus stop" },
+  {
+    id: "dci-sitting-in-pool",
+    slug: "sitting-in-the-pool",
+    title: "Sitting in the pool",
+  },
   { id: "dci-swimming", slug: "swimming", title: "Swimming" },
   { id: "dci-playground", slug: "playground", title: "Playground" },
+  {
+    id: "dci-swing-with-luliya",
+    slug: "swing-with-luliya",
+    title: "Swing with Luliya",
+  },
   { id: "dci-library", slug: "library", title: "Library" },
   { id: "dci-supermarket", slug: "supermarket", title: "Supermarket" },
   { id: "dci-shops", slug: "shops", title: "Shops" },
@@ -185,6 +343,28 @@ const IKRAM_SCHEDULE_SCENE_SLUGS = new Set(
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => s.slug),
 );
 
+const IKRAM_MON_WED_FRI_SCHEDULE_SCENE_SLUGS = new Set(
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.map((s) => s.slug),
+);
+
+function ikramScheduleImageUrlForStep(
+  step: DayCentreIkramStep,
+  sceneSlugs: Set<string>,
+): string {
+  if (sceneSlugs.has(step.slug)) {
+    return dayCentreIkramSceneUrl(step.slug);
+  }
+  return dayCentreIkramImageUrl(step.slug);
+}
+
+function ikramScheduleFocusImageUrlForStep(
+  step: DayCentreIkramStep,
+  sceneSlugs: Set<string>,
+): string | undefined {
+  if (!sceneSlugs.has(step.slug)) return undefined;
+  return dayCentreIkramSceneFocusUrl(step.slug);
+}
+
 /** Ikram library picker — personalised cards only. */
 export function dayCentreIkramImageUrlForStep(step: DayCentreIkramStep): string {
   if (IKRAM_LIBRARY_SCENE_SLUGS.has(step.slug)) {
@@ -200,15 +380,27 @@ export function dayCentreIkramFocusImageUrlForStep(step: DayCentreIkramStep): st
 
 /** Ikram · Saturday routine — schedule steps use personalised `ikram/scenes/` art. */
 export function dayCentreIkramScheduleImageUrlForStep(step: DayCentreIkramStep): string {
-  if (IKRAM_SCHEDULE_SCENE_SLUGS.has(step.slug)) {
-    return dayCentreIkramSceneUrl(step.slug);
-  }
-  return dayCentreIkramImageUrl(step.slug);
+  return ikramScheduleImageUrlForStep(step, IKRAM_SCHEDULE_SCENE_SLUGS);
 }
 
 export function dayCentreIkramScheduleFocusImageUrlForStep(
   step: DayCentreIkramStep,
 ): string | undefined {
-  if (!IKRAM_SCHEDULE_SCENE_SLUGS.has(step.slug)) return undefined;
-  return dayCentreIkramSceneFocusUrl(step.slug);
+  return ikramScheduleFocusImageUrlForStep(step, IKRAM_SCHEDULE_SCENE_SLUGS);
+}
+
+/** Ikram · Mon / Wed / Fri — personalised scenes where available. */
+export function dayCentreIkramMonWedFriScheduleImageUrlForStep(
+  step: DayCentreIkramStep,
+): string {
+  return ikramScheduleImageUrlForStep(step, IKRAM_MON_WED_FRI_SCHEDULE_SCENE_SLUGS);
+}
+
+export function dayCentreIkramMonWedFriScheduleFocusImageUrlForStep(
+  step: DayCentreIkramStep,
+): string | undefined {
+  return ikramScheduleFocusImageUrlForStep(
+    step,
+    IKRAM_MON_WED_FRI_SCHEDULE_SCENE_SLUGS,
+  );
 }
