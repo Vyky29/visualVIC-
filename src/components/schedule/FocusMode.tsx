@@ -262,7 +262,7 @@ export function FocusMode({ routine, exitHref }: Props) {
     goPrevious,
   } = useRoutinePlayback(routine, {
     syncSession: true,
-    appendFinishStep: true,
+    appendFinishStep: false,
   });
 
   const openFirstThen = useCallback(() => {

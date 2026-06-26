@@ -65,12 +65,16 @@ import {
 } from "@/lib/cards/physical-cards";
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
+  DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE,
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+  dayCentreIkramDailyAvatarFocusImageUrlForStep,
+  dayCentreIkramDailyAvatarImageUrlForStep,
+  dayCentreIkramDailyItemsImageUrlForStep,
   dayCentreIkramFocusImageUrlForStep,
   dayCentreIkramImageUrlForStep,
   dayCentreIkramScheduleFocusImageUrlForStep,
@@ -79,6 +83,7 @@ import {
   dayCentreIkramScheduleImageUrlForStep,
   dayCentreIkramPackMarkUrl,
   type DayCentreIkramStep,
+  type IkramDailyStep,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
   DAY_CENTRE_SERINE_LIBRARY_SEQUENCE,
@@ -146,6 +151,7 @@ import {
 } from "@/lib/cards/day-centre-fadi-cards";
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE,
@@ -444,6 +450,41 @@ function ikramGeneratedCardProps(step: DayCentreIkramStep) {
 export const DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE.map((s) => ikramGeneratedCardProps(s));
 
+function ikramDailyItemsGeneratedCardProps(step: IkramDailyStep) {
+  return {
+    illustrationUrl: dayCentreIkramDailyItemsImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  };
+}
+
+function ikramDailyAvatarGeneratedCardProps(step: IkramDailyStep) {
+  const focusIllustrationUrl =
+    dayCentreIkramDailyAvatarFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreIkramDailyAvatarImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+/** Day Centre · Ikram — day centre schedule (avatar art). */
+export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE.map((s) =>
+    ikramDailyAvatarGeneratedCardProps(s),
+  );
+
+/** Ikram · Day centre — illustrated objects (items routine). */
+export const DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE.map((s) =>
+    ikramDailyItemsGeneratedCardProps(s),
+  );
+
 function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
   const focusIllustrationUrl = dayCentreIkramScheduleFocusImageUrlForStep(step);
   return {
@@ -456,8 +497,8 @@ function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {
   };
 }
 
-/** Day Centre · Ikram — Saturday schedule routine (personalised scenes only). */
-export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+/** @deprecated Legacy Saturday schedule card props. */
+export const DAY_CENTRE_IKRAM_LEGACY_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.map((s) => ikramScheduleGeneratedCardProps(s));
 
 function ikramMonWedFriScheduleGeneratedCardProps(step: DayCentreIkramStep) {
@@ -479,18 +520,7 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS: Generat
     ikramMonWedFriScheduleGeneratedCardProps(s),
   );
 
-/** Ikram · Day centre — illustrated objects (no photos). */
-export const DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_IKRAM_ITEMS_SEQUENCE.map((s) =>
-    dayCentreItems3dGeneratedCardProps(
-      s,
-      DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
-      GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
-      dayCentreIkramPackMarkUrl(),
-    ),
-  );
-
-/** Ikram · Mon / Wed / Fri — illustrated objects. */
+/** @deprecated Removed from stock registry. */
 export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
@@ -501,7 +531,7 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS: GeneratedP
     ),
   );
 
-/** Ikram · Tuesday — illustrated objects. */
+/** @deprecated Removed from stock registry. */
 export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
@@ -669,6 +699,10 @@ export const DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardPr
     timiScheduleGeneratedCardProps(s),
   );
 
+/** Timi · Day centre (items) — same steps, general library art. */
+export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS;
+
 function fadiGeneratedCardProps(step: DayCentreFadiStep) {
   const focusIllustrationUrl = dayCentreFadiFocusImageUrlForStep(step);
   return {
@@ -790,9 +824,9 @@ function emmanuelDailyAvatarGeneratedCardProps(step: EmmanuelDailyStep) {
   };
 }
 
-/** Emmanuel · Day centre (avatar) — full weekday schedule. */
+/** Emmanuel · Day centre (avatar) — Mon/Tue/Wed schedule. */
 export const DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+  DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE.map((s) =>
     emmanuelDailyAvatarGeneratedCardProps(s),
   );
 

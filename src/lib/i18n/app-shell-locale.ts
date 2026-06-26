@@ -199,11 +199,18 @@ export function firstThenDemoIkramHomeThenTitle(lang: CardLanguageCode): string 
 }
 
 export function ikramFirstThenPackTitle(
-  packId: "ikram-sit-walk" | "ikram-toilet-hub" | "ikram-cab-home",
+  packId:
+    | "ikram-bench-walk"
+    | "ikram-walk-beanbag"
+    | "ikram-toilet-hub"
+    | "ikram-cab-home",
   lang: CardLanguageCode,
 ): string {
-  if (packId === "ikram-sit-walk") {
-    return isEs(lang) ? "Sentarse → Caminar" : "Sit down → Walk";
+  if (packId === "ikram-bench-walk") {
+    return isEs(lang) ? "Banco → Caminar" : "Bench → Walk";
+  }
+  if (packId === "ikram-walk-beanbag") {
+    return isEs(lang) ? "Caminar → Puff" : "Walk → Bean bag";
   }
   if (packId === "ikram-toilet-hub") {
     return isEs(lang) ? "Baño → Sala hub" : "Toilet → Hub room";

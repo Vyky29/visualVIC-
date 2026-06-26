@@ -33,8 +33,14 @@ export const DAY_CENTRE_TIMI_CATEGORY_LABEL =
 
 export const DAY_CENTRE_TIMI_PARTICIPANT_LABEL = "Timi" as const;
 
-export const DAY_CENTRE_TIMI_ROUTINE_NAME =
+export const DAY_CENTRE_TIMI_AVATAR_ROUTINE_NAME =
   "Timi · Day centre (avatar)" as const;
+
+export const DAY_CENTRE_TIMI_ITEMS_ROUTINE_NAME =
+  "Timi · Day centre (items)" as const;
+
+/** @deprecated Use {@link DAY_CENTRE_TIMI_AVATAR_ROUTINE_NAME}. */
+export const DAY_CENTRE_TIMI_ROUTINE_NAME = DAY_CENTRE_TIMI_AVATAR_ROUTINE_NAME;
 
 export const DAY_CENTRE_TIMI_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_TIMI_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;

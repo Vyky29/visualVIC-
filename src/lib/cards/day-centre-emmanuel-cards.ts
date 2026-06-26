@@ -78,101 +78,112 @@ export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
 export const DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
 
-/** Emmanuel's weekday — same flow in avatar and items stock routines. */
-export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+/** Emmanuel · Mon / Tue / Wed — avatar scenes where available. */
+export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
   [
     {
-      id: "dced-hub-room",
-      slug: "hub-room",
-      title: "Hub room",
-      items: { type: "general", slug: "hub-room" },
-      avatar: { type: "general", slug: "hub-room" },
-    },
-    {
-      id: "dced-cruzigramas-am",
+      id: "dcea-cruzigramas-am",
       slug: "cruzigramas-am",
       title: "Cruzigramas",
       items: { type: "emmanuel-icon", slug: "cruzigramas" },
       avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
     },
     {
-      id: "dced-snack",
+      id: "dcea-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+      items: { type: "general", slug: "circle-time" },
+      avatar: { type: "general", slug: "circle-time" },
+    },
+    {
+      id: "dcea-snack",
       slug: "snack",
       title: "Snack",
       items: { type: "general", slug: "snack" },
       avatar: { type: "emmanuel-scene", slug: "snack" },
     },
     {
-      id: "dced-gym",
+      id: "dcea-gym",
       slug: "gym",
       title: "Gym",
       items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
       avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
     },
     {
-      id: "dced-swimming",
+      id: "dcea-trunks-on",
+      slug: "trunks-on",
+      title: "Trunks on",
+      items: { type: "dress", slug: "trunks-on" },
+      avatar: { type: "dress", slug: "trunks-on" },
+    },
+    {
+      id: "dcea-swimming",
       slug: "swimming",
       title: "Swimming",
       items: { type: "general", slug: "swimming-pool" },
       avatar: { type: "general", slug: "swimming-pool" },
     },
     {
-      id: "dced-shower",
+      id: "dcea-shower",
       slug: "shower",
       title: "Shower",
       items: { type: "shower", slug: "shower" },
       avatar: { type: "shower", slug: "shower" },
     },
     {
-      id: "dced-shampoo",
+      id: "dcea-shampoo",
       slug: "shampoo",
       title: "Shampoo",
       items: { type: "shower", slug: "shampoo" },
       avatar: { type: "shower", slug: "shampoo" },
     },
     {
-      id: "dced-lunch",
+      id: "dcea-lunch",
       slug: "lunch",
       title: "Lunch",
       items: { type: "general", slug: "packed-lunch" },
       avatar: { type: "general", slug: "packed-lunch" },
     },
     {
-      id: "dced-maths",
+      id: "dcea-maths",
       slug: "maths",
       title: "Maths",
       items: { type: "emmanuel-icon", slug: "maths" },
       avatar: { type: "emmanuel-scene", slug: "maths" },
     },
     {
-      id: "dced-football",
-      slug: "football",
-      title: "Football",
+      id: "dcea-sports",
+      slug: "sports",
+      title: "Sports",
       items: { type: "3d", slug: "football" },
       avatar: { type: "emmanuel-scene", slug: "basketball" },
     },
     {
-      id: "dced-washing-up",
+      id: "dcea-washing-up",
       slug: "washing-up",
       title: "Washing up",
       items: { type: "emmanuel-icon", slug: "washing-up" },
       avatar: { type: "emmanuel-scene", slug: "washing-up" },
     },
     {
-      id: "dced-cruzigramas-pm",
+      id: "dcea-cruzigramas-pm",
       slug: "cruzigramas-pm",
       title: "Cruzigramas",
       items: { type: "emmanuel-icon", slug: "cruzigramas" },
       avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
     },
     {
-      id: "dced-home",
+      id: "dcea-home",
       slug: "home",
       title: "Home",
       items: { type: "general", slug: "home" },
       avatar: { type: "general", slug: "home" },
     },
   ] as const;
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE}. */
+export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE;
 
 /**
  * Items routine · Mon / Tue / Wed — object & icon illustrations (no avatar).

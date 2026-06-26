@@ -6,10 +6,11 @@ import {
 } from "@/lib/experimental/generated-pixto-demo-routine";
 import {
   DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE,
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
-  DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
+  dayCentreGeneralImageUrl,
   dayCentreHubRoomImageUrl,
   dayCentreIkramPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
@@ -20,9 +21,10 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 
 export const IKRAM_FIRST_THEN_PACK_IDS = [
-  "ikram-sit-walk",
   "ikram-toilet-hub",
   "ikram-cab-home",
+  "ikram-bench-walk",
+  "ikram-walk-beanbag",
 ] as const;
 
 export type IkramFirstThenPackId = (typeof IKRAM_FIRST_THEN_PACK_IDS)[number];
@@ -35,14 +37,11 @@ export type IkramFirstThenPackSpec = {
   secondTitleKey?: "home-with-muchie";
   /** Use hub-room illustration instead of an Ikram library slug. */
   secondUsesHubRoom?: boolean;
+  /** Use a day-centre general illustration for the first card. */
+  firstUsesGeneral?: boolean;
 };
 
 export const IKRAM_FIRST_THEN_PACKS: readonly IkramFirstThenPackSpec[] = [
-  {
-    id: "ikram-sit-walk",
-    firstSlug: "sit-down",
-    secondSlug: "walk",
-  },
   {
     id: "ikram-toilet-hub",
     firstSlug: "toilet",
@@ -54,6 +53,17 @@ export const IKRAM_FIRST_THEN_PACKS: readonly IkramFirstThenPackSpec[] = [
     firstSlug: "cab",
     secondSlug: "home",
     secondTitleKey: "home-with-muchie",
+  },
+  {
+    id: "ikram-bench-walk",
+    firstSlug: "bench",
+    secondSlug: "walk",
+    firstUsesGeneral: true,
+  },
+  {
+    id: "ikram-walk-beanbag",
+    firstSlug: "walk",
+    secondSlug: "bean-bag",
   },
 ] as const;
 
@@ -70,13 +80,23 @@ function ikramLibraryCard(slug: string): GeneratedPixtoCardProps {
   return card;
 }
 
-function ikramScheduleCard(slug: string): GeneratedPixtoCardProps {
-  const index = DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE.findIndex((s) => s.slug === slug);
+function ikramDayCentreScheduleCard(slug: string): GeneratedPixtoCardProps {
+  const index = DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE.findIndex((s) => s.slug === slug);
   const card = DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS[index];
   if (!card) {
-    throw new Error(`Missing Ikram schedule card for slug: ${slug}`);
+    throw new Error(`Missing Ikram day centre schedule card for slug: ${slug}`);
   }
   return card;
+}
+
+function ikramGeneralCard(slug: string): GeneratedPixtoCardProps {
+  return {
+    illustrationUrl: dayCentreGeneralImageUrl(slug),
+    title: lc(slug.replace(/-/g, " ")),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  };
 }
 
 function ikramHubRoomCard(lang: CardLanguageCode): GeneratedPixtoCardProps {
@@ -91,9 +111,17 @@ function ikramHubRoomCard(lang: CardLanguageCode): GeneratedPixtoCardProps {
 
 function ikramFirstThenCard(
   slug: string,
-  options?: { schedule?: boolean; titleOverride?: string },
+  options?: {
+    schedule?: boolean;
+    general?: boolean;
+    titleOverride?: string;
+  },
 ): GeneratedPixtoCardProps {
-  const base = options?.schedule ? ikramScheduleCard(slug) : ikramLibraryCard(slug);
+  const base = options?.general
+    ? ikramGeneralCard(slug)
+    : options?.schedule
+      ? ikramDayCentreScheduleCard(slug)
+      : ikramLibraryCard(slug);
   if (!options?.titleOverride) return base;
   return { ...base, title: lc(options.titleOverride) };
 }
@@ -106,6 +134,7 @@ export function normalizeIkramFirstThenPackId(
   raw: string | null | undefined,
 ): IkramFirstThenPackId | null {
   if (raw === "ikram-home") return "ikram-cab-home";
+  if (raw === "ikram-sit-walk") return "ikram-walk-beanbag";
   if (raw && isIkramFirstThenPackId(raw)) return raw;
   return null;
 }
@@ -121,6 +150,7 @@ export function resolveIkramFirstThenPack(
 
   const first = ikramFirstThenCard(spec.firstSlug, {
     schedule: spec.id === "ikram-cab-home",
+    general: spec.firstUsesGeneral,
   });
 
   let second: GeneratedPixtoCardProps;
@@ -131,6 +161,8 @@ export function resolveIkramFirstThenPack(
       schedule: true,
       titleOverride: firstThenDemoIkramHomeThenTitle(lang),
     });
+  } else if (spec.id === "ikram-bench-walk") {
+    second = ikramFirstThenCard(spec.secondSlug);
   } else {
     second = ikramFirstThenCard(spec.secondSlug);
   }

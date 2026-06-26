@@ -208,7 +208,7 @@ export function SchedulePlayer({
     steps,
   } = useRoutinePlayback(playbackRoutine, {
     syncSession: true,
-    appendFinishStep: true,
+    appendFinishStep: false,
   });
 
   const progress =

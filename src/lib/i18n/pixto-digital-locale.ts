@@ -240,6 +240,13 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     es: "tiempo de círculo",
   },
   "trunks-on": { en: "trunks on", es: "ponerse el bañador" },
+  "changing-room": { en: "changing room", es: "vestuario" },
+  "dry-body": { en: "dry body", es: "secar el cuerpo" },
+  "vest-on": { en: "vest on", es: "ponerse el chaleco" },
+  "home-with-munchie": {
+    en: "home with munchie",
+    es: "casa con muchie",
+  },
   sports: { en: "sports", es: "deporte" },
   "sitting-in-the-pool": {
     en: "sitting in the pool",
@@ -462,24 +469,12 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     es: "Día mixto",
   },
   "ikram-day-centre": {
-    en: "Ikram · Saturday outing (avatar)",
-    es: "Ikram · salida del sábado (avatar)",
+    en: "Ikram · Day centre (avatar)",
+    es: "Ikram · centro de día (avatar)",
   },
   "ikram-day-centre-items": {
     en: "Ikram · Day centre (items)",
     es: "Ikram · centro de día (objetos)",
-  },
-  "ikram-mon-wed-fri-items": {
-    en: "Ikram · Mon / Wed / Fri (items)",
-    es: "Ikram · lunes / miércoles / viernes (objetos)",
-  },
-  "ikram-mon-wed-fri": {
-    en: "Ikram · Mon / Wed / Fri (avatar)",
-    es: "Ikram · lunes / miércoles / viernes (avatar)",
-  },
-  "ikram-tuesday-items": {
-    en: "Ikram · Tuesday (items)",
-    es: "Ikram · martes (objetos)",
   },
   "serine-day-centre": {
     en: "Serine Physical Activity (avatar)",
@@ -524,6 +519,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
   "timi-day-centre": {
     en: "Timi · Day centre (avatar)",
     es: "Timi · centro de día (avatar)",
+  },
+  "timi-day-centre-items": {
+    en: "Timi · Day centre (items)",
+    es: "Timi · centro de día (objetos)",
   },
   physical: {
     en: "Physical Activity",

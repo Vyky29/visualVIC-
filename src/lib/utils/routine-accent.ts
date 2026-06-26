@@ -55,9 +55,6 @@ const STOCK_PACK_IDS = new Set<string>([
   "physical",
   "ikram-day-centre",
   "ikram-day-centre-items",
-  "ikram-mon-wed-fri",
-  "ikram-mon-wed-fri-items",
-  "ikram-tuesday-items",
   "serine-day-centre",
   "serine-gym-equipment-3d",
   "ayaan-day-centre",
@@ -69,6 +66,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "cyrus-day-centre",
   "fadi-day-centre",
   "timi-day-centre",
+  "timi-day-centre-items",
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
@@ -659,9 +657,6 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "ikram-day-centre-items") return "daycentre";
-  if (id === "ikram-mon-wed-fri") return "tailored";
-  if (id === "ikram-mon-wed-fri-items") return "daycentre";
-  if (id === "ikram-tuesday-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";
@@ -725,9 +720,6 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id.startsWith("dc-")) return "daycentre";
   if (id === "ikram-day-centre") return "tailored";
   if (id === "ikram-day-centre-items") return "daycentre";
-  if (id === "ikram-mon-wed-fri") return "tailored";
-  if (id === "ikram-mon-wed-fri-items") return "daycentre";
-  if (id === "ikram-tuesday-items") return "daycentre";
   if (id === "serine-day-centre") return "tailored";
   if (id === "serine-gym-equipment-3d") return "physical";
   if (id === "ayaan-day-centre") return "ayaan";

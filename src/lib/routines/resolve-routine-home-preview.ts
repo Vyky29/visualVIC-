@@ -25,9 +25,6 @@ import {
 export const TAILORED_STOCK_ROUTINE_IDS = [
   "ikram-day-centre",
   "ikram-day-centre-items",
-  "ikram-mon-wed-fri",
-  "ikram-mon-wed-fri-items",
-  "ikram-tuesday-items",
   "serine-day-centre",
   "serine-gym-equipment-3d",
   "ayaan-day-centre",
@@ -39,6 +36,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "cyrus-day-centre",
   "fadi-day-centre",
   "timi-day-centre",
+  "timi-day-centre-items",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -51,12 +49,6 @@ export function tailoredScheduleCloseUpPreviewUrl(
     case "ikram-day-centre":
       return dayCentreIkramTailoredHomeAvatarUrl();
     case "ikram-day-centre-items":
-      return undefined;
-    case "ikram-mon-wed-fri":
-      return dayCentreIkramTailoredHomeAvatarUrl();
-    case "ikram-mon-wed-fri-items":
-      return undefined;
-    case "ikram-tuesday-items":
       return undefined;
     case "serine-day-centre":
       return dayCentreSerineTailoredHomeAvatarUrl();
@@ -80,6 +72,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreFadiTailoredHomeAvatarUrl();
     case "timi-day-centre":
       return dayCentreTimiTailoredHomeAvatarUrl();
+    case "timi-day-centre-items":
+      return undefined;
     default:
       return undefined;
   }
@@ -94,12 +88,6 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreIkramSceneUrl("music");
     case "ikram-day-centre-items":
       return undefined;
-    case "ikram-mon-wed-fri":
-      return dayCentreIkramSceneUrl("sitting-in-the-pool");
-    case "ikram-mon-wed-fri-items":
-      return undefined;
-    case "ikram-tuesday-items":
-      return undefined;
     case "serine-day-centre":
       return dayCentreSerineSceneUrl("row-machine");
     case "serine-gym-equipment-3d":
@@ -109,7 +97,7 @@ export function tailoredScheduleActionPreviewUrl(
     case "ayaan-gym-equipment-3d":
       return undefined;
     case "emmanuel-day-centre":
-      return dayCentreEmmanuelSceneUrl("cross-trainer");
+      return dayCentreEmmanuelSceneUrl("gym-with-michelle");
     case "emmanuel-day-centre-items":
       return undefined;
     case "emmanuel-gym-avatar":
@@ -122,6 +110,8 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreFadiImageUrl("vassims-car");
     case "timi-day-centre":
       return dayCentreGeneralImageUrl("timi-motor-skills");
+    case "timi-day-centre-items":
+      return dayCentreGeneralImageUrl("sensory-room");
     default:
       return undefined;
   }
@@ -144,7 +134,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
   if (haystack.includes("/fadi")) return "fadi-day-centre";
-  if (haystack.includes("/timi")) return "timi-day-centre";
+  if (haystack.includes("/timi") || haystack.includes("timi-")) return "timi-day-centre";
   return undefined;
 }
 
