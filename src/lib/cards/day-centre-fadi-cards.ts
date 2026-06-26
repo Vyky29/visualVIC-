@@ -85,6 +85,7 @@ export const DAY_CENTRE_FADI_LIBRARY_SEQUENCE: readonly DayCentreFadiStep[] = [
     id: "dcf-vassims-car",
     slug: "vassims-car",
     title: "Vassim's car",
+    source: "fadi-scene",
   },
 ] as const;
 
@@ -197,7 +198,13 @@ const FADI_SCENE_SLUGS = new Set(
 );
 
 export function dayCentreFadiImageUrlForStep(step: DayCentreFadiStep): string {
-  switch (step.source ?? "fadi-scene") {
+  const source = step.source ?? "fadi-scene";
+  // Vassim's car — 3D cartoon scene (avatar) or 3D item only; never the legacy photo.
+  if (step.slug === "vassims-car") {
+    if (source === "3d") return physical3dImageUrl(step.slug);
+    return dayCentreFadiSceneUrl(step.slug);
+  }
+  switch (source) {
     case "general":
       return dayCentreGeneralImageUrl(step.slug);
     case "fadi-photo":
