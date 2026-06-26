@@ -65,6 +65,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
   "fadi-day-centre",
+  "fadi-day-centre-items",
   "timi-day-centre",
   "timi-day-centre-items",
 ]);
@@ -667,6 +668,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
   if (id === "fadi-day-centre") return "tailored";
+  if (id === "fadi-day-centre-items") return "daycentre";
   if (id === "timi-day-centre") return "tailored";
 
   if (id.includes("brush") || id.includes("teeth")) return "brushing";
@@ -730,6 +732,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
   if (id === "fadi-day-centre") return "tailored";
+  if (id === "fadi-day-centre-items") return "daycentre";
   if (id === "timi-day-centre") return "tailored";
   if (id.includes("core")) return "core";
 

@@ -35,7 +35,7 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
     "emmanuel-gym-equipment-3d",
   ],
   cyrus: ["cyrus-day-centre"],
-  fadi: ["fadi-day-centre"],
+  fadi: ["fadi-day-centre", "fadi-day-centre-items"],
   timi: ["timi-day-centre", "timi-day-centre-items"],
 };
 

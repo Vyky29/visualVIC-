@@ -516,6 +516,14 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Fadi · Day centre (avatar)",
     es: "Fadi · centro de día (avatar)",
   },
+  "fadi-day-centre-items": {
+    en: "Fadi · Day centre (items)",
+    es: "Fadi · centro de día (objetos)",
+  },
+  "vassims-car": {
+    en: "vassim's car",
+    es: "coche de vassim",
+  },
   "timi-day-centre": {
     en: "Timi · Day centre (avatar)",
     es: "Timi · centro de día (avatar)",

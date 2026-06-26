@@ -3,6 +3,7 @@ import type {
   RoutineStep,
   VisualAsset,
 } from "@/lib/types/routine";
+import { tailoredItems3dImageUrlForStep } from "@/lib/cards/tailored-items-3d-shared";
 import {
   BRUSHING_TEETH_CARD_FILES,
   BRUSHING_TEETH_SEQUENCE,
@@ -54,6 +55,7 @@ import {
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
   DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
+  DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE,
   dayCentreFadiImageUrlForStep,
 } from "@/lib/cards/day-centre-fadi-cards";
 import {
@@ -103,6 +105,7 @@ import {
   DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_ITEMS_LIBRARY_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS,
@@ -609,6 +612,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcfadi", s.slug),
       label: s.title,
       imageUrl: dayCentreFadiImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_FADI_ITEMS_LIBRARY_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcfadi", `items-${s.slug}`),
+      label: s.title,
+      imageUrl: tailoredItems3dImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {

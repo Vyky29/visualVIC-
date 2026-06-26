@@ -139,7 +139,9 @@ import {
 } from "@/lib/cards/day-centre-timi-cards";
 import {
   DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
+  DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_FADI_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE,
   DAY_CENTRE_FADI_CARD_CATEGORY_LABEL,
   DAY_CENTRE_FADI_CATEGORY_COLOUR,
   dayCentreFadiFocusImageUrlForStep,
@@ -733,6 +735,35 @@ function fadiScheduleGeneratedCardProps(step: DayCentreFadiStep) {
 export const DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_FADI_SCHEDULE_SEQUENCE.map((s) =>
     fadiScheduleGeneratedCardProps(s),
+  );
+
+function fadiItemsLibraryGeneratedCardProps(step: TailoredItems3dStep) {
+  return dayCentreItems3dGeneratedCardProps(
+    step,
+    DAY_CENTRE_FADI_CARD_CATEGORY_LABEL,
+    DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    dayCentreFadiPackMarkUrl(),
+  );
+}
+
+export const DAY_CENTRE_FADI_ITEMS_LIBRARY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE.map((s) =>
+    fadiItemsLibraryGeneratedCardProps(s),
+  );
+
+function fadiItemsScheduleGeneratedCardProps(step: DayCentreFadiStep) {
+  return {
+    illustrationUrl: dayCentreFadiImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+  };
+}
+
+export const DAY_CENTRE_FADI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE.map((s) =>
+    fadiItemsScheduleGeneratedCardProps(s),
   );
 
 /** Tailored schedules · Emmanuel — physical activity library. */

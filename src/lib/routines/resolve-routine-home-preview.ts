@@ -5,7 +5,7 @@ import {
   dayCentreCyrusTailoredHomeAvatarUrl,
   dayCentreEmmanuelSceneUrl,
   dayCentreEmmanuelTailoredHomeAvatarUrl,
-  dayCentreFadiImageUrl,
+  dayCentreFadiSceneUrl,
   dayCentreFadiTailoredHomeAvatarUrl,
   dayCentreHubRoomImageUrl,
   dayCentreIkramSceneUrl,
@@ -15,6 +15,7 @@ import {
   dayCentreTimiTailoredHomeAvatarUrl,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
+import { physical3dImageUrl } from "@/lib/cards/physical-cards";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 import {
   isPixtoLearnFullBleedCardUrl,
@@ -35,6 +36,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
   "fadi-day-centre",
+  "fadi-day-centre-items",
   "timi-day-centre",
   "timi-day-centre-items",
 ] as const;
@@ -70,6 +72,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreCyrusTailoredHomeAvatarUrl();
     case "fadi-day-centre":
       return dayCentreFadiTailoredHomeAvatarUrl();
+    case "fadi-day-centre-items":
+      return undefined;
     case "timi-day-centre":
       return dayCentreTimiTailoredHomeAvatarUrl();
     case "timi-day-centre-items":
@@ -107,7 +111,9 @@ export function tailoredScheduleActionPreviewUrl(
     case "cyrus-day-centre":
       return dayCentreCyrusSceneUrl("table-work");
     case "fadi-day-centre":
-      return dayCentreFadiImageUrl("vassims-car");
+      return dayCentreFadiSceneUrl("vassims-car");
+    case "fadi-day-centre-items":
+      return physical3dImageUrl("vassims-car");
     case "timi-day-centre":
       return dayCentreGeneralImageUrl("timi-motor-skills");
     case "timi-day-centre-items":
