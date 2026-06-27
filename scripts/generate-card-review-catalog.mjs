@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 /**
- * Generate review/card-catalog.html — interactive card audit at NOW size (531×648).
+ * Generate public/review/card-catalog.html — interactive card audit at NOW size (531×648).
  *
- * Open via local server (images load from ../public):
- *   npx serve review -p 3456
- *   → http://localhost:3456/card-catalog.html
+ * Served as a static file by Next.js, so it is reachable in production at:
+ *   https://<your-domain>/review/card-catalog.html
  *
- * Or from repo root:
- *   npm run dev
- *   → copy review/card-catalog.html to public/review/ if needed
+ * Locally: `npm run dev` → http://localhost:3000/review/card-catalog.html
  */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
@@ -17,7 +14,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
-const outDir = path.join(root, "review");
+// Served from public/ so it is reachable in production at /review/card-catalog.html.
+const outDir = path.join(root, "public", "review");
 const outFile = path.join(outDir, "card-catalog.html");
 
 function loadCatalogJson() {
@@ -268,7 +266,7 @@ function buildHtml(catalog) {
       <label><button type="button" id="btn-import-label">Cargar JSON</button><input id="btn-import" type="file" accept="application/json,.json" class="hidden" /></label>
     </div>
     <div class="stats" id="stats"></div>
-    <p class="hint">Abre esta página con un servidor local para ver las imágenes: <code>npx serve review -p 3456</code> → <code>http://localhost:3456/card-catalog.html</code>. Cuando termines, descarga el JSON y pásamelo para actualizar el repo.</p>
+    <p class="hint">En producción: <code>/review/card-catalog.html</code>. Cuando termines, descarga el JSON y pásamelo para actualizar el repo.</p>
   </header>
   <main id="main"></main>
   <script id="catalog-data" type="application/json">${embedded}</script>
@@ -370,11 +368,11 @@ function buildHtml(catalog) {
       if (!matchesFilters(card)) el.classList.add("hidden");
 
       const img = document.createElement("img");
-      img.src = card.imagePath;
+      img.src = encodeURI(card.imageUrl);
       img.alt = card.label;
       img.loading = "lazy";
       img.onerror = () => {
-        img.alt = "Imagen no encontrada — abre con servidor local";
+        img.alt = "Imagen no encontrada";
         img.style.opacity = "0.35";
       };
 
