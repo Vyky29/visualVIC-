@@ -50,6 +50,7 @@ function buildHtml(catalog) {
       --border: #ddd6cc;
       --keep: #2e7d32;
       --redo: #e65100;
+      --digitalizar: #1565c0;
       --papelera: #c62828;
       --unset: #9e9e9e;
     }
@@ -152,6 +153,7 @@ function buildHtml(catalog) {
     }
     .card[data-status="keep"] { border-color: var(--keep); }
     .card[data-status="redo"] { border-color: var(--redo); }
+    .card[data-status="digitalizar"] { border-color: var(--digitalizar); }
     .card[data-status="papelera"] { border-color: var(--papelera); opacity: 0.82; }
     .thumb-wrap {
       width: 100%;
@@ -195,12 +197,12 @@ function buildHtml(catalog) {
     }
     .actions {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 6px;
     }
     .actions button {
       padding: 7px 4px;
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 600;
     }
     .actions button.active-keep {
@@ -212,6 +214,11 @@ function buildHtml(catalog) {
       background: #fff3e0;
       border-color: var(--redo);
       color: var(--redo);
+    }
+    .actions button.active-digitalizar {
+      background: #e3f2fd;
+      border-color: var(--digitalizar);
+      color: var(--digitalizar);
     }
     .actions button.active-papelera {
       background: #ffebee;
@@ -238,7 +245,8 @@ function buildHtml(catalog) {
 <body>
   <header>
     <h1>Revisión de tarjetas · PixtoLearn</h1>
-    <p class="sub">Ilustraciones a tamaño NOW (${catalog.cardSize.width}×${catalog.cardSize.height}). Marca <strong>Keep</strong>, <strong>Redo</strong> o <strong>Papelera</strong> y edita el nombre como en la app.</p>
+    <p class="sub">Ilustraciones a tamaño NOW (${catalog.cardSize.width}×${catalog.cardSize.height}). Marca cada tarjeta y edita el nombre como en la app.</p>
+    <p class="sub" style="margin-top:6px"><strong>Keep</strong> = ya está bien · <strong>Redo</strong> = rehacer ilustración · <strong>Digitalizar</strong> = quitar ribete y logo, recortar a ilustración y agrandar · <strong>Papelera</strong> = no la necesitamos</p>
     <div class="toolbar">
       <input id="search" type="search" placeholder="Buscar nombre o slug…" />
       <select id="filter-category">
@@ -252,6 +260,7 @@ function buildHtml(catalog) {
         <option value="unset">Sin marcar</option>
         <option value="keep">Keep</option>
         <option value="redo">Redo</option>
+        <option value="digitalizar">Digitalizar</option>
         <option value="papelera">Papelera</option>
       </select>
       <button type="button" id="btn-save-local">Guardar en navegador</button>
@@ -264,13 +273,15 @@ function buildHtml(catalog) {
   <main id="main"></main>
   <script id="catalog-data" type="application/json">${embedded}</script>
   <script>
-    const STORAGE_KEY = "pixtolearn-card-review-v1";
+    const STORAGE_KEY = "pixtolearn-card-review-v2";
     const catalog = JSON.parse(document.getElementById("catalog-data").textContent);
     const state = new Map(catalog.cards.map((c) => [c.pickId, { ...c }]));
 
     function loadSaved() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw =
+          localStorage.getItem(STORAGE_KEY) ||
+          localStorage.getItem("pixtolearn-card-review-v1");
         if (!raw) return;
         const saved = JSON.parse(raw);
         for (const row of saved.cards || []) {
@@ -313,7 +324,7 @@ function buildHtml(catalog) {
 
     function updateStats() {
       const rows = [...state.values()];
-      const counts = { keep: 0, redo: 0, papelera: 0, unset: 0 };
+      const counts = { keep: 0, redo: 0, digitalizar: 0, papelera: 0, unset: 0 };
       for (const r of rows) {
         const k = r.status || "unset";
         counts[k] = (counts[k] || 0) + 1;
@@ -322,6 +333,7 @@ function buildHtml(catalog) {
         "<span><strong>" + rows.length + "</strong> tarjetas</span>" +
         "<span>Keep: <strong>" + counts.keep + "</strong></span>" +
         "<span>Redo: <strong>" + counts.redo + "</strong></span>" +
+        "<span>Digitalizar: <strong>" + counts.digitalizar + "</strong></span>" +
         "<span>Papelera: <strong>" + counts.papelera + "</strong></span>" +
         "<span>Sin marcar: <strong>" + counts.unset + "</strong></span>";
     }
@@ -397,6 +409,7 @@ function buildHtml(catalog) {
       for (const [label, value, cls] of [
         ["Keep", "keep", "active-keep"],
         ["Redo", "redo", "active-redo"],
+        ["Digitalizar", "digitalizar", "active-digitalizar"],
         ["Papelera", "papelera", "active-papelera"],
       ]) {
         const btn = document.createElement("button");

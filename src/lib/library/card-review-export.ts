@@ -38,7 +38,13 @@ import {
 const NOW_W = 531;
 const NOW_H = 648;
 
-export type CardReviewStatus = "" | "keep" | "redo" | "papelera";
+/** Post-process bundled cards: strip ribete + logo, crop to illustration, enlarge. */
+export type CardReviewStatus =
+  | ""
+  | "keep"
+  | "redo"
+  | "digitalizar"
+  | "papelera";
 
 export type CardReviewCatalogEntry = {
   pickId: string;
