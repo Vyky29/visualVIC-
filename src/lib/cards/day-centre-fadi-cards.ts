@@ -72,6 +72,16 @@ export const DAY_CENTRE_FADI_LIBRARY_SEQUENCE: readonly DayCentreFadiStep[] = [
     title: "Motor skills",
   },
   {
+    id: "dcf-cooking-activity",
+    slug: "cooking-activity",
+    title: "Cooking activity",
+  },
+  {
+    id: "dcf-keys-activity",
+    slug: "keys-activity",
+    title: "Keys activity",
+  },
+  {
     id: "dcf-pe-steps",
     slug: "pe-steps",
     title: "PE steps",
