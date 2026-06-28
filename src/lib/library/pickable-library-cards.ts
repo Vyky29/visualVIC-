@@ -69,7 +69,6 @@ import {
   dayCentreEmmanuelImageUrlForStep,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import {
-  MINI_GYM_2D_LIBRARY_SEQUENCE,
   MINI_GYM_3D_LIBRARY_SEQUENCE,
   MINI_GYM_LIBRARY_SLUGS,
   miniGymLibraryCategoryLabel,
@@ -456,17 +455,6 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     imageUrlForSlug: (slug) =>
       dayCentreGeneralImageUrlForStep({ id: slug, slug, title: slug }),
     titleMap: dayCentreGeneralTitleMap,
-  });
-
-  MINI_GYM_2D_LIBRARY_SEQUENCE.forEach((s) => {
-    const illustrationUrl = physicalImageUrlForStep(s);
-    out.push({
-      pickId: pid("mg2d", s.slug),
-      label: s.title,
-      imageUrl: illustrationUrl,
-      category: "home",
-      generatedPixto: miniGymLibraryGeneratedPixto(s.title, illustrationUrl),
-    });
   });
 
   MINI_GYM_3D_LIBRARY_SEQUENCE.forEach((s) => {

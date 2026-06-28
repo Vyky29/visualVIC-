@@ -176,7 +176,6 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   // Places & extras
   "community-centre": "places-extras",
   "hub-room": "places-extras",
-  "make-up": "places-extras",
   "birthday-cake": "places-extras",
   "birthday-party": "places-extras",
 };

@@ -273,6 +273,26 @@ function buildHtml(catalog) {
   <script>
     const STORAGE_KEY = "pixtolearn-card-review-v2";
     const catalog = JSON.parse(document.getElementById("catalog-data").textContent);
+
+    // Normalise each path segment once so spaces and "&" (folder getting-dress-&-undress)
+    // are encoded correctly regardless of how the source stored them.
+    function safeImageSrc(url) {
+      if (!url || !url.startsWith("/")) return url || "";
+      return (
+        "/" +
+        url
+          .replace(/^\/+/, "")
+          .split("/")
+          .map((seg) => {
+            try {
+              return encodeURIComponent(decodeURIComponent(seg));
+            } catch {
+              return encodeURIComponent(seg);
+            }
+          })
+          .join("/")
+      );
+    }
     const state = new Map(catalog.cards.map((c) => [c.pickId, { ...c }]));
 
     function loadSaved() {
@@ -368,7 +388,7 @@ function buildHtml(catalog) {
       if (!matchesFilters(card)) el.classList.add("hidden");
 
       const img = document.createElement("img");
-      img.src = encodeURI(card.imageUrl);
+      img.src = safeImageSrc(card.imageUrl);
       img.alt = card.label;
       img.loading = "lazy";
       img.onerror = () => {
