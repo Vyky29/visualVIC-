@@ -281,7 +281,7 @@ function buildHtml(catalog) {
       return (
         "/" +
         url
-          .replace(/^\/+/, "")
+          .replace(/^\\/+/, "")
           .split("/")
           .map((seg) => {
             try {
