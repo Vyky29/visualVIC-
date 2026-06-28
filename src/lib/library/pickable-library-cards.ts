@@ -187,6 +187,14 @@ function pid(ns: string, slug: string): string {
   return `${ns}${SEP}${slug}`;
 }
 
+const ARCHIVED_PICK_IDS = new Set([
+  "core::finish3D",
+  "daycentre::bells",
+  "daycentre::exercise-bike",
+  "daycentre::rope",
+  "daycentre::playground",
+]);
+
 function stemOf(file: string): string {
   return file.replace(/\.(png|PNG)$/i, "");
 }
@@ -743,7 +751,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     });
   }
 
-  return out;
+  return out.filter((card) => !ARCHIVED_PICK_IDS.has(card.pickId));
 }
 
 export const PICKABLE_LIBRARY_CARDS: PickableLibraryCard[] =

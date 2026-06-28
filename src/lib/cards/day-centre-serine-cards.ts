@@ -55,7 +55,7 @@ export const DAY_CENTRE_SERINE_SCHEDULE_SEQUENCE: readonly DayCentreSerineStep[]
     {
       id: "dcs-weights-on-bosu",
       slug: "weights-on-bosu",
-      title: "Weights on BOSU",
+      title: "Weights",
     },
     {
       id: "dcs-knees-up-on-top",

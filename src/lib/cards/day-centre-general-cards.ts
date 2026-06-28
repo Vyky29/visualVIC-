@@ -191,7 +191,7 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-karaoke", slug: "karaoke", title: "Karaoke" },
   { id: "dcg-circle-time", slug: "circle-time", title: "Circle time" },
   { id: "dcg-park", slug: "park", title: "Park" },
-  { id: "dcg-park-swing", slug: "park-and-swing", title: "Park and swing" },
+  { id: "dcg-park-swing", slug: "park-and-swing", title: "Assisted Swing" },
   { id: "dcg-swing", slug: "swing", title: "Swing" },
   { id: "dcg-playground", slug: "playground", title: "Playground" },
   { id: "dcg-cafe", slug: "cafe", title: "Cafe" },
