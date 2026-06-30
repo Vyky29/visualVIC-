@@ -13,6 +13,7 @@ export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
 export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as const;
 export const DAY_CENTRE_CYRUS_DIR = `${DAY_CENTRE_PUBLIC_DIR}/cyrus` as const;
 export const DAY_CENTRE_FADI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/fadi` as const;
+export const DAY_CENTRE_TIMI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/timi` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -282,6 +283,10 @@ export function dayCentreFadiImageUrl(slug: string): string {
 
 export function dayCentreFadiSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_FADI_DIR}/scenes/${slug}-focus.png`;
+}
+
+export function dayCentreTimiImageUrl(slug: string): string {
+  return `${DAY_CENTRE_TIMI_DIR}/${slug}.png`;
 }
 
 /** Square 2D avatars — Home · Tailored schedules tiles only. */

@@ -227,6 +227,7 @@ function appendExtraCardsFromFiles(params: {
   const { out, ns, files, category, imageUrlForSlug, titleMap } = params;
   for (const file of files) {
     const slug = stemOf(file);
+    if (ns === "daycentre" && slug.startsWith("timi-")) continue;
     if (slug.startsWith("backcard") || slug.startsWith("logo-")) continue;
     if (titleMap.has(slug)) continue;
     out.push({

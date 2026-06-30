@@ -13,6 +13,7 @@ import {
   dayCentreSerineSceneUrl,
   dayCentreSerineTailoredHomeAvatarUrl,
   dayCentreTimiTailoredHomeAvatarUrl,
+  dayCentreTimiImageUrl,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { physical3dImageUrl } from "@/lib/cards/physical-cards";
@@ -115,7 +116,7 @@ export function tailoredScheduleActionPreviewUrl(
     case "fadi-day-centre-items":
       return physical3dImageUrl("vassims-car");
     case "timi-day-centre":
-      return dayCentreGeneralImageUrl("timi-motor-skills");
+      return dayCentreTimiImageUrl("timi-motor-skills");
     case "timi-day-centre-items":
       return dayCentreGeneralImageUrl("sensory-room");
     default:

@@ -1,15 +1,14 @@
 /**
  * Timi · Day centre — personalised photo pack.
- * Timi's cards live in the shared day-centre general library
- * (`public/cards/day centre/general/timi-*.png`), so every step resolves
- * through {@link dayCentreGeneralImageUrl}.
+ * Timi's cards live in `public/cards/day centre/timi/{slug}.png`.
  */
 
 import {
-  dayCentreGeneralImageUrl,
   dayCentreTimiAvatarUrl,
+  dayCentreTimiImageUrl,
   dayCentreTimiPackMarkUrl,
   dayCentreTimiTailoredHomeAvatarUrl,
+  dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 
@@ -87,6 +86,9 @@ export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] = [
 ] as const;
 
 export function dayCentreTimiImageUrlForStep(step: DayCentreTimiStep): string {
+  if (step.slug.startsWith("timi-")) {
+    return dayCentreTimiImageUrl(step.slug);
+  }
   return dayCentreGeneralImageUrl(step.slug);
 }
 

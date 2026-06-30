@@ -121,8 +121,6 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   // Technology
   "ipad.png",
   "tablet.png",
-  "timi-fitness.png",
-  "timi-motor-skills-with-raul.png",
   "whiteboard.png",
   "laptop.png",
   // Activities — cognitive & sensory
@@ -130,13 +128,6 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "sorting-trays.png",
   "matching-cards.png",
   "play-dough.png",
-  "timi-foam.png",
-  "timi-motor-skills.png",
-  "timi-screwdriver.png",
-  "timi-puzzle-2.png",
-  "timi-stacking-cubes.png",
-  "timi-puzzles-with-raul.png",
-  "timi-vocational-activity.png",
   // Activities — cooking, food & art (generic objects, no people)
   "pizza.png",
   "cooking.png",
@@ -268,12 +259,6 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   // Technology
   { id: "dcg-ipad", slug: "ipad", title: "iPad" },
   { id: "dcg-tablet", slug: "tablet", title: "Tablet" },
-  { id: "dcg-timi-fitness", slug: "timi-fitness", title: "Timi fitness" },
-  {
-    id: "dcg-timi-motor-skills-raul",
-    slug: "timi-motor-skills-with-raul",
-    title: "Timi motor skills with Raul",
-  },
   { id: "dcg-whiteboard", slug: "whiteboard", title: "Whiteboard" },
   { id: "dcg-laptop", slug: "laptop", title: "Laptop" },
   // Activities — puzzles, sorting & matching
@@ -281,37 +266,6 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-sorting-trays", slug: "sorting-trays", title: "Sorting trays" },
   { id: "dcg-matching-cards", slug: "matching-cards", title: "Matching cards" },
   { id: "dcg-play-dough", slug: "play-dough", title: "Play dough" },
-  { id: "dcg-timi-foam", slug: "timi-foam", title: "Timi foam" },
-  {
-    id: "dcg-timi-motor-skills",
-    slug: "timi-motor-skills",
-    title: "Timi motor skills",
-  },
-  {
-    id: "dcg-timi-screwdriver",
-    slug: "timi-screwdriver",
-    title: "Timi screwdriver",
-  },
-  {
-    id: "dcg-timi-puzzle-2",
-    slug: "timi-puzzle-2",
-    title: "Timi puzzle 2",
-  },
-  {
-    id: "dcg-timi-stacking-cubes",
-    slug: "timi-stacking-cubes",
-    title: "Timi stacking cubes",
-  },
-  {
-    id: "dcg-timi-puzzles-raul",
-    slug: "timi-puzzles-with-raul",
-    title: "Timi puzzles with Raul",
-  },
-  {
-    id: "dcg-timi-vocational-activity",
-    slug: "timi-vocational-activity",
-    title: "Timi vocational activity",
-  },
   // Activities — cooking, food & art (until Oct — object illustrations)
   { id: "dcg-pizza", slug: "pizza", title: "Pizza" },
   { id: "dcg-cooking", slug: "cooking", title: "Cooking" },

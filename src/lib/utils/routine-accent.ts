@@ -533,7 +533,7 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (includesAny(haystack, ["/day centre/fadi", "/fadi/"])) {
     return "tailored";
   }
-  if (includesAny(haystack, ["/general/timi", "timi-"])) {
+  if (includesAny(haystack, ["/day centre/timi", "/timi/", "timi-"])) {
     return "tailored";
   }
   if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/"])) {
