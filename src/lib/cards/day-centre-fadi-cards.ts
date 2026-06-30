@@ -108,6 +108,30 @@ export const DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE: readonly TailoredItems3dSte
       title: "Vassim's car",
       library: "3d",
     },
+    {
+      id: "dcfi-kitkat",
+      slug: "kitkat",
+      title: "KitKat",
+      library: "3d",
+    },
+    {
+      id: "dcfi-popcorn",
+      slug: "popcorn",
+      title: "Popcorn",
+      library: "3d",
+    },
+    {
+      id: "dcfi-doritos",
+      slug: "doritos",
+      title: "Doritos",
+      library: "3d",
+    },
+    {
+      id: "dcfi-crisps",
+      slug: "crisps",
+      title: "Crisps",
+      library: "3d",
+    },
   ] as const;
 
 /** Stock routine · Fadi's day-centre order. */
