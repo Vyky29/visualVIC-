@@ -39,6 +39,8 @@ import {
 import { dayCentreLibraryGroupForSlug } from "@/lib/cards/day-centre-library-groups";
 import {
   DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
+  DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE,
+  DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS,
   dayCentreIkramImageUrlForStep,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
@@ -56,8 +58,20 @@ import {
 import {
   DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
   DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE,
+  DAY_CENTRE_FADI_CATEGORY_COLOUR,
   dayCentreFadiImageUrlForStep,
 } from "@/lib/cards/day-centre-fadi-cards";
+import {
+  TAILORED_EMOTION_SEQUENCE,
+  tailoredParticipantEmotionImageUrl,
+  type TailoredEmotionSlug,
+} from "@/lib/cards/tailored-emotion-cards";
+import {
+  TAILORED_PARTICIPANT_IDS,
+  tailoredParticipantDisplayName,
+  type TailoredParticipantId,
+} from "@/lib/routines/tailored-participants";
+import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 import {
   DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
   dayCentreTimiImageUrlForStep,
@@ -77,6 +91,7 @@ import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentreGeneralImageUrl,
   dayCentrePackMarkUrl,
+  dayCentreFadiPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
@@ -98,6 +113,7 @@ import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_ITEMS_LIBRARY_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
@@ -113,6 +129,23 @@ import {
 } from "@/lib/experimental/generated-pixto-demo-routine";
 
 const SEP = "::";
+
+/** Shipped emotion portraits per participant — extend as 3D emotions are added. */
+const TAILORED_PARTICIPANT_EMOTION_AVAILABILITY: Partial<
+  Record<TailoredParticipantId, readonly TailoredEmotionSlug[]>
+> = {
+  fadi: ["happy"],
+};
+
+const PARTICIPANT_PICK_NS: Record<TailoredParticipantId, PickablePackId> = {
+  ikram: "dcikram",
+  serine: "dcserine",
+  ayaan: "dcayaan",
+  emmanuel: "dcemmanuel",
+  cyrus: "dccyrus",
+  fadi: "dcfadi",
+  timi: "dctimi",
+};
 
 /** Namespace prefix in `pickId` (before `::`). */
 export type PickablePackId =
@@ -435,6 +468,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
 
   DAY_CENTRE_GENERAL_SEQUENCE.forEach((s, i) => {
     if (MINI_GYM_LIBRARY_SLUGS.has(s.slug)) return;
+    if (DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS.has(s.slug)) return;
     if (dayCentreLibraryGroupForSlug(s.slug) === "fitness-held") return;
     const gp = DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS[i];
     out.push({
@@ -457,9 +491,12 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   appendExtraCardsFromFiles({
     out,
     ns: "daycentre",
-    files: DAY_CENTRE_GENERAL_CARD_FILES.filter(
-      (file) => dayCentreLibraryGroupForSlug(file.replace(/\.png$/, "")) !== "fitness-held",
-    ),
+    files: DAY_CENTRE_GENERAL_CARD_FILES.filter((file) => {
+      const slug = file.replace(/\.png$/, "");
+      if (dayCentreLibraryGroupForSlug(slug) === "fitness-held") return false;
+      if (DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS.has(slug)) return false;
+      return true;
+    }),
     category: "home",
     imageUrlForSlug: (slug) =>
       dayCentreGeneralImageUrlForStep({ id: slug, slug, title: slug }),
@@ -483,6 +520,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dcikram", s.slug),
       label: s.title,
       imageUrl: dayCentreIkramImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_IKRAM_ITEMS_LIBRARY_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcikram", `items-${s.slug}`),
+      label: s.title,
+      imageUrl: tailoredItems3dImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {
@@ -665,6 +723,32 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
         : undefined,
     });
   });
+
+  for (const participantId of TAILORED_PARTICIPANT_IDS) {
+    const slugs = TAILORED_PARTICIPANT_EMOTION_AVAILABILITY[participantId];
+    if (!slugs?.length) continue;
+    const ns = PARTICIPANT_PICK_NS[participantId];
+    for (const step of TAILORED_EMOTION_SEQUENCE) {
+      if (!slugs.includes(step.slug)) continue;
+      const illustrationUrl = tailoredParticipantEmotionImageUrl(
+        participantId,
+        step.slug,
+      );
+      out.push({
+        pickId: pid(ns, `emotion-${step.slug}`),
+        label: step.title,
+        imageUrl: illustrationUrl,
+        category: "home",
+        generatedPixto: {
+          illustrationUrl,
+          title: step.title,
+          category: `${tailoredParticipantDisplayName(participantId)} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}`,
+          categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+          iconUrl: dayCentreFadiPackMarkUrl(),
+        },
+      });
+    }
+  }
 
   PHYSICAL_2D_LIBRARY_SEQUENCE.forEach((s, i) => {
     const gp = PHYSICAL_2D_LIBRARY_GENERATED_CARD_PROPS[i];

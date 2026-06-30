@@ -26,7 +26,6 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "bean-bag.png",
   "birthday-cake.png",
   "birthday-party.png",
-  "black-nail-varnish.png",
   "breakfast.png",
   "brush-teeth.png",
   "bus-stop.png",
@@ -76,6 +75,8 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "queue.png",
   "restaurant.png",
   "shopping-basket.png",
+  "coop-shopping-basket.png",
+  "sainsbury-shopping-basket.png",
   "shopping.png",
   "shops.png",
   "shower.png",
@@ -147,11 +148,10 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "exercise-machine.png",
   "row-machine.png",
   "skis.png",
-  // Fitness — stretching
+  // Fitness — mat & bands
   "exercise-mat.png",
   "resistance-bands.png",
   "foam-roller.png",
-  "stretching.png",
 ] as const;
 
 export function dayCentreGeneralImageUrlForStep(step: DayCentreGeneralStep): string {
@@ -177,36 +177,35 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-home", slug: "home", title: "Home" },
   { id: "dcg-bus-stop", slug: "bus-stop", title: "Bus stop" },
   // Activities & leisure
-  { id: "dcg-swimming-pool", slug: "swimming-pool", title: "Swimming" },
   { id: "dcg-hair-salon", slug: "hair-salon", title: "Hairdresser" },
   { id: "dcg-karaoke", slug: "karaoke", title: "Karaoke" },
-  { id: "dcg-circle-time", slug: "circle-time", title: "Circle time" },
-  { id: "dcg-park", slug: "park", title: "Park" },
   { id: "dcg-park-swing", slug: "park-and-swing", title: "Assisted Swing" },
   { id: "dcg-swing", slug: "swing", title: "Swing" },
   { id: "dcg-playground", slug: "playground", title: "Playground" },
   { id: "dcg-cafe", slug: "cafe", title: "Cafe" },
   { id: "dcg-sams-cafe", slug: "sams-cafe", title: "Sam's Cafe" },
-  { id: "dcg-sensory-room", slug: "sensory-room", title: "Sensory room" },
   { id: "dcg-flip-flops", slug: "flip-flops", title: "Flip-flops" },
-  { id: "dcg-library", slug: "library", title: "Library" },
   { id: "dcg-music", slug: "music", title: "Music" },
-  { id: "dcg-bean-bag", slug: "bean-bag", title: "Relaxation bean bag" },
   // Shopping & market
   { id: "dcg-supermarket", slug: "supermarket", title: "Supermarket" },
   { id: "dcg-market", slug: "market", title: "Market" },
   { id: "dcg-bakery", slug: "bakery", title: "Bakery" },
   { id: "dcg-shops", slug: "shops", title: "Shops" },
   { id: "dcg-shopping", slug: "shopping", title: "Shopping" },
-  { id: "dcg-shopping-basket", slug: "shopping-basket", title: "Basket" },
+  { id: "dcg-shopping-basket", slug: "shopping-basket", title: "Tesco basket" },
+  {
+    id: "dcg-coop-shopping-basket",
+    slug: "coop-shopping-basket",
+    title: "Co-op basket",
+  },
+  {
+    id: "dcg-sainsbury-shopping-basket",
+    slug: "sainsbury-shopping-basket",
+    title: "Sainsbury's basket",
+  },
   { id: "dcg-pay", slug: "pay", title: "Pay" },
   { id: "dcg-queue", slug: "queue", title: "Queue" },
   { id: "dcg-westfield", slug: "westfield", title: "Westfield" },
-  {
-    id: "dcg-nail-varnish",
-    slug: "black-nail-varnish",
-    title: "Buy black nail varnish",
-  },
   // Food & drink
   { id: "dcg-eat", slug: "eat", title: "Eat" },
   { id: "dcg-packed-lunch", slug: "packed-lunch", title: "Packed lunch" },
@@ -285,11 +284,10 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-exercise-machine", slug: "exercise-machine", title: "Exercise machine" },
   { id: "dcg-row-machine", slug: "row-machine", title: "Row machine" },
   { id: "dcg-skis", slug: "skis", title: "Skis" },
-  // Fitness — stretching
+  // Fitness — mat & bands
   { id: "dcg-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcg-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
   { id: "dcg-foam-roller", slug: "foam-roller", title: "Foam roller" },
-  { id: "dcg-stretching", slug: "stretching", title: "Stretching" },
   // Communication
   { id: "dcg-help", slug: "help", title: "Help" },
   { id: "dcg-stop", slug: "stop", title: "Stop" },
@@ -298,11 +296,9 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-yes", slug: "yes", title: "Yes" },
   { id: "dcg-no", slug: "no", title: "No" },
   { id: "dcg-not-now", slug: "not-now", title: "Not now" },
-  // Places & extras
+  // Places
   { id: "dcg-community-centre", slug: "community-centre", title: "Club Sensational" },
   { id: "dcg-hub-room", slug: "hub-room", title: "Hub room" },
-  { id: "dcg-birthday-cake", slug: "birthday-cake", title: "Birthday cake" },
-  { id: "dcg-birthday-party", slug: "birthday-party", title: "Birthday party" },
 ] as const;
 
 /** Mini gym routine — equipment only (531×648 illustrations). */
@@ -319,7 +315,6 @@ export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgf-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcgf-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
   { id: "dcgf-foam-roller", slug: "foam-roller", title: "Foam roller" },
-  { id: "dcgf-stretching", slug: "stretching", title: "Stretching" },
 ] as const;
 
 /** Mixed illustrated day — personal care, activities, cooking, outing (Schedule Player). */
@@ -392,7 +387,6 @@ export const DAY_CENTRE_MINI_GYM_WARMUP_SEQUENCE: readonly DayCentreGeneralStep[
   { id: "dcgw-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
   { id: "dcgw-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcgw-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
-  { id: "dcgw-stretching", slug: "stretching", title: "Stretching" },
 ] as const;
 
 /** Mini gym · cardio stations (2D). */
@@ -420,11 +414,12 @@ export const DAY_CENTRE_MINI_GYM_3D_WARMUP_SEQUENCE: readonly TailoredItems3dSte
   { id: "dcg3w-bosu", slug: "bosu", title: "BOSU", library: "3d" },
 ] as const;
 
-/** Mini gym · full 3D equipment schedule (no cones/rope/bells — not on disk). */
+/** Mini gym · full 3D equipment schedule (no rope/bells — not on disk). */
 export const DAY_CENTRE_MINI_GYM_3D_FITNESS_SEQUENCE: readonly TailoredItems3dStep[] = [
   { id: "dc3f-therapy-ball", slug: "therapy-ball", title: "Therapy ball", library: "3d" },
   { id: "dc3f-trampoline", slug: "trampoline", title: "Trampoline", library: "3d" },
   { id: "dc3f-treadmill", slug: "treadmill", title: "Treadmill", library: "3d" },
+  { id: "dc3f-cones", slug: "cones", title: "Cones", library: "3d" },
   { id: "dc3f-step-platform", slug: "step-platform", title: "Steps", library: "3d" },
   { id: "dc3f-weights", slug: "weights", title: "Weights", library: "3d" },
   { id: "dc3f-exercise-bike", slug: "exercise-bike", title: "Mini bikes", library: "3d" },
@@ -491,7 +486,7 @@ export const DAY_CENTRE_COOKING_BAKE_SEQUENCE: readonly DayCentreGeneralStep[] =
 export const DAY_CENTRE_COMMUNITY_MARKET_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dccm-bus", slug: "bus", title: "Bus" },
   { id: "dccm-market", slug: "market", title: "Market" },
-  { id: "dccm-shopping-basket", slug: "shopping-basket", title: "Basket" },
+  { id: "dccm-shopping-basket", slug: "shopping-basket", title: "Tesco basket" },
   { id: "dccm-pay", slug: "pay", title: "Pay" },
   { id: "dccm-snack", slug: "snack", title: "Snack" },
   { id: "dccm-bus-stop", slug: "bus-stop", title: "Bus stop" },

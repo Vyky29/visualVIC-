@@ -62,11 +62,6 @@ export const DAY_CENTRE_FADI_LIBRARY_SEQUENCE: readonly DayCentreFadiStep[] = [
     title: "Yellow bib walk",
   },
   {
-    id: "dcf-happy",
-    slug: "happy",
-    title: "Happy",
-  },
-  {
     id: "dcf-motor-skills",
     slug: "motor-skills",
     title: "Motor skills",
@@ -130,6 +125,12 @@ export const DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE: readonly TailoredItems3dSte
       id: "dcfi-crisps",
       slug: "crisps",
       title: "Crisps",
+      library: "3d",
+    },
+    {
+      id: "dcfi-yellow-bib",
+      slug: "yellow-bib",
+      title: "Yellow bib",
       library: "3d",
     },
   ] as const;

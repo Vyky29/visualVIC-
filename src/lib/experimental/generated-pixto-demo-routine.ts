@@ -69,6 +69,7 @@ import {
   DAY_CENTRE_IKRAM_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_ITEMS_SEQUENCE,
+  DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
@@ -485,6 +486,22 @@ export const DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardP
 export const DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE.map((s) =>
     ikramDailyItemsGeneratedCardProps(s),
+  );
+
+function ikramItemsLibraryGeneratedCardProps(step: TailoredItems3dStep) {
+  return {
+    illustrationUrl: tailoredItems3dImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  };
+}
+
+/** Ikram library · Items folder — object-only cards. */
+export const DAY_CENTRE_IKRAM_ITEMS_LIBRARY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE.map((s) =>
+    ikramItemsLibraryGeneratedCardProps(s),
   );
 
 function ikramScheduleGeneratedCardProps(step: DayCentreIkramStep) {

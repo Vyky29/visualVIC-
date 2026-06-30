@@ -9,6 +9,7 @@ import {
   dayCentreIkramSceneUrl,
   dayCentreIkramPackMarkUrl,
   dayCentreGeneralImageUrl,
+  dayCentreIkramItemsImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
@@ -35,6 +36,21 @@ export const DAY_CENTRE_IKRAM_CATEGORY_LABEL =
 
 export const DAY_CENTRE_IKRAM_PARTICIPANT_LABEL = "Ikram" as const;
 
+/**
+ * Object illustrations listed only under Library → Ikram → Items,
+ * not in Day centre → general accordion.
+ */
+export const DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS = new Set([
+  "swimming-pool",
+  "circle-time",
+  "park",
+  "sensory-room",
+  "library",
+  "bean-bag",
+  "birthday-cake",
+  "birthday-party",
+]);
+
 /** Schedule Player + Home tile — personalised day centre (avatar art). */
 export const DAY_CENTRE_IKRAM_ROUTINE_NAME =
   "Ikram · Day centre (avatar)" as const;
@@ -59,6 +75,7 @@ export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME =
   "Ikram · Tuesday (items)" as const;
 
 export type IkramDailyArtSource =
+  | { type: "ikram-items"; slug: string }
   | { type: "general"; slug: string }
   | { type: "ikram-scene"; slug: string }
   | { type: "dress"; slug: string }
@@ -77,6 +94,8 @@ function ikramDailyArtLibrary(
   source: IkramDailyArtSource,
 ): TailoredItems3dStep["library"] {
   switch (source.type) {
+    case "ikram-items":
+      return "ikram-items";
     case "general":
       return "general";
     case "ikram-scene":
@@ -92,6 +111,8 @@ function ikramDailyArtLibrary(
 
 export function ikramDailyArtImageUrl(source: IkramDailyArtSource): string {
   switch (source.type) {
+    case "ikram-items":
+      return dayCentreIkramItemsImageUrl(source.slug);
     case "general":
       return dayCentreGeneralImageUrl(source.slug);
     case "ikram-scene":
@@ -116,6 +137,19 @@ export function dayCentreIkramDailyItemsImageUrlForStep(
   step: IkramDailyStep,
 ): string {
   return ikramDailyArtImageUrl(step.items);
+}
+
+function ikramItemsLibraryStepFromDaily(
+  step: IkramDailyStep,
+): TailoredItems3dStep {
+  const itemSlug =
+    step.items.type === "ikram-scene" ? step.slug : step.items.slug;
+  return {
+    id: step.id.replace(/^dci-dc-/, "dcii-"),
+    slug: itemSlug,
+    title: step.title,
+    library: ikramDailyArtLibrary(step.items),
+  };
 }
 
 export function dayCentreIkramDailyAvatarImageUrlForStep(
@@ -175,21 +209,21 @@ export const DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE: readonly IkramDailyStep[] = [
     id: "dci-dc-music",
     slug: "music",
     title: "Music",
-    items: { type: "general", slug: "music" },
+    items: { type: "ikram-items", slug: "music" },
     avatar: { type: "ikram-scene", slug: "music" },
   },
   {
     id: "dci-dc-circle-time",
     slug: "circle-time",
     title: "Circle time",
-    items: { type: "general", slug: "circle-time" },
+    items: { type: "ikram-items", slug: "circle-time" },
     avatar: { type: "general", slug: "circle-time" },
   },
   {
     id: "dci-dc-cafe",
     slug: "cafe",
     title: "Cafe",
-    items: { type: "general", slug: "cafe" },
+    items: { type: "ikram-items", slug: "cafe" },
     avatar: { type: "ikram-scene", slug: "cafe" },
   },
   {
@@ -210,7 +244,7 @@ export const DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE: readonly IkramDailyStep[] = [
     id: "dci-dc-swimming",
     slug: "swimming",
     title: "Swimming",
-    items: { type: "general", slug: "swimming-pool" },
+    items: { type: "ikram-items", slug: "swimming-pool" },
     avatar: { type: "ikram-scene", slug: "swimming" },
   },
   {
@@ -238,63 +272,63 @@ export const DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE: readonly IkramDailyStep[] = [
     id: "dci-dc-bean-bag",
     slug: "bean-bag",
     title: "Relaxation bean bag",
-    items: { type: "general", slug: "bean-bag" },
+    items: { type: "ikram-items", slug: "bean-bag" },
     avatar: { type: "ikram-scene", slug: "bean-bag" },
   },
   {
     id: "dci-dc-bus",
     slug: "bus",
     title: "Bus",
-    items: { type: "general", slug: "bus" },
+    items: { type: "ikram-items", slug: "bus" },
     avatar: { type: "ikram-scene", slug: "bus" },
   },
   {
     id: "dci-dc-park",
     slug: "park",
     title: "Park",
-    items: { type: "general", slug: "park" },
+    items: { type: "ikram-items", slug: "park" },
     avatar: { type: "ikram-scene", slug: "park" },
   },
   {
     id: "dci-dc-swing",
     slug: "swing",
     title: "Swing",
-    items: { type: "general", slug: "swing" },
+    items: { type: "ikram-items", slug: "swing" },
     avatar: { type: "ikram-scene", slug: "swing-with-luliya" },
   },
   {
     id: "dci-dc-walk",
     slug: "walk",
     title: "Walk",
-    items: { type: "general", slug: "walk" },
+    items: { type: "ikram-items", slug: "walk" },
     avatar: { type: "ikram-scene", slug: "walk" },
   },
   {
     id: "dci-dc-restaurant",
     slug: "restaurant",
     title: "Restaurant",
-    items: { type: "general", slug: "restaurant" },
+    items: { type: "ikram-items", slug: "restaurant" },
     avatar: { type: "general", slug: "restaurant" },
   },
   {
     id: "dci-dc-birthday-party",
     slug: "birthday-party",
     title: "Birthday party",
-    items: { type: "general", slug: "birthday-party" },
+    items: { type: "ikram-items", slug: "birthday-party" },
     avatar: { type: "ikram-scene", slug: "birthday-party" },
   },
   {
     id: "dci-dc-birthday-cake",
     slug: "birthday-cake",
     title: "Birthday cake",
-    items: { type: "general", slug: "birthday-cake" },
+    items: { type: "ikram-items", slug: "birthday-cake" },
     avatar: { type: "general", slug: "birthday-cake" },
   },
   {
     id: "dci-dc-cab",
     slug: "cab",
     title: "Cab",
-    items: { type: "general", slug: "cab" },
+    items: { type: "ikram-items", slug: "cab" },
     avatar: { type: "ikram-scene", slug: "cab" },
   },
   {
@@ -323,17 +357,43 @@ export const DAY_CENTRE_IKRAM_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
     library: ikramDailyArtLibrary(items),
   }));
 
+/** Library · Items — object-only cards matching the items routine (`ikram/items/`). */
+export const DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE: readonly TailoredItems3dStep[] =
+  [
+    ...DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE.filter(
+      (s) => s.items.type !== "ikram-scene",
+    ).map(ikramItemsLibraryStepFromDaily),
+    {
+      id: "dcii-black-nail-varnish",
+      slug: "black-nail-varnish",
+      title: "Buy black nail varnish",
+      library: "ikram-items",
+    },
+    {
+      id: "dcii-sensory-room",
+      slug: "sensory-room",
+      title: "Sensory room",
+      library: "ikram-items",
+    },
+    {
+      id: "dcii-library",
+      slug: "library",
+      title: "Library",
+      library: "ikram-items",
+    },
+  ] as const;
+
 /** Mon / Wed / Fri — swimming day (illustrated objects). */
 export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
   [
-    { id: "dcimwf-karaoke", slug: "karaoke", title: "Karaoke", library: "general" },
+    { id: "dcimwf-karaoke", slug: "karaoke", title: "Karaoke", library: "ikram-items" },
     {
       id: "dcimwf-circle-time",
       slug: "circle-time",
       title: "Circle time",
-      library: "general",
+      library: "ikram-items",
     },
-    { id: "dcimwf-toilet", slug: "toilet", title: "Toilet", library: "general" },
+    { id: "dcimwf-toilet", slug: "toilet", title: "Toilet", library: "ikram-items" },
     {
       id: "dcimwf-swimsuit-on",
       slug: "swimsuit-on",
@@ -344,7 +404,7 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE: readonly TailoredItems
       id: "dcimwf-swimming",
       slug: "swimming-pool",
       title: "Swimming",
-      library: "general",
+      library: "ikram-items",
     },
     { id: "dcimwf-shower", slug: "shower", title: "Shower", library: "shower" },
     {
@@ -357,22 +417,22 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE: readonly TailoredItems
       id: "dcimwf-bean-bag",
       slug: "bean-bag",
       title: "Relaxation bean bag",
-      library: "general",
+      library: "ikram-items",
     },
-    { id: "dcimwf-cafe", slug: "cafe", title: "Cafe", library: "general" },
-    { id: "dcimwf-park", slug: "park", title: "Park", library: "general" },
+    { id: "dcimwf-cafe", slug: "cafe", title: "Cafe", library: "ikram-items" },
+    { id: "dcimwf-park", slug: "park", title: "Park", library: "ikram-items" },
     {
       id: "dcimwf-birthday-party",
       slug: "birthday-party",
       title: "Birthday party",
-      library: "general",
+      library: "ikram-items",
     },
-    { id: "dcimwf-cab", slug: "cab", title: "Cab", library: "general" },
+    { id: "dcimwf-cab", slug: "cab", title: "Cab", library: "ikram-items" },
     {
       id: "dcimwf-home",
       slug: "home",
       title: "Home with munchie",
-      library: "general",
+      library: "ikram-scene",
     },
   ] as const;
 
@@ -422,43 +482,43 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE: readonly DayCentreI
 /** Tuesday — outing (illustrated objects). */
 export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
   [
-    { id: "dcitu-karaoke", slug: "karaoke", title: "Karaoke", library: "general" },
+    { id: "dcitu-karaoke", slug: "karaoke", title: "Karaoke", library: "ikram-items" },
     {
       id: "dcitu-circle-time",
       slug: "circle-time",
       title: "Circle time",
-      library: "general",
+      library: "ikram-items",
     },
-    { id: "dcitu-toilet", slug: "toilet", title: "Toilet", library: "general" },
+    { id: "dcitu-toilet", slug: "toilet", title: "Toilet", library: "ikram-items" },
     {
       id: "dcitu-sams-cafe",
       slug: "sams-cafe",
       title: "Sam's Cafe",
-      library: "general",
+      library: "ikram-items",
     },
-    { id: "dcitu-bus", slug: "bus", title: "Bus", library: "general" },
-    { id: "dcitu-park", slug: "park", title: "Park", library: "general" },
-    { id: "dcitu-swing", slug: "swing", title: "Swing", library: "general" },
-    { id: "dcitu-cafe", slug: "cafe", title: "Cafe", library: "general" },
+    { id: "dcitu-bus", slug: "bus", title: "Bus", library: "ikram-items" },
+    { id: "dcitu-park", slug: "park", title: "Park", library: "ikram-items" },
+    { id: "dcitu-swing", slug: "swing", title: "Swing", library: "ikram-items" },
+    { id: "dcitu-cafe", slug: "cafe", title: "Cafe", library: "ikram-items" },
     {
       id: "dcitu-birthday-party",
       slug: "birthday-party",
       title: "Birthday party",
-      library: "general",
+      library: "ikram-items",
     },
     {
       id: "dcitu-cake",
       slug: "birthday-cake",
       title: "Birthday cake",
-      library: "general",
+      library: "ikram-items",
     },
     { id: "dcitu-ball", slug: "football", title: "Ball", library: "3d" },
-    { id: "dcitu-cab", slug: "cab", title: "Cab", library: "general" },
+    { id: "dcitu-cab", slug: "cab", title: "Cab", library: "ikram-items" },
     {
       id: "dcitu-home",
       slug: "home",
       title: "Home with munchi",
-      library: "general",
+      library: "ikram-scene",
     },
   ] as const;
 

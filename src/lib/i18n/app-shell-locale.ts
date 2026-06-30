@@ -645,7 +645,7 @@ export function dayCentreLibraryGroupLabel(
     shopping: "Shopping",
     "food-drink": "Food & drink",
     communication: "Communication",
-    "places-extras": "Places & extras",
+    "places-extras": "Places",
   };
   const es: Record<DayCentreLibraryGroup, string> = {
     "mini-gym": "Mini gym",
@@ -661,7 +661,7 @@ export function dayCentreLibraryGroupLabel(
     shopping: "Compras",
     "food-drink": "Comida y bebida",
     communication: "Comunicación",
-    "places-extras": "Lugares y extras",
+    "places-extras": "Lugares",
   };
   return isEs(lang) ? es[group] : en[group];
 }
@@ -703,12 +703,14 @@ export function ikramLibraryGroupLabel(
   lang: CardLanguageCode,
 ): string {
   const en: Record<IkramLibraryGroup, string> = {
+    items: "Items (objects only)",
     "scene-cards": "Scene cards (PECS grid)",
     "mon-wed-fri-schedule": "Mon / Wed / Fri schedule",
     "saturday-schedule": "Saturday schedule",
     "photo-cards": "Photo library",
   };
   const es: Record<IkramLibraryGroup, string> = {
+    items: "Objetos (solo ítems)",
     "scene-cards": "Tarjetas escena (PECS)",
     "mon-wed-fri-schedule": "Rutina lunes / miércoles / viernes",
     "saturday-schedule": "Rutina del sábado",

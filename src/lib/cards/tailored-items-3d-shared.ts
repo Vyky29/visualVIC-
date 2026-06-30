@@ -4,6 +4,7 @@
 import {
   dayCentreEmmanuelIconUrl,
   dayCentreGeneralImageUrl,
+  dayCentreIkramItemsImageUrl,
   dayCentreIkramSceneUrl,
 } from "@/lib/cards/day-centre-shared";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
@@ -18,6 +19,7 @@ export type TailoredItems3dLibrary =
   | "3d"
   | "3d-gym"
   | "general"
+  | "ikram-items"
   | "dress"
   | "emmanuel-icons"
   | "ikram-scene"
@@ -37,6 +39,8 @@ export function tailoredItems3dImageUrlForStep(step: TailoredItems3dStep): strin
       return dayCentreEmmanuelIconUrl(step.slug);
     case "general":
       return dayCentreGeneralImageUrl(step.slug);
+    case "ikram-items":
+      return dayCentreIkramItemsImageUrl(step.slug);
     case "dress":
       return gettingDressUndressImageUrl(step.slug);
     case "3d-gym":

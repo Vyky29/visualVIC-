@@ -259,7 +259,7 @@ export const mockRoutines: Routine[] = [
   {
     id: "dc-mini-gym-warmup",
     name: "Mini Gym · Warm-up",
-    description: "Therapy ball, mat, bands and stretching — 2D objects",
+    description: "Therapy ball, mat and bands — 2D objects",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreFolderIconUrl("mini-gym"),
     steps: routineStepsFromGeneratedCardProps(
@@ -556,7 +556,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — cruzigramas, circle time, snack, gym, trunks on, swimming, shower, shampoo, lunch, maths, sports, washing up and home (avatar art)",
+      "Emmanuel · Mon/Tue/Wed — word search, circle time, snack, gym, trunks on, swimming, shower, shampoo, lunch, maths, sports, washing up and home (avatar art)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
@@ -568,7 +568,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre-items",
     name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — cruzigramas, circle time, snack, gym (with Michelle), trunks on, swimming, shower, shampoo, lunch, maths, sports, washing up, cruzigramas and home (object / icon art)",
+      "Emmanuel · Mon/Tue/Wed — word search, circle time, snack, gym (with Michelle), trunks on, swimming, shower, shampoo, lunch, maths, sports, washing up, word search and home (object / icon art)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
     steps: routineStepsFromGeneratedCardProps(

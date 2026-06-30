@@ -9,7 +9,7 @@ import {
   emmanuelLibraryGroupLabel,
 } from "@/lib/cards/emmanuel-library-groups";
 import {
-  ikramLibraryGroupForSlug,
+  ikramLibraryGroupForPickId,
   type IkramLibraryGroup,
 } from "@/lib/cards/ikram-library-groups";
 import {
@@ -161,7 +161,7 @@ function subgroupLabelForCard(
   const ns = card.pickId.split("::")[0]?.toLowerCase() ?? "";
 
   if (pack === "dcikram") {
-    const group: IkramLibraryGroup = ikramLibraryGroupForSlug(slug);
+    const group: IkramLibraryGroup = ikramLibraryGroupForPickId(card.pickId);
     return ikramLibraryGroupLabel(group, "en");
   }
   if (pack === "dcemmanuel" || pack === "dcemmanuel-icons") {

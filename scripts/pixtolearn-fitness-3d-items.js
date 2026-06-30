@@ -87,6 +87,13 @@ const FITNESS_3D_ITEMS = [
     object: "a blue foam roller cylinder, soft 3D rendered style",
   },
   {
+    file: "cones.png",
+    slug: "cones",
+    title: "Cones",
+    object:
+      "a set of bright yellow sports saucer disc cones — five stacked in a neat pile plus two loose cones beside them, low-profile flexible plastic agility markers with hollow tops and subtle horizontal ridges, soft 3D rendered style",
+  },
+  {
     file: "stretching.png",
     slug: "stretching",
     title: "Stretching",

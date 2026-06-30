@@ -22,7 +22,7 @@ import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import {
   IKRAM_LIBRARY_GROUP_ORDER,
-  ikramLibraryGroupForSlug,
+  ikramLibraryGroupForPickId,
 } from "@/lib/cards/ikram-library-groups";
 import {
   EMMANUEL_LIBRARY_DIMENSION_ORDER,
@@ -557,8 +557,7 @@ function LibraryPackThematicSubgroups({
 
   return IKRAM_LIBRARY_GROUP_ORDER.map((groupId) => {
     const groupCards = cards.filter((v) => {
-      const slug = v.pickId.split("::")[1] ?? "";
-      return ikramLibraryGroupForSlug(slug) === groupId;
+      return ikramLibraryGroupForPickId(v.pickId) === groupId;
     });
     if (groupCards.length === 0) return null;
     return (

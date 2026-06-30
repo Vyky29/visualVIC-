@@ -84,8 +84,8 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailySt
     {
       id: "dcea-cruzigramas-am",
       slug: "cruzigramas-am",
-      title: "Cruzigramas",
-      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      title: "Word search",
+      items: { type: "emmanuel-icon", slug: "word-search" },
       avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
     },
     {
@@ -168,8 +168,8 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailySt
     {
       id: "dcea-cruzigramas-pm",
       slug: "cruzigramas-pm",
-      title: "Cruzigramas",
-      items: { type: "emmanuel-icon", slug: "cruzigramas" },
+      title: "Word search",
+      items: { type: "emmanuel-icon", slug: "word-search" },
       avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
     },
     {
@@ -194,9 +194,9 @@ export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailySte
     {
       id: "dcedi-cruzigramas-am",
       slug: "cruzigramas-am",
-      title: "Cruzigramas",
-      items: { type: "emmanuel-icon", slug: "cruzigramas" },
-      avatar: { type: "emmanuel-icon", slug: "cruzigramas" },
+      title: "Word search",
+      items: { type: "emmanuel-icon", slug: "word-search" },
+      avatar: { type: "emmanuel-icon", slug: "word-search" },
     },
     {
       id: "dcedi-circle-time",
@@ -278,9 +278,9 @@ export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailySte
     {
       id: "dcedi-cruzigramas-pm",
       slug: "cruzigramas-pm",
-      title: "Cruzigramas",
-      items: { type: "emmanuel-icon", slug: "cruzigramas" },
-      avatar: { type: "emmanuel-icon", slug: "cruzigramas" },
+      title: "Word search",
+      items: { type: "emmanuel-icon", slug: "word-search" },
+      avatar: { type: "emmanuel-icon", slug: "word-search" },
     },
     {
       id: "dcedi-home",
@@ -295,21 +295,15 @@ export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailySte
 export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
   [
     {
-      id: "dcei-cruzigramas",
-      slug: "cruzigramas",
-      title: "Cruzigramas",
+      id: "dcei-word-search",
+      slug: "word-search",
+      title: "Word search",
       library: "emmanuel-icons",
     },
     {
       id: "dcei-washing-up",
       slug: "washing-up",
       title: "Washing up",
-      library: "emmanuel-icons",
-    },
-    {
-      id: "dcei-table-work",
-      slug: "table-work",
-      title: "Table work",
       library: "emmanuel-icons",
     },
     {
@@ -347,7 +341,7 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
     },
     { id: "dce-basketball", slug: "basketball", title: "Basketball" },
     { id: "dce-snack", slug: "snack", title: "Snack" },
-    { id: "dce-cruzigramas", slug: "cruzigramas", title: "Cruzigramas" },
+    { id: "dce-cruzigramas", slug: "cruzigramas", title: "Word search" },
     { id: "dce-maths", slug: "maths", title: "Maths" },
     {
       id: "dce-circle-time",

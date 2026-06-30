@@ -50,7 +50,6 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "exercise-mat": "mini-gym",
   "resistance-bands": "mini-gym",
   "foam-roller": "mini-gym",
-  stretching: "mini-gym",
   football: "mini-gym",
   badminton: "mini-gym",
   basketball: "mini-gym",
@@ -141,10 +140,11 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   shops: "shopping",
   shopping: "shopping",
   "shopping-basket": "shopping",
+  "coop-shopping-basket": "shopping",
+  "sainsbury-shopping-basket": "shopping",
   pay: "shopping",
   queue: "shopping",
   westfield: "shopping",
-  "black-nail-varnish": "shopping",
   // Food & drink
   eat: "food-drink",
   "packed-lunch": "food-drink",
@@ -176,8 +176,6 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   // Places & extras
   "community-centre": "places-extras",
   "hub-room": "places-extras",
-  "birthday-cake": "places-extras",
-  "birthday-party": "places-extras",
 };
 
 export function dayCentreLibraryGroupForSlug(

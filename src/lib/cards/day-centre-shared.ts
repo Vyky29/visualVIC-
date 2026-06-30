@@ -8,6 +8,8 @@ export const DAY_CENTRE_PUBLIC_DIR = `/cards/${DAY_CENTRE_DIR_SEG}`;
 
 export const DAY_CENTRE_GENERAL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/general` as const;
 export const DAY_CENTRE_IKRAM_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ikram` as const;
+export const DAY_CENTRE_IKRAM_ITEMS_DIR =
+  `${DAY_CENTRE_IKRAM_DIR}/items` as const;
 export const DAY_CENTRE_SERINE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/serine` as const;
 export const DAY_CENTRE_AYAAN_DIR = `${DAY_CENTRE_PUBLIC_DIR}/ayaan` as const;
 export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as const;
@@ -66,6 +68,11 @@ export function dayCentreGeneralImageUrl(slug: string): string {
 
 export function dayCentreIkramImageUrl(slug: string): string {
   return `${DAY_CENTRE_IKRAM_DIR}/${slug}.png`;
+}
+
+/** Ikram · items routine — object-only illustrations (`ikram/items/`). */
+export function dayCentreIkramItemsImageUrl(slug: string): string {
+  return `${DAY_CENTRE_IKRAM_ITEMS_DIR}/${slug}.png`;
 }
 
 /** Ikram scene illustration — Now/Next (531×648). */
@@ -283,6 +290,10 @@ export function dayCentreFadiImageUrl(slug: string): string {
 
 export function dayCentreFadiSceneFocusUrl(slug: string): string {
   return `${DAY_CENTRE_FADI_DIR}/scenes/${slug}-focus.png`;
+}
+
+export function dayCentreFadiEmotionUrl(slug: string): string {
+  return `${DAY_CENTRE_FADI_DIR}/emotions/${slug}.png`;
 }
 
 export function dayCentreTimiImageUrl(slug: string): string {
