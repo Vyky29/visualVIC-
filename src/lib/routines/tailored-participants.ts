@@ -30,7 +30,6 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
   ayaan: ["ayaan-day-centre", "ayaan-gym-equipment-3d"],
   emmanuel: [
     "emmanuel-day-centre",
-    "emmanuel-day-centre-items",
     "emmanuel-gym-avatar",
     "emmanuel-gym-equipment-3d",
   ],

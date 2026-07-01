@@ -60,7 +60,6 @@ const STOCK_PACK_IDS = new Set<string>([
   "ayaan-day-centre",
   "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
-  "emmanuel-day-centre-items",
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
@@ -663,7 +662,6 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "ayaan-day-centre") return "ayaan";
   if (id === "ayaan-gym-equipment-3d") return "ayaan";
   if (id === "emmanuel-day-centre") return "ayaan";
-  if (id === "emmanuel-day-centre-items") return "daycentre";
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
@@ -727,7 +725,6 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "ayaan-day-centre") return "ayaan";
   if (id === "ayaan-gym-equipment-3d") return "ayaan";
   if (id === "emmanuel-day-centre") return "ayaan";
-  if (id === "emmanuel-day-centre-items") return "daycentre";
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";

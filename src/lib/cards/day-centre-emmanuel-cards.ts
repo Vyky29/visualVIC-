@@ -57,13 +57,12 @@ export const DAY_CENTRE_EMMANUEL_CATEGORY_LABEL =
 
 export const DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL = "Emmanuel" as const;
 
-/** Stock routine · full day with Emmanuel in art where available. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME =
-  "Emmanuel · Day centre (avatar)" as const;
+  "Emmanuel · Day centre" as const;
 
-/** Stock routine · full day with object / icon art only. */
+/** @deprecated Removed — use {@link DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME}. */
 export const DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME =
-  "Emmanuel · Day centre (items)" as const;
+  DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME;
 
 export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME =
   "Emmanuel · Gym (avatar)" as const;
@@ -78,102 +77,105 @@ export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
 export const DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL =
   `${DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}` as const;
 
-/** Emmanuel · Mon / Tue / Wed — avatar scenes where available. */
-export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+/**
+ * Emmanuel · Mon / Tue / Wed — same step order as library Items; avatar art uses
+ * personalised 3D scenes where available (tall adult ~1.95 m).
+ */
+export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
   [
     {
-      id: "dcea-word-search",
+      id: "dce-word-search",
       slug: "word-search",
       title: "Word search",
       items: { type: "emmanuel-icon", slug: "word-search" },
       avatar: { type: "emmanuel-scene", slug: "cruzigramas" },
     },
     {
-      id: "dcea-gym",
+      id: "dce-gym",
       slug: "gym",
       title: "Gym",
       items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
       avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
     },
     {
-      id: "dcea-swimming",
+      id: "dce-swimming",
       slug: "swimming",
       title: "Swimming",
       items: { type: "general", slug: "swimming-pool" },
       avatar: { type: "general", slug: "swimming-pool" },
     },
     {
-      id: "dcea-shower",
+      id: "dce-shower",
       slug: "shower",
       title: "Shower",
       items: { type: "shower", slug: "shower" },
       avatar: { type: "shower", slug: "shower" },
     },
     {
-      id: "dcea-shampoo",
+      id: "dce-shampoo",
       slug: "shampoo",
       title: "Shampoo",
       items: { type: "shower", slug: "shampoo" },
       avatar: { type: "shower", slug: "shampoo" },
     },
     {
-      id: "dcea-getting-dressed",
+      id: "dce-getting-dressed",
       slug: "getting-dressed",
       title: "Getting dressed",
       items: { type: "dress", slug: "tshirt-on" },
       avatar: { type: "dress", slug: "tshirt-on" },
     },
     {
-      id: "dcea-lunch",
+      id: "dce-lunch",
       slug: "lunch",
       title: "Lunch",
       items: { type: "general", slug: "packed-lunch" },
-      avatar: { type: "general", slug: "packed-lunch" },
+      avatar: { type: "emmanuel-scene", slug: "packed-lunch" },
     },
     {
-      id: "dcea-bean-bag",
+      id: "dce-bean-bag",
       slug: "bean-bag",
       title: "Bean bag",
       items: { type: "general", slug: "bean-bag" },
       avatar: { type: "general", slug: "bean-bag" },
     },
     {
-      id: "dcea-handwriting",
+      id: "dce-handwriting",
       slug: "handwriting",
       title: "Handwriting",
       items: { type: "emmanuel-icon", slug: "handwriting" },
       avatar: { type: "emmanuel-icon", slug: "handwriting" },
     },
     {
-      id: "dcea-vocational-activity",
+      id: "dce-vocational-activity",
       slug: "vocational-activity",
       title: "Vocational activity",
       items: { type: "emmanuel-icon", slug: "vocational-activity" },
       avatar: { type: "emmanuel-icon", slug: "vocational-activity" },
     },
     {
-      id: "dcea-sports",
+      id: "dce-sports",
       slug: "sports",
       title: "Sports",
       items: { type: "emmanuel-icon", slug: "sports" },
-      avatar: { type: "emmanuel-icon", slug: "sports" },
+      avatar: { type: "emmanuel-scene", slug: "basketball" },
     },
     {
-      id: "dcea-snack",
+      id: "dce-snack",
       slug: "snack",
       title: "Chocolate cake",
       items: { type: "emmanuel-icon", slug: "chocolate-cake" },
       avatar: { type: "emmanuel-scene", slug: "snack" },
     },
     {
-      id: "dcea-washing-up",
+      id: "dce-washing-up",
       slug: "washing-up",
       title: "Washing up",
       items: { type: "emmanuel-icon", slug: "washing-up" },
       avatar: { type: "emmanuel-scene", slug: "washing-up" },
     },
     {
-      id: "dcea-picture-book",
+      id: "dce-picture-book",
       slug: "picture-book",
       title: "Picture book",
       items: { type: "emmanuel-icon", slug: "picture-book" },
@@ -181,115 +183,13 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailySt
     },
   ] as const;
 
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE}. */
-export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
-  DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE;
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
+export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE;
 
-/**
- * Items routine · Mon / Tue / Wed — object & icon illustrations (no avatar).
- * Gym keeps Emmanuel's real photo with Michelle, as requested.
- */
+/** @deprecated Removed — use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
 export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
-  [
-    {
-      id: "dcedi-word-search",
-      slug: "word-search",
-      title: "Word search",
-      items: { type: "emmanuel-icon", slug: "word-search" },
-      avatar: { type: "emmanuel-icon", slug: "word-search" },
-    },
-    {
-      id: "dcedi-gym",
-      slug: "gym",
-      title: "Gym",
-      items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
-      avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
-    },
-    {
-      id: "dcedi-swimming",
-      slug: "swimming",
-      title: "Swimming",
-      items: { type: "general", slug: "swimming-pool" },
-      avatar: { type: "general", slug: "swimming-pool" },
-    },
-    {
-      id: "dcedi-shower",
-      slug: "shower",
-      title: "Shower",
-      items: { type: "shower", slug: "shower" },
-      avatar: { type: "shower", slug: "shower" },
-    },
-    {
-      id: "dcedi-shampoo",
-      slug: "shampoo",
-      title: "Shampoo",
-      items: { type: "shower", slug: "shampoo" },
-      avatar: { type: "shower", slug: "shampoo" },
-    },
-    {
-      id: "dcedi-getting-dressed",
-      slug: "getting-dressed",
-      title: "Getting dressed",
-      items: { type: "dress", slug: "tshirt-on" },
-      avatar: { type: "dress", slug: "tshirt-on" },
-    },
-    {
-      id: "dcedi-lunch",
-      slug: "lunch",
-      title: "Lunch",
-      items: { type: "general", slug: "packed-lunch" },
-      avatar: { type: "general", slug: "packed-lunch" },
-    },
-    {
-      id: "dcedi-bean-bag",
-      slug: "bean-bag",
-      title: "Bean bag",
-      items: { type: "general", slug: "bean-bag" },
-      avatar: { type: "general", slug: "bean-bag" },
-    },
-    {
-      id: "dcedi-handwriting",
-      slug: "handwriting",
-      title: "Handwriting",
-      items: { type: "emmanuel-icon", slug: "handwriting" },
-      avatar: { type: "emmanuel-icon", slug: "handwriting" },
-    },
-    {
-      id: "dcedi-vocational-activity",
-      slug: "vocational-activity",
-      title: "Vocational activity",
-      items: { type: "emmanuel-icon", slug: "vocational-activity" },
-      avatar: { type: "emmanuel-icon", slug: "vocational-activity" },
-    },
-    {
-      id: "dcedi-sports",
-      slug: "sports",
-      title: "Sports",
-      items: { type: "emmanuel-icon", slug: "sports" },
-      avatar: { type: "emmanuel-icon", slug: "sports" },
-    },
-    {
-      id: "dcedi-snack",
-      slug: "snack",
-      title: "Chocolate cake",
-      items: { type: "emmanuel-icon", slug: "chocolate-cake" },
-      avatar: { type: "emmanuel-icon", slug: "chocolate-cake" },
-    },
-    {
-      id: "dcedi-washing-up",
-      slug: "washing-up",
-      title: "Washing up",
-      items: { type: "emmanuel-icon", slug: "washing-up" },
-      avatar: { type: "emmanuel-icon", slug: "washing-up" },
-    },
-    {
-      id: "dcedi-picture-book",
-      slug: "picture-book",
-      title: "Picture book",
-      items: { type: "emmanuel-icon", slug: "picture-book" },
-      avatar: { type: "emmanuel-icon", slug: "picture-book" },
-    },
-  ] as const;
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE;
 
 /** Library · Items subgroup — activity icons (no avatar). */
 export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
@@ -344,27 +244,24 @@ export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
     },
   ] as const;
 
-/** Library · Avatar subgroup — personalised 3D scenes. */
+/** Library · Avatar subgroup — same slugs as Items, with Emmanuel 3D scenes. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   [
-    {
-      id: "dce-cross-trainer",
-      slug: "cross-trainer",
-      title: "Cross trainer",
-    },
+    { id: "dce-football", slug: "football", title: "Football" },
+    { id: "dce-basketball", slug: "basketball", title: "Basketball" },
+    { id: "dce-badminton", slug: "badminton", title: "Badminton" },
+    { id: "dce-tennis", slug: "tennis", title: "Tennis" },
     {
       id: "dce-gym-with-michelle",
       slug: "gym-with-michelle",
-      title: "Gym with Michelle",
+      title: "Gym",
     },
-    { id: "dce-basketball", slug: "basketball", title: "Basketball" },
+    { id: "dce-packed-lunch", slug: "packed-lunch", title: "Packed lunch" },
     { id: "dce-snack", slug: "snack", title: "Snack" },
-    { id: "dce-cruzigramas", slug: "cruzigramas", title: "Word search" },
-    { id: "dce-maths", slug: "maths", title: "Maths" },
     {
-      id: "dce-circle-time",
-      slug: "circle-time",
-      title: "Circle time",
+      id: "dce-commenting",
+      slug: "commenting",
+      title: "Commenting",
     },
   ] as const;
 
@@ -423,7 +320,6 @@ export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE: readonly TailoredItems3dSte
 export const DAY_CENTRE_EMMANUEL_MACHINERY_3D_SEQUENCE =
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE;
 
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
 export const DAY_CENTRE_EMMANUEL_SCHEDULE_SEQUENCE: readonly EmmanuelDailyStep[] =
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE;
 
@@ -438,6 +334,9 @@ export const DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE: readonly DayCentreEmmanuelSte
 const EMMANUEL_AVATAR_SCENE_SLUGS = new Set(
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) => s.slug),
 );
+
+/** Avatar library cards that reuse icon art (no dedicated scene PNG). */
+const EMMANUEL_AVATAR_ICON_FALLBACK_SLUGS = new Set(["commenting"]);
 
 export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string {
   switch (source.type) {
@@ -492,6 +391,9 @@ export function dayCentreEmmanuelIconImageUrlForStep(
 export function dayCentreEmmanuelImageUrlForStep(
   step: DayCentreEmmanuelStep,
 ): string {
+  if (EMMANUEL_AVATAR_ICON_FALLBACK_SLUGS.has(step.slug)) {
+    return dayCentreEmmanuelIconUrl(step.slug);
+  }
   if (EMMANUEL_AVATAR_SCENE_SLUGS.has(step.slug)) {
     return dayCentreEmmanuelSceneUrl(step.slug);
   }

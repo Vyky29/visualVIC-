@@ -81,7 +81,6 @@ import {
   DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
-  DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
 import {
@@ -556,24 +555,12 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up and picture book (avatar art)",
+      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up and picture book",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
       "emmanuel-day-centre",
       DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS,
-    ),
-  },
-  {
-    id: "emmanuel-day-centre-items",
-    name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
-    description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up and picture book (object / icon art)",
-    tags: ["extra"],
-    homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
-    steps: routineStepsFromGeneratedCardProps(
-      "emmanuel-day-centre-items",
-      DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {
