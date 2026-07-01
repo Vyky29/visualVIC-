@@ -98,8 +98,8 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailySt
     {
       id: "dcea-snack",
       slug: "snack",
-      title: "Snack",
-      items: { type: "general", slug: "snack" },
+      title: "Chocolate cake",
+      items: { type: "emmanuel-icon", slug: "chocolate-cake" },
       avatar: { type: "emmanuel-scene", slug: "snack" },
     },
     {
@@ -208,9 +208,9 @@ export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailySte
     {
       id: "dcedi-snack",
       slug: "snack",
-      title: "Snack",
-      items: { type: "general", slug: "snack" },
-      avatar: { type: "general", slug: "snack" },
+      title: "Chocolate cake",
+      items: { type: "emmanuel-icon", slug: "chocolate-cake" },
+      avatar: { type: "emmanuel-icon", slug: "chocolate-cake" },
     },
     {
       id: "dcedi-gym",
@@ -294,6 +294,12 @@ export const DAY_CENTRE_EMMANUEL_ITEMS_DAILY_SEQUENCE: readonly EmmanuelDailySte
 /** Library · Items subgroup — activity icons (no avatar). */
 export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
   [
+    {
+      id: "dcei-chocolate-cake",
+      slug: "chocolate-cake",
+      title: "Chocolate cake",
+      library: "emmanuel-icons",
+    },
     {
       id: "dcei-word-search",
       slug: "word-search",

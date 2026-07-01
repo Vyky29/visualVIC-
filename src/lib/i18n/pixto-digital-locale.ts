@@ -231,6 +231,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   badminton: { en: "badminton", es: "bádminton" },
   cruzigramas: { en: "word search", es: "sopa de letras" },
   "word-search": { en: "word search", es: "sopa de letras" },
+  "chocolate-cake": { en: "chocolate cake", es: "tarta de chocolate" },
   "washing-up": { en: "washing up", es: "fregar platos" },
   "table-work": { en: "table work", es: "trabajo en mesa" },
   spelling: { en: "spelling", es: "deletreo" },
