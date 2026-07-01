@@ -183,6 +183,13 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       items: { type: "emmanuel-icon", slug: "picture-book" },
       avatar: { type: "emmanuel-icon", slug: "picture-book" },
     },
+    {
+      id: "dce-home",
+      slug: "home",
+      title: "Home",
+      items: { type: "general", slug: "home" },
+      avatar: { type: "general", slug: "home" },
+    },
   ] as const;
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
@@ -281,6 +288,8 @@ export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE: readonly DayCentreEmmanuel
       title: "Gym with Michelle",
     },
     { id: "dceg-basketball", slug: "basketball", title: "Basketball" },
+    { id: "dceg-finished", slug: "finished", title: "Finished" },
+    { id: "dceg-swimming", slug: "swimming", title: "Swimming" },
   ] as const;
 
 /** Gym stock routine · equipment only (no Emmanuel). */
@@ -316,6 +325,18 @@ export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE: readonly TailoredItems3dSte
       title: "Therapy ball",
       library: "3d",
     },
+    {
+      id: "dcem-finished",
+      slug: "finished",
+      title: "Finished",
+      library: "general",
+    },
+    {
+      id: "dcem-swimming",
+      slug: "swimming-pool",
+      title: "Swimming",
+      library: "general",
+    },
   ] as const;
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE}. */
@@ -339,6 +360,13 @@ const EMMANUEL_AVATAR_SCENE_SLUGS = new Set(
 
 /** Avatar library cards that reuse icon art (no dedicated scene PNG). */
 const EMMANUEL_AVATAR_ICON_FALLBACK_SLUGS = new Set(["commenting"]);
+
+/** Gym / terminal steps — general day-centre illustrations (no Emmanuel scene PNG). */
+const EMMANUEL_GENERAL_ART_SLUGS: Readonly<Record<string, string>> = {
+  finished: "finished",
+  swimming: "swimming-pool",
+  home: "home",
+};
 
 export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string {
   switch (source.type) {
@@ -395,6 +423,10 @@ export function dayCentreEmmanuelImageUrlForStep(
 ): string {
   if (EMMANUEL_AVATAR_ICON_FALLBACK_SLUGS.has(step.slug)) {
     return dayCentreEmmanuelIconUrl(step.slug);
+  }
+  const generalSlug = EMMANUEL_GENERAL_ART_SLUGS[step.slug];
+  if (generalSlug) {
+    return dayCentreGeneralImageUrl(generalSlug);
   }
   if (EMMANUEL_AVATAR_SCENE_SLUGS.has(step.slug)) {
     return dayCentreEmmanuelSceneUrl(step.slug);

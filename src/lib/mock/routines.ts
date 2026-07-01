@@ -556,7 +556,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre",
     name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up and picture book (avatar art)",
+      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up, picture book and home (avatar art)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
@@ -568,7 +568,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-day-centre-items",
     name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up and picture book (object / icon art)",
+      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, getting dressed, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up, picture book and home (object / icon art)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
     steps: routineStepsFromGeneratedCardProps(
@@ -580,7 +580,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-gym-avatar",
     name: DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
     description:
-      "Gym with Emmanuel — cross trainer, gym with Michelle and basketball (3D avatar)",
+      "Gym with Emmanuel — cross trainer, gym with Michelle, basketball, finished and swimming (3D avatar)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-gym-avatar"),
     steps: routineStepsFromGeneratedCardProps(
@@ -592,7 +592,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-gym-equipment-3d",
     name: DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
     description:
-      "Gym equipment only — cross trainer, bike, treadmill, mat and therapy ball (3D objects)",
+      "Gym equipment only — cross trainer, bike, treadmill, mat, therapy ball, finished and swimming (3D objects)",
     tags: ["extra"],
     homePreviewImageUrl: physical3dGymImageUrl("elliptical"),
     steps: routineStepsFromGeneratedCardProps(
