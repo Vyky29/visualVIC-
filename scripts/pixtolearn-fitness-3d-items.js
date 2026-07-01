@@ -162,6 +162,46 @@ const FITNESS_3D_ITEMS = [
     title: "Basketball",
     object: "an orange basketball with black ribs, soft 3D rendered style",
   },
+  {
+    file: "ladder.png",
+    slug: "ladder",
+    title: "Ladder",
+    object: "a flat yellow agility speed ladder on the ground, soft 3D rendered style",
+  },
+  {
+    file: "hurdles.png",
+    slug: "hurdles",
+    title: "Hurdles",
+    object:
+      "three adjustable orange and white track hurdles for athletics training, soft 3D rendered style",
+  },
+  {
+    file: "parachute.png",
+    slug: "parachute",
+    title: "Parachute",
+    object:
+      "a colourful round play parachute spread flat with rainbow panels and edge handles, soft 3D rendered style",
+  },
+  {
+    file: "colour-balls.png",
+    slug: "colour-balls",
+    title: "Colour balls",
+    object:
+      "a cluster of bright colourful soft play balls in red blue yellow green and orange, soft 3D rendered style",
+  },
+  {
+    file: "comb.png",
+    slug: "comb",
+    title: "Comb",
+    object: "a blue wide-tooth plastic hair comb, soft 3D rendered style",
+  },
+  {
+    file: "stilts.png",
+    slug: "stilts",
+    title: "Stilts",
+    object:
+      "a pair of wooden walking peg stilts with foot platforms and hand grips, soft 3D rendered style",
+  },
 ];
 
 const PROMPT_3D_TEMPLATE =

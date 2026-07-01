@@ -429,6 +429,12 @@ export const DAY_CENTRE_MINI_GYM_3D_FITNESS_SEQUENCE: readonly TailoredItems3dSt
   { id: "dc3f-football", slug: "football", title: "Football", library: "3d" },
   { id: "dc3f-badminton", slug: "badminton", title: "Badminton", library: "3d" },
   { id: "dc3f-basketball", slug: "basketball", title: "Basketball", library: "3d" },
+  { id: "dc3f-ladder", slug: "ladder", title: "Ladder", library: "3d" },
+  { id: "dc3f-hurdles", slug: "hurdles", title: "Hurdles", library: "3d" },
+  { id: "dc3f-parachute", slug: "parachute", title: "Parachute", library: "3d" },
+  { id: "dc3f-colour-balls", slug: "colour-balls", title: "Colour balls", library: "3d" },
+  { id: "dc3f-comb", slug: "comb", title: "Comb", library: "3d" },
+  { id: "dc3f-stilts", slug: "stilts", title: "Stilts", library: "3d" },
 ] as const;
 
 /** Mini gym · 3D cardio stations. */

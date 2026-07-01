@@ -10,9 +10,14 @@ export function isSupabaseConfigured(): boolean {
   );
 }
 
+let browserClient: SupabaseClient | undefined;
+
+/** Single browser client — avoids multiple GoTrueClient instances in one tab. */
 export function createBrowserSupabase(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
-  return createClient(url, key);
+
+  browserClient ??= createClient(url, key);
+  return browserClient;
 }
