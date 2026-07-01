@@ -16,6 +16,7 @@ import {
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
 import {
@@ -43,6 +44,7 @@ export type EmmanuelDailyArtSource =
   | { type: "emmanuel-icon"; slug: string }
   | { type: "emmanuel-scene"; slug: string }
   | { type: "shower"; slug: string }
+  | { type: "swimming"; slug: string }
   | { type: "dress"; slug: string }
   | { type: "3d"; slug: string }
   | { type: "3d-gym"; slug: string };
@@ -121,11 +123,11 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       avatar: { type: "shower", slug: "shampoo" },
     },
     {
-      id: "dce-getting-dressed",
-      slug: "getting-dressed",
-      title: "Getting dressed",
-      items: { type: "dress", slug: "tshirt-on" },
-      avatar: { type: "dress", slug: "tshirt-on" },
+      id: "dce-changing-room",
+      slug: "changing-room",
+      title: "Changing room",
+      items: { type: "swimming", slug: "changing-room" },
+      avatar: { type: "swimming", slug: "changing-room" },
     },
     {
       id: "dce-lunch",
@@ -378,6 +380,8 @@ export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string
       return dayCentreEmmanuelSceneUrl(source.slug);
     case "shower":
       return showerImageUrl(source.slug);
+    case "swimming":
+      return swimmingImageUrl(source.slug);
     case "dress":
       return gettingDressUndressImageUrl(source.slug);
     case "3d-gym":
