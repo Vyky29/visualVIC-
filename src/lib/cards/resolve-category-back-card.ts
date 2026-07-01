@@ -5,6 +5,7 @@
 
 import type { RoutineStep } from "@/lib/types/routine";
 import { climbingBackCardUrl } from "@/lib/cards/climbing-cards";
+import { swimmingBackCardUrl } from "@/lib/cards/swimming-cards";
 import { coreBackCardUrl } from "@/lib/cards/core-cards";
 import { showerBackCardUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressBackCardUrl } from "@/lib/cards/getting-dress-undress-cards";
@@ -96,6 +97,9 @@ export function resolveCategoryBackCardUrl(
   if (path.includes("/cards/shower/")) {
     return showerBackCardUrl();
   }
+  if (path.includes("/cards/swimming/")) {
+    return swimmingBackCardUrl();
+  }
   if (path.includes("getting-dress")) {
     return gettingDressUndressBackCardUrl();
   }
@@ -143,6 +147,7 @@ export function resolveCategoryBackCardUrlForStep(
     case "core":
       return coreBackCardUrl();
     case "swimming":
+      return swimmingBackCardUrl();
     case "custom":
     case "default":
     default:

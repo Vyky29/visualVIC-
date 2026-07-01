@@ -5,6 +5,9 @@
 
 export const SWIMMING_PUBLIC_DIR = "/cards/swimming";
 
+/** Back-of-card for swipe flip in this category (not a routine step). */
+export const SWIMMING_BACK_CARD_FILE = "backcard-swimming.png" as const;
+
 /** Shipped swimming step PNGs (synced to folder on disk). */
 export const SWIMMING_CARD_FILES = [
   "blow-bubbles.png",
@@ -22,6 +25,10 @@ export type SwimmingCardFile = (typeof SWIMMING_CARD_FILES)[number];
 export function swimmingImageUrl(slug: string): string {
   const base = slug.replace(/\.png$/i, "");
   return `${SWIMMING_PUBLIC_DIR}/${base}.png`;
+}
+
+export function swimmingBackCardUrl(): string {
+  return `${SWIMMING_PUBLIC_DIR}/${SWIMMING_BACK_CARD_FILE}`;
 }
 
 /** Pool visit flow — basename without .png must exist in the folder above. */
