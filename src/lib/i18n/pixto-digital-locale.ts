@@ -153,6 +153,8 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   "packed-lunch": { en: "packed lunch", es: "tupper cerrado" },
   lunch: { en: "lunch", es: "comida" },
   "bus-stop": { en: "bus stop", es: "parada de autobús" },
+  "train-station": { en: "train station", es: "estación de tren" },
+  home: { en: "home", es: "casa" },
   "community-centre": { en: "club sensational", es: "club sensational" },
   "hub-room": { en: "hub room", es: "sala hub" },
   "sensory-room": { en: "sensory room", es: "sala sensorial" },
@@ -231,17 +233,36 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   hurdles: { en: "hurdles", es: "vallas" },
   parachute: { en: "parachute", es: "paracaídas" },
   "colour-balls": { en: "colour balls", es: "pelotas de colores" },
+  "jump-rope": { en: "jump rope", es: "comba" },
   comb: { en: "comb", es: "peine" },
-  stilts: { en: "stilts", es: "zancos" },
+  stilts: { en: "bucket stilts", es: "zancos de bote" },
   football: { en: "football", es: "fútbol" },
   badminton: { en: "badminton", es: "bádminton" },
   cruzigramas: { en: "word search", es: "sopa de letras" },
   "word-search": { en: "word search", es: "sopa de letras" },
   "chocolate-cake": { en: "chocolate cake", es: "tarta de chocolate" },
   "washing-up": { en: "washing up", es: "fregar platos" },
+  paintbrush: { en: "paintbrush", es: "pincel" },
+  "paint-palette": { en: "paint palette", es: "paleta de pintura" },
+  scissors: { en: "scissors", es: "tijeras" },
+  "glue-stick": { en: "glue stick", es: "pegamento en barra" },
+  "coloured-paper": { en: "coloured paper", es: "papel de colores" },
+  pencils: { en: "pencils", es: "lápices" },
+  pen: { en: "pen", es: "bolígrafo" },
+  "colouring-pens": { en: "colouring pens", es: "rotuladores de colores" },
+  "felt-tips": { en: "felt tips", es: "rotuladores de punta fina" },
+  eraser: { en: "eraser", es: "goma de borrar" },
+  sharpener: { en: "sharpener", es: "sacapuntas" },
+  paint: { en: "paint", es: "pintura" },
   "table-work": { en: "table work", es: "trabajo en mesa" },
   spelling: { en: "spelling", es: "deletreo" },
   handwriting: { en: "handwriting", es: "escritura" },
+  "vocational-activity": {
+    en: "vocational activity",
+    es: "actividad vocacional",
+  },
+  "picture-book": { en: "picture book", es: "libro de fotos" },
+  "getting-dressed": { en: "getting dressed", es: "vestirse" },
   maths: { en: "maths", es: "matemáticas" },
   "circle-time": {
     en: "circle time",
@@ -256,6 +277,12 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     es: "casa con muchie",
   },
   sports: { en: "sports", es: "deporte" },
+  tennis: { en: "tennis", es: "tenis" },
+  commenting: { en: "commenting", es: "comentar" },
+  "colourful-semantics": {
+    en: "colourful semantics",
+    es: "semántica colorida",
+  },
   "sitting-in-the-pool": {
     en: "sitting in the pool",
     es: "sentada en la piscina",
@@ -586,7 +613,7 @@ export function libraryTailoredParticipantFolderLabel(
 }
 
 export function libraryDayCentreFolderLabel(
-  folder: "mini-gym" | "bouldering" | "cooking" | "community" | "mixed" | "premium",
+  folder: "mini-gym" | "bouldering" | "cooking" | "community" | "mixed",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -596,7 +623,6 @@ export function libraryDayCentreFolderLabel(
     cooking: "Cooking Folder",
     community: "Community Folder",
     mixed: "Mixed Folder",
-    premium: "Premium Folder",
   };
   const es: Record<typeof folder, string> = {
     "mini-gym": "Carpeta mini gym",
@@ -604,7 +630,6 @@ export function libraryDayCentreFolderLabel(
     cooking: "Carpeta cocina",
     community: "Carpeta comunidad",
     mixed: "Carpeta mixta",
-    premium: "Carpeta Premium",
   };
   return ui === "es" ? es[folder] : en[folder];
 }

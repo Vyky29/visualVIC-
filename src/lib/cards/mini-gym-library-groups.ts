@@ -1,9 +1,9 @@
 /**
  * Library sub-sections inside Day centre → Mini gym (3D equipment).
- * Synced to `public/images/library-3d/`.
+ * Synced to `public/images/library-3d/` — excludes Physical Activity machines.
  */
 
-import { PHYSICAL_3D_LIBRARY_CATALOG } from "@/lib/cards/physical-cards";
+import { MINI_GYM_3D_CATALOG } from "@/lib/cards/physical-cards";
 
 export type MiniGymLibraryDimension = "3d";
 
@@ -24,7 +24,7 @@ export type MiniGymLibraryStep = {
 function miniGymLibrarySteps(
   idPrefix: "mg2" | "mg3",
 ): readonly MiniGymLibraryStep[] {
-  return PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
+  return MINI_GYM_3D_CATALOG.map((item) => ({
     id: `${idPrefix}-${item.slug}`,
     slug: item.slug,
     title: item.title,
@@ -35,12 +35,12 @@ function miniGymLibrarySteps(
 export const MINI_GYM_2D_LIBRARY_SEQUENCE: readonly MiniGymLibraryStep[] =
   miniGymLibrarySteps("mg2");
 
-/** 3D — `public/images/library-3d/{slug}.png`. */
+/** 3D — `public/images/library-3d/{slug}.png` (mini gym only). */
 export const MINI_GYM_3D_LIBRARY_SEQUENCE: readonly MiniGymLibraryStep[] =
   miniGymLibrarySteps("mg3");
 
 export const MINI_GYM_LIBRARY_SLUGS = new Set(
-  PHYSICAL_3D_LIBRARY_CATALOG.map((s) => s.slug),
+  MINI_GYM_3D_CATALOG.map((s) => s.slug),
 );
 
 export function miniGymLibraryDimensionFromPickNamespace(

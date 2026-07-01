@@ -16,7 +16,6 @@ export type DayCentreLibraryGroup =
   | "activities-leisure"
   | "shopping"
   | "food-drink"
-  | "communication"
   | "places-extras";
 
 /** Display order in Library → Home → Day centre accordion. */
@@ -32,20 +31,16 @@ export const DAY_CENTRE_LIBRARY_GROUP_ORDER: readonly DayCentreLibraryGroup[] = 
   "activities-leisure",
   "shopping",
   "food-drink",
-  "communication",
   "places-extras",
 ] as const;
 
 const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
-  // Mini gym
+  // Mini gym — agility, balls, mats, sports (machines → Physical Activity)
   "therapy-ball": "mini-gym",
   trampoline: "mini-gym",
-  treadmill: "mini-gym",
   cones: "mini-gym",
-  "step-platform": "mini-gym",
   rope: "mini-gym",
   weights: "mini-gym",
-  "exercise-bike": "mini-gym",
   bells: "mini-gym",
   "exercise-mat": "mini-gym",
   "resistance-bands": "mini-gym",
@@ -53,20 +48,18 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   football: "mini-gym",
   badminton: "mini-gym",
   basketball: "mini-gym",
+  tennis: "mini-gym",
   ladder: "mini-gym",
   hurdles: "mini-gym",
   parachute: "mini-gym",
   "colour-balls": "mini-gym",
-  comb: "mini-gym",
+  "jump-rope": "mini-gym",
   stilts: "mini-gym",
   "plyo-box": "mini-gym",
   bosu: "mini-gym",
-  kettlebell: "mini-gym",
-  "medicine-ball": "mini-gym",
   "balance-board": "mini-gym",
   // Held — more Physical Activity items may join later
   "exercise-machine": "fitness-held",
-  "row-machine": "fitness-held",
   skis: "fitness-held",
   // Materials — kitchen
   apron: "materials-kitchen",
@@ -97,6 +90,13 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   scissors: "materials-art",
   "glue-stick": "materials-art",
   "coloured-paper": "materials-art",
+  pencils: "materials-art",
+  pen: "materials-art",
+  "colouring-pens": "materials-art",
+  "felt-tips": "materials-art",
+  eraser: "materials-art",
+  sharpener: "materials-art",
+  paint: "materials-art",
   // Technology
   ipad: "technology",
   tablet: "technology",
@@ -119,15 +119,15 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   "brush-teeth": "personal-care",
   "get-dressed": "personal-care",
   "hair-care": "personal-care",
-  // Community
+  // Transport
   bus: "community",
   tube: "community",
   cab: "community",
   walk: "community",
   "cross-road": "community",
   wait: "community",
-  home: "community",
   "bus-stop": "community",
+  "train-station": "community",
   // Activities & leisure
   "swimming-pool": "activities-leisure",
   "hair-salon": "activities-leisure",
@@ -139,7 +139,6 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   playground: "activities-leisure",
   cafe: "activities-leisure",
   "sams-cafe": "activities-leisure",
-  "sensory-room": "activities-leisure",
   "flip-flops": "activities-leisure",
   library: "activities-leisure",
   music: "activities-leisure",
@@ -176,17 +175,19 @@ const SLUG_GROUP: Record<string, DayCentreLibraryGroup> = {
   breakfast: "food-drink",
   dinner: "food-drink",
   mcdonalds: "food-drink",
-  // Communication
-  help: "communication",
-  stop: "communication",
-  finished: "communication",
-  more: "communication",
-  yes: "communication",
-  no: "communication",
-  "not-now": "communication",
-  // Places & extras
+  // Held — hidden from library (communication cards kept for routines)
+  help: "fitness-held",
+  stop: "fitness-held",
+  finished: "fitness-held",
+  more: "fitness-held",
+  yes: "fitness-held",
+  no: "fitness-held",
+  "not-now": "fitness-held",
+  // Places
+  home: "places-extras",
   "community-centre": "places-extras",
   "hub-room": "places-extras",
+  "sensory-room": "places-extras",
 };
 
 export function dayCentreLibraryGroupForSlug(

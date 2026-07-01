@@ -29,7 +29,6 @@ export type PlannerLibrarySectionId =
   | "dcfolderminigym"
   | "dcfolderbouldering"
   | (typeof DAY_CENTRE_LIBRARY_SECTION_IDS)[number]
-  | "dcfolderpremium"
   | "dcikram"
   | "dcserine"
   | "dcayaan"
@@ -39,12 +38,10 @@ export type PlannerLibrarySectionId =
   | "dctimi"
   | "physical";
 
-/** Day centre folders visible to assigned staff (Premium replaces core/shower/dress). */
 export const PLANNER_STAFF_DAY_CENTRE_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dcfolderminigym",
   "dcfolderbouldering",
   ...DAY_CENTRE_LIBRARY_SECTION_IDS,
-  "dcfolderpremium",
 ];
 
 export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
@@ -59,7 +56,6 @@ export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dcfolderminigym",
   "dcfolderbouldering",
   ...DAY_CENTRE_LIBRARY_SECTION_IDS,
-  "dcfolderpremium",
   "dcikram",
   "dcserine",
   "dcayaan",

@@ -241,7 +241,6 @@ export type LibraryPackSectionId =
   | "hotel"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfolderpremium"
   | DayCentreLibrarySectionId
   | "dcikram"
   | "dcserine"
@@ -266,8 +265,6 @@ export function libraryPackSectionTitle(
     return libraryDayCentreFolderLabel("bouldering", lang);
   const dayCentreGroup = dayCentreLibraryGroupFromSectionId(section);
   if (dayCentreGroup) return dayCentreLibraryGroupLabel(dayCentreGroup, lang);
-  if (section === "dcfolderpremium")
-    return libraryDayCentreFolderLabel("premium", lang);
   if (section === "dcikram") return libraryDayCentreIkramLabel(lang);
   if (section === "dcserine") return libraryDayCentreSerineLabel(lang);
   if (section === "dcayaan") return libraryDayCentreAyaanLabel(lang);
@@ -640,11 +637,10 @@ export function dayCentreLibraryGroupLabel(
     "activities-cognitive": "Activities — puzzles & matching",
     "activities-cooking": "Activities — cooking & art",
     "personal-care": "Personal care",
-    community: "Community & transport",
+    community: "Transport",
     "activities-leisure": "Activities & leisure",
     shopping: "Shopping",
     "food-drink": "Food & drink",
-    communication: "Communication",
     "places-extras": "Places",
   };
   const es: Record<DayCentreLibraryGroup, string> = {
@@ -656,11 +652,10 @@ export function dayCentreLibraryGroupLabel(
     "activities-cognitive": "Actividades — puzzles y clasificación",
     "activities-cooking": "Actividades — cocina y arte",
     "personal-care": "Cuidado personal",
-    community: "Comunidad y transporte",
+    community: "Transporte",
     "activities-leisure": "Actividades y ocio",
     shopping: "Compras",
     "food-drink": "Comida y bebida",
-    communication: "Comunicación",
     "places-extras": "Lugares",
   };
   return isEs(lang) ? es[group] : en[group];

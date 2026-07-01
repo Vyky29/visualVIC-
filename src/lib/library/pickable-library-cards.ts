@@ -94,11 +94,6 @@ import {
   dayCentreFadiPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
-import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
-import {
-  DAY_CENTRE_PREMIUM_PICKS,
-  type DayCentrePremiumSourcePack,
-} from "@/lib/cards/day-centre-premium-cards";
 import {
   PHYSICAL_2D_LIBRARY_SEQUENCE,
   PHYSICAL_3D_GYM_CARD_FILES,
@@ -167,7 +162,6 @@ export type PickablePackId =
   | "dccyrus"
   | "dcfadi"
   | "dctimi"
-  | "dcpremium"
   | "mg2d"
   | "mg3d"
   | "phy2d"
@@ -195,7 +189,6 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dccyrus" ||
     ns === "dcfadi" ||
     ns === "dctimi" ||
-    ns === "dcpremium" ||
     ns === "mg2d" ||
     ns === "mg3d" ||
     ns === "phy2d" ||
@@ -300,15 +293,6 @@ function generalGeneratedPixtoBySlug(
     iconUrl: gp.iconUrl,
     cardType: gp.cardType,
   };
-}
-
-function premiumPickImageUrl(
-  sourcePack: DayCentrePremiumSourcePack,
-  slug: string,
-): string {
-  if (sourcePack === "dress") return gettingDressUndressImageUrl(slug);
-  if (sourcePack === "shower") return showerImageUrl(slug);
-  return swimmingImageUrl(slug);
 }
 
 /** All Pixto cards users can add to a custom routine (V1 — local registries). */
@@ -824,15 +808,6 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       label: card.title,
       imageUrl: card.imageUrl,
       category: "self-care",
-    });
-  }
-
-  for (const pick of DAY_CENTRE_PREMIUM_PICKS) {
-    out.push({
-      pickId: pid("dcpremium", pick.slug),
-      label: pick.title,
-      imageUrl: premiumPickImageUrl(pick.sourcePack, pick.slug),
-      category: "home",
     });
   }
 

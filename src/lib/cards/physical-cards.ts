@@ -78,18 +78,14 @@ export function physical3dGymImageUrl(slug: string): string {
   return `${PHYSICAL_3D_GYM_LIBRARY_DIR}/${slug}.png`;
 }
 
-/** Library catalogue — synced to `public/images/library-3d/*.png`. */
-export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
+/** Mini gym — balls, mats, agility, sports (`library-3d/`). */
+export const MINI_GYM_3D_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
   { slug: "therapy-ball", title: "Therapy ball" },
   { slug: "trampoline", title: "Trampoline" },
-  { slug: "step-platform", title: "Steps" },
   { slug: "plyo-box", title: "Plyo box" },
-  { slug: "treadmill", title: "Treadmill" },
   { slug: "cones", title: "Cones" },
   { slug: "resistance-bands", title: "Resistance bands" },
   { slug: "bosu", title: "BOSU" },
-  { slug: "kettlebell", title: "Kettlebell" },
-  { slug: "medicine-ball", title: "Weight ball" },
   { slug: "balance-board", title: "Balance board" },
   { slug: "foam-roller", title: "Foam roller" },
   { slug: "exercise-mat", title: "Exercise mat" },
@@ -97,12 +93,29 @@ export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = 
   { slug: "football", title: "Football" },
   { slug: "badminton", title: "Badminton" },
   { slug: "basketball", title: "Basketball" },
+  { slug: "tennis", title: "Tennis" },
   { slug: "ladder", title: "Ladder" },
   { slug: "hurdles", title: "Hurdles" },
   { slug: "parachute", title: "Parachute" },
   { slug: "colour-balls", title: "Colour balls" },
-  { slug: "comb", title: "Comb" },
-  { slug: "stilts", title: "Stilts" },
+  { slug: "jump-rope", title: "Jump rope" },
+  { slug: "stilts", title: "Bucket stilts" },
+] as const;
+
+/** Physical Activity — steps, kettlebell, weight ball + cardio machines in `library-3d/`. */
+export const PHYSICAL_ACTIVITY_3D_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
+  { slug: "step-platform", title: "Steps" },
+  { slug: "kettlebell", title: "Kettlebell" },
+  { slug: "medicine-ball", title: "Weight ball" },
+  { slug: "treadmill", title: "Treadmill" },
+  { slug: "exercise-bike", title: "Exercise bike" },
+  { slug: "row-machine", title: "Row machine" },
+] as const;
+
+/** All slugs under `public/images/library-3d/` (mini gym + physical activity). */
+export const PHYSICAL_3D_LIBRARY_CATALOG: readonly Omit<PhysicalStep, "id">[] = [
+  ...PHYSICAL_ACTIVITY_3D_CATALOG,
+  ...MINI_GYM_3D_CATALOG,
 ] as const;
 
 /** Library → machines — curated gym picks (531×648 each). */
@@ -148,7 +161,7 @@ export const PHYSICAL_SCHEDULE_SEQUENCE: readonly PhysicalScheduleStep[] = [
 ] as const;
 
 function physical3dLibrarySteps(): readonly PhysicalStep[] {
-  return PHYSICAL_3D_LIBRARY_CATALOG.map((item) => ({
+  return PHYSICAL_ACTIVITY_3D_CATALOG.map((item) => ({
     id: `phy3-${item.slug}`,
     slug: item.slug,
     title: item.title,

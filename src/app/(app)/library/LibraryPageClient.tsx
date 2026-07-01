@@ -122,7 +122,6 @@ export type LibrarySectionId =
       | "phy3d"
       | "phy3g"
       | "daycentre"
-      | "dcpremium"
       | "mg2d"
       | "mg3d"
       | "dcemmanuel2d"
@@ -133,7 +132,6 @@ export type LibrarySectionId =
   | "physical"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfolderpremium"
   | DayCentreThematicSectionId;
 
 const DAY_CENTRE_THEMATIC_SECTION_HEADER_ICONS = Object.fromEntries(
@@ -164,7 +162,6 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "dcfolderminigym",
     "dcfolderbouldering",
     ...DAY_CENTRE_LIBRARY_SECTION_IDS,
-    "dcfolderpremium",
     "dcikram",
     "dcserine",
     "dcayaan",
@@ -188,7 +185,6 @@ const SECTION_HEADER_ICON: Record<LibrarySectionId, string> = {
   dcfolderminigym: dayCentreFolderIconUrl("mini-gym"),
   dcfolderbouldering: dayCentreFolderIconUrl("bouldering"),
   ...DAY_CENTRE_THEMATIC_SECTION_HEADER_ICONS,
-  dcfolderpremium: dayCentreFolderIconUrl("premium"),
   dcikram: dayCentreIkramLibraryPackIconUrl(),
   dcserine: dayCentreSerineLibraryPackIconUrl(),
   dcayaan: dayCentreAyaanLibraryPackIconUrl(),
@@ -213,7 +209,6 @@ const libraryPackIconRingClass: Record<LibrarySectionId, string> = {
   dcfolderminigym: "ring-[#E53935]/75",
   dcfolderbouldering: "ring-[#E53935]/75",
   ...DAY_CENTRE_THEMATIC_SECTION_RING,
-  dcfolderpremium: "ring-[#E53935]/75",
   dcikram: "ring-[#E05C9A]/75",
   dcserine: "ring-[#E05C9A]/75",
   dcayaan: "ring-[#1E4A73]/75",
@@ -246,7 +241,6 @@ const libraryPackRibbonClass: Record<PickablePackId, string> = {
   dccyrus: "border-t border-[#2E7D6E]/55 bg-[#e6f4f1] text-ink",
   dcfadi: "border-t border-[#8C1E2E]/55 bg-[#fdecee] text-ink",
   dctimi: "border-t border-[#C8741C]/55 bg-[#fdf0e2] text-ink",
-  dcpremium: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg2d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   mg3d: "border-t border-[#E53935]/45 bg-[#ffebee] text-ink",
   phy2d: "border-t border-[#43A047]/40 bg-[#e8f5e9] text-ink",
@@ -276,7 +270,6 @@ function librarySectionFromCard(
     const slug = c.pickId.split("::")[1] ?? "";
     return dayCentreLibrarySectionIdForSlug(slug);
   }
-  if (pack === "dcpremium") return "dcfolderpremium";
   if (pack === "climb") {
     const slug = c.pickId.split("::")[1] ?? "";
     if (isDayCentreBoulderingClimbSlug(slug)) return "dcfolderbouldering";

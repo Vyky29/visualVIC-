@@ -29,6 +29,7 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "breakfast.png",
   "brush-teeth.png",
   "bus-stop.png",
+  "train-station.png",
   "bus.png",
   "butter.png",
   "cab.png",
@@ -119,6 +120,13 @@ export const DAY_CENTRE_GENERAL_CARD_FILES = [
   "scissors.png",
   "glue-stick.png",
   "coloured-paper.png",
+  "pencils.png",
+  "pen.png",
+  "colouring-pens.png",
+  "felt-tips.png",
+  "eraser.png",
+  "sharpener.png",
+  "paint.png",
   // Technology
   "ipad.png",
   "tablet.png",
@@ -167,15 +175,19 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-brush-teeth", slug: "brush-teeth", title: "Brush teeth" },
   { id: "dcg-get-dressed", slug: "get-dressed", title: "Get dressed" },
   { id: "dcg-hair-care", slug: "hair-care", title: "Hair care" },
-  // Community access
+  // Transport
   { id: "dcg-bus", slug: "bus", title: "Bus" },
   { id: "dcg-tube", slug: "tube", title: "Tube" },
   { id: "dcg-cab", slug: "cab", title: "Cab" },
   { id: "dcg-walk", slug: "walk", title: "Walking" },
   { id: "dcg-cross-road", slug: "cross-road", title: "Crossing road" },
   { id: "dcg-wait", slug: "wait", title: "Waiting" },
-  { id: "dcg-home", slug: "home", title: "Home" },
   { id: "dcg-bus-stop", slug: "bus-stop", title: "Bus stop" },
+  {
+    id: "dcg-train-station",
+    slug: "train-station",
+    title: "Train station",
+  },
   // Activities & leisure
   { id: "dcg-hair-salon", slug: "hair-salon", title: "Hairdresser" },
   { id: "dcg-karaoke", slug: "karaoke", title: "Karaoke" },
@@ -255,6 +267,13 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-scissors", slug: "scissors", title: "Scissors" },
   { id: "dcg-glue-stick", slug: "glue-stick", title: "Glue stick" },
   { id: "dcg-coloured-paper", slug: "coloured-paper", title: "Coloured paper" },
+  { id: "dcg-pencils", slug: "pencils", title: "Pencils" },
+  { id: "dcg-pen", slug: "pen", title: "Pen" },
+  { id: "dcg-colouring-pens", slug: "colouring-pens", title: "Colouring pens" },
+  { id: "dcg-felt-tips", slug: "felt-tips", title: "Felt tips" },
+  { id: "dcg-eraser", slug: "eraser", title: "Eraser" },
+  { id: "dcg-sharpener", slug: "sharpener", title: "Sharpener" },
+  { id: "dcg-paint", slug: "paint", title: "Paint" },
   // Technology
   { id: "dcg-ipad", slug: "ipad", title: "iPad" },
   { id: "dcg-tablet", slug: "tablet", title: "Tablet" },
@@ -297,24 +316,30 @@ export const DAY_CENTRE_GENERAL_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcg-no", slug: "no", title: "No" },
   { id: "dcg-not-now", slug: "not-now", title: "Not now" },
   // Places
-  { id: "dcg-community-centre", slug: "community-centre", title: "Club Sensational" },
+  { id: "dcg-home", slug: "home", title: "Home" },
+  {
+    id: "dcg-community-centre",
+    slug: "community-centre",
+    title: "Club Sensational",
+  },
   { id: "dcg-hub-room", slug: "hub-room", title: "Hub room" },
+  { id: "dcg-sensory-room", slug: "sensory-room", title: "Sensory room" },
 ] as const;
 
 /** Mini gym routine — equipment only (531×648 illustrations). */
 export const DAY_CENTRE_FITNESS_SEQUENCE: readonly DayCentreGeneralStep[] = [
   { id: "dcgf-therapy-ball", slug: "therapy-ball", title: "Therapy ball" },
   { id: "dcgf-trampoline", slug: "trampoline", title: "Trampoline" },
-  { id: "dcgf-treadmill", slug: "treadmill", title: "Treadmill" },
   { id: "dcgf-cones", slug: "cones", title: "Cones" },
-  { id: "dcgf-step-platform", slug: "step-platform", title: "Steps" },
   { id: "dcgf-rope", slug: "rope", title: "Rope" },
   { id: "dcgf-weights", slug: "weights", title: "Weights" },
-  { id: "dcgf-exercise-bike", slug: "exercise-bike", title: "Mini bikes" },
   { id: "dcgf-bells", slug: "bells", title: "Bells" },
   { id: "dcgf-exercise-mat", slug: "exercise-mat", title: "Exercise mat" },
   { id: "dcgf-resistance-bands", slug: "resistance-bands", title: "Resistance bands" },
   { id: "dcgf-foam-roller", slug: "foam-roller", title: "Foam roller" },
+  { id: "dcgf-ladder", slug: "ladder", title: "Ladder" },
+  { id: "dcgf-hurdles", slug: "hurdles", title: "Hurdles" },
+  { id: "dcgf-parachute", slug: "parachute", title: "Parachute" },
 ] as const;
 
 /** Mixed illustrated day — personal care, activities, cooking, outing (Schedule Player). */
@@ -433,8 +458,8 @@ export const DAY_CENTRE_MINI_GYM_3D_FITNESS_SEQUENCE: readonly TailoredItems3dSt
   { id: "dc3f-hurdles", slug: "hurdles", title: "Hurdles", library: "3d" },
   { id: "dc3f-parachute", slug: "parachute", title: "Parachute", library: "3d" },
   { id: "dc3f-colour-balls", slug: "colour-balls", title: "Colour balls", library: "3d" },
-  { id: "dc3f-comb", slug: "comb", title: "Comb", library: "3d" },
-  { id: "dc3f-stilts", slug: "stilts", title: "Stilts", library: "3d" },
+  { id: "dc3f-jump-rope", slug: "jump-rope", title: "Jump rope", library: "3d" },
+  { id: "dc3f-stilts", slug: "stilts", title: "Bucket stilts", library: "3d" },
 ] as const;
 
 /** Mini gym · 3D cardio stations. */

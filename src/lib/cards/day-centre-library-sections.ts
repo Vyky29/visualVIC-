@@ -60,8 +60,7 @@ const GROUP_REPRESENTATIVE_SLUG: Record<DayCentreLibrarySectionGroup, string> =
     "activities-leisure": "park",
     shopping: "shopping",
     "food-drink": "snack",
-    communication: "yes",
-    "places-extras": "community-centre",
+    "places-extras": "home",
   };
 
 export function dayCentreLibrarySectionIconUrl(

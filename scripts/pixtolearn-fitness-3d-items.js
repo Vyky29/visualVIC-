@@ -119,12 +119,6 @@ const FITNESS_3D_ITEMS = [
     object: "a heavy red medicine ball with textured surface, soft 3D rendered style",
   },
   {
-    file: "jump-rope.png",
-    slug: "jump-rope",
-    title: "Jump rope",
-    object: "a jump rope with black handles coiled loosely, soft 3D rendered style",
-  },
-  {
     file: "punching-bag.png",
     slug: "punching-bag",
     title: "Punching bag",
@@ -163,6 +157,13 @@ const FITNESS_3D_ITEMS = [
     object: "an orange basketball with black ribs, soft 3D rendered style",
   },
   {
+    file: "tennis.png",
+    slug: "tennis",
+    title: "Tennis",
+    object:
+      "a tennis racket and bright yellow tennis ball, soft 3D rendered style",
+  },
+  {
     file: "ladder.png",
     slug: "ladder",
     title: "Ladder",
@@ -190,17 +191,18 @@ const FITNESS_3D_ITEMS = [
       "a cluster of bright colourful soft play balls in red blue yellow green and orange, soft 3D rendered style",
   },
   {
-    file: "comb.png",
-    slug: "comb",
-    title: "Comb",
-    object: "a blue wide-tooth plastic hair comb, soft 3D rendered style",
+    file: "jump-rope.png",
+    slug: "jump-rope",
+    title: "Jump rope",
+    object:
+      "a jump rope skipping rope with black handles and blue braided cord coiled loosely, soft 3D rendered style",
   },
   {
     file: "stilts.png",
     slug: "stilts",
-    title: "Stilts",
+    title: "Bucket stilts",
     object:
-      "a pair of wooden walking peg stilts with foot platforms and hand grips, soft 3D rendered style",
+      "a pair of red plastic bucket stilts with yellow ropes for holding, classic zancos de bote PE equipment, soft 3D rendered style",
   },
 ];
 

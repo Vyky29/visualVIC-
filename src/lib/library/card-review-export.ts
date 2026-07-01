@@ -77,7 +77,6 @@ type LibrarySectionId =
       | "phy3d"
       | "phy3g"
       | "daycentre"
-      | "dcpremium"
       | "mg2d"
       | "mg3d"
       | "dcemmanuel2d"
@@ -88,7 +87,6 @@ type LibrarySectionId =
   | "physical"
   | "dcfolderminigym"
   | "dcfolderbouldering"
-  | "dcfolderpremium"
   | DayCentreLibrarySectionId;
 
 const SECTION_ORDER_BY_CATEGORY: Record<
@@ -113,9 +111,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "dcg-activities-leisure",
     "dcg-shopping",
     "dcg-food-drink",
-    "dcg-communication",
     "dcg-places-extras",
-    "dcfolderpremium",
     "dcikram",
     "dcserine",
     "dcayaan",
@@ -139,7 +135,6 @@ function librarySectionFromCard(
     const slug = card.pickId.split("::")[1] ?? "";
     return dayCentreLibrarySectionIdForSlug(slug);
   }
-  if (pack === "dcpremium") return "dcfolderpremium";
   if (pack === "climb") {
     const slug = card.pickId.split("::")[1] ?? "";
     if (isDayCentreBoulderingClimbSlug(slug)) return "dcfolderbouldering";

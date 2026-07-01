@@ -3,6 +3,7 @@
  */
 import {
   dayCentreEmmanuelIconUrl,
+  dayCentreEmmanuelSceneUrl,
   dayCentreGeneralImageUrl,
   dayCentreIkramItemsImageUrl,
   dayCentreIkramSceneUrl,
@@ -22,6 +23,7 @@ export type TailoredItems3dLibrary =
   | "ikram-items"
   | "dress"
   | "emmanuel-icons"
+  | "emmanuel-scene"
   | "ikram-scene"
   | "shower"
   | "swimming";
@@ -37,6 +39,8 @@ export function tailoredItems3dImageUrlForStep(step: TailoredItems3dStep): strin
   switch (step.library) {
     case "emmanuel-icons":
       return dayCentreEmmanuelIconUrl(step.slug);
+    case "emmanuel-scene":
+      return dayCentreEmmanuelSceneUrl(step.slug);
     case "general":
       return dayCentreGeneralImageUrl(step.slug);
     case "ikram-items":

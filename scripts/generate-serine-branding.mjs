@@ -73,6 +73,7 @@ async function knockOutBlackPng(inputPath) {
 async function publishCartoonAvatar(src) {
   fs.mkdirSync(path.dirname(refCartoon), { recursive: true });
   fs.copyFileSync(src, refCartoon);
+  // Library folder headers — full landscape source (like Ikram); UI crops with object-cover.
   await sharp(src).png().toFile(avatarOut);
   await sharp(src)
     .resize(85, 85, { fit: "cover", position: "attention" })

@@ -5,8 +5,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
-import { fitIllustrationToCard } from "./pixtolearn-card-fit.mjs";
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
@@ -45,14 +43,10 @@ const CARTOON = {
   "3d": { asset: "serine-cartoon-3d-adult.png", avatar: "serine-cartoon.png" },
 };
 
-async function maybeAvatar(src, destName, style) {
+async function maybeAvatar(src, destName) {
   if (!fs.existsSync(src)) return false;
   const dest = path.join(avatarDir, destName);
-  if (style === "2d") {
-    await sharp(src).png().toFile(dest);
-  } else {
-    await fitIllustrationToCard(src, dest);
-  }
+  await sharp(src).png().toFile(dest);
   fs.copyFileSync(src, path.join(refDir, path.basename(src)));
   return true;
 }
@@ -73,7 +67,7 @@ async function main() {
 
   for (const [style, { asset, avatar }] of Object.entries(CARTOON)) {
     const src = path.join(assets, asset);
-    if (await maybeAvatar(src, avatar, style)) {
+    if (await maybeAvatar(src, avatar)) {
       console.log("avatar:", style, "→", avatar);
     } else {
       console.warn("missing cartoon:", asset, `(phase ${style})`);

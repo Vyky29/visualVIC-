@@ -4,7 +4,6 @@ import {
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { climbingImageUrl } from "@/lib/cards/climbing-cards";
-import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { dayCentreFolderForSlug } from "@/lib/cards/day-centre-folder-groups";
 import { isDayCentreMixedStaffRoutine } from "@/lib/routines/day-centre-mixed-routines";
 
@@ -14,7 +13,6 @@ export const DAY_CENTRE_FOLDER_IDS = [
   "cooking",
   "community",
   "mixed",
-  "premium",
 ] as const;
 
 export type DayCentreFolderId = (typeof DAY_CENTRE_FOLDER_IDS)[number];
@@ -50,11 +48,6 @@ export const DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS: Record<
   ],
   /** Staff-built schedules only — see `day-centre-mixed-routines`. */
   mixed: [],
-  premium: [
-    "dc-premium-shower",
-    "dc-premium-swim",
-    "dc-premium-dress",
-  ],
 };
 
 const STOCK_ROUTINE_TO_FOLDER = Object.fromEntries(
@@ -132,8 +125,6 @@ export function dayCentreFolderDisplayName(
       return "Community";
     case "mixed":
       return "Mixed";
-    case "premium":
-      return "Premium";
   }
 }
 
@@ -142,8 +133,7 @@ export type DayCentreFolderLibrarySectionId =
   | "dcfolderbouldering"
   | "dcfoldercooking"
   | "dcfoldercommunity"
-  | "dcfoldermixed"
-  | "dcfolderpremium";
+  | "dcfoldermixed";
 
 export function dayCentreFolderLibrarySectionId(
   folderId: DayCentreFolderId,
@@ -159,8 +149,6 @@ export function dayCentreFolderLibrarySectionId(
       return "dcfoldercommunity";
     case "mixed":
       return "dcfoldermixed";
-    case "premium":
-      return "dcfolderpremium";
   }
 }
 
@@ -178,8 +166,6 @@ export function dayCentreFolderFromLibrarySectionId(
       return "community";
     case "dcfoldermixed":
       return "mixed";
-    case "dcfolderpremium":
-      return "premium";
     default:
       return undefined;
   }
@@ -198,8 +184,6 @@ export function dayCentreFolderIconUrl(folderId: DayCentreFolderId): string {
       return dayCentreGeneralImageUrl("westfield");
     case "mixed":
       return dayCentreHubRoomImageUrl();
-    case "premium":
-      return showerImageUrl("shampoo");
   }
 }
 
