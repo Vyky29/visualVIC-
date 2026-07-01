@@ -18,7 +18,10 @@ import {
 import { showerImageUrl } from "@/lib/cards/shower-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
-import type { TailoredItems3dStep } from "@/lib/cards/tailored-items-3d-shared";
+import {
+  tailoredItems3dImageUrlForStep,
+  type TailoredItems3dStep,
+} from "@/lib/cards/tailored-items-3d-shared";
 import {
   physical3dGymImageUrl,
   physical3dImageUrl,
@@ -385,7 +388,7 @@ export function dayCentreEmmanuelDailyAvatarFocusImageUrlForStep(
 export function dayCentreEmmanuelIconImageUrlForStep(
   step: TailoredItems3dStep,
 ): string {
-  return dayCentreEmmanuelIconUrl(step.slug);
+  return tailoredItems3dImageUrlForStep(step);
 }
 
 export function dayCentreEmmanuelImageUrlForStep(
