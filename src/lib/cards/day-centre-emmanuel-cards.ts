@@ -61,11 +61,10 @@ export const DAY_CENTRE_EMMANUEL_CATEGORY_LABEL =
 export const DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL = "Emmanuel" as const;
 
 export const DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME =
-  "Emmanuel · Day centre" as const;
+  "Emmanuel · Day centre (avatar)" as const;
 
-/** @deprecated Removed — use {@link DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME}. */
 export const DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME =
-  DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME;
+  "Emmanuel · Day centre (items)" as const;
 
 export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME =
   "Emmanuel · Gym (avatar)" as const;
@@ -234,10 +233,10 @@ export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
       library: "general",
     },
     {
-      id: "dcei-snack",
-      slug: "snack",
-      title: "Snack",
-      library: "general",
+      id: "dcei-chocolate-cake",
+      slug: "chocolate-cake",
+      title: "Chocolate cake",
+      library: "emmanuel-icons",
     },
     {
       id: "dcei-commenting",

@@ -163,6 +163,7 @@ import {
   DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
   dayCentreEmmanuelDailyAvatarFocusImageUrlForStep,
   dayCentreEmmanuelDailyAvatarImageUrlForStep,
+  dayCentreEmmanuelDailyItemsImageUrlForStep,
   dayCentreEmmanuelFocusImageUrlForStep,
   dayCentreEmmanuelImageUrlForStep,
   dayCentreEmmanuelLibrary2dFocusImageUrlForStep,
@@ -845,11 +846,31 @@ function emmanuelDailyAvatarGeneratedCardProps(step: EmmanuelDailyStep) {
   };
 }
 
-/** Emmanuel · Day centre — Mon/Tue/Wed schedule. */
+/** Emmanuel · Day centre (avatar) — Mon/Tue/Wed schedule. */
 export const DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
     emmanuelDailyAvatarGeneratedCardProps(s),
   );
+
+function emmanuelDailyItemsGeneratedCardProps(step: EmmanuelDailyStep) {
+  return {
+    illustrationUrl: dayCentreEmmanuelDailyItemsImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+  };
+}
+
+/** Emmanuel · Day centre (items) — Mon/Tue/Wed schedule (object & icon art). */
+export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+    emmanuelDailyItemsGeneratedCardProps(s),
+  );
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS;
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
@@ -857,14 +878,6 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SCHEDULE_GENERATED_CARD_PROPS: Generated
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_EMMANUEL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS;
-
-/** @deprecated Removed items routine — alias of avatar schedule props. */
-export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS;
-
-/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS}. */
-export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS;
 
 function emmanuelGymAvatarGeneratedCardProps(step: DayCentreEmmanuelStep) {

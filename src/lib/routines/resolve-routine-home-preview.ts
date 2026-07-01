@@ -32,6 +32,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "ayaan-day-centre",
   "ayaan-gym-equipment-3d",
   "emmanuel-day-centre",
+  "emmanuel-day-centre-items",
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
@@ -62,6 +63,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
+    case "emmanuel-day-centre-items":
+      return undefined;
     case "emmanuel-gym-avatar":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
     case "emmanuel-gym-equipment-3d":
@@ -100,6 +103,8 @@ export function tailoredScheduleActionPreviewUrl(
       return undefined;
     case "emmanuel-day-centre":
       return dayCentreEmmanuelSceneUrl("gym-with-michelle");
+    case "emmanuel-day-centre-items":
+      return undefined;
     case "emmanuel-gym-avatar":
       return dayCentreEmmanuelSceneUrl("cross-trainer");
     case "emmanuel-gym-equipment-3d":
