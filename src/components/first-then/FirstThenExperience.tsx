@@ -43,6 +43,8 @@ import {
 } from "@/lib/experimental/first-then-demo-packs";
 import { setFirstThenDemoFocusActive } from "@/lib/experimental/first-then-demo-focus-nav";
 import { readFirstThenSession } from "@/lib/experimental/first-then-session";
+import { useFirstThenPlayback, type FirstThenPhase } from "@/lib/hooks/useFirstThenPlayback";
+import { FirstThenSwipeableSlot } from "@/components/first-then/FirstThenSwipeableSlot";
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import {
   bottomNavLabel,
@@ -55,6 +57,10 @@ import {
   firstThenDemoRotateForFocusTitle,
   firstThenSlotLabel,
   playerKindRoutine,
+  schedulePlayerDoubleTapHint,
+  focusModeAllFinishedTitle,
+  focusModeOptRestartRoutine,
+  schedulePlayerDone,
   shellBackAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
@@ -694,16 +700,58 @@ function FirstThenFocusSidebar({
   );
 }
 
+function FirstThenCompletePanel({
+  lang,
+  routineHref,
+  onRestart,
+}: {
+  lang: ReturnType<typeof useCardUiLanguage>;
+  routineHref: string;
+  onRestart: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-4 px-6 py-8 text-center">
+      <p className="text-[1.05rem] font-semibold text-ink">
+        {focusModeAllFinishedTitle(lang)}
+      </p>
+      <p className="text-[14px] text-ink-subtle">{schedulePlayerDone(lang)}</p>
+      <div className="mt-2 flex flex-col gap-2">
+        <Link
+          href={routineHref}
+          className="rounded-full bg-sage px-5 py-2.5 text-[14px] font-semibold text-white"
+        >
+          {playerKindRoutine(lang)}
+        </Link>
+        <button
+          type="button"
+          onClick={onRestart}
+          className="text-[13px] font-medium text-sage underline-offset-2 hover:underline"
+        >
+          {focusModeOptRestartRoutine(lang)}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function FirstThenFocusLandscapeLayout({
   firstCard,
   secondCard,
   lang,
   routineHref,
+  phase,
+  onAdvance,
+  isComplete,
+  onRestart,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   routineHref: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  isComplete: boolean;
+  onRestart: () => void;
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.5);
@@ -750,17 +798,56 @@ function FirstThenFocusLandscapeLayout({
       style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
     >
       <div
-        className="absolute left-0 top-0 origin-top-left"
+        className="absolute left-0 top-0 flex origin-top-left flex-col items-center"
         style={{
           width: FOCUS_LANDSCAPE.cardW,
           height: FOCUS_LANDSCAPE.cardH,
           transform: `scale(${scale})`,
         }}
       >
-        <FirstThenFocusSpecCard slot={slot} card={card} lang={lang} />
+        <span
+          className="mb-1 font-extrabold lowercase"
+          style={{
+            color: card.categoryColour,
+            fontSize: FOCUS_LANDSCAPE.slotLabelFontPx,
+            lineHeight: 1,
+          }}
+        >
+          {firstThenSlotLabel(slot, lang)}
+        </span>
+        <div className="min-h-0 w-full flex-1">
+          <FirstThenSwipeableSlot
+            slot={slot}
+            card={card}
+            phase={phase}
+            onAdvance={onAdvance}
+            presentation="focus"
+          />
+        </div>
       </div>
     </div>
   );
+
+  if (isComplete) {
+    return (
+      <div
+        ref={outerRef}
+        className="relative flex h-full min-h-0 w-full items-center justify-center"
+        style={{
+          paddingLeft: "max(24px, env(safe-area-inset-left))",
+          paddingRight: "max(24px, env(safe-area-inset-right))",
+          paddingTop: "max(8px, env(safe-area-inset-top))",
+          paddingBottom: "max(8px, env(safe-area-inset-bottom))",
+        }}
+      >
+        <FirstThenCompletePanel
+          lang={lang}
+          routineHref={routineHref}
+          onRestart={onRestart}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -984,6 +1071,8 @@ function FirstThenPortraitLabeledRow({
   label,
   card,
   categoryColour,
+  phase,
+  onAdvance,
   scaleMultiplier = 1,
   readableTitle = false,
   actionReservePx = 0,
@@ -993,6 +1082,8 @@ function FirstThenPortraitLabeledRow({
   label: string;
   card: GeneratedPixtoCardProps;
   categoryColour: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
   scaleMultiplier?: number;
   readableTitle?: boolean;
   /** Width reserved for focus slot so FIRST/THEN cards match. */
@@ -1000,67 +1091,25 @@ function FirstThenPortraitLabeledRow({
   /** Bottom of the group (THEN row only). */
   focusBottomAction?: ReactNode;
 }) {
-  const rowRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState<number | null>(null);
-  const stableScaleRef = useRef<number | null>(null);
-
-  useLayoutEffect(() => {
-    const row = rowRef.current;
-    if (!row) return;
-
-    const update = () => {
-      const H = row.clientHeight;
-      const W = row.clientWidth;
-      if (W <= 0 || H <= 0) return;
-
-      const labelReservePx = SLOT_LABEL_COLUMN_W_PX + SLOT_LABEL_TO_CARD_GAP_PX;
-      const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2;
-      const sx =
-        (W - labelReservePx - actionReservePx - bleed) /
-        GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = (H - bleed) / GENERATED_PIXTO_CARD_SIZE.h;
-      const next = Math.min(sx, sy) * scaleMultiplier;
-      if (!Number.isFinite(next) || next <= 0) return;
-
-      const prev = stableScaleRef.current;
-      if (prev === null) {
-        stableScaleRef.current = next;
-        setScale(next);
-        return;
-      }
-      // Keep first measured size; only shrink if the viewport gets narrower/shorter.
-      if (next < prev) {
-        stableScaleRef.current = next;
-        setScale(next);
-      }
-    };
-
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(row);
-    return () => ro.disconnect();
-  }, [actionReservePx, scaleMultiplier]);
+  void scaleMultiplier;
+  void readableTitle;
 
   return (
-    <div
-      ref={rowRef}
-      className="flex min-h-0 flex-1 w-full min-w-0 items-center justify-center"
-    >
+    <div className="flex min-h-0 flex-1 w-full min-w-0 items-center justify-center">
       <div
-        className={cn(
-          "flex shrink-0 items-center",
-          scale === null && "invisible",
-        )}
+        className="flex shrink-0 items-center"
         style={{ gap: SLOT_LABEL_TO_CARD_GAP_PX }}
       >
         <SlotLabelRow slot={slot} label={label} categoryColour={categoryColour} />
-        {scale !== null ? (
-          <FirstThenPortraitCardScaled
+        <div className="flex min-h-0 w-[min(100%,14rem)] flex-1 items-center justify-center">
+          <FirstThenSwipeableSlot
+            slot={slot}
             card={card}
-            scale={scale}
-            readableTitle={readableTitle}
+            phase={phase}
+            onAdvance={onAdvance}
+            presentation="hero"
           />
-        ) : null}
+        </div>
         {actionReservePx > 0 ? (
           <div className="flex w-[2.75rem] shrink-0 flex-col justify-end self-stretch pb-1">
             {focusBottomAction}
@@ -1073,72 +1122,42 @@ function FirstThenPortraitLabeledRow({
 
 function FirstThenPortraitCardCell({
   card,
+  slot,
+  phase,
+  onAdvance,
   scaleMultiplier = 1,
   slotHeaderLabel,
   readableTitle = false,
   align = "center",
 }: {
   card: GeneratedPixtoCardProps;
+  slot: "first" | "then";
+  phase: FirstThenPhase;
+  onAdvance: () => void;
   scaleMultiplier?: number;
   slotHeaderLabel?: string;
   readableTitle?: boolean;
   align?: "center" | "end";
 }) {
-  const outerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.28);
-  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
-
-  useLayoutEffect(() => {
-    const outer = outerRef.current;
-    if (!outer) return;
-
-    const update = () => {
-      const W = outer.clientWidth;
-      const H = outer.clientHeight;
-      if (W <= 0 || H <= 0) return;
-
-      const bleedTotal = bleed * 2;
-      const sx = (W - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.w;
-      const sy = (H - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.h;
-      const next = Math.min(sx, sy) * scaleMultiplier;
-      setScale(Number.isFinite(next) && next > 0 ? next : 0.28 * scaleMultiplier);
-    };
-
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(outer);
-    return () => ro.disconnect();
-  }, [bleed, scaleMultiplier]);
-
-  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
-  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
+  void scaleMultiplier;
+  void slotHeaderLabel;
+  void readableTitle;
 
   return (
     <div
-      ref={outerRef}
       className={cn(
         "flex h-full min-h-0 w-full items-center",
         align === "end" ? "justify-end" : "justify-center",
       )}
     >
-      <div
-        className="relative shrink-0"
-        style={{ width: slotW, height: slotH, padding: bleed }}
-      >
-        <div
-          className="absolute left-0 top-0 origin-top-left"
-          style={{
-            width: GENERATED_PIXTO_CARD_SIZE.w,
-            height: GENERATED_PIXTO_CARD_SIZE.h,
-            transform: `scale(${scale})`,
-          }}
-        >
-          <MiniDigitalWowCard
-            card={card}
-            slotHeaderLabel={slotHeaderLabel}
-            readableTitle={readableTitle}
-          />
-        </div>
+      <div className="w-full max-w-[14rem]">
+        <FirstThenSwipeableSlot
+          slot={slot}
+          card={card}
+          phase={phase}
+          onAdvance={onAdvance}
+          presentation="hero"
+        />
       </div>
     </div>
   );
@@ -1196,47 +1215,72 @@ function FirstThenIntroLayout1({
   lang,
   onFocusMode,
   backHref,
+  phase,
+  onAdvance,
+  isComplete,
+  onRestart,
+  routineHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  isComplete: boolean;
+  onRestart: () => void;
+  routineHref: string;
 }) {
   const firstLabel = firstThenSlotLabel("first", lang);
   const thenLabel = firstThenSlotLabel("then", lang);
 
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1 tablet:max-w-none">
-        <FirstThenPortraitLabeledRow
-          slot="first"
-          label={firstLabel}
-          card={firstCard}
-          categoryColour={firstCard.categoryColour}
-          scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
-          readableTitle
-          actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+      {isComplete ? (
+        <FirstThenCompletePanel
+          lang={lang}
+          routineHref={routineHref}
+          onRestart={onRestart}
         />
-        <FirstThenPortraitLabeledRow
-          slot="then"
-          label={thenLabel}
-          card={secondCard}
-          categoryColour={secondCard.categoryColour}
-          scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
-          readableTitle
-          actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
-          focusBottomAction={
-            <FirstThenFocusEntryButton
-              lang={lang}
-              onFocusMode={onFocusMode}
-              variant="stacked"
-              size="compact"
-              categoryColour={firstCard.categoryColour}
-            />
-          }
-        />
-      </div>
+      ) : (
+        <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-1 px-1 tablet:max-w-none">
+          <FirstThenPortraitLabeledRow
+            slot="first"
+            label={firstLabel}
+            card={firstCard}
+            categoryColour={firstCard.categoryColour}
+            phase={phase}
+            onAdvance={onAdvance}
+            scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
+            readableTitle
+            actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+          />
+          <FirstThenPortraitLabeledRow
+            slot="then"
+            label={thenLabel}
+            card={secondCard}
+            categoryColour={secondCard.categoryColour}
+            phase={phase}
+            onAdvance={onAdvance}
+            scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
+            readableTitle
+            actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+            focusBottomAction={
+              <FirstThenFocusEntryButton
+                lang={lang}
+                onFocusMode={onFocusMode}
+                variant="stacked"
+                size="compact"
+                categoryColour={firstCard.categoryColour}
+              />
+            }
+          />
+          <p className="px-2 pb-2 text-center text-[11px] leading-snug text-ink-faint">
+            {schedulePlayerDoubleTapHint(lang)}
+          </p>
+        </div>
+      )}
     </FirstThenIntroPortraitShell>
   );
 }
@@ -1248,30 +1292,63 @@ function FirstThenIntroLayout2({
   lang,
   onFocusMode,
   backHref,
+  phase,
+  onAdvance,
+  isComplete,
+  onRestart,
+  routineHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  isComplete: boolean;
+  onRestart: () => void;
+  routineHref: string;
 }) {
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className={cn("relative w-full px-1", TABLET_CONTENT_COLUMN_CLASS)}>
-        <FirstThenFocusEntryButton
+      {isComplete ? (
+        <FirstThenCompletePanel
           lang={lang}
-          onFocusMode={onFocusMode}
-          className="absolute right-0 top-0 z-10"
+          routineHref={routineHref}
+          onRestart={onRestart}
         />
-        <div className="flex flex-col items-center gap-4 pt-10">
-          <div className="h-[min(34dvh,260px)] w-full min-h-0">
-            <FirstThenPortraitCardCell card={firstCard} scaleMultiplier={0.92} />
+      ) : (
+        <div className={cn("relative w-full px-1", TABLET_CONTENT_COLUMN_CLASS)}>
+          <FirstThenFocusEntryButton
+            lang={lang}
+            onFocusMode={onFocusMode}
+            className="absolute right-0 top-0 z-10"
+          />
+          <div className="flex flex-col items-center gap-4 pt-10">
+            <div className="h-[min(34dvh,260px)] w-full min-h-0">
+              <FirstThenPortraitCardCell
+                slot="first"
+                card={firstCard}
+                phase={phase}
+                onAdvance={onAdvance}
+                scaleMultiplier={0.92}
+              />
+            </div>
+            <div className="h-[min(34dvh,260px)] w-full min-h-0">
+              <FirstThenPortraitCardCell
+                slot="then"
+                card={secondCard}
+                phase={phase}
+                onAdvance={onAdvance}
+                scaleMultiplier={0.92}
+              />
+            </div>
           </div>
-          <div className="h-[min(34dvh,260px)] w-full min-h-0">
-            <FirstThenPortraitCardCell card={secondCard} scaleMultiplier={0.92} />
-          </div>
+          <p className="mt-3 text-center text-[11px] leading-snug text-ink-faint">
+            {schedulePlayerDoubleTapHint(lang)}
+          </p>
         </div>
-      </div>
+      )}
     </FirstThenIntroPortraitShell>
   );
 }
@@ -1283,41 +1360,68 @@ function FirstThenIntroLayout3({
   lang,
   onFocusMode,
   backHref,
+  phase,
+  onAdvance,
+  isComplete,
+  onRestart,
+  routineHref,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  isComplete: boolean;
+  onRestart: () => void;
+  routineHref: string;
 }) {
-  const firstLabel = firstThenSlotLabel("first", lang);
-  const thenLabel = firstThenSlotLabel("then", lang);
-
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
-      <div className={cn("relative flex w-full flex-1 flex-col items-center justify-center px-1 pb-12", TABLET_CONTENT_COLUMN_CLASS)}>
-        <div className="flex w-full flex-col items-center gap-3">
-          <div className="h-[min(32dvh,272px)] w-full min-h-0">
-            <FirstThenPortraitCardCell
-              card={firstCard}
-              scaleMultiplier={0.98}
-              slotHeaderLabel={firstLabel}
-            />
-          </div>
-          <div className="h-[min(32dvh,272px)] w-full min-h-0">
-            <FirstThenPortraitCardCell
-              card={secondCard}
-              scaleMultiplier={0.98}
-              slotHeaderLabel={thenLabel}
-            />
-          </div>
-        </div>
-        <FirstThenFocusEntryButton
+      {isComplete ? (
+        <FirstThenCompletePanel
           lang={lang}
-          onFocusMode={onFocusMode}
-          className="absolute bottom-0 right-0 z-10"
+          routineHref={routineHref}
+          onRestart={onRestart}
         />
-      </div>
+      ) : (
+        <div
+          className={cn(
+            "relative flex w-full flex-1 flex-col items-center justify-center px-1 pb-12",
+            TABLET_CONTENT_COLUMN_CLASS,
+          )}
+        >
+          <div className="flex w-full flex-col items-center gap-3">
+            <div className="h-[min(32dvh,272px)] w-full min-h-0">
+              <FirstThenPortraitCardCell
+                slot="first"
+                card={firstCard}
+                phase={phase}
+                onAdvance={onAdvance}
+                scaleMultiplier={0.98}
+              />
+            </div>
+            <div className="h-[min(32dvh,272px)] w-full min-h-0">
+              <FirstThenPortraitCardCell
+                slot="then"
+                card={secondCard}
+                phase={phase}
+                onAdvance={onAdvance}
+                scaleMultiplier={0.98}
+              />
+            </div>
+          </div>
+          <p className="mt-3 text-center text-[11px] leading-snug text-ink-faint">
+            {schedulePlayerDoubleTapHint(lang)}
+          </p>
+          <FirstThenFocusEntryButton
+            lang={lang}
+            onFocusMode={onFocusMode}
+            className="absolute bottom-0 right-0 z-10"
+          />
+        </div>
+      )}
     </FirstThenIntroPortraitShell>
   );
 }
@@ -1329,6 +1433,11 @@ function FirstThenIntroPortraitScreen({
   lang,
   onFocusMode,
   backHref,
+  phase,
+  onAdvance,
+  isComplete,
+  onRestart,
+  routineHref,
 }: {
   layout: FirstThenDemoLayoutId;
   firstCard: GeneratedPixtoCardProps;
@@ -1336,8 +1445,24 @@ function FirstThenIntroPortraitScreen({
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  isComplete: boolean;
+  onRestart: () => void;
+  routineHref: string;
 }) {
-  const props = { firstCard, secondCard, lang, onFocusMode, backHref };
+  const props = {
+    firstCard,
+    secondCard,
+    lang,
+    onFocusMode,
+    backHref,
+    phase,
+    onAdvance,
+    isComplete,
+    onRestart,
+    routineHref,
+  };
   if (layout === "2") return <FirstThenIntroLayout2 {...props} />;
   if (layout === "3") return <FirstThenIntroLayout3 {...props} />;
   return <FirstThenIntroLayout1 {...props} />;
@@ -1418,6 +1543,9 @@ function FirstThenExperienceClient() {
   }, [sessionPayload, packId, lang]);
   const showLandscapeFocus = useFirstThenLandscapeFocus();
   const [showFocusMode, setShowFocusMode] = useState(false);
+  const playbackResetKey = `${packId}:${layout}:${first.illustrationUrl}:${second.illustrationUrl}`;
+  const { phase, completeCurrent, reset, isComplete } =
+    useFirstThenPlayback(playbackResetKey);
 
   const backHref = fromRoutine?.trim() || routineHref;
 
@@ -1455,6 +1583,11 @@ function FirstThenExperienceClient() {
         lang={lang}
         backHref={backHref}
         onFocusMode={() => setShowFocusMode(true)}
+        phase={phase}
+        onAdvance={completeCurrent}
+        isComplete={isComplete}
+        onRestart={reset}
+        routineHref={routineHref}
       />
     );
   }
@@ -1467,6 +1600,10 @@ function FirstThenExperienceClient() {
           secondCard={second}
           lang={lang}
           routineHref={routineHref}
+          phase={phase}
+          onAdvance={completeCurrent}
+          isComplete={isComplete}
+          onRestart={reset}
         />
       ) : (
         <div className="flex h-full min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">
