@@ -10,7 +10,15 @@ import {
   dayCentreTimiTailoredHomeAvatarUrl,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
+import { showerImageUrl } from "@/lib/cards/shower-cards";
+import { swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
+
+export type DayCentreTimiArtSource =
+  | "general"
+  | "timi-photo"
+  | "shower"
+  | "swimming";
 
 /** Amber — Timi tailored schedules (distinct from pink, navy, teal, and day centre red). */
 export const DAY_CENTRE_TIMI_CATEGORY_COLOUR = "#C8741C" as const;
@@ -25,6 +33,7 @@ export type DayCentreTimiStep = {
   id: string;
   slug: string;
   title: string;
+  source?: DayCentreTimiArtSource;
 };
 
 export const DAY_CENTRE_TIMI_CATEGORY_LABEL =
@@ -76,19 +85,58 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
 /** Stock routine — Timi's day-centre order. */
 export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] = [
   { id: "dcts-sensory-room-am", slug: "sensory-room", title: "Sensory room" },
-  { id: "dcts-motor-skills", slug: "timi-motor-skills", title: "Motor skills" },
-  { id: "dcts-swimming-pool", slug: "swimming-pool", title: "Swimming pool" },
+  {
+    id: "dcts-motor-skills",
+    slug: "timi-motor-skills",
+    title: "Motor skills",
+    source: "timi-photo",
+  },
+  {
+    id: "dcts-changing-room",
+    slug: "changing-room",
+    title: "Changing room",
+    source: "swimming",
+  },
+  { id: "dcts-shower", slug: "shower", title: "Shower", source: "shower" },
+  {
+    id: "dcts-swimming",
+    slug: "swimming-pool",
+    title: "Swimming",
+    source: "swimming",
+  },
+  { id: "dcts-hub-room", slug: "hub-room", title: "Hub room" },
   { id: "dcts-snack", slug: "snack", title: "Snack" },
-  { id: "dcts-puzzles", slug: "timi-puzzle-2", title: "Puzzles" },
+  {
+    id: "dcts-puzzles",
+    slug: "timi-puzzle-2",
+    title: "Puzzles",
+    source: "timi-photo",
+  },
   { id: "dcts-sensory-room-pm", slug: "sensory-room", title: "Sensory room" },
+  { id: "dcts-timis-car", slug: "cab", title: "Timi's Car" },
   { id: "dcts-home", slug: "home", title: "Home" },
 ] as const;
 
+function dayCentreTimiResolvedSource(
+  step: DayCentreTimiStep,
+): DayCentreTimiArtSource {
+  if (step.source) return step.source;
+  if (step.slug.startsWith("timi-")) return "timi-photo";
+  return "general";
+}
+
 export function dayCentreTimiImageUrlForStep(step: DayCentreTimiStep): string {
-  if (step.slug.startsWith("timi-")) {
-    return dayCentreTimiImageUrl(step.slug);
+  switch (dayCentreTimiResolvedSource(step)) {
+    case "timi-photo":
+      return dayCentreTimiImageUrl(step.slug);
+    case "shower":
+      return showerImageUrl(step.slug);
+    case "swimming":
+      return swimmingImageUrl(step.slug);
+    case "general":
+    default:
+      return dayCentreGeneralImageUrl(step.slug);
   }
-  return dayCentreGeneralImageUrl(step.slug);
 }
 
 export function dayCentreTimiFocusImageUrlForStep(
