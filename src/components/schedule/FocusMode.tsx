@@ -47,6 +47,7 @@ import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
+import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import {
   focusModeOptTimerHint,
@@ -270,13 +271,13 @@ export function FocusMode({ routine, exitHref }: Props) {
     const thenStep = nextStep ?? steps[nowIndex + 1];
     if (!thenStep) return;
     writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep),
-      second: routineStepToGeneratedPixtoCard(thenStep),
+      first: routineStepToGeneratedPixtoCard(nowStep, routine),
+      second: routineStepToGeneratedPixtoCard(thenStep, routine),
       routineHref: exitHref,
     });
     setSheet(null);
     router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
-  }, [nowStep, nextStep, steps, nowIndex, exitHref, router]);
+  }, [nowStep, nextStep, steps, nowIndex, exitHref, router, routine]);
 
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 
@@ -320,6 +321,14 @@ export function FocusMode({ routine, exitHref }: Props) {
     nowStep?.id ?? "none",
     Boolean(nowStep && !isComplete),
   );
+
+  useAutoAdvanceOnTimerFinish({
+    active: Boolean(nowStep && !isComplete),
+    stepKey: nowStep?.id ?? "none",
+    hasTimer: nowHasTimer,
+    finished: nowTimerFinished,
+    onAdvance: completeCurrent,
+  });
 
   useEffect(() => {
     setSessionTimerSec(undefined);

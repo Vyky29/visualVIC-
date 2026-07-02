@@ -42,6 +42,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
+import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import { ScheduleCardSearchPanel } from "@/components/schedule/ScheduleCardSearchPanel";
 import type { PickableLibraryCard } from "@/lib/library/pickable-library-cards";
@@ -238,6 +239,14 @@ export function SchedulePlayer({
     Boolean(nowStep && !isComplete),
   );
 
+  useAutoAdvanceOnTimerFinish({
+    active: Boolean(nowStep && !isComplete),
+    stepKey: nowStep?.id ?? "none",
+    hasTimer: nowHasTimer,
+    finished: nowTimerFinished,
+    onAdvance: completeCurrent,
+  });
+
   useEffect(() => {
     setSessionTimerSec(undefined);
     setShowTimerPanel(false);
@@ -266,8 +275,8 @@ export function SchedulePlayer({
     const thenStep = nextStep ?? steps[nowIndex + 1];
     if (!thenStep) return;
     writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep),
-      second: routineStepToGeneratedPixtoCard(thenStep),
+      first: routineStepToGeneratedPixtoCard(nowStep, routine),
+      second: routineStepToGeneratedPixtoCard(thenStep, routine),
       routineHref: `/player/${routine.id}`,
     });
     router.push(`/first-then?from=${encodeURIComponent(`/player/${routine.id}`)}`);

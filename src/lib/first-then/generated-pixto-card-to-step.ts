@@ -10,6 +10,9 @@ export function generatedPixtoCardToRoutineStep(
     id: stepId,
     title: card.title,
     imageUrl: card.illustrationUrl,
+    ...(card.timerSec && card.timerSec > 0
+      ? { durationHintSec: card.timerSec }
+      : {}),
     generatedPixto: {
       illustrationUrl: card.illustrationUrl,
       title: card.title,

@@ -43,8 +43,16 @@ import {
 } from "@/lib/experimental/first-then-demo-packs";
 import { setFirstThenDemoFocusActive } from "@/lib/experimental/first-then-demo-focus-nav";
 import { readFirstThenSession } from "@/lib/experimental/first-then-session";
-import { useFirstThenPlayback, type FirstThenPhase } from "@/lib/hooks/useFirstThenPlayback";
+import {
+  useFirstThenPlayback,
+  type FirstThenPhase,
+} from "@/lib/hooks/useFirstThenPlayback";
+import { useFirstThenStepTimer } from "@/lib/hooks/useFirstThenStepTimer";
 import { FirstThenSwipeableSlot } from "@/components/first-then/FirstThenSwipeableSlot";
+
+type FirstThenScheduleTimerForSlot = ReturnType<
+  typeof useFirstThenStepTimer
+>["scheduleTimerForSlot"];
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import {
   bottomNavLabel,
@@ -743,6 +751,7 @@ function FirstThenFocusLandscapeLayout({
   onAdvance,
   isComplete,
   onRestart,
+  scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
@@ -752,6 +761,7 @@ function FirstThenFocusLandscapeLayout({
   onAdvance: () => void;
   isComplete: boolean;
   onRestart: () => void;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.5);
@@ -822,6 +832,7 @@ function FirstThenFocusLandscapeLayout({
             phase={phase}
             onAdvance={onAdvance}
             presentation="focus"
+            scheduleTimer={scheduleTimerForSlot(slot)}
           />
         </div>
       </div>
@@ -1077,6 +1088,7 @@ function FirstThenPortraitLabeledRow({
   readableTitle = false,
   actionReservePx = 0,
   focusBottomAction,
+  scheduleTimerForSlot,
 }: {
   slot: "first" | "then";
   label: string;
@@ -1090,6 +1102,7 @@ function FirstThenPortraitLabeledRow({
   actionReservePx?: number;
   /** Bottom of the group (THEN row only). */
   focusBottomAction?: ReactNode;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   void scaleMultiplier;
   void readableTitle;
@@ -1108,6 +1121,7 @@ function FirstThenPortraitLabeledRow({
             phase={phase}
             onAdvance={onAdvance}
             presentation="hero"
+            scheduleTimer={scheduleTimerForSlot(slot)}
           />
         </div>
         {actionReservePx > 0 ? (
@@ -1129,6 +1143,7 @@ function FirstThenPortraitCardCell({
   slotHeaderLabel,
   readableTitle = false,
   align = "center",
+  scheduleTimerForSlot,
 }: {
   card: GeneratedPixtoCardProps;
   slot: "first" | "then";
@@ -1138,6 +1153,7 @@ function FirstThenPortraitCardCell({
   slotHeaderLabel?: string;
   readableTitle?: boolean;
   align?: "center" | "end";
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   void scaleMultiplier;
   void slotHeaderLabel;
@@ -1157,6 +1173,7 @@ function FirstThenPortraitCardCell({
           phase={phase}
           onAdvance={onAdvance}
           presentation="hero"
+          scheduleTimer={scheduleTimerForSlot(slot)}
         />
       </div>
     </div>
@@ -1220,6 +1237,7 @@ function FirstThenIntroLayout1({
   isComplete,
   onRestart,
   routineHref,
+  scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
@@ -1231,6 +1249,7 @@ function FirstThenIntroLayout1({
   isComplete: boolean;
   onRestart: () => void;
   routineHref: string;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   const firstLabel = firstThenSlotLabel("first", lang);
   const thenLabel = firstThenSlotLabel("then", lang);
@@ -1255,6 +1274,7 @@ function FirstThenIntroLayout1({
             scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
             readableTitle
             actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+            scheduleTimerForSlot={scheduleTimerForSlot}
           />
           <FirstThenPortraitLabeledRow
             slot="then"
@@ -1266,6 +1286,7 @@ function FirstThenIntroLayout1({
             scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
             readableTitle
             actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+            scheduleTimerForSlot={scheduleTimerForSlot}
             focusBottomAction={
               <FirstThenFocusEntryButton
                 lang={lang}
@@ -1297,6 +1318,7 @@ function FirstThenIntroLayout2({
   isComplete,
   onRestart,
   routineHref,
+  scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
@@ -1308,6 +1330,7 @@ function FirstThenIntroLayout2({
   isComplete: boolean;
   onRestart: () => void;
   routineHref: string;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
@@ -1332,6 +1355,7 @@ function FirstThenIntroLayout2({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.92}
+                scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
             <div className="h-[min(34dvh,260px)] w-full min-h-0">
@@ -1341,6 +1365,7 @@ function FirstThenIntroLayout2({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.92}
+                scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
           </div>
@@ -1365,6 +1390,7 @@ function FirstThenIntroLayout3({
   isComplete,
   onRestart,
   routineHref,
+  scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
   secondCard: GeneratedPixtoCardProps;
@@ -1376,6 +1402,7 @@ function FirstThenIntroLayout3({
   isComplete: boolean;
   onRestart: () => void;
   routineHref: string;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
@@ -1400,6 +1427,7 @@ function FirstThenIntroLayout3({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.98}
+                scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
             <div className="h-[min(32dvh,272px)] w-full min-h-0">
@@ -1409,6 +1437,7 @@ function FirstThenIntroLayout3({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.98}
+                scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
           </div>
@@ -1438,6 +1467,7 @@ function FirstThenIntroPortraitScreen({
   isComplete,
   onRestart,
   routineHref,
+  scheduleTimerForSlot,
 }: {
   layout: FirstThenDemoLayoutId;
   firstCard: GeneratedPixtoCardProps;
@@ -1450,6 +1480,7 @@ function FirstThenIntroPortraitScreen({
   isComplete: boolean;
   onRestart: () => void;
   routineHref: string;
+  scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
   const props = {
     firstCard,
@@ -1462,6 +1493,7 @@ function FirstThenIntroPortraitScreen({
     isComplete,
     onRestart,
     routineHref,
+    scheduleTimerForSlot,
   };
   if (layout === "2") return <FirstThenIntroLayout2 {...props} />;
   if (layout === "3") return <FirstThenIntroLayout3 {...props} />;
@@ -1546,6 +1578,13 @@ function FirstThenExperienceClient() {
   const playbackResetKey = `${packId}:${layout}:${first.illustrationUrl}:${second.illustrationUrl}`;
   const { phase, completeCurrent, reset, isComplete } =
     useFirstThenPlayback(playbackResetKey);
+  const { scheduleTimerForSlot } = useFirstThenStepTimer({
+    firstCard: first,
+    secondCard: second,
+    phase,
+    isComplete,
+    onAdvance: completeCurrent,
+  });
 
   const backHref = fromRoutine?.trim() || routineHref;
 
@@ -1588,6 +1627,7 @@ function FirstThenExperienceClient() {
         isComplete={isComplete}
         onRestart={reset}
         routineHref={routineHref}
+        scheduleTimerForSlot={scheduleTimerForSlot}
       />
     );
   }
@@ -1604,6 +1644,7 @@ function FirstThenExperienceClient() {
           onAdvance={completeCurrent}
           isComplete={isComplete}
           onRestart={reset}
+          scheduleTimerForSlot={scheduleTimerForSlot}
         />
       ) : (
         <div className="flex h-full min-h-0 flex-col px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))]">

@@ -386,6 +386,8 @@ export type GeneratedPixtoCardProps = {
     totalSec: number;
     finished?: boolean;
   };
+  /** Countdown duration (seconds) when opened from a timed routine step. */
+  timerSec?: number;
 };
 
 const CARD_ASPECT = `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}` as const;

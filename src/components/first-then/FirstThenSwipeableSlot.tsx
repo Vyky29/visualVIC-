@@ -19,6 +19,11 @@ type Props = {
   onAdvance: () => void;
   presentation?: TimelineVariant;
   stepId?: string;
+  scheduleTimer?: {
+    remainingSec: number;
+    totalSec: number;
+    finished?: boolean;
+  };
 };
 
 export function FirstThenSwipeableSlot({
@@ -28,6 +33,7 @@ export function FirstThenSwipeableSlot({
   onAdvance,
   presentation = "hero",
   stepId,
+  scheduleTimer,
 }: Props) {
   const step = useMemo(
     () => generatedPixtoCardToRoutineStep(card, stepId ?? slot),
@@ -47,6 +53,7 @@ export function FirstThenSwipeableSlot({
       }}
       doubleTapCompletes={status === "now"}
       completionBackImageUrl={resolveCategoryBackCardUrl(card.illustrationUrl)}
+      scheduleTimer={status === "now" ? scheduleTimer : undefined}
     />
   );
 }
