@@ -920,7 +920,7 @@ export default function DashboardPage() {
                             }
                             previewFillFrame={
                               group.key === "home::tailored" ||
-                              group.key === "home::day-centre"
+                              (group.key === "home::day-centre" && !isDayCentreHub)
                             }
                             href={
                               participantId
