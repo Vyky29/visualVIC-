@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
+import { AppSerwistProvider } from "@/components/offline/AppSerwistProvider";
+import { OfflineBootstrap } from "@/components/offline/OfflineBootstrap";
 import { CustomRoutinesProvider } from "@/contexts/CustomRoutinesContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { SavedRoutinesProvider } from "@/contexts/SavedRoutines";
@@ -56,11 +58,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={dmSans.variable}>
       <body className="touch-manipulation font-[family-name:var(--font-dm-sans)]">
-        <ProfileProvider>
-          <SavedRoutinesProvider>
-            <CustomRoutinesProvider>{children}</CustomRoutinesProvider>
-          </SavedRoutinesProvider>
-        </ProfileProvider>
+        <AppSerwistProvider>
+          <ProfileProvider>
+            <SavedRoutinesProvider>
+              <CustomRoutinesProvider>
+                <OfflineBootstrap />
+                {children}
+              </CustomRoutinesProvider>
+            </SavedRoutinesProvider>
+          </ProfileProvider>
+        </AppSerwistProvider>
       </body>
     </html>
   );

@@ -18,6 +18,7 @@ import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
 import { touchSchedulePlayerRoutine } from "@/lib/preferences/schedule-player-recent-preference";
+import { prefetchRoutineAssets } from "@/lib/offline/prefetch-routine-assets";
 
 function SchedulePlayerLoadingLine() {
   const lang = useCardUiLanguage();
@@ -62,6 +63,11 @@ export function PlayerDetailClient({
   useEffect(() => {
     if (routine) touchSchedulePlayerRoutine(id);
   }, [id, routine]);
+
+  useEffect(() => {
+    if (!routine || !navigator.onLine) return;
+    void prefetchRoutineAssets(routine);
+  }, [routine]);
 
   if (!routine) {
     return (

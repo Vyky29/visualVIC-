@@ -814,6 +814,16 @@ export function playerIndexEmptyBody(lang: CardLanguageCode): string {
     : "Open a routine from Home or the Library. It will show up here next time.";
 }
 
+export function offlineBannerTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Sin conexión" : "You are offline";
+}
+
+export function offlineBannerBody(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Las rutinas que ya abriste en Schedule Player siguen disponibles en este dispositivo."
+    : "Routines you already opened in Schedule Player are still available on this device.";
+}
+
 export function playerRemoveFromListAria(lang: CardLanguageCode): string {
   return isEs(lang) ? "Quitar de la lista" : "Remove from list";
 }

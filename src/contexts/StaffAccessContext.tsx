@@ -15,6 +15,10 @@ import {
   type StaffPlannerAccess,
 } from "@/lib/staff/fetch-staff-planner-access";
 import {
+  loadOfflineStaffAccess,
+  saveOfflineStaffAccess,
+} from "@/lib/offline/offline-staff-access-cache";
+import {
   isRestrictedStaffAccess,
   staffAllowedLibrarySections,
   staffCanAccessTailoredParticipant,
@@ -58,23 +62,41 @@ export function StaffAccessProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const { data: sessionData } = await supabase.auth.getSession();
-    const userId = sessionData.session?.user?.id;
-    if (!userId) {
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user?.id;
+      if (!userId) {
+        setAccess(null);
+        setStatus("none");
+        return;
+      }
+
+      const result = await fetchStaffPlannerAccess(supabase, userId);
+      if (!result.ok) {
+        const cached = loadOfflineStaffAccess();
+        if (!navigator.onLine && cached) {
+          setAccess(cached);
+          setStatus("ready");
+          return;
+        }
+        setAccess(null);
+        setStatus("none");
+        return;
+      }
+
+      saveOfflineStaffAccess(result.access);
+      setAccess(result.access);
+      setStatus("ready");
+    } catch {
+      const cached = loadOfflineStaffAccess();
+      if (!navigator.onLine && cached) {
+        setAccess(cached);
+        setStatus("ready");
+        return;
+      }
       setAccess(null);
       setStatus("none");
-      return;
     }
-
-    const result = await fetchStaffPlannerAccess(supabase, userId);
-    if (!result.ok) {
-      setAccess(null);
-      setStatus("none");
-      return;
-    }
-
-    setAccess(result.access);
-    setStatus("ready");
   }, []);
 
   useEffect(() => {

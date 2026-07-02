@@ -45,3 +45,7 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# serwist service worker build output
+/public/sw.js
+/public/sw.js.map

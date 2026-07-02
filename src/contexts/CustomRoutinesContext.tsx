@@ -20,6 +20,7 @@ import {
   upsertParticipantSharedRoutine,
 } from "@/lib/staff/participant-shared-routines";
 import { fetchStaffPlannerAccess } from "@/lib/staff/fetch-staff-planner-access";
+import { loadOfflineRoutinesSnapshot } from "@/lib/offline/offline-routines-db";
 import { createBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { Routine } from "@/lib/types/routine";
 
@@ -102,6 +103,16 @@ export function CustomRoutinesProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const refreshSharedRoutines = useCallback(async () => {
+    const applyOfflineSharedFallback = async () => {
+      if (!navigator.onLine) {
+        const offline = await loadOfflineRoutinesSnapshot();
+        const sharedOnly = offline.filter((r) => participantIdFromRoutine(r));
+        if (sharedOnly.length > 0) {
+          setSharedRoutines(sharedOnly);
+        }
+      }
+    };
+
     if (!isSupabaseConfigured()) {
       setSharedRoutines([]);
       setSharedHydrated(true);
@@ -115,43 +126,48 @@ export function CustomRoutinesProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const { data: sessionData } = await supabase.auth.getSession();
-    const userId = sessionData.session?.user?.id;
-    if (!userId) {
-      setSharedRoutines([]);
-      setSharedHydrated(true);
-      return;
-    }
-
-    const accessResult = await fetchStaffPlannerAccess(supabase, userId);
-    if (!accessResult.ok) {
-      setSharedRoutines([]);
-      setSharedHydrated(true);
-      return;
-    }
-
-    if (!migrationDone.current) {
-      const stored = loadFromStorage();
-      const { participantLocal } = partitionLocalRoutines(stored);
-      if (participantLocal.length > 0) {
-        await migrateLocalParticipantRoutinesToShared(
-          supabase,
-          accessResult.access,
-          participantLocal,
-          userId,
-        );
-        const { deviceOnly } = partitionLocalRoutines(stored);
-        persistDeviceOnly(deviceOnly);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user?.id;
+      if (!userId) {
+        setSharedRoutines([]);
+        setSharedHydrated(true);
+        return;
       }
-      migrationDone.current = true;
-    }
 
-    const fetched = await fetchParticipantSharedRoutines(
-      supabase,
-      accessResult.access,
-    );
-    setSharedRoutines(fetched);
-    setSharedHydrated(true);
+      const accessResult = await fetchStaffPlannerAccess(supabase, userId);
+      if (!accessResult.ok) {
+        await applyOfflineSharedFallback();
+        setSharedHydrated(true);
+        return;
+      }
+
+      if (!migrationDone.current) {
+        const stored = loadFromStorage();
+        const { participantLocal } = partitionLocalRoutines(stored);
+        if (participantLocal.length > 0) {
+          await migrateLocalParticipantRoutinesToShared(
+            supabase,
+            accessResult.access,
+            participantLocal,
+            userId,
+          );
+          const { deviceOnly } = partitionLocalRoutines(stored);
+          persistDeviceOnly(deviceOnly);
+        }
+        migrationDone.current = true;
+      }
+
+      const fetched = await fetchParticipantSharedRoutines(
+        supabase,
+        accessResult.access,
+      );
+      setSharedRoutines(fetched);
+      setSharedHydrated(true);
+    } catch {
+      await applyOfflineSharedFallback();
+      setSharedHydrated(true);
+    }
   }, [persistDeviceOnly]);
 
   useEffect(() => {
