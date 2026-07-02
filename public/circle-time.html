@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circle Time</title>
+  <style>
+    :root {
+      --orange: #e8762a;
+      --orange-dark: #c8621f;
+      --orange-soft: #fdf0e6;
+      --navy: #1b3a5c;
+      --navy-dark: #122840;
+      --white: #ffffff;
+      --grey-50: #f7f8fa;
+      --grey-100: #eef1f5;
+      --grey-200: #d8dee6;
+      --grey-500: #6b7280;
+      --grey-700: #374151;
+      --green: #2d7a4f;
+      --green-soft: #e8f5ee;
+      --amber: #b45309;
+      --amber-soft: #fef3c7;
+      --red-soft: #fde8e8;
+      --shadow: 0 2px 8px rgba(27, 58, 92, 0.08);
+      --shadow-lg: 0 8px 24px rgba(27, 58, 92, 0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --touch-min: 48px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--navy);
+      background: var(--grey-50);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      padding: 0.75rem 1rem;
+      background: var(--navy);
+      color: var(--white);
+      z-index: 1000;
+    }
+    .skip-link:focus { left: 1rem; top: 1rem; }
+
+    header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+      color: var(--white);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      background: var(--orange);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    .header-meta {
+      text-align: right;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      border: 1px solid var(--grey-200);
+    }
+
+    section:focus-within {
+      outline: 2px solid var(--orange);
+      outline-offset: 2px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--grey-100);
+    }
+
+    .section-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .section-header h2 {
+      margin: 0 0 0.25rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+      color: var(--navy);
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--grey-500);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .grid-2 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    .grid-7 { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+
+    /* Register cards */
+    .participant-card {
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+      background: var(--white);
+    }
+
+    .participant-card.status-here {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .participant-card.status-late {
+      border-color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .participant-card.status-away {
+      border-color: var(--grey-200);
+      background: var(--grey-100);
+      opacity: 0.65;
+    }
+
+    .avatar-wrap {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--grey-200);
+      background: var(--grey-100);
+      flex-shrink: 0;
+    }
+
+    .status-here .avatar-wrap { border-color: var(--green); }
+    .status-late .avatar-wrap { border-color: var(--amber); }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      background: var(--grey-200);
+    }
+
+    .participant-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: center;
+      margin: 0;
+    }
+
+    .status-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Buttons */
+    .btn {
+      min-height: var(--touch-min);
+      min-width: var(--touch-min);
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--navy);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn:hover { border-color: var(--navy); background: var(--grey-50); }
+    .btn:focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 2px;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    .btn.selected,
+    .btn-primary.selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-here.selected { background: var(--green); border-color: var(--green); color: var(--white); }
+    .btn-late.selected { background: var(--amber); border-color: var(--amber); color: var(--white); }
+    .btn-away.selected { background: var(--grey-500); border-color: var(--grey-500); color: var(--white); }
+
+    .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
+
+    .btn-secondary {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+    }
+    .btn-secondary:hover { background: var(--navy-dark); }
+
+    .btn-danger {
+      background: transparent;
+      border-color: #c53030;
+      color: #c53030;
+    }
+
+    .btn-sm {
+      min-height: 40px;
+      min-width: 40px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    /* Choice cards (day, weather, feelings, focus, activities) */
+    .choice-card {
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      background: var(--white);
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: var(--touch-min);
+    }
+
+    .choice-card:hover { border-color: var(--orange); background: var(--orange-soft); }
+    .choice-card:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .choice-card.selected {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .choice-card .icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .choice-card .label {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .choice-card img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+    }
+
+    /* Feelings */
+    .feelings-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .feeling-btn {
+      min-height: 44px;
+      padding: 0.5rem 0.85rem;
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--navy);
+    }
+
+    .feeling-btn.selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+    }
+
+    .feeling-display {
+      font-size: 0.95rem;
+      color: var(--grey-700);
+      margin: 0;
+      min-height: 1.4em;
+    }
+
+    .feeling-display strong { color: var(--navy); }
+
+    /* Focus multi-select */
+    .focus-grid .choice-card.selected {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    /* Activities */
+    .activity-card {
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-img {
+      height: 100px;
+      background: var(--grey-100);
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+    }
+
+    .activity-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .activity-body {
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .activity-name {
+      font-weight: 700;
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .activity-card.selected {
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px var(--green-soft);
+    }
+
+    /* Today's plan */
+    .plan-list {
+      list-style: none;
+      margin: 1rem 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .plan-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--grey-50);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--orange);
+    }
+
+    .plan-item span { font-weight: 600; }
+
+    .empty-state {
+      color: var(--grey-500);
+      font-style: italic;
+      padding: 1rem;
+      text-align: center;
+      background: var(--grey-50);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Agreements */
+    .agreement-card {
+      padding: 1.25rem;
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      border-left: 4px solid var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .agreement-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .agreement-text {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    /* Turn-taking board */
+    .turn-board {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .turn-board { grid-template-columns: 1fr 1fr; }
+    }
+
+    .turn-column h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--grey-500);
+    }
+
+    .turn-now {
+      background: var(--orange-soft);
+      border: 2px solid var(--orange);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .turn-now .avatar-wrap {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 0.75rem;
+      border-color: var(--orange);
+      border-width: 4px;
+    }
+
+    .turn-now .participant-name { font-size: 1.35rem; }
+
+    .turn-avatar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .turn-mini {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      width: 80px;
+    }
+
+    .turn-mini .avatar-wrap {
+      width: 64px;
+      height: 64px;
+    }
+
+    .turn-mini .participant-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .turn-mini .music-tag {
+      font-size: 0.7rem;
+      color: var(--grey-500);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .turn-mini.completed { opacity: 0.85; }
+
+    .music-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .turn-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    /* Summary */
+    .summary-box {
+      background: var(--grey-50);
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      color: var(--grey-700);
+    }
+
+    .summary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.3s ease;
+      z-index: 200;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      main { padding: 1rem; }
+      section { padding: 1rem; }
+      .grid-7 { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CT</div>
+        <div>
+          <h1>Circle Time</h1>
+          <p>Morning group session · ClubSENsational</p>
+        </div>
+      </div>
+      <div class="header-meta" id="header-date" aria-live="polite"></div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- 1. Register -->
+    <section id="register" aria-labelledby="register-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">1</span>
+        <div>
+          <h2 id="register-heading">Who is here today?</h2>
+          <p>Mark each participant as Here, Away or Late. Only Here and Late continue to feelings and turn-taking.</p>
+        </div>
+      </div>
+      <div class="grid grid-2" id="register-grid" role="list"></div>
+    </section>
+
+    <!-- 2. Day -->
+    <section id="day" aria-labelledby="day-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">2</span>
+        <div>
+          <h2 id="day-heading">Today is…</h2>
+          <p>Select the day of the week.</p>
+        </div>
+      </div>
+      <div class="grid grid-7" id="day-grid" role="group" aria-label="Day of the week"></div>
+    </section>
+
+    <!-- 3. Weather -->
+    <section id="weather" aria-labelledby="weather-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">3</span>
+        <div>
+          <h2 id="weather-heading">Weather</h2>
+          <p>Select today's weather.</p>
+        </div>
+      </div>
+      <div class="grid grid-4" id="weather-grid" role="group" aria-label="Weather"></div>
+    </section>
+
+    <!-- 4. Feelings -->
+    <section id="feelings" aria-labelledby="feelings-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">4</span>
+        <div>
+          <h2 id="feelings-heading">Feelings Check-In</h2>
+          <p>How is each participant feeling today?</p>
+        </div>
+      </div>
+      <div class="grid grid-2" id="feelings-grid"></div>
+    </section>
+
+    <!-- 5. Focus -->
+    <section id="focus" aria-labelledby="focus-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">5</span>
+        <div>
+          <h2 id="focus-heading">Today's Focus</h2>
+          <p>Select one or more outcomes-based focus areas for today's session.</p>
+        </div>
+      </div>
+      <div class="grid grid-3 focus-grid" id="focus-grid" role="group" aria-label="Focus areas"></div>
+    </section>
+
+    <!-- 6. Activities -->
+    <section id="activities" aria-labelledby="activities-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">6</span>
+        <div>
+          <h2 id="activities-heading">Today's Activities</h2>
+          <p>Build today's plan by selecting activities.</p>
+        </div>
+      </div>
+      <div class="grid grid-3" id="activities-grid"></div>
+      <h3 style="margin:1.5rem 0 0.5rem;font-size:1.1rem;">Today's Plan</h3>
+      <ul class="plan-list" id="plan-list" aria-label="Selected activities"></ul>
+    </section>
+
+    <!-- 7. Agreements -->
+    <section id="agreements" aria-labelledby="agreements-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">7</span>
+        <div>
+          <h2 id="agreements-heading">Group Agreements</h2>
+          <p>Shared expectations for today's session.</p>
+        </div>
+      </div>
+      <div class="grid grid-2" id="agreements-grid"></div>
+    </section>
+
+    <!-- 8. Music + Turn-taking -->
+    <section id="turn-taking" aria-labelledby="turn-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">8</span>
+        <div>
+          <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
+          <p>Each participant chooses music when it is their turn.</p>
+        </div>
+      </div>
+      <div id="turn-taking-content"></div>
+    </section>
+
+    <!-- 9. Summary -->
+    <section id="summary" aria-labelledby="summary-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">9</span>
+        <div>
+          <h2 id="summary-heading">Session Summary</h2>
+          <p>Automatically generated record of today's circle time.</p>
+        </div>
+      </div>
+      <div class="summary-box" id="summary-box" aria-live="polite"></div>
+      <div class="summary-actions">
+        <button type="button" class="btn btn-primary" id="copy-summary" aria-label="Copy session summary to clipboard">
+          Copy Summary
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ============================================================
+       EDITABLE CONFIG — participants, avatars & activities
+       ============================================================ */
+
+    const PARTICIPANTS = [
+      { id: "p1", name: "Alex", avatar: "assets/avatars/participant-1.png" },
+      { id: "p2", name: "Maria", avatar: "assets/avatars/participant-2.png" },
+      { id: "p3", name: "David", avatar: "assets/avatars/participant-3.png" },
+      { id: "p4", name: "John", avatar: "assets/avatars/participant-4.png" },
+    ];
+
+    const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    const WEATHER = [
+      { id: "sunny", label: "Sunny", icon: "☀️" },
+      { id: "cloudy", label: "Cloudy", icon: "☁️" },
+      { id: "rainy", label: "Rainy", icon: "🌧️" },
+      { id: "windy", label: "Windy", icon: "💨" },
+      { id: "cold", label: "Cold", icon: "❄️" },
+      { id: "hot", label: "Hot", icon: "🌡️" },
+      { id: "stormy", label: "Stormy", icon: "⛈️" },
+    ];
+
+    const FEELINGS = [
+      "Happy", "Calm", "Tired", "Worried", "Excited", "Frustrated", "Not sure",
+    ];
+
+    const FOCUS_AREAS = [
+      { id: "communication", label: "Communication", icon: "💬" },
+      { id: "independence", label: "Independence", icon: "🎯" },
+      { id: "physical", label: "Physical wellbeing", icon: "🏃" },
+      { id: "emotional", label: "Emotional regulation", icon: "🧘" },
+      { id: "social", label: "Social interaction", icon: "🤝" },
+      { id: "community", label: "Community participation", icon: "🏘️" },
+    ];
+
+    const ACTIVITIES = [
+      { id: "swimming", name: "Swimming", icon: "🏊", image: "assets/activities/swimming.png" },
+      { id: "fitness", name: "Fitness", icon: "💪", image: "assets/activities/fitness.png" },
+      { id: "climbing", name: "Climbing", icon: "🧗", image: "assets/activities/climbing.png" },
+      { id: "cooking", name: "Cooking", icon: "🍳", image: "assets/activities/cooking.png" },
+      { id: "art", name: "Art", icon: "🎨", image: "assets/activities/art.png" },
+      { id: "communication", name: "Communication", icon: "💬", image: "assets/activities/communication.png" },
+      { id: "community-walk", name: "Community Walk", icon: "🚶", image: "assets/activities/community-walk.png" },
+      { id: "sensory-break", name: "Sensory Break", icon: "🌿", image: "assets/activities/sensory-break.png" },
+      { id: "lunch", name: "Lunch", icon: "🍽️", image: "assets/activities/lunch.png" },
+      { id: "independent-skills", name: "Independent Skills", icon: "✅", image: "assets/activities/independent-skills.png" },
+      { id: "relaxation", name: "Relaxation", icon: "😌", image: "assets/activities/relaxation.png" },
+      { id: "group-game", name: "Group Game", icon: "🎲", image: "assets/activities/group-game.png" },
+    ];
+
+    const AGREEMENTS = [
+      { icon: "👂", text: "We listen to each other" },
+      { icon: "🔄", text: "We take turns" },
+      { icon: "🙋", text: "We ask for help when needed" },
+      { icon: "↔️", text: "We respect personal space" },
+      { icon: "⏸️", text: "We can ask for a break" },
+    ];
+
+    const MUSIC_OPTIONS = [
+      "Calm music",
+      "Favourite song",
+      "Movement song",
+      "No music today",
+    ];
+
+    /* ============================================================
+       STATE
+       ============================================================ */
+
+    const state = {
+      register: {},
+      day: null,
+      weather: null,
+      feelings: {},
+      focus: new Set(),
+      plan: [],
+      turnQueue: [],
+      turnCompleted: [],
+      turnIndex: 0,
+    };
+
+    function initState() {
+      PARTICIPANTS.forEach((p) => {
+        state.register[p.id] = null;
+        state.feelings[p.id] = null;
+      });
+      resetTurns();
+    }
+
+    function activeParticipants() {
+      return PARTICIPANTS.filter((p) => {
+        const s = state.register[p.id];
+        return s === "here" || s === "late";
+      });
+    }
+
+    function resetTurns() {
+      state.turnQueue = activeParticipants().map((p) => p.id);
+      state.turnCompleted = [];
+      state.turnIndex = 0;
+    }
+
+    /* ============================================================
+       HELPERS
+       ============================================================ */
+
+    function el(tag, attrs, children) {
+      const node = document.createElement(tag);
+      if (attrs) {
+        Object.entries(attrs).forEach(([k, v]) => {
+          if (k === "className") node.className = v;
+          else if (k === "textContent") node.textContent = v;
+          else if (k.startsWith("on")) node.addEventListener(k.slice(2).toLowerCase(), v);
+          else node.setAttribute(k, v);
+        });
+      }
+      (children || []).forEach((c) => {
+        if (typeof c === "string") node.appendChild(document.createTextNode(c));
+        else if (c) node.appendChild(c);
+      });
+      return node;
+    }
+
+    function avatarImg(participant, size) {
+      const wrap = el("div", { className: "avatar-wrap" });
+      const img = el("img", {
+        src: participant.avatar,
+        alt: `${participant.name} avatar`,
+        loading: "lazy",
+      });
+      img.addEventListener("error", () => {
+        img.remove();
+        wrap.appendChild(
+          el("div", {
+            className: "avatar-fallback",
+            textContent: participant.name.charAt(0).toUpperCase(),
+            "aria-hidden": "true",
+          })
+        );
+      });
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2500);
+    }
+
+    function updateHeaderDate() {
+      const now = new Date();
+      document.getElementById("header-date").textContent = now.toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+
+    /* ============================================================
+       RENDER: Register
+       ============================================================ */
+
+    function renderRegister() {
+      const grid = document.getElementById("register-grid");
+      grid.innerHTML = "";
+
+      PARTICIPANTS.forEach((p) => {
+        const status = state.register[p.id];
+        const card = el("div", {
+          className: `participant-card${status ? ` status-${status}` : ""}`,
+          role: "listitem",
+        });
+
+        card.appendChild(avatarImg(p));
+        card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
+
+        const btns = el("div", { className: "status-buttons", role: "group", "aria-label": `Status for ${p.name}` });
+
+        [
+          { key: "here", label: "Here", cls: "btn-here" },
+          { key: "away", label: "Away", cls: "btn-away" },
+          { key: "late", label: "Late", cls: "btn-late" },
+        ].forEach(({ key, label, cls }) => {
+          const btn = el("button", {
+            type: "button",
+            className: `btn btn-sm ${cls}${status === key ? " selected" : ""}`,
+            textContent: label,
+            "aria-label": `${p.name}: ${label}`,
+            "aria-pressed": status === key ? "true" : "false",
+          });
+          btn.addEventListener("click", () => {
+            state.register[p.id] = state.register[p.id] === key ? null : key;
+            if (state.register[p.id] === "away" || state.register[p.id] === null) {
+              state.feelings[p.id] = null;
+            }
+            resetTurns();
+            renderAll();
+          });
+          btns.appendChild(btn);
+        });
+
+        card.appendChild(btns);
+        grid.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Day & Weather
+       ============================================================ */
+
+    function renderDay() {
+      const grid = document.getElementById("day-grid");
+      grid.innerHTML = "";
+      DAYS.forEach((day) => {
+        const card = el("button", {
+          type: "button",
+          className: `choice-card${state.day === day ? " selected" : ""}`,
+          "aria-label": day,
+          "aria-pressed": state.day === day ? "true" : "false",
+        });
+        card.appendChild(el("span", { className: "label", textContent: day }));
+        card.addEventListener("click", () => {
+          state.day = state.day === day ? null : day;
+          renderDay();
+          renderSummary();
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderWeather() {
+      const grid = document.getElementById("weather-grid");
+      grid.innerHTML = "";
+      WEATHER.forEach((w) => {
+        const card = el("button", {
+          type: "button",
+          className: `choice-card${state.weather === w.id ? " selected" : ""}`,
+          "aria-label": w.label,
+          "aria-pressed": state.weather === w.id ? "true" : "false",
+        });
+        card.appendChild(el("span", { className: "icon", textContent: w.icon, "aria-hidden": "true" }));
+        card.appendChild(el("span", { className: "label", textContent: w.label }));
+        card.addEventListener("click", () => {
+          state.weather = state.weather === w.id ? null : w.id;
+          renderWeather();
+          renderSummary();
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Feelings
+       ============================================================ */
+
+    function renderFeelings() {
+      const grid = document.getElementById("feelings-grid");
+      grid.innerHTML = "";
+      const active = activeParticipants();
+
+      if (active.length === 0) {
+        grid.appendChild(el("p", {
+          className: "empty-state",
+          textContent: "Mark participants as Here or Late in the register to begin feelings check-in.",
+        }));
+        return;
+      }
+
+      active.forEach((p) => {
+        const status = state.register[p.id];
+        const card = el("div", {
+          className: `participant-card status-${status}`,
+        });
+
+        card.appendChild(avatarImg(p));
+        card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
+
+        const feelingsRow = el("div", {
+          className: "feelings-grid",
+          role: "group",
+          "aria-label": `Feelings for ${p.name}`,
+        });
+
+        FEELINGS.forEach((f) => {
+          const btn = el("button", {
+            type: "button",
+            className: `feeling-btn${state.feelings[p.id] === f ? " selected" : ""}`,
+            textContent: f,
+            "aria-label": `${p.name} feels ${f}`,
+            "aria-pressed": state.feelings[p.id] === f ? "true" : "false",
+          });
+          btn.addEventListener("click", () => {
+            state.feelings[p.id] = state.feelings[p.id] === f ? null : f;
+            renderFeelings();
+            renderSummary();
+          });
+          feelingsRow.appendChild(btn);
+        });
+
+        card.appendChild(feelingsRow);
+
+        const display = el("p", { className: "feeling-display" });
+        if (state.feelings[p.id]) {
+          display.innerHTML = `Selected: <strong>${state.feelings[p.id]}</strong>`;
+        } else {
+          display.textContent = "No feeling selected yet";
+        }
+        card.appendChild(display);
+
+        grid.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Focus
+       ============================================================ */
+
+    function renderFocus() {
+      const grid = document.getElementById("focus-grid");
+      grid.innerHTML = "";
+      FOCUS_AREAS.forEach((f) => {
+        const selected = state.focus.has(f.id);
+        const card = el("button", {
+          type: "button",
+          className: `choice-card${selected ? " selected" : ""}`,
+          "aria-label": f.label,
+          "aria-pressed": selected ? "true" : "false",
+        });
+        card.appendChild(el("span", { className: "icon", textContent: f.icon, "aria-hidden": "true" }));
+        card.appendChild(el("span", { className: "label", textContent: f.label }));
+        card.addEventListener("click", () => {
+          if (state.focus.has(f.id)) state.focus.delete(f.id);
+          else state.focus.add(f.id);
+          renderFocus();
+          renderSummary();
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Activities
+       ============================================================ */
+
+    function renderActivities() {
+      const grid = document.getElementById("activities-grid");
+      grid.innerHTML = "";
+
+      ACTIVITIES.forEach((a) => {
+        const inPlan = state.plan.includes(a.id);
+        const card = el("div", { className: `activity-card${inPlan ? " selected" : ""}` });
+
+        const imgWrap = el("div", { className: "activity-img" });
+        const img = el("img", { src: a.image, alt: "", loading: "lazy" });
+        img.addEventListener("error", () => {
+          img.remove();
+          imgWrap.textContent = a.icon;
+          imgWrap.setAttribute("aria-hidden", "true");
+        });
+        imgWrap.appendChild(img);
+        card.appendChild(imgWrap);
+
+        const body = el("div", { className: "activity-body" });
+        body.appendChild(el("p", { className: "activity-name", textContent: a.name }));
+
+        const btn = el("button", {
+          type: "button",
+          className: `btn btn-sm${inPlan ? " btn-danger" : " btn-primary"}`,
+          textContent: inPlan ? "Remove" : "Select",
+          "aria-label": `${inPlan ? "Remove" : "Add"} ${a.name}`,
+        });
+        btn.addEventListener("click", () => {
+          if (inPlan) {
+            state.plan = state.plan.filter((id) => id !== a.id);
+          } else {
+            state.plan.push(a.id);
+          }
+          renderActivities();
+          renderSummary();
+        });
+        body.appendChild(btn);
+        card.appendChild(body);
+        grid.appendChild(card);
+      });
+
+      renderPlanList();
+    }
+
+    function renderPlanList() {
+      const list = document.getElementById("plan-list");
+      list.innerHTML = "";
+
+      if (state.plan.length === 0) {
+        list.appendChild(el("li", {
+          className: "empty-state",
+          textContent: "No activities selected yet.",
+        }));
+        return;
+      }
+
+      state.plan.forEach((id, i) => {
+        const act = ACTIVITIES.find((a) => a.id === id);
+        if (!act) return;
+        const li = el("li", { className: "plan-item" });
+        li.appendChild(el("span", { textContent: `${i + 1}. ${act.name}` }));
+        const rm = el("button", {
+          type: "button",
+          className: "btn btn-sm btn-danger",
+          textContent: "Remove",
+          "aria-label": `Remove ${act.name} from plan`,
+        });
+        rm.addEventListener("click", () => {
+          state.plan = state.plan.filter((x) => x !== id);
+          renderActivities();
+          renderSummary();
+        });
+        li.appendChild(rm);
+        list.appendChild(li);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Agreements
+       ============================================================ */
+
+    function renderAgreements() {
+      const grid = document.getElementById("agreements-grid");
+      grid.innerHTML = "";
+      AGREEMENTS.forEach((a) => {
+        const card = el("div", { className: "agreement-card" });
+        card.appendChild(el("div", { className: "agreement-icon", textContent: a.icon, "aria-hidden": "true" }));
+        card.appendChild(el("p", { className: "agreement-text", textContent: a.text }));
+        grid.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       RENDER: Turn-taking
+       ============================================================ */
+
+    function getParticipant(id) {
+      return PARTICIPANTS.find((p) => p.id === id);
+    }
+
+    function currentTurnParticipant() {
+      if (state.turnIndex >= state.turnQueue.length) return null;
+      return getParticipant(state.turnQueue[state.turnIndex]);
+    }
+
+    function renderTurnTaking() {
+      const container = document.getElementById("turn-taking-content");
+      container.innerHTML = "";
+
+      const active = activeParticipants();
+
+      if (active.length === 0) {
+        container.appendChild(el("p", {
+          className: "empty-state",
+          textContent: "Mark participants as Here or Late in the register to use the turn-taking board.",
+        }));
+        return;
+      }
+
+      if (state.turnQueue.length !== active.length ||
+          !active.every((p) => state.turnQueue.includes(p.id))) {
+        resetTurns();
+      }
+
+      const board = el("div", { className: "turn-board" });
+
+      /* Now */
+      const nowCol = el("div");
+      nowCol.appendChild(el("h3", { textContent: "Current turn" }));
+      const nowBox = el("div", { className: "turn-now", "aria-live": "polite" });
+      const current = currentTurnParticipant();
+
+      if (current) {
+        nowBox.appendChild(avatarImg(current));
+        nowBox.appendChild(el("p", { className: "participant-name", textContent: current.name }));
+        nowBox.appendChild(el("p", { textContent: "Choose music for this turn:", style: "margin:0.5rem 0 0;color:var(--grey-500);" }));
+
+        const musicOpts = el("div", { className: "music-options", role: "group", "aria-label": "Music choices" });
+        MUSIC_OPTIONS.forEach((m) => {
+          const btn = el("button", {
+            type: "button",
+            className: "btn btn-sm",
+            textContent: m,
+            "aria-label": `Select ${m}`,
+          });
+          btn.addEventListener("click", () => {
+            state.turnCompleted.push({ id: current.id, music: m });
+            state.turnIndex += 1;
+            renderTurnTaking();
+            renderSummary();
+          });
+          musicOpts.appendChild(btn);
+        });
+        nowBox.appendChild(musicOpts);
+      } else {
+        nowBox.appendChild(el("p", { textContent: "All turns complete.", style: "font-weight:600;font-size:1.1rem;margin:0;" }));
+      }
+      nowCol.appendChild(nowBox);
+      board.appendChild(nowCol);
+
+      /* Completed & Waiting */
+      const sideCol = el("div");
+
+      sideCol.appendChild(el("h3", { textContent: "Completed" }));
+      const completedRow = el("div", { className: "turn-avatar-row", "aria-label": "Completed turns" });
+      if (state.turnCompleted.length === 0) {
+        completedRow.appendChild(el("p", { className: "empty-state", textContent: "No turns completed yet.", style: "width:100%;" }));
+      } else {
+        state.turnCompleted.forEach(({ id, music }) => {
+          const p = getParticipant(id);
+          if (!p) return;
+          const mini = el("div", { className: "turn-mini completed" });
+          mini.appendChild(avatarImg(p));
+          mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
+          mini.appendChild(el("span", { className: "music-tag", textContent: music }));
+          completedRow.appendChild(mini);
+        });
+      }
+      sideCol.appendChild(completedRow);
+
+      sideCol.appendChild(el("h3", { textContent: "Waiting", style: "margin-top:1.25rem;" }));
+      const waitingRow = el("div", { className: "turn-avatar-row", "aria-label": "Waiting participants" });
+      const waiting = state.turnQueue.slice(state.turnIndex + (current ? 1 : 0));
+      if (waiting.length === 0 && !current) {
+        waitingRow.appendChild(el("p", { className: "empty-state", textContent: "Everyone has had a turn.", style: "width:100%;" }));
+      } else if (waiting.length === 0) {
+        waitingRow.appendChild(el("p", { className: "empty-state", textContent: "No one waiting.", style: "width:100%;" }));
+      } else {
+        waiting.forEach((id) => {
+          const p = getParticipant(id);
+          if (!p) return;
+          const mini = el("div", { className: "turn-mini" });
+          mini.appendChild(avatarImg(p));
+          mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
+          waitingRow.appendChild(mini);
+        });
+      }
+      sideCol.appendChild(waitingRow);
+      board.appendChild(sideCol);
+
+      container.appendChild(board);
+
+      /* Order strip */
+      const orderSection = el("div", { style: "margin-top:1.5rem;" });
+      orderSection.appendChild(el("h3", { textContent: "Turn order", style: "margin:0 0 0.75rem;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--grey-500);" }));
+      const orderRow = el("div", { className: "turn-avatar-row", role: "list", "aria-label": "Turn order" });
+      state.turnQueue.forEach((id, i) => {
+        const p = getParticipant(id);
+        if (!p) return;
+        const isCurrent = i === state.turnIndex && current;
+        const isDone = i < state.turnIndex;
+        const mini = el("div", {
+          className: `turn-mini${isDone ? " completed" : ""}`,
+          role: "listitem",
+          style: isCurrent ? "outline:3px solid var(--orange);border-radius:var(--radius-sm);padding:0.35rem;" : "",
+        });
+        mini.appendChild(avatarImg(p));
+        mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
+        if (isCurrent) mini.appendChild(el("span", { className: "music-tag", textContent: "Now", style: "color:var(--orange);font-weight:700;" }));
+        orderRow.appendChild(mini);
+      });
+      orderSection.appendChild(orderRow);
+      container.appendChild(orderSection);
+
+      /* Controls */
+      const controls = el("div", { className: "turn-controls" });
+
+      const nextBtn = el("button", {
+        type: "button",
+        className: "btn btn-secondary",
+        textContent: "Next Turn",
+        "aria-label": "Skip to next turn without music choice",
+      });
+      nextBtn.addEventListener("click", () => {
+        const cur = currentTurnParticipant();
+        if (cur) {
+          state.turnCompleted.push({ id: cur.id, music: "Skipped" });
+          state.turnIndex += 1;
+          renderTurnTaking();
+          renderSummary();
+        }
+      });
+      nextBtn.disabled = !current;
+
+      const skipBtn = el("button", {
+        type: "button",
+        className: "btn",
+        textContent: "Skip Turn",
+        "aria-label": "Skip current participant turn",
+      });
+      skipBtn.addEventListener("click", () => {
+        if (state.turnIndex < state.turnQueue.length) {
+          state.turnIndex += 1;
+          renderTurnTaking();
+          renderSummary();
+        }
+      });
+      skipBtn.disabled = !current;
+
+      const resetBtn = el("button", {
+        type: "button",
+        className: "btn btn-danger",
+        textContent: "Reset Turns",
+        "aria-label": "Reset all turns",
+      });
+      resetBtn.addEventListener("click", () => {
+        resetTurns();
+        renderTurnTaking();
+        renderSummary();
+      });
+
+      controls.appendChild(nextBtn);
+      controls.appendChild(skipBtn);
+      controls.appendChild(resetBtn);
+      container.appendChild(controls);
+    }
+
+    /* ============================================================
+       RENDER: Summary
+       ============================================================ */
+
+    function buildSummaryText() {
+      const lines = ["Circle Time Summary", ""];
+
+      lines.push(`Day: ${state.day || "Not selected"}`);
+
+      const weatherLabel = WEATHER.find((w) => w.id === state.weather)?.label || "Not selected";
+      lines.push(`Weather: ${weatherLabel}`);
+      lines.push("");
+
+      const present = PARTICIPANTS.filter((p) => state.register[p.id] === "here" || state.register[p.id] === "late");
+      const away = PARTICIPANTS.filter((p) => state.register[p.id] === "away");
+      const late = PARTICIPANTS.filter((p) => state.register[p.id] === "late");
+
+      lines.push(`Present: ${present.length ? present.map((p) => p.name).join(", ") : "None"}`);
+      if (late.length) lines.push(`Late: ${late.map((p) => p.name).join(", ")}`);
+      lines.push(`Away: ${away.length ? away.map((p) => p.name).join(", ") : "None"}`);
+      lines.push("");
+
+      const feelingsLines = present
+        .filter((p) => state.feelings[p.id])
+        .map((p) => `${p.name} - ${state.feelings[p.id]}`);
+      lines.push(`Feelings: ${feelingsLines.length ? feelingsLines.join(", ") : "None recorded"}`);
+      lines.push("");
+
+      const focusLabels = FOCUS_AREAS.filter((f) => state.focus.has(f.id)).map((f) => f.label);
+      lines.push(`Focus: ${focusLabels.length ? focusLabels.join(", ") : "None selected"}`);
+      lines.push("");
+
+      const actNames = state.plan.map((id) => ACTIVITIES.find((a) => a.id === id)?.name).filter(Boolean);
+      lines.push(`Activities: ${actNames.length ? actNames.join(", ") : "None selected"}`);
+      lines.push("");
+
+      const musicLines = state.turnCompleted.map(({ id, music }) => {
+        const p = getParticipant(id);
+        return p ? `${p.name} - ${music}` : null;
+      }).filter(Boolean);
+      lines.push(`Music Choices: ${musicLines.length ? musicLines.join(", ") : "None yet"}`);
+
+      return lines.join("\n");
+    }
+
+    function renderSummary() {
+      document.getElementById("summary-box").textContent = buildSummaryText();
+    }
+
+    /* ============================================================
+       INIT
+       ============================================================ */
+
+    function renderAll() {
+      renderRegister();
+      renderDay();
+      renderWeather();
+      renderFeelings();
+      renderFocus();
+      renderActivities();
+      renderAgreements();
+      renderTurnTaking();
+      renderSummary();
+    }
+
+    document.getElementById("copy-summary").addEventListener("click", async () => {
+      const text = buildSummaryText();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("Summary copied to clipboard");
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Summary copied to clipboard");
+      }
+    });
+
+    initState();
+    updateHeaderDate();
+    renderAll();
+  </script>
+</body>
+</html>
