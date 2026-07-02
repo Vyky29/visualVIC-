@@ -800,8 +800,8 @@ export function authTermsPlaceholder(lang: CardLanguageCode): string {
 
 export function playerIndexIntro(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Rutinas que has abierto en este dispositivo. Toca una para continuar o usa ✕ para quitarla de la lista."
-    : "Routines you have opened on this device. Tap one to continue, or use ✕ to remove it from the list.";
+    ? "Rutinas que has abierto en este dispositivo. Toca una para continuar, usa ✕ para quitarla de la lista, o «Descargar para offline» para usarla sin WiFi."
+    : "Routines you have opened on this device. Tap one to continue, use ✕ to remove it from the list, or Download for offline to use it without WiFi.";
 }
 
 export function playerIndexEmptyTitle(lang: CardLanguageCode): string {
@@ -822,6 +822,30 @@ export function offlineBannerBody(lang: CardLanguageCode): string {
   return isEs(lang)
     ? "Las rutinas que ya abriste en Schedule Player siguen disponibles en este dispositivo."
     : "Routines you already opened in Schedule Player are still available on this device.";
+}
+
+export function offlineDownloadButton(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Descargar para offline" : "Download for offline";
+}
+
+export function offlineDownloadWorking(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Descargando…" : "Downloading…";
+}
+
+export function offlineDownloadDone(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Lista sin red" : "Ready offline";
+}
+
+export function offlineDownloadNeedNetwork(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Conéctate a WiFi para descargar las tarjetas."
+    : "Connect to WiFi to download the cards.";
+}
+
+export function offlineUnpinAria(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Quitar descarga offline"
+    : "Remove offline download";
 }
 
 export function playerRemoveFromListAria(lang: CardLanguageCode): string {

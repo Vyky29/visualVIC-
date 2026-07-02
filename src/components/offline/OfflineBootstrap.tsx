@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
-import { prefetchRoutineAssets } from "@/lib/offline/prefetch-routine-assets";
+import { listOfflinePinnedRoutineIds } from "@/lib/offline/offline-pinned-routines";
 import { saveOfflineRoutinesSnapshot } from "@/lib/offline/offline-routines-db";
+import { prefetchRoutineAssets } from "@/lib/offline/prefetch-routine-assets";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
 import { listSchedulePlayerRecentRoutineIds } from "@/lib/preferences/schedule-player-recent-preference";
 
@@ -24,16 +25,18 @@ export function OfflineBootstrap() {
   useEffect(() => {
     if (!hydrated || !navigator.onLine) return;
 
-    const recentIds = listSchedulePlayerRecentRoutineIds().slice(
-      0,
-      RECENT_PREFETCH_LIMIT,
-    );
-    if (recentIds.length === 0) return;
+    const ids = [
+      ...new Set([
+        ...listOfflinePinnedRoutineIds(),
+        ...listSchedulePlayerRecentRoutineIds().slice(0, RECENT_PREFETCH_LIMIT),
+      ]),
+    ];
+    if (ids.length === 0) return;
 
     let cancelled = false;
 
     void (async () => {
-      for (const id of recentIds) {
+      for (const id of ids) {
         if (cancelled) return;
         const routine = resolveAnyRoutine(id, routines);
         if (routine) await prefetchRoutineAssets(routine);

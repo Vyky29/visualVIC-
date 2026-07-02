@@ -35,6 +35,7 @@ import {
   pixtoBundledCardThumbnailClipPath,
 } from "@/lib/utils/visual-card-url";
 import { resolveSchedulePlayerIndexPreviewUrl } from "@/lib/routines/resolve-routine-home-preview";
+import { DownloadRoutineOfflineButton } from "@/components/offline/DownloadRoutineOfflineButton";
 
 const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   brushing: "border-[#91C24C]/30 bg-sage-mist/85 text-[#6a8f3a]",
@@ -147,7 +148,7 @@ export default function PlayerIndexPage() {
                     />
                     <Link
                       href={`/player/${r.id}`}
-                      className="flex gap-4 p-4 pr-12 transition hover:bg-white/60"
+                      className="flex gap-4 p-4 pr-12 pb-3 transition hover:bg-white/60"
                     >
                       <div
                         className={cn(
@@ -193,6 +194,9 @@ export default function PlayerIndexPage() {
                         →
                       </span>
                     </Link>
+                    <div className="border-t border-ink/6 px-4 py-2.5">
+                      <DownloadRoutineOfflineButton routine={r} />
+                    </div>
                   </Card>
                 </li>
               );
