@@ -128,6 +128,8 @@ import {
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
   DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
+  DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE,
   DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_TIMI_CARD_CATEGORY_LABEL,
   DAY_CENTRE_TIMI_CATEGORY_COLOUR,
@@ -712,13 +714,15 @@ function timiScheduleGeneratedCardProps(step: DayCentreTimiStep) {
 }
 
 export const DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE.map((s) =>
+  DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE.map((s) =>
     timiScheduleGeneratedCardProps(s),
   );
 
-/** Timi · Day centre (items) — same steps, general library art. */
+/** Timi · Day centre (items) — object / library art where noted. */
 export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS;
+  DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE.map((s) =>
+    timiScheduleGeneratedCardProps(s),
+  );
 
 function fadiGeneratedCardProps(step: DayCentreFadiStep) {
   const focusIllustrationUrl = dayCentreFadiFocusImageUrlForStep(step);

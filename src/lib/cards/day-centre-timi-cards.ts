@@ -86,42 +86,108 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
     title: "Timi's Car",
     source: "timi-photo",
   },
+  {
+    id: "dct-shower",
+    slug: "timi-shower",
+    title: "Shower",
+    source: "timi-photo",
+  },
 ] as const;
 
-/** Stock routine — Timi's day-centre order. */
-export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] = [
-  { id: "dcts-sensory-room-am", slug: "sensory-room", title: "Sensory room" },
-  {
-    id: "dcts-motor-skills",
-    slug: "timi-motor-skills",
-    title: "Motor skills",
-    source: "timi-photo",
-  },
-  {
-    id: "dcts-changing-room",
-    slug: "changing-room",
-    title: "Changing room",
-    source: "swimming",
-  },
-  { id: "dcts-shower", slug: "shower", title: "Shower", source: "shower" },
-  {
-    id: "dcts-swimming",
-    slug: "swimming-pool",
-    title: "Swimming",
-    source: "swimming",
-  },
-  { id: "dcts-hub-room", slug: "hub-room", title: "Hub room" },
-  { id: "dcts-snack", slug: "snack", title: "Snack" },
-  {
-    id: "dcts-puzzles",
-    slug: "timi-puzzle-2",
-    title: "Puzzles",
-    source: "timi-photo",
-  },
-  { id: "dcts-sensory-room-pm", slug: "sensory-room", title: "Sensory room" },
-  { id: "dcts-timis-car", slug: "timis-car", title: "Timi's Car", source: "timi-photo" },
-  { id: "dcts-home", slug: "home", title: "Home" },
-] as const;
+/** Avatar routine — Timi appears in personalised photos where available. */
+export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] =
+  [
+    { id: "dcts-sensory-room-am", slug: "sensory-room", title: "Sensory room" },
+    {
+      id: "dcts-motor-skills",
+      slug: "timi-motor-skills",
+      title: "Motor skills",
+      source: "timi-photo",
+    },
+    {
+      id: "dcts-changing-room",
+      slug: "changing-room",
+      title: "Changing room",
+      source: "swimming",
+    },
+    {
+      id: "dcts-shower",
+      slug: "timi-shower",
+      title: "Shower",
+      source: "timi-photo",
+    },
+    {
+      id: "dcts-swimming",
+      slug: "swimming-pool",
+      title: "Swimming",
+      source: "swimming",
+    },
+    { id: "dcts-hub-room", slug: "hub-room", title: "Hub room" },
+    { id: "dcts-snack", slug: "snack", title: "Snack" },
+    {
+      id: "dcts-puzzles",
+      slug: "timi-puzzle-2",
+      title: "Puzzles",
+      source: "timi-photo",
+    },
+    { id: "dcts-sensory-room-pm", slug: "sensory-room", title: "Sensory room" },
+    {
+      id: "dcts-timis-car",
+      slug: "timis-car",
+      title: "Timi's Car",
+      source: "timi-photo",
+    },
+    { id: "dcts-home", slug: "home", title: "Home" },
+  ] as const;
+
+/** Items routine — object / library art (generic shower icon). */
+export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] =
+  [
+    { id: "dctsi-sensory-room-am", slug: "sensory-room", title: "Sensory room" },
+    {
+      id: "dctsi-motor-skills",
+      slug: "timi-motor-skills",
+      title: "Motor skills",
+      source: "timi-photo",
+    },
+    {
+      id: "dctsi-changing-room",
+      slug: "changing-room",
+      title: "Changing room",
+      source: "swimming",
+    },
+    { id: "dctsi-shower", slug: "shower", title: "Shower", source: "shower" },
+    {
+      id: "dctsi-swimming",
+      slug: "swimming-pool",
+      title: "Swimming",
+      source: "swimming",
+    },
+    { id: "dctsi-hub-room", slug: "hub-room", title: "Hub room" },
+    { id: "dctsi-snack", slug: "snack", title: "Snack" },
+    {
+      id: "dctsi-puzzles",
+      slug: "timi-puzzle-2",
+      title: "Puzzles",
+      source: "timi-photo",
+    },
+    {
+      id: "dctsi-sensory-room-pm",
+      slug: "sensory-room",
+      title: "Sensory room",
+    },
+    {
+      id: "dctsi-timis-car",
+      slug: "timis-car",
+      title: "Timi's Car",
+      source: "timi-photo",
+    },
+    { id: "dctsi-home", slug: "home", title: "Home" },
+  ] as const;
+
+/** @deprecated Use {@link DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE}. */
+export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE =
+  DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE;
 
 function dayCentreTimiResolvedSource(
   step: DayCentreTimiStep,

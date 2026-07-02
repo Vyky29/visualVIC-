@@ -308,6 +308,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "timi screwdriver",
     es: "timi destornillador",
   },
+  "timi-shower": { en: "shower", es: "ducha" },
   "timi-puzzles-with-raul": {
     en: "timi puzzles with Raul",
     es: "timi puzzles con Raul",
