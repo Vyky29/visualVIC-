@@ -203,7 +203,7 @@ export const mockRoutines: Routine[] = [
     name: "Swimming",
     description: "PixtoLearn swimming visual cards — pool visit flow",
     tags: ["activity"],
-    homePreviewImageUrl: swimmingImageUrl("goggles-on"),
+    homePreviewImageUrl: swimmingImageUrl("swimming-pool"),
     steps: SWIMMING_SEQUENCE.map((s) => ({
       id: s.id,
       title: s.title,
@@ -439,7 +439,7 @@ export const mockRoutines: Routine[] = [
     name: "Premium · Swim changing",
     description: "Shoes off, trunks, flip-flops and goggles",
     tags: ["extra"],
-    homePreviewImageUrl: swimmingImageUrl("goggles-on"),
+    homePreviewImageUrl: swimmingImageUrl("swimming-pool"),
     steps: routineStepsFromGeneratedCardProps(
       "dc-premium-swim",
       DAY_CENTRE_PREMIUM_SWIM_GENERATED_CARD_PROPS,
