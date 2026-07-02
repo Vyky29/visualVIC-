@@ -6,7 +6,10 @@
 import {
   dayCentreTimiAvatarUrl,
   dayCentreTimiImageUrl,
+  dayCentreTimiItemsImageUrl,
   dayCentreTimiPackMarkUrl,
+  dayCentreTimiSceneFocusUrl,
+  dayCentreTimiSceneUrl,
   dayCentreTimiTailoredHomeAvatarUrl,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
@@ -17,6 +20,8 @@ import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedule
 export type DayCentreTimiArtSource =
   | "general"
   | "timi-photo"
+  | "timi-scene"
+  | "timi-item"
   | "shower"
   | "swimming";
 
@@ -84,13 +89,13 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
     id: "dct-timis-car",
     slug: "timis-car",
     title: "Timi's Car",
-    source: "timi-photo",
+    source: "timi-item",
   },
   {
     id: "dct-shower",
     slug: "timi-shower",
     title: "Shower",
-    source: "timi-photo",
+    source: "timi-scene",
   },
 ] as const;
 
@@ -114,7 +119,7 @@ export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiSte
       id: "dcts-shower",
       slug: "timi-shower",
       title: "Shower",
-      source: "timi-photo",
+      source: "timi-scene",
     },
     {
       id: "dcts-swimming",
@@ -135,7 +140,7 @@ export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiSte
       id: "dcts-timis-car",
       slug: "timis-car",
       title: "Timi's Car",
-      source: "timi-photo",
+      source: "timi-scene",
     },
     { id: "dcts-home", slug: "home", title: "Home" },
   ] as const;
@@ -180,7 +185,7 @@ export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep
       id: "dctsi-timis-car",
       slug: "timis-car",
       title: "Timi's Car",
-      source: "timi-photo",
+      source: "timi-item",
     },
     { id: "dctsi-home", slug: "home", title: "Home" },
   ] as const;
@@ -201,6 +206,10 @@ export function dayCentreTimiImageUrlForStep(step: DayCentreTimiStep): string {
   switch (dayCentreTimiResolvedSource(step)) {
     case "timi-photo":
       return dayCentreTimiImageUrl(step.slug);
+    case "timi-scene":
+      return dayCentreTimiSceneUrl(step.slug);
+    case "timi-item":
+      return dayCentreTimiItemsImageUrl(step.slug);
     case "shower":
       return showerImageUrl(step.slug);
     case "swimming":
@@ -212,9 +221,10 @@ export function dayCentreTimiImageUrlForStep(step: DayCentreTimiStep): string {
 }
 
 export function dayCentreTimiFocusImageUrlForStep(
-  _step: DayCentreTimiStep,
+  step: DayCentreTimiStep,
 ): string | undefined {
-  return undefined;
+  if (dayCentreTimiResolvedSource(step) !== "timi-scene") return undefined;
+  return dayCentreTimiSceneFocusUrl(step.slug);
 }
 
 export function dayCentreTimiScheduleImageUrlForStep(
@@ -224,7 +234,7 @@ export function dayCentreTimiScheduleImageUrlForStep(
 }
 
 export function dayCentreTimiScheduleFocusImageUrlForStep(
-  _step: DayCentreTimiStep,
+  step: DayCentreTimiStep,
 ): string | undefined {
-  return undefined;
+  return dayCentreTimiFocusImageUrlForStep(step);
 }

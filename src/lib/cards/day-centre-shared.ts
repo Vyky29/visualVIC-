@@ -16,6 +16,8 @@ export const DAY_CENTRE_EMMANUEL_DIR = `${DAY_CENTRE_PUBLIC_DIR}/emmanuel` as co
 export const DAY_CENTRE_CYRUS_DIR = `${DAY_CENTRE_PUBLIC_DIR}/cyrus` as const;
 export const DAY_CENTRE_FADI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/fadi` as const;
 export const DAY_CENTRE_TIMI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/timi` as const;
+export const DAY_CENTRE_TIMI_ITEMS_DIR =
+  `${DAY_CENTRE_TIMI_DIR}/items` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -298,6 +300,21 @@ export function dayCentreFadiEmotionUrl(slug: string): string {
 
 export function dayCentreTimiImageUrl(slug: string): string {
   return `${DAY_CENTRE_TIMI_DIR}/${slug}.png`;
+}
+
+/** Timi · items routine — object-only illustrations (`timi/items/`). */
+export function dayCentreTimiItemsImageUrl(slug: string): string {
+  return `${DAY_CENTRE_TIMI_ITEMS_DIR}/${slug}.png`;
+}
+
+/** Timi scene illustration — Now/Next (531×648). */
+export function dayCentreTimiSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_TIMI_DIR}/scenes/${slug}.png`;
+}
+
+/** Timi scene illustration — Focus mode (531×663). */
+export function dayCentreTimiSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_TIMI_DIR}/scenes/${slug}-focus.png`;
 }
 
 /** Square 2D avatars — Home · Tailored schedules tiles only. */
