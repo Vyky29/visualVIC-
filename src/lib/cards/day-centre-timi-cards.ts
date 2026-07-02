@@ -76,7 +76,6 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
 /** Stock routine — Timi's day-centre order. */
 export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] = [
   { id: "dcts-sensory-room-am", slug: "sensory-room", title: "Sensory room" },
-  { id: "dcts-circle-time", slug: "circle-time", title: "Circle time" },
   { id: "dcts-motor-skills", slug: "timi-motor-skills", title: "Motor skills" },
   { id: "dcts-swimming-pool", slug: "swimming-pool", title: "Swimming pool" },
   { id: "dcts-snack", slug: "snack", title: "Snack" },
