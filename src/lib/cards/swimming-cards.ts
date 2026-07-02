@@ -11,6 +11,7 @@ export const SWIMMING_BACK_CARD_FILE = "backcard-swimming.png" as const;
 /** Shipped swimming step PNGs (synced to folder on disk). */
 export const SWIMMING_CARD_FILES = [
   "swimming-pool.png",
+  "changing-room.png",
   "blow-bubbles.png",
   "float-on-back.png",
   "goggles-on.png",
@@ -35,6 +36,7 @@ export function swimmingBackCardUrl(): string {
 /** Pool visit flow — basename without .png must exist in the folder above. */
 export const SWIMMING_SEQUENCE = [
   { id: "swim-pool", slug: "swimming-pool", title: "Swimming pool" },
+  { id: "swim-changing-room", slug: "changing-room", title: "Changing room" },
   { id: "swim-cap-on", slug: "swim-cap-on", title: "Swim cap on" },
   { id: "swim-goggles", slug: "goggles-on", title: "Goggles on" },
   {
