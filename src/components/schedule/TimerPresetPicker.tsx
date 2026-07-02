@@ -36,18 +36,32 @@ export function TimerPresetPicker({
       )}
     >
       {allowDefault ? (
-        <button
-          type="button"
-          onClick={() => onChange(undefined)}
-          className={cn(
-            "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
-            value === undefined
-              ? "border-sage/40 bg-sage/10 text-sage"
-              : "border-ink/10 bg-white text-ink-subtle",
-          )}
-        >
-          {routineTimerUseDefaultLabel(lang)}
-        </button>
+        <>
+          <button
+            type="button"
+            onClick={() => onChange(undefined)}
+            className={cn(
+              "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
+              value === undefined
+                ? "border-sage/40 bg-sage/10 text-sage"
+                : "border-ink/10 bg-white text-ink-subtle",
+            )}
+          >
+            {routineTimerUseDefaultLabel(lang)}
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(0)}
+            className={cn(
+              "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
+              value === 0
+                ? "border-sage/40 bg-sage/10 text-sage"
+                : "border-ink/10 bg-white text-ink-subtle",
+            )}
+          >
+            {routineTimerOffLabel(lang)}
+          </button>
+        </>
       ) : (
         <button
           type="button"

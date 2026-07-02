@@ -7,12 +7,17 @@ function lc(s: string): string {
   return s.toLowerCase();
 }
 
-/** Map a playback step to the digital WOW / Focus First & Then card shell. */
+/**
+ * Map a playback step to the digital WOW / Focus First & Then card shell.
+ * Each card gets its own resolved timer (or none) — steps can differ independently.
+ */
 export function routineStepToGeneratedPixtoCard(
   step: RoutineStep,
   routine?: Pick<Routine, "defaultTimerSec">,
 ): GeneratedPixtoCardProps {
   const timerSec = resolveStepTimerSec(step, routine);
+  const timerFields =
+    typeof timerSec === "number" && timerSec > 0 ? { timerSec } : {};
   const gp = step.generatedPixto;
   if (gp) {
     return {
@@ -24,7 +29,7 @@ export function routineStepToGeneratedPixtoCard(
       cardType: gp.cardType,
       focusIllustrationScale: gp.focusIllustrationScale,
       focusIllustrationUrl: gp.focusIllustrationUrl,
-      timerSec,
+      ...timerFields,
     };
   }
 
@@ -34,6 +39,6 @@ export function routineStepToGeneratedPixtoCard(
     title: lc(step.title),
     category: "core",
     categoryColour,
-    timerSec,
+    ...timerFields,
   };
 }

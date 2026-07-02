@@ -160,9 +160,11 @@ export function RoutineNewClient({
           title: row.label,
           imageUrl: row.imageUrl || undefined,
           ...(row.generatedPixto ? { generatedPixto: row.generatedPixto } : {}),
-          ...(row.timerSec && row.timerSec > 0
-            ? { durationHintSec: row.timerSec }
-            : {}),
+          ...(row.timerSec === 0
+            ? { durationHintSec: 0 }
+            : row.timerSec && row.timerSec > 0
+              ? { durationHintSec: row.timerSec }
+              : {}),
         },
       ];
     });
