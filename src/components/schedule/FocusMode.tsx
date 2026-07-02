@@ -271,13 +271,13 @@ export function FocusMode({ routine, exitHref }: Props) {
     const thenStep = nextStep ?? steps[nowIndex + 1];
     if (!thenStep) return;
     writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep, routine),
-      second: routineStepToGeneratedPixtoCard(thenStep, routine),
+      first: routineStepToGeneratedPixtoCard(nowStep),
+      second: routineStepToGeneratedPixtoCard(thenStep),
       routineHref: exitHref,
     });
     setSheet(null);
     router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
-  }, [nowStep, nextStep, steps, nowIndex, exitHref, router, routine]);
+  }, [nowStep, nextStep, steps, nowIndex, exitHref, router]);
 
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 
@@ -304,9 +304,7 @@ export function FocusMode({ routine, exitHref }: Props) {
     ? resolveCategoryBackCardUrlForStep(nowStep)
     : undefined;
 
-  const savedTimerSec = nowStep
-    ? resolveStepTimerSec(nowStep, routine)
-    : undefined;
+  const savedTimerSec = nowStep ? resolveStepTimerSec(nowStep) : undefined;
   const activeTimerSec =
     sessionTimerSec === 0
       ? undefined

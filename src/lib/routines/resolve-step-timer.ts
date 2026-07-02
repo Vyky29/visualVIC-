@@ -1,22 +1,19 @@
-import type { Routine, RoutineStep } from "@/lib/types/routine";
+import type { RoutineStep } from "@/lib/types/routine";
 
-/** Explicit “no timer” on this step — skips routine default. */
+/** Explicit “no timer” on this step. */
 export function isStepTimerExplicitlyOff(step: RoutineStep): boolean {
   return step.durationHintSec === 0;
 }
 
-/** Seconds for the countdown on this step, if any. Step override wins over routine default. */
-export function resolveStepTimerSec(
-  step: RoutineStep,
-  routine?: Pick<Routine, "defaultTimerSec">,
-): number | undefined {
+/**
+ * Optional per-step countdown (seconds). Only set when the step has an explicit
+ * duration — never inherited from a routine-wide default.
+ */
+export function resolveStepTimerSec(step: RoutineStep): number | undefined {
   if (isStepTimerExplicitlyOff(step)) return undefined;
 
   const stepSec = step.durationHintSec;
   if (typeof stepSec === "number" && stepSec > 0) return stepSec;
-
-  const routineSec = routine?.defaultTimerSec;
-  if (typeof routineSec === "number" && routineSec > 0) return routineSec;
 
   return undefined;
 }

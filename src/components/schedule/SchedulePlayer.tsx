@@ -221,9 +221,7 @@ export function SchedulePlayer({
   const [showTimerPanel, setShowTimerPanel] = useState(false);
   const [sessionTimerSec, setSessionTimerSec] = useState<number | undefined>();
 
-  const savedTimerSec = nowStep
-    ? resolveStepTimerSec(nowStep, routine)
-    : undefined;
+  const savedTimerSec = nowStep ? resolveStepTimerSec(nowStep) : undefined;
   const activeTimerSec =
     sessionTimerSec === 0
       ? undefined
@@ -275,8 +273,8 @@ export function SchedulePlayer({
     const thenStep = nextStep ?? steps[nowIndex + 1];
     if (!thenStep) return;
     writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep, routine),
-      second: routineStepToGeneratedPixtoCard(thenStep, routine),
+      first: routineStepToGeneratedPixtoCard(nowStep),
+      second: routineStepToGeneratedPixtoCard(thenStep),
       routineHref: `/player/${routine.id}`,
     });
     router.push(`/first-then?from=${encodeURIComponent(`/player/${routine.id}`)}`);

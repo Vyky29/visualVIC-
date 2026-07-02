@@ -5,24 +5,18 @@ import {
   ROUTINE_TIMER_PRESETS_SEC,
   timerPresetLabel,
 } from "@/lib/routines/resolve-step-timer";
-import {
-  routineTimerOffLabel,
-  routineTimerUseDefaultLabel,
-} from "@/lib/i18n/app-shell-locale";
+import { routineTimerOffLabel } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 type Props = {
   value: number | undefined;
   onChange: (value: number | undefined) => void;
-  /** Step editor: allow reverting to routine default. */
-  allowDefault?: boolean;
   compact?: boolean;
 };
 
 export function TimerPresetPicker({
   value,
   onChange,
-  allowDefault = false,
   compact = false,
 }: Props) {
   const lang = useCardUiLanguage();
@@ -35,47 +29,18 @@ export function TimerPresetPicker({
         compact ? "max-w-[14rem]" : undefined,
       )}
     >
-      {allowDefault ? (
-        <>
-          <button
-            type="button"
-            onClick={() => onChange(undefined)}
-            className={cn(
-              "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
-              value === undefined
-                ? "border-sage/40 bg-sage/10 text-sage"
-                : "border-ink/10 bg-white text-ink-subtle",
-            )}
-          >
-            {routineTimerUseDefaultLabel(lang)}
-          </button>
-          <button
-            type="button"
-            onClick={() => onChange(0)}
-            className={cn(
-              "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
-              value === 0
-                ? "border-sage/40 bg-sage/10 text-sage"
-                : "border-ink/10 bg-white text-ink-subtle",
-            )}
-          >
-            {routineTimerOffLabel(lang)}
-          </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          onClick={() => onChange(undefined)}
-          className={cn(
-            "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
-            value === undefined
-              ? "border-sage/40 bg-sage/10 text-sage"
-              : "border-ink/10 bg-white text-ink-subtle",
-          )}
-        >
-          {routineTimerOffLabel(lang)}
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => onChange(undefined)}
+        className={cn(
+          "rounded-full border px-2.5 py-1 text-[11px] font-medium transition active:scale-[0.98]",
+          value === undefined
+            ? "border-sage/40 bg-sage/10 text-sage"
+            : "border-ink/10 bg-white text-ink-subtle",
+        )}
+      >
+        {routineTimerOffLabel(lang)}
+      </button>
       {ROUTINE_TIMER_PRESETS_SEC.map((sec) => (
         <button
           key={sec}

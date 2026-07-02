@@ -34,7 +34,6 @@ import {
   routineNewSaveButton,
   routineNewStepOrdinal,
   routineNewStepsHeading,
-  routineTimerDefaultLabel,
   routineTimerStepLabel,
   shellHeaderTitle,
   tailoredAddCardsFromLibrary,
@@ -55,7 +54,7 @@ type DraftRow = {
   label: string;
   imageUrl: string;
   generatedPixto?: GeneratedPixtoRoutineStepData;
-  /** Per-step timer override (seconds). Undefined = use routine default. */
+  /** Optional per-step timer (seconds). Undefined = no timer on this step. */
   timerSec?: number;
 };
 
@@ -80,7 +79,6 @@ export function RoutineNewClient({
   const { addRoutine, replaceRoutine, routines, hydrated } = useCustomRoutines();
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [name, setName] = useState("My routine");
-  const [defaultTimerSec, setDefaultTimerSec] = useState<number | undefined>();
   const [hydratedDraft, setHydratedDraft] = useState(false);
   const isEdit = Boolean(editRoutineId);
 
@@ -91,7 +89,6 @@ export function RoutineNewClient({
       const existing = routines.find((r) => r.id === editRoutineId);
       if (existing) {
         setName(existing.name);
-        setDefaultTimerSec(existing.defaultTimerSec);
         setRows(
           existing.steps.map((step) => ({
             pickId: step.id,
@@ -101,7 +98,10 @@ export function RoutineNewClient({
               step.generatedPixto?.illustrationUrl ??
               "",
             generatedPixto: step.generatedPixto,
-            timerSec: step.durationHintSec,
+            timerSec:
+              typeof step.durationHintSec === "number" && step.durationHintSec > 0
+                ? step.durationHintSec
+                : undefined,
           })),
         );
         setHydratedDraft(true);
@@ -182,9 +182,6 @@ export function RoutineNewClient({
       name: name.trim(),
       description: routineFromLibraryDescription(cardUiLang),
       tags: [...tags],
-      ...(defaultTimerSec && defaultTimerSec > 0
-        ? { defaultTimerSec }
-        : {}),
       homePreviewImageUrl: resolveFeaturedRoutineHomePreviewUrl({
         id,
         name: name.trim(),
@@ -202,7 +199,6 @@ export function RoutineNewClient({
     addRoutine,
     canSave,
     cardUiLang,
-    defaultTimerSec,
     dayCentreMixedSchedule,
     editRoutineId,
     name,
@@ -290,16 +286,6 @@ export function RoutineNewClient({
           />
         </label>
 
-        <div className="space-y-2 px-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-faint">
-            {routineTimerDefaultLabel(cardUiLang)}
-          </span>
-          <TimerPresetPicker
-            value={defaultTimerSec}
-            onChange={setDefaultTimerSec}
-          />
-        </div>
-
         <section className="space-y-2">
           <h2 className="px-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-faint">
             {routineNewStepsHeading(rows.length, cardUiLang)}
@@ -337,7 +323,6 @@ export function RoutineNewClient({
                       <TimerPresetPicker
                         value={row.timerSec}
                         onChange={(sec) => setRowTimer(index, sec)}
-                        allowDefault={Boolean(defaultTimerSec && defaultTimerSec > 0)}
                         compact
                       />
                     </div>

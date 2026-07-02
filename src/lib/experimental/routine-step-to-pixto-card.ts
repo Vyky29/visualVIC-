@@ -1,6 +1,6 @@
 import type { GeneratedPixtoCardProps } from "@/components/experimental/GeneratedPixtoCard";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
-import type { Routine, RoutineStep } from "@/lib/types/routine";
+import type { RoutineStep } from "@/lib/types/routine";
 import { stepCategoryOutlineColour } from "@/lib/utils/routine-accent";
 
 function lc(s: string): string {
@@ -9,13 +9,12 @@ function lc(s: string): string {
 
 /**
  * Map a playback step to the digital WOW / Focus First & Then card shell.
- * Each card gets its own resolved timer (or none) — steps can differ independently.
+ * Each card keeps its own optional timer when set on that step only.
  */
 export function routineStepToGeneratedPixtoCard(
   step: RoutineStep,
-  routine?: Pick<Routine, "defaultTimerSec">,
 ): GeneratedPixtoCardProps {
-  const timerSec = resolveStepTimerSec(step, routine);
+  const timerSec = resolveStepTimerSec(step);
   const timerFields =
     typeof timerSec === "number" && timerSec > 0 ? { timerSec } : {};
   const gp = step.generatedPixto;
