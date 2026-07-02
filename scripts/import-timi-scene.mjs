@@ -50,13 +50,21 @@ async function main() {
     fs.copyFileSync(src, rawLocal);
   }
 
-  const fitOpts = {
-    fit: "cover-padded",
-    minPad: 0,
-    trim: true,
-    trimThreshold: 18,
-    position: "centre",
-  };
+  const fitOpts =
+    slug === "timis-car"
+      ? {
+          fit: "contain",
+          minPad: 28,
+          trim: false,
+          position: "centre",
+        }
+      : {
+          fit: "cover-padded",
+          minPad: 0,
+          trim: true,
+          trimThreshold: 18,
+          position: "centre",
+        };
 
   await fitIllustrationToCard(src, path.join(scenesDir, `${slug}.png`), fitOpts);
   await fitIllustrationToCard(src, path.join(scenesDir, `${slug}-focus.png`), {
