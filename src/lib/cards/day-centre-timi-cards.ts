@@ -80,6 +80,12 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
   },
   { id: "dct-foam", slug: "timi-foam", title: "Foam" },
   { id: "dct-screwdriver", slug: "timi-screwdriver", title: "Screwdriver" },
+  {
+    id: "dct-timis-car",
+    slug: "timis-car",
+    title: "Timi's Car",
+    source: "timi-photo",
+  },
 ] as const;
 
 /** Stock routine — Timi's day-centre order. */
@@ -113,7 +119,7 @@ export const DAY_CENTRE_TIMI_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep[] = [
     source: "timi-photo",
   },
   { id: "dcts-sensory-room-pm", slug: "sensory-room", title: "Sensory room" },
-  { id: "dcts-timis-car", slug: "cab", title: "Timi's Car" },
+  { id: "dcts-timis-car", slug: "timis-car", title: "Timi's Car", source: "timi-photo" },
   { id: "dcts-home", slug: "home", title: "Home" },
 ] as const;
 

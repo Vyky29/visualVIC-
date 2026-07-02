@@ -324,6 +324,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     en: "timi vocational activity",
     es: "timi actividad vocacional",
   },
+  "timis-car": { en: "timi's car", es: "coche de timi" },
   "yellow-bib-walk": {
     en: "yellow bib walk",
     es: "caminar con chaleco amarillo",
