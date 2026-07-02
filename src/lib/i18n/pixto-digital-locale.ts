@@ -131,6 +131,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
   walk: { en: "walk", es: "caminar" },
   "sit-down": { en: "sit down", es: "sentarse" },
   music: { en: "music", es: "música" },
+  headphones: { en: "headphones", es: "auriculares" },
   cafe: { en: "cafe", es: "cafetería" },
   park: { en: "park", es: "parque" },
   "park-and-swing": { en: "park and swing", es: "parque y columpio" },

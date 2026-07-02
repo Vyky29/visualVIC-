@@ -456,7 +456,7 @@ export const DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
 function ikramDailyItemsGeneratedCardProps(step: IkramDailyStep) {
   return {
     illustrationUrl: dayCentreIkramDailyItemsImageUrlForStep(step),
-    title: lc(step.title),
+    title: lc(step.itemsTitle ?? step.title),
     category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
@@ -468,7 +468,7 @@ function ikramDailyAvatarGeneratedCardProps(step: IkramDailyStep) {
     dayCentreIkramDailyAvatarFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreIkramDailyAvatarImageUrlForStep(step),
-    title: lc(step.title),
+    title: lc(step.avatarTitle ?? step.title),
     category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),

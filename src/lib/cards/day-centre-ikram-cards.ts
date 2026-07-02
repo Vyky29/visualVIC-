@@ -49,6 +49,7 @@ export const DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS = new Set([
   "bean-bag",
   "birthday-cake",
   "birthday-party",
+  "headphones",
 ]);
 
 /** Schedule Player + Home tile — personalised day centre (avatar art). */
@@ -86,6 +87,10 @@ export type IkramDailyStep = {
   id: string;
   slug: string;
   title: string;
+  /** Items routine card title when it differs from avatar (e.g. Headphones vs Music). */
+  itemsTitle?: string;
+  /** Avatar routine card title when it differs from items. */
+  avatarTitle?: string;
   items: IkramDailyArtSource;
   avatar: IkramDailyArtSource;
 };
@@ -147,7 +152,7 @@ function ikramItemsLibraryStepFromDaily(
   return {
     id: step.id.replace(/^dci-dc-/, "dcii-"),
     slug: itemSlug,
-    title: step.title,
+    title: step.itemsTitle ?? step.title,
     library: ikramDailyArtLibrary(step.items),
   };
 }
@@ -206,10 +211,12 @@ export const DAY_CENTRE_IKRAM_PECS_GRID_SEQUENCE: readonly DayCentreIkramStep[] 
  */
 export const DAY_CENTRE_IKRAM_DAY_CENTRE_SEQUENCE: readonly IkramDailyStep[] = [
   {
-    id: "dci-dc-music",
-    slug: "music",
-    title: "Music",
-    items: { type: "ikram-items", slug: "music" },
+    id: "dci-dc-headphones",
+    slug: "headphones",
+    title: "Headphones",
+    itemsTitle: "Headphones",
+    avatarTitle: "Music",
+    items: { type: "ikram-items", slug: "headphones" },
     avatar: { type: "ikram-scene", slug: "music" },
   },
   {
