@@ -652,7 +652,7 @@ export const mockRoutines: Routine[] = [
     id: "timi-day-centre-items",
     name: DAY_CENTRE_TIMI_ITEMS_ROUTINE_NAME,
     description:
-      "Timi's day-centre routine — sensory room, circle time, motor skills, swimming pool, snack, puzzles and home (items)",
+      "Timi's day-centre routine — sensory room, motor skills, swimming pool, snack, puzzles and home (items)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("sensory-room"),
     steps: routineStepsFromGeneratedCardProps(
