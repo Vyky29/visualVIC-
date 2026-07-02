@@ -22,6 +22,17 @@ export function isPixtoLearnLibraryStockImageUrl(
 }
 
 /**
+ * Object-only item cards (Ikram items, Emmanuel icons, etc.) — centred contain, no zoom crop.
+ */
+export function isPixtoLearnItemObjectCardUrl(
+  url: string | undefined,
+): boolean {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return u.includes("/items/") || u.includes("/icons/");
+}
+
+/**
  * Illustration-only assets (531×648) for HTML `GeneratedPixtoCard` shells — participant
  * scenes, focus variants, library stock, etc. Must use `object-contain`, not cover crop.
  */
@@ -33,17 +44,21 @@ export function isPixtoLearnIllustrationOnlyUrl(url: string | undefined): boolea
     u.includes("/scenes-2d/") ||
     u.includes("/cards/day centre/general/") ||
     u.includes("/cards/day%20centre/general/") ||
+    u.includes("/cards/day centre/timi/") ||
+    u.includes("/cards/day%20centre/timi/") ||
     u.includes("/cards/core/finish3d.png") ||
+    isPixtoLearnItemObjectCardUrl(url) ||
     isPixtoLearnLibraryStockImageUrl(url)
   );
 }
 
-/** Schedule / Focus contain zoom — skip full WOW pack cards (embedded title strip). */
+/** Schedule / Focus contain zoom — skip full WOW pack cards and tall object items. */
 export function shouldApplyDigitalIllustrationContainZoom(
   url: string | undefined,
 ): boolean {
   if (!url) return false;
   if (isPixtoLearnFullBleedCardUrl(url)) return false;
+  if (isPixtoLearnItemObjectCardUrl(url)) return false;
   return isPixtoLearnIllustrationOnlyUrl(url);
 }
 
