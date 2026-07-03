@@ -2,8 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="theme-color" content="#1b3a5c" />
+  <script>
+    /* Wide Android / smart-board displays often report a phone-width layout viewport — expand before paint. */
+    (function syncCircleTimeViewport() {
+      function layoutWidth() {
+        var sw = window.screen && (window.screen.availWidth || window.screen.width) || 0;
+        var sh = window.screen && (window.screen.availHeight || window.screen.height) || 0;
+        var vv = window.visualViewport && window.visualViewport.width ? window.visualViewport.width : 0;
+        var iw = window.innerWidth || document.documentElement.clientWidth || 0;
+        /* Landscape-mounted boards may still expose the short edge as device-width. */
+        return Math.max(vv, iw, sw, sh);
+      }
+
+      function apply() {
+        var sw = window.screen && (window.screen.availWidth || window.screen.width) || 0;
+        var sh = window.screen && (window.screen.availHeight || window.screen.height) || 0;
+        var layoutW = layoutWidth();
+        var isWideDisplay = layoutW >= 740 || Math.max(sw, sh) >= 1024;
+        if (!isWideDisplay) return;
+        var meta = document.querySelector('meta[name="viewport"]');
+        if (!meta) return;
+        meta.setAttribute(
+          "content",
+          "width=" + Math.round(layoutW) + ", initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
+        );
+        document.documentElement.style.setProperty("--layout-w", Math.round(layoutW) + "px");
+        document.documentElement.classList.add("is-wide-display");
+      }
+
+      apply();
+      document.addEventListener("DOMContentLoaded", apply);
+      window.addEventListener("load", apply);
+      window.addEventListener("orientationchange", function () { setTimeout(apply, 200); });
+      window.addEventListener("resize", apply);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", apply);
+      }
+    })();
+  </script>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <title>Circle Time</title>
@@ -35,23 +73,43 @@
 
     *, *::before, *::after { box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      width: 100%;
+      min-width: 100%;
+      min-height: 100%;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
     body {
       margin: 0;
+      width: 100%;
+      min-width: 100%;
+      max-width: none;
       font-family: var(--font);
       font-size: 18px;
       line-height: 1.5;
       color: var(--navy);
       background: var(--grey-50);
       overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body:has(#pre-show:not(.hidden)) {
+      background: var(--navy-dark);
     }
 
     /* Full-screen session pages */
     #session-app {
       display: flex;
       flex-direction: column;
+      width: 100%;
+      max-width: none;
+      min-width: 100%;
       height: 100dvh;
+      min-height: 100dvh;
       overflow: hidden;
     }
 
@@ -2056,6 +2114,137 @@
       display: block;
     }
 
+    /* ClubSENsational animated mark — infinity + orbiting balls */
+    .cs-logo-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1.25rem, 3vw, 1.75rem);
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .cs-logo-card-compact {
+      margin: 0;
+      padding: 6px 10px;
+      gap: 0;
+      box-shadow: none;
+      border-radius: var(--radius-sm);
+    }
+
+    .cs-infinity-anim {
+      position: relative;
+      width: clamp(118px, 26vw, 152px);
+      height: clamp(58px, 13vw, 74px);
+      flex-shrink: 0;
+    }
+
+    .cs-logo-card-compact .cs-infinity-anim {
+      width: clamp(72px, 14vw, 88px);
+      height: clamp(36px, 7vw, 44px);
+    }
+
+    .cs-infinity-graphic {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .cs-ball-orbit {
+      position: absolute;
+      border-radius: 50%;
+      animation: cs-logo-orbit 2.6s linear infinite;
+      pointer-events: none;
+    }
+
+    .cs-ball-orbit-left {
+      left: 12%;
+      top: 18%;
+      width: 38%;
+      height: 64%;
+    }
+
+    .cs-ball-orbit-right {
+      right: 12%;
+      top: 18%;
+      width: 38%;
+      height: 64%;
+      animation-direction: reverse;
+      animation-duration: 2.1s;
+    }
+
+    .cs-logo-card-compact .cs-ball-orbit-left {
+      left: 10%;
+      top: 16%;
+    }
+
+    .cs-logo-card-compact .cs-ball-orbit-right {
+      right: 10%;
+      top: 16%;
+    }
+
+    .cs-ball {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: clamp(9px, 2vw, 12px);
+      height: clamp(9px, 2vw, 12px);
+      margin-left: calc(clamp(9px, 2vw, 12px) / -2);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+    }
+
+    .cs-ball-orbit-left .cs-ball {
+      background: #2c364b;
+    }
+
+    .cs-ball-orbit-right .cs-ball {
+      background: #e9b93c;
+    }
+
+    @keyframes cs-logo-orbit {
+      to { transform: rotate(360deg); }
+    }
+
+    .cs-wordmark {
+      margin: 0;
+      font-size: clamp(1.28rem, 3.8vw, 1.82rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #2c364b;
+    }
+
+    .cs-wordmark .sen {
+      color: #e9b93c;
+      font-weight: 700;
+    }
+
+    .cs-tagline {
+      margin: 0;
+      font-size: clamp(0.72rem, 2vw, 0.88rem);
+      font-weight: 500;
+      color: #2c364b;
+      letter-spacing: 0.01em;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cs-ball-orbit {
+        animation: none;
+      }
+      .cs-ball-orbit-left .cs-ball {
+        top: 8%;
+        left: 72%;
+      }
+      .cs-ball-orbit-right .cs-ball {
+        top: 72%;
+        left: 28%;
+      }
+    }
+
     .skip-link {
       position: absolute;
       left: -9999px;
@@ -2100,6 +2289,16 @@
       background: var(--white);
       padding: 6px 10px;
       border-radius: var(--radius-sm);
+    }
+
+    .header-logo-wrap .cs-logo-card-compact {
+      height: clamp(44px, 7vh, 64px);
+      justify-content: center;
+    }
+
+    .header-logo-wrap .cs-wordmark,
+    .header-logo-wrap .cs-tagline {
+      display: none;
     }
 
     .header-center {
@@ -3025,7 +3224,16 @@
 
     .pre-show {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      min-width: 100vw;
+      min-width: 100dvw;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
       z-index: 500;
       background: linear-gradient(160deg, var(--navy-dark) 0%, #0a1628 45%, var(--navy) 100%);
       color: var(--white);
@@ -3049,8 +3257,35 @@
     .pre-show-inner {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: min(900px, 96vw);
       width: 100%;
+    }
+
+    @media (min-width: 740px) {
+      .pre-show-inner {
+        max-width: min(1200px, 94vw);
+      }
+
+      .pre-show-title {
+        font-size: clamp(2.4rem, 5vw, 3.6rem);
+      }
+
+      .countdown-start-btn,
+      .pre-show-skip {
+        min-height: 56px;
+        font-size: 1.1rem;
+        padding: 0.85rem 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) and (orientation: landscape) {
+      .pre-show-inner {
+        max-width: min(1400px, 92vw);
+      }
+
+      .pre-show {
+        padding: 2.5rem 3rem;
+      }
     }
 
     .pre-show-brand {
@@ -3232,13 +3467,63 @@
       border-color: var(--orange);
     }
 
-    .session-app { min-height: 100dvh; }
+    .session-app { min-height: 100dvh; width: 100%; max-width: none; }
+
+    button,
+    .btn,
+    .countdown-start-btn,
+    .pre-show-skip,
+    .participant-card,
+    .feelings-card,
+    .activity-chip {
+      touch-action: manipulation;
+    }
+
+    .draggable-avatar,
+    .day-chip,
+    .dom-chip,
+    .month-chip,
+    .year-chip,
+    .activity-dock-chip,
+    body.is-dragging {
+      touch-action: none;
+    }
 
     #register { scroll-margin-top: 1rem; }
 
     .back-to-waiting {
       font-size: 0.85rem;
       opacity: 0.9;
+    }
+
+    html.is-wide-display .screen-page {
+      padding: 0.75rem 1.5rem;
+    }
+
+    html.is-wide-display .screen-page.scrollable {
+      padding: 1.25rem 2rem 1.75rem;
+    }
+
+    html.is-wide-display .screen-footer {
+      padding: 1rem 2rem;
+    }
+
+    html.is-wide-display .register-zones {
+      grid-template-columns: minmax(120px, 0.42fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    html.is-wide-display .draggable-avatar {
+      width: clamp(130px, 14vw, 180px);
+    }
+
+    html.is-wide-display .drag-ghost {
+      width: clamp(130px, 14vw, 180px);
+    }
+
+    html.is-wide-display .drag-ghost .avatar-wrap {
+      width: clamp(120px, 12vw, 160px);
+      height: clamp(120px, 12vw, 160px);
     }
 
     @media (max-width: 480px) {
@@ -3254,13 +3539,7 @@
   <!-- Pre-show waiting screen (cinema style) -->
   <div id="pre-show" class="pre-show" role="region" aria-label="Waiting for Circle Time">
     <div class="pre-show-inner">
-      <img
-        src="/assets/clubsensational-logo.webp"
-        alt="ClubSENsational"
-        class="pre-show-logo"
-        width="280"
-        height="80"
-      />
+      <div id="pre-show-logo-slot" class="pre-show-logo-slot"></div>
       <h1 class="pre-show-title" id="pre-show-title">Circle Time</h1>
       <p class="pre-show-wait" id="pre-show-wait">Sit down and wait</p>
 
@@ -3295,11 +3574,7 @@
   <header>
     <div class="header-inner">
       <div class="header-logo-wrap">
-        <img
-          src="/assets/clubsensational-logo.webp"
-          alt="ClubSENsational"
-          class="header-logo-main"
-        />
+        <div id="header-logo-slot"></div>
       </div>
       <div class="header-center">
         <h1>Circle Time</h1>
@@ -3853,6 +4128,43 @@
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
+    const CLUBSENSATIONAL_INFINITY_SVG = `
+      <svg class="cs-infinity-graphic" viewBox="0 0 140 70" aria-hidden="true">
+        <path d="M70 35 C70 17 52 8 36 16 C18 25 16 48 34 57 C48 64 70 52 70 35" fill="none" stroke="#2c364b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M70 35 C70 53 88 62 104 54 C122 45 124 22 106 13 C92 6 70 18 70 35" fill="none" stroke="#e9b93c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="cs-ball-orbit cs-ball-orbit-left"><span class="cs-ball"></span></div>
+      <div class="cs-ball-orbit cs-ball-orbit-right"><span class="cs-ball"></span></div>
+    `;
+
+    function buildClubSensationalLogoMark(compact) {
+      const card = el("div", {
+        className: `cs-logo-card${compact ? " cs-logo-card-compact" : ""}`,
+        role: "img",
+        "aria-label": "clubSENsational Autism Consultancy Services",
+      });
+      const anim = el("div", { className: "cs-infinity-anim" });
+      anim.innerHTML = CLUBSENSATIONAL_INFINITY_SVG;
+      card.appendChild(anim);
+      if (!compact) {
+        const wordmark = el("p", { className: "cs-wordmark" });
+        wordmark.innerHTML = 'club<span class="sen">SEN</span>sational';
+        card.appendChild(wordmark);
+        card.appendChild(el("p", {
+          className: "cs-tagline",
+          textContent: "Autism Consultancy Services",
+        }));
+      }
+      return card;
+    }
+
+    function mountClubSensationalLogos() {
+      const preSlot = document.getElementById("pre-show-logo-slot");
+      const headerSlot = document.getElementById("header-logo-slot");
+      if (preSlot) preSlot.appendChild(buildClubSensationalLogoMark(false));
+      if (headerSlot) headerSlot.appendChild(buildClubSensationalLogoMark(true));
+    }
+
     /* Pre-show countdown — announcements at 3, 2, 1 minutes (or fewer if shorter countdown) */
     const COUNTDOWN_OPTIONS = [3, 2, 1];
     const DEFAULT_COUNTDOWN_MINUTES = 3;
@@ -4131,6 +4443,35 @@
     }
 
 
+    function getFullscreenElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+
+    function requestAppFullscreen() {
+      const el = document.documentElement;
+      const fn =
+        el.requestFullscreen ||
+        el.webkitRequestFullscreen ||
+        el.mozRequestFullScreen ||
+        el.msRequestFullscreen;
+      if (!fn) return Promise.reject(new Error("Fullscreen not supported"));
+      const result = fn.call(el);
+      if (result && typeof result.then === "function") return result;
+      return Promise.resolve();
+    }
+
+    function exitAppFullscreen() {
+      const fn =
+        document.exitFullscreen ||
+        document.webkitExitFullscreen ||
+        document.mozCancelFullScreen ||
+        document.msExitFullscreen;
+      if (!fn) return Promise.reject(new Error("Fullscreen not supported"));
+      const result = fn.call(document);
+      if (result && typeof result.then === "function") return result;
+      return Promise.resolve();
+    }
+
     function initPreShow() {
       document.querySelectorAll(".countdown-start-btn[data-countdown]").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -4143,10 +4484,14 @@
       document.getElementById("back-to-waiting").addEventListener("click", showWaitingScreen);
 
       document.getElementById("toggle-fullscreen").addEventListener("click", () => {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen?.().catch(() => {});
+        if (!getFullscreenElement()) {
+          requestAppFullscreen()
+            .then(() => {
+              window.scrollTo(0, 1);
+            })
+            .catch(() => {});
         } else {
-          document.exitFullscreen?.();
+          exitAppFullscreen().catch(() => {});
         }
       });
 
@@ -6274,6 +6619,7 @@
     updateHeaderDate();
     initPreShow();
     initScreenNav();
+    mountClubSensationalLogos();
     document.getElementById("feelings-shuffle-btn").addEventListener("click", reshuffleFeelingsTurn);
     renderAll();
   </script>
