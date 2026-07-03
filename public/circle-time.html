@@ -2554,14 +2554,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(0.65rem, 1.6vh, 1rem);
+      gap: clamp(0.55rem, 1.4vh, 0.85rem);
       min-height: 0;
       width: 100%;
     }
 
     .turn-hero {
       text-align: center;
-      padding: clamp(0.85rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
+      padding: clamp(0.65rem, 1.6vw, 1rem) clamp(0.85rem, 2vw, 1.25rem);
       background: linear-gradient(180deg, var(--orange-soft) 0%, #fff7ed 100%);
       border: 3px solid var(--orange);
       border-radius: var(--radius);
@@ -2590,9 +2590,9 @@
     }
 
     .turn-hero .avatar-wrap {
-      width: clamp(96px, 15vw, 128px);
-      height: clamp(96px, 15vw, 128px);
-      margin: 0 auto 0.55rem;
+      width: clamp(72px, 11vw, 96px);
+      height: clamp(72px, 11vw, 96px);
+      margin: 0 auto 0.45rem;
       border-color: var(--orange);
       border-width: 4px;
     }
@@ -2603,18 +2603,85 @@
 
     .turn-hero .participant-name {
       margin: 0;
-      font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
       font-weight: 800;
       color: var(--navy);
       line-height: 1.15;
     }
 
     .turn-hero-hint {
-      margin: 0.45rem 0 0;
-      font-size: clamp(0.88rem, 2vw, 1rem);
+      margin: 0.35rem 0 0;
+      font-size: clamp(0.82rem, 1.85vw, 0.95rem);
       font-weight: 600;
       color: var(--grey-500);
       line-height: 1.35;
+    }
+
+    .turn-music-stage {
+      flex: 1;
+      min-height: 0;
+      width: min(1120px, 98vw);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1.2vh, 0.75rem);
+    }
+
+    .turn-youtube-panel {
+      position: relative;
+      flex: 1;
+      min-height: clamp(240px, 42vh, 480px);
+      width: 100%;
+      background: #0f172a;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 3px solid var(--grey-200);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .turn-youtube-panel iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .turn-youtube-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 1.25rem;
+      text-align: center;
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: clamp(0.95rem, 2.1vw, 1.08rem);
+      line-height: 1.4;
+    }
+
+    .turn-youtube-placeholder svg {
+      width: clamp(42px, 7vw, 56px);
+      height: clamp(42px, 7vw, 56px);
+      color: #ef4444;
+      opacity: 0.9;
+    }
+
+    .turn-youtube-open-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.15rem;
+      font-size: clamp(0.82rem, 1.8vw, 0.92rem);
+      font-weight: 800;
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .turn-youtube-open-link:hover {
+      text-decoration: underline;
     }
 
     .turn-music-options {
@@ -2622,19 +2689,63 @@
       flex-wrap: wrap;
       gap: clamp(0.45rem, 1.2vw, 0.65rem);
       justify-content: center;
-      width: min(680px, 96vw);
+      width: 100%;
       flex-shrink: 0;
     }
 
     .turn-music-options .btn {
-      font-size: clamp(0.88rem, 1.9vw, 1.02rem);
+      font-size: clamp(0.84rem, 1.85vw, 0.98rem);
       font-weight: 800;
-      padding: clamp(0.55rem, 1.4vw, 0.7rem) clamp(0.85rem, 2vw, 1.1rem);
+      padding: clamp(0.5rem, 1.3vw, 0.65rem) clamp(0.8rem, 1.8vw, 1rem);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .turn-music-options .btn.is-active {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+      box-shadow: 0 0 0 3px rgba(232, 118, 42, 0.2);
+    }
+
+    .turn-music-options .btn-youtube-mark {
+      display: inline-flex;
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 0.2rem;
+      background: #ef4444;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 900;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .turn-music-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .turn-music-actions .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange-dark);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .turn-music-actions .btn-primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     .turn-queue-section {
-      flex: 1;
-      min-height: 0;
+      flex-shrink: 0;
+      max-height: clamp(140px, 22vh, 200px);
       width: min(1120px, 98vw);
       display: flex;
       flex-direction: column;
@@ -2656,9 +2767,9 @@
       overflow-y: auto;
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: clamp(0.5rem, 1.2vw, 0.75rem);
+      gap: clamp(0.4rem, 1vw, 0.6rem);
       align-content: start;
-      padding: 0.15rem 0 0.35rem;
+      padding: 0.1rem 0 0.25rem;
     }
 
     @media (max-width: 900px) {
@@ -3422,7 +3533,7 @@
         <span class="section-num" aria-hidden="true">11</span>
         <div>
           <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
-          <p>Random order — everyone plus 2 staff. Play music on another screen, then tap a choice.</p>
+          <p>Pick a YouTube option below — it opens here on screen. When they have chosen, tap Next person.</p>
         </div>
       </div>
       <div id="turn-taking-content" class="turn-layout"></div>
@@ -3652,12 +3763,38 @@
       return wrap;
     }
 
-    const MUSIC_OPTIONS = [
-      "Calm music",
-      "Favourite song",
-      "Movement song",
-      "No music today",
+    /**
+     * YouTube music for turn-taking — edit embedUrl / watchUrl for your favourites.
+     * embedUrl loads inside the Circle Time screen (no new window).
+     */
+    const MUSIC_YOUTUBE_OPTIONS = [
+      {
+        id: "calm",
+        label: "Calm music",
+        embedUrl: "https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+      },
+      {
+        id: "movement",
+        label: "Movement song",
+        embedUrl: "https://www.youtube-nocookie.com/embed/MDEJH9uHQiM?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=MDEJH9uHQiM",
+      },
+      {
+        id: "favourite",
+        label: "Favourite songs",
+        embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL8F43D702EA1CD734&rel=0",
+        watchUrl: "https://www.youtube.com/playlist?list=PL8F43D702EA1CD734",
+      },
+      {
+        id: "none",
+        label: "No music today",
+        embedUrl: null,
+        watchUrl: null,
+      },
     ];
+
+    const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
     /* Pre-show countdown — announcements at 3, 2, 1 minutes (or fewer if shorter countdown) */
     const COUNTDOWN_OPTIONS = [3, 2, 1];
@@ -3985,6 +4122,8 @@
       turnStaffIds: [],
       turnCompleted: [],
       turnIndex: 0,
+      turnMusicPersonId: null,
+      turnSelectedMusicId: null,
     };
 
     let currentScreenIndex = 0;
@@ -4594,6 +4733,90 @@
       state.turnStaffIds = built.staffIds;
       state.turnCompleted = [];
       state.turnIndex = 0;
+      state.turnMusicPersonId = null;
+      state.turnSelectedMusicId = null;
+    }
+
+    function getMusicYoutubeOption(id) {
+      return MUSIC_YOUTUBE_OPTIONS.find((opt) => opt.id === id);
+    }
+
+    function ensureTurnMusicState(currentPerson) {
+      if (!currentPerson) {
+        state.turnMusicPersonId = null;
+        state.turnSelectedMusicId = null;
+        return;
+      }
+      if (state.turnMusicPersonId !== currentPerson.id) {
+        state.turnMusicPersonId = currentPerson.id;
+        state.turnSelectedMusicId = null;
+      }
+    }
+
+    function completeCurrentTurnWithMusic() {
+      const current = currentTurnPerson();
+      if (!current || !state.turnSelectedMusicId) return;
+      const option = getMusicYoutubeOption(state.turnSelectedMusicId);
+      state.turnCompleted.push({
+        id: current.id,
+        music: option?.label || state.turnSelectedMusicId,
+        youtubeId: state.turnSelectedMusicId,
+      });
+      state.turnIndex += 1;
+      state.turnMusicPersonId = null;
+      state.turnSelectedMusicId = null;
+      renderTurnTaking();
+      renderSummary();
+    }
+
+    function youtubeEmbedSrc(embedUrl) {
+      if (!embedUrl) return null;
+      const join = embedUrl.includes("?") ? "&" : "?";
+      return `${embedUrl}${join}autoplay=1`;
+    }
+
+    function buildTurnYoutubePanel(selectedMusicId) {
+      const panel = el("div", {
+        className: "turn-youtube-panel",
+        "aria-label": "YouTube music player",
+      });
+      const option = selectedMusicId ? getMusicYoutubeOption(selectedMusicId) : null;
+
+      if (!option || !option.embedUrl) {
+        const placeholder = el("div", { className: "turn-youtube-placeholder" });
+        placeholder.innerHTML = `${YOUTUBE_PLAY_ICON}<span>${option?.id === "none" ? "No music today — tap Next person when ready." : "Tap a YouTube option below to open music here."}</span>`;
+        panel.appendChild(placeholder);
+        return panel;
+      }
+
+      const iframe = el("iframe", {
+        src: youtubeEmbedSrc(option.embedUrl),
+        title: `${option.label} on YouTube`,
+        allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+        allowFullscreen: "true",
+        referrerPolicy: "strict-origin-when-cross-origin",
+      });
+      panel.appendChild(iframe);
+
+      if (option.watchUrl) {
+        const link = el("a", {
+          className: "turn-youtube-open-link",
+          href: option.watchUrl,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          textContent: "Open on YouTube (backup)",
+        });
+        link.style.position = "absolute";
+        link.style.bottom = "0.55rem";
+        link.style.right = "0.65rem";
+        link.style.zIndex = "2";
+        link.style.background = "rgba(15, 23, 42, 0.82)";
+        link.style.padding = "0.35rem 0.55rem";
+        link.style.borderRadius = "var(--radius-sm)";
+        panel.appendChild(link);
+      }
+
+      return panel;
     }
 
     /* ============================================================
@@ -5754,34 +5977,55 @@
         hero.appendChild(el("p", {
           className: "turn-hero-hint",
           textContent: current.role === "staff"
-            ? "Staff turn — play music on the other screen, then tap a choice below."
-            : "Play music on the other screen, then tap a choice below.",
+            ? "Staff turn — pick a YouTube option, then tap Next person."
+            : "Pick a YouTube option below, listen together here, then tap Next person.",
         }));
       }
       container.appendChild(hero);
 
       if (!allDone) {
+        ensureTurnMusicState(current);
+        const selectedMusicId = state.turnSelectedMusicId;
+
+        const musicStage = el("div", { className: "turn-music-stage" });
+        musicStage.appendChild(buildTurnYoutubePanel(selectedMusicId));
+
         const musicOpts = el("div", {
           className: "turn-music-options",
           role: "group",
-          "aria-label": `Music choices for ${current.name}`,
+          "aria-label": `YouTube music for ${current.name}`,
         });
-        MUSIC_OPTIONS.forEach((m) => {
+        MUSIC_YOUTUBE_OPTIONS.forEach((opt) => {
           const btn = el("button", {
             type: "button",
-            className: "btn btn-sm",
-            textContent: m,
-            "aria-label": `Select ${m} for ${current.name}`,
+            className: `btn btn-sm${selectedMusicId === opt.id ? " is-active" : ""}`,
+            "aria-label": `Open ${opt.label} on YouTube for ${current.name}`,
+            "aria-pressed": selectedMusicId === opt.id ? "true" : "false",
           });
+          const mark = el("span", { className: "btn-youtube-mark", textContent: "▶", "aria-hidden": "true" });
+          btn.appendChild(mark);
+          btn.appendChild(document.createTextNode(opt.label));
           btn.addEventListener("click", () => {
-            state.turnCompleted.push({ id: current.id, music: m });
-            state.turnIndex += 1;
+            state.turnSelectedMusicId = opt.id;
             renderTurnTaking();
-            renderSummary();
           });
           musicOpts.appendChild(btn);
         });
-        container.appendChild(musicOpts);
+        musicStage.appendChild(musicOpts);
+
+        const musicActions = el("div", { className: "turn-music-actions" });
+        const nextBtn = el("button", {
+          type: "button",
+          className: "btn btn-primary",
+          textContent: "Next person",
+          "aria-label": `Finish ${current.name}'s music choice and go to next turn`,
+          disabled: !selectedMusicId,
+        });
+        nextBtn.addEventListener("click", completeCurrentTurnWithMusic);
+        musicActions.appendChild(nextBtn);
+        musicStage.appendChild(musicActions);
+
+        container.appendChild(musicStage);
       }
 
       const queueSection = el("div", { className: "turn-queue-section" });
@@ -5813,6 +6057,8 @@
       skipBtn.addEventListener("click", () => {
         if (state.turnIndex < state.turnQueue.length) {
           state.turnIndex += 1;
+          state.turnMusicPersonId = null;
+          state.turnSelectedMusicId = null;
           renderTurnTaking();
           renderSummary();
         }
