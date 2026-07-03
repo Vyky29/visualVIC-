@@ -1684,6 +1684,7 @@
       padding: 0.55rem;
       min-height: 100%;
       height: 100%;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1726,13 +1727,55 @@
     .plan-col-activities {
       flex: 1 1 auto;
       width: 100%;
+      min-height: 0;
+      display: grid;
+      gap: clamp(0.35rem, 0.9vw, 0.5rem);
+      align-content: stretch;
+      justify-content: stretch;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+    .plan-col-activities.is-empty {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
       justify-content: center;
       align-content: flex-start;
-      align-items: flex-start;
-      min-height: clamp(220px, 48vh, 520px);
+      min-height: clamp(180px, 38vh, 420px);
+    }
+
+    .plan-col-activities .activity-assigned {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-col-activities .activity-assigned .draggable-activity {
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-col-activities .activity-assigned .activity-img-wrap {
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+      border-width: 3px;
+    }
+
+    .plan-col-activities .activity-assigned .activity-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .plan-col-empty {
@@ -1765,13 +1808,20 @@
       align-items: flex-start;
     }
 
-    .draggable-activity {
+    .activity-dock .draggable-activity {
       width: clamp(82px, 12vw, 102px);
       touch-action: none;
       user-select: none;
       cursor: grab;
       text-align: center;
       flex-shrink: 0;
+    }
+
+    .draggable-activity {
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      text-align: center;
     }
 
     .draggable-activity.is-drag-source {
@@ -1782,10 +1832,21 @@
       opacity: 1;
     }
 
-    .activity-img-wrap {
+    .activity-dock .activity-img-wrap {
       width: clamp(68px, 10vw, 84px);
       height: clamp(68px, 10vw, 84px);
       margin: 0 auto;
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .activity-img-wrap {
       border-radius: var(--radius-sm);
       background: var(--white);
       border: 2px solid var(--grey-200);
@@ -1815,17 +1876,13 @@
     .drag-ghost.draggable-activity .activity-img-wrap {
       border-color: var(--orange);
       background: var(--orange-soft);
+      width: clamp(68px, 10vw, 84px);
+      height: clamp(68px, 10vw, 84px);
     }
 
     .activity-assigned {
       position: relative;
-      width: clamp(58px, 9vw, 72px);
       flex-shrink: 0;
-    }
-
-    .activity-assigned .activity-img-wrap {
-      width: 100%;
-      height: clamp(58px, 9vw, 72px);
     }
 
     .activity-remove {
@@ -5714,7 +5771,11 @@
 
     function createActivityImgWrap(activity) {
       const wrap = el("div", { className: "activity-img-wrap" });
-      const img = el("img", { src: activity.image, alt: "", loading: "lazy" });
+      const img = el("img", {
+        src: activity.image,
+        alt: activity.name,
+        loading: "lazy",
+      });
       img.addEventListener("error", () => {
         img.remove();
         wrap.textContent = activity.name.charAt(0);
@@ -5722,6 +5783,28 @@
       });
       wrap.appendChild(img);
       return wrap;
+    }
+
+    /** Grid cols/rows — maximise card size inside each participant column. */
+    function planActivityGridSize(count) {
+      if (count <= 1) return { cols: 1, rows: 1 };
+      if (count <= 3) return { cols: 1, rows: count };
+      return { cols: 2, rows: Math.ceil(count / 2) };
+    }
+
+    function applyPlanColumnActivityGrid(container, count) {
+      if (count <= 0) {
+        container.classList.add("is-empty");
+        container.style.removeProperty("grid-template-columns");
+        container.style.removeProperty("grid-template-rows");
+        container.dataset.count = "0";
+        return;
+      }
+      container.classList.remove("is-empty");
+      const { cols, rows } = planActivityGridSize(count);
+      container.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+      container.style.gridTemplateRows = `repeat(${rows}, minmax(0, 1fr))`;
+      container.dataset.count = String(count);
     }
 
     function createDockActivityChip(activity) {
@@ -5798,6 +5881,7 @@
 
           const acts = el("div", { className: "plan-col-activities" });
           const list = state.participantActivities[p.id] || [];
+          applyPlanColumnActivityGrid(acts, list.length);
           if (list.length === 0) {
             acts.appendChild(el("p", {
               className: "plan-col-empty",
