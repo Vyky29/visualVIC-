@@ -7,6 +7,7 @@ import {
   parseTailoredParticipantTag,
   routineBelongsToTailoredParticipant,
 } from "@/lib/routines/tailored-routine-meta";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 
 export const TAILORED_PARTICIPANT_IDS = [
   "ikram",
@@ -67,7 +68,11 @@ export function isTailoredParticipantId(
 export function tailoredParticipantFromStockRoutineId(
   routineId: string,
 ): TailoredParticipantId | undefined {
-  return STOCK_ROUTINE_TO_PARTICIPANT[routineId as TailoredStockRoutineId];
+  const canonical = canonicalRoutineId(routineId);
+  return (
+    STOCK_ROUTINE_TO_PARTICIPANT[canonical as TailoredStockRoutineId] ??
+    STOCK_ROUTINE_TO_PARTICIPANT[routineId as TailoredStockRoutineId]
+  );
 }
 
 function detectTailoredStockIdFromSteps(

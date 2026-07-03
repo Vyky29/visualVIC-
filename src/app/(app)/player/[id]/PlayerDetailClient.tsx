@@ -17,6 +17,7 @@ import {
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 import { touchSchedulePlayerRoutine } from "@/lib/preferences/schedule-player-recent-preference";
 import { prefetchRoutineAssets } from "@/lib/offline/prefetch-routine-assets";
 
@@ -51,7 +52,14 @@ export function PlayerDetailClient({
   const cardUiLang = useCardUiLanguage();
   const router = useRouter();
   const { mayOpenRoutine, playerBackHref, status: staffStatus } = useStaffAccess();
-  const routine = resolveAnyRoutine(id, custom);
+  const canonicalId = canonicalRoutineId(id);
+  const routine = resolveAnyRoutine(canonicalId, custom);
+
+  useEffect(() => {
+    if (canonicalId !== id) {
+      router.replace(`/player/${canonicalId}`);
+    }
+  }, [canonicalId, id, router]);
 
   useEffect(() => {
     if (staffStatus === "loading" || !routine) return;
@@ -61,8 +69,8 @@ export function PlayerDetailClient({
   }, [mayOpenRoutine, routine, router, staffStatus]);
 
   useEffect(() => {
-    if (routine) touchSchedulePlayerRoutine(id);
-  }, [id, routine]);
+    if (routine) touchSchedulePlayerRoutine(canonicalId);
+  }, [canonicalId, routine]);
 
   useEffect(() => {
     if (!routine || !navigator.onLine) return;

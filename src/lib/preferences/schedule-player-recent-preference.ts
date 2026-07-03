@@ -1,3 +1,5 @@
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
+
 /** MRU timestamps for Schedule Player index — routine id → last opened ms. */
 export const SCHEDULE_PLAYER_RECENT_STORAGE_KEY =
   "pixtolearn-schedule-player-recent";
@@ -6,6 +8,17 @@ export const SCHEDULE_PLAYER_RECENT_CHANGE_EVENT =
   "pixtolearn-schedule-player-recent-change";
 
 export type SchedulePlayerRecentMap = Record<string, number>;
+
+function normalizeSchedulePlayerRecentMap(
+  map: SchedulePlayerRecentMap,
+): SchedulePlayerRecentMap {
+  const out: SchedulePlayerRecentMap = {};
+  for (const [id, ts] of Object.entries(map)) {
+    const canonical = canonicalRoutineId(id);
+    out[canonical] = Math.max(out[canonical] ?? 0, ts);
+  }
+  return out;
+}
 
 export function readSchedulePlayerRecentMap(): SchedulePlayerRecentMap {
   if (typeof window === "undefined") return {};
@@ -20,7 +33,7 @@ export function readSchedulePlayerRecentMap(): SchedulePlayerRecentMap {
         out[id] = ts;
       }
     }
-    return out;
+    return normalizeSchedulePlayerRecentMap(out);
   } catch {
     return {};
   }
@@ -28,8 +41,9 @@ export function readSchedulePlayerRecentMap(): SchedulePlayerRecentMap {
 
 export function touchSchedulePlayerRoutine(routineId: string) {
   if (typeof window === "undefined" || !routineId.trim()) return;
+  const canonical = canonicalRoutineId(routineId);
   const map = readSchedulePlayerRecentMap();
-  map[routineId] = Date.now();
+  map[canonical] = Date.now();
   try {
     window.localStorage.setItem(
       SCHEDULE_PLAYER_RECENT_STORAGE_KEY,
@@ -39,15 +53,16 @@ export function touchSchedulePlayerRoutine(routineId: string) {
     /* ignore */
   }
   window.dispatchEvent(
-    new CustomEvent(SCHEDULE_PLAYER_RECENT_CHANGE_EVENT, { detail: routineId }),
+    new CustomEvent(SCHEDULE_PLAYER_RECENT_CHANGE_EVENT, { detail: canonical }),
   );
 }
 
 export function removeSchedulePlayerRoutine(routineId: string) {
   if (typeof window === "undefined" || !routineId.trim()) return;
+  const canonical = canonicalRoutineId(routineId);
   const map = readSchedulePlayerRecentMap();
-  if (!(routineId in map)) return;
-  delete map[routineId];
+  if (!(canonical in map)) return;
+  delete map[canonical];
   try {
     window.localStorage.setItem(
       SCHEDULE_PLAYER_RECENT_STORAGE_KEY,
@@ -57,7 +72,7 @@ export function removeSchedulePlayerRoutine(routineId: string) {
     /* ignore */
   }
   window.dispatchEvent(
-    new CustomEvent(SCHEDULE_PLAYER_RECENT_CHANGE_EVENT, { detail: routineId }),
+    new CustomEvent(SCHEDULE_PLAYER_RECENT_CHANGE_EVENT, { detail: canonical }),
   );
 }
 

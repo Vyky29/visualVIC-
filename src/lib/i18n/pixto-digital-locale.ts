@@ -1,5 +1,6 @@
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 
 function lc(s: string): string {
   return s.toLowerCase();
@@ -595,6 +596,30 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Timi · Day centre (items)",
     es: "Timi · centro de día (objetos)",
   },
+  "ikram-day-centre": {
+    en: "Ikram · Day centre (avatar)",
+    es: "Ikram · centro de día (avatar)",
+  },
+  "ikram-day-centre-items": {
+    en: "Ikram · Day centre (items)",
+    es: "Ikram · centro de día (objetos)",
+  },
+  "emmanuel-day-centre": {
+    en: "Emmanuel · Day centre (avatar)",
+    es: "Emmanuel · centro de día (avatar)",
+  },
+  "emmanuel-day-centre-items": {
+    en: "Emmanuel · Day centre (items)",
+    es: "Emmanuel · centro de día (objetos)",
+  },
+  "fadi-day-centre": {
+    en: "Fadi · Day centre (avatar)",
+    es: "Fadi · centro de día (avatar)",
+  },
+  "fadi-day-centre-items": {
+    en: "Fadi · Day centre (items)",
+    es: "Fadi · centro de día (objetos)",
+  },
   physical: {
     en: "Physical Activity",
     es: "Actividad física",
@@ -695,7 +720,9 @@ export function stockRoutineDisplayName(
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
-  const row = STOCK_ROUTINE_LABEL[routineId];
+  const row =
+    STOCK_ROUTINE_LABEL[routineId] ??
+    STOCK_ROUTINE_LABEL[canonicalRoutineId(routineId)];
   if (!row) return fallback;
   return ui === "es" ? row.es : row.en;
 }

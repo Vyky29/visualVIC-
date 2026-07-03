@@ -18,6 +18,7 @@ import {
 } from "@/lib/cards/day-centre-shared";
 import { physical3dImageUrl } from "@/lib/cards/physical-cards";
 import type { Routine, RoutineStep } from "@/lib/types/routine";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 import {
   isPixtoLearnFullBleedCardUrl,
   isPixtoLearnIllustrationOnlyUrl,
@@ -54,7 +55,7 @@ export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number]
 export function tailoredScheduleCloseUpPreviewUrl(
   routineId: string,
 ): string | undefined {
-  switch (routineId as TailoredStockRoutineId) {
+  switch (canonicalRoutineId(routineId) as TailoredStockRoutineId) {
     case "ikram-mon-wed-fri-avatar":
     case "ikram-tuesday-avatar":
       return dayCentreIkramTailoredHomeAvatarUrl();

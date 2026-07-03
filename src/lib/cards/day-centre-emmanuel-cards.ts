@@ -179,7 +179,7 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
     {
       id: "dce-snack",
       slug: "snack",
-      title: "Chocolate cake",
+      title: "Snack",
       items: { type: "emmanuel-icon", slug: "chocolate-cake" },
       avatar: { type: "emmanuel-scene", slug: "snack" },
     },

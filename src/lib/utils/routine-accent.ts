@@ -1,5 +1,6 @@
 import type { Routine, RoutineStep } from "@/lib/types/routine";
 import { GETTING_DRESS_ROUTINE_IDS } from "@/lib/cards/getting-dress-undress-registry";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 
 export type RoutineVisualTone =
   | "brushing"
@@ -77,7 +78,8 @@ const STOCK_PACK_IDS = new Set<string>([
 ]);
 
 export function isStockPackRoutine(r: Routine): boolean {
-  return STOCK_PACK_IDS.has(r.id);
+  const canonical = canonicalRoutineId(r.id);
+  return STOCK_PACK_IDS.has(r.id) || STOCK_PACK_IDS.has(canonical);
 }
 
 export type RoutineAccentRings = {
@@ -655,7 +657,7 @@ function dominantToneFromSteps(r: Routine): RoutineVisualTone | null {
 export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (!isStockPackRoutine(r)) return "custom";
 
-  const id = r.id.trim().toLowerCase();
+  const id = canonicalRoutineId(r.id).trim().toLowerCase();
 
   if (id === "at-the-airport") return "airport";
   if (id === "at-the-hotel") return "hotel";
@@ -702,7 +704,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
  * content (id hints + dominant step imagery), so e.g. `demo-climbing-preparation` is yellow climbing, not list black.
  */
 export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
-  const id = r.id.trim().toLowerCase();
+  const id = canonicalRoutineId(r.id).trim().toLowerCase();
 
   /** Stock dress packs — must win before `includes("swim")` / dominant mix (e.g. trunks, swimsuit slugs). */
   if ((GETTING_DRESS_ROUTINE_IDS as readonly string[]).includes(id)) {

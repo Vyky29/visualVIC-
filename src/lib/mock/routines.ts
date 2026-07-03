@@ -1,4 +1,5 @@
 import type { Routine } from "@/lib/types/routine";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 import {
   BRUSHING_TEETH_SEQUENCE,
   brushingTeethImageUrl,
@@ -762,5 +763,6 @@ export function getRoutineById(id: string): Routine | undefined {
 }
 
 export function resolveRoutineById(id: string): Routine | undefined {
-  return getRoutineById(id) ?? mockTemplates.find((t) => t.id === id);
+  const canonical = canonicalRoutineId(id);
+  return getRoutineById(canonical) ?? mockTemplates.find((t) => t.id === canonical);
 }

@@ -2,8 +2,10 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { use } from "react";
+import { use, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
+import { canonicalRoutineId } from "@/lib/routines/legacy-routine-ids";
 import { resolveAnyRoutine } from "@/lib/routines/resolve-any-routine";
 
 const FocusModeWithProfileRoutine = dynamic(
@@ -26,8 +28,16 @@ export function FocusDetailClient({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
   const { routines: custom } = useCustomRoutines();
-  const routine = resolveAnyRoutine(id, custom);
+  const canonicalId = canonicalRoutineId(id);
+  const routine = resolveAnyRoutine(canonicalId, custom);
+
+  useEffect(() => {
+    if (canonicalId !== id) {
+      router.replace(`/focus/${canonicalId}`);
+    }
+  }, [canonicalId, id, router]);
 
   if (!routine) {
     return (
@@ -46,7 +56,7 @@ export function FocusDetailClient({
   return (
     <FocusModeWithProfileRoutine
       routine={routine}
-      exitHref={`/player/${id}`}
+      exitHref={`/player/${canonicalId}`}
     />
   );
 }
