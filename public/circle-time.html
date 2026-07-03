@@ -1414,52 +1414,77 @@
 
     /* Feelings — feedback form emotion icons */
     .feelings-participant-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-      gap: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.5rem, 1.2vw, 0.75rem);
+      justify-content: center;
+      align-items: stretch;
     }
 
     .feelings-card {
       background: var(--white);
       border: 2px solid var(--grey-200);
       border-radius: var(--radius);
-      padding: 1rem;
+      padding: clamp(0.5rem, 1.2vw, 0.75rem);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.45rem;
+      flex: 1 1 clamp(128px, 14vw, 168px);
+      min-width: clamp(120px, 13vw, 152px);
+      max-width: clamp(148px, 16vw, 188px);
+    }
+
+    .feelings-card.is-staff {
+      border-color: rgba(27, 58, 92, 0.35);
+      background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
     }
 
     .feelings-card .avatar-wrap {
-      width: clamp(88px, 14vw, 108px);
-      height: clamp(88px, 14vw, 108px);
+      width: clamp(52px, 7.5vw, 68px);
+      height: clamp(52px, 7.5vw, 68px);
     }
 
     .feelings-card .participant-name {
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: clamp(0.78rem, 1.8vw, 0.92rem);
       margin: 0;
       color: var(--navy);
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .feelings-role-tag {
+      margin: -0.15rem 0 0;
+      font-size: 0.62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--grey-500);
     }
 
     .emotion-options {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.55rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0.28rem;
       width: 100%;
+      justify-content: center;
     }
 
     .emotion-btn {
       border: 2px solid var(--grey-200);
       border-radius: var(--radius-sm);
       background: var(--white);
-      padding: 0.55rem 0.35rem;
+      padding: 0.3rem 0.15rem;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.35rem;
-      min-height: 88px;
+      gap: 0.2rem;
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: auto;
       transition: border-color 0.15s, background 0.15s, transform 0.1s;
     }
 
@@ -1493,8 +1518,8 @@
     }
 
     .emotion-face {
-      width: 40px;
-      height: 40px;
+      width: clamp(26px, 3.8vw, 34px);
+      height: clamp(26px, 3.8vw, 34px);
       color: var(--emotion-color, var(--navy));
     }
 
@@ -1505,15 +1530,21 @@
     }
 
     .emotion-label {
-      font-size: 0.72rem;
+      font-size: clamp(0.5rem, 1.1vw, 0.62rem);
       font-weight: 700;
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.1;
       color: var(--navy);
     }
 
     #screen-feelings .section-header {
       flex-shrink: 0;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.65rem;
+    }
+
+    #screen-feelings .section-header p {
+      font-size: clamp(0.82rem, 1.9vw, 0.95rem);
     }
 
     /* Today's plan — participant columns + unlimited activity dock */
@@ -2892,7 +2923,7 @@
         <span class="section-num" aria-hidden="true">7</span>
         <div>
           <h2 id="feelings-heading">Feelings Check-In</h2>
-          <p>How is everyone at the day centre feeling today?</p>
+          <p>Staff first: 2 workers, then 1 participant — shuffled order. Tap a feeling for everyone at ClubSENsational.</p>
         </div>
       </div>
       <div class="feelings-participant-grid" id="feelings-grid"></div>
@@ -3296,6 +3327,7 @@
       state.weatherConfirmed = false;
       londonWeather = null;
       clearWeatherAdvanceTimer();
+      state.feelingsOrder = [];
       renderAll();
       showScreen(0);
     }
@@ -3350,6 +3382,7 @@
           maybeAdvanceFromWeather();
         }
       }
+      if (activeId === "feelings") ensureFeelingsOrder();
       const section = document.getElementById(activeId);
       if (section) section.focus({ preventScroll: true });
     }
@@ -3471,6 +3504,7 @@
       weather: null,
       weatherConfirmed: false,
       feelings: {},
+      feelingsOrder: [],
       participantActivities: {},
       turnQueue: [],
       turnCompleted: [],
@@ -3506,10 +3540,15 @@
       if (!zoneKey) return;
       const person = getPerson(personId);
       state.location[personId] = zoneKey;
-      if (person?.role === "participant" && zoneKey !== "club") {
+      if (zoneKey !== "club") {
         state.feelings[personId] = null;
-        state.participantActivities[personId] = [];
+        if (person?.role === "participant") {
+          state.participantActivities[personId] = [];
+        }
+      } else if (state.feelings[personId] === undefined) {
+        state.feelings[personId] = null;
       }
+      state.feelingsOrder = [];
       resetTurns();
       renderRegister();
       renderFeelings();
@@ -3927,7 +3966,9 @@
       });
       STAFF.forEach((s) => {
         state.location[s.id] = "dock";
+        state.feelings[s.id] = null;
       });
+      state.feelingsOrder = [];
       state.day = null;
       state.dayOfMonth = null;
       state.month = null;
@@ -3947,6 +3988,58 @@
 
     function dayCentreParticipants() {
       return PARTICIPANTS.filter((p) => state.location[p.id] === "club");
+    }
+
+    function peopleAtClub() {
+      return REGISTER_PEOPLE.filter((p) => state.location[p.id] === "club");
+    }
+
+    function shufflePeople(list) {
+      const arr = [...list];
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function buildFeelingsDisplayOrder() {
+      const staffQueue = shufflePeople(STAFF.filter((s) => state.location[s.id] === "club"));
+      const participantQueue = shufflePeople(PARTICIPANTS.filter((p) => state.location[p.id] === "club"));
+      const ordered = [];
+
+      while (staffQueue.length > 0 || participantQueue.length > 0) {
+        for (let i = 0; i < 2 && staffQueue.length > 0; i += 1) {
+          ordered.push(staffQueue.shift());
+        }
+        if (participantQueue.length > 0) {
+          ordered.push(participantQueue.shift());
+        }
+      }
+      return ordered;
+    }
+
+    function ensureFeelingsOrder() {
+      const atClub = peopleAtClub();
+      const clubIds = new Set(atClub.map((p) => p.id));
+      const orderValid = state.feelingsOrder.length > 0
+        && state.feelingsOrder.length === atClub.length
+        && state.feelingsOrder.every((id) => clubIds.has(id));
+
+      if (!orderValid) {
+        state.feelingsOrder = buildFeelingsDisplayOrder().map((p) => p.id);
+      }
+
+      atClub.forEach((p) => {
+        if (state.feelings[p.id] === undefined) state.feelings[p.id] = null;
+      });
+    }
+
+    function feelingsDisplayPeople() {
+      ensureFeelingsOrder();
+      return state.feelingsOrder
+        .map((id) => getPerson(id))
+        .filter(Boolean);
     }
 
     function activeParticipants() {
@@ -4739,23 +4832,27 @@
     function renderFeelings() {
       const grid = document.getElementById("feelings-grid");
       grid.innerHTML = "";
-      const present = dayCentreParticipants();
+      const present = feelingsDisplayPeople();
 
       if (present.length === 0) {
         grid.appendChild(el("p", {
           className: "empty-state",
-          textContent: "Drag participants to ClubSENsational to begin feelings check-in.",
+          textContent: "Drag staff and participants to ClubSENsational to begin feelings check-in.",
         }));
         return;
       }
 
       present.forEach((p) => {
+        const isStaff = p.role === "staff";
         const card = el("div", {
-          className: "feelings-card",
+          className: `feelings-card${isStaff ? " is-staff" : ""}`,
         });
 
         card.appendChild(avatarImg(p));
         card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
+        if (isStaff) {
+          card.appendChild(el("p", { className: "feelings-role-tag", textContent: "Staff" }));
+        }
 
         const feelingsRow = el("div", {
           className: "emotion-options",
@@ -5193,11 +5290,13 @@
 
       const present = dayCentreParticipants();
 
-      const feelingsLines = present
+      const feelingsPeople = peopleAtClub();
+      const feelingsLines = feelingsPeople
         .filter((p) => state.feelings[p.id])
         .map((p) => {
           const label = FEELINGS.find((f) => f.id === state.feelings[p.id])?.label || state.feelings[p.id];
-          return `${p.name} - ${label}`;
+          const role = p.role === "staff" ? "staff" : "participant";
+          return `${p.name} (${role}) - ${label}`;
         });
       lines.push(`Feelings: ${feelingsLines.length ? feelingsLines.join(", ") : "None recorded"}`);
       lines.push("");
