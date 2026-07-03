@@ -637,6 +637,233 @@
       flex-shrink: 0;
     }
 
+    /* Today's plan — participant columns + unlimited activity dock */
+    .plan-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .plan-columns {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 148px), 1fr));
+      gap: 0.65rem;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 0.25rem 0;
+      align-content: start;
+    }
+
+    .plan-participant-col {
+      border: 3px dashed var(--grey-200);
+      border-radius: var(--radius);
+      background: var(--white);
+      padding: 0.55rem;
+      min-height: clamp(140px, 22vh, 200px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .plan-participant-col.drag-over {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+      border-style: solid;
+    }
+
+    .plan-col-header {
+      text-align: center;
+      margin-bottom: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    .plan-col-header .avatar-wrap {
+      width: clamp(64px, 10vw, 80px);
+      height: clamp(64px, 10vw, 80px);
+      margin: 0 auto;
+    }
+
+    .plan-col-header .participant-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin: 0.35rem 0 0;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+
+    .plan-col-on-the-way {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--amber);
+      margin: 0.15rem 0 0;
+    }
+
+    .plan-col-activities {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+      align-content: flex-start;
+      min-height: 56px;
+    }
+
+    .plan-col-empty {
+      color: var(--grey-500);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-align: center;
+      margin: auto 0;
+      padding: 0.35rem;
+    }
+
+    .activity-dock {
+      flex-shrink: 0;
+      margin-top: 0.5rem;
+      border-top: 3px solid var(--grey-200);
+      padding: 0.75rem;
+      background: var(--grey-100);
+      border-radius: var(--radius);
+      min-height: clamp(130px, 20vh, 170px);
+    }
+
+    .activity-dock-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .draggable-activity {
+      width: clamp(82px, 12vw, 102px);
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .draggable-activity.is-drag-source {
+      opacity: 0.25;
+    }
+
+    .activity-dock-source.is-drag-source {
+      opacity: 1;
+    }
+
+    .activity-img-wrap {
+      width: clamp(68px, 10vw, 84px);
+      height: clamp(68px, 10vw, 84px);
+      margin: 0 auto;
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .activity-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .activity-name-label {
+      font-size: clamp(0.62rem, 1.8vw, 0.74rem);
+      font-weight: 700;
+      margin: 0.3rem 0 0;
+      color: var(--navy);
+      line-height: 1.1;
+      pointer-events: none;
+    }
+
+    .drag-ghost.draggable-activity .activity-img-wrap {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+    }
+
+    .activity-assigned {
+      position: relative;
+      width: clamp(58px, 9vw, 72px);
+      flex-shrink: 0;
+    }
+
+    .activity-assigned .activity-img-wrap {
+      width: 100%;
+      height: clamp(58px, 9vw, 72px);
+    }
+
+    .activity-remove {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.85rem;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      padding: 0;
+    }
+
+    .activity-remove:hover {
+      background: var(--orange);
+    }
+
+    #screen-focus .section-header {
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .plan-summary-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .plan-summary-item {
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .plan-summary-item strong {
+      color: var(--navy);
+    }
+
+    .plan-summary-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.45rem;
+    }
+
+    .plan-summary-tag {
+      background: var(--orange-soft);
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+    }
+
     #screen-day .section-header {
       flex-shrink: 0;
       margin-bottom: 0.35rem;
@@ -1677,16 +1904,22 @@
     </section>
     </div>
 
-    <div id="screen-focus" class="screen-page scrollable" data-screen="focus">
+    <div id="screen-focus" class="screen-page" data-screen="focus">
     <section id="focus" aria-labelledby="focus-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">5</span>
         <div>
-          <h2 id="focus-heading">Today's Focus</h2>
-          <p>Select one or more outcomes-based focus areas for today's session.</p>
+          <h2 id="focus-heading">Today's Plan</h2>
+          <p>Drag activities from below to each person at the day centre.</p>
         </div>
       </div>
-      <div class="grid grid-3 focus-grid" id="focus-grid" role="group" aria-label="Focus areas"></div>
+      <div class="plan-layout">
+        <div class="plan-columns" id="plan-columns" role="group" aria-label="Participant activity columns"></div>
+        <div class="activity-dock" data-drop-zone="activity-dock" aria-label="Activities — drag to a person">
+          <p class="register-dock-label">Drag an activity (unlimited)</p>
+          <div class="activity-dock-items" id="activity-dock"></div>
+        </div>
+      </div>
     </section>
     </div>
 
@@ -1695,13 +1928,11 @@
       <div class="section-header">
         <span class="section-num" aria-hidden="true">6</span>
         <div>
-          <h2 id="activities-heading">Today's Activities</h2>
-          <p>Build today's plan by selecting activities.</p>
+          <h2 id="activities-heading">Everyone's Choices</h2>
+          <p>Summary of what each person chose for today.</p>
         </div>
       </div>
-      <div class="grid grid-3" id="activities-grid"></div>
-      <h3 style="margin:1.5rem 0 0.5rem;font-size:1.1rem;">Today's Plan</h3>
-      <ul class="plan-list" id="plan-list" aria-label="Selected activities"></ul>
+      <ul class="plan-summary-list" id="plan-summary-list" aria-label="Participant activity choices"></ul>
     </section>
     </div>
 
@@ -1834,29 +2065,26 @@
       { id: "Out of control", label: "Out of control", color: "#dc2626" },
     ];
 
-    const FOCUS_AREAS = [
-      { id: "communication", label: "Communication", icon: "💬" },
-      { id: "independence", label: "Independence", icon: "🎯" },
-      { id: "physical", label: "Physical wellbeing", icon: "🏃" },
-      { id: "emotional", label: "Emotional regulation", icon: "🧘" },
-      { id: "social", label: "Social interaction", icon: "🤝" },
-      { id: "community", label: "Community participation", icon: "🏘️" },
+    const DC_GENERAL = "/cards/day%20centre/general";
+
+    const DAY_PLAN_ACTIVITIES = [
+      { id: "swimming", name: "Swimming", image: `${DC_GENERAL}/swimming-pool.png` },
+      { id: "gym", name: "Gym", image: `${DC_GENERAL}/exercise-machine.png` },
+      { id: "walk", name: "Walk", image: `${DC_GENERAL}/walk.png` },
+      { id: "cafe", name: "Cafe", image: `${DC_GENERAL}/cafe.png` },
+      { id: "word-search", name: "Word search", image: "/cards/day%20centre/emmanuel/icons/word-search.png" },
+      { id: "sports", name: "Sports", image: "/cards/day%20centre/emmanuel/scenes-2d/basketball.png" },
+      { id: "bean-bag", name: "Bean bag", image: `${DC_GENERAL}/bean-bag.png` },
+      { id: "sensory-room", name: "Sensory room", image: `${DC_GENERAL}/sensory-room.png` },
+      { id: "park", name: "Park", image: `${DC_GENERAL}/park-and-swing.png` },
+      { id: "vocational", name: "Vocational", image: "/cards/day%20centre/emmanuel/icons/vocational-activity.png" },
+      { id: "washing-up", name: "Washing up", image: `${DC_GENERAL}/washing-up.png` },
+      { id: "bday-party", name: "Birthday party", image: `${DC_GENERAL}/birthday-party.png` },
     ];
 
-    const ACTIVITIES = [
-      { id: "swimming", name: "Swimming", icon: "🏊", image: "assets/activities/swimming.png" },
-      { id: "fitness", name: "Fitness", icon: "💪", image: "assets/activities/fitness.png" },
-      { id: "climbing", name: "Climbing", icon: "🧗", image: "assets/activities/climbing.png" },
-      { id: "cooking", name: "Cooking", icon: "🍳", image: "assets/activities/cooking.png" },
-      { id: "art", name: "Art", icon: "🎨", image: "assets/activities/art.png" },
-      { id: "communication", name: "Communication", icon: "💬", image: "assets/activities/communication.png" },
-      { id: "community-walk", name: "Community Walk", icon: "🚶", image: "assets/activities/community-walk.png" },
-      { id: "sensory-break", name: "Sensory Break", icon: "🌿", image: "assets/activities/sensory-break.png" },
-      { id: "lunch", name: "Lunch", icon: "🍽️", image: "assets/activities/lunch.png" },
-      { id: "independent-skills", name: "Independent Skills", icon: "✅", image: "assets/activities/independent-skills.png" },
-      { id: "relaxation", name: "Relaxation", icon: "😌", image: "assets/activities/relaxation.png" },
-      { id: "group-game", name: "Group Game", icon: "🎲", image: "assets/activities/group-game.png" },
-    ];
+    function getDayPlanActivity(id) {
+      return DAY_PLAN_ACTIVITIES.find((a) => a.id === id);
+    }
 
     const AGREEMENTS = [
       { icon: "👂", text: "We listen to each other" },
@@ -2089,8 +2317,7 @@
       day: null,
       weather: null,
       feelings: {},
-      focus: new Set(),
-      plan: [],
+      participantActivities: {},
       turnQueue: [],
       turnCompleted: [],
       turnIndex: 0,
@@ -2126,13 +2353,41 @@
         zoneKey = "club";
       }
       state.location[personId] = zoneKey;
-      if (person?.role === "participant" && zoneKey !== "club") {
+      if (person?.role === "participant" && zoneKey !== "club" && zoneKey !== "car") {
         state.feelings[personId] = null;
+        state.participantActivities[personId] = [];
       }
       resetTurns();
       renderRegister();
       renderFeelings();
+      renderFocus();
+      renderActivities();
       renderTurnTaking();
+      renderSummary();
+    }
+
+    function finishActivityDrop(zoneKey) {
+      const { activityId, fromParticipantId, fromIndex } = dragState || {};
+      if (!activityId) return;
+
+      if (zoneKey === "activity-dock") {
+        if (fromParticipantId != null && fromIndex != null) {
+          state.participantActivities[fromParticipantId].splice(fromIndex, 1);
+        }
+      } else if (zoneKey && zoneKey.startsWith("plan-")) {
+        const targetId = zoneKey.slice(5);
+        if (!state.participantActivities[targetId]) state.participantActivities[targetId] = [];
+
+        if (fromParticipantId != null && fromIndex != null) {
+          if (fromParticipantId === targetId) return;
+          state.participantActivities[fromParticipantId].splice(fromIndex, 1);
+        }
+
+        state.participantActivities[targetId].push(activityId);
+      }
+
+      renderFocus();
+      renderActivities();
       renderSummary();
     }
 
@@ -2181,6 +2436,8 @@
           if (zoneKey === "weather-slot" || zoneKey === "weather-dock") {
             finishWeatherDrop(zoneKey, dragState.weatherId);
           }
+        } else if (dragState.type === "activity") {
+          finishActivityDrop(zoneKey);
         } else if (zoneKey) {
           finishAvatarDrop(dragState.id, zoneKey);
         }
@@ -2209,7 +2466,9 @@
         dragState.ghost = ghost;
         dragState.offsetX = e.clientX - rect.left;
         dragState.offsetY = e.clientY - rect.top;
-        dragState.sourceEl.classList.add("is-drag-source");
+        if (!(dragState.type === "activity" && dragState.fromDock)) {
+          dragState.sourceEl.classList.add("is-drag-source");
+        }
         document.body.classList.add("is-dragging");
       }
 
@@ -2272,6 +2531,38 @@
       e.preventDefault();
     }
 
+    function startActivityDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const activityId = chip.dataset.activityId;
+      if (!activityId) return;
+
+      const fromDock = chip.classList.contains("activity-dock-source");
+      const fromParticipantId = chip.dataset.participantId || null;
+      const fromIndex = chip.dataset.activityIndex != null
+        ? Number(chip.dataset.activityIndex)
+        : null;
+
+      dragState = {
+        type: "activity",
+        activityId,
+        fromDock,
+        fromParticipantId,
+        fromIndex,
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
     function startWeatherDrag(e) {
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
@@ -2299,6 +2590,7 @@
       PARTICIPANTS.forEach((p) => {
         state.location[p.id] = p.id === "fadi" ? "car" : "dock";
         state.feelings[p.id] = null;
+        state.participantActivities[p.id] = [];
       });
       STAFF.forEach((s) => {
         state.location[s.id] = "club";
@@ -2655,110 +2947,171 @@
     }
 
     /* ============================================================
-       RENDER: Focus
+       RENDER: Today's plan (participant columns)
        ============================================================ */
 
+    function createActivityImgWrap(activity) {
+      const wrap = el("div", { className: "activity-img-wrap" });
+      const img = el("img", { src: activity.image, alt: "", loading: "lazy" });
+      img.addEventListener("error", () => {
+        img.remove();
+        wrap.textContent = activity.name.charAt(0);
+        wrap.setAttribute("aria-hidden", "true");
+      });
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    function createDockActivityChip(activity) {
+      const chip = el("div", {
+        className: "draggable-activity activity-dock-source",
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag ${activity.name} to a person`,
+        "data-activity-id": activity.id,
+      });
+      chip.appendChild(createActivityImgWrap(activity));
+      chip.appendChild(el("p", { className: "activity-name-label", textContent: activity.name }));
+      return chip;
+    }
+
+    function createAssignedActivityChip(activity, participantId, activityIndex) {
+      const outer = el("div", { className: "activity-assigned" });
+      const chip = el("div", {
+        className: "draggable-activity",
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Move ${activity.name}`,
+        "data-activity-id": activity.id,
+        "data-participant-id": participantId,
+        "data-activity-index": String(activityIndex),
+      });
+      chip.appendChild(createActivityImgWrap(activity));
+      outer.appendChild(chip);
+
+      const removeBtn = el("button", {
+        type: "button",
+        className: "activity-remove",
+        textContent: "×",
+        "aria-label": `Remove ${activity.name}`,
+      });
+      removeBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        state.participantActivities[participantId].splice(activityIndex, 1);
+        renderFocus();
+        renderActivities();
+        renderSummary();
+      });
+      outer.appendChild(removeBtn);
+      return outer;
+    }
+
     function renderFocus() {
-      const grid = document.getElementById("focus-grid");
-      grid.innerHTML = "";
-      FOCUS_AREAS.forEach((f) => {
-        const selected = state.focus.has(f.id);
-        const card = el("button", {
-          type: "button",
-          className: `choice-card${selected ? " selected" : ""}`,
-          "aria-label": f.label,
-          "aria-pressed": selected ? "true" : "false",
+      const columns = document.getElementById("plan-columns");
+      const dock = document.getElementById("activity-dock");
+      if (!columns || !dock) return;
+
+      columns.innerHTML = "";
+      dock.innerHTML = "";
+
+      const present = dayCentreParticipants();
+
+      if (present.length === 0) {
+        columns.appendChild(el("p", {
+          className: "empty-state",
+          textContent: "No participants at the day centre yet. Complete the register first.",
+        }));
+      } else {
+        present.forEach((p) => {
+          const col = el("div", {
+            className: "plan-participant-col",
+            "data-drop-zone": `plan-${p.id}`,
+            "aria-label": `Activities for ${p.name}`,
+          });
+
+          const header = el("div", { className: "plan-col-header" });
+          header.appendChild(avatarImg(p));
+          header.appendChild(el("p", { className: "participant-name", textContent: p.name }));
+          if (state.location[p.id] === "car") {
+            header.appendChild(el("p", {
+              className: "plan-col-on-the-way",
+              textContent: "On the way",
+            }));
+          }
+          col.appendChild(header);
+
+          const acts = el("div", { className: "plan-col-activities" });
+          const list = state.participantActivities[p.id] || [];
+          if (list.length === 0) {
+            acts.appendChild(el("p", {
+              className: "plan-col-empty",
+              textContent: "Drop activities here",
+            }));
+          } else {
+            list.forEach((actId, idx) => {
+              const activity = getDayPlanActivity(actId);
+              if (activity) acts.appendChild(createAssignedActivityChip(activity, p.id, idx));
+            });
+          }
+          col.appendChild(acts);
+          columns.appendChild(col);
         });
-        card.appendChild(el("span", { className: "icon", textContent: f.icon, "aria-hidden": "true" }));
-        card.appendChild(el("span", { className: "label", textContent: f.label }));
-        card.addEventListener("click", () => {
-          if (state.focus.has(f.id)) state.focus.delete(f.id);
-          else state.focus.add(f.id);
-          renderFocus();
-          renderSummary();
-        });
-        grid.appendChild(card);
+      }
+
+      DAY_PLAN_ACTIVITIES.forEach((activity) => {
+        dock.appendChild(createDockActivityChip(activity));
+      });
+
+      initPlanDragDrop();
+    }
+
+    function initPlanDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll(".draggable-activity").forEach((chip) => {
+        chip.onpointerdown = startActivityDrag;
       });
     }
 
     /* ============================================================
-       RENDER: Activities
+       RENDER: Everyone's choices (summary)
        ============================================================ */
 
     function renderActivities() {
-      const grid = document.getElementById("activities-grid");
-      grid.innerHTML = "";
-
-      ACTIVITIES.forEach((a) => {
-        const inPlan = state.plan.includes(a.id);
-        const card = el("div", { className: `activity-card${inPlan ? " selected" : ""}` });
-
-        const imgWrap = el("div", { className: "activity-img" });
-        const img = el("img", { src: a.image, alt: "", loading: "lazy" });
-        img.addEventListener("error", () => {
-          img.remove();
-          imgWrap.textContent = a.icon;
-          imgWrap.setAttribute("aria-hidden", "true");
-        });
-        imgWrap.appendChild(img);
-        card.appendChild(imgWrap);
-
-        const body = el("div", { className: "activity-body" });
-        body.appendChild(el("p", { className: "activity-name", textContent: a.name }));
-
-        const btn = el("button", {
-          type: "button",
-          className: `btn btn-sm${inPlan ? " btn-danger" : " btn-primary"}`,
-          textContent: inPlan ? "Remove" : "Select",
-          "aria-label": `${inPlan ? "Remove" : "Add"} ${a.name}`,
-        });
-        btn.addEventListener("click", () => {
-          if (inPlan) {
-            state.plan = state.plan.filter((id) => id !== a.id);
-          } else {
-            state.plan.push(a.id);
-          }
-          renderActivities();
-          renderSummary();
-        });
-        body.appendChild(btn);
-        card.appendChild(body);
-        grid.appendChild(card);
-      });
-
-      renderPlanList();
-    }
-
-    function renderPlanList() {
-      const list = document.getElementById("plan-list");
+      const list = document.getElementById("plan-summary-list");
+      if (!list) return;
       list.innerHTML = "";
 
-      if (state.plan.length === 0) {
+      const present = dayCentreParticipants();
+
+      if (present.length === 0) {
         list.appendChild(el("li", {
           className: "empty-state",
-          textContent: "No activities selected yet.",
+          textContent: "No day centre participants yet.",
         }));
         return;
       }
 
-      state.plan.forEach((id, i) => {
-        const act = ACTIVITIES.find((a) => a.id === id);
-        if (!act) return;
-        const li = el("li", { className: "plan-item" });
-        li.appendChild(el("span", { textContent: `${i + 1}. ${act.name}` }));
-        const rm = el("button", {
-          type: "button",
-          className: "btn btn-sm btn-danger",
-          textContent: "Remove",
-          "aria-label": `Remove ${act.name} from plan`,
-        });
-        rm.addEventListener("click", () => {
-          state.plan = state.plan.filter((x) => x !== id);
-          renderActivities();
-          renderSummary();
-        });
-        li.appendChild(rm);
-        list.appendChild(li);
+      present.forEach((p) => {
+        const acts = (state.participantActivities[p.id] || [])
+          .map((id) => getDayPlanActivity(id)?.name)
+          .filter(Boolean);
+
+        const item = el("li", { className: "plan-summary-item" });
+        item.appendChild(el("strong", { textContent: p.name }));
+
+        if (acts.length === 0) {
+          item.appendChild(el("p", {
+            textContent: "No activities chosen yet.",
+            style: "margin:0.45rem 0 0;color:var(--grey-500);font-size:0.9rem;",
+          }));
+        } else {
+          const tags = el("div", { className: "plan-summary-tags" });
+          acts.forEach((name) => {
+            tags.appendChild(el("span", { className: "plan-summary-tag", textContent: name }));
+          });
+          item.appendChild(tags);
+        }
+        list.appendChild(item);
       });
     }
 
@@ -3002,12 +3355,12 @@
       lines.push(`Feelings: ${feelingsLines.length ? feelingsLines.join(", ") : "None recorded"}`);
       lines.push("");
 
-      const focusLabels = FOCUS_AREAS.filter((f) => state.focus.has(f.id)).map((f) => f.label);
-      lines.push(`Focus: ${focusLabels.length ? focusLabels.join(", ") : "None selected"}`);
-      lines.push("");
-
-      const actNames = state.plan.map((id) => ACTIVITIES.find((a) => a.id === id)?.name).filter(Boolean);
-      lines.push(`Activities: ${actNames.length ? actNames.join(", ") : "None selected"}`);
+      present.forEach((p) => {
+        const acts = (state.participantActivities[p.id] || [])
+          .map((id) => getDayPlanActivity(id)?.name)
+          .filter(Boolean);
+        lines.push(`${p.name}'s plan: ${acts.length ? acts.join(", ") : "None chosen"}`);
+      });
       lines.push("");
 
       const musicLines = state.turnCompleted.map(({ id, music }) => {
