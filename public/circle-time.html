@@ -1760,34 +1760,93 @@
       list-style: none;
       margin: 0;
       padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: clamp(0.75rem, 2vw, 1.1rem);
     }
 
     .plan-summary-item {
       background: var(--white);
-      border: 2px solid var(--grey-200);
+      border: 3px solid var(--grey-200);
       border-radius: var(--radius);
-      padding: 0.85rem 1rem;
-      margin-bottom: 0.65rem;
+      padding: clamp(1rem, 2.2vw, 1.35rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .plan-summary-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .plan-summary-header .avatar-wrap {
+      width: clamp(64px, 10vw, 80px);
+      height: clamp(64px, 10vw, 80px);
+      flex-shrink: 0;
     }
 
     .plan-summary-item strong {
       color: var(--navy);
+      font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+      font-weight: 800;
+      line-height: 1.15;
     }
 
     .plan-summary-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.45rem;
+      gap: clamp(0.5rem, 1.2vw, 0.75rem);
     }
 
     .plan-summary-tag {
       background: var(--orange-soft);
       color: var(--navy);
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 0.25rem 0.55rem;
+      font-size: clamp(0.88rem, 2vw, 1.05rem);
+      font-weight: 800;
+      padding: clamp(0.4rem, 1vw, 0.55rem) clamp(0.75rem, 1.8vw, 1rem);
       border-radius: 999px;
+      border: 2px solid rgba(232, 118, 42, 0.25);
+    }
+
+    .plan-summary-activities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.55rem, 1.4vw, 0.85rem);
+      justify-content: flex-start;
+    }
+
+    .plan-summary-act {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      width: clamp(88px, 14vw, 112px);
+      text-align: center;
+    }
+
+    .plan-summary-act .activity-img-wrap {
+      width: clamp(72px, 11vw, 96px);
+      height: clamp(72px, 11vw, 96px);
+      border: 3px solid var(--grey-200);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow);
+    }
+
+    .plan-summary-act .activity-name-label {
+      font-size: clamp(0.72rem, 1.6vw, 0.88rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    .plan-summary-empty {
+      margin: 0;
+      color: var(--grey-500);
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      font-weight: 600;
     }
 
     #screen-day .section-header {
@@ -5147,24 +5206,30 @@
       }
 
       present.forEach((p) => {
-        const acts = (state.participantActivities[p.id] || [])
-          .map((id) => getDayPlanActivity(id)?.name)
-          .filter(Boolean);
+        const actIds = state.participantActivities[p.id] || [];
 
         const item = el("li", { className: "plan-summary-item" });
-        item.appendChild(el("strong", { textContent: p.name }));
+        const header = el("div", { className: "plan-summary-header" });
+        header.appendChild(avatarImg(p));
+        header.appendChild(el("strong", { textContent: p.name }));
+        item.appendChild(header);
 
-        if (acts.length === 0) {
+        if (actIds.length === 0) {
           item.appendChild(el("p", {
+            className: "plan-summary-empty",
             textContent: "No activities chosen yet.",
-            style: "margin:0.45rem 0 0;color:var(--grey-500);font-size:0.9rem;",
           }));
         } else {
-          const tags = el("div", { className: "plan-summary-tags" });
-          acts.forEach((name) => {
-            tags.appendChild(el("span", { className: "plan-summary-tag", textContent: name }));
+          const grid = el("div", { className: "plan-summary-activities" });
+          actIds.forEach((actId) => {
+            const activity = getDayPlanActivity(actId);
+            if (!activity) return;
+            const cell = el("div", { className: "plan-summary-act" });
+            cell.appendChild(createActivityImgWrap(activity));
+            cell.appendChild(el("p", { className: "activity-name-label", textContent: activity.name }));
+            grid.appendChild(cell);
           });
-          item.appendChild(tags);
+          item.appendChild(grid);
         }
         list.appendChild(item);
       });
