@@ -1412,49 +1412,143 @@
       min-height: 0;
     }
 
-    /* Feelings — feedback form emotion icons */
+    /* Feelings — two-row layout: 3 participants + 4 staff */
+    #screen-feelings {
+      overflow: hidden;
+      padding: 0.5rem 0.75rem 0.75rem;
+    }
+
+    #screen-feelings section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .feelings-controls {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem 1rem;
+      margin-bottom: clamp(0.45rem, 1.2vh, 0.75rem);
+      padding: 0.55rem 0.85rem;
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+    }
+
+    .feelings-turn-banner {
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(0.88rem, 2vw, 1.05rem);
+      color: var(--navy);
+      flex: 1 1 12rem;
+    }
+
+    .feelings-turn-banner .turn-name {
+      color: var(--orange);
+    }
+
     .feelings-participant-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: clamp(0.55rem, 1.4vw, 0.85rem);
-      align-items: stretch;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
       width: 100%;
-      max-width: min(1120px, 98vw);
+      max-width: min(1280px, 98vw);
       margin: 0 auto;
     }
 
-    @media (max-width: 720px) {
-      .feelings-participant-grid {
+    .feelings-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.55rem, 1.5vh, 0.9rem);
+      min-height: 0;
+    }
+
+    .feelings-row {
+      flex: 1;
+      display: grid;
+      gap: clamp(0.55rem, 1.4vw, 0.95rem);
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    .feelings-row-participants {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feelings-row-staff {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (max-width: 900px) {
+      .feelings-row-participants {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .feelings-row-staff {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .feelings-row-participants,
+      .feelings-row-staff {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
     .feelings-card {
       background: var(--white);
-      border: 2px solid var(--grey-200);
+      border: 3px solid var(--grey-200);
       border-radius: var(--radius);
-      padding: clamp(0.55rem, 1.3vw, 0.8rem);
+      padding: clamp(0.7rem, 1.6vw, 1rem);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.45rem;
+      justify-content: flex-start;
+      gap: clamp(0.45rem, 1.2vh, 0.65rem);
       min-width: 0;
       width: 100%;
+      min-height: 0;
+      transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s, transform 0.2s;
     }
 
     .feelings-card.is-staff {
-      border-color: rgba(27, 58, 92, 0.35);
+      border-color: rgba(27, 58, 92, 0.28);
       background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
     }
 
+    .feelings-card.is-turn {
+      border-color: var(--orange);
+      box-shadow:
+        0 0 0 5px rgba(232, 118, 42, 0.28),
+        0 12px 32px rgba(232, 118, 42, 0.18);
+      transform: scale(1.015);
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .feelings-card.is-done {
+      border-color: var(--green);
+      opacity: 0.92;
+    }
+
+    .feelings-card:not(.is-turn):not(.is-done) {
+      opacity: 0.68;
+    }
+
     .feelings-card .avatar-wrap {
-      width: clamp(56px, 8vw, 72px);
-      height: clamp(56px, 8vw, 72px);
+      width: clamp(88px, 12vw, 132px);
+      height: clamp(88px, 12vw, 132px);
     }
 
     .feelings-card .participant-name {
       font-weight: 800;
-      font-size: clamp(0.82rem, 1.9vw, 0.98rem);
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
       margin: 0;
       color: var(--navy);
       text-align: center;
@@ -1474,25 +1568,31 @@
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
-      gap: 0.32rem;
+      gap: clamp(0.28rem, 0.8vw, 0.42rem);
       width: 100%;
       justify-content: center;
+      margin-top: auto;
     }
 
     .emotion-btn {
       border: 2px solid var(--grey-200);
       border-radius: var(--radius-sm);
       background: var(--white);
-      padding: 0.35rem 0.2rem;
+      padding: clamp(0.38rem, 1vw, 0.5rem) 0.22rem;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.22rem;
+      gap: 0.28rem;
       flex: 1 1 0;
       min-width: 0;
       min-height: auto;
-      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s, opacity 0.15s;
+    }
+
+    .emotion-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
     }
 
     .emotion-btn:hover {
@@ -1531,13 +1631,13 @@
     }
 
     .emotion-face svg {
-      width: 100%;
-      height: 100%;
+      width: clamp(30px, 4.8vw, 42px);
+      height: clamp(30px, 4.8vw, 42px);
       display: block;
     }
 
     .emotion-label {
-      font-size: clamp(0.52rem, 1.15vw, 0.66rem);
+      font-size: clamp(0.58rem, 1.25vw, 0.72rem);
       font-weight: 700;
       text-align: center;
       line-height: 1.1;
@@ -2401,12 +2501,15 @@
     }
 
     .agreement-illustration {
-      width: clamp(108px, 14vw, 148px);
-      height: clamp(108px, 14vw, 148px);
+      width: clamp(120px, 16vw, 168px);
+      height: clamp(120px, 16vw, 168px);
       border-radius: var(--radius-sm);
-      background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      background: linear-gradient(165deg, #ffffff 0%, #e8eef5 48%, #d4dee9 100%);
       border: 3px solid var(--grey-200);
-      box-shadow: 0 6px 0 rgba(27, 58, 92, 0.1), 0 10px 24px rgba(27, 58, 92, 0.12);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.9),
+        0 8px 0 rgba(27, 58, 92, 0.1),
+        0 14px 28px rgba(27, 58, 92, 0.14);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2415,9 +2518,10 @@
     }
 
     .agreement-illustration svg {
-      width: 88%;
-      height: 88%;
+      width: 92%;
+      height: 92%;
       display: block;
+      filter: drop-shadow(0 4px 6px rgba(27, 58, 92, 0.12));
     }
 
     .agreement-text {
@@ -3248,14 +3352,18 @@
     </section>
     </div>
 
-    <div id="screen-feelings" class="screen-page scrollable" data-screen="feelings">
+    <div id="screen-feelings" class="screen-page" data-screen="feelings">
     <section id="feelings" aria-labelledby="feelings-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">7</span>
         <div>
           <h2 id="feelings-heading">Feelings Check-In</h2>
-          <p>Staff first: 2 workers, then 1 participant — shuffled order. Tap a feeling for everyone at ClubSENsational.</p>
+          <p>3 participants on top, 4 staff below. Turn order always starts with an adult — shuffle who goes first without moving cards.</p>
         </div>
+      </div>
+      <div class="feelings-controls">
+        <p class="feelings-turn-banner" id="feelings-turn-banner" aria-live="polite">Tap shuffle to begin.</p>
+        <button type="button" class="btn btn-sm" id="feelings-shuffle-btn">Shuffle turn order</button>
       </div>
       <div class="feelings-participant-grid" id="feelings-grid"></div>
     </section>
@@ -3531,11 +3639,11 @@
     ];
 
     const AGREEMENT_3D_SVG = {
-      listen: '<svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="62" rx="28" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="28" cy="34" r="11" fill="#fcd9b6"/><circle cx="52" cy="34" r="11" fill="#e8b896"/><rect x="22" y="44" width="16" height="18" rx="6" fill="#3b82f6"/><rect x="46" y="44" width="16" height="18" rx="6" fill="#2563eb"/><path d="M18 30c3-8 11-12 22-12s19 4 22 12" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/><path d="M12 28c0-6 4-10 10-10" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/><path d="M68 28c0-6-4-10-10-10" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/><ellipse cx="40" cy="30" rx="14" ry="4" fill="#bfdbfe" opacity="0.65"/></svg>',
-      turns: '<svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="62" rx="28" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="40" cy="36" r="20" fill="none" stroke="#e2e8f0" stroke-width="6"/><path d="M40 16a20 20 0 0 1 17.3 10" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/><polygon points="60,20 56,30 66,26" fill="#1d4ed8"/><circle cx="26" cy="48" r="9" fill="#fcd9b6"/><circle cx="54" cy="48" r="9" fill="#e8b896"/><rect x="20" y="56" width="12" height="10" rx="4" fill="#64748b"/><rect x="48" y="56" width="12" height="10" rx="4" fill="#475569"/></svg>',
-      help: '<svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="62" rx="28" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="40" cy="30" r="12" fill="#fcd9b6"/><rect x="30" y="41" width="20" height="20" rx="7" fill="#16a34a"/><path d="M40 18v-6M40 12l-3 3M40 12l3 3" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/><path d="M52 26l8-4M28 26l-8-4" stroke="#fcd9b6" stroke-width="4" stroke-linecap="round"/><rect x="34" y="48" width="12" height="14" rx="4" fill="#15803d"/><circle cx="58" cy="40" r="8" fill="#e8b896"/><path d="M54 40h8M58 36v8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>',
-      space: '<svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="62" rx="28" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="24" cy="34" r="10" fill="#fcd9b6"/><circle cx="56" cy="34" r="10" fill="#e8b896"/><rect x="18" y="43" width="12" height="16" rx="5" fill="#7c3aed"/><rect x="50" y="43" width="12" height="16" rx="5" fill="#6d28d9"/><rect x="34" y="38" width="12" height="24" rx="2" fill="#94a3b8" opacity="0.35"/><path d="M30 38h20" stroke="#64748b" stroke-width="2" stroke-dasharray="3 3"/><path d="M18 52h10M52 52h10" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/></svg>',
-      break: '<svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="62" rx="28" ry="6" fill="#cbd5e1" opacity="0.55"/><rect x="22" y="44" width="36" height="14" rx="6" fill="#94a3b8"/><rect x="24" y="40" width="32" height="8" rx="4" fill="#cbd5e1"/><circle cx="40" cy="30" r="11" fill="#fcd9b6"/><rect x="32" y="40" width="16" height="12" rx="5" fill="#ca8a04"/><rect x="34" y="22" width="4" height="10" rx="1" fill="#fff"/><rect x="42" y="22" width="4" height="10" rx="1" fill="#fff"/><path d="M52 18c4 2 6 6 6 10" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/></svg>',
+      listen: '<svg viewBox="0 0 80 80" aria-hidden="true"><defs><linearGradient id="ag1-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient><radialGradient id="ag1-skin" cx="35%" cy="28%"><stop offset="0%" stop-color="#fde7c7"/><stop offset="100%" stop-color="#e8b896"/></radialGradient><linearGradient id="ag1-shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><ellipse cx="40" cy="64" rx="30" ry="6" fill="url(#ag1-floor)" opacity="0.55"/><circle cx="28" cy="32" r="11" fill="url(#ag1-skin)"/><circle cx="52" cy="32" r="11" fill="url(#ag1-skin)"/><rect x="21" y="42" width="14" height="18" rx="6" fill="url(#ag1-shirt)"/><rect x="45" y="42" width="14" height="18" rx="6" fill="url(#ag1-shirt)"/><path d="M16 28c4-9 12-13 24-13s20 4 24 13" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/><path d="M10 26c0-6 5-10 11-10" fill="none" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/><path d="M70 26c0-6-5-10-11-10" fill="none" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="40" cy="28" rx="15" ry="5" fill="#bfdbfe" opacity="0.7"/></svg>',
+      turns: '<svg viewBox="0 0 80 80" aria-hidden="true"><defs><linearGradient id="ag2-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e2e8f0"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient><radialGradient id="ag2-skin" cx="35%" cy="28%"><stop offset="0%" stop-color="#fde7c7"/><stop offset="100%" stop-color="#e8b896"/></radialGradient></defs><ellipse cx="40" cy="64" rx="30" ry="6" fill="url(#ag2-floor)" opacity="0.55"/><circle cx="40" cy="36" r="21" fill="none" stroke="#e2e8f0" stroke-width="6"/><path d="M40 15a21 21 0 0 1 18.3 10.5" fill="none" stroke="#2563eb" stroke-width="5.5" stroke-linecap="round"/><polygon points="61,18 57,28 68,24" fill="#1d4ed8"/><circle cx="25" cy="48" r="9.5" fill="url(#ag2-skin)"/><circle cx="55" cy="48" r="9.5" fill="url(#ag2-skin)"/><rect x="19" y="56" width="12" height="10" rx="4" fill="#64748b"/><rect x="49" y="56" width="12" height="10" rx="4" fill="#475569"/></svg>',
+      help: '<svg viewBox="0 0 80 80" aria-hidden="true"><defs><radialGradient id="ag3-skin" cx="35%" cy="28%"><stop offset="0%" stop-color="#fde7c7"/><stop offset="100%" stop-color="#e8b896"/></radialGradient><linearGradient id="ag3-shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#15803d"/></linearGradient></defs><ellipse cx="40" cy="64" rx="30" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="40" cy="28" r="12" fill="url(#ag3-skin)"/><rect x="29" y="39" width="22" height="22" rx="8" fill="url(#ag3-shirt)"/><path d="M40 16v-7M40 9l-3.5 3.5M40 9l3.5 3.5" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/><path d="M53 24l9-5M27 24l-9-5" stroke="#fcd9b6" stroke-width="4.2" stroke-linecap="round"/><circle cx="59" cy="38" r="8.5" fill="url(#ag3-skin)"/><path d="M55 38h8M59 34v8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>',
+      space: '<svg viewBox="0 0 80 80" aria-hidden="true"><defs><radialGradient id="ag4-skin" cx="35%" cy="28%"><stop offset="0%" stop-color="#fde7c7"/><stop offset="100%" stop-color="#e8b896"/></radialGradient><linearGradient id="ag4-shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient></defs><ellipse cx="40" cy="64" rx="30" ry="6" fill="#cbd5e1" opacity="0.55"/><circle cx="23" cy="32" r="10.5" fill="url(#ag4-skin)"/><circle cx="57" cy="32" r="10.5" fill="url(#ag4-skin)"/><rect x="17" y="41" width="12" height="17" rx="5" fill="url(#ag4-shirt)"/><rect x="51" y="41" width="12" height="17" rx="5" fill="url(#ag4-shirt)"/><rect x="34" y="36" width="12" height="26" rx="2" fill="#94a3b8" opacity="0.4"/><path d="M29 36h22" stroke="#64748b" stroke-width="2.2" stroke-dasharray="3 3"/><path d="M17 52h10M53 52h10" stroke="#cbd5e1" stroke-width="3.2" stroke-linecap="round"/></svg>',
+      break: '<svg viewBox="0 0 80 80" aria-hidden="true"><defs><radialGradient id="ag5-skin" cx="35%" cy="28%"><stop offset="0%" stop-color="#fde7c7"/><stop offset="100%" stop-color="#e8b896"/></radialGradient><linearGradient id="ag5-shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/></linearGradient></defs><ellipse cx="40" cy="64" rx="30" ry="6" fill="#cbd5e1" opacity="0.55"/><rect x="20" y="44" width="40" height="15" rx="7" fill="#94a3b8"/><rect x="22" y="39" width="36" height="9" rx="4" fill="#cbd5e1"/><circle cx="40" cy="28" r="11.5" fill="url(#ag5-skin)"/><rect x="31" y="38" width="18" height="13" rx="5" fill="url(#ag5-shirt)"/><rect x="33" y="20" width="4.5" height="11" rx="1.2" fill="#fff"/><rect x="42.5" y="20" width="4.5" height="11" rx="1.2" fill="#fff"/><path d="M54 16c4.5 2.2 7 6.5 7 11" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/></svg>',
     };
 
     function buildAgreementIcon3D(agreementId) {
@@ -3693,6 +3801,7 @@
       londonWeather = null;
       clearWeatherAdvanceTimer();
       state.feelingsOrder = [];
+      state.feelingsTurnIndex = 0;
       renderAll();
       showScreen(0);
     }
@@ -3870,6 +3979,7 @@
       weatherConfirmed: false,
       feelings: {},
       feelingsOrder: [],
+      feelingsTurnIndex: 0,
       participantActivities: {},
       turnQueue: [],
       turnStaffIds: [],
@@ -3915,6 +4025,7 @@
         state.feelings[personId] = null;
       }
       state.feelingsOrder = [];
+      state.feelingsTurnIndex = 0;
       resetTurns();
       renderRegister();
       renderFeelings();
@@ -4335,6 +4446,7 @@
         state.feelings[s.id] = null;
       });
       state.feelingsOrder = [];
+      state.feelingsTurnIndex = 0;
       state.day = null;
       state.dayOfMonth = null;
       state.month = null;
@@ -4369,9 +4481,28 @@
       return arr;
     }
 
+    const FEELINGS_MAX_PARTICIPANTS = 3;
+    const FEELINGS_MAX_STAFF = 4;
+
+    function feelingsClubParticipants() {
+      return PARTICIPANTS
+        .filter((p) => state.location[p.id] === "club")
+        .slice(0, FEELINGS_MAX_PARTICIPANTS);
+    }
+
+    function feelingsClubStaff() {
+      return STAFF
+        .filter((s) => state.location[s.id] === "club")
+        .slice(0, FEELINGS_MAX_STAFF);
+    }
+
+    function feelingsClubPeople() {
+      return [...feelingsClubParticipants(), ...feelingsClubStaff()];
+    }
+
     function buildFeelingsDisplayOrder() {
-      const staffQueue = shufflePeople(STAFF.filter((s) => state.location[s.id] === "club"));
-      const participantQueue = shufflePeople(PARTICIPANTS.filter((p) => state.location[p.id] === "club"));
+      const staffQueue = shufflePeople(feelingsClubStaff());
+      const participantQueue = shufflePeople(feelingsClubParticipants());
       const ordered = [];
 
       while (staffQueue.length > 0 || participantQueue.length > 0) {
@@ -4382,11 +4513,12 @@
           ordered.push(participantQueue.shift());
         }
       }
+
       return ordered;
     }
 
     function ensureFeelingsOrder() {
-      const atClub = peopleAtClub();
+      const atClub = feelingsClubPeople();
       const clubIds = new Set(atClub.map((p) => p.id));
       const orderValid = state.feelingsOrder.length > 0
         && state.feelingsOrder.length === atClub.length
@@ -4394,6 +4526,11 @@
 
       if (!orderValid) {
         state.feelingsOrder = buildFeelingsDisplayOrder().map((p) => p.id);
+        state.feelingsTurnIndex = 0;
+      }
+
+      if (state.feelingsTurnIndex > state.feelingsOrder.length) {
+        state.feelingsTurnIndex = state.feelingsOrder.length;
       }
 
       atClub.forEach((p) => {
@@ -4401,11 +4538,26 @@
       });
     }
 
-    function feelingsDisplayPeople() {
+    function syncFeelingsTurnIndex() {
       ensureFeelingsOrder();
-      return state.feelingsOrder
-        .map((id) => getPerson(id))
-        .filter(Boolean);
+      let idx = state.feelingsTurnIndex;
+      while (idx < state.feelingsOrder.length && state.feelings[state.feelingsOrder[idx]] != null) {
+        idx += 1;
+      }
+      state.feelingsTurnIndex = idx;
+    }
+
+    function currentFeelingsTurnId() {
+      syncFeelingsTurnIndex();
+      if (state.feelingsTurnIndex >= state.feelingsOrder.length) return null;
+      return state.feelingsOrder[state.feelingsTurnIndex];
+    }
+
+    function reshuffleFeelingsTurn() {
+      state.feelingsOrder = buildFeelingsDisplayOrder().map((p) => p.id);
+      state.feelingsTurnIndex = 0;
+      renderFeelings();
+      renderSummary();
     }
 
     function activeParticipants() {
@@ -5221,65 +5373,116 @@
        RENDER: Feelings
        ============================================================ */
 
+    function buildFeelingsCard(person, turnId) {
+      const isStaff = person.role === "staff";
+      const isTurn = person.id === turnId;
+      const isDone = state.feelings[person.id] != null;
+      const card = el("div", {
+        className: `feelings-card${isStaff ? " is-staff" : ""}${isTurn ? " is-turn" : ""}${isDone ? " is-done" : ""}`,
+      });
+
+      card.appendChild(avatarImg(person));
+      card.appendChild(el("p", { className: "participant-name", textContent: person.name }));
+      if (isStaff) {
+        card.appendChild(el("p", { className: "feelings-role-tag", textContent: "Staff" }));
+      }
+
+      const feelingsRow = el("div", {
+        className: "emotion-options",
+        role: "group",
+        "aria-label": `Feelings for ${person.name}`,
+      });
+
+      FEELINGS.forEach((f) => {
+        const selected = state.feelings[person.id] === f.id;
+        const btn = el("button", {
+          type: "button",
+          className: `emotion-btn${selected ? " selected" : ""}`,
+          "data-emotion": f.id,
+          "aria-label": `${person.name} feels ${f.label}`,
+          "aria-pressed": selected ? "true" : "false",
+          disabled: !isTurn,
+        });
+        const face = el("span", {
+          className: "emotion-face",
+          "aria-hidden": "true",
+        });
+        face.style.color = f.color;
+        face.innerHTML = EMOTION_SVGS[f.id] || "";
+        btn.appendChild(face);
+        btn.appendChild(el("span", { className: "emotion-label", textContent: f.label }));
+        btn.addEventListener("click", () => {
+          if (person.id !== currentFeelingsTurnId()) return;
+          state.feelings[person.id] = selected ? null : f.id;
+          if (!selected) {
+            state.feelingsTurnIndex += 1;
+            syncFeelingsTurnIndex();
+          }
+          renderFeelings();
+          renderSummary();
+        });
+        feelingsRow.appendChild(btn);
+      });
+
+      card.appendChild(feelingsRow);
+      return card;
+    }
+
+    function updateFeelingsTurnBanner(turnId) {
+      const banner = document.getElementById("feelings-turn-banner");
+      if (!banner) return;
+      if (!turnId) {
+        banner.innerHTML = "Everyone has shared a feeling.";
+        return;
+      }
+      const person = getPerson(turnId);
+      if (!person) {
+        banner.textContent = "Tap shuffle to begin.";
+        return;
+      }
+      banner.innerHTML = `Now: <span class="turn-name">${person.name}</span> — tap how you feel`;
+    }
+
     function renderFeelings() {
       const grid = document.getElementById("feelings-grid");
       grid.innerHTML = "";
-      const present = feelingsDisplayPeople();
+      const participants = feelingsClubParticipants();
+      const staff = feelingsClubStaff();
 
-      if (present.length === 0) {
+      if (participants.length === 0 && staff.length === 0) {
         grid.appendChild(el("p", {
           className: "empty-state",
           textContent: "Drag staff and participants to ClubSENsational to begin feelings check-in.",
         }));
+        updateFeelingsTurnBanner(null);
         return;
       }
 
-      present.forEach((p) => {
-        const isStaff = p.role === "staff";
-        const card = el("div", {
-          className: `feelings-card${isStaff ? " is-staff" : ""}`,
-        });
+      ensureFeelingsOrder();
+      const turnId = currentFeelingsTurnId();
+      updateFeelingsTurnBanner(turnId);
 
-        card.appendChild(avatarImg(p));
-        card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
-        if (isStaff) {
-          card.appendChild(el("p", { className: "feelings-role-tag", textContent: "Staff" }));
-        }
+      const layout = el("div", { className: "feelings-layout" });
 
-        const feelingsRow = el("div", {
-          className: "emotion-options",
-          role: "group",
-          "aria-label": `Feelings for ${p.name}`,
-        });
-
-        FEELINGS.forEach((f) => {
-          const selected = state.feelings[p.id] === f.id;
-          const btn = el("button", {
-            type: "button",
-            className: `emotion-btn${selected ? " selected" : ""}`,
-            "data-emotion": f.id,
-            "aria-label": `${p.name} feels ${f.label}`,
-            "aria-pressed": selected ? "true" : "false",
-          });
-          const face = el("span", {
-            className: "emotion-face",
-            "aria-hidden": "true",
-          });
-          face.style.color = f.color;
-          face.innerHTML = EMOTION_SVGS[f.id] || "";
-          btn.appendChild(face);
-          btn.appendChild(el("span", { className: "emotion-label", textContent: f.label }));
-          btn.addEventListener("click", () => {
-            state.feelings[p.id] = selected ? null : f.id;
-            renderFeelings();
-            renderSummary();
-          });
-          feelingsRow.appendChild(btn);
-        });
-
-        card.appendChild(feelingsRow);
-        grid.appendChild(card);
+      const participantRow = el("div", {
+        className: "feelings-row feelings-row-participants",
+        "aria-label": "Participants",
       });
+      participants.forEach((p) => {
+        participantRow.appendChild(buildFeelingsCard(p, turnId));
+      });
+
+      const staffRow = el("div", {
+        className: "feelings-row feelings-row-staff",
+        "aria-label": "Staff",
+      });
+      staff.forEach((p) => {
+        staffRow.appendChild(buildFeelingsCard(p, turnId));
+      });
+
+      layout.appendChild(participantRow);
+      layout.appendChild(staffRow);
+      grid.appendChild(layout);
     }
 
     /* ============================================================
@@ -5741,6 +5944,7 @@
     updateHeaderDate();
     initPreShow();
     initScreenNav();
+    document.getElementById("feelings-shuffle-btn").addEventListener("click", reshuffleFeelingsTurn);
     renderAll();
   </script>
 </body>
