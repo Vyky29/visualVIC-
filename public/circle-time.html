@@ -121,8 +121,8 @@
     .register-zones {
       flex: 1;
       display: grid;
-      grid-template-columns: minmax(68px, 0.72fr) minmax(0, 1fr) minmax(0, 1.15fr);
-      gap: 0.65rem;
+      grid-template-columns: minmax(72px, 0.55fr) minmax(0, 1fr);
+      gap: 0.75rem;
       min-height: 0;
     }
 
@@ -138,10 +138,7 @@
 
     @media (max-width: 520px) {
       .register-zones {
-        grid-template-columns: minmax(60px, 0.65fr) minmax(0, 1fr);
-      }
-      .drop-zone-car {
-        grid-column: 1 / -1;
+        grid-template-columns: minmax(64px, 0.5fr) minmax(0, 1fr);
       }
     }
 
@@ -161,15 +158,6 @@
     .drop-zone-home.drag-over {
       border-color: var(--navy);
       background: var(--grey-50);
-    }
-
-    .drop-zone-car {
-      border-color: rgba(180, 83, 9, 0.35);
-    }
-
-    .drop-zone-car.drag-over {
-      border-color: var(--amber);
-      background: rgba(245, 158, 11, 0.12);
     }
 
     .drop-zone-club.drag-over {
@@ -204,13 +192,24 @@
       flex: 1;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.45rem;
       align-content: flex-start;
       justify-content: center;
       width: 100%;
       min-height: clamp(96px, 14vh, 128px);
+      max-height: 100%;
+      overflow-y: auto;
       padding: 0.35rem;
       border-radius: var(--radius-sm);
+    }
+
+    .zone-avatars .draggable-avatar {
+      width: clamp(96px, 14vw, 128px);
+    }
+
+    .zone-avatars .draggable-avatar .avatar-wrap {
+      width: clamp(88px, 13vw, 112px);
+      height: clamp(88px, 13vw, 112px);
     }
 
     .register-dock {
@@ -1808,7 +1807,7 @@
         <span class="section-num" aria-hidden="true">1</span>
         <div>
           <h2 id="register-heading">Who is here today?</h2>
-          <p>Drag each person to <strong>Home</strong>, <strong>On the way</strong>, or <strong>ClubSENsational</strong>.</p>
+          <p>Drag each person to <strong>Home</strong> or <strong>ClubSENsational</strong>.</p>
         </div>
       </div>
       <div class="register-layout">
@@ -1819,13 +1818,6 @@
               <p class="zone-label">Home</p>
             </div>
             <div class="zone-avatars" id="zone-home"></div>
-          </div>
-          <div class="drop-zone drop-zone-car" data-drop-zone="car" aria-label="On the way to ClubSENsational">
-            <div class="zone-header">
-              <img class="zone-icon" src="/cards/day%20centre/fadi/scenes/vassims-car.png" alt="" />
-              <p class="zone-label">On the way</p>
-            </div>
-            <div class="zone-avatars" id="zone-car"></div>
           </div>
           <div class="drop-zone drop-zone-club" data-drop-zone="club" aria-label="ClubSENsational drop zone">
             <div class="zone-header">
@@ -2349,11 +2341,11 @@
     function finishAvatarDrop(personId, zoneKey) {
       if (!zoneKey) return;
       const person = getPerson(personId);
-      if (person?.role === "staff" && (zoneKey === "home" || zoneKey === "car")) {
+      if (person?.role === "staff" && zoneKey === "home") {
         zoneKey = "club";
       }
       state.location[personId] = zoneKey;
-      if (person?.role === "participant" && zoneKey !== "club" && zoneKey !== "car") {
+      if (person?.role === "participant" && zoneKey !== "club") {
         state.feelings[personId] = null;
         state.participantActivities[personId] = [];
       }
@@ -2588,7 +2580,7 @@
 
     function initState() {
       PARTICIPANTS.forEach((p) => {
-        state.location[p.id] = p.id === "fadi" ? "car" : "dock";
+        state.location[p.id] = p.id === "fadi" ? "home" : "dock";
         state.feelings[p.id] = null;
         state.participantActivities[p.id] = [];
       });
@@ -2607,10 +2599,7 @@
     }
 
     function dayCentreParticipants() {
-      return PARTICIPANTS.filter((p) => {
-        const loc = state.location[p.id];
-        return loc === "club" || loc === "car";
-      });
+      return PARTICIPANTS.filter((p) => state.location[p.id] === "club");
     }
 
     function activeParticipants() {
@@ -2689,7 +2678,6 @@
     function renderRegister() {
       const zones = {
         home: document.getElementById("zone-home"),
-        car: document.getElementById("zone-car"),
         club: document.getElementById("zone-club"),
         dock: document.getElementById("register-dock"),
       };
@@ -2736,7 +2724,7 @@
         tabindex: "0",
         "aria-label": isStaff
           ? `${p.name}, drag to ClubSENsational`
-          : `${p.name}, drag to Home, On the way, or ClubSENsational`,
+          : `${p.name}, drag to Home or ClubSENsational`,
         "data-participant-id": p.id,
       });
       chip.appendChild(avatarImg(p));
@@ -2752,7 +2740,6 @@
           const id = chip.dataset.participantId;
           const person = getPerson(id);
           if (e.key === "h" || e.key === "H") finishAvatarDrop(id, person?.role === "staff" ? "club" : "home");
-          else if (e.key === "w" || e.key === "W") finishAvatarDrop(id, person?.role === "staff" ? "club" : "car");
           else if (e.key === "c" || e.key === "C") finishAvatarDrop(id, "club");
           else if (e.key === "d" || e.key === "D") finishAvatarDrop(id, "dock");
         };
@@ -2893,7 +2880,7 @@
       if (present.length === 0) {
         grid.appendChild(el("p", {
           className: "empty-state",
-          textContent: "Drag participants to ClubSENsational or On the way to begin feelings check-in.",
+          textContent: "Drag participants to ClubSENsational to begin feelings check-in.",
         }));
         return;
       }
@@ -2904,11 +2891,7 @@
         });
 
         card.appendChild(avatarImg(p));
-        const nameRow = el("p", { className: "participant-name", textContent: p.name });
-        if (state.location[p.id] === "car") {
-          nameRow.textContent = `${p.name} (on the way)`;
-        }
-        card.appendChild(nameRow);
+        card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
 
         const feelingsRow = el("div", {
           className: "emotion-options",
@@ -3032,12 +3015,6 @@
           const header = el("div", { className: "plan-col-header" });
           header.appendChild(avatarImg(p));
           header.appendChild(el("p", { className: "participant-name", textContent: p.name }));
-          if (state.location[p.id] === "car") {
-            header.appendChild(el("p", {
-              className: "plan-col-on-the-way",
-              textContent: "On the way",
-            }));
-          }
           col.appendChild(header);
 
           const acts = el("div", { className: "plan-col-activities" });
@@ -3330,11 +3307,9 @@
 
       const atClub = PARTICIPANTS.filter((p) => state.location[p.id] === "club");
       const atHome = PARTICIPANTS.filter((p) => state.location[p.id] === "home");
-      const onTheWay = PARTICIPANTS.filter((p) => state.location[p.id] === "car");
       const unassigned = PARTICIPANTS.filter((p) => state.location[p.id] === "dock");
 
       lines.push(`At ClubSENsational: ${atClub.length ? atClub.map((p) => p.name).join(", ") : "None"}`);
-      lines.push(`On the way: ${onTheWay.length ? onTheWay.map((p) => p.name).join(", ") : "None"}`);
       lines.push(`At Home: ${atHome.length ? atHome.map((p) => p.name).join(", ") : "None"}`);
       if (unassigned.length) {
         lines.push(`Not placed: ${unassigned.map((p) => p.name).join(", ")}`);
