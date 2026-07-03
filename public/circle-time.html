@@ -119,12 +119,11 @@
     }
 
     .register-zones {
-      flex: 0 1 auto;
+      flex: 1;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.5rem;
+      grid-template-columns: minmax(68px, 0.72fr) minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 0.65rem;
       min-height: 0;
-      max-height: min(42vh, 320px);
     }
 
     #screen-register .section-header {
@@ -139,8 +138,7 @@
 
     @media (max-width: 520px) {
       .register-zones {
-        grid-template-columns: 1fr 1fr;
-        max-height: none;
+        grid-template-columns: minmax(60px, 0.65fr) minmax(0, 1fr);
       }
       .drop-zone-car {
         grid-column: 1 / -1;
@@ -154,8 +152,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0.4rem 0.45rem;
+      padding: 0.65rem 0.75rem;
       min-height: 0;
+      height: 100%;
       transition: border-color 0.2s, background 0.2s;
     }
 
@@ -188,14 +187,14 @@
     }
 
     .zone-icon {
-      width: clamp(40px, 8vw, 56px);
-      height: clamp(40px, 8vw, 56px);
+      width: clamp(56px, 11vw, 88px);
+      height: clamp(56px, 11vw, 88px);
       object-fit: contain;
     }
 
     .zone-label {
       font-weight: 700;
-      font-size: clamp(0.72rem, 1.8vw, 0.88rem);
+      font-size: clamp(0.78rem, 2vw, 1rem);
       margin: 0;
       text-align: center;
       line-height: 1.15;
@@ -205,23 +204,23 @@
       flex: 1;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
+      gap: 0.5rem;
       align-content: flex-start;
       justify-content: center;
       width: 100%;
-      min-height: 64px;
-      padding: 0.25rem;
+      min-height: clamp(96px, 14vh, 128px);
+      padding: 0.35rem;
       border-radius: var(--radius-sm);
     }
 
     .register-dock {
-      flex: 1;
+      flex-shrink: 0;
       margin-top: 0.5rem;
       border-top: 3px solid var(--grey-200);
-      padding: 0.75rem;
+      padding: 0.85rem;
       background: var(--grey-100);
       border-radius: var(--radius);
-      min-height: clamp(140px, 28vh, 220px);
+      min-height: clamp(170px, 34vh, 280px);
     }
 
     .register-dock-label {
@@ -344,22 +343,22 @@
       flex-shrink: 0;
       margin-top: 0.5rem;
       border-top: 3px solid var(--grey-200);
-      padding: 0.75rem;
+      padding: 0.85rem;
       background: var(--grey-100);
       border-radius: var(--radius);
-      min-height: clamp(120px, 18vh, 155px);
+      min-height: clamp(150px, 22vh, 190px);
     }
 
     .day-dock-items {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.65rem;
+      gap: 0.75rem;
       justify-content: center;
       align-items: flex-start;
     }
 
     .draggable-day {
-      width: clamp(76px, 11vw, 100px);
+      width: clamp(96px, 14vw, 124px);
       touch-action: none;
       user-select: none;
       cursor: grab;
@@ -372,13 +371,13 @@
     }
 
     .day-letter-icon {
-      width: clamp(56px, 9vw, 72px);
-      height: clamp(56px, 9vw, 72px);
+      width: clamp(72px, 11vw, 92px);
+      height: clamp(72px, 11vw, 92px);
       border-radius: 50%;
-      background: var(--navy);
+      background: var(--day-color, var(--navy));
       color: var(--white);
       font-weight: 800;
-      font-size: clamp(1.1rem, 3.5vw, 1.55rem);
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
       display: grid;
       place-items: center;
       margin: 0 auto;
@@ -388,9 +387,9 @@
     }
 
     .day-name-label {
-      font-size: clamp(0.65rem, 2vw, 0.8rem);
+      font-size: clamp(0.72rem, 2.1vw, 0.88rem);
       font-weight: 700;
-      margin: 0.35rem 0 0;
+      margin: 0.4rem 0 0;
       color: var(--navy);
       line-height: 1.15;
       pointer-events: none;
@@ -398,6 +397,244 @@
 
     .drag-ghost.draggable-day .day-letter-icon {
       background: var(--orange);
+    }
+
+    /* Weather screen — drag like day */
+    .weather-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .weather-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 0;
+    }
+
+    .weather-today-label {
+      font-size: clamp(1.6rem, 5.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-align: center;
+      margin: 0 0 1.25rem;
+      color: var(--navy);
+    }
+
+    .weather-drop-slot {
+      min-height: clamp(180px, 28vh, 260px);
+      width: min(380px, 90vw);
+      border: 4px dashed var(--navy);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--grey-50);
+      padding: 1.25rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .weather-drop-slot.drag-over {
+      background: rgba(27, 58, 92, 0.1);
+      border-color: var(--orange);
+      border-style: solid;
+    }
+
+    .weather-placeholder {
+      color: var(--grey-500);
+      font-weight: 600;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      text-align: center;
+      margin: 0;
+      padding: 0 1rem;
+    }
+
+    .weather-dock {
+      flex-shrink: 0;
+      margin-top: 0.5rem;
+      border-top: 3px solid var(--grey-200);
+      padding: 0.85rem;
+      background: var(--grey-100);
+      border-radius: var(--radius);
+      min-height: clamp(150px, 22vh, 190px);
+    }
+
+    .weather-dock-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .draggable-weather {
+      width: clamp(108px, 15vw, 138px);
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .draggable-weather.is-drag-source {
+      opacity: 0.2;
+    }
+
+    .weather-icon-box {
+      width: clamp(88px, 13vw, 112px);
+      height: clamp(88px, 13vw, 112px);
+      border-radius: var(--radius);
+      background: var(--white);
+      border: 3px solid var(--grey-200);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      font-size: clamp(2.5rem, 7vw, 3.5rem);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .weather-name-label {
+      font-size: clamp(0.75rem, 2.1vw, 0.92rem);
+      font-weight: 700;
+      margin: 0.4rem 0 0;
+      color: var(--navy);
+      line-height: 1.15;
+      pointer-events: none;
+    }
+
+    .drag-ghost.draggable-weather .weather-icon-box {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+    }
+
+    #screen-weather .section-header {
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+      padding-bottom: 0.5rem;
+    }
+
+    #screen-weather {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    #screen-weather section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Feelings — feedback form emotion icons */
+    .feelings-participant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      gap: 1rem;
+    }
+
+    .feelings-card {
+      background: var(--white);
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .feelings-card .avatar-wrap {
+      width: clamp(88px, 14vw, 108px);
+      height: clamp(88px, 14vw, 108px);
+    }
+
+    .feelings-card .participant-name {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin: 0;
+      color: var(--navy);
+    }
+
+    .emotion-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+      width: 100%;
+    }
+
+    .emotion-btn {
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      padding: 0.55rem 0.35rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 88px;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+
+    .emotion-btn:hover {
+      border-color: var(--grey-500);
+    }
+
+    .emotion-btn.selected {
+      border-width: 3px;
+      transform: scale(1.02);
+    }
+
+    .emotion-btn[data-emotion="Withdrawn"].selected {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    .emotion-btn[data-emotion="Happy/Excited"].selected {
+      border-color: #16a34a;
+      background: rgba(22, 163, 74, 0.1);
+    }
+
+    .emotion-btn[data-emotion="Anxious"].selected {
+      border-color: #ca8a04;
+      background: rgba(202, 138, 4, 0.12);
+    }
+
+    .emotion-btn[data-emotion="Out of control"].selected {
+      border-color: #dc2626;
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .emotion-face {
+      width: 40px;
+      height: 40px;
+      color: var(--emotion-color, var(--navy));
+    }
+
+    .emotion-face svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .emotion-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.15;
+      color: var(--navy);
+    }
+
+    #screen-feelings .section-header {
+      flex-shrink: 0;
     }
 
     #screen-day .section-header {
@@ -417,6 +654,30 @@
       font-size: clamp(0.85rem, 2.2vw, 0.98rem);
       margin-top: 0.35rem;
       pointer-events: none;
+    }
+
+    .draggable-avatar.staff-chip .avatar-wrap {
+      border-color: var(--orange);
+    }
+
+    .draggable-avatar.staff-chip .participant-name {
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .register-dock-section-label {
+      text-align: center;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0.75rem 0 0.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: 100%;
+    }
+
+    .register-dock-section-label:first-child {
+      margin-top: 0;
     }
 
     .pre-show-logo {
@@ -1347,8 +1608,8 @@
             <div class="zone-avatars" id="zone-club"></div>
           </div>
         </div>
-        <div class="register-dock" data-drop-zone="dock" aria-label="Unassigned participants">
-          <p class="register-dock-label">Drag from here</p>
+        <div class="register-dock" data-drop-zone="dock" aria-label="Unassigned participants and staff">
+          <p class="register-dock-label">Drag people from here</p>
           <div class="register-dock-avatars" id="register-dock"></div>
         </div>
       </div>
@@ -1379,16 +1640,27 @@
     </section>
     </div>
 
-    <div id="screen-weather" class="screen-page scrollable" data-screen="weather">
+    <div id="screen-weather" class="screen-page" data-screen="weather">
     <section id="weather" aria-labelledby="weather-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">3</span>
         <div>
           <h2 id="weather-heading">Weather</h2>
-          <p>Select today's weather.</p>
+          <p>Drag today's weather into the box.</p>
         </div>
       </div>
-      <div class="grid grid-4" id="weather-grid" role="group" aria-label="Weather"></div>
+      <div class="weather-layout">
+        <div class="weather-center">
+          <p class="weather-today-label" aria-hidden="true">TODAY'S WEATHER</p>
+          <div class="weather-drop-slot" data-drop-zone="weather-slot" id="weather-slot" aria-label="Selected weather">
+            <p class="weather-placeholder" id="weather-slot-placeholder">Drop the weather here</p>
+          </div>
+        </div>
+        <div class="weather-dock" data-drop-zone="weather-dock" aria-label="Weather options">
+          <p class="register-dock-label">Drag the weather</p>
+          <div class="weather-dock-items" id="weather-dock"></div>
+        </div>
+      </div>
     </section>
     </div>
 
@@ -1398,10 +1670,10 @@
         <span class="section-num" aria-hidden="true">4</span>
         <div>
           <h2 id="feelings-heading">Feelings Check-In</h2>
-          <p>How is each participant feeling today?</p>
+          <p>How is everyone at the day centre feeling today?</p>
         </div>
       </div>
-      <div class="grid grid-2" id="feelings-grid"></div>
+      <div class="feelings-participant-grid" id="feelings-grid"></div>
     </section>
     </div>
 
@@ -1494,11 +1766,22 @@
        ============================================================ */
 
     const PARTICIPANTS = [
-      { id: "ikram", name: "Ikram", avatar: "/avatars/ikram-cartoon-leopard-2d.png" },
-      { id: "emmanuel", name: "Emmanuel", avatar: "/avatars/emmanuel-cartoon-2d.png" },
-      { id: "timi", name: "Timi", avatar: "/avatars/timi-cartoon-2d.png" },
-      { id: "fadi", name: "Fadi", avatar: "/avatars/fadi-cartoon-2d.png" },
+      { id: "ikram", name: "Ikram", avatar: "/avatars/ikram-cartoon-leopard-2d.png", role: "participant" },
+      { id: "emmanuel", name: "Emmanuel", avatar: "/avatars/emmanuel-cartoon-2d.png", role: "participant" },
+      { id: "timi", name: "Timi", avatar: "/avatars/timi-cartoon-2d.png", role: "participant" },
+      { id: "fadi", name: "Fadi", avatar: "/avatars/fadi-cartoon-2d.png", role: "participant" },
     ];
+
+    const STAFF = [
+      { id: "youssef", name: "Youssef", avatar: "/avatars/youssef-cartoon-2d.png", role: "staff" },
+      { id: "luliya", name: "Luliya", avatar: "/avatars/luliya-cartoon-2d.png", role: "staff" },
+      { id: "michelle", name: "Michelle", avatar: "/avatars/michelle-cartoon-2d.png", role: "staff" },
+      { id: "raul", name: "Raul", avatar: "/avatars/raul-cartoon-2d.png", role: "staff" },
+      { id: "roberto", name: "Roberto", avatar: "/avatars/roberto-cartoon-2d.png", role: "staff" },
+      { id: "victor", name: "Victor", avatar: "/avatars/victor-cartoon-2d.png", role: "staff" },
+    ];
+
+    const REGISTER_PEOPLE = [...PARTICIPANTS, ...STAFF];
 
     const SCREEN_IDS = [
       "register", "day", "weather", "feelings", "focus",
@@ -1517,6 +1800,16 @@
       Sunday: "Su",
     };
 
+    const DAY_COLORS = {
+      Monday: "#2563eb",
+      Tuesday: "#7c3aed",
+      Wednesday: "#16a34a",
+      Thursday: "#ca8a04",
+      Friday: "#e8762a",
+      Saturday: "#db2777",
+      Sunday: "#dc2626",
+    };
+
     const WEATHER = [
       { id: "sunny", label: "Sunny", icon: "☀️" },
       { id: "cloudy", label: "Cloudy", icon: "☁️" },
@@ -1527,8 +1820,18 @@
       { id: "stormy", label: "Stormy", icon: "⛈️" },
     ];
 
+    const EMOTION_SVGS = {
+      Withdrawn: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 15.5Q12 12.7 16 15.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
+      "Happy/Excited": '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 14Q12 17.2 16 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
+      Anxious: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M8 8.5l2 1.5M16 8.5l-2 1.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.5 14.5h7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M17.2 6.3c.9.6.8 1.8 0 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>',
+      "Out of control": '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M8 8.5l3 2M16 8.5l-3 2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M9 15h6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>',
+    };
+
     const FEELINGS = [
-      "Happy", "Calm", "Tired", "Worried", "Excited", "Frustrated", "Not sure",
+      { id: "Withdrawn", label: "Withdrawn", color: "#2563eb" },
+      { id: "Happy/Excited", label: "Happy / Excited", color: "#16a34a" },
+      { id: "Anxious", label: "Anxious", color: "#ca8a04" },
+      { id: "Out of control", label: "Out of control", color: "#dc2626" },
     ];
 
     const FOCUS_AREAS = [
@@ -1816,10 +2119,16 @@
       document.querySelectorAll("[data-drop-zone]").forEach((z) => z.classList.remove("drag-over"));
     }
 
-    function finishAvatarDrop(participantId, zoneKey) {
+    function finishAvatarDrop(personId, zoneKey) {
       if (!zoneKey) return;
-      state.location[participantId] = zoneKey;
-      if (zoneKey !== "club") state.feelings[participantId] = null;
+      const person = getPerson(personId);
+      if (person?.role === "staff" && (zoneKey === "home" || zoneKey === "car")) {
+        zoneKey = "club";
+      }
+      state.location[personId] = zoneKey;
+      if (person?.role === "participant" && zoneKey !== "club") {
+        state.feelings[personId] = null;
+      }
       resetTurns();
       renderRegister();
       renderFeelings();
@@ -1834,6 +2143,16 @@
         state.day = null;
       }
       renderDay();
+      renderSummary();
+    }
+
+    function finishWeatherDrop(zoneKey, weatherId) {
+      if (zoneKey === "weather-slot") {
+        state.weather = weatherId;
+      } else if (zoneKey === "weather-dock" && state.weather === weatherId) {
+        state.weather = null;
+      }
+      renderWeather();
       renderSummary();
     }
 
@@ -1857,6 +2176,10 @@
         if (dragState.type === "day") {
           if (zoneKey === "day-slot" || zoneKey === "day-dock") {
             finishDayDrop(zoneKey, dragState.dayName);
+          }
+        } else if (dragState.type === "weather") {
+          if (zoneKey === "weather-slot" || zoneKey === "weather-dock") {
+            finishWeatherDrop(zoneKey, dragState.weatherId);
           }
         } else if (zoneKey) {
           finishAvatarDrop(dragState.id, zoneKey);
@@ -1949,16 +2272,53 @@
       e.preventDefault();
     }
 
+    function startWeatherDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const weatherId = chip.dataset.weatherId;
+      if (!weatherId) return;
+
+      dragState = {
+        type: "weather",
+        weatherId,
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
     function initState() {
       PARTICIPANTS.forEach((p) => {
-        state.location[p.id] = "dock";
+        state.location[p.id] = p.id === "fadi" ? "car" : "dock";
         state.feelings[p.id] = null;
+      });
+      STAFF.forEach((s) => {
+        state.location[s.id] = "club";
       });
       resetTurns();
     }
 
+    function getPerson(id) {
+      return REGISTER_PEOPLE.find((p) => p.id === id);
+    }
+
     function participantAtClub(p) {
       return state.location[p.id] === "club";
+    }
+
+    function dayCentreParticipants() {
+      return PARTICIPANTS.filter((p) => {
+        const loc = state.location[p.id];
+        return loc === "club" || loc === "car";
+      });
     }
 
     function activeParticipants() {
@@ -2043,22 +2403,48 @@
       };
       Object.values(zones).forEach((z) => { if (z) z.innerHTML = ""; });
 
-      PARTICIPANTS.forEach((p) => {
+      REGISTER_PEOPLE.forEach((p) => {
         const loc = state.location[p.id] || "dock";
-        const container = zones[loc] || zones.dock;
-        const chip = createDraggableAvatar(p);
-        container.appendChild(chip);
+        if (loc === "dock") return;
+        const container = zones[loc];
+        if (container) container.appendChild(createDraggableAvatar(p));
       });
+
+      const dockParticipants = PARTICIPANTS.filter((p) => (state.location[p.id] || "dock") === "dock");
+      const dockStaff = STAFF.filter((s) => (state.location[s.id] || "dock") === "dock");
+
+      if (dockParticipants.length) {
+        zones.dock.appendChild(el("p", {
+          className: "register-dock-section-label",
+          textContent: "Participants",
+        }));
+        dockParticipants.forEach((p) => {
+          zones.dock.appendChild(createDraggableAvatar(p));
+        });
+      }
+
+      if (dockStaff.length) {
+        zones.dock.appendChild(el("p", {
+          className: "register-dock-section-label",
+          textContent: "Staff",
+        }));
+        dockStaff.forEach((s) => {
+          zones.dock.appendChild(createDraggableAvatar(s));
+        });
+      }
 
       initRegisterDragDrop();
     }
 
     function createDraggableAvatar(p) {
+      const isStaff = p.role === "staff";
       const chip = el("div", {
-        className: "draggable-avatar",
+        className: `draggable-avatar${isStaff ? " staff-chip" : ""}`,
         role: "button",
         tabindex: "0",
-        "aria-label": `${p.name}, drag to Home, On the way, or ClubSENsational`,
+        "aria-label": isStaff
+          ? `${p.name}, drag to ClubSENsational`
+          : `${p.name}, drag to Home, On the way, or ClubSENsational`,
         "data-participant-id": p.id,
       });
       chip.appendChild(avatarImg(p));
@@ -2072,8 +2458,9 @@
         chip.onpointerdown = startAvatarDrag;
         chip.onkeydown = (e) => {
           const id = chip.dataset.participantId;
-          if (e.key === "h" || e.key === "H") finishAvatarDrop(id, "home");
-          else if (e.key === "w" || e.key === "W") finishAvatarDrop(id, "car");
+          const person = getPerson(id);
+          if (e.key === "h" || e.key === "H") finishAvatarDrop(id, person?.role === "staff" ? "club" : "home");
+          else if (e.key === "w" || e.key === "W") finishAvatarDrop(id, person?.role === "staff" ? "club" : "car");
           else if (e.key === "c" || e.key === "C") finishAvatarDrop(id, "club");
           else if (e.key === "d" || e.key === "D") finishAvatarDrop(id, "dock");
         };
@@ -2085,18 +2472,21 @@
        ============================================================ */
 
     function createDayChip(day) {
+      const color = DAY_COLORS[day] || "var(--navy)";
       const chip = el("div", {
         className: "draggable-day",
         role: "button",
         tabindex: "0",
         "aria-label": `Drag ${day} to TODAY IS box`,
         "data-day-name": day,
+        style: `--day-color:${color}`,
       });
-      chip.appendChild(el("div", {
+      const icon = el("div", {
         className: "day-letter-icon",
         textContent: DAY_LETTERS[day] || day.charAt(0),
         "aria-hidden": "true",
-      }));
+      });
+      chip.appendChild(icon);
       chip.appendChild(el("p", { className: "day-name-label", textContent: day }));
       return chip;
     }
@@ -2141,24 +2531,61 @@
       });
     }
 
+    function createWeatherChip(w) {
+      const chip = el("div", {
+        className: "draggable-weather",
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag ${w.label} to weather box`,
+        "data-weather-id": w.id,
+      });
+      chip.appendChild(el("div", {
+        className: "weather-icon-box",
+        textContent: w.icon,
+        "aria-hidden": "true",
+      }));
+      chip.appendChild(el("p", { className: "weather-name-label", textContent: w.label }));
+      return chip;
+    }
+
     function renderWeather() {
-      const grid = document.getElementById("weather-grid");
-      grid.innerHTML = "";
+      const slot = document.getElementById("weather-slot");
+      const dock = document.getElementById("weather-dock");
+      const placeholder = document.getElementById("weather-slot-placeholder");
+      if (!slot || !dock) return;
+
+      dock.innerHTML = "";
+      slot.querySelectorAll(".draggable-weather").forEach((n) => n.remove());
+
+      if (state.weather) {
+        const selected = WEATHER.find((w) => w.id === state.weather);
+        placeholder.classList.add("hidden");
+        if (selected) slot.appendChild(createWeatherChip(selected));
+      } else {
+        placeholder.classList.remove("hidden");
+      }
+
       WEATHER.forEach((w) => {
-        const card = el("button", {
-          type: "button",
-          className: `choice-card${state.weather === w.id ? " selected" : ""}`,
-          "aria-label": w.label,
-          "aria-pressed": state.weather === w.id ? "true" : "false",
-        });
-        card.appendChild(el("span", { className: "icon", textContent: w.icon, "aria-hidden": "true" }));
-        card.appendChild(el("span", { className: "label", textContent: w.label }));
-        card.addEventListener("click", () => {
-          state.weather = state.weather === w.id ? null : w.id;
-          renderWeather();
-          renderSummary();
-        });
-        grid.appendChild(card);
+        if (w.id === state.weather) return;
+        dock.appendChild(createWeatherChip(w));
+      });
+
+      initWeatherDragDrop();
+    }
+
+    function initWeatherDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll(".draggable-weather").forEach((chip) => {
+        chip.onpointerdown = startWeatherDrag;
+        chip.onkeydown = (e) => {
+          const weatherId = chip.dataset.weatherId;
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            state.weather = state.weather === weatherId ? null : weatherId;
+            renderWeather();
+            renderSummary();
+          }
+        };
       });
     }
 
@@ -2169,40 +2596,53 @@
     function renderFeelings() {
       const grid = document.getElementById("feelings-grid");
       grid.innerHTML = "";
-      const active = activeParticipants();
+      const present = dayCentreParticipants();
 
-      if (active.length === 0) {
+      if (present.length === 0) {
         grid.appendChild(el("p", {
           className: "empty-state",
-          textContent: "Drag participants to ClubSENsational to begin feelings check-in.",
+          textContent: "Drag participants to ClubSENsational or On the way to begin feelings check-in.",
         }));
         return;
       }
 
-      active.forEach((p) => {
+      present.forEach((p) => {
         const card = el("div", {
-          className: "participant-card status-here",
+          className: "feelings-card",
         });
 
         card.appendChild(avatarImg(p));
-        card.appendChild(el("p", { className: "participant-name", textContent: p.name }));
+        const nameRow = el("p", { className: "participant-name", textContent: p.name });
+        if (state.location[p.id] === "car") {
+          nameRow.textContent = `${p.name} (on the way)`;
+        }
+        card.appendChild(nameRow);
 
         const feelingsRow = el("div", {
-          className: "feelings-grid",
+          className: "emotion-options",
           role: "group",
           "aria-label": `Feelings for ${p.name}`,
         });
 
         FEELINGS.forEach((f) => {
+          const selected = state.feelings[p.id] === f.id;
           const btn = el("button", {
             type: "button",
-            className: `feeling-btn${state.feelings[p.id] === f ? " selected" : ""}`,
-            textContent: f,
-            "aria-label": `${p.name} feels ${f}`,
-            "aria-pressed": state.feelings[p.id] === f ? "true" : "false",
+            className: `emotion-btn${selected ? " selected" : ""}`,
+            "data-emotion": f.id,
+            "aria-label": `${p.name} feels ${f.label}`,
+            "aria-pressed": selected ? "true" : "false",
           });
+          const face = el("span", {
+            className: "emotion-face",
+            "aria-hidden": "true",
+          });
+          face.style.color = f.color;
+          face.innerHTML = EMOTION_SVGS[f.id] || "";
+          btn.appendChild(face);
+          btn.appendChild(el("span", { className: "emotion-label", textContent: f.label }));
           btn.addEventListener("click", () => {
-            state.feelings[p.id] = state.feelings[p.id] === f ? null : f;
+            state.feelings[p.id] = selected ? null : f.id;
             renderFeelings();
             renderSummary();
           });
@@ -2210,15 +2650,6 @@
         });
 
         card.appendChild(feelingsRow);
-
-        const display = el("p", { className: "feeling-display" });
-        if (state.feelings[p.id]) {
-          display.innerHTML = `Selected: <strong>${state.feelings[p.id]}</strong>`;
-        } else {
-          display.textContent = "No feeling selected yet";
-        }
-        card.appendChild(display);
-
         grid.appendChild(card);
       });
     }
@@ -2555,13 +2986,19 @@
       if (unassigned.length) {
         lines.push(`Not placed: ${unassigned.map((p) => p.name).join(", ")}`);
       }
+
+      const staffAtClub = STAFF.filter((s) => state.location[s.id] === "club");
+      lines.push(`Staff at ClubSENsational: ${staffAtClub.length ? staffAtClub.map((s) => s.name).join(", ") : "None"}`);
       lines.push("");
 
-      const present = atClub;
+      const present = dayCentreParticipants();
 
       const feelingsLines = present
         .filter((p) => state.feelings[p.id])
-        .map((p) => `${p.name} - ${state.feelings[p.id]}`);
+        .map((p) => {
+          const label = FEELINGS.find((f) => f.id === state.feelings[p.id])?.label || state.feelings[p.id];
+          return `${p.name} - ${label}`;
+        });
       lines.push(`Feelings: ${feelingsLines.length ? feelingsLines.join(", ") : "None recorded"}`);
       lines.push("");
 
