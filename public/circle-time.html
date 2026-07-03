@@ -2429,89 +2429,228 @@
       max-width: 14ch;
     }
 
-    /* Turn-taking board */
-    .turn-board {
-      display: grid;
-      gap: 1.5rem;
+    /* Turn-taking */
+    #screen-turn-taking {
+      overflow: hidden;
+      padding: 0.5rem 0.75rem 0.75rem;
     }
 
-    @media (min-width: 768px) {
-      .turn-board { grid-template-columns: 1fr 1fr; }
+    #screen-turn-taking section {
+      min-height: 0;
     }
 
-    .turn-column h3 {
-      margin: 0 0 0.75rem;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--grey-500);
+    #screen-turn-taking .section-header {
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+      padding-bottom: 0.5rem;
     }
 
-    .turn-now {
-      background: var(--orange-soft);
-      border: 2px solid var(--orange);
-      border-radius: var(--radius);
-      padding: 1.5rem;
+    .turn-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(0.65rem, 1.6vh, 1rem);
+      min-height: 0;
+      width: 100%;
+    }
+
+    .turn-hero {
       text-align: center;
+      padding: clamp(0.85rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
+      background: linear-gradient(180deg, var(--orange-soft) 0%, #fff7ed 100%);
+      border: 3px solid var(--orange);
+      border-radius: var(--radius);
+      width: min(460px, 94vw);
+      flex-shrink: 0;
+      box-shadow: 0 8px 28px rgba(232, 118, 42, 0.15);
     }
 
-    .turn-now .avatar-wrap {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 0.75rem;
+    .turn-hero.is-complete {
+      background: linear-gradient(180deg, rgba(22, 163, 74, 0.12) 0%, #f0fdf4 100%);
+      border-color: #16a34a;
+      box-shadow: 0 8px 28px rgba(22, 163, 74, 0.12);
+    }
+
+    .turn-hero-label {
+      margin: 0 0 0.5rem;
+      font-size: clamp(0.72rem, 1.6vw, 0.82rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--orange);
+    }
+
+    .turn-hero.is-complete .turn-hero-label {
+      color: #16a34a;
+    }
+
+    .turn-hero .avatar-wrap {
+      width: clamp(96px, 15vw, 128px);
+      height: clamp(96px, 15vw, 128px);
+      margin: 0 auto 0.55rem;
       border-color: var(--orange);
       border-width: 4px;
     }
 
-    .turn-now .participant-name { font-size: 1.35rem; }
-
-    .turn-avatar-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+    .turn-hero.is-complete .avatar-wrap {
+      display: none;
     }
 
-    .turn-mini {
+    .turn-hero .participant-name {
+      margin: 0;
+      font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+
+    .turn-hero-hint {
+      margin: 0.45rem 0 0;
+      font-size: clamp(0.88rem, 2vw, 1rem);
+      font-weight: 600;
+      color: var(--grey-500);
+      line-height: 1.35;
+    }
+
+    .turn-music-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.45rem, 1.2vw, 0.65rem);
+      justify-content: center;
+      width: min(680px, 96vw);
+      flex-shrink: 0;
+    }
+
+    .turn-music-options .btn {
+      font-size: clamp(0.88rem, 1.9vw, 1.02rem);
+      font-weight: 800;
+      padding: clamp(0.55rem, 1.4vw, 0.7rem) clamp(0.85rem, 2vw, 1.1rem);
+    }
+
+    .turn-queue-section {
+      flex: 1;
+      min-height: 0;
+      width: min(1120px, 98vw);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .turn-queue-heading {
+      margin: 0 0 0.5rem;
+      font-size: clamp(0.72rem, 1.6vw, 0.82rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--grey-500);
+      text-align: center;
+    }
+
+    .turn-queue-grid {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(0.5rem, 1.2vw, 0.75rem);
+      align-content: start;
+      padding: 0.15rem 0 0.35rem;
+    }
+
+    @media (max-width: 900px) {
+      .turn-queue-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .turn-queue-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .turn-queue-card {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.35rem;
-      width: 80px;
-    }
-
-    .turn-mini .avatar-wrap {
-      width: 64px;
-      height: 64px;
-    }
-
-    .turn-mini .participant-name {
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .turn-mini .music-tag {
-      font-size: 0.7rem;
-      color: var(--grey-500);
+      gap: 0.3rem;
+      padding: clamp(0.55rem, 1.3vw, 0.75rem) 0.4rem 0.65rem;
+      border: 2px solid var(--grey-200);
+      border-radius: var(--radius);
+      background: var(--white);
       text-align: center;
-      line-height: 1.2;
     }
 
-    .turn-mini.completed { opacity: 0.85; }
+    .turn-queue-card.is-current {
+      border-color: var(--orange);
+      background: var(--orange-soft);
+      box-shadow: 0 0 0 3px rgba(232, 118, 42, 0.22);
+    }
 
-    .music-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-      margin: 1rem 0;
+    .turn-queue-card.is-done {
+      border-color: #86efac;
+      background: rgba(22, 163, 74, 0.08);
+      opacity: 0.88;
+    }
+
+    .turn-queue-num {
+      position: absolute;
+      top: 0.3rem;
+      left: 0.35rem;
+      min-width: 1.35rem;
+      height: 1.35rem;
+      padding: 0 0.3rem;
+      border-radius: 999px;
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.68rem;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+
+    .turn-queue-card.is-current .turn-queue-num {
+      background: var(--orange);
+    }
+
+    .turn-queue-card.is-done .turn-queue-num {
+      background: #16a34a;
+    }
+
+    .turn-queue-card .avatar-wrap {
+      width: clamp(52px, 8vw, 68px);
+      height: clamp(52px, 8vw, 68px);
+    }
+
+    .turn-queue-card .participant-name {
+      font-size: clamp(0.72rem, 1.6vw, 0.86rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+
+    .turn-queue-status {
+      font-size: clamp(0.58rem, 1.2vw, 0.68rem);
+      font-weight: 700;
+      color: var(--grey-500);
+      line-height: 1.15;
+      max-width: 11ch;
+    }
+
+    .turn-queue-card.is-current .turn-queue-status {
+      color: var(--orange);
+      font-weight: 800;
     }
 
     .turn-controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.65rem;
       justify-content: center;
-      margin-top: 1rem;
+      flex-shrink: 0;
+      padding-top: 0.15rem;
     }
 
     /* Summary */
@@ -3169,16 +3308,16 @@
     </section>
     </div>
 
-    <div id="screen-turn-taking" class="screen-page scrollable" data-screen="turn-taking">
+    <div id="screen-turn-taking" class="screen-page" data-screen="turn-taking">
     <section id="turn-taking" aria-labelledby="turn-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">11</span>
         <div>
           <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
-          <p>Random order — every participant plus 2 staff take a turn. Open music on another screen.</p>
+          <p>Random order — everyone plus 2 staff. Play music on another screen, then tap a choice.</p>
         </div>
       </div>
-      <div id="turn-taking-content"></div>
+      <div id="turn-taking-content" class="turn-layout"></div>
     </section>
     </div>
 
@@ -5340,27 +5479,39 @@
       return getPerson(state.turnQueue[state.turnIndex]);
     }
 
-    function appendTurnMini(row, person, extra) {
-      const mini = el("div", { className: `turn-mini${extra?.completed ? " completed" : ""}`, role: extra?.role });
-      if (extra?.highlight) {
-        mini.style.outline = "3px solid var(--orange)";
-        mini.style.borderRadius = "var(--radius-sm)";
-        mini.style.padding = "0.35rem";
+    function getTurnMusic(personId) {
+      return state.turnCompleted.find((t) => t.id === personId)?.music;
+    }
+
+    function buildTurnQueueCard(person, index, currentIndex) {
+      const isCurrent = index === currentIndex;
+      const isDone = index < currentIndex;
+      const music = getTurnMusic(person.id);
+
+      const card = el("div", {
+        className: `turn-queue-card${isCurrent ? " is-current" : ""}${isDone ? " is-done" : ""}`,
+        role: "listitem",
+      });
+      card.appendChild(el("span", { className: "turn-queue-num", textContent: String(index + 1) }));
+      card.appendChild(avatarImg(person));
+      card.appendChild(el("span", { className: "participant-name", textContent: person.name }));
+
+      let status = "Waiting";
+      if (isCurrent) status = "Now";
+      else if (isDone) status = music || "Done";
+      if (person.role === "staff" && !isDone) {
+        status = isCurrent ? "Now · Staff" : `Staff · ${status}`;
+      } else if (person.role === "staff" && isDone) {
+        status = music ? `${music} · Staff` : "Done · Staff";
       }
-      mini.appendChild(avatarImg(person));
-      mini.appendChild(el("span", { className: "participant-name", textContent: person.name }));
-      if (person.role === "staff") {
-        mini.appendChild(el("span", { className: "music-tag", textContent: "Staff" }));
-      }
-      if (extra?.tag) {
-        mini.appendChild(el("span", { className: "music-tag", textContent: extra.tag, style: extra.tagStyle || "" }));
-      }
-      row.appendChild(mini);
+      card.appendChild(el("span", { className: "turn-queue-status", textContent: status }));
+      return card;
     }
 
     function renderTurnTaking() {
       const container = document.getElementById("turn-taking-content");
       container.innerHTML = "";
+      container.className = "turn-layout";
 
       const active = activeParticipants();
 
@@ -5376,29 +5527,48 @@
         resetTurns();
       }
 
-      const board = el("div", { className: "turn-board" });
-
-      /* Now */
-      const nowCol = el("div");
-      nowCol.appendChild(el("h3", { textContent: "Current turn" }));
-      const nowBox = el("div", { className: "turn-now", "aria-live": "polite" });
       const current = currentTurnPerson();
+      const allDone = !current;
 
-      if (current) {
-        nowBox.appendChild(avatarImg(current));
-        nowBox.appendChild(el("p", { className: "participant-name", textContent: current.name }));
-        if (current.role === "staff") {
-          nowBox.appendChild(el("p", { className: "music-tag", textContent: "Staff", style: "margin:0;color:var(--grey-500);font-weight:800;" }));
-        }
-        nowBox.appendChild(el("p", { textContent: "Their turn — play music on the other screen:", style: "margin:0.5rem 0 0;color:var(--grey-500);" }));
+      const hero = el("div", { className: `turn-hero${allDone ? " is-complete" : ""}`, "aria-live": "polite" });
+      hero.appendChild(el("p", {
+        className: "turn-hero-label",
+        textContent: allDone ? "All turns complete" : "Now choosing music",
+      }));
 
-        const musicOpts = el("div", { className: "music-options", role: "group", "aria-label": "Music choices" });
+      if (allDone) {
+        hero.appendChild(el("p", {
+          className: "participant-name",
+          textContent: "Everyone has had a turn!",
+        }));
+        hero.appendChild(el("p", {
+          className: "turn-hero-hint",
+          textContent: "Press Next to continue.",
+        }));
+      } else {
+        hero.appendChild(avatarImg(current));
+        hero.appendChild(el("p", { className: "participant-name", textContent: current.name }));
+        hero.appendChild(el("p", {
+          className: "turn-hero-hint",
+          textContent: current.role === "staff"
+            ? "Staff turn — play music on the other screen, then tap a choice below."
+            : "Play music on the other screen, then tap a choice below.",
+        }));
+      }
+      container.appendChild(hero);
+
+      if (!allDone) {
+        const musicOpts = el("div", {
+          className: "turn-music-options",
+          role: "group",
+          "aria-label": `Music choices for ${current.name}`,
+        });
         MUSIC_OPTIONS.forEach((m) => {
           const btn = el("button", {
             type: "button",
             className: "btn btn-sm",
             textContent: m,
-            "aria-label": `Select ${m}`,
+            "aria-label": `Select ${m} for ${current.name}`,
           });
           btn.addEventListener("click", () => {
             state.turnCompleted.push({ id: current.id, music: m });
@@ -5408,97 +5578,34 @@
           });
           musicOpts.appendChild(btn);
         });
-        nowBox.appendChild(musicOpts);
-      } else {
-        nowBox.appendChild(el("p", { textContent: "All turns complete.", style: "font-weight:600;font-size:1.1rem;margin:0;" }));
+        container.appendChild(musicOpts);
       }
-      nowCol.appendChild(nowBox);
-      board.appendChild(nowCol);
 
-      /* Completed & Waiting */
-      const sideCol = el("div");
-
-      sideCol.appendChild(el("h3", { textContent: "Completed" }));
-      const completedRow = el("div", { className: "turn-avatar-row", "aria-label": "Completed turns" });
-      if (state.turnCompleted.length === 0) {
-        completedRow.appendChild(el("p", { className: "empty-state", textContent: "No turns completed yet.", style: "width:100%;" }));
-      } else {
-        state.turnCompleted.forEach(({ id, music }) => {
-          const p = getPerson(id);
-          if (!p) return;
-          const mini = el("div", { className: "turn-mini completed" });
-          mini.appendChild(avatarImg(p));
-          mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
-          mini.appendChild(el("span", { className: "music-tag", textContent: music }));
-          completedRow.appendChild(mini);
-        });
-      }
-      sideCol.appendChild(completedRow);
-
-      sideCol.appendChild(el("h3", { textContent: "Waiting", style: "margin-top:1.25rem;" }));
-      const waitingRow = el("div", { className: "turn-avatar-row", "aria-label": "Waiting for turn" });
-      const waiting = state.turnQueue.slice(state.turnIndex + (current ? 1 : 0));
-      if (waiting.length === 0 && !current) {
-        waitingRow.appendChild(el("p", { className: "empty-state", textContent: "Everyone has had a turn.", style: "width:100%;" }));
-      } else if (waiting.length === 0) {
-        waitingRow.appendChild(el("p", { className: "empty-state", textContent: "No one waiting.", style: "width:100%;" }));
-      } else {
-        waiting.forEach((id) => {
-          const p = getPerson(id);
-          if (!p) return;
-          appendTurnMini(waitingRow, p, {});
-        });
-      }
-      sideCol.appendChild(waitingRow);
-      board.appendChild(sideCol);
-
-      container.appendChild(board);
-
-      /* Order strip */
-      const orderSection = el("div", { style: "margin-top:1.5rem;" });
-      orderSection.appendChild(el("h3", { textContent: "Turn order (random)", style: "margin:0 0 0.75rem;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--grey-500);" }));
-      const orderRow = el("div", { className: "turn-avatar-row", role: "list", "aria-label": "Turn order" });
+      const queueSection = el("div", { className: "turn-queue-section" });
+      queueSection.appendChild(el("h3", {
+        className: "turn-queue-heading",
+        textContent: "Turn order (random)",
+      }));
+      const queueGrid = el("div", {
+        className: "turn-queue-grid",
+        role: "list",
+        "aria-label": "Turn order",
+      });
       state.turnQueue.forEach((id, i) => {
         const p = getPerson(id);
         if (!p) return;
-        const isCurrent = i === state.turnIndex && current;
-        const isDone = i < state.turnIndex;
-        appendTurnMini(orderRow, p, {
-          completed: isDone,
-          highlight: isCurrent,
-          role: "listitem",
-          tag: isCurrent ? "Now" : "",
-          tagStyle: isCurrent ? "color:var(--orange);font-weight:700;" : "",
-        });
+        queueGrid.appendChild(buildTurnQueueCard(p, i, state.turnIndex));
       });
-      orderSection.appendChild(orderRow);
-      container.appendChild(orderSection);
+      queueSection.appendChild(queueGrid);
+      container.appendChild(queueSection);
 
-      /* Controls */
       const controls = el("div", { className: "turn-controls" });
-
-      const nextBtn = el("button", {
-        type: "button",
-        className: "btn btn-secondary",
-        textContent: "Next Turn",
-        "aria-label": "Skip to next turn without music choice",
-      });
-      nextBtn.addEventListener("click", () => {
-        const cur = currentTurnPerson();
-        if (cur) {
-          state.turnCompleted.push({ id: cur.id, music: "Skipped" });
-          state.turnIndex += 1;
-          renderTurnTaking();
-          renderSummary();
-        }
-      });
-      nextBtn.disabled = !current;
 
       const skipBtn = el("button", {
         type: "button",
         className: "btn",
-        textContent: "Skip Turn",
-        "aria-label": "Skip current participant turn",
+        textContent: "Skip turn",
+        "aria-label": "Skip current turn without recording music",
       });
       skipBtn.addEventListener("click", () => {
         if (state.turnIndex < state.turnQueue.length) {
@@ -5507,13 +5614,13 @@
           renderSummary();
         }
       });
-      skipBtn.disabled = !current;
+      skipBtn.disabled = allDone;
 
       const resetBtn = el("button", {
         type: "button",
         className: "btn btn-danger",
-        textContent: "Reset Turns",
-        "aria-label": "Reset all turns",
+        textContent: "Shuffle again",
+        "aria-label": "Reset and shuffle turn order",
       });
       resetBtn.addEventListener("click", () => {
         resetTurns();
@@ -5521,7 +5628,6 @@
         renderSummary();
       });
 
-      controls.appendChild(nextBtn);
       controls.appendChild(skipBtn);
       controls.appendChild(resetBtn);
       container.appendChild(controls);
