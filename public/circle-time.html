@@ -109,8 +109,14 @@
       font-size: 0.95rem;
     }
 
+    #screen-next.is-auto-hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
     /* Register — drag to Home / ClubSENsational */
     .register-layout {
+      position: relative;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -311,6 +317,7 @@
     }
 
     .day-drop-slot {
+      position: relative;
       min-height: clamp(150px, 24vh, 220px);
       width: min(360px, 88vw);
       border: 4px dashed var(--orange);
@@ -320,7 +327,7 @@
       justify-content: center;
       background: var(--orange-soft);
       padding: 1.25rem;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
     }
 
     .day-drop-slot.drag-over {
@@ -385,6 +392,35 @@
       pointer-events: none;
     }
 
+    .day-chip-face {
+      width: clamp(72px, 11vw, 92px);
+      height: clamp(72px, 11vw, 92px);
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--day-color, var(--navy)), color-mix(in srgb, var(--day-color, var(--navy)) 72%, #0f172a));
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.05rem;
+      margin: 0 auto;
+      border: 3px solid var(--white);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+    }
+
+    .day-chip-icon {
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      line-height: 1;
+    }
+
+    .day-chip-letter {
+      font-weight: 800;
+      font-size: clamp(0.72rem, 2vw, 0.88rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
     .day-name-label {
       font-size: clamp(0.72rem, 2.1vw, 0.88rem);
       font-weight: 700;
@@ -394,6 +430,458 @@
       pointer-events: none;
     }
 
+    .day-theme-icon {
+      font-size: clamp(1.35rem, 4.5vw, 2rem);
+      line-height: 1;
+      margin-bottom: 0.15rem;
+      pointer-events: none;
+    }
+
+    .date-dock-source.is-drag-source {
+      opacity: 1;
+    }
+
+    .date-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0.85rem;
+      min-height: 2.5rem;
+    }
+
+    .date-build-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.75rem, 2.5vw, 1.35rem);
+      flex-wrap: nowrap;
+      width: 100%;
+      max-width: min(560px, 94vw);
+    }
+
+    .date-stack-side {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      margin-bottom: 0;
+      min-height: auto;
+      flex-shrink: 0;
+      min-width: clamp(72px, 11vw, 96px);
+    }
+
+    .date-stack-side .date-stack-sep {
+      display: none;
+    }
+
+    .date-stack-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 800;
+      font-size: clamp(0.85rem, 2.2vw, 1rem);
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    .date-stack-sep {
+      font-weight: 800;
+      color: var(--grey-500);
+      font-size: 1.1rem;
+    }
+
+    .draggable-date-num {
+      width: clamp(72px, 11vw, 92px);
+    }
+
+    .date-num-icon {
+      width: clamp(56px, 9vw, 72px);
+      height: clamp(56px, 9vw, 72px);
+      border-radius: 50%;
+      background: var(--chip-color, var(--navy));
+      color: var(--white);
+      font-weight: 800;
+      font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      border: 3px solid var(--white);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+    }
+
+    .draggable-month {
+      width: auto;
+    }
+
+    .month-chip-face {
+      width: clamp(52px, 8.5vw, 68px);
+      height: clamp(58px, 9.5vw, 76px);
+      border-radius: 14px;
+      background: linear-gradient(155deg, var(--chip-color, var(--navy)), color-mix(in srgb, var(--chip-color, var(--navy)) 68%, #0f172a));
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.12rem;
+      margin: 0 auto;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 14px rgba(27, 58, 92, 0.18);
+      pointer-events: none;
+    }
+
+    .month-chip-icon {
+      font-size: clamp(1.05rem, 2.8vw, 1.4rem);
+      line-height: 1;
+    }
+
+    .month-chip-abbr {
+      font-weight: 800;
+      font-size: clamp(0.62rem, 1.7vw, 0.76rem);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1;
+      opacity: 0.95;
+    }
+
+    .month-theme-icon {
+      display: none;
+    }
+
+    .month-letter-icon {
+      display: none;
+    }
+
+    .dock-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: clamp(0.45rem, 1.5vw, 0.7rem);
+      max-width: min(680px, 96vw);
+      margin: 0 auto;
+      justify-items: center;
+    }
+
+    .date-part-slot {
+      position: relative;
+      min-height: clamp(120px, 18vh, 160px);
+      min-width: clamp(100px, 16vw, 130px);
+      border: 4px dashed var(--orange);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--orange-soft);
+      padding: 1.25rem;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+      flex: 1;
+      max-width: min(280px, 55vw);
+    }
+
+    .date-part-slot.slot-feedback-correct,
+    .day-drop-slot.slot-feedback-correct,
+    .weather-drop-slot.slot-feedback-correct,
+    .register-layout.slot-feedback-correct {
+      border-color: #16a34a !important;
+      border-style: solid !important;
+      background: rgba(22, 163, 74, 0.14) !important;
+      box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.35), 0 0 28px rgba(22, 163, 74, 0.28);
+      animation: slot-correct-pop 0.55s ease-out;
+    }
+
+    .date-part-slot.slot-feedback-wrong,
+    .day-drop-slot.slot-feedback-wrong,
+    .weather-drop-slot.slot-feedback-wrong,
+    .register-layout.slot-feedback-wrong {
+      border-color: #dc2626 !important;
+      border-style: solid !important;
+      background: rgba(220, 38, 38, 0.12) !important;
+      box-shadow: 0 0 0 5px rgba(220, 38, 38, 0.38), 0 0 24px rgba(220, 38, 38, 0.22);
+      animation: slot-wrong-shake 0.55s ease-out;
+    }
+
+    .slot-feedback-msg {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 0.55rem);
+      transform: translateX(-50%);
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(0.88rem, 2.4vw, 1.05rem);
+      white-space: nowrap;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      z-index: 6;
+      pointer-events: none;
+      box-shadow: var(--shadow);
+    }
+
+    .slot-feedback-correct .slot-feedback-msg {
+      background: #16a34a;
+      color: var(--white);
+    }
+
+    .slot-feedback-wrong .slot-feedback-msg {
+      background: #dc2626;
+      color: var(--white);
+    }
+
+    @keyframes slot-correct-pop {
+      0% { transform: scale(0.97); }
+      45% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes slot-wrong-shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .date-part-slot.drag-over {
+      background: rgba(232, 118, 42, 0.35);
+      border-color: var(--navy);
+      border-style: solid;
+    }
+
+    .draggable-year {
+      width: clamp(100px, 14vw, 130px);
+    }
+
+    .year-num-icon {
+      width: clamp(72px, 11vw, 92px);
+      height: clamp(56px, 9vw, 72px);
+      border-radius: var(--radius-sm);
+      background: var(--chip-color, var(--orange));
+      color: var(--white);
+      font-weight: 800;
+      font-size: clamp(1.1rem, 3vw, 1.45rem);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      border: 3px solid var(--white);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+    }
+
+    .date-part-placeholder {
+      color: var(--grey-500);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-align: center;
+      margin: 0;
+      padding: 0 0.5rem;
+    }
+
+    .weather-layout-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      position: relative;
+    }
+
+    .london-forecast {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      background: var(--white);
+      border: 3px solid var(--navy);
+      border-radius: var(--radius);
+      padding: 0.55rem 0.65rem 0.65rem;
+      text-align: center;
+      min-width: clamp(168px, 30vw, 240px);
+      max-width: clamp(200px, 34vw, 260px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .london-forecast-label {
+      margin: 0;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--grey-500);
+    }
+
+    .london-forecast-scene {
+      position: relative;
+      width: 100%;
+      height: clamp(108px, 19vh, 148px);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin: 0.4rem 0 0.35rem;
+      border: 2px solid var(--grey-200);
+      background: #94a3b8;
+    }
+
+    .london-forecast-scene .weather-scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    .london-forecast-scene .weather-fx {
+      inset: 0;
+    }
+
+    .london-forecast-scene .weather-fx-raindrop {
+      width: 1.5px;
+      height: 11px;
+    }
+
+    .london-forecast-scene .weather-fx-snowflake svg {
+      width: 9px;
+      height: 9px;
+    }
+
+    .london-forecast-scene .weather-fx-sun-wrap {
+      top: 8%;
+      right: 10%;
+      width: 42px;
+      height: 42px;
+    }
+
+    .london-forecast-scene .weather-fx-cloud svg {
+      width: 52px;
+    }
+
+    .london-forecast-scene .weather-fx-lightning {
+      width: 22px;
+    }
+
+    .london-forecast-scene .weather-fx-wind-line {
+      height: 2px;
+    }
+
+    .weather-scene-sky {
+      position: absolute;
+      inset: 0;
+      transition: background 0.6s ease;
+    }
+
+    .weather-scene-sunny .weather-scene-sky {
+      background: linear-gradient(180deg, #0ea5e9 0%, #7dd3fc 55%, #fef08a 100%);
+    }
+
+    .weather-scene-hot .weather-scene-sky {
+      background: linear-gradient(180deg, #f97316 0%, #fdba74 50%, #fef3c7 100%);
+    }
+
+    .weather-scene-cloudy .weather-scene-sky {
+      background: linear-gradient(180deg, #64748b 0%, #94a3b8 55%, #cbd5e1 100%);
+    }
+
+    .weather-scene-rainy .weather-scene-sky {
+      background: linear-gradient(180deg, #475569 0%, #64748b 50%, #94a3b8 100%);
+    }
+
+    .weather-scene-cold .weather-scene-sky {
+      background: linear-gradient(180deg, #93c5fd 0%, #bfdbfe 55%, #e0f2fe 100%);
+    }
+
+    .weather-scene-stormy .weather-scene-sky {
+      background: linear-gradient(180deg, #1e293b 0%, #334155 50%, #475569 100%);
+    }
+
+    .weather-scene-windy .weather-scene-sky {
+      background: linear-gradient(180deg, #64748b 0%, #94a3b8 60%, #cbd5e1 100%);
+    }
+
+    .weather-scene-ground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 18%;
+      background: linear-gradient(180deg, transparent, rgba(22, 101, 52, 0.35));
+      pointer-events: none;
+    }
+
+    .london-forecast-desc {
+      margin: 0;
+      font-weight: 800;
+      font-size: 0.78rem;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .london-forecast-meta {
+      margin: 0.12rem 0 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--grey-500);
+    }
+
+    .london-forecast.loading {
+      opacity: 0.65;
+    }
+
+    .london-forecast.loading .london-forecast-scene {
+      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+      background-size: 200% 100%;
+      animation: london-shimmer 1.2s linear infinite;
+    }
+
+    @keyframes london-shimmer {
+      to { background-position: -200% 0; }
+    }
+
+    .weather-chip-scene {
+      position: relative;
+      width: clamp(88px, 13vw, 112px);
+      height: clamp(72px, 11vw, 88px);
+      border-radius: var(--radius-sm);
+      margin: 0 auto;
+      overflow: hidden;
+      border: 3px solid var(--grey-200);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+      background: #94a3b8;
+    }
+
+    .weather-chip-scene .weather-scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    .weather-chip-scene .weather-fx {
+      inset: 0;
+    }
+
+    .weather-chip-scene .weather-fx-raindrop {
+      width: 1px;
+      height: 8px;
+    }
+
+    .weather-chip-scene .weather-fx-snowflake svg {
+      width: 7px;
+      height: 7px;
+    }
+
+    .weather-chip-scene .weather-fx-sun-wrap {
+      top: 6%;
+      right: 8%;
+      width: 34px;
+      height: 34px;
+    }
+
+    .weather-chip-scene .weather-fx-cloud svg {
+      width: 40px;
+    }
+
+    .weather-chip-scene .weather-fx-lightning {
+      width: 16px;
+    }
+
+    .drag-ghost.draggable-day .day-chip-face,
     .drag-ghost.draggable-day .day-letter-icon {
       background: var(--orange);
     }
@@ -404,6 +892,8 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
+      position: relative;
+      z-index: 1;
     }
 
     .weather-center {
@@ -416,6 +906,267 @@
       min-height: 0;
     }
 
+    .weather-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(560px, 96vw);
+      min-height: clamp(240px, 38vh, 340px);
+      flex-shrink: 0;
+    }
+
+    .date-build-row-weather {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .date-build-row-weather .weather-drop-slot {
+      flex: 1;
+      max-width: min(320px, 58vw);
+    }
+
+    .weather-effects {
+      position: absolute;
+      inset: -2.5rem -1.5rem;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: calc(var(--radius) + 8px);
+      z-index: 0;
+    }
+
+    .weather-effects:empty {
+      display: none;
+    }
+
+    /* —— Weather FX: shared —— */
+    .weather-fx-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .weather-fx-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    /* Rain */
+    .weather-fx-raindrop {
+      position: absolute;
+      top: -12%;
+      width: 2px;
+      height: clamp(14px, 2.5vh, 22px);
+      background: linear-gradient(to bottom, transparent, #60a5fa 40%, #3b82f6);
+      border-radius: 999px;
+      opacity: 0.75;
+      animation: wx-rain-fall linear infinite;
+    }
+
+    @keyframes wx-rain-fall {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      8% { opacity: 0.85; }
+      100% { transform: translateY(115%) translateX(-8px); opacity: 0.35; }
+    }
+
+    /* Snow */
+    .weather-fx-snowflake {
+      position: absolute;
+      top: -8%;
+      animation: wx-snow-fall linear infinite;
+      color: #93c5fd;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+    }
+
+    .weather-fx-snowflake svg {
+      display: block;
+      width: clamp(10px, 2vw, 18px);
+      height: clamp(10px, 2vw, 18px);
+    }
+
+    @keyframes wx-snow-fall {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(115%) translateX(18px) rotate(360deg); opacity: 0.5; }
+    }
+
+    /* Sunny glow */
+    .weather-fx-sun-wrap {
+      position: absolute;
+      top: -6%;
+      right: 2%;
+      width: clamp(72px, 16vw, 110px);
+      height: clamp(72px, 16vw, 110px);
+      animation: wx-sun-pulse 3s ease-in-out infinite;
+    }
+
+    .weather-fx-sun-wrap svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.85));
+    }
+
+    .weather-fx-sun-rays {
+      transform-origin: 50px 50px;
+      animation: wx-sun-spin 24s linear infinite;
+    }
+
+    @keyframes wx-sun-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes wx-sun-pulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.06); filter: brightness(1.15); }
+    }
+
+    .weather-fx-sunny-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 88% 12%, rgba(251, 191, 36, 0.35) 0%, transparent 55%);
+      animation: wx-sunny-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes wx-sunny-glow {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 0.95; }
+    }
+
+    /* Cloudy */
+    .weather-fx-cloud {
+      position: absolute;
+      top: 4%;
+      animation: wx-cloud-drift linear infinite;
+      opacity: 0.92;
+    }
+
+    .weather-fx-cloud svg {
+      width: clamp(64px, 14vw, 100px);
+      height: auto;
+      display: block;
+    }
+
+    @keyframes wx-cloud-drift {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(220%); }
+    }
+
+    .weather-fx-cloudy-dim {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(148, 163, 184, 0.15) 0%, rgba(71, 85, 105, 0.45) 100%);
+      animation: wx-cloudy-dim 5s ease-in-out infinite;
+    }
+
+    @keyframes wx-cloudy-dim {
+      0%, 100% { opacity: 0.25; }
+      50% { opacity: 0.75; }
+    }
+
+    /* Storm */
+    .weather-fx-storm-dark {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.55) 0%, rgba(15, 23, 42, 0.35) 100%);
+    }
+
+    .weather-fx-lightning {
+      position: absolute;
+      top: 2%;
+      width: clamp(36px, 8vw, 56px);
+      opacity: 0;
+      z-index: 3;
+      animation: wx-lightning-flash 4.5s ease-in-out infinite;
+    }
+
+    .weather-fx-lightning svg {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.9));
+    }
+
+    @keyframes wx-lightning-flash {
+      0%, 88%, 100% { opacity: 0; }
+      89% { opacity: 1; }
+      90% { opacity: 0.2; }
+      91% { opacity: 1; }
+      93% { opacity: 0; }
+    }
+
+    .weather-fx-storm-flash {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0);
+      animation: wx-storm-screen-flash 4.5s ease-in-out infinite;
+    }
+
+    @keyframes wx-storm-screen-flash {
+      0%, 88%, 100% { background: rgba(255, 255, 255, 0); }
+      89% { background: rgba(255, 255, 255, 0.35); }
+      90% { background: rgba(255, 255, 255, 0.05); }
+      91% { background: rgba(255, 255, 255, 0.28); }
+      93% { background: rgba(255, 255, 255, 0); }
+    }
+
+    /* Wind */
+    .weather-fx-wind-line {
+      position: absolute;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.9), transparent);
+      animation: wx-wind-blow linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes wx-wind-blow {
+      0% { transform: translateX(-120%) scaleX(0.6); opacity: 0; }
+      15% { opacity: 0.85; }
+      100% { transform: translateX(220%) scaleX(1); opacity: 0; }
+    }
+
+    /* Hot */
+    .weather-fx-heat-wave {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.55), transparent);
+      animation: wx-heat-rise ease-in-out infinite;
+    }
+
+    @keyframes wx-heat-rise {
+      0% { transform: translateY(80%) scaleX(0.7); opacity: 0; }
+      30% { opacity: 0.8; }
+      100% { transform: translateY(-20%) scaleX(1.1); opacity: 0; }
+    }
+
+    .weather-fx-hot-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 90%, rgba(249, 115, 22, 0.28) 0%, transparent 60%);
+      animation: wx-hot-glow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes wx-hot-glow {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 0.85; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .weather-effects *,
+      .weather-effects::before,
+      .weather-effects::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
     .weather-today-label {
       font-size: clamp(1.6rem, 5.5vw, 2.75rem);
       font-weight: 800;
@@ -426,6 +1177,8 @@
     }
 
     .weather-drop-slot {
+      position: relative;
+      z-index: 2;
       min-height: clamp(180px, 28vh, 260px);
       width: min(380px, 90vw);
       border: 4px dashed var(--navy);
@@ -491,7 +1244,7 @@
       background: var(--white);
       border: 3px solid var(--grey-200);
       box-shadow: var(--shadow);
-      display: grid;
+      display: none;
       place-items: center;
       margin: 0 auto;
       font-size: clamp(2.5rem, 7vw, 3.5rem);
@@ -508,9 +1261,9 @@
       pointer-events: none;
     }
 
-    .drag-ghost.draggable-weather .weather-icon-box {
+    .drag-ghost.draggable-weather .weather-chip-scene {
       border-color: var(--orange);
-      background: var(--orange-soft);
+      box-shadow: 0 0 0 3px var(--orange-soft);
     }
 
     #screen-weather .section-header {
@@ -1841,7 +2594,7 @@
         <span class="section-num" aria-hidden="true">2</span>
         <div>
           <h2 id="day-heading">Today is…</h2>
-          <p>Drag the day of the week into the box.</p>
+          <p>Drag the correct weekday (Mon–Fri) into the box. It must match the date under Circle Time.</p>
         </div>
       </div>
       <div class="day-layout">
@@ -1859,25 +2612,120 @@
     </section>
     </div>
 
-    <div id="screen-weather" class="screen-page" data-screen="weather">
-    <section id="weather" aria-labelledby="weather-heading">
+    <div id="screen-date" class="screen-page" data-screen="date">
+    <section id="date" aria-labelledby="date-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">3</span>
         <div>
-          <h2 id="weather-heading">Weather</h2>
-          <p>Drag today's weather into the box.</p>
+          <h2 id="date-heading">Day of the month</h2>
+          <p>Drag the correct day number. It must match the date under Circle Time.</p>
         </div>
       </div>
-      <div class="weather-layout">
-        <div class="weather-center">
-          <p class="weather-today-label" aria-hidden="true">TODAY'S WEATHER</p>
-          <div class="weather-drop-slot" data-drop-zone="weather-slot" id="weather-slot" aria-label="Selected weather">
-            <p class="weather-placeholder" id="weather-slot-placeholder">Drop the weather here</p>
+      <div class="day-layout">
+        <div class="day-center">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="date-build-row">
+            <div class="date-stack date-stack-side" id="date-dom-stack"></div>
+            <div class="date-part-slot" data-drop-zone="dom-slot" id="dom-slot" aria-label="Day of month">
+              <p class="date-part-placeholder" id="dom-slot-placeholder">Drop day number</p>
+            </div>
           </div>
         </div>
-        <div class="weather-dock" data-drop-zone="weather-dock" aria-label="Weather options">
-          <p class="register-dock-label">Drag the weather</p>
-          <div class="weather-dock-items" id="weather-dock"></div>
+        <div class="day-dock" data-drop-zone="dom-dock" aria-label="Day numbers">
+          <p class="register-dock-label">Drag a day number</p>
+          <div class="day-dock-items" id="dom-dock"></div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div id="screen-month" class="screen-page" data-screen="month">
+    <section id="month" aria-labelledby="month-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">4</span>
+        <div>
+          <h2 id="month-heading">Month</h2>
+          <p>Drag the correct month. It must match the date under Circle Time.</p>
+        </div>
+      </div>
+      <div class="day-layout">
+        <div class="day-center">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="date-build-row">
+            <div class="date-stack date-stack-side" id="date-month-stack"></div>
+            <div class="date-part-slot" data-drop-zone="month-slot" id="month-slot" aria-label="Month">
+              <p class="date-part-placeholder" id="month-slot-placeholder">Drop month</p>
+            </div>
+          </div>
+        </div>
+        <div class="day-dock" data-drop-zone="month-dock" aria-label="Months">
+          <p class="register-dock-label">Drag a month</p>
+          <div class="day-dock-items dock-grid-6" id="month-dock"></div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div id="screen-year" class="screen-page" data-screen="year">
+    <section id="year" aria-labelledby="year-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">5</span>
+        <div>
+          <h2 id="year-heading">Year</h2>
+          <p>Drag the correct year. It must match the date under Circle Time.</p>
+        </div>
+      </div>
+      <div class="day-layout">
+        <div class="day-center">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="date-build-row">
+            <div class="date-stack date-stack-side" id="date-year-stack"></div>
+            <div class="date-part-slot" data-drop-zone="year-slot" id="year-slot" aria-label="Year">
+              <p class="date-part-placeholder" id="year-slot-placeholder">Drop year</p>
+            </div>
+          </div>
+        </div>
+        <div class="day-dock" data-drop-zone="year-dock" aria-label="Years">
+          <p class="register-dock-label">Drag a year</p>
+          <div class="day-dock-items" id="year-dock"></div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div id="screen-weather" class="screen-page" data-screen="weather">
+    <section id="weather" aria-labelledby="weather-heading">
+      <div class="section-header">
+        <span class="section-num" aria-hidden="true">6</span>
+        <div>
+          <h2 id="weather-heading">Weather</h2>
+          <p>Look at the live London window (top right) — drag the matching weather scene into the box.</p>
+        </div>
+      </div>
+      <div class="weather-layout-wrap">
+        <div class="london-forecast loading" id="london-forecast" aria-live="polite">
+          <p class="london-forecast-label">London now — live</p>
+          <div class="london-forecast-scene" id="london-forecast-scene" aria-hidden="true"></div>
+          <p class="london-forecast-desc" id="london-forecast-desc">Loading…</p>
+          <p class="london-forecast-meta" id="london-forecast-meta"></p>
+        </div>
+        <div class="weather-layout">
+          <div class="weather-center">
+            <p class="weather-today-label" aria-hidden="true">TODAY'S WEATHER</p>
+            <div class="weather-stage" id="weather-stage">
+              <div class="weather-effects" id="weather-effects" aria-hidden="true"></div>
+              <div class="date-build-row date-build-row-weather">
+                <div class="date-stack date-stack-side" id="date-weather-stack"></div>
+                <div class="weather-drop-slot" data-drop-zone="weather-slot" id="weather-slot" aria-label="Selected weather">
+                  <p class="weather-placeholder" id="weather-slot-placeholder">Drop the weather here</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="weather-dock" data-drop-zone="weather-dock" aria-label="Weather options">
+            <p class="register-dock-label">Drag the weather</p>
+            <div class="weather-dock-items" id="weather-dock"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1886,7 +2734,7 @@
     <div id="screen-feelings" class="screen-page scrollable" data-screen="feelings">
     <section id="feelings" aria-labelledby="feelings-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">4</span>
+        <span class="section-num" aria-hidden="true">7</span>
         <div>
           <h2 id="feelings-heading">Feelings Check-In</h2>
           <p>How is everyone at the day centre feeling today?</p>
@@ -1899,7 +2747,7 @@
     <div id="screen-focus" class="screen-page" data-screen="focus">
     <section id="focus" aria-labelledby="focus-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">5</span>
+        <span class="section-num" aria-hidden="true">8</span>
         <div>
           <h2 id="focus-heading">Today's Plan</h2>
           <p>Drag activities from below to each person at the day centre.</p>
@@ -1918,7 +2766,7 @@
     <div id="screen-activities" class="screen-page scrollable" data-screen="activities">
     <section id="activities" aria-labelledby="activities-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">6</span>
+        <span class="section-num" aria-hidden="true">9</span>
         <div>
           <h2 id="activities-heading">Everyone's Choices</h2>
           <p>Summary of what each person chose for today.</p>
@@ -1931,7 +2779,7 @@
     <div id="screen-agreements" class="screen-page scrollable" data-screen="agreements">
     <section id="agreements" aria-labelledby="agreements-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">7</span>
+        <span class="section-num" aria-hidden="true">10</span>
         <div>
           <h2 id="agreements-heading">Group Agreements</h2>
           <p>Shared expectations for today's session.</p>
@@ -1944,7 +2792,7 @@
     <div id="screen-turn-taking" class="screen-page scrollable" data-screen="turn-taking">
     <section id="turn-taking" aria-labelledby="turn-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">8</span>
+        <span class="section-num" aria-hidden="true">11</span>
         <div>
           <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
           <p>Each participant chooses music when it is their turn.</p>
@@ -1957,7 +2805,7 @@
     <div id="screen-summary" class="screen-page scrollable" data-screen="summary">
     <section id="summary" aria-labelledby="summary-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">9</span>
+        <span class="section-num" aria-hidden="true">12</span>
         <div>
           <h2 id="summary-heading">Session Summary</h2>
           <p>Automatically generated record of today's circle time.</p>
@@ -2007,31 +2855,84 @@
     const REGISTER_PEOPLE = [...PARTICIPANTS, ...STAFF];
 
     const SCREEN_IDS = [
-      "register", "day", "weather", "feelings", "focus",
+      "register", "day", "date", "month", "year", "weather", "feelings", "focus",
       "activities", "agreements", "turn-taking", "summary",
     ];
 
-    const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year", "weather"]);
 
-    const DAY_LETTERS = {
-      Monday: "M",
-      Tuesday: "Tu",
-      Wednesday: "W",
-      Thursday: "Th",
-      Friday: "F",
-      Saturday: "Sa",
-      Sunday: "Su",
-    };
+    const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    const DAY_COLORS = {
-      Monday: "#2563eb",
-      Tuesday: "#7c3aed",
-      Wednesday: "#16a34a",
-      Thursday: "#ca8a04",
-      Friday: "#e8762a",
-      Saturday: "#db2777",
-      Sunday: "#dc2626",
-    };
+    const WEEKDAYS = [
+      { name: "Monday", letter: "M", color: "#2563eb", icon: "📚" },
+      { name: "Tuesday", letter: "Tu", color: "#7c3aed", icon: "✏️" },
+      { name: "Wednesday", letter: "W", color: "#16a34a", icon: "🐪" },
+      { name: "Thursday", letter: "Th", color: "#ca8a04", icon: "⚡" },
+      { name: "Friday", letter: "F", color: "#e8762a", icon: "🎉" },
+    ];
+
+    const MONTHS = [
+      { id: 0, name: "January", short: "Jan", color: "#2563eb", icon: "❄️" },
+      { id: 1, name: "February", short: "Feb", color: "#db2777", icon: "💝" },
+      { id: 2, name: "March", short: "Mar", color: "#16a34a", icon: "🌱" },
+      { id: 3, name: "April", short: "Apr", color: "#7c3aed", icon: "🌧️" },
+      { id: 4, name: "May", short: "May", color: "#e8762a", icon: "🌸" },
+      { id: 5, name: "June", short: "Jun", color: "#ca8a04", icon: "☀️" },
+      { id: 6, name: "July", short: "Jul", color: "#dc2626", icon: "🏖️" },
+      { id: 7, name: "August", short: "Aug", color: "#e8762a", icon: "🌻" },
+      { id: 8, name: "September", short: "Sep", color: "#16a34a", icon: "🍂" },
+      { id: 9, name: "October", short: "Oct", color: "#ca8a04", icon: "🎃" },
+      { id: 10, name: "November", short: "Nov", color: "#7c3aed", icon: "🍁" },
+      { id: 11, name: "December", short: "Dec", color: "#2563eb", icon: "🎄" },
+    ];
+
+    const YEAR_OPTIONS = [
+      { value: 2026, color: "#e8762a" },
+      { value: 1000, color: "#1b3a5c" },
+    ];
+
+    let todayRef = getTodayReference();
+    let londonWeather = null;
+
+    function getTodayReference() {
+      const now = new Date();
+      return {
+        weekday: WEEKDAY_NAMES[now.getDay()],
+        dayOfMonth: now.getDate(),
+        month: now.getMonth(),
+        monthName: now.toLocaleDateString("en-GB", { month: "long" }),
+        year: now.getFullYear(),
+      };
+    }
+
+    function getWeekdayMeta(name) {
+      return WEEKDAYS.find((w) => w.name === name);
+    }
+
+    function getMonthMeta(id) {
+      return MONTHS.find((m) => m.id === id);
+    }
+
+    function clearDateAfter(part) {
+      if (part === "day") {
+        state.dayOfMonth = null;
+        state.month = null;
+        state.year = null;
+      } else if (part === "dom") {
+        state.month = null;
+        state.year = null;
+      } else if (part === "month") {
+        state.year = null;
+      }
+    }
+
+    function renderAllDateScreens() {
+      renderDay();
+      renderDateDom();
+      renderMonth();
+      renderYear();
+      renderSummary();
+    }
 
     const WEATHER = [
       { id: "sunny", label: "Sunny", icon: "☀️" },
@@ -2224,6 +3125,14 @@
       document.getElementById("pre-show-staff").classList.add("hidden");
       document.getElementById("session-app").classList.remove("hidden");
       document.querySelector(".skip-link").href = "#register";
+      todayRef = getTodayReference();
+      updateHeaderDate();
+      state.day = null;
+      state.dayOfMonth = null;
+      state.month = null;
+      state.year = null;
+      state.weather = null;
+      renderAll();
       showScreen(0);
     }
 
@@ -2233,6 +3142,7 @@
 
     function showScreen(index) {
       currentScreenIndex = Math.max(0, Math.min(index, SCREEN_IDS.length - 1));
+      clearAllSlotFeedback();
       SCREEN_IDS.forEach((id, i) => {
         const page = document.getElementById(`screen-${id}`);
         if (page) page.classList.toggle("active", i === currentScreenIndex);
@@ -2240,11 +3150,24 @@
       document.getElementById("screen-indicator").textContent =
         `${currentScreenIndex + 1} / ${SCREEN_IDS.length}`;
       document.getElementById("screen-prev").disabled = currentScreenIndex === 0;
-      const nextBtn = document.getElementById("screen-next");
-      nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
+      updateNavButtons();
       const activeId = SCREEN_IDS[currentScreenIndex];
+      if (activeId === "weather") fetchLondonWeather();
       const section = document.getElementById(activeId);
       if (section) section.focus({ preventScroll: true });
+    }
+
+    function updateNavButtons() {
+      const screenId = SCREEN_IDS[currentScreenIndex];
+      const nextBtn = document.getElementById("screen-next");
+      nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
+      nextBtn.disabled = false;
+      nextBtn.classList.toggle("is-auto-hidden", AUTO_ADVANCE_SCREENS.has(screenId));
+    }
+
+    function scheduleAutoAdvance(screenId, slotEl, message) {
+      if (SCREEN_IDS[currentScreenIndex] !== screenId) return;
+      showSlotFeedback(slotEl, "correct", message || "Correct!", () => autoAdvanceFromScreen(screenId));
     }
 
     function initScreenNav() {
@@ -2252,6 +3175,11 @@
         showScreen(currentScreenIndex - 1);
       });
       document.getElementById("screen-next").addEventListener("click", () => {
+        const screenId = SCREEN_IDS[currentScreenIndex];
+        if (!canAdvanceFromScreen(screenId)) {
+          showToast(advanceHint(screenId));
+          return;
+        }
         if (currentScreenIndex < SCREEN_IDS.length - 1) {
           showScreen(currentScreenIndex + 1);
         }
@@ -2307,6 +3235,9 @@
     const state = {
       location: {},
       day: null,
+      dayOfMonth: null,
+      month: null,
+      year: null,
       weather: null,
       feelings: {},
       participantActivities: {},
@@ -2317,6 +3248,10 @@
 
     let currentScreenIndex = 0;
     let dragState = null;
+    let slotFeedbackTimer = null;
+    let slotFeedbackActive = false;
+
+    const SLOT_FEEDBACK_MS = { correct: 3500, wrong: 4000 };
 
     function findDropZone(clientX, clientY) {
       if (!dragState?.ghost) {
@@ -2353,6 +3288,16 @@
       renderActivities();
       renderTurnTaking();
       renderSummary();
+      tryAutoAdvanceRegister();
+    }
+
+    function tryAutoAdvanceRegister() {
+      if (SCREEN_IDS[currentScreenIndex] !== "register") return;
+      if (slotFeedbackActive) return;
+      const allPlaced = REGISTER_PEOPLE.every((p) => (state.location[p.id] || "dock") !== "dock");
+      if (!allPlaced) return;
+      const layout = document.querySelector(".register-layout");
+      scheduleAutoAdvance("register", layout, "Everyone placed!");
     }
 
     function finishActivityDrop(zoneKey) {
@@ -2381,23 +3326,128 @@
     }
 
     function finishDayDrop(zoneKey, dayName) {
+      const slot = document.getElementById("day-slot");
+      if (slotFeedbackActive && zoneKey === "day-slot") return;
       if (zoneKey === "day-slot") {
+        if (dayName !== todayRef.weekday) {
+          showSlotFeedback(slot, "wrong", "Not today — check the date under Circle Time");
+          return;
+        }
+        if (state.day === dayName) {
+          scheduleAutoAdvance("day", slot);
+          return;
+        }
+        if (state.day !== dayName) clearDateAfter("day");
         state.day = dayName;
+        renderAllDateScreens();
+        scheduleAutoAdvance("day", slot);
       } else if (zoneKey === "day-dock" && state.day === dayName) {
+        clearSlotFeedback(slot);
         state.day = null;
+        clearDateAfter("day");
+        renderAllDateScreens();
       }
-      renderDay();
-      renderSummary();
+    }
+
+    function finishDomDrop(zoneKey, num) {
+      const slot = document.getElementById("dom-slot");
+      const n = Number(num);
+      if (slotFeedbackActive && zoneKey === "dom-slot") return;
+      if (zoneKey === "dom-slot") {
+        if (n !== todayRef.dayOfMonth) {
+          showSlotFeedback(slot, "wrong", "Wrong day number — check the date under Circle Time");
+          return;
+        }
+        if (state.dayOfMonth === n) {
+          scheduleAutoAdvance("date", slot);
+          return;
+        }
+        if (state.dayOfMonth !== n) clearDateAfter("dom");
+        state.dayOfMonth = n;
+        renderAllDateScreens();
+        scheduleAutoAdvance("date", slot);
+      } else if (zoneKey === "dom-dock" && state.dayOfMonth === n) {
+        clearSlotFeedback(slot);
+        state.dayOfMonth = null;
+        clearDateAfter("dom");
+        renderAllDateScreens();
+      }
+    }
+
+    function finishMonthDrop(zoneKey, monthId) {
+      const slot = document.getElementById("month-slot");
+      const m = Number(monthId);
+      if (slotFeedbackActive && zoneKey === "month-slot") return;
+      if (zoneKey === "month-slot") {
+        if (m !== todayRef.month) {
+          showSlotFeedback(slot, "wrong", "Wrong month — check the date under Circle Time");
+          return;
+        }
+        if (state.month === m) {
+          scheduleAutoAdvance("month", slot);
+          return;
+        }
+        if (state.month !== m) clearDateAfter("month");
+        state.month = m;
+        renderAllDateScreens();
+        scheduleAutoAdvance("month", slot);
+      } else if (zoneKey === "month-dock" && state.month === m) {
+        clearSlotFeedback(slot);
+        state.month = null;
+        clearDateAfter("month");
+        renderAllDateScreens();
+      }
+    }
+
+    function finishYearDrop(zoneKey, yearVal) {
+      const slot = document.getElementById("year-slot");
+      const y = Number(yearVal);
+      if (slotFeedbackActive && zoneKey === "year-slot") return;
+      if (zoneKey === "year-slot") {
+        if (y !== todayRef.year) {
+          showSlotFeedback(slot, "wrong", "Wrong year — check the date under Circle Time");
+          return;
+        }
+        if (state.year === y) {
+          scheduleAutoAdvance("year", slot);
+          return;
+        }
+        state.year = y;
+        renderAllDateScreens();
+        scheduleAutoAdvance("year", slot);
+      } else if (zoneKey === "year-dock" && state.year === y) {
+        clearSlotFeedback(slot);
+        state.year = null;
+        renderAllDateScreens();
+      }
     }
 
     function finishWeatherDrop(zoneKey, weatherId) {
+      const slot = document.getElementById("weather-slot");
+      if (slotFeedbackActive && zoneKey === "weather-slot") return;
       if (zoneKey === "weather-slot") {
+        if (!londonWeather?.id) {
+          showSlotFeedback(slot, "wrong", "Wait for London forecast to load…");
+          return;
+        }
+        if (weatherId !== londonWeather.id) {
+          showSlotFeedback(slot, "wrong", "Look at London live window — try again");
+          return;
+        }
+        if (state.weather === weatherId) {
+          scheduleAutoAdvance("weather", slot);
+          return;
+        }
         state.weather = weatherId;
+        renderWeather();
+        renderSummary();
+        scheduleAutoAdvance("weather", slot);
       } else if (zoneKey === "weather-dock" && state.weather === weatherId) {
+        clearSlotFeedback(slot);
         state.weather = null;
+        renderWeather();
+        renderSummary();
       }
-      renderWeather();
-      renderSummary();
     }
 
     function endDrag(e) {
@@ -2420,6 +3470,18 @@
         if (dragState.type === "day") {
           if (zoneKey === "day-slot" || zoneKey === "day-dock") {
             finishDayDrop(zoneKey, dragState.dayName);
+          }
+        } else if (dragState.type === "dom") {
+          if (zoneKey === "dom-slot" || zoneKey === "dom-dock") {
+            finishDomDrop(zoneKey, dragState.value);
+          }
+        } else if (dragState.type === "month") {
+          if (zoneKey === "month-slot" || zoneKey === "month-dock") {
+            finishMonthDrop(zoneKey, dragState.value);
+          }
+        } else if (dragState.type === "year") {
+          if (zoneKey === "year-slot" || zoneKey === "year-dock") {
+            finishYearDrop(zoneKey, dragState.value);
           }
         } else if (dragState.type === "weather") {
           if (zoneKey === "weather-slot" || zoneKey === "weather-dock") {
@@ -2455,7 +3517,7 @@
         dragState.ghost = ghost;
         dragState.offsetX = e.clientX - rect.left;
         dragState.offsetY = e.clientY - rect.top;
-        if (!(dragState.type === "activity" && dragState.fromDock)) {
+        if (!(dragState.fromDock || (dragState.type === "activity" && dragState.fromDock))) {
           dragState.sourceEl.classList.add("is-drag-source");
         }
         document.body.classList.add("is-dragging");
@@ -2506,6 +3568,7 @@
       dragState = {
         type: "day",
         dayName,
+        fromDock: chip.classList.contains("date-dock-source"),
         sourceEl: chip,
         pointerId: e.pointerId,
         startX: e.clientX,
@@ -2516,6 +3579,72 @@
         offsetY: 0,
       };
 
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
+    function startDomDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const value = chip.dataset.domValue;
+      if (!value) return;
+      dragState = {
+        type: "dom",
+        value,
+        fromDock: chip.classList.contains("date-dock-source"),
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
+    function startMonthDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const value = chip.dataset.monthId;
+      if (value == null) return;
+      dragState = {
+        type: "month",
+        value,
+        fromDock: chip.classList.contains("date-dock-source"),
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
+    function startYearDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const value = chip.dataset.yearValue;
+      if (!value) return;
+      dragState = {
+        type: "year",
+        value,
+        fromDock: chip.classList.contains("date-dock-source"),
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
       chip.setPointerCapture(e.pointerId);
       e.preventDefault();
     }
@@ -2552,29 +3681,6 @@
       e.preventDefault();
     }
 
-    function startWeatherDrag(e) {
-      if (e.button !== 0 && e.pointerType === "mouse") return;
-      const chip = e.currentTarget;
-      const weatherId = chip.dataset.weatherId;
-      if (!weatherId) return;
-
-      dragState = {
-        type: "weather",
-        weatherId,
-        sourceEl: chip,
-        pointerId: e.pointerId,
-        startX: e.clientX,
-        startY: e.clientY,
-        moved: false,
-        ghost: null,
-        offsetX: 0,
-        offsetY: 0,
-      };
-
-      chip.setPointerCapture(e.pointerId);
-      e.preventDefault();
-    }
-
     function initState() {
       PARTICIPANTS.forEach((p) => {
         state.location[p.id] = "dock";
@@ -2584,6 +3690,11 @@
       STAFF.forEach((s) => {
         state.location[s.id] = "dock";
       });
+      state.day = null;
+      state.dayOfMonth = null;
+      state.month = null;
+      state.year = null;
+      state.weather = null;
       resetTurns();
     }
 
@@ -2656,6 +3767,63 @@
       t.textContent = msg;
       t.classList.add("show");
       setTimeout(() => t.classList.remove("show"), 2500);
+    }
+
+    function clearSlotFeedback(slotEl) {
+      if (slotFeedbackTimer) {
+        clearTimeout(slotFeedbackTimer);
+        slotFeedbackTimer = null;
+      }
+      if (slotEl) {
+        slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
+        slotEl.querySelector(".slot-feedback-msg")?.remove();
+      }
+      slotFeedbackActive = false;
+    }
+
+    function clearAllSlotFeedback() {
+      if (slotFeedbackTimer) {
+        clearTimeout(slotFeedbackTimer);
+        slotFeedbackTimer = null;
+      }
+      slotFeedbackActive = false;
+      ["day-slot", "dom-slot", "month-slot", "year-slot", "weather-slot"].forEach((id) => {
+        const slot = document.getElementById(id);
+        if (slot) {
+          slot.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
+          slot.querySelector(".slot-feedback-msg")?.remove();
+        }
+      });
+      const registerLayout = document.querySelector(".register-layout");
+      if (registerLayout) {
+        registerLayout.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
+        registerLayout.querySelector(".slot-feedback-msg")?.remove();
+      }
+    }
+
+    function showSlotFeedback(slotEl, type, message, onDone) {
+      if (!slotEl) {
+        onDone?.();
+        return;
+      }
+      clearSlotFeedback(slotEl);
+      slotFeedbackActive = true;
+      slotEl.classList.add(`slot-feedback-${type}`);
+      slotEl.appendChild(el("p", { className: "slot-feedback-msg", textContent: message }));
+      slotFeedbackTimer = setTimeout(() => {
+        slotFeedbackActive = false;
+        slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
+        slotEl.querySelector(".slot-feedback-msg")?.remove();
+        slotFeedbackTimer = null;
+        onDone?.();
+      }, SLOT_FEEDBACK_MS[type] || 3500);
+    }
+
+    function autoAdvanceFromScreen(screenId) {
+      const idx = SCREEN_IDS.indexOf(screenId);
+      if (idx < 0 || idx >= SCREEN_IDS.length - 1) return;
+      if (SCREEN_IDS[currentScreenIndex] !== screenId) return;
+      showScreen(idx + 1);
     }
 
     function updateHeaderDate() {
@@ -2744,24 +3912,85 @@
        RENDER: Day & Weather
        ============================================================ */
 
-    function createDayChip(day) {
-      const color = DAY_COLORS[day] || "var(--navy)";
+    function createDayChip(day, inDock) {
+      const meta = getWeekdayMeta(day);
       const chip = el("div", {
-        className: "draggable-day",
+        className: `draggable-day${inDock ? " date-dock-source" : ""}`,
         role: "button",
         tabindex: "0",
         "aria-label": `Drag ${day} to TODAY IS box`,
         "data-day-name": day,
-        style: `--day-color:${color}`,
+        style: `--day-color:${meta?.color || "var(--navy)"}`,
       });
-      const icon = el("div", {
-        className: "day-letter-icon",
-        textContent: DAY_LETTERS[day] || day.charAt(0),
+      const face = el("div", { className: "day-chip-face" });
+      if (meta?.icon) {
+        face.appendChild(el("span", { className: "day-chip-icon", textContent: meta.icon, "aria-hidden": "true" }));
+      }
+      face.appendChild(el("span", {
+        className: "day-chip-letter",
+        textContent: meta?.letter || day.charAt(0),
         "aria-hidden": "true",
-      });
-      chip.appendChild(icon);
+      }));
+      chip.appendChild(face);
       chip.appendChild(el("p", { className: "day-name-label", textContent: day }));
       return chip;
+    }
+
+    function createDomChip(num, inDock) {
+      const chip = el("div", {
+        className: `draggable-day draggable-date-num${inDock ? " date-dock-source" : ""}`,
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag day ${num}`,
+        "data-dom-value": String(num),
+        style: "--chip-color:#1b3a5c",
+      });
+      chip.appendChild(el("div", { className: "date-num-icon", textContent: String(num), "aria-hidden": "true" }));
+      return chip;
+    }
+
+    function createMonthChip(month, inDock) {
+      const chip = el("div", {
+        className: `draggable-day draggable-month${inDock ? " date-dock-source" : ""}`,
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag ${month.name}`,
+        "data-month-id": String(month.id),
+        style: `--chip-color:${month.color}`,
+      });
+      const face = el("div", { className: "month-chip-face" });
+      face.appendChild(el("span", { className: "month-chip-icon", textContent: month.icon, "aria-hidden": "true" }));
+      face.appendChild(el("span", { className: "month-chip-abbr", textContent: month.short, "aria-hidden": "true" }));
+      chip.appendChild(face);
+      chip.appendChild(el("p", { className: "day-name-label", textContent: month.name }));
+      return chip;
+    }
+
+    function createYearChip(yearOpt, inDock) {
+      const chip = el("div", {
+        className: `draggable-day draggable-year${inDock ? " date-dock-source" : ""}`,
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag year ${yearOpt.value}`,
+        "data-year-value": String(yearOpt.value),
+        style: `--chip-color:${yearOpt.color}`,
+      });
+      chip.appendChild(el("div", {
+        className: "year-num-icon",
+        textContent: String(yearOpt.value),
+        "aria-hidden": "true",
+      }));
+      return chip;
+    }
+
+    function fillDateStack(containerId, parts) {
+      const stack = document.getElementById(containerId);
+      if (!stack) return;
+      stack.innerHTML = "";
+      parts.forEach((part, i) => {
+        if (i > 0) stack.appendChild(el("span", { className: "date-stack-sep", textContent: "·", "aria-hidden": "true" }));
+        stack.appendChild(el("span", { className: "date-stack-locked", textContent: part }));
+      });
     }
 
     function renderDay() {
@@ -2775,50 +4004,378 @@
 
       if (state.day) {
         placeholder.classList.add("hidden");
-        slot.appendChild(createDayChip(state.day));
+        slot.appendChild(createDayChip(state.day, false));
       } else {
         placeholder.classList.remove("hidden");
       }
 
-      DAYS.forEach((day) => {
-        if (day === state.day) return;
-        dock.appendChild(createDayChip(day));
-      });
-
+      WEEKDAYS.forEach((w) => dock.appendChild(createDayChip(w.name, true)));
       initDayDragDrop();
+    }
+
+    function renderDateDom() {
+      const slot = document.getElementById("dom-slot");
+      const dock = document.getElementById("dom-dock");
+      const placeholder = document.getElementById("dom-slot-placeholder");
+      if (!slot || !dock) return;
+
+      if (state.day) fillDateStack("date-dom-stack", [state.day]);
+      else fillDateStack("date-dom-stack", []);
+
+      dock.innerHTML = "";
+      slot.querySelectorAll(".draggable-date-num").forEach((n) => n.remove());
+
+      if (state.dayOfMonth != null) {
+        placeholder.classList.add("hidden");
+        slot.appendChild(createDomChip(state.dayOfMonth, false));
+      } else {
+        placeholder.classList.remove("hidden");
+      }
+
+      for (let n = 1; n <= 31; n += 1) dock.appendChild(createDomChip(n, true));
+      initDomDragDrop();
+    }
+
+    function renderMonth() {
+      const slot = document.getElementById("month-slot");
+      const dock = document.getElementById("month-dock");
+      const placeholder = document.getElementById("month-slot-placeholder");
+      if (!slot || !dock) return;
+
+      const stackParts = [];
+      if (state.day) stackParts.push(state.day);
+      if (state.dayOfMonth != null) stackParts.push(String(state.dayOfMonth));
+      fillDateStack("date-month-stack", stackParts);
+
+      dock.innerHTML = "";
+      slot.querySelectorAll(".draggable-month").forEach((n) => n.remove());
+
+      if (state.month != null) {
+        const meta = getMonthMeta(state.month);
+        placeholder.classList.add("hidden");
+        if (meta) slot.appendChild(createMonthChip(meta, false));
+      } else {
+        placeholder.classList.remove("hidden");
+      }
+
+      MONTHS.forEach((m) => dock.appendChild(createMonthChip(m, true)));
+      initMonthDragDrop();
+    }
+
+    function renderYear() {
+      const slot = document.getElementById("year-slot");
+      const dock = document.getElementById("year-dock");
+      const placeholder = document.getElementById("year-slot-placeholder");
+      if (!slot || !dock) return;
+
+      const stackParts = [];
+      if (state.day) stackParts.push(state.day);
+      if (state.dayOfMonth != null) stackParts.push(String(state.dayOfMonth));
+      if (state.month != null) {
+        const mn = getMonthMeta(state.month);
+        if (mn) stackParts.push(mn.name);
+      }
+      fillDateStack("date-year-stack", stackParts);
+
+      dock.innerHTML = "";
+      slot.querySelectorAll(".draggable-year").forEach((n) => n.remove());
+
+      if (state.year != null) {
+        const yo = YEAR_OPTIONS.find((y) => y.value === state.year);
+        placeholder.classList.add("hidden");
+        if (yo) slot.appendChild(createYearChip(yo, false));
+      } else {
+        placeholder.classList.remove("hidden");
+      }
+
+      YEAR_OPTIONS.forEach((y) => dock.appendChild(createYearChip(y, true)));
+      initYearDragDrop();
     }
 
     function initDayDragDrop() {
       setupDragSystem();
-      document.querySelectorAll(".draggable-day").forEach((chip) => {
+      document.querySelectorAll("#day-dock .draggable-day, #day-slot .draggable-day").forEach((chip) => {
         chip.onpointerdown = startDayDrag;
-        chip.onkeydown = (e) => {
-          const dayName = chip.dataset.dayName;
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            state.day = state.day === dayName ? null : dayName;
-            renderDay();
-            renderSummary();
-          }
-        };
       });
     }
 
-    function createWeatherChip(w) {
+    function initDomDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll("#dom-dock .draggable-date-num, #dom-slot .draggable-date-num").forEach((chip) => {
+        chip.onpointerdown = startDomDrag;
+      });
+    }
+
+    function initMonthDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll("#month-dock .draggable-month, #month-slot .draggable-month").forEach((chip) => {
+        chip.onpointerdown = startMonthDrag;
+      });
+    }
+
+    function initYearDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll("#year-dock .draggable-year, #year-slot .draggable-year").forEach((chip) => {
+        chip.onpointerdown = startYearDrag;
+      });
+    }
+
+    function wmoLabel(code) {
+      const labels = {
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Depositing rime fog",
+        51: "Light drizzle",
+        53: "Drizzle",
+        55: "Heavy drizzle",
+        56: "Light freezing drizzle",
+        57: "Freezing drizzle",
+        61: "Light rain",
+        63: "Rain",
+        65: "Heavy rain",
+        66: "Light freezing rain",
+        67: "Freezing rain",
+        71: "Light snow",
+        73: "Snow",
+        75: "Heavy snow",
+        77: "Snow grains",
+        80: "Light rain showers",
+        81: "Rain showers",
+        82: "Heavy rain showers",
+        85: "Snow showers",
+        86: "Heavy snow showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with hail",
+        99: "Thunderstorm with hail",
+      };
+      return labels[code] || "Cloudy";
+    }
+
+    function mapWmoToWeatherId(code, tempC, windKmh) {
+      if (code >= 95) return "stormy";
+      if (code >= 71 && code <= 77) return "cold";
+      if (code >= 85 && code <= 86) return "cold";
+      if (code >= 51 && code <= 67) return "rainy";
+      if (code >= 80 && code <= 82) return "rainy";
+      if (code >= 45 && code <= 48) return "cloudy";
+      if (windKmh >= 30) return "windy";
+      if (code === 0) return tempC >= 26 ? "hot" : "sunny";
+      if (code === 1) return tempC >= 26 ? "hot" : "sunny";
+      if (code === 2 || code === 3) return "cloudy";
+      if (tempC <= 5) return "cold";
+      if (tempC >= 26) return "hot";
+      return "cloudy";
+    }
+
+    function updateLondonForecastDisplay() {
+      const box = document.getElementById("london-forecast");
+      const sceneEl = document.getElementById("london-forecast-scene");
+      const descEl = document.getElementById("london-forecast-desc");
+      const metaEl = document.getElementById("london-forecast-meta");
+      if (!box || !londonWeather) return;
+      box.classList.remove("loading");
+      if (sceneEl) {
+        sceneEl.innerHTML = "";
+        sceneEl.appendChild(buildWeatherScene(londonWeather.id, "forecast"));
+      }
+      if (descEl) descEl.textContent = londonWeather.wmoLabel || londonWeather.label;
+      if (metaEl) {
+        const parts = [];
+        if (londonWeather.temp != null) parts.push(`${londonWeather.temp}°C`);
+        if (londonWeather.wind != null) parts.push(`${Math.round(londonWeather.wind)} km/h`);
+        metaEl.textContent = parts.join(" · ");
+      }
+    }
+
+    async function fetchLondonWeather() {
+      const box = document.getElementById("london-forecast");
+      const sceneEl = document.getElementById("london-forecast-scene");
+      const descEl = document.getElementById("london-forecast-desc");
+      if (box) box.classList.add("loading");
+      if (sceneEl) sceneEl.innerHTML = "";
+      if (descEl) descEl.textContent = "Loading live forecast…";
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current=weather_code,wind_speed_10m,temperature_2m,cloud_cover,precipitation&timezone=Europe%2FLondon";
+        const res = await fetch(url);
+        const data = await res.json();
+        const code = data.current.weather_code;
+        const temp = Math.round(data.current.temperature_2m);
+        const wind = data.current.wind_speed_10m;
+        const id = mapWmoToWeatherId(code, temp, wind);
+        const w = WEATHER.find((x) => x.id === id) || WEATHER[1];
+        londonWeather = {
+          id,
+          label: w.label,
+          temp,
+          wind,
+          wmoCode: code,
+          wmoLabel: wmoLabel(code),
+        };
+      } catch {
+        londonWeather = {
+          id: "cloudy",
+          label: "Cloudy",
+          temp: null,
+          wind: null,
+          wmoCode: 3,
+          wmoLabel: "Overcast",
+        };
+      }
+      updateLondonForecastDisplay();
+    }
+
+    function createWeatherChip(w, inDock) {
       const chip = el("div", {
-        className: "draggable-weather",
+        className: `draggable-weather${inDock ? " date-dock-source" : ""}`,
         role: "button",
         tabindex: "0",
-        "aria-label": `Drag ${w.label} to weather box`,
+        "aria-label": `Drag ${w.label} weather to match London`,
         "data-weather-id": w.id,
       });
-      chip.appendChild(el("div", {
-        className: "weather-icon-box",
-        textContent: w.icon,
-        "aria-hidden": "true",
-      }));
+      const sceneWrap = el("div", { className: "weather-chip-scene", "aria-hidden": "true" });
+      sceneWrap.appendChild(buildWeatherScene(w.id, "chip"));
+      chip.appendChild(sceneWrap);
       chip.appendChild(el("p", { className: "weather-name-label", textContent: w.label }));
       return chip;
+    }
+
+    const WEATHER_FX_SVG = {
+      snowflake: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M12 2l-2 2M12 2l2 2M12 22l-2-2M12 22l2-2M2 12h20M2 12l2-2M2 12l2 2M22 12l-2-2M22 12l-2 2M5.6 5.6l12.8 12.8M5.6 18.4L18.4 5.6M18.4 18.4L5.6 5.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      cloud: '<svg viewBox="0 0 120 60" fill="none" aria-hidden="true"><ellipse cx="42" cy="38" rx="28" ry="18" fill="#94a3b8"/><ellipse cx="68" cy="32" rx="34" ry="22" fill="#cbd5e1"/><ellipse cx="88" cy="40" rx="24" ry="16" fill="#94a3b8"/></svg>',
+      sun: '<svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="50" cy="50" r="18" fill="#fbbf24"/><g class="weather-fx-sun-rays" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"><line x1="50" y1="8" x2="50" y2="22"/><line x1="50" y1="78" x2="50" y2="92"/><line x1="8" y1="50" x2="22" y2="50"/><line x1="78" y1="50" x2="92" y2="50"/><line x1="20" y1="20" x2="30" y2="30"/><line x1="70" y1="70" x2="80" y2="80"/><line x1="80" y1="20" x2="70" y2="30"/><line x1="30" y1="70" x2="20" y2="80"/></g></svg>',
+      lightning: '<svg viewBox="0 0 40 80" fill="none" aria-hidden="true"><path d="M22 0L8 34h10L14 80l22-38H24L32 0H22z" fill="#fde047" stroke="#f59e0b" stroke-width="1.5"/></svg>',
+    };
+
+    function addRainFx(container, count) {
+      for (let i = 0; i < count; i += 1) {
+        const drop = el("div", { className: "weather-fx-raindrop" });
+        drop.style.left = `${(i * 97 / count + Math.random() * 3) % 100}%`;
+        drop.style.animationDuration = `${0.55 + Math.random() * 0.45}s`;
+        drop.style.animationDelay = `${Math.random() * 1.8}s`;
+        container.appendChild(drop);
+      }
+    }
+
+    function addSnowFx(container, count) {
+      for (let i = 0; i < count; i += 1) {
+        const flake = el("div", { className: "weather-fx-snowflake" });
+        flake.style.left = `${Math.random() * 100}%`;
+        flake.style.animationDuration = `${2.8 + Math.random() * 2.5}s`;
+        flake.style.animationDelay = `${Math.random() * 2.5}s`;
+        const inner = document.createElement("div");
+        inner.innerHTML = WEATHER_FX_SVG.snowflake;
+        flake.appendChild(inner.firstElementChild);
+        container.appendChild(flake);
+      }
+    }
+
+    function addCloudFx(container, count) {
+      for (let i = 0; i < count; i += 1) {
+        const cloud = el("div", { className: "weather-fx-cloud" });
+        cloud.style.top = `${4 + i * 14}%`;
+        cloud.style.animationDuration = `${14 + i * 4}s`;
+        cloud.style.animationDelay = `${-i * 5}s`;
+        const inner = document.createElement("div");
+        inner.innerHTML = WEATHER_FX_SVG.cloud;
+        cloud.appendChild(inner.firstElementChild);
+        container.appendChild(cloud);
+      }
+      container.appendChild(el("div", { className: "weather-fx-cloudy-dim" }));
+    }
+
+    function addWindFx(container, count) {
+      for (let i = 0; i < count; i += 1) {
+        const line = el("div", { className: "weather-fx-wind-line" });
+        line.style.top = `${12 + (i * 70 / count)}%`;
+        line.style.width = `${20 + Math.random() * 25}%`;
+        line.style.animationDuration = `${1.2 + Math.random() * 0.9}s`;
+        line.style.animationDelay = `${Math.random() * 2}s`;
+        container.appendChild(line);
+      }
+    }
+
+    function addHeatFx(container, count) {
+      container.appendChild(el("div", { className: "weather-fx-hot-glow" }));
+      for (let i = 0; i < count; i += 1) {
+        const wave = el("div", { className: "weather-fx-heat-wave" });
+        wave.style.top = `${20 + i * 12}%`;
+        wave.style.animationDuration = `${2.2 + i * 0.35}s`;
+        wave.style.animationDelay = `${i * 0.45}s`;
+        container.appendChild(wave);
+      }
+    }
+
+    const WEATHER_FX_DENSITY = {
+      full: { rain: 36, snow: 28, cloud: 3, wind: 10, heat: 6, lightning: 3 },
+      forecast: { rain: 20, snow: 16, cloud: 2, wind: 7, heat: 4, lightning: 2 },
+      chip: { rain: 12, snow: 10, cloud: 1, wind: 5, heat: 3, lightning: 1 },
+    };
+
+    function buildWeatherFx(weatherId, densityKey) {
+      const d = WEATHER_FX_DENSITY[densityKey] || WEATHER_FX_DENSITY.full;
+      const wrap = el("div", { className: `weather-fx weather-fx-${weatherId}` });
+      switch (weatherId) {
+        case "rainy":
+          addRainFx(wrap, d.rain);
+          break;
+        case "cold":
+          addSnowFx(wrap, d.snow);
+          break;
+        case "sunny": {
+          wrap.appendChild(el("div", { className: "weather-fx-sunny-glow" }));
+          const sunWrap = el("div", { className: "weather-fx-sun-wrap" });
+          sunWrap.innerHTML = WEATHER_FX_SVG.sun;
+          wrap.appendChild(sunWrap);
+          break;
+        }
+        case "cloudy":
+          addCloudFx(wrap, d.cloud);
+          break;
+        case "stormy":
+          wrap.appendChild(el("div", { className: "weather-fx-storm-dark" }));
+          addRainFx(wrap, d.rain);
+          for (let i = 0; i < d.lightning; i += 1) {
+            const bolt = el("div", { className: "weather-fx-lightning" });
+            bolt.style.left = `${22 + i * 32}%`;
+            bolt.style.animationDelay = `${i * 1.55}s`;
+            bolt.style.transform = `translateX(-50%) scale(${0.75 + i * 0.08})`;
+            bolt.innerHTML = WEATHER_FX_SVG.lightning;
+            wrap.appendChild(bolt);
+          }
+          wrap.appendChild(el("div", { className: "weather-fx-storm-flash" }));
+          break;
+        case "windy":
+          addWindFx(wrap, d.wind);
+          addCloudFx(wrap, Math.max(1, d.cloud));
+          break;
+        case "hot":
+          addHeatFx(wrap, d.heat);
+          break;
+        default:
+          break;
+      }
+      return wrap;
+    }
+
+    function buildWeatherScene(weatherId, densityKey) {
+      const scene = el("div", { className: `weather-scene weather-scene-${weatherId}` });
+      scene.appendChild(el("div", { className: "weather-scene-sky" }));
+      scene.appendChild(buildWeatherFx(weatherId, densityKey));
+      if (densityKey !== "chip") {
+        scene.appendChild(el("div", { className: "weather-scene-ground" }));
+      }
+      return scene;
+    }
+
+    function updateWeatherEffects(weatherId) {
+      const fx = document.getElementById("weather-effects");
+      if (!fx) return;
+      fx.innerHTML = "";
+      if (!weatherId) return;
+      fx.appendChild(buildWeatherScene(weatherId, "full"));
     }
 
     function renderWeather() {
@@ -2827,39 +4384,78 @@
       const placeholder = document.getElementById("weather-slot-placeholder");
       if (!slot || !dock) return;
 
+      const stackParts = [];
+      if (state.day) stackParts.push(state.day);
+      if (state.dayOfMonth != null) stackParts.push(String(state.dayOfMonth));
+      if (state.month != null) {
+        const mn = getMonthMeta(state.month);
+        if (mn) stackParts.push(mn.name);
+      }
+      if (state.year != null) stackParts.push(String(state.year));
+      fillDateStack("date-weather-stack", stackParts);
+
       dock.innerHTML = "";
       slot.querySelectorAll(".draggable-weather").forEach((n) => n.remove());
 
       if (state.weather) {
         const selected = WEATHER.find((w) => w.id === state.weather);
         placeholder.classList.add("hidden");
-        if (selected) slot.appendChild(createWeatherChip(selected));
+        if (selected) slot.appendChild(createWeatherChip(selected, false));
       } else {
         placeholder.classList.remove("hidden");
       }
 
-      WEATHER.forEach((w) => {
-        if (w.id === state.weather) return;
-        dock.appendChild(createWeatherChip(w));
-      });
-
+      WEATHER.forEach((w) => dock.appendChild(createWeatherChip(w, true)));
       initWeatherDragDrop();
+      updateWeatherEffects(state.weather);
     }
 
     function initWeatherDragDrop() {
       setupDragSystem();
       document.querySelectorAll(".draggable-weather").forEach((chip) => {
-        chip.onpointerdown = startWeatherDrag;
-        chip.onkeydown = (e) => {
+        chip.onpointerdown = (e) => {
+          if (e.button !== 0 && e.pointerType === "mouse") return;
           const weatherId = chip.dataset.weatherId;
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            state.weather = state.weather === weatherId ? null : weatherId;
-            renderWeather();
-            renderSummary();
-          }
+          if (!weatherId) return;
+          dragState = {
+            type: "weather",
+            weatherId,
+            fromDock: chip.classList.contains("date-dock-source"),
+            sourceEl: chip,
+            pointerId: e.pointerId,
+            startX: e.clientX,
+            startY: e.clientY,
+            moved: false,
+            ghost: null,
+            offsetX: 0,
+            offsetY: 0,
+          };
+          chip.setPointerCapture(e.pointerId);
+          e.preventDefault();
         };
       });
+    }
+
+    function canAdvanceFromScreen(screenId) {
+      switch (screenId) {
+        case "day": return state.day === todayRef.weekday;
+        case "date": return state.dayOfMonth === todayRef.dayOfMonth;
+        case "month": return state.month === todayRef.month;
+        case "year": return state.year === todayRef.year;
+        case "weather": return state.weather != null;
+        default: return true;
+      }
+    }
+
+    function advanceHint(screenId) {
+      const hints = {
+        day: "Choose the correct weekday first",
+        date: "Choose the correct day number",
+        month: "Choose the correct month",
+        year: "Choose the correct year",
+        weather: "Match the live London weather window — top right",
+      };
+      return hints[screenId] || "Complete this screen first";
     }
 
     /* ============================================================
@@ -3293,7 +4889,15 @@
     function buildSummaryText() {
       const lines = ["Circle Time Summary", ""];
 
-      lines.push(`Day: ${state.day || "Not selected"}`);
+      const dateParts = [];
+      if (state.day) dateParts.push(state.day);
+      if (state.dayOfMonth != null) dateParts.push(String(state.dayOfMonth));
+      if (state.month != null) {
+        const mn = getMonthMeta(state.month);
+        dateParts.push(mn ? mn.name : "Unknown month");
+      }
+      if (state.year != null) dateParts.push(String(state.year));
+      lines.push(`Date: ${dateParts.length ? dateParts.join(" · ") : "Not completed"}`);
 
       const weatherLabel = WEATHER.find((w) => w.id === state.weather)?.label || "Not selected";
       lines.push(`Weather: ${weatherLabel}`);
@@ -3352,6 +4956,9 @@
     function renderAll() {
       renderRegister();
       renderDay();
+      renderDateDom();
+      renderMonth();
+      renderYear();
       renderWeather();
       renderFeelings();
       renderFocus();
