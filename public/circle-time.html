@@ -5430,8 +5430,10 @@
       const node = document.createElement(tag);
       if (attrs) {
         Object.entries(attrs).forEach(([k, v]) => {
+          if (v == null) return;
           if (k === "className") node.className = v;
           else if (k === "textContent") node.textContent = v;
+          else if (k === "disabled") node.disabled = Boolean(v);
           else if (k.startsWith("on")) node.addEventListener(k.slice(2).toLowerCase(), v);
           else node.setAttribute(k, v);
         });
