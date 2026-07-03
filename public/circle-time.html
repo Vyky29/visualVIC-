@@ -2253,84 +2253,107 @@
       flex-shrink: 0;
     }
 
-    /* ClubSENsational — official logo + SVG orbiting balls */
+    /* ClubSENsational — same mark as portal login (portalvic.vercel.app/login.html) */
     .cs-logo-stage {
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: min(280px, 64vw);
+      max-width: 100%;
+      aspect-ratio: 1;
       margin: 0 auto 1.25rem;
-      width: min(320px, 82vw);
-      height: min(320px, 82vw);
+      display: grid;
+      place-items: center;
       flex-shrink: 0;
     }
 
     .cs-logo-stage-compact {
-      width: clamp(96px, 18vw, 124px);
-      height: clamp(96px, 18vw, 124px);
+      width: clamp(88px, 16vw, 108px);
       margin: 0;
     }
 
-    .cs-orbit-field {
+    .cs-orbit-svg {
       position: absolute;
-      inset: -4%;
-      width: 108%;
-      height: 108%;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 0;
       overflow: visible;
     }
 
-    .cs-orbit-ring {
-      pointer-events: none;
+    .cs-orbit-layer--cw {
+      transform-origin: 0 0;
+      animation: cs-orbit-cw 18s linear infinite;
+    }
+
+    .cs-orbit-layer--ccw {
+      transform-origin: 0 0;
+      animation: cs-orbit-ccw 14s linear infinite;
+    }
+
+    .cs-orbit-layer--slow-ccw {
+      transform-origin: 0 0;
+      animation: cs-orbit-ccw 26s linear infinite;
+    }
+
+    @keyframes cs-orbit-cw {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes cs-orbit-ccw {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .cs-orbit-ring animateTransform {
-        display: none;
+      .cs-orbit-layer--cw,
+      .cs-orbit-layer--ccw,
+      .cs-orbit-layer--slow-ccw {
+        animation: none;
       }
     }
 
+    /* Official PNG has a square canvas — crop to circle like the portal */
     .cs-logo-disc {
       position: relative;
       z-index: 1;
-      width: 68%;
-      height: 68%;
-      flex-shrink: 0;
+      width: 70%;
+      max-width: 168px;
+      aspect-ratio: 1;
       border-radius: 50%;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10%;
       overflow: hidden;
+      background: #fff;
+      display: grid;
+      place-items: center;
       box-shadow:
-        0 0 0 4px rgba(255, 255, 255, 0.96),
-        0 14px 40px rgba(0, 0, 0, 0.28);
+        0 0 0 2px rgba(249, 191, 46, 0.5),
+        0 0 18px rgba(249, 191, 46, 0.45),
+        0 0 36px rgba(244, 183, 64, 0.32),
+        0 0 56px rgba(249, 191, 46, 0.22),
+        0 0 80px rgba(45, 132, 179, 0.12);
+    }
+
+    .cs-logo-stage-compact .cs-logo-disc {
+      max-width: 76px;
+      box-shadow:
+        0 0 0 2px rgba(249, 191, 46, 0.45),
+        0 0 10px rgba(249, 191, 46, 0.35),
+        0 0 20px rgba(244, 183, 64, 0.25);
     }
 
     .cs-logo-original {
       width: 100%;
       height: 100%;
+      margin: 0;
       display: block;
-      object-fit: contain;
-      object-position: center;
-      background: transparent;
-      border-radius: 0;
-      padding: 0;
-      box-shadow: none;
-    }
-
-    .cs-logo-stage-compact .cs-logo-disc {
-      width: 66%;
-      padding: 8%;
-      box-shadow:
-        0 0 0 2px rgba(255, 255, 255, 0.92),
-        0 6px 16px rgba(0, 0, 0, 0.22);
+      object-fit: cover;
+      transform: scale(1.32);
+      transform-origin: center center;
     }
 
     @media (min-width: 740px) {
       .cs-logo-stage:not(.cs-logo-stage-compact) {
-        width: min(380px, 44vw);
+        width: min(280px, 40vw);
       }
     }
 
@@ -4242,82 +4265,52 @@
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
-    const CLUBSENSATIONAL_LOGO_SRC = "/assets/clubsensational-logo.webp";
+    const CLUBSENSATIONAL_LOGO_SRC = "/assets/clubsensational-logo-mark.png";
 
-    const CLUBSENSATIONAL_ORBIT_RINGS = {
-      full: [
-        { dur: 8, dots: [
-          { angle: 0, dist: 0.48, r: 7, fill: "#e9b93c" },
-          { angle: 110, dist: 0.44, r: 5.5, fill: "#2c364b" },
-          { angle: 230, dist: 0.46, r: 6, fill: "#7ec8e8" },
-        ]},
-        { dur: 11, reverse: true, dots: [
-          { angle: 35, dist: 0.52, r: 5, fill: "#2c364b" },
-          { angle: 155, dist: 0.5, r: 4.5, fill: "#e9b93c" },
-          { angle: 280, dist: 0.51, r: 4, fill: "#7ec8e8" },
-        ]},
-        { dur: 6.5, dots: [
-          { angle: 70, dist: 0.42, r: 4, fill: "#7ec8e8" },
-          { angle: 190, dist: 0.43, r: 3.5, fill: "#e9b93c" },
-          { angle: 310, dist: 0.45, r: 3.5, fill: "#2c364b" },
-        ]},
-      ],
-      compact: [
-        { dur: 7, dots: [
-          { angle: 0, dist: 0.47, r: 4.5, fill: "#e9b93c" },
-          { angle: 180, dist: 0.45, r: 3.5, fill: "#2c364b" },
-        ]},
-        { dur: 9.5, reverse: true, dots: [
-          { angle: 90, dist: 0.5, r: 3, fill: "#7ec8e8" },
-          { angle: 270, dist: 0.48, r: 2.8, fill: "#e9b93c" },
-        ]},
-      ],
-    };
+    let csOrbitFilterSeq = 0;
 
-    function buildClubSensationalOrbitSvg(compact) {
-      const size = compact ? 120 : 280;
-      const cx = size / 2;
-      const cy = size / 2;
-      const ns = "http://www.w3.org/2000/svg";
-      const svg = document.createElementNS(ns, "svg");
-      svg.setAttribute("class", "cs-orbit-field");
-      svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-      svg.setAttribute("aria-hidden", "true");
-
-      const rings = compact ? CLUBSENSATIONAL_ORBIT_RINGS.compact : CLUBSENSATIONAL_ORBIT_RINGS.full;
-      rings.forEach((ring, ringIndex) => {
-        const group = document.createElementNS(ns, "g");
-        group.setAttribute("class", "cs-orbit-ring");
-
-        ring.dots.forEach((dot) => {
-          const rad = (dot.angle * Math.PI) / 180;
-          const circle = document.createElementNS(ns, "circle");
-          circle.setAttribute("cx", String(cx + Math.cos(rad) * dot.dist * size));
-          circle.setAttribute("cy", String(cy + Math.sin(rad) * dot.dist * size));
-          circle.setAttribute("r", String(dot.r));
-          circle.setAttribute("fill", dot.fill);
-          circle.setAttribute("opacity", "0.92");
-          group.appendChild(circle);
-        });
-
-        const spin = document.createElementNS(ns, "animateTransform");
-        spin.setAttribute("attributeName", "transform");
-        spin.setAttribute("type", "rotate");
-        spin.setAttribute("dur", `${ring.dur}s`);
-        spin.setAttribute("repeatCount", "indefinite");
-        if (ring.reverse) {
-          spin.setAttribute("from", `360 ${cx} ${cy}`);
-          spin.setAttribute("to", `0 ${cx} ${cy}`);
-        } else {
-          spin.setAttribute("from", `0 ${cx} ${cy}`);
-          spin.setAttribute("to", `360 ${cx} ${cy}`);
-        }
-        if (ringIndex % 2) spin.setAttribute("begin", `${-(ring.dur / 3)}s`);
-        group.appendChild(spin);
-
-        svg.appendChild(group);
-      });
-      return svg;
+    function buildClubSensationalOrbitSvg() {
+      const filterId = `cs-orb-soft-${csOrbitFilterSeq += 1}`;
+      const tpl = document.createElement("template");
+      tpl.innerHTML = `
+        <svg class="cs-orbit-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="${filterId}" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g transform="translate(100,100)">
+            <g class="cs-orbit-layer cs-orbit-layer--cw" filter="url(#${filterId})">
+              <circle cx="0" cy="-92" r="7" fill="#2d84b3"/>
+              <circle cx="79.67" cy="-46" r="6" fill="#f9bf2e"/>
+              <circle cx="79.67" cy="46" r="6" fill="#173247"/>
+              <circle cx="0" cy="92" r="7" fill="#f4b740"/>
+              <circle cx="-79.67" cy="46" r="6" fill="#2d84b3"/>
+              <circle cx="-79.67" cy="-46" r="6" fill="#5a9fc4"/>
+            </g>
+            <g class="cs-orbit-layer cs-orbit-layer--ccw" filter="url(#${filterId})">
+              <circle cx="0" cy="-82" r="5" fill="#f9bf2e"/>
+              <circle cx="71.01" cy="-41" r="5" fill="#2d84b3"/>
+              <circle cx="71.01" cy="41" r="5" fill="#f4b740"/>
+              <circle cx="0" cy="82" r="5" fill="#173247"/>
+              <circle cx="-71.01" cy="41" r="5" fill="#8ebfe0"/>
+              <circle cx="-71.01" cy="-41" r="5" fill="#f9bf2e"/>
+            </g>
+            <g class="cs-orbit-layer cs-orbit-layer--slow-ccw" filter="url(#${filterId})">
+              <circle cx="37.27" cy="-64" r="4" fill="#f4b740"/>
+              <circle cx="74" cy="-8" r="4" fill="#2d84b3"/>
+              <circle cx="37.27" cy="64" r="4" fill="#f9bf2e"/>
+              <circle cx="-37.27" cy="64" r="4" fill="#173247"/>
+              <circle cx="-74" cy="-8" r="4" fill="#2d84b3"/>
+              <circle cx="-37.27" cy="-64" r="4" fill="#f4d78a"/>
+            </g>
+          </g>
+        </svg>`;
+      return tpl.content.firstElementChild;
     }
 
     function buildClubSensationalLogoMark(compact) {
@@ -4326,12 +4319,14 @@
         role: "img",
         "aria-label": "clubSENsational Autism Consultancy Services",
       });
-      stage.appendChild(buildClubSensationalOrbitSvg(compact));
+      stage.appendChild(buildClubSensationalOrbitSvg());
       const disc = el("div", { className: "cs-logo-disc" });
       disc.appendChild(el("img", {
         className: "cs-logo-original",
         src: CLUBSENSATIONAL_LOGO_SRC,
         alt: "",
+        width: "200",
+        height: "200",
         decoding: "async",
         draggable: "false",
       }));
