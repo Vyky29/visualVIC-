@@ -2114,6 +2114,26 @@
       display: block;
     }
 
+    .pre-show-logo-slot {
+      margin: 0 auto 1.25rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pre-show-logo-hero {
+      width: min(340px, 82vw);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      filter: drop-shadow(0 18px 42px rgba(0, 0, 0, 0.32));
+    }
+
+    @media (min-width: 740px) {
+      .pre-show-logo-hero {
+        width: min(400px, 42vw);
+      }
+    }
+
     /* ClubSENsational animated mark — infinity + orbiting balls */
     .cs-logo-card {
       background: var(--white);
@@ -4161,7 +4181,16 @@
     function mountClubSensationalLogos() {
       const preSlot = document.getElementById("pre-show-logo-slot");
       const headerSlot = document.getElementById("header-logo-slot");
-      if (preSlot) preSlot.appendChild(buildClubSensationalLogoMark(false));
+      if (preSlot) {
+        preSlot.appendChild(el("img", {
+          className: "pre-show-logo-hero",
+          src: "/assets/clubsensational-logo-hero.png",
+          alt: "clubSENsational Autism Consultancy Services",
+          width: "614",
+          height: "664",
+          decoding: "async",
+        }));
+      }
       if (headerSlot) headerSlot.appendChild(buildClubSensationalLogoMark(true));
     }
 
