@@ -65,9 +65,14 @@
     .screen-page {
       display: none;
       height: 100%;
+      overflow: hidden;
+      padding: 0.5rem 0.75rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .screen-page.scrollable {
       overflow-y: auto;
       padding: 1rem 1.25rem 1.5rem;
-      -webkit-overflow-scrolling: touch;
     }
 
     .screen-page.active {
@@ -121,7 +126,17 @@
       min-height: 0;
     }
 
-    @media (max-width: 520px) {
+    #screen-register .section-header {
+      flex-shrink: 0;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.65rem;
+    }
+
+    #screen-register .section-header h2 {
+      font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+    }
+
+    @media (max-width: 400px) {
       .register-zones { grid-template-columns: 1fr; }
     }
 
@@ -133,7 +148,8 @@
       flex-direction: column;
       align-items: center;
       padding: 0.75rem;
-      min-height: 180px;
+      min-height: 0;
+      height: 100%;
       transition: border-color 0.2s, background 0.2s;
     }
 
@@ -156,8 +172,8 @@
     }
 
     .zone-icon {
-      width: clamp(64px, 14vw, 96px);
-      height: clamp(64px, 14vw, 96px);
+      width: clamp(72px, 16vw, 120px);
+      height: clamp(72px, 16vw, 120px);
       object-fit: contain;
     }
 
@@ -183,11 +199,12 @@
 
     .register-dock {
       flex-shrink: 0;
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
       border-top: 3px solid var(--grey-200);
-      padding: 1rem 0.5rem;
+      padding: 0.75rem;
       background: var(--grey-100);
       border-radius: var(--radius);
+      min-height: clamp(120px, 18vh, 160px);
     }
 
     .register-dock-label {
@@ -208,24 +225,52 @@
     }
 
     .draggable-avatar {
-      width: 100px;
+      width: clamp(100px, 16vw, 130px);
       cursor: grab;
       touch-action: none;
       user-select: none;
+      -webkit-user-select: none;
       text-align: center;
       flex-shrink: 0;
     }
 
-    .draggable-avatar:active { cursor: grabbing; }
-    .draggable-avatar.dragging {
-      opacity: 0.55;
-      transform: scale(1.05);
-      z-index: 50;
+    .draggable-avatar.is-drag-source {
+      opacity: 0.2;
+    }
+
+    .drag-ghost {
+      position: fixed;
+      z-index: 10000;
+      pointer-events: none;
+      touch-action: none;
+      transform: scale(1.06);
+      filter: drop-shadow(0 10px 28px rgba(27, 58, 92, 0.35));
+      opacity: 0.98;
+      width: clamp(100px, 16vw, 130px);
+      text-align: center;
+    }
+
+    .drag-ghost .avatar-wrap {
+      width: clamp(88px, 14vw, 112px);
+      height: clamp(88px, 14vw, 112px);
+      margin: 0 auto;
+    }
+
+    .drag-ghost .participant-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-top: 0.35rem;
+      color: var(--navy);
+    }
+
+    body.is-dragging {
+      overflow: hidden;
+      touch-action: none;
     }
 
     .draggable-avatar .avatar-wrap {
-      width: 88px;
-      height: 88px;
+      width: clamp(88px, 14vw, 112px);
+      height: clamp(88px, 14vw, 112px);
       margin: 0 auto;
       pointer-events: none;
     }
@@ -257,64 +302,76 @@
     header {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
       color: var(--white);
-      padding: 1rem 1.25rem;
+      padding: 0.65rem 1rem;
       flex-shrink: 0;
       box-shadow: var(--shadow-lg);
+      width: 100%;
     }
 
     .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .brand-mark {
-      width: 44px;
-      height: 44px;
-      background: var(--orange);
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    header h1 {
+      width: 100%;
+      max-width: none;
       margin: 0;
-      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .header-logo-main {
+      height: clamp(44px, 7vh, 64px);
+      width: auto;
+      max-width: min(220px, 40vw);
+      object-fit: contain;
+      background: var(--white);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .header-center {
+      text-align: center;
+      min-width: 0;
+    }
+
+    .header-center h1 {
+      margin: 0;
+      font-size: clamp(1.2rem, 3vw, 1.65rem);
       font-weight: 700;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    header p {
-      margin: 0;
-      font-size: 0.95rem;
+    .header-center .header-date {
+      margin: 0.15rem 0 0;
+      font-size: clamp(0.8rem, 2vw, 0.95rem);
       opacity: 0.85;
     }
 
-    .header-meta {
-      text-align: right;
-      font-size: 0.9rem;
-      opacity: 0.9;
+    .header-actions {
+      display: flex;
+      justify-content: flex-end;
     }
 
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
+    .back-to-waiting {
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    #session-app main.screens-wrapper {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
     }
 
     section {
@@ -1036,9 +1093,9 @@
       border-color: var(--orange);
     }
 
-    .session-app { min-height: 100vh; }
+    .session-app { min-height: 100dvh; }
 
-    #register { scroll-margin-top: 5rem; }
+    #register { scroll-margin-top: 1rem; }
 
     .back-to-waiting {
       font-size: 0.85rem;
@@ -1098,17 +1155,22 @@
   <div id="session-app" class="session-app hidden">
   <header>
     <div class="header-inner">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">CT</div>
-        <div>
-          <h1>Circle Time</h1>
-          <p>Morning group session · ClubSENsational</p>
-        </div>
+      <div class="header-logo-wrap">
+        <img
+          src="/assets/clubsensational-logo.webp"
+          alt="ClubSENsational"
+          class="header-logo-main"
+        />
       </div>
-      <div class="header-meta" id="header-date" aria-live="polite"></div>
-      <button type="button" class="btn btn-sm back-to-waiting" id="back-to-waiting" aria-label="Return to waiting screen">
-        Waiting screen
-      </button>
+      <div class="header-center">
+        <h1>Circle Time</h1>
+        <p class="header-date" id="header-date" aria-live="polite"></p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-sm back-to-waiting" id="back-to-waiting" aria-label="Return to waiting screen">
+          Waiting screen
+        </button>
+      </div>
     </div>
   </header>
 
@@ -1148,7 +1210,7 @@
     </section>
     </div>
 
-    <div id="screen-day" class="screen-page" data-screen="day">
+    <div id="screen-day" class="screen-page scrollable" data-screen="day">
     <section id="day" aria-labelledby="day-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">2</span>
@@ -1161,7 +1223,7 @@
     </section>
     </div>
 
-    <div id="screen-weather" class="screen-page" data-screen="weather">
+    <div id="screen-weather" class="screen-page scrollable" data-screen="weather">
     <section id="weather" aria-labelledby="weather-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">3</span>
@@ -1174,7 +1236,7 @@
     </section>
     </div>
 
-    <div id="screen-feelings" class="screen-page" data-screen="feelings">
+    <div id="screen-feelings" class="screen-page scrollable" data-screen="feelings">
     <section id="feelings" aria-labelledby="feelings-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">4</span>
@@ -1187,7 +1249,7 @@
     </section>
     </div>
 
-    <div id="screen-focus" class="screen-page" data-screen="focus">
+    <div id="screen-focus" class="screen-page scrollable" data-screen="focus">
     <section id="focus" aria-labelledby="focus-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">5</span>
@@ -1200,7 +1262,7 @@
     </section>
     </div>
 
-    <div id="screen-activities" class="screen-page" data-screen="activities">
+    <div id="screen-activities" class="screen-page scrollable" data-screen="activities">
     <section id="activities" aria-labelledby="activities-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">6</span>
@@ -1215,7 +1277,7 @@
     </section>
     </div>
 
-    <div id="screen-agreements" class="screen-page" data-screen="agreements">
+    <div id="screen-agreements" class="screen-page scrollable" data-screen="agreements">
     <section id="agreements" aria-labelledby="agreements-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">7</span>
@@ -1228,7 +1290,7 @@
     </section>
     </div>
 
-    <div id="screen-turn-taking" class="screen-page" data-screen="turn-taking">
+    <div id="screen-turn-taking" class="screen-page scrollable" data-screen="turn-taking">
     <section id="turn-taking" aria-labelledby="turn-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">8</span>
@@ -1241,7 +1303,7 @@
     </section>
     </div>
 
-    <div id="screen-summary" class="screen-page" data-screen="summary">
+    <div id="screen-summary" class="screen-page scrollable" data-screen="summary">
     <section id="summary" aria-labelledby="summary-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">9</span>
@@ -1566,7 +1628,120 @@
     };
 
     let currentScreenIndex = 0;
-    let dragPointer = null;
+    let dragState = null;
+
+    function findDropZone(clientX, clientY) {
+      if (!dragState?.ghost) {
+        return document.elementFromPoint(clientX, clientY)?.closest("[data-drop-zone]");
+      }
+      dragState.ghost.style.visibility = "hidden";
+      const zone = document.elementFromPoint(clientX, clientY)?.closest("[data-drop-zone]");
+      dragState.ghost.style.visibility = "visible";
+      return zone;
+    }
+
+    function highlightDropZone(zone) {
+      document.querySelectorAll("[data-drop-zone]").forEach((z) => {
+        z.classList.toggle("drag-over", z === zone);
+      });
+    }
+
+    function clearDropHighlights() {
+      document.querySelectorAll("[data-drop-zone]").forEach((z) => z.classList.remove("drag-over"));
+    }
+
+    function finishDrag(participantId, zoneKey) {
+      if (!zoneKey) return;
+      state.location[participantId] = zoneKey;
+      if (zoneKey !== "club") state.feelings[participantId] = null;
+      resetTurns();
+      renderRegister();
+      renderFeelings();
+      renderTurnTaking();
+      renderSummary();
+    }
+
+    function endDrag(e) {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+
+      const { id, sourceEl, ghost, moved } = dragState;
+      try {
+        sourceEl?.releasePointerCapture(e.pointerId);
+      } catch {
+        /* pointer already released */
+      }
+      if (ghost?.parentNode) ghost.parentNode.removeChild(ghost);
+      sourceEl?.classList.remove("is-drag-source");
+      document.body.classList.remove("is-dragging");
+      clearDropHighlights();
+
+      if (moved) {
+        const zone = findDropZone(e.clientX, e.clientY);
+        const zoneKey = zone?.dataset?.dropZone;
+        if (zoneKey) finishDrag(id, zoneKey);
+      }
+
+      dragState = null;
+    }
+
+    function onDragPointerMove(e) {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      e.preventDefault();
+
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      if (!dragState.moved && Math.hypot(dx, dy) < 6) return;
+
+      if (!dragState.moved) {
+        dragState.moved = true;
+        const rect = dragState.sourceEl.getBoundingClientRect();
+        const ghost = dragState.sourceEl.cloneNode(true);
+        ghost.classList.add("drag-ghost");
+        ghost.removeAttribute("id");
+        ghost.style.left = `${rect.left}px`;
+        ghost.style.top = `${rect.top}px`;
+        document.body.appendChild(ghost);
+        dragState.ghost = ghost;
+        dragState.offsetX = e.clientX - rect.left;
+        dragState.offsetY = e.clientY - rect.top;
+        dragState.sourceEl.classList.add("is-drag-source");
+        document.body.classList.add("is-dragging");
+      }
+
+      dragState.ghost.style.left = `${e.clientX - dragState.offsetX}px`;
+      dragState.ghost.style.top = `${e.clientY - dragState.offsetY}px`;
+      highlightDropZone(findDropZone(e.clientX, e.clientY));
+    }
+
+    function setupRegisterDragSystem() {
+      if (setupRegisterDragSystem.done) return;
+      setupRegisterDragSystem.done = true;
+      document.addEventListener("pointermove", onDragPointerMove, { passive: false });
+      document.addEventListener("pointerup", endDrag);
+      document.addEventListener("pointercancel", endDrag);
+    }
+
+    function startAvatarDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const id = chip.dataset.participantId;
+      if (!id) return;
+
+      dragState = {
+        id,
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
 
     function initState() {
       PARTICIPANTS.forEach((p) => {
@@ -1685,60 +1860,14 @@
     }
 
     function initRegisterDragDrop() {
+      setupRegisterDragSystem();
       document.querySelectorAll(".draggable-avatar").forEach((chip) => {
-        const id = chip.dataset.participantId;
-        chip.onpointerdown = (e) => {
-          if (e.button !== 0 && e.pointerType === "mouse") return;
-          dragPointer = { id, el: chip, pointerId: e.pointerId };
-          chip.classList.add("dragging");
-          chip.setPointerCapture(e.pointerId);
-          document.querySelectorAll("[data-drop-zone]").forEach((z) => {
-            z.classList.remove("drag-over");
-          });
-        };
-        chip.onpointermove = (e) => {
-          if (!dragPointer || dragPointer.el !== chip) return;
-          const target = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-drop-zone]");
-          document.querySelectorAll("[data-drop-zone]").forEach((z) => {
-            z.classList.toggle("drag-over", target === z);
-          });
-        };
-        chip.onpointerup = (e) => {
-          if (!dragPointer || dragPointer.el !== chip) return;
-          chip.releasePointerCapture(e.pointerId);
-          chip.classList.remove("dragging");
-          const target = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-drop-zone]");
-          if (target?.dataset.dropZone) {
-            state.location[id] = target.dataset.dropZone;
-            if (state.location[id] !== "club") state.feelings[id] = null;
-            resetTurns();
-            setTimeout(() => {
-              renderRegister();
-              renderFeelings();
-              renderTurnTaking();
-              renderSummary();
-            }, 0);
-          }
-          document.querySelectorAll("[data-drop-zone]").forEach((z) => z.classList.remove("drag-over"));
-          dragPointer = null;
-        };
-        chip.onpointercancel = chip.onpointerup;
+        chip.onpointerdown = startAvatarDrag;
         chip.onkeydown = (e) => {
-          if (e.key === "h" || e.key === "H") {
-            state.location[id] = "home";
-            state.feelings[id] = null;
-            resetTurns();
-            renderAll();
-          } else if (e.key === "c" || e.key === "C") {
-            state.location[id] = "club";
-            resetTurns();
-            renderAll();
-          } else if (e.key === "d" || e.key === "D") {
-            state.location[id] = "dock";
-            state.feelings[id] = null;
-            resetTurns();
-            renderAll();
-          }
+          const id = chip.dataset.participantId;
+          if (e.key === "h" || e.key === "H") finishDrag(id, "home");
+          else if (e.key === "c" || e.key === "C") finishDrag(id, "club");
+          else if (e.key === "d" || e.key === "D") finishDrag(id, "dock");
         };
       });
     }
