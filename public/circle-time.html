@@ -2155,134 +2155,67 @@
       justify-content: center;
     }
 
-    /* ClubSENsational animated mark — infinity + orbiting balls */
-    .cs-logo-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1.25rem, 3vw, 1.75rem);
-      margin: 0 auto 1.25rem;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.55rem;
-    }
-
-    .cs-logo-card-compact {
-      margin: 0;
-      padding: 6px 10px;
-      gap: 0;
-      box-shadow: none;
-      border-radius: var(--radius-sm);
-    }
-
-    .cs-infinity-anim {
+    /* ClubSENsational — official logo + SVG orbiting balls */
+    .cs-logo-stage {
       position: relative;
-      width: clamp(118px, 26vw, 152px);
-      height: clamp(58px, 13vw, 74px);
-      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      width: min(320px, 82vw);
+      aspect-ratio: 1;
     }
 
-    .cs-logo-card-compact .cs-infinity-anim {
-      width: clamp(72px, 14vw, 88px);
-      height: clamp(36px, 7vw, 44px);
+    .cs-logo-stage-compact {
+      width: clamp(96px, 18vw, 124px);
+      margin: 0;
     }
 
-    .cs-infinity-graphic {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .cs-ball-orbit {
+    .cs-orbit-field {
       position: absolute;
-      border-radius: 50%;
-      animation: cs-logo-orbit 2.6s linear infinite;
+      inset: -4%;
+      width: 108%;
+      height: 108%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .cs-orbit-ring {
       pointer-events: none;
     }
 
-    .cs-ball-orbit-left {
-      left: 12%;
-      top: 18%;
-      width: 38%;
-      height: 64%;
-    }
-
-    .cs-ball-orbit-right {
-      right: 12%;
-      top: 18%;
-      width: 38%;
-      height: 64%;
-      animation-direction: reverse;
-      animation-duration: 2.1s;
-    }
-
-    .cs-logo-card-compact .cs-ball-orbit-left {
-      left: 10%;
-      top: 16%;
-    }
-
-    .cs-logo-card-compact .cs-ball-orbit-right {
-      right: 10%;
-      top: 16%;
-    }
-
-    .cs-ball {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: clamp(9px, 2vw, 12px);
-      height: clamp(9px, 2vw, 12px);
-      margin-left: calc(clamp(9px, 2vw, 12px) / -2);
-      border-radius: 50%;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-    }
-
-    .cs-ball-orbit-left .cs-ball {
-      background: #2c364b;
-    }
-
-    .cs-ball-orbit-right .cs-ball {
-      background: #e9b93c;
-    }
-
-    @keyframes cs-logo-orbit {
-      to { transform: rotate(360deg); }
-    }
-
-    .cs-wordmark {
-      margin: 0;
-      font-size: clamp(1.28rem, 3.8vw, 1.82rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      color: #2c364b;
-    }
-
-    .cs-wordmark .sen {
-      color: #e9b93c;
-      font-weight: 700;
-    }
-
-    .cs-tagline {
-      margin: 0;
-      font-size: clamp(0.72rem, 2vw, 0.88rem);
-      font-weight: 500;
-      color: #2c364b;
-      letter-spacing: 0.01em;
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      .cs-ball-orbit {
-        animation: none;
+      .cs-orbit-ring animateTransform {
+        display: none;
       }
-      .cs-ball-orbit-left .cs-ball {
-        top: 8%;
-        left: 72%;
-      }
-      .cs-ball-orbit-right .cs-ball {
-        top: 72%;
-        left: 28%;
+    }
+
+    .cs-logo-original {
+      position: relative;
+      z-index: 1;
+      width: 70%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow:
+        0 0 0 4px rgba(255, 255, 255, 0.96),
+        0 14px 40px rgba(0, 0, 0, 0.28);
+      padding: 7%;
+    }
+
+    .cs-logo-stage-compact .cs-logo-original {
+      width: 66%;
+      padding: 5%;
+      box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.92),
+        0 6px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    @media (min-width: 740px) {
+      .cs-logo-stage:not(.cs-logo-stage-compact) {
+        width: min(380px, 44vw);
       }
     }
 
@@ -2332,14 +2265,9 @@
       border-radius: var(--radius-sm);
     }
 
-    .header-logo-wrap .cs-logo-card-compact {
+    .header-logo-wrap .cs-logo-stage-compact {
       height: clamp(44px, 7vh, 64px);
-      justify-content: center;
-    }
-
-    .header-logo-wrap .cs-wordmark,
-    .header-logo-wrap .cs-tagline {
-      display: none;
+      width: clamp(96px, 18vw, 124px);
     }
 
     .header-center {
@@ -4199,34 +4127,99 @@
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
-    const CLUBSENSATIONAL_INFINITY_SVG = `
-      <svg class="cs-infinity-graphic" viewBox="0 0 140 70" aria-hidden="true">
-        <path d="M70 35 C70 17 52 8 36 16 C18 25 16 48 34 57 C48 64 70 52 70 35" fill="none" stroke="#2c364b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M70 35 C70 53 88 62 104 54 C122 45 124 22 106 13 C92 6 70 18 70 35" fill="none" stroke="#e9b93c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div class="cs-ball-orbit cs-ball-orbit-left"><span class="cs-ball"></span></div>
-      <div class="cs-ball-orbit cs-ball-orbit-right"><span class="cs-ball"></span></div>
-    `;
+    const CLUBSENSATIONAL_LOGO_SRC = "/assets/clubsensational-logo.webp";
+
+    const CLUBSENSATIONAL_ORBIT_RINGS = {
+      full: [
+        { dur: 8, dots: [
+          { angle: 0, dist: 0.48, r: 7, fill: "#e9b93c" },
+          { angle: 110, dist: 0.44, r: 5.5, fill: "#2c364b" },
+          { angle: 230, dist: 0.46, r: 6, fill: "#7ec8e8" },
+        ]},
+        { dur: 11, reverse: true, dots: [
+          { angle: 35, dist: 0.52, r: 5, fill: "#2c364b" },
+          { angle: 155, dist: 0.5, r: 4.5, fill: "#e9b93c" },
+          { angle: 280, dist: 0.51, r: 4, fill: "#7ec8e8" },
+        ]},
+        { dur: 6.5, dots: [
+          { angle: 70, dist: 0.42, r: 4, fill: "#7ec8e8" },
+          { angle: 190, dist: 0.43, r: 3.5, fill: "#e9b93c" },
+          { angle: 310, dist: 0.45, r: 3.5, fill: "#2c364b" },
+        ]},
+      ],
+      compact: [
+        { dur: 7, dots: [
+          { angle: 0, dist: 0.47, r: 4.5, fill: "#e9b93c" },
+          { angle: 180, dist: 0.45, r: 3.5, fill: "#2c364b" },
+        ]},
+        { dur: 9.5, reverse: true, dots: [
+          { angle: 90, dist: 0.5, r: 3, fill: "#7ec8e8" },
+          { angle: 270, dist: 0.48, r: 2.8, fill: "#e9b93c" },
+        ]},
+      ],
+    };
+
+    function buildClubSensationalOrbitSvg(compact) {
+      const size = compact ? 120 : 280;
+      const cx = size / 2;
+      const cy = size / 2;
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("class", "cs-orbit-field");
+      svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+      svg.setAttribute("aria-hidden", "true");
+
+      const rings = compact ? CLUBSENSATIONAL_ORBIT_RINGS.compact : CLUBSENSATIONAL_ORBIT_RINGS.full;
+      rings.forEach((ring, ringIndex) => {
+        const group = document.createElementNS(ns, "g");
+        group.setAttribute("class", "cs-orbit-ring");
+
+        ring.dots.forEach((dot) => {
+          const rad = (dot.angle * Math.PI) / 180;
+          const circle = document.createElementNS(ns, "circle");
+          circle.setAttribute("cx", String(cx + Math.cos(rad) * dot.dist * size));
+          circle.setAttribute("cy", String(cy + Math.sin(rad) * dot.dist * size));
+          circle.setAttribute("r", String(dot.r));
+          circle.setAttribute("fill", dot.fill);
+          circle.setAttribute("opacity", "0.92");
+          group.appendChild(circle);
+        });
+
+        const spin = document.createElementNS(ns, "animateTransform");
+        spin.setAttribute("attributeName", "transform");
+        spin.setAttribute("type", "rotate");
+        spin.setAttribute("dur", `${ring.dur}s`);
+        spin.setAttribute("repeatCount", "indefinite");
+        if (ring.reverse) {
+          spin.setAttribute("from", `360 ${cx} ${cy}`);
+          spin.setAttribute("to", `0 ${cx} ${cy}`);
+        } else {
+          spin.setAttribute("from", `0 ${cx} ${cy}`);
+          spin.setAttribute("to", `360 ${cx} ${cy}`);
+        }
+        if (ringIndex % 2) spin.setAttribute("begin", `${-(ring.dur / 3)}s`);
+        group.appendChild(spin);
+
+        svg.appendChild(group);
+      });
+      return svg;
+    }
 
     function buildClubSensationalLogoMark(compact) {
-      const card = el("div", {
-        className: `cs-logo-card${compact ? " cs-logo-card-compact" : ""}`,
+      const stage = el("div", {
+        className: `cs-logo-stage${compact ? " cs-logo-stage-compact" : ""}`,
         role: "img",
         "aria-label": "clubSENsational Autism Consultancy Services",
       });
-      const anim = el("div", { className: "cs-infinity-anim" });
-      anim.innerHTML = CLUBSENSATIONAL_INFINITY_SVG;
-      card.appendChild(anim);
-      if (!compact) {
-        const wordmark = el("p", { className: "cs-wordmark" });
-        wordmark.innerHTML = 'club<span class="sen">SEN</span>sational';
-        card.appendChild(wordmark);
-        card.appendChild(el("p", {
-          className: "cs-tagline",
-          textContent: "Autism Consultancy Services",
-        }));
-      }
-      return card;
+      stage.appendChild(buildClubSensationalOrbitSvg(compact));
+      stage.appendChild(el("img", {
+        className: "cs-logo-original",
+        src: CLUBSENSATIONAL_LOGO_SRC,
+        alt: "",
+        decoding: "async",
+        draggable: "false",
+      }));
+      return stage;
     }
 
     function mountClubSensationalLogos() {
