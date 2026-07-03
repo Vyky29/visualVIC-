@@ -3020,11 +3020,13 @@
       "activities", "agreements", "turn-taking", "summary",
     ];
 
-    const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year", "weather"]);
+    const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year"]);
 
-    const SLOT_FEEDBACK_MS = { correct: 2800, wrong: 4000 };
+    const SLOT_FEEDBACK_MS = { correct: 2000, wrong: 4000 };
 
     let pendingAdvanceTimer = null;
+    let weatherAdvanceTimer = null;
+    let weatherAutoAdvancing = false;
 
     const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -3299,6 +3301,7 @@
       state.weather = null;
       state.weatherConfirmed = false;
       londonWeather = null;
+      clearWeatherAdvanceTimer();
       renderAll();
       showScreen(0);
     }
@@ -3307,7 +3310,30 @@
        SCREEN NAVIGATION — one section per screen
        ============================================================ */
 
+    function clearWeatherAdvanceTimer() {
+      if (weatherAdvanceTimer) {
+        clearTimeout(weatherAdvanceTimer);
+        weatherAdvanceTimer = null;
+      }
+    }
+
+    function scheduleWeatherAdvance(slot) {
+      const weatherIdx = SCREEN_IDS.indexOf("weather");
+      const nextIdx = weatherIdx + 1;
+      if (weatherIdx < 0 || nextIdx >= SCREEN_IDS.length) return;
+      showSlotFeedback(slot, "correct", "Correct!");
+      clearWeatherAdvanceTimer();
+      weatherAdvanceTimer = setTimeout(() => {
+        weatherAdvanceTimer = null;
+        if (!state.weatherConfirmed || state.weather !== londonWeather?.id) return;
+        weatherAutoAdvancing = true;
+        showScreen(nextIdx);
+        weatherAutoAdvancing = false;
+      }, SLOT_FEEDBACK_MS.correct);
+    }
+
     function showScreen(index) {
+      if (!weatherAutoAdvancing) clearWeatherAdvanceTimer();
       if (pendingAdvanceTimer) {
         clearTimeout(pendingAdvanceTimer);
         pendingAdvanceTimer = null;
@@ -3339,9 +3365,7 @@
       const nextBtn = document.getElementById("screen-next");
       nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
       nextBtn.disabled = false;
-      const hideAutoNext = AUTO_ADVANCE_SCREENS.has(screenId)
-        && !(screenId === "weather" && state.weatherConfirmed);
-      nextBtn.classList.toggle("is-auto-hidden", hideAutoNext);
+      nextBtn.classList.toggle("is-auto-hidden", AUTO_ADVANCE_SCREENS.has(screenId));
     }
 
     function maybeAdvanceFromWeather() {
@@ -3354,8 +3378,8 @@
         renderSummary();
         updateNavButtons();
       }
-      if (slotFeedbackActive || pendingAdvanceTimer) return;
-      scheduleAutoAdvance("weather", slot);
+      if (weatherAdvanceTimer) return;
+      scheduleWeatherAdvance(slot);
       setTimeout(() => updateWeatherEffects(state.weather), 80);
     }
 
@@ -3384,6 +3408,10 @@
       });
       document.getElementById("screen-next").addEventListener("click", () => {
         const screenId = SCREEN_IDS[currentScreenIndex];
+        if (screenId === "weather" && state.weather === londonWeather?.id) {
+          state.weatherConfirmed = true;
+          updateNavButtons();
+        }
         if (!canAdvanceFromScreen(screenId)) {
           showToast(advanceHint(screenId));
           return;
@@ -3652,7 +3680,7 @@
         renderWeather();
         renderSummary();
         updateNavButtons();
-        scheduleAutoAdvance("weather", slot);
+        scheduleWeatherAdvance(slot);
         setTimeout(() => updateWeatherEffects(weatherId), 80);
       } else if (zoneKey === "weather-dock" && state.weather === weatherId) {
         clearSlotFeedback(slot);
@@ -3706,6 +3734,8 @@
         } else if (zoneKey) {
           finishAvatarDrop(dragState.id, zoneKey);
         }
+      } else if (dragState.type === "weather" && dragState.fromDock) {
+        finishWeatherDrop("weather-slot", dragState.weatherId);
       }
 
       dragState = null;
