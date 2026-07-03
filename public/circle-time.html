@@ -624,6 +624,167 @@
 
     .toast.show { transform: translateX(-50%) translateY(0); }
 
+    /* ============================================================
+       PRE-SHOW — cinema-style waiting screen
+       ============================================================ */
+    .hidden { display: none !important; }
+
+    .pre-show {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: linear-gradient(160deg, var(--navy-dark) 0%, #0a1628 45%, var(--navy) 100%);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .pre-show::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(232, 118, 42, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .pre-show-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .pre-show-brand {
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 1rem;
+    }
+
+    .pre-show-title {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .pre-show-wait {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 600;
+      color: var(--orange);
+      margin: 0 0 2rem;
+    }
+
+    .pre-show-timer {
+      font-size: clamp(3rem, 12vw, 7rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.05em;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .pre-show-sub {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      opacity: 0.85;
+      margin: 1rem 0 0;
+    }
+
+    .pre-show-announcement {
+      margin-top: 2rem;
+      padding: 1.5rem 2rem;
+      background: rgba(232, 118, 42, 0.15);
+      border: 2px solid var(--orange);
+      border-radius: var(--radius);
+      animation: preShowPulse 2s ease-in-out infinite;
+    }
+
+    .pre-show-announcement.hidden { display: none; }
+
+    .pre-show-announcement p {
+      margin: 0;
+      font-size: clamp(1.25rem, 3.5vw, 2rem);
+      font-weight: 700;
+    }
+
+    .pre-show-announcement .announce-wait {
+      margin-top: 0.75rem;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    @keyframes preShowPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 118, 42, 0.3); }
+      50% { box-shadow: 0 0 24px 4px rgba(232, 118, 42, 0.25); }
+    }
+
+    .pre-show-starting {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      color: var(--orange);
+      animation: preShowPulse 1s ease-in-out infinite;
+    }
+
+    .pre-show-staff {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 510;
+      background: rgba(18, 40, 64, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 1rem 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .pre-show-staff.hidden { display: none; }
+
+    .pre-show-staff-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .pre-show-staff label {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .pre-show-staff .btn {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--white);
+    }
+
+    .pre-show-staff .btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--white);
+    }
+
+    .pre-show-staff .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .session-app { min-height: 100vh; }
+
+    .back-to-waiting {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
     @media (max-width: 480px) {
       main { padding: 1rem; }
       section { padding: 1rem; }
@@ -634,6 +795,35 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  <!-- Pre-show waiting screen (cinema style) -->
+  <div id="pre-show" class="pre-show" role="region" aria-label="Waiting for Circle Time">
+    <div class="pre-show-inner">
+      <p class="pre-show-brand">ClubSENsational</p>
+      <h1 class="pre-show-title" id="pre-show-title">Circle Time</h1>
+      <p class="pre-show-wait" id="pre-show-wait">Sit down and wait</p>
+      <p class="pre-show-timer hidden" id="pre-show-timer" aria-live="polite">05:00</p>
+      <p class="pre-show-sub hidden" id="pre-show-sub"></p>
+      <div class="pre-show-announcement hidden" id="pre-show-announcement" aria-live="assertive">
+        <p id="pre-show-announcement-text"></p>
+        <p class="announce-wait">Sit down and wait</p>
+      </div>
+      <p class="pre-show-starting hidden" id="pre-show-starting">Circle Time is starting now</p>
+    </div>
+  </div>
+
+  <div class="pre-show-staff" id="pre-show-staff" aria-label="Staff controls">
+    <div class="pre-show-staff-inner">
+      <label for="countdown-minutes">Countdown (minutes):</label>
+      <button type="button" class="btn btn-sm" data-countdown="5" aria-label="Start 5 minute countdown">5 min</button>
+      <button type="button" class="btn btn-sm" data-countdown="10" aria-label="Start 10 minute countdown">10 min</button>
+      <button type="button" class="btn btn-sm" data-countdown="15" aria-label="Start 15 minute countdown">15 min</button>
+      <button type="button" class="btn btn-primary" id="start-countdown" aria-label="Start countdown">Start countdown</button>
+      <button type="button" class="btn" id="skip-to-session" aria-label="Skip waiting screen and open Circle Time">Start Circle Time now</button>
+      <button type="button" class="btn btn-sm" id="toggle-fullscreen" aria-label="Toggle full screen">Full screen</button>
+    </div>
+  </div>
+
+  <div id="session-app" class="session-app hidden">
   <header>
     <div class="header-inner">
       <div class="brand">
@@ -644,6 +834,9 @@
         </div>
       </div>
       <div class="header-meta" id="header-date" aria-live="polite"></div>
+      <button type="button" class="btn btn-sm back-to-waiting" id="back-to-waiting" aria-label="Return to waiting screen">
+        Waiting screen
+      </button>
     </div>
   </header>
 
@@ -765,6 +958,7 @@
     </section>
 
   </main>
+  </div><!-- /session-app -->
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -834,6 +1028,190 @@
       "Movement song",
       "No music today",
     ];
+
+    /* Pre-show countdown — cinema-style announcements (minutes) */
+    const COUNTDOWN_MILESTONES = [5, 2, 1];
+    const DEFAULT_COUNTDOWN_MINUTES = 5;
+    const WAIT_MESSAGE = "Sit down and wait";
+
+    /* ============================================================
+       PRE-SHOW COUNTDOWN
+       ============================================================ */
+
+    const preShow = {
+      mode: "idle", // idle | running | starting | done
+      endTime: null,
+      totalSeconds: 0,
+      intervalId: null,
+      selectedMinutes: DEFAULT_COUNTDOWN_MINUTES,
+    };
+
+    function formatCountdown(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    function getRemainingSeconds() {
+      if (!preShow.endTime) return 0;
+      return Math.max(0, Math.ceil((preShow.endTime - Date.now()) / 1000));
+    }
+
+    function getActiveAnnouncement(remaining) {
+      if (remaining <= 0) return null;
+      const sorted = [...COUNTDOWN_MILESTONES].sort((a, b) => a - b);
+      for (const m of sorted) {
+        if (remaining <= m * 60) return m;
+      }
+      return null;
+    }
+
+    function updatePreShowDisplay() {
+      const timerEl = document.getElementById("pre-show-timer");
+      const subEl = document.getElementById("pre-show-sub");
+      const waitEl = document.getElementById("pre-show-wait");
+      const announceEl = document.getElementById("pre-show-announcement");
+      const announceText = document.getElementById("pre-show-announcement-text");
+      const startingEl = document.getElementById("pre-show-starting");
+
+      if (preShow.mode === "idle") {
+        timerEl.classList.add("hidden");
+        subEl.classList.add("hidden");
+        waitEl.classList.remove("hidden");
+        announceEl.classList.add("hidden");
+        startingEl.classList.add("hidden");
+        waitEl.textContent = WAIT_MESSAGE;
+        return;
+      }
+
+      if (preShow.mode === "starting") {
+        timerEl.classList.add("hidden");
+        subEl.classList.add("hidden");
+        waitEl.classList.add("hidden");
+        announceEl.classList.add("hidden");
+        startingEl.classList.remove("hidden");
+        return;
+      }
+
+      const remaining = getRemainingSeconds();
+      timerEl.classList.remove("hidden");
+      timerEl.textContent = formatCountdown(remaining);
+      waitEl.classList.remove("hidden");
+      waitEl.textContent = WAIT_MESSAGE;
+      startingEl.classList.add("hidden");
+
+      const minsLeft = Math.ceil(remaining / 60);
+      subEl.classList.remove("hidden");
+      if (remaining <= 60) {
+        subEl.textContent = "Circle Time begins in less than one minute";
+      } else if (minsLeft === 1) {
+        subEl.textContent = "One minute until Circle Time begins";
+      } else {
+        subEl.textContent = `${minsLeft} minutes until Circle Time begins`;
+      }
+
+      const milestone = getActiveAnnouncement(remaining);
+      if (milestone !== null) {
+        const label = milestone === 1 ? "One minute" : `${milestone} minutes`;
+        announceText.textContent = `${label} until Circle Time begins`;
+        announceEl.classList.remove("hidden");
+      } else {
+        announceEl.classList.add("hidden");
+      }
+    }
+
+    function tickCountdown() {
+      const remaining = getRemainingSeconds();
+      updatePreShowDisplay();
+
+      if (remaining <= 0) {
+        clearInterval(preShow.intervalId);
+        preShow.intervalId = null;
+        preShow.mode = "starting";
+        updatePreShowDisplay();
+        setTimeout(beginSession, 2800);
+      }
+    }
+
+    function startCountdown(minutes) {
+      preShow.selectedMinutes = minutes;
+      preShow.totalSeconds = minutes * 60;
+      preShow.endTime = Date.now() + preShow.totalSeconds * 1000;
+      preShow.mode = "running";
+
+      if (preShow.intervalId) clearInterval(preShow.intervalId);
+      updatePreShowDisplay();
+      preShow.intervalId = setInterval(tickCountdown, 250);
+    }
+
+    function beginSession() {
+      preShow.mode = "done";
+      document.getElementById("pre-show").classList.add("hidden");
+      document.getElementById("pre-show-staff").classList.add("hidden");
+      document.getElementById("session-app").classList.remove("hidden");
+      document.querySelector(".skip-link").href = "#register";
+    }
+
+    function showWaitingScreen() {
+      if (preShow.intervalId) {
+        clearInterval(preShow.intervalId);
+        preShow.intervalId = null;
+      }
+      preShow.mode = "idle";
+      preShow.endTime = null;
+      document.getElementById("pre-show").classList.remove("hidden");
+      if (!isDisplayMode()) document.getElementById("pre-show-staff").classList.remove("hidden");
+      document.getElementById("session-app").classList.add("hidden");
+      document.getElementById("pre-show-announcement").classList.add("hidden");
+      updatePreShowDisplay();
+    }
+
+    function isDisplayMode() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("display") === "1" || params.get("screen") === "1";
+    }
+
+    function initPreShow() {
+      document.querySelectorAll("[data-countdown]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          preShow.selectedMinutes = Number(btn.dataset.countdown);
+          document.querySelectorAll("[data-countdown]").forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+      });
+
+      document.getElementById("start-countdown").addEventListener("click", () => {
+        startCountdown(preShow.selectedMinutes);
+      });
+
+      document.getElementById("skip-to-session").addEventListener("click", beginSession);
+
+      document.getElementById("back-to-waiting").addEventListener("click", showWaitingScreen);
+
+      document.getElementById("toggle-fullscreen").addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.().catch(() => {});
+        } else {
+          document.exitFullscreen?.();
+        }
+      });
+
+      if (isDisplayMode()) {
+        document.getElementById("pre-show-staff").classList.add("hidden");
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const autoMin = Number(params.get("start"));
+      if (autoMin > 0) {
+        startCountdown(autoMin);
+      } else {
+        updatePreShowDisplay();
+      }
+
+      /* Default select 5 min */
+      const fiveBtn = document.querySelector('[data-countdown="5"]');
+      if (fiveBtn) fiveBtn.classList.add("selected");
+    }
 
     /* ============================================================
        STATE
@@ -1477,6 +1855,7 @@
 
     initState();
     updateHeaderDate();
+    initPreShow();
     renderAll();
   </script>
 </body>
