@@ -2407,6 +2407,62 @@
       margin-top: 1rem;
     }
 
+    /* Finish — large card before session summary */
+    #screen-finish {
+      padding: 0.75rem 1rem 1rem;
+    }
+
+    #screen-finish section {
+      justify-content: center;
+    }
+
+    .finish-layout {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 0.5rem 0 1rem;
+    }
+
+    .finish-card-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.75rem, 2vh, 1.25rem);
+      width: min(520px, 92vw);
+      text-align: center;
+    }
+
+    .finish-card-img {
+      width: min(420px, 78vw);
+      max-height: min(58vh, 520px);
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 40px rgba(27, 58, 92, 0.18), 0 0 0 4px var(--orange-soft);
+      background: var(--white);
+    }
+
+    .finish-title {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+
+    .finish-message {
+      margin: 0;
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+      font-weight: 700;
+      color: var(--orange);
+      line-height: 1.35;
+      max-width: 28ch;
+    }
+
     .toast {
       position: fixed;
       bottom: 1.5rem;
@@ -2997,10 +3053,28 @@
     </section>
     </div>
 
+    <div id="screen-finish" class="screen-page" data-screen="finish">
+    <section id="finish" aria-labelledby="finish-heading">
+      <div class="finish-layout">
+        <div class="finish-card-wrap">
+          <img
+            class="finish-card-img"
+            src="/cards/day%20centre/general/finished.png"
+            alt="Finished — green tick and finish flag"
+            width="531"
+            height="648"
+          />
+          <h2 id="finish-heading" class="finish-title">Finished!</h2>
+          <p class="finish-message">Well done — Circle Time is complete.</p>
+        </div>
+      </div>
+    </section>
+    </div>
+
     <div id="screen-summary" class="screen-page scrollable" data-screen="summary">
     <section id="summary" aria-labelledby="summary-heading">
       <div class="section-header">
-        <span class="section-num" aria-hidden="true">12</span>
+        <span class="section-num" aria-hidden="true">13</span>
         <div>
           <h2 id="summary-heading">Session Summary</h2>
           <p>Automatically generated record of today's circle time.</p>
@@ -3051,7 +3125,7 @@
 
     const SCREEN_IDS = [
       "register", "day", "date", "month", "year", "weather", "feelings", "focus",
-      "activities", "agreements", "turn-taking", "summary",
+      "activities", "agreements", "turn-taking", "finish", "summary",
     ];
 
     const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year"]);
