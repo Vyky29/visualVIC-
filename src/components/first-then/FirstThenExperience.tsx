@@ -797,46 +797,16 @@ function FirstThenFocusLandscapeLayout({
     return () => ro.disconnect();
   }, []);
 
-  const slotW = FOCUS_LANDSCAPE.cardW * scale;
-  const slotH = FOCUS_LANDSCAPE.cardH * scale;
-  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
-
   const renderFocusCard = (slot: "first" | "then", card: GeneratedPixtoCardProps) => (
-    <div
+    <FirstThenFocusCardScaled
       key={slot}
-      className="relative shrink-0"
-      style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
-    >
-      <div
-        className="absolute left-0 top-0 flex origin-top-left flex-col items-center"
-        style={{
-          width: FOCUS_LANDSCAPE.cardW,
-          height: FOCUS_LANDSCAPE.cardH,
-          transform: `scale(${scale})`,
-        }}
-      >
-        <span
-          className="mb-1 font-extrabold lowercase"
-          style={{
-            color: card.categoryColour,
-            fontSize: FOCUS_LANDSCAPE.slotLabelFontPx,
-            lineHeight: 1,
-          }}
-        >
-          {firstThenSlotLabel(slot, lang)}
-        </span>
-        <div className="min-h-0 w-full flex-1">
-          <FirstThenSwipeableSlot
-            slot={slot}
-            card={card}
-            phase={phase}
-            onAdvance={onAdvance}
-            presentation="focus"
-            scheduleTimer={scheduleTimerForSlot(slot)}
-          />
-        </div>
-      </div>
-    </div>
+      slot={slot}
+      card={card}
+      scale={scale}
+      phase={phase}
+      onAdvance={onAdvance}
+      scheduleTimer={scheduleTimerForSlot(slot)}
+    />
   );
 
   if (isComplete) {
@@ -1019,6 +989,7 @@ function FirstThenPortraitCardScaled({
   sizeTrimPx = 0,
   enterAnimation = false,
   enterDelayMs = 0,
+  interactive,
 }: {
   card: GeneratedPixtoCardProps;
   scale: number;
@@ -1029,6 +1000,16 @@ function FirstThenPortraitCardScaled({
   /** Grow from slightly smaller on mount (Prueba 1). */
   enterAnimation?: boolean;
   enterDelayMs?: number;
+  interactive?: {
+    slot: "first" | "then";
+    phase: FirstThenPhase;
+    onAdvance: () => void;
+    scheduleTimer?: {
+      remainingSec: number;
+      totalSec: number;
+      finished?: boolean;
+    };
+  };
 }) {
   const rawW = GENERATED_PIXTO_CARD_SIZE.w * scale;
   const rawH = GENERATED_PIXTO_CARD_SIZE.h * scale;
@@ -1062,10 +1043,70 @@ function FirstThenPortraitCardScaled({
           transform: `scale(${renderScale})`,
         }}
       >
-        <MiniDigitalWowCard
+        {interactive ? (
+          <FirstThenSwipeableSlot
+            slot={interactive.slot}
+            card={card}
+            phase={interactive.phase}
+            onAdvance={interactive.onAdvance}
+            presentation="hero"
+            scheduleTimer={interactive.scheduleTimer}
+          />
+        ) : (
+          <MiniDigitalWowCard
+            card={card}
+            slotHeaderLabel={slotHeaderLabel}
+            readableTitle={readableTitle}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FirstThenFocusCardScaled({
+  slot,
+  card,
+  scale,
+  phase,
+  onAdvance,
+  scheduleTimer,
+}: {
+  slot: "first" | "then";
+  card: GeneratedPixtoCardProps;
+  scale: number;
+  phase: FirstThenPhase;
+  onAdvance: () => void;
+  scheduleTimer?: {
+    remainingSec: number;
+    totalSec: number;
+    finished?: boolean;
+  };
+}) {
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+  const slotW = FOCUS_LANDSCAPE.cardW * scale;
+  const slotH = FOCUS_LANDSCAPE.cardH * scale;
+
+  return (
+    <div
+      className="relative shrink-0"
+      style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
+    >
+      <div
+        className="absolute left-0 top-0 origin-top-left"
+        style={{
+          width: FOCUS_LANDSCAPE.cardW,
+          height: FOCUS_LANDSCAPE.cardH,
+          transform: `scale(${scale})`,
+        }}
+      >
+        <FirstThenSwipeableSlot
+          slot={slot}
           card={card}
-          slotHeaderLabel={slotHeaderLabel}
-          readableTitle={readableTitle}
+          phase={phase}
+          onAdvance={onAdvance}
+          presentation="focus"
+          scheduleTimer={scheduleTimer}
         />
       </div>
     </div>
@@ -1104,26 +1145,72 @@ function FirstThenPortraitLabeledRow({
   focusBottomAction?: ReactNode;
   scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
-  void scaleMultiplier;
-  void readableTitle;
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState<number | null>(null);
+  const stableScaleRef = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+
+    const update = () => {
+      const H = row.clientHeight;
+      const W = row.clientWidth;
+      if (W <= 0 || H <= 0) return;
+
+      const labelReservePx = SLOT_LABEL_COLUMN_W_PX + SLOT_LABEL_TO_CARD_GAP_PX;
+      const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX * 2;
+      const sx =
+        (W - labelReservePx - actionReservePx - bleed) /
+        GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = (H - bleed) / GENERATED_PIXTO_CARD_SIZE.h;
+      const next = Math.min(sx, sy) * scaleMultiplier;
+      if (!Number.isFinite(next) || next <= 0) return;
+
+      const prev = stableScaleRef.current;
+      if (prev === null) {
+        stableScaleRef.current = next;
+        setScale(next);
+        return;
+      }
+      if (next < prev) {
+        stableScaleRef.current = next;
+        setScale(next);
+      }
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(row);
+    return () => ro.disconnect();
+  }, [actionReservePx, scaleMultiplier]);
 
   return (
-    <div className="flex min-h-0 flex-1 w-full min-w-0 items-center justify-center">
+    <div
+      ref={rowRef}
+      className="flex min-h-0 flex-1 w-full min-w-0 items-center justify-center"
+    >
       <div
-        className="flex shrink-0 items-center"
+        className={cn(
+          "flex shrink-0 items-center",
+          scale === null && "invisible",
+        )}
         style={{ gap: SLOT_LABEL_TO_CARD_GAP_PX }}
       >
         <SlotLabelRow slot={slot} label={label} categoryColour={categoryColour} />
-        <div className="flex min-h-0 w-[min(100%,14rem)] flex-1 items-center justify-center">
-          <FirstThenSwipeableSlot
-            slot={slot}
+        {scale !== null ? (
+          <FirstThenPortraitCardScaled
             card={card}
-            phase={phase}
-            onAdvance={onAdvance}
-            presentation="hero"
-            scheduleTimer={scheduleTimerForSlot(slot)}
+            scale={scale}
+            readableTitle={readableTitle}
+            interactive={{
+              slot,
+              phase,
+              onAdvance,
+              scheduleTimer: scheduleTimerForSlot(slot),
+            }}
           />
-        </div>
+        ) : null}
         {actionReservePx > 0 ? (
           <div className="flex w-[2.75rem] shrink-0 flex-col justify-end self-stretch pb-1">
             {focusBottomAction}
@@ -1155,27 +1242,74 @@ function FirstThenPortraitCardCell({
   align?: "center" | "end";
   scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
-  void scaleMultiplier;
-  void slotHeaderLabel;
-  void readableTitle;
+  const outerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.28);
+  const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+
+  useLayoutEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
+
+    const update = () => {
+      const W = outer.clientWidth;
+      const H = outer.clientHeight;
+      if (W <= 0 || H <= 0) return;
+
+      const bleedTotal = bleed * 2;
+      const sx = (W - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.w;
+      const sy = (H - bleedTotal) / GENERATED_PIXTO_CARD_SIZE.h;
+      const next = Math.min(sx, sy) * scaleMultiplier;
+      setScale(Number.isFinite(next) && next > 0 ? next : 0.28 * scaleMultiplier);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(outer);
+    return () => ro.disconnect();
+  }, [bleed, scaleMultiplier]);
+
+  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
+  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
 
   return (
     <div
+      ref={outerRef}
       className={cn(
         "flex h-full min-h-0 w-full items-center",
         align === "end" ? "justify-end" : "justify-center",
       )}
     >
-      <div className="w-full max-w-[14rem]">
-        <FirstThenSwipeableSlot
-          slot={slot}
+      {slotHeaderLabel ? (
+        <FirstThenPortraitCardScaled
           card={card}
-          phase={phase}
-          onAdvance={onAdvance}
-          presentation="hero"
-          scheduleTimer={scheduleTimerForSlot(slot)}
+          scale={scale}
+          slotHeaderLabel={slotHeaderLabel}
+          readableTitle={readableTitle}
         />
-      </div>
+      ) : (
+        <div
+          className="relative shrink-0"
+          style={{ width: slotW, height: slotH, padding: bleed }}
+        >
+          <div
+            className="absolute left-0 top-0 origin-top-left"
+            style={{
+              width: GENERATED_PIXTO_CARD_SIZE.w,
+              height: GENERATED_PIXTO_CARD_SIZE.h,
+              transform: `scale(${scale})`,
+            }}
+          >
+            <FirstThenSwipeableSlot
+              slot={slot}
+              card={card}
+              phase={phase}
+              onAdvance={onAdvance}
+              presentation="hero"
+              scheduleTimer={scheduleTimerForSlot(slot)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1404,6 +1538,9 @@ function FirstThenIntroLayout3({
   routineHref: string;
   scheduleTimerForSlot: FirstThenScheduleTimerForSlot;
 }) {
+  const firstLabel = firstThenSlotLabel("first", lang);
+  const thenLabel = firstThenSlotLabel("then", lang);
+
   return (
     <FirstThenIntroPortraitShell lang={lang} backHref={backHref}>
       {isComplete ? (
@@ -1427,6 +1564,8 @@ function FirstThenIntroLayout3({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.98}
+                slotHeaderLabel={firstLabel}
+                readableTitle
                 scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
@@ -1437,6 +1576,8 @@ function FirstThenIntroLayout3({
                 phase={phase}
                 onAdvance={onAdvance}
                 scaleMultiplier={0.98}
+                slotHeaderLabel={thenLabel}
+                readableTitle
                 scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>

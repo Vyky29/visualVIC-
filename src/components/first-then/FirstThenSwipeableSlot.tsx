@@ -54,6 +54,7 @@ export function FirstThenSwipeableSlot({
       doubleTapCompletes={status === "now"}
       completionBackImageUrl={resolveCategoryBackCardUrl(card.illustrationUrl)}
       scheduleTimer={status === "now" ? scheduleTimer : undefined}
+      useDesignWidth
     />
   );
 }

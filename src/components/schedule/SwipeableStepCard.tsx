@@ -68,6 +68,8 @@ type Props = {
     totalSec: number;
     finished?: boolean;
   };
+  /** First & Then scaled slot — fill the 744×1054 design box without schedule max-width caps. */
+  useDesignWidth?: boolean;
 };
 
 const DOUBLE_TAP_MS = 300;
@@ -121,6 +123,7 @@ export function SwipeableStepCard({
   completionBackImageUrl,
   accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
   scheduleTimer,
+  useDesignWidth = false,
 }: Props) {
   const rings = useMemo(
     () => stepCardAccentRings(step, accentRings),
@@ -485,7 +488,7 @@ export function SwipeableStepCard({
         : "origin-center scale-[1.06]";
   const focusGeneratedBorderStyle = undefined;
   const scheduleGeneratedWidthStyle =
-    scheduleGeneratedPixto && !focusGenerated
+    scheduleGeneratedPixto && !focusGenerated && !useDesignWidth
       ? variant === "hero" && isNow
         ? ({
             width: "100%",
@@ -494,7 +497,7 @@ export function SwipeableStepCard({
         : undefined
       : undefined;
   const scheduleNextWidthStyle =
-    variant === "next"
+    variant === "next" && !useDesignWidth
       ? ({
           width: "100%",
           maxWidth: `${nextCardMaxW}px`,
