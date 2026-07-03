@@ -1007,6 +1007,21 @@
       z-index: 1;
       width: 100%;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(0.55rem, 2vw, 0.85rem);
+    }
+
+    .date-build-row-weather .date-stack-side {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: min(320px, 52vw);
+    }
+
+    .date-build-row-weather .date-stack-locked {
+      font-size: clamp(0.82rem, 2.2vw, 1rem);
+      padding: 0.4rem 0.65rem;
     }
 
     .date-build-row-weather .weather-drop-slot {
@@ -3310,7 +3325,10 @@
       const activeId = SCREEN_IDS[currentScreenIndex];
       if (activeId === "weather") {
         if (!londonWeather) fetchLondonWeather();
-        else updateLondonForecastDisplay();
+        else {
+          updateLondonForecastDisplay();
+          maybeAdvanceFromWeather();
+        }
       }
       const section = document.getElementById(activeId);
       if (section) section.focus({ preventScroll: true });
@@ -3321,7 +3339,24 @@
       const nextBtn = document.getElementById("screen-next");
       nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
       nextBtn.disabled = false;
-      nextBtn.classList.toggle("is-auto-hidden", AUTO_ADVANCE_SCREENS.has(screenId));
+      const hideAutoNext = AUTO_ADVANCE_SCREENS.has(screenId)
+        && !(screenId === "weather" && state.weatherConfirmed);
+      nextBtn.classList.toggle("is-auto-hidden", hideAutoNext);
+    }
+
+    function maybeAdvanceFromWeather() {
+      if (SCREEN_IDS[currentScreenIndex] !== "weather") return;
+      const slot = document.getElementById("weather-slot");
+      if (!slot || !londonWeather?.id) return;
+      if (state.weather !== londonWeather.id) return;
+      if (!state.weatherConfirmed) {
+        state.weatherConfirmed = true;
+        renderSummary();
+        updateNavButtons();
+      }
+      if (slotFeedbackActive || pendingAdvanceTimer) return;
+      scheduleAutoAdvance("weather", slot);
+      setTimeout(() => updateWeatherEffects(state.weather), 80);
     }
 
     function scheduleAutoAdvance(screenId, slotEl, message) {
@@ -3596,7 +3631,8 @@
 
     function finishWeatherDrop(zoneKey, weatherId) {
       const slot = document.getElementById("weather-slot");
-      if (slotFeedbackActive && zoneKey === "weather-slot") return;
+      const alreadyCorrect = state.weather === weatherId && state.weatherConfirmed;
+      if (slotFeedbackActive && zoneKey === "weather-slot" && !alreadyCorrect) return;
       if (zoneKey === "weather-slot") {
         const targetId = londonWeather?.id;
         if (!targetId) {
@@ -3604,17 +3640,18 @@
           return;
         }
         if (weatherId !== targetId) {
-          showSlotFeedback(slot, "wrong", "Look at London live window — try again");
+          showSlotFeedback(slot, "wrong", `Match “${londonWeather.label}” from the live window`);
           return;
         }
-        if (state.weather === weatherId && state.weatherConfirmed) {
-          scheduleAutoAdvance("weather", slot);
+        if (alreadyCorrect) {
+          maybeAdvanceFromWeather();
           return;
         }
         state.weather = weatherId;
         state.weatherConfirmed = true;
         renderWeather();
         renderSummary();
+        updateNavButtons();
         scheduleAutoAdvance("weather", slot);
         setTimeout(() => updateWeatherEffects(weatherId), 80);
       } else if (zoneKey === "weather-dock" && state.weather === weatherId) {
@@ -4348,10 +4385,12 @@
       if (code >= 51 && code <= 67) return "rainy";
       if (code >= 80 && code <= 82) return "rainy";
       if (code >= 45 && code <= 48) return "cloudy";
-      if (windKmh >= 30) return "windy";
-      if (code === 0) return tempC >= 26 ? "hot" : "sunny";
-      if (code === 1) return tempC >= 26 ? "hot" : "sunny";
       if (code === 2 || code === 3) return "cloudy";
+      if (code === 0 || code === 1) {
+        if (windKmh >= 36) return "windy";
+        return tempC >= 26 ? "hot" : "sunny";
+      }
+      if (windKmh >= 30) return "windy";
       if (tempC <= 5) return "cold";
       if (tempC >= 26) return "hot";
       return "cloudy";
@@ -4370,13 +4409,20 @@
         iconBox.appendChild(buildWeatherIcon3D(londonWeather.id));
         sceneEl.appendChild(iconBox);
       }
-      if (descEl) descEl.textContent = londonWeather.wmoLabel || londonWeather.label;
+      if (descEl) {
+        const target = londonWeather.label;
+        const detail = londonWeather.wmoLabel;
+        descEl.textContent = detail && detail !== target
+          ? `${detail} — drag: ${target}`
+          : target;
+      }
       if (metaEl) {
         const parts = [];
         if (londonWeather.temp != null) parts.push(`${londonWeather.temp}°C`);
         if (londonWeather.wind != null) parts.push(`${Math.round(londonWeather.wind)} km/h`);
         metaEl.textContent = parts.join(" · ");
       }
+      maybeAdvanceFromWeather();
     }
 
     async function fetchLondonWeather() {
