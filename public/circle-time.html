@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b3a5c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Circle Time</title>
   <style>
     :root {
@@ -678,8 +681,68 @@
       font-size: clamp(1.5rem, 4vw, 2.25rem);
       font-weight: 600;
       color: var(--orange);
-      margin: 0 0 2rem;
+      margin: 0 0 1.5rem;
     }
+
+    .countdown-buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .pre-show-countdown-picker {
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .pre-show-countdown-picker.hidden { display: none; }
+
+    .countdown-start-btn {
+      min-height: 72px;
+      min-width: 120px;
+      padding: 1rem 1.75rem;
+      font-size: clamp(1.15rem, 3vw, 1.5rem);
+      font-weight: 700;
+      border: 3px solid var(--orange);
+      border-radius: var(--radius);
+      background: rgba(232, 118, 42, 0.2);
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .countdown-start-btn:hover,
+    .countdown-start-btn:focus-visible {
+      background: var(--orange);
+      outline: 3px solid var(--white);
+      outline-offset: 2px;
+    }
+
+    .countdown-start-btn:active { transform: scale(0.97); }
+
+    .pre-show-picker-label {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      opacity: 0.9;
+      margin: 0 0 0.75rem;
+    }
+
+    .pre-show-skip {
+      margin-top: 1.5rem;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.85);
+      min-height: var(--touch-min);
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pre-show-skip:hover { border-color: var(--white); color: var(--white); }
 
     .pre-show-timer {
       font-size: clamp(3rem, 12vw, 7rem);
@@ -780,6 +843,8 @@
 
     .session-app { min-height: 100vh; }
 
+    #register { scroll-margin-top: 5rem; }
+
     .back-to-waiting {
       font-size: 0.85rem;
       opacity: 0.9;
@@ -801,7 +866,23 @@
       <p class="pre-show-brand">ClubSENsational</p>
       <h1 class="pre-show-title" id="pre-show-title">Circle Time</h1>
       <p class="pre-show-wait" id="pre-show-wait">Sit down and wait</p>
-      <p class="pre-show-timer hidden" id="pre-show-timer" aria-live="polite">05:00</p>
+
+      <div class="pre-show-countdown-picker" id="pre-show-picker">
+        <p class="pre-show-picker-label">Start countdown</p>
+        <div class="countdown-buttons-row" role="group" aria-label="Countdown duration">
+          <button type="button" class="countdown-start-btn" data-countdown="3" aria-label="Start 3 minute countdown">3 min</button>
+          <button type="button" class="countdown-start-btn" data-countdown="2" aria-label="Start 2 minute countdown">2 min</button>
+          <button type="button" class="countdown-start-btn" data-countdown="1" aria-label="Start 1 minute countdown">1 min</button>
+        </div>
+        <button type="button" class="pre-show-skip" id="skip-to-session" aria-label="Skip countdown and open register">
+          Start Circle Time now
+        </button>
+        <button type="button" class="pre-show-skip" id="toggle-fullscreen" aria-label="Toggle full screen" style="margin-top:0.75rem;">
+          Full screen
+        </button>
+      </div>
+
+      <p class="pre-show-timer hidden" id="pre-show-timer" aria-live="polite">03:00</p>
       <p class="pre-show-sub hidden" id="pre-show-sub"></p>
       <div class="pre-show-announcement hidden" id="pre-show-announcement" aria-live="assertive">
         <p id="pre-show-announcement-text"></p>
@@ -811,17 +892,7 @@
     </div>
   </div>
 
-  <div class="pre-show-staff" id="pre-show-staff" aria-label="Staff controls">
-    <div class="pre-show-staff-inner">
-      <label for="countdown-minutes">Countdown (minutes):</label>
-      <button type="button" class="btn btn-sm" data-countdown="5" aria-label="Start 5 minute countdown">5 min</button>
-      <button type="button" class="btn btn-sm" data-countdown="10" aria-label="Start 10 minute countdown">10 min</button>
-      <button type="button" class="btn btn-sm" data-countdown="15" aria-label="Start 15 minute countdown">15 min</button>
-      <button type="button" class="btn btn-primary" id="start-countdown" aria-label="Start countdown">Start countdown</button>
-      <button type="button" class="btn" id="skip-to-session" aria-label="Skip waiting screen and open Circle Time">Start Circle Time now</button>
-      <button type="button" class="btn btn-sm" id="toggle-fullscreen" aria-label="Toggle full screen">Full screen</button>
-    </div>
-  </div>
+  <div class="pre-show-staff hidden" id="pre-show-staff" aria-hidden="true"></div>
 
   <div id="session-app" class="session-app hidden">
   <header>
@@ -843,7 +914,7 @@
   <main id="main-content">
 
     <!-- 1. Register -->
-    <section id="register" aria-labelledby="register-heading">
+    <section id="register" aria-labelledby="register-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">1</span>
         <div>
@@ -1029,9 +1100,9 @@
       "No music today",
     ];
 
-    /* Pre-show countdown — cinema-style announcements (minutes) */
-    const COUNTDOWN_MILESTONES = [5, 2, 1];
-    const DEFAULT_COUNTDOWN_MINUTES = 5;
+    /* Pre-show countdown — announcements at 3, 2, 1 minutes (or fewer if shorter countdown) */
+    const COUNTDOWN_OPTIONS = [3, 2, 1];
+    const DEFAULT_COUNTDOWN_MINUTES = 3;
     const WAIT_MESSAGE = "Sit down and wait";
 
     /* ============================================================
@@ -1057,19 +1128,25 @@
       return Math.max(0, Math.ceil((preShow.endTime - Date.now()) / 1000));
     }
 
+    function getMilestonesForDuration(minutes) {
+      return COUNTDOWN_OPTIONS.filter((m) => m <= minutes).sort((a, b) => a - b);
+    }
+
     function getActiveAnnouncement(remaining) {
       if (remaining <= 0) return null;
-      const sorted = [...COUNTDOWN_MILESTONES].sort((a, b) => a - b);
-      for (const m of sorted) {
-        if (remaining <= m * 60) return m;
+      const milestones = getMilestonesForDuration(preShow.selectedMinutes);
+      let active = null;
+      for (const m of milestones) {
+        if (remaining <= m * 60) active = m;
       }
-      return null;
+      return active;
     }
 
     function updatePreShowDisplay() {
       const timerEl = document.getElementById("pre-show-timer");
       const subEl = document.getElementById("pre-show-sub");
       const waitEl = document.getElementById("pre-show-wait");
+      const pickerEl = document.getElementById("pre-show-picker");
       const announceEl = document.getElementById("pre-show-announcement");
       const announceText = document.getElementById("pre-show-announcement-text");
       const startingEl = document.getElementById("pre-show-starting");
@@ -1078,6 +1155,7 @@
         timerEl.classList.add("hidden");
         subEl.classList.add("hidden");
         waitEl.classList.remove("hidden");
+        pickerEl.classList.remove("hidden");
         announceEl.classList.add("hidden");
         startingEl.classList.add("hidden");
         waitEl.textContent = WAIT_MESSAGE;
@@ -1088,10 +1166,13 @@
         timerEl.classList.add("hidden");
         subEl.classList.add("hidden");
         waitEl.classList.add("hidden");
+        pickerEl.classList.add("hidden");
         announceEl.classList.add("hidden");
         startingEl.classList.remove("hidden");
         return;
       }
+
+      pickerEl.classList.add("hidden");
 
       const remaining = getRemainingSeconds();
       timerEl.classList.remove("hidden");
@@ -1129,7 +1210,7 @@
         preShow.intervalId = null;
         preShow.mode = "starting";
         updatePreShowDisplay();
-        setTimeout(beginSession, 2800);
+        setTimeout(beginSession, 2000);
       }
     }
 
@@ -1150,6 +1231,11 @@
       document.getElementById("pre-show-staff").classList.add("hidden");
       document.getElementById("session-app").classList.remove("hidden");
       document.querySelector(".skip-link").href = "#register";
+      const register = document.getElementById("register");
+      if (register) {
+        register.scrollIntoView({ behavior: "smooth", block: "start" });
+        register.focus({ preventScroll: true });
+      }
     }
 
     function showWaitingScreen() {
@@ -1160,28 +1246,17 @@
       preShow.mode = "idle";
       preShow.endTime = null;
       document.getElementById("pre-show").classList.remove("hidden");
-      if (!isDisplayMode()) document.getElementById("pre-show-staff").classList.remove("hidden");
       document.getElementById("session-app").classList.add("hidden");
       document.getElementById("pre-show-announcement").classList.add("hidden");
       updatePreShowDisplay();
     }
 
-    function isDisplayMode() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("display") === "1" || params.get("screen") === "1";
-    }
 
     function initPreShow() {
-      document.querySelectorAll("[data-countdown]").forEach((btn) => {
+      document.querySelectorAll(".countdown-start-btn[data-countdown]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          preShow.selectedMinutes = Number(btn.dataset.countdown);
-          document.querySelectorAll("[data-countdown]").forEach((b) => b.classList.remove("selected"));
-          btn.classList.add("selected");
+          startCountdown(Number(btn.dataset.countdown));
         });
-      });
-
-      document.getElementById("start-countdown").addEventListener("click", () => {
-        startCountdown(preShow.selectedMinutes);
       });
 
       document.getElementById("skip-to-session").addEventListener("click", beginSession);
@@ -1196,21 +1271,13 @@
         }
       });
 
-      if (isDisplayMode()) {
-        document.getElementById("pre-show-staff").classList.add("hidden");
-      }
-
       const params = new URLSearchParams(window.location.search);
       const autoMin = Number(params.get("start"));
-      if (autoMin > 0) {
+      if (autoMin > 0 && COUNTDOWN_OPTIONS.includes(autoMin)) {
         startCountdown(autoMin);
       } else {
         updatePreShowDisplay();
       }
-
-      /* Default select 5 min */
-      const fiveBtn = document.querySelector('[data-countdown="5"]');
-      if (fiveBtn) fiveBtn.classList.add("selected");
     }
 
     /* ============================================================
