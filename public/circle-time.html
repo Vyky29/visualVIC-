@@ -309,13 +309,17 @@
 
     .day-today-label,
     .weather-today-label {
-      font-size: clamp(0.95rem, 2.8vw, 1.25rem);
+      font-size: clamp(0.85rem, 2.4vw, 1.05rem);
       font-weight: 800;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-align: center;
-      margin: 0 0 0.5rem;
+      margin: 0;
+      padding: 0 0.5rem;
       color: var(--navy);
       flex-shrink: 0;
+      position: relative;
+      z-index: 5;
+      line-height: 1.2;
     }
 
     .today-center-wrap {
@@ -324,7 +328,7 @@
       align-items: center;
       width: 100%;
       max-width: min(580px, 96vw);
-      gap: 0.35rem;
+      gap: clamp(0.75rem, 2vh, 1rem);
     }
 
     .today-center-body {
@@ -339,6 +343,29 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+      gap: 0.35rem;
+    }
+
+    .weather-slot-wrap {
+      position: relative;
+      flex: 1;
+      max-width: min(320px, 58vw);
+      min-width: clamp(140px, 28vw, 200px);
+    }
+
+    .weather-slot-wrap .weather-effects {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .weather-slot-wrap .weather-drop-slot {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: none;
     }
 
     .day-drop-slot {
@@ -485,6 +512,7 @@
       flex-wrap: nowrap;
       width: 100%;
       max-width: min(560px, 94vw);
+      margin-top: 0.15rem;
     }
 
     .date-stack-side {
@@ -666,11 +694,13 @@
       text-align: center;
     }
 
+    .slot-feedback-host:has(.slot-feedback-correct) .slot-feedback-msg,
     .slot-feedback-correct .slot-feedback-msg {
       background: #16a34a;
       color: var(--white);
     }
 
+    .slot-feedback-host:has(.slot-feedback-wrong) .slot-feedback-msg,
     .slot-feedback-wrong .slot-feedback-msg {
       background: #dc2626;
       color: var(--white);
@@ -958,14 +988,14 @@
       align-items: center;
       justify-content: center;
       width: min(560px, 96vw);
-      min-height: clamp(240px, 38vh, 340px);
       flex-shrink: 0;
     }
 
     .date-build-row-weather {
       position: relative;
-      z-index: 2;
+      z-index: 1;
       width: 100%;
+      align-items: center;
     }
 
     .date-build-row-weather .weather-drop-slot {
@@ -975,10 +1005,10 @@
 
     .weather-effects {
       position: absolute;
-      inset: -2.5rem -1.5rem;
+      inset: 0;
       pointer-events: none;
       overflow: hidden;
-      border-radius: calc(var(--radius) + 8px);
+      border-radius: var(--radius);
       z-index: 0;
     }
 
@@ -1213,13 +1243,9 @@
       }
     }
 
-    .weather-today-label {
-      font-size: clamp(0.95rem, 2.8vw, 1.25rem);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-align: center;
-      margin: 0 0 0.5rem;
-      color: var(--navy);
+    .weather-slot-wrap .weather-effects .weather-scene {
+      position: absolute;
+      inset: 0;
     }
 
     .weather-icon-3d-box {
@@ -2818,15 +2844,13 @@
           <div class="weather-center">
             <div class="today-center-wrap">
               <p class="weather-today-label" aria-hidden="true">TODAY'S WEATHER</p>
-              <div class="today-center-body">
-                <div class="weather-stage" id="weather-stage">
-                  <div class="weather-effects" id="weather-effects" aria-hidden="true"></div>
-                  <div class="slot-feedback-host">
-                    <div class="date-build-row date-build-row-weather">
-                      <div class="date-stack date-stack-side" id="date-weather-stack"></div>
-                      <div class="weather-drop-slot" data-drop-zone="weather-slot" id="weather-slot" aria-label="Selected weather">
-                        <p class="weather-placeholder" id="weather-slot-placeholder">Drop the weather here</p>
-                      </div>
+              <div class="slot-feedback-host">
+                <div class="date-build-row date-build-row-weather">
+                  <div class="date-stack date-stack-side" id="date-weather-stack"></div>
+                  <div class="weather-slot-wrap">
+                    <div class="weather-effects" id="weather-effects" aria-hidden="true"></div>
+                    <div class="weather-drop-slot" data-drop-zone="weather-slot" id="weather-slot" aria-label="Selected weather">
+                      <p class="weather-placeholder" id="weather-slot-placeholder">Drop the weather here</p>
                     </div>
                   </div>
                 </div>
@@ -2971,6 +2995,10 @@
     ];
 
     const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year", "weather"]);
+
+    const SLOT_FEEDBACK_MS = { correct: 2800, wrong: 4000 };
+
+    let pendingAdvanceTimer = null;
 
     const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -3254,6 +3282,10 @@
        ============================================================ */
 
     function showScreen(index) {
+      if (pendingAdvanceTimer) {
+        clearTimeout(pendingAdvanceTimer);
+        pendingAdvanceTimer = null;
+      }
       currentScreenIndex = Math.max(0, Math.min(index, SCREEN_IDS.length - 1));
       clearAllSlotFeedback();
       SCREEN_IDS.forEach((id, i) => {
@@ -3282,12 +3314,22 @@
     }
 
     function scheduleAutoAdvance(screenId, slotEl, message) {
-      if (SCREEN_IDS[currentScreenIndex] !== screenId) return;
       const idx = SCREEN_IDS.indexOf(screenId);
       if (idx < 0 || idx >= SCREEN_IDS.length - 1) return;
-      showSlotFeedback(slotEl, "correct", message || "Correct!", () => {
-        showScreen(idx + 1);
-      });
+      const nextIdx = idx + 1;
+      let advanced = false;
+      const doAdvance = () => {
+        if (advanced) return;
+        advanced = true;
+        if (pendingAdvanceTimer) {
+          clearTimeout(pendingAdvanceTimer);
+          pendingAdvanceTimer = null;
+        }
+        showScreen(nextIdx);
+      };
+      showSlotFeedback(slotEl, "correct", message || "Correct!", doAdvance);
+      if (pendingAdvanceTimer) clearTimeout(pendingAdvanceTimer);
+      pendingAdvanceTimer = setTimeout(doAdvance, SLOT_FEEDBACK_MS.correct);
     }
 
     function initScreenNav() {
@@ -3371,8 +3413,6 @@
     let dragState = null;
     let slotFeedbackTimer = null;
     let slotFeedbackActive = false;
-
-    const SLOT_FEEDBACK_MS = { correct: 3500, wrong: 4000 };
 
     function findDropZone(clientX, clientY) {
       if (!dragState?.ghost) {
@@ -3563,9 +3603,9 @@
         state.weather = weatherId;
         state.weatherConfirmed = true;
         renderWeather();
-        updateWeatherEffects(weatherId);
         renderSummary();
         scheduleAutoAdvance("weather", slot);
+        setTimeout(() => updateWeatherEffects(weatherId), 80);
       } else if (zoneKey === "weather-dock" && state.weather === weatherId) {
         clearSlotFeedback(slot);
         state.weather = null;
@@ -3936,10 +3976,15 @@
         onDone?.();
         return;
       }
-      clearSlotFeedback(slotEl);
+      if (slotFeedbackTimer) {
+        clearTimeout(slotFeedbackTimer);
+        slotFeedbackTimer = null;
+      }
       slotFeedbackActive = true;
-      slotEl.classList.add(`slot-feedback-${type}`);
+      slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
       const host = slotEl.closest(".slot-feedback-host") || slotEl;
+      host.querySelector(".slot-feedback-msg")?.remove();
+      slotEl.classList.add(`slot-feedback-${type}`);
       host.appendChild(el("p", { className: "slot-feedback-msg", textContent: message }));
       slotFeedbackTimer = setTimeout(() => {
         slotFeedbackActive = false;
@@ -4556,11 +4601,6 @@
 
       WEATHER.forEach((w) => dock.appendChild(createWeatherChip(w, true)));
       initWeatherDragDrop();
-      if (state.weatherConfirmed && state.weather) {
-        updateWeatherEffects(state.weather);
-      } else {
-        updateWeatherEffects(null);
-      }
     }
 
     function initWeatherDragDrop() {
