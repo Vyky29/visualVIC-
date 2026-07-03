@@ -3046,7 +3046,7 @@
         <span class="section-num" aria-hidden="true">11</span>
         <div>
           <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
-          <p>Each participant chooses music when it is their turn.</p>
+          <p>Random order — every participant plus 2 staff take a turn. Open music on another screen.</p>
         </div>
       </div>
       <div id="turn-taking-content"></div>
@@ -3590,6 +3590,7 @@
       feelingsOrder: [],
       participantActivities: {},
       turnQueue: [],
+      turnStaffIds: [],
       turnCompleted: [],
       turnIndex: 0,
     };
@@ -4129,8 +4130,34 @@
       return PARTICIPANTS.filter(participantAtClub);
     }
 
+    function staffAtClub() {
+      return STAFF.filter((s) => state.location[s.id] === "club");
+    }
+
+    function buildTurnQueue() {
+      const clubStaff = staffAtClub();
+      const staffPick = shufflePeople(clubStaff).slice(0, Math.min(2, clubStaff.length));
+      const allPeople = [...activeParticipants(), ...staffPick];
+      return {
+        queue: shufflePeople(allPeople).map((p) => p.id),
+        staffIds: staffPick.map((s) => s.id),
+      };
+    }
+
+    function turnsNeedReset() {
+      const participantIds = activeParticipants().map((p) => p.id);
+      if (participantIds.length === 0) return false;
+      const expected = new Set([...participantIds, ...state.turnStaffIds]);
+      if (state.turnQueue.length !== expected.size) return true;
+      if (!participantIds.every((id) => state.turnQueue.includes(id))) return true;
+      if (!state.turnStaffIds.every((id) => state.turnQueue.includes(id))) return true;
+      return !state.turnQueue.every((id) => expected.has(id));
+    }
+
     function resetTurns() {
-      state.turnQueue = activeParticipants().map((p) => p.id);
+      const built = buildTurnQueue();
+      state.turnQueue = built.queue;
+      state.turnStaffIds = built.staffIds;
       state.turnCompleted = [];
       state.turnIndex = 0;
     }
@@ -5159,9 +5186,27 @@
       return PARTICIPANTS.find((p) => p.id === id);
     }
 
-    function currentTurnParticipant() {
+    function currentTurnPerson() {
       if (state.turnIndex >= state.turnQueue.length) return null;
-      return getParticipant(state.turnQueue[state.turnIndex]);
+      return getPerson(state.turnQueue[state.turnIndex]);
+    }
+
+    function appendTurnMini(row, person, extra) {
+      const mini = el("div", { className: `turn-mini${extra?.completed ? " completed" : ""}`, role: extra?.role });
+      if (extra?.highlight) {
+        mini.style.outline = "3px solid var(--orange)";
+        mini.style.borderRadius = "var(--radius-sm)";
+        mini.style.padding = "0.35rem";
+      }
+      mini.appendChild(avatarImg(person));
+      mini.appendChild(el("span", { className: "participant-name", textContent: person.name }));
+      if (person.role === "staff") {
+        mini.appendChild(el("span", { className: "music-tag", textContent: "Staff" }));
+      }
+      if (extra?.tag) {
+        mini.appendChild(el("span", { className: "music-tag", textContent: extra.tag, style: extra.tagStyle || "" }));
+      }
+      row.appendChild(mini);
     }
 
     function renderTurnTaking() {
@@ -5178,8 +5223,7 @@
         return;
       }
 
-      if (state.turnQueue.length !== active.length ||
-          !active.every((p) => state.turnQueue.includes(p.id))) {
+      if (turnsNeedReset()) {
         resetTurns();
       }
 
@@ -5189,12 +5233,15 @@
       const nowCol = el("div");
       nowCol.appendChild(el("h3", { textContent: "Current turn" }));
       const nowBox = el("div", { className: "turn-now", "aria-live": "polite" });
-      const current = currentTurnParticipant();
+      const current = currentTurnPerson();
 
       if (current) {
         nowBox.appendChild(avatarImg(current));
         nowBox.appendChild(el("p", { className: "participant-name", textContent: current.name }));
-        nowBox.appendChild(el("p", { textContent: "Choose music for this turn:", style: "margin:0.5rem 0 0;color:var(--grey-500);" }));
+        if (current.role === "staff") {
+          nowBox.appendChild(el("p", { className: "music-tag", textContent: "Staff", style: "margin:0;color:var(--grey-500);font-weight:800;" }));
+        }
+        nowBox.appendChild(el("p", { textContent: "Their turn — play music on the other screen:", style: "margin:0.5rem 0 0;color:var(--grey-500);" }));
 
         const musicOpts = el("div", { className: "music-options", role: "group", "aria-label": "Music choices" });
         MUSIC_OPTIONS.forEach((m) => {
@@ -5228,7 +5275,7 @@
         completedRow.appendChild(el("p", { className: "empty-state", textContent: "No turns completed yet.", style: "width:100%;" }));
       } else {
         state.turnCompleted.forEach(({ id, music }) => {
-          const p = getParticipant(id);
+          const p = getPerson(id);
           if (!p) return;
           const mini = el("div", { className: "turn-mini completed" });
           mini.appendChild(avatarImg(p));
@@ -5240,7 +5287,7 @@
       sideCol.appendChild(completedRow);
 
       sideCol.appendChild(el("h3", { textContent: "Waiting", style: "margin-top:1.25rem;" }));
-      const waitingRow = el("div", { className: "turn-avatar-row", "aria-label": "Waiting participants" });
+      const waitingRow = el("div", { className: "turn-avatar-row", "aria-label": "Waiting for turn" });
       const waiting = state.turnQueue.slice(state.turnIndex + (current ? 1 : 0));
       if (waiting.length === 0 && !current) {
         waitingRow.appendChild(el("p", { className: "empty-state", textContent: "Everyone has had a turn.", style: "width:100%;" }));
@@ -5248,12 +5295,9 @@
         waitingRow.appendChild(el("p", { className: "empty-state", textContent: "No one waiting.", style: "width:100%;" }));
       } else {
         waiting.forEach((id) => {
-          const p = getParticipant(id);
+          const p = getPerson(id);
           if (!p) return;
-          const mini = el("div", { className: "turn-mini" });
-          mini.appendChild(avatarImg(p));
-          mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
-          waitingRow.appendChild(mini);
+          appendTurnMini(waitingRow, p, {});
         });
       }
       sideCol.appendChild(waitingRow);
@@ -5263,22 +5307,20 @@
 
       /* Order strip */
       const orderSection = el("div", { style: "margin-top:1.5rem;" });
-      orderSection.appendChild(el("h3", { textContent: "Turn order", style: "margin:0 0 0.75rem;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--grey-500);" }));
+      orderSection.appendChild(el("h3", { textContent: "Turn order (random)", style: "margin:0 0 0.75rem;font-size:1rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--grey-500);" }));
       const orderRow = el("div", { className: "turn-avatar-row", role: "list", "aria-label": "Turn order" });
       state.turnQueue.forEach((id, i) => {
-        const p = getParticipant(id);
+        const p = getPerson(id);
         if (!p) return;
         const isCurrent = i === state.turnIndex && current;
         const isDone = i < state.turnIndex;
-        const mini = el("div", {
-          className: `turn-mini${isDone ? " completed" : ""}`,
+        appendTurnMini(orderRow, p, {
+          completed: isDone,
+          highlight: isCurrent,
           role: "listitem",
-          style: isCurrent ? "outline:3px solid var(--orange);border-radius:var(--radius-sm);padding:0.35rem;" : "",
+          tag: isCurrent ? "Now" : "",
+          tagStyle: isCurrent ? "color:var(--orange);font-weight:700;" : "",
         });
-        mini.appendChild(avatarImg(p));
-        mini.appendChild(el("span", { className: "participant-name", textContent: p.name }));
-        if (isCurrent) mini.appendChild(el("span", { className: "music-tag", textContent: "Now", style: "color:var(--orange);font-weight:700;" }));
-        orderRow.appendChild(mini);
       });
       orderSection.appendChild(orderRow);
       container.appendChild(orderSection);
@@ -5293,7 +5335,7 @@
         "aria-label": "Skip to next turn without music choice",
       });
       nextBtn.addEventListener("click", () => {
-        const cur = currentTurnParticipant();
+        const cur = currentTurnPerson();
         if (cur) {
           state.turnCompleted.push({ id: cur.id, music: "Skipped" });
           state.turnIndex += 1;
@@ -5393,8 +5435,8 @@
       lines.push("");
 
       const musicLines = state.turnCompleted.map(({ id, music }) => {
-        const p = getParticipant(id);
-        return p ? `${p.name} - ${music}` : null;
+        const p = getPerson(id);
+        return p ? `${p.name}${p.role === "staff" ? " (staff)" : ""} - ${music}` : null;
       }).filter(Boolean);
       lines.push(`Music Choices: ${musicLines.length ? musicLines.join(", ") : "None yet"}`);
 
