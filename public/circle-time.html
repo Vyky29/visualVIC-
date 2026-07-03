@@ -1807,7 +1807,7 @@
         <span class="section-num" aria-hidden="true">1</span>
         <div>
           <h2 id="register-heading">Who is here today?</h2>
-          <p>Drag each person to <strong>Home</strong> or <strong>ClubSENsational</strong>.</p>
+          <p>Everyone starts below. Each person drags their avatar to <strong>Home</strong> or <strong>ClubSENsational</strong>.</p>
         </div>
       </div>
       <div class="register-layout">
@@ -1828,7 +1828,7 @@
           </div>
         </div>
         <div class="register-dock" data-drop-zone="dock" aria-label="Unassigned participants and staff">
-          <p class="register-dock-label">Drag people from here</p>
+          <p class="register-dock-label">Drag your avatar from here</p>
           <div class="register-dock-avatars" id="register-dock"></div>
         </div>
       </div>
@@ -2341,9 +2341,6 @@
     function finishAvatarDrop(personId, zoneKey) {
       if (!zoneKey) return;
       const person = getPerson(personId);
-      if (person?.role === "staff" && zoneKey === "home") {
-        zoneKey = "club";
-      }
       state.location[personId] = zoneKey;
       if (person?.role === "participant" && zoneKey !== "club") {
         state.feelings[personId] = null;
@@ -2580,12 +2577,12 @@
 
     function initState() {
       PARTICIPANTS.forEach((p) => {
-        state.location[p.id] = p.id === "fadi" ? "home" : "dock";
+        state.location[p.id] = "dock";
         state.feelings[p.id] = null;
         state.participantActivities[p.id] = [];
       });
       STAFF.forEach((s) => {
-        state.location[s.id] = "club";
+        state.location[s.id] = "dock";
       });
       resetTurns();
     }
@@ -2722,9 +2719,7 @@
         className: `draggable-avatar${isStaff ? " staff-chip" : ""}`,
         role: "button",
         tabindex: "0",
-        "aria-label": isStaff
-          ? `${p.name}, drag to ClubSENsational`
-          : `${p.name}, drag to Home or ClubSENsational`,
+        "aria-label": `${p.name}, drag to Home or ClubSENsational`,
         "data-participant-id": p.id,
       });
       chip.appendChild(avatarImg(p));
@@ -2738,8 +2733,7 @@
         chip.onpointerdown = startAvatarDrag;
         chip.onkeydown = (e) => {
           const id = chip.dataset.participantId;
-          const person = getPerson(id);
-          if (e.key === "h" || e.key === "H") finishAvatarDrop(id, person?.role === "staff" ? "club" : "home");
+          if (e.key === "h" || e.key === "H") finishAvatarDrop(id, "home");
           else if (e.key === "c" || e.key === "C") finishAvatarDrop(id, "club");
           else if (e.key === "d" || e.key === "D") finishAvatarDrop(id, "dock");
         };
