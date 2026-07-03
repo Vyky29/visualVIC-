@@ -12,6 +12,7 @@ import {
   DAY_CENTRE_SERINE_DIR,
   DAY_CENTRE_TIMI_DIR,
   dayCentreFadiEmotionUrl,
+  dayCentreIkramTailoredHomeAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
 import type { TailoredParticipantId } from "@/lib/routines/tailored-participants";
 
@@ -41,6 +42,9 @@ const PARTICIPANT_EMOTION_DIR: Record<TailoredParticipantId, string> = {
 const PARTICIPANT_EMOTION_SCENE_FALLBACK: Partial<
   Record<TailoredParticipantId, Partial<Record<TailoredEmotionSlug, string>>>
 > = {
+  ikram: {
+    happy: dayCentreIkramTailoredHomeAvatarUrl(),
+  },
   fadi: {
     happy: dayCentreFadiEmotionUrl("happy"),
   },

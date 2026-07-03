@@ -25,7 +25,6 @@ import {
   DAY_CENTRE_COMMUNITY_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_COOKING_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_SCHEDULE_GENERATED_CARD_PROPS,
-  DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_3D_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_MINI_GYM_WARMUP_GENERATED_CARD_PROPS,
@@ -47,17 +46,23 @@ import {
   DAY_CENTRE_SERINE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_MACHINERY_3D_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_MONDAY_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_WEDNESDAY_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_FRIDAY_GENERATED_CARD_PROPS,
+  DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
-  DAY_CENTRE_EMMANUEL_MACHINERY_3D_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
-  DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS,
-  DAY_CENTRE_FADI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_TUE_THU_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
-  DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_MACHINERY_3D_GENERATED_CARD_PROPS,
   HOTEL_GENERATED_CARD_PROPS,
   PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS,
@@ -78,23 +83,29 @@ import {
   DAY_CENTRE_AYAAN_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-ayaan-cards";
 import {
-  DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_FRIDAY_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME,
-  DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_MONDAY_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_WEDNESDAY_ROUTINE_NAME,
+  DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
 import {
-  DAY_CENTRE_FADI_AVATAR_ROUTINE_NAME,
-  DAY_CENTRE_FADI_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_FADI_MON_WED_FRI_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_FADI_TUE_THU_AVATAR_ROUTINE_NAME,
+  DAY_CENTRE_FADI_TUE_THU_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-fadi-cards";
 import {
   DAY_CENTRE_TIMI_AVATAR_ROUTINE_NAME,
   DAY_CENTRE_TIMI_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-timi-cards";
 import {
-  DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
-  DAY_CENTRE_IKRAM_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME,
+  DAY_CENTRE_IKRAM_TUESDAY_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-ikram-cards";
 import {
   tailoredScheduleCloseUpPreviewUrl,
@@ -493,15 +504,51 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
-    id: "ikram-day-centre",
-    name: DAY_CENTRE_IKRAM_ROUTINE_NAME,
+    id: "ikram-mon-wed-fri-avatar",
+    name: DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME,
     description:
-      "Ikram · Day centre — music, circle time, cafe, swimming, shower, park, swing, restaurant, birthday party, cab and home with munchie (avatar art)",
+      "Ikram · Mon / Wed / Fri — karaoke, circle time, toilet, swimming costume, pool, shower, dress, bean bag, cafe, park, birthday party, cab and home with munchie (avatar art)",
     tags: ["extra"],
-    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ikram-day-centre"),
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ikram-mon-wed-fri-avatar"),
     steps: routineStepsFromGeneratedCardProps(
-      "ikram-day-centre",
-      DAY_CENTRE_IKRAM_SCHEDULE_GENERATED_CARD_PROPS,
+      "ikram-mon-wed-fri-avatar",
+      DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-mon-wed-fri-items",
+    name: DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME,
+    description:
+      "Ikram · Mon / Wed / Fri — same flow with illustrated objects and photos (items)",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("circle-time"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-mon-wed-fri-items",
+      DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-tuesday-avatar",
+    name: DAY_CENTRE_IKRAM_TUESDAY_ROUTINE_NAME,
+    description:
+      "Ikram · Tuesday — karaoke, circle time, toilet, Sam's Cafe, bus, park, swing, cafe, birthday party, cake, ball, cab and home with munchi (avatar art)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("ikram-tuesday-avatar"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-tuesday-avatar",
+      DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "ikram-tuesday-items",
+    name: DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME,
+    description:
+      "Ikram · Tuesday — same outing with illustrated objects and photos (items)",
+    tags: ["extra"],
+    homePreviewImageUrl: dayCentreGeneralImageUrl("park"),
+    steps: routineStepsFromGeneratedCardProps(
+      "ikram-tuesday-items",
+      DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -553,27 +600,51 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
-    id: "emmanuel-day-centre",
-    name: DAY_CENTRE_EMMANUEL_AVATAR_ROUTINE_NAME,
+    id: "emmanuel-monday-avatar",
+    name: DAY_CENTRE_EMMANUEL_MONDAY_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, changing room, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up, picture book and home (avatar art)",
+      "Emmanuel · Monday — word search, gym, swimming, shower, lunch, hub handwriting, football, snack, washing up, picture book and home (avatar art)",
     tags: ["extra"],
-    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-day-centre"),
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-monday-avatar"),
     steps: routineStepsFromGeneratedCardProps(
-      "emmanuel-day-centre",
-      DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS,
+      "emmanuel-monday-avatar",
+      DAY_CENTRE_EMMANUEL_MONDAY_GENERATED_CARD_PROPS,
     ),
   },
   {
-    id: "emmanuel-day-centre-items",
-    name: DAY_CENTRE_EMMANUEL_ITEMS_ROUTINE_NAME,
+    id: "emmanuel-wednesday-avatar",
+    name: DAY_CENTRE_EMMANUEL_WEDNESDAY_ROUTINE_NAME,
     description:
-      "Emmanuel · Mon/Tue/Wed — word search, gym, swimming, shower, shampoo, changing room, lunch, bean bag, handwriting, vocational activity, sports, chocolate cake, washing up, picture book and home (object / icon art)",
+      "Emmanuel · Wednesday — same order with basketball and maths in the hub (avatar art)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-wednesday-avatar"),
+    steps: routineStepsFromGeneratedCardProps(
+      "emmanuel-wednesday-avatar",
+      DAY_CENTRE_EMMANUEL_WEDNESDAY_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "emmanuel-friday-avatar",
+    name: DAY_CENTRE_EMMANUEL_FRIDAY_ROUTINE_NAME,
+    description:
+      "Emmanuel · Friday — same order with tennis and spelling in the hub (avatar art)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-friday-avatar"),
+    steps: routineStepsFromGeneratedCardProps(
+      "emmanuel-friday-avatar",
+      DAY_CENTRE_EMMANUEL_FRIDAY_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "emmanuel-weekday-items",
+    name: DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_ROUTINE_NAME,
+    description:
+      "Emmanuel · Mon / Wed / Fri — one items routine with generic sport and hub icons (swap cards per day)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("community-centre"),
     steps: routineStepsFromGeneratedCardProps(
-      "emmanuel-day-centre-items",
-      DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS,
+      "emmanuel-weekday-items",
+      DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -613,27 +684,51 @@ export const mockRoutines: Routine[] = [
     ),
   },
   {
-    id: "fadi-day-centre",
-    name: DAY_CENTRE_FADI_AVATAR_ROUTINE_NAME,
+    id: "fadi-mon-wed-fri-avatar",
+    name: DAY_CENTRE_FADI_MON_WED_FRI_AVATAR_ROUTINE_NAME,
     description:
-      "Fadi's day-centre routine — day centre, swimming, snack, table work, Co-op and Vassim's car (avatar art)",
+      "Fadi · Mon / Wed / Fri — day centre, swimming, snack, table work, Co-op and Vassim's car (avatar art)",
     tags: ["extra"],
-    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("fadi-day-centre"),
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("fadi-mon-wed-fri-avatar"),
     steps: routineStepsFromGeneratedCardProps(
-      "fadi-day-centre",
-      DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS,
+      "fadi-mon-wed-fri-avatar",
+      DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {
-    id: "fadi-day-centre-items",
-    name: DAY_CENTRE_FADI_ITEMS_ROUTINE_NAME,
+    id: "fadi-mon-wed-fri-items",
+    name: DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_ROUTINE_NAME,
     description:
-      "Fadi's day-centre routine — day centre, swimming, snack, table work, Co-op and Vassim's car (3D items)",
+      "Fadi · Mon / Wed / Fri — same flow with 3D items (includes swimming pool)",
     tags: ["extra"],
     homePreviewImageUrl: physical3dImageUrl("vassims-car"),
     steps: routineStepsFromGeneratedCardProps(
-      "fadi-day-centre-items",
-      DAY_CENTRE_FADI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
+      "fadi-mon-wed-fri-items",
+      DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "fadi-tue-thu-avatar",
+    name: DAY_CENTRE_FADI_TUE_THU_AVATAR_ROUTINE_NAME,
+    description:
+      "Fadi · Tue / Thu — day centre, snack, table work, Co-op and Vassim's car without swimming (avatar art)",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("fadi-tue-thu-avatar"),
+    steps: routineStepsFromGeneratedCardProps(
+      "fadi-tue-thu-avatar",
+      DAY_CENTRE_FADI_TUE_THU_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "fadi-tue-thu-items",
+    name: DAY_CENTRE_FADI_TUE_THU_ITEMS_ROUTINE_NAME,
+    description:
+      "Fadi · Tue / Thu — same flow with 3D items, no swimming",
+    tags: ["extra"],
+    homePreviewImageUrl: physical3dImageUrl("vassims-car"),
+    steps: routineStepsFromGeneratedCardProps(
+      "fadi-tue-thu-items",
+      DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
   {
@@ -658,18 +753,6 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "timi-day-centre-items",
       DAY_CENTRE_TIMI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
-    ),
-  },
-  {
-    id: "ikram-day-centre-items",
-    name: DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME,
-    description:
-      "Ikram · Day centre — music, circle time, cafe, swimming, shower, park, swing, restaurant, birthday party, cab and home with munchie (object / icon art)",
-    tags: ["extra"],
-    homePreviewImageUrl: dayCentreGeneralImageUrl("circle-time"),
-    steps: routineStepsFromGeneratedCardProps(
-      "ikram-day-centre-items",
-      DAY_CENTRE_IKRAM_ITEMS_GENERATED_CARD_PROPS,
     ),
   },
 ];

@@ -26,9 +26,14 @@ import {
 } from "@/lib/cards/ikram-library-groups";
 import {
   EMMANUEL_LIBRARY_DIMENSION_ORDER,
-  emmanuelLibraryDimensionFromPickNamespace,
+  emmanuelLibraryDimensionFromPickId,
   emmanuelLibraryGroupLabel,
 } from "@/lib/cards/emmanuel-library-groups";
+import {
+  FADI_LIBRARY_GROUP_ORDER,
+  fadiLibraryGroupForPickId,
+} from "@/lib/cards/fadi-library-groups";
+import { tailoredLibraryDimensionLabel } from "@/lib/cards/tailored-library-dimensions";
 import {
   MINI_GYM_LIBRARY_DIMENSION_ORDER,
   miniGymLibraryDimensionFromPickNamespace,
@@ -394,6 +399,7 @@ function libraryPackUsesThematicSubgroups(section: LibrarySectionId): boolean {
   return (
     section === "physical" ||
     section === "dcikram" ||
+    section === "dcfadi" ||
     section === "dcfolderminigym" ||
     section === "dcemmanuel"
   );
@@ -522,14 +528,41 @@ function LibraryPackThematicSubgroups({
   if (section === "dcemmanuel") {
     return EMMANUEL_LIBRARY_DIMENSION_ORDER.map((groupId) => {
       const groupCards = cards.filter((v) => {
-        const ns = v.pickId.split("::")[0] ?? "";
-        return emmanuelLibraryDimensionFromPickNamespace(ns) === groupId;
+        return emmanuelLibraryDimensionFromPickId(v.pickId) === groupId;
       });
       if (groupCards.length === 0) return null;
       return (
         <section key={groupId} className="space-y-1.5">
           <LibrarySubgroupHeader
             label={emmanuelLibraryGroupLabel(groupId, cardUiLang)}
+            iconUrl={groupCards[0]?.imageUrl}
+            ringClass={ringClass}
+          />
+          <div className="grid grid-cols-4 gap-1.5 tablet:grid-cols-6 tablet:gap-3">
+            {groupCards.map((v) => (
+              <LibraryPickTile
+                key={v.pickId}
+                v={v}
+                selected={selectedSet.has(v.pickId)}
+                onToggle={onToggle}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  }
+
+  if (section === "dcfadi") {
+    return FADI_LIBRARY_GROUP_ORDER.map((groupId) => {
+      const groupCards = cards.filter((v) => {
+        return fadiLibraryGroupForPickId(v.pickId) === groupId;
+      });
+      if (groupCards.length === 0) return null;
+      return (
+        <section key={groupId} className="space-y-1.5">
+          <LibrarySubgroupHeader
+            label={tailoredLibraryDimensionLabel(groupId, cardUiLang)}
             iconUrl={groupCards[0]?.imageUrl}
             ringClass={ringClass}
           />

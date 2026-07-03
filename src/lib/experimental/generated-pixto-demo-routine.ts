@@ -72,7 +72,9 @@ import {
   DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE,
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE,
   DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_IKRAM_PARTICIPANT_LABEL,
   dayCentreIkramDailyAvatarFocusImageUrlForStep,
   dayCentreIkramDailyAvatarImageUrlForStep,
   dayCentreIkramDailyItemsImageUrlForStep,
@@ -81,6 +83,8 @@ import {
   dayCentreIkramScheduleFocusImageUrlForStep,
   dayCentreIkramMonWedFriScheduleFocusImageUrlForStep,
   dayCentreIkramMonWedFriScheduleImageUrlForStep,
+  dayCentreIkramTuesdayScheduleFocusImageUrlForStep,
+  dayCentreIkramTuesdayScheduleImageUrlForStep,
   dayCentreIkramScheduleImageUrlForStep,
   dayCentreIkramPackMarkUrl,
   type DayCentreIkramStep,
@@ -145,7 +149,12 @@ import {
   DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_FADI_SCHEDULE_SEQUENCE,
   DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_TUE_THU_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_SEQUENCE,
   DAY_CENTRE_FADI_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_FADI_PARTICIPANT_LABEL,
   DAY_CENTRE_FADI_CATEGORY_COLOUR,
   dayCentreFadiFocusImageUrlForStep,
   dayCentreFadiImageUrlForStep,
@@ -157,11 +166,16 @@ import {
 import {
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_MONDAY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_WEDNESDAY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_FRIDAY_SEQUENCE,
+  DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE,
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL,
   DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
   dayCentreEmmanuelDailyAvatarFocusImageUrlForStep,
   dayCentreEmmanuelDailyAvatarImageUrlForStep,
@@ -191,6 +205,7 @@ import {
   atTheHotelImageUrl,
   atTheHotelPackMarkUrl,
 } from "@/lib/cards/at-the-hotel-cards";
+import { tailoredLibraryCategoryRibbon } from "@/lib/cards/tailored-library-dimensions";
 
 /** Fallback if a pack logo fails to load — `public/brand/pixtolearn-logo.png`. */
 export const GENERATED_PIXTO_COLOUR_MARK_FALLBACK_URL =
@@ -437,12 +452,21 @@ export const PHYSICAL_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
 export const DAY_CENTRE_FITNESS_GENERATED_CARD_PROPS = PHYSICAL_GENERATED_CARD_PROPS;
 
 /** Tailored schedules · Ikram — full photo library. */
+const IKRAM_AVATAR_CATEGORY_LABEL = tailoredLibraryCategoryRibbon(
+  DAY_CENTRE_IKRAM_PARTICIPANT_LABEL,
+  "avatar",
+);
+const IKRAM_ITEMS_CATEGORY_LABEL = tailoredLibraryCategoryRibbon(
+  DAY_CENTRE_IKRAM_PARTICIPANT_LABEL,
+  "items",
+);
+
 function ikramGeneratedCardProps(step: DayCentreIkramStep) {
   const focusIllustrationUrl = dayCentreIkramFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreIkramImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    category: lc(IKRAM_AVATAR_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -457,7 +481,7 @@ function ikramDailyItemsGeneratedCardProps(step: IkramDailyStep) {
   return {
     illustrationUrl: dayCentreIkramDailyItemsImageUrlForStep(step),
     title: lc(step.itemsTitle ?? step.title),
-    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    category: lc(IKRAM_ITEMS_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
   };
@@ -469,7 +493,7 @@ function ikramDailyAvatarGeneratedCardProps(step: IkramDailyStep) {
   return {
     illustrationUrl: dayCentreIkramDailyAvatarImageUrlForStep(step),
     title: lc(step.avatarTitle ?? step.title),
-    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    category: lc(IKRAM_AVATAR_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -492,7 +516,7 @@ function ikramItemsLibraryGeneratedCardProps(step: TailoredItems3dStep) {
   return {
     illustrationUrl: tailoredItems3dImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    category: lc(IKRAM_ITEMS_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
   };
@@ -526,7 +550,20 @@ function ikramMonWedFriScheduleGeneratedCardProps(step: DayCentreIkramStep) {
   return {
     illustrationUrl: dayCentreIkramMonWedFriScheduleImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL),
+    category: lc(IKRAM_AVATAR_CATEGORY_LABEL),
+    categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+function ikramTuesdayScheduleGeneratedCardProps(step: DayCentreIkramStep) {
+  const focusIllustrationUrl =
+    dayCentreIkramTuesdayScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreIkramTuesdayScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(IKRAM_AVATAR_CATEGORY_LABEL),
     categoryColour: GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
     iconUrl: dayCentreIkramPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -539,23 +576,36 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS: Generat
     ikramMonWedFriScheduleGeneratedCardProps(s),
   );
 
-/** @deprecated Removed from stock registry. */
+/** Ikram · Tuesday — outing (avatar). */
+export const DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE.map((s) =>
+    ikramTuesdayScheduleGeneratedCardProps(s),
+  );
+
+/** Ikram library · Avatar schedule steps (Mon–Fri + Tuesday). */
+export const DAY_CENTRE_IKRAM_AVATAR_LIBRARY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  [
+    ...DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
+    ...DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_GENERATED_CARD_PROPS,
+  ];
+
+/** Ikram · Mon / Wed / Fri — swimming day (items). */
 export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
       s,
-      DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+      IKRAM_ITEMS_CATEGORY_LABEL,
       GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
       dayCentreIkramPackMarkUrl(),
     ),
   );
 
-/** @deprecated Removed from stock registry. */
+/** Ikram · Tuesday — outing (items). */
 export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
       s,
-      DAY_CENTRE_IKRAM_CARD_CATEGORY_LABEL,
+      IKRAM_ITEMS_CATEGORY_LABEL,
       GENERATED_PIXTO_TAILORED_SCHEDULES_CATEGORY_COLOUR,
       dayCentreIkramPackMarkUrl(),
     ),
@@ -729,7 +779,9 @@ function fadiGeneratedCardProps(step: DayCentreFadiStep) {
   return {
     illustrationUrl: dayCentreFadiImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    category: lc(
+      tailoredLibraryCategoryRibbon(DAY_CENTRE_FADI_PARTICIPANT_LABEL, "avatar"),
+    ),
     categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
     iconUrl: dayCentreFadiPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -744,7 +796,9 @@ function fadiScheduleGeneratedCardProps(step: DayCentreFadiStep) {
   return {
     illustrationUrl: dayCentreFadiScheduleImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    category: lc(
+      tailoredLibraryCategoryRibbon(DAY_CENTRE_FADI_PARTICIPANT_LABEL, "avatar"),
+    ),
     categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
     iconUrl: dayCentreFadiPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -756,10 +810,20 @@ export const DAY_CENTRE_FADI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardPr
     fadiScheduleGeneratedCardProps(s),
   );
 
+export const DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_SEQUENCE.map((s) =>
+    fadiScheduleGeneratedCardProps(s),
+  );
+
+export const DAY_CENTRE_FADI_TUE_THU_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_TUE_THU_SCHEDULE_SEQUENCE.map((s) =>
+    fadiScheduleGeneratedCardProps(s),
+  );
+
 function fadiItemsLibraryGeneratedCardProps(step: TailoredItems3dStep) {
   return dayCentreItems3dGeneratedCardProps(
     step,
-    DAY_CENTRE_FADI_CARD_CATEGORY_LABEL,
+    tailoredLibraryCategoryRibbon(DAY_CENTRE_FADI_PARTICIPANT_LABEL, "items"),
     DAY_CENTRE_FADI_CATEGORY_COLOUR,
     dayCentreFadiPackMarkUrl(),
   );
@@ -774,7 +838,9 @@ function fadiItemsScheduleGeneratedCardProps(step: DayCentreFadiStep) {
   return {
     illustrationUrl: dayCentreFadiImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_FADI_CARD_CATEGORY_LABEL),
+    category: lc(
+      tailoredLibraryCategoryRibbon(DAY_CENTRE_FADI_PARTICIPANT_LABEL, "items"),
+    ),
     categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
     iconUrl: dayCentreFadiPackMarkUrl(),
   };
@@ -785,13 +851,32 @@ export const DAY_CENTRE_FADI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixto
     fadiItemsScheduleGeneratedCardProps(s),
   );
 
+export const DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_SEQUENCE.map((s) =>
+    fadiItemsScheduleGeneratedCardProps(s),
+  );
+
+export const DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_SEQUENCE.map((s) =>
+    fadiItemsScheduleGeneratedCardProps(s),
+  );
+
 /** Tailored schedules · Emmanuel — physical activity library. */
+const EMMANUEL_AVATAR_CATEGORY_LABEL = tailoredLibraryCategoryRibbon(
+  DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL,
+  "avatar",
+);
+const EMMANUEL_ITEMS_CATEGORY_LABEL = tailoredLibraryCategoryRibbon(
+  DAY_CENTRE_EMMANUEL_PARTICIPANT_LABEL,
+  "items",
+);
+
 function emmanuelLibraryAvatarGeneratedCardProps(step: DayCentreEmmanuelStep) {
   const focusIllustrationUrl = dayCentreEmmanuelFocusImageUrlForStep(step);
   return {
     illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    category: lc(EMMANUEL_AVATAR_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -825,7 +910,7 @@ export const DAY_CENTRE_EMMANUEL_2D_GENERATED_CARD_PROPS: GeneratedPixtoCardProp
 function emmanuelLibraryIconGeneratedCardProps(step: TailoredItems3dStep) {
   return dayCentreItems3dGeneratedCardProps(
     step,
-    DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+    EMMANUEL_ITEMS_CATEGORY_LABEL,
     DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     dayCentreEmmanuelPackMarkUrl(),
   );
@@ -843,14 +928,32 @@ function emmanuelDailyAvatarGeneratedCardProps(step: EmmanuelDailyStep) {
   return {
     illustrationUrl: dayCentreEmmanuelDailyAvatarImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    category: lc(EMMANUEL_AVATAR_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
   };
 }
 
-/** Emmanuel · Day centre (avatar) — Mon/Tue/Wed schedule. */
+/** Emmanuel · Monday (avatar). */
+export const DAY_CENTRE_EMMANUEL_MONDAY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_MONDAY_SEQUENCE.map((s) =>
+    emmanuelDailyAvatarGeneratedCardProps(s),
+  );
+
+/** Emmanuel · Wednesday (avatar). */
+export const DAY_CENTRE_EMMANUEL_WEDNESDAY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_WEDNESDAY_SEQUENCE.map((s) =>
+    emmanuelDailyAvatarGeneratedCardProps(s),
+  );
+
+/** Emmanuel · Friday (avatar). */
+export const DAY_CENTRE_EMMANUEL_FRIDAY_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_FRIDAY_SEQUENCE.map((s) =>
+    emmanuelDailyAvatarGeneratedCardProps(s),
+  );
+
+/** @deprecated Use per-day avatar schedules. */
 export const DAY_CENTRE_EMMANUEL_DAILY_AVATAR_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
     emmanuelDailyAvatarGeneratedCardProps(s),
@@ -860,17 +963,21 @@ function emmanuelDailyItemsGeneratedCardProps(step: EmmanuelDailyStep) {
   return {
     illustrationUrl: dayCentreEmmanuelDailyItemsImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    category: lc(EMMANUEL_ITEMS_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelPackMarkUrl(),
   };
 }
 
-/** Emmanuel · Day centre (items) — Mon/Tue/Wed schedule (object & icon art). */
-export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
-  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((s) =>
+/** Emmanuel · Mon / Wed / Fri (items) — generic sport + hub icons. */
+export const DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_SEQUENCE.map((s) =>
     emmanuelDailyItemsGeneratedCardProps(s),
   );
+
+/** @deprecated Use {@link DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_GENERATED_CARD_PROPS}. */
+export const DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_GENERATED_CARD_PROPS;
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_ITEMS_GENERATED_CARD_PROPS}. */
 export const DAY_CENTRE_EMMANUEL_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
@@ -889,7 +996,7 @@ function emmanuelGymAvatarGeneratedCardProps(step: DayCentreEmmanuelStep) {
   return {
     illustrationUrl: dayCentreEmmanuelImageUrlForStep(step),
     title: lc(step.title),
-    category: lc(DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL),
+    category: lc(EMMANUEL_AVATAR_CATEGORY_LABEL),
     categoryColour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
     iconUrl: dayCentreEmmanuelPackMarkUrl(),
     ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
@@ -907,7 +1014,7 @@ export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS: GeneratedPixtoC
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_SEQUENCE.map((s) =>
     dayCentreItems3dGeneratedCardProps(
       s,
-      DAY_CENTRE_EMMANUEL_CARD_CATEGORY_LABEL,
+      EMMANUEL_ITEMS_CATEGORY_LABEL,
       DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
       dayCentreEmmanuelPackMarkUrl(),
     ),

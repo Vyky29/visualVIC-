@@ -43,6 +43,18 @@ export const DAY_CENTRE_FADI_AVATAR_ROUTINE_NAME =
 export const DAY_CENTRE_FADI_ITEMS_ROUTINE_NAME =
   "Fadi · Day centre (items)" as const;
 
+export const DAY_CENTRE_FADI_MON_WED_FRI_AVATAR_ROUTINE_NAME =
+  "Fadi · Mon / Wed / Fri (avatar)" as const;
+
+export const DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_ROUTINE_NAME =
+  "Fadi · Mon / Wed / Fri (items)" as const;
+
+export const DAY_CENTRE_FADI_TUE_THU_AVATAR_ROUTINE_NAME =
+  "Fadi · Tue / Thu (avatar)" as const;
+
+export const DAY_CENTRE_FADI_TUE_THU_ITEMS_ROUTINE_NAME =
+  "Fadi · Tue / Thu (items)" as const;
+
 /** @deprecated Use {@link DAY_CENTRE_FADI_AVATAR_ROUTINE_NAME}. */
 export const DAY_CENTRE_FADI_ROUTINE_NAME = DAY_CENTRE_FADI_AVATAR_ROUTINE_NAME;
 
@@ -135,7 +147,7 @@ export const DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE: readonly TailoredItems3dSte
     },
   ] as const;
 
-/** Stock routine · Fadi's day-centre order. */
+/** Stock routine · Fadi's day-centre order (with swimming). */
 export const DAY_CENTRE_FADI_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] = [
   {
     id: "dcfs-day-centre",
@@ -179,9 +191,17 @@ export const DAY_CENTRE_FADI_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] = [
     title: "Vassim's car",
     source: "fadi-scene",
   },
-] as const;
+  ] as const;
 
-/** Stock routine · same flow with object / 3D illustrations. */
+/** Mon / Wed / Fri — same as full day-centre routine (includes swimming). */
+export const DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] =
+  DAY_CENTRE_FADI_SCHEDULE_SEQUENCE;
+
+/** Tue / Thu — outing without swimming. */
+export const DAY_CENTRE_FADI_TUE_THU_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] =
+  DAY_CENTRE_FADI_SCHEDULE_SEQUENCE.filter((s) => s.slug !== "swimming");
+
+/** Stock routine · same flow with object / 3D illustrations (with swimming). */
 export const DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] =
   [
     {
@@ -227,6 +247,16 @@ export const DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep
       source: "3d",
     },
   ] as const;
+
+/** Mon / Wed / Fri — items routine (includes swimming pool). */
+export const DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] =
+  DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE;
+
+/** Tue / Thu — items routine without swimming. */
+export const DAY_CENTRE_FADI_TUE_THU_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreFadiStep[] =
+  DAY_CENTRE_FADI_ITEMS_SCHEDULE_SEQUENCE.filter(
+    (s) => s.slug !== "swimming-pool",
+  );
 
 const FADI_SCENE_SLUGS = new Set(
   DAY_CENTRE_FADI_LIBRARY_SEQUENCE.map((s) => s.slug),

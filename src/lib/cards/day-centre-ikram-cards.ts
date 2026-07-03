@@ -63,17 +63,17 @@ export const DAY_CENTRE_IKRAM_ITEMS_ROUTINE_NAME =
 export const DAY_CENTRE_IKRAM_SATURDAY_ROUTINE_NAME =
   "Ikram · Saturday outing (avatar)" as const;
 
-/** @deprecated Removed from stock registry. */
 export const DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_ROUTINE_NAME =
   "Ikram · Mon / Wed / Fri (items)" as const;
 
-/** @deprecated Removed from stock registry. */
 export const DAY_CENTRE_IKRAM_MON_WED_FRI_ROUTINE_NAME =
   "Ikram · Mon / Wed / Fri (avatar)" as const;
 
-/** @deprecated Removed from stock registry. */
 export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_ROUTINE_NAME =
   "Ikram · Tuesday (items)" as const;
+
+export const DAY_CENTRE_IKRAM_TUESDAY_ROUTINE_NAME =
+  "Ikram · Tuesday (avatar)" as const;
 
 export type IkramDailyArtSource =
   | { type: "ikram-items"; slug: string }
@@ -486,6 +486,48 @@ export const DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE: readonly DayCentreI
     },
   ] as const;
 
+/** Tuesday — outing (personalised Ikram scenes). */
+export const DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE: readonly DayCentreIkramStep[] =
+  [
+    { id: "dciut-karaoke", slug: "karaoke", title: "Karaoke" },
+    {
+      id: "dciut-circle-time",
+      slug: "circle-time",
+      title: "Circle time",
+    },
+    { id: "dciut-toilet", slug: "toilet", title: "Toilet" },
+    {
+      id: "dciut-sams-cafe",
+      slug: "cafe",
+      title: "Sam's Cafe",
+    },
+    { id: "dciut-bus", slug: "bus", title: "Bus" },
+    { id: "dciut-park", slug: "park", title: "Park" },
+    {
+      id: "dciut-swing",
+      slug: "swing-with-luliya",
+      title: "Swing",
+    },
+    { id: "dciut-cafe", slug: "cafe", title: "Cafe" },
+    {
+      id: "dciut-birthday-party",
+      slug: "birthday-party",
+      title: "Birthday party",
+    },
+    {
+      id: "dciut-birthday-cake",
+      slug: "birthday-cake",
+      title: "Birthday cake",
+    },
+    { id: "dciut-ball", slug: "basket", title: "Ball" },
+    { id: "dciut-cab", slug: "cab", title: "Cab" },
+    {
+      id: "dciut-home",
+      slug: "home",
+      title: "Home with munchi",
+    },
+  ] as const;
+
 /** Tuesday — outing (illustrated objects). */
 export const DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE: readonly TailoredItems3dStep[] =
   [
@@ -615,6 +657,10 @@ const IKRAM_MON_WED_FRI_SCHEDULE_SCENE_SLUGS = new Set(
   DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.map((s) => s.slug),
 );
 
+const IKRAM_TUESDAY_SCHEDULE_SCENE_SLUGS = new Set(
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE.map((s) => s.slug),
+);
+
 function ikramScheduleImageUrlForStep(
   step: DayCentreIkramStep,
   sceneSlugs: Set<string>,
@@ -674,5 +720,27 @@ export function dayCentreIkramMonWedFriScheduleFocusImageUrlForStep(
   return ikramScheduleFocusImageUrlForStep(
     step,
     IKRAM_MON_WED_FRI_SCHEDULE_SCENE_SLUGS,
+  );
+}
+
+/** Ikram · Tuesday — personalised scenes where available. */
+export function dayCentreIkramTuesdayScheduleImageUrlForStep(
+  step: DayCentreIkramStep,
+): string {
+  if (step.slug === "circle-time") {
+    return dayCentreGeneralImageUrl("circle-time");
+  }
+  if (step.slug === "birthday-cake") {
+    return dayCentreGeneralImageUrl("birthday-cake");
+  }
+  return ikramScheduleImageUrlForStep(step, IKRAM_TUESDAY_SCHEDULE_SCENE_SLUGS);
+}
+
+export function dayCentreIkramTuesdayScheduleFocusImageUrlForStep(
+  step: DayCentreIkramStep,
+): string | undefined {
+  return ikramScheduleFocusImageUrlForStep(
+    step,
+    IKRAM_TUESDAY_SCHEDULE_SCENE_SLUGS,
   );
 }

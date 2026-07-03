@@ -74,6 +74,18 @@ export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME =
 export const DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME =
   "Emmanuel · Gym (items)" as const;
 
+export const DAY_CENTRE_EMMANUEL_MONDAY_ROUTINE_NAME =
+  "Emmanuel · Monday (avatar)" as const;
+
+export const DAY_CENTRE_EMMANUEL_WEDNESDAY_ROUTINE_NAME =
+  "Emmanuel · Wednesday (avatar)" as const;
+
+export const DAY_CENTRE_EMMANUEL_FRIDAY_ROUTINE_NAME =
+  "Emmanuel · Friday (avatar)" as const;
+
+export const DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_ROUTINE_NAME =
+  "Emmanuel · Mon / Wed / Fri (items)" as const;
+
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME}. */
 export const DAY_CENTRE_EMMANUEL_MACHINERY_ROUTINE_NAME =
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_ROUTINE_NAME;
@@ -193,6 +205,93 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       avatar: { type: "general", slug: "home" },
     },
   ] as const;
+
+type EmmanuelWeekdayVariant = {
+  sportsSceneSlug: string;
+  sportsTitle: string;
+  hubSlug: string;
+  hubTitle: string;
+};
+
+const EMMANUEL_WEEKDAY_VARIANTS = {
+  monday: {
+    sportsSceneSlug: "football",
+    sportsTitle: "Football",
+    hubSlug: "handwriting",
+    hubTitle: "Handwriting",
+  },
+  wednesday: {
+    sportsSceneSlug: "basketball",
+    sportsTitle: "Basketball",
+    hubSlug: "maths",
+    hubTitle: "Maths",
+  },
+  friday: {
+    sportsSceneSlug: "tennis",
+    sportsTitle: "Tennis",
+    hubSlug: "spelling",
+    hubTitle: "Spelling",
+  },
+} as const satisfies Record<string, EmmanuelWeekdayVariant>;
+
+function emmanuelWeekdayAvatarSequence(
+  variant: EmmanuelWeekdayVariant,
+): readonly EmmanuelDailyStep[] {
+  return DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((step) => {
+    if (step.slug === "sports") {
+      return {
+        ...step,
+        title: variant.sportsTitle,
+        avatar: { type: "emmanuel-scene", slug: variant.sportsSceneSlug },
+      };
+    }
+    if (step.slug === "handwriting") {
+      const hubIcon = { type: "emmanuel-icon" as const, slug: variant.hubSlug };
+      const hubAvatar: EmmanuelDailyArtSource =
+        variant.hubSlug === "maths"
+          ? { type: "emmanuel-scene", slug: "maths" }
+          : hubIcon;
+      return {
+        ...step,
+        id: `dce-${variant.hubSlug}`,
+        slug: variant.hubSlug,
+        title: variant.hubTitle,
+        items: hubIcon,
+        avatar: hubAvatar,
+      };
+    }
+    return step;
+  });
+}
+
+/** Emmanuel · Monday — avatar schedule (football + handwriting in hub). */
+export const DAY_CENTRE_EMMANUEL_MONDAY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  emmanuelWeekdayAvatarSequence(EMMANUEL_WEEKDAY_VARIANTS.monday);
+
+/** Emmanuel · Wednesday — avatar schedule (basketball + maths in hub). */
+export const DAY_CENTRE_EMMANUEL_WEDNESDAY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  emmanuelWeekdayAvatarSequence(EMMANUEL_WEEKDAY_VARIANTS.wednesday);
+
+/** Emmanuel · Friday — avatar schedule (tennis + spelling in hub). */
+export const DAY_CENTRE_EMMANUEL_FRIDAY_SEQUENCE: readonly EmmanuelDailyStep[] =
+  emmanuelWeekdayAvatarSequence(EMMANUEL_WEEKDAY_VARIANTS.friday);
+
+/**
+ * Emmanuel · Mon / Wed / Fri — one items routine with generic sport + hub icons
+ * (swap cards in the player when the day changes).
+ */
+export const DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_SEQUENCE: readonly EmmanuelDailyStep[] =
+  DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE.map((step) => {
+    if (step.slug === "sports") {
+      return {
+        ...step,
+        title: "Sports",
+        items: { type: "emmanuel-icon", slug: "sports" },
+        avatar: { type: "emmanuel-icon", slug: "sports" },
+      };
+    }
+    return step;
+  });
 
 /** @deprecated Use {@link DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE}. */
 export const DAY_CENTRE_EMMANUEL_AVATAR_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =

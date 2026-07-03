@@ -38,11 +38,18 @@ import {
 } from "@/lib/cards/day-centre-general-cards";
 import { dayCentreLibraryGroupForSlug } from "@/lib/cards/day-centre-library-groups";
 import {
-  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE,
   DAY_CENTRE_IKRAM_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_IKRAM_EXCLUSIVE_ITEM_SLUGS,
-  dayCentreIkramImageUrlForStep,
+  DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
+  DAY_CENTRE_IKRAM_PARTICIPANT_LABEL,
+  dayCentreIkramMonWedFriScheduleImageUrlForStep,
+  dayCentreIkramTuesdayScheduleImageUrlForStep,
 } from "@/lib/cards/day-centre-ikram-cards";
+import { tailoredLibraryCategoryRibbon } from "@/lib/cards/tailored-library-dimensions";
 import {
   DAY_CENTRE_SERINE_LIBRARY_SEQUENCE,
   dayCentreSerineImageUrlForStep,
@@ -71,12 +78,17 @@ import {
   tailoredParticipantDisplayName,
   type TailoredParticipantId,
 } from "@/lib/routines/tailored-participants";
-import { TAILORED_SCHEDULES_CATEGORY_LABEL } from "@/lib/cards/tailored-schedules-shared";
+import {
+  dayCentreEmmanuelPackMarkUrl,
+  dayCentreFadiPackMarkUrl,
+  dayCentreIkramPackMarkUrl,
+} from "@/lib/cards/day-centre-shared";
 import {
   DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
   dayCentreTimiImageUrlForStep,
 } from "@/lib/cards/day-centre-timi-cards";
 import {
+  DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
   DAY_CENTRE_EMMANUEL_ICON_SEQUENCE,
   DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE,
   dayCentreEmmanuelIconImageUrlForStep,
@@ -91,7 +103,6 @@ import {
   DAY_CENTRE_CATEGORY_COLOUR,
   dayCentreGeneralImageUrl,
   dayCentrePackMarkUrl,
-  dayCentreFadiPackMarkUrl,
 } from "@/lib/cards/day-centre-shared";
 import { GETTING_DRESS_REGISTRY } from "@/lib/cards/getting-dress-undress-registry";
 import {
@@ -107,7 +118,9 @@ import {
 import {
   AIRPORT_GENERATED_CARD_PROPS,
   DAY_CENTRE_GENERAL_GENERATED_CARD_PROPS,
-  DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_AVATAR_LIBRARY_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_IKRAM_ITEMS_LIBRARY_GENERATED_CARD_PROPS,
   DAY_CENTRE_SERINE_GENERATED_CARD_PROPS,
   DAY_CENTRE_AYAAN_GENERATED_CARD_PROPS,
@@ -129,7 +142,42 @@ const SEP = "::";
 const TAILORED_PARTICIPANT_EMOTION_AVAILABILITY: Partial<
   Record<TailoredParticipantId, readonly TailoredEmotionSlug[]>
 > = {
+  ikram: ["happy"],
   fadi: ["happy"],
+};
+
+const PARTICIPANT_EMOTION_PACK: Record<
+  TailoredParticipantId,
+  { colour: string; iconUrl: string }
+> = {
+  ikram: {
+    colour: DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  },
+  serine: {
+    colour: DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  },
+  ayaan: {
+    colour: DAY_CENTRE_IKRAM_CATEGORY_COLOUR,
+    iconUrl: dayCentreIkramPackMarkUrl(),
+  },
+  emmanuel: {
+    colour: DAY_CENTRE_EMMANUEL_CATEGORY_COLOUR,
+    iconUrl: dayCentreEmmanuelPackMarkUrl(),
+  },
+  cyrus: {
+    colour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+  },
+  fadi: {
+    colour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+  },
+  timi: {
+    colour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+  },
 };
 
 const PARTICIPANT_PICK_NS: Record<TailoredParticipantId, PickablePackId> = {
@@ -310,7 +358,6 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
   const airportTitleMap = titleMapFromSequence(AT_THE_AIRPORT_SEQUENCE);
   const hotelTitleMap = titleMapFromSequence(AT_THE_HOTEL_SEQUENCE);
   const dayCentreGeneralTitleMap = titleMapFromSequence(DAY_CENTRE_GENERAL_SEQUENCE);
-  const dayCentreIkramTitleMap = titleMapFromSequence(DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE);
 
   for (const s of BRUSHING_TEETH_SEQUENCE) {
     out.push({
@@ -498,12 +545,80 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     });
   });
 
-  DAY_CENTRE_IKRAM_LIBRARY_SEQUENCE.forEach((s, i) => {
-    const gp = DAY_CENTRE_IKRAM_GENERATED_CARD_PROPS[i];
+  DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_IKRAM_AVATAR_LIBRARY_GENERATED_CARD_PROPS[i];
     out.push({
-      pickId: pid("dcikram", s.slug),
+      pickId: pid("dcikram", `mwf-${s.slug}`),
       label: s.title,
-      imageUrl: dayCentreIkramImageUrlForStep(s),
+      imageUrl: dayCentreIkramMonWedFriScheduleImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  const ikramTueAvatarOffset =
+    DAY_CENTRE_IKRAM_MON_WED_FRI_SCHEDULE_SEQUENCE.length;
+  DAY_CENTRE_IKRAM_TUESDAY_SCHEDULE_SEQUENCE.forEach((s, i) => {
+    const gp =
+      DAY_CENTRE_IKRAM_AVATAR_LIBRARY_GENERATED_CARD_PROPS[
+        ikramTueAvatarOffset + i
+      ];
+    out.push({
+      pickId: pid("dcikram", `tue-${s.slug}`),
+      label: s.title,
+      imageUrl: dayCentreIkramTuesdayScheduleImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_IKRAM_MON_WED_FRI_ITEMS_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcikram", `items-mwf-${s.slug}`),
+      label: s.title,
+      imageUrl: tailoredItems3dImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_IKRAM_TUESDAY_ITEMS_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_IKRAM_TUESDAY_ITEMS_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dcikram", `items-tue-${s.slug}`),
+      label: s.title,
+      imageUrl: tailoredItems3dImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {
@@ -718,6 +833,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
         participantId,
         step.slug,
       );
+      const pack = PARTICIPANT_EMOTION_PACK[participantId];
       out.push({
         pickId: pid(ns, `emotion-${step.slug}`),
         label: step.title,
@@ -726,9 +842,12 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
         generatedPixto: {
           illustrationUrl,
           title: step.title,
-          category: `${tailoredParticipantDisplayName(participantId)} · ${TAILORED_SCHEDULES_CATEGORY_LABEL}`,
-          categoryColour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
-          iconUrl: dayCentreFadiPackMarkUrl(),
+          category: tailoredLibraryCategoryRibbon(
+            tailoredParticipantDisplayName(participantId),
+            "emotions",
+          ).toLowerCase(),
+          categoryColour: pack.colour,
+          iconUrl: pack.iconUrl,
         },
       });
     }

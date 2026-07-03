@@ -17,6 +17,7 @@ import {
 } from "@/lib/i18n/pixto-digital-locale";
 import type { DayCentreLibraryGroup } from "@/lib/cards/day-centre-library-groups";
 import type { IkramLibraryGroup } from "@/lib/cards/ikram-library-groups";
+import { tailoredLibraryDimensionLabel } from "@/lib/cards/tailored-library-dimensions";
 import type { MiniGymLibraryDimension } from "@/lib/cards/mini-gym-library-groups";
 import type { PhysicalLibraryGroup } from "@/lib/cards/physical-library-groups";
 import type { DayCentreFolderId } from "@/lib/routines/day-centre-folders";
@@ -697,21 +698,7 @@ export function ikramLibraryGroupLabel(
   group: IkramLibraryGroup,
   lang: CardLanguageCode,
 ): string {
-  const en: Record<IkramLibraryGroup, string> = {
-    items: "Items (objects only)",
-    "scene-cards": "Scene cards (PECS grid)",
-    "mon-wed-fri-schedule": "Mon / Wed / Fri schedule",
-    "saturday-schedule": "Saturday schedule",
-    "photo-cards": "Photo library",
-  };
-  const es: Record<IkramLibraryGroup, string> = {
-    items: "Objetos (solo ítems)",
-    "scene-cards": "Tarjetas escena (PECS)",
-    "mon-wed-fri-schedule": "Rutina lunes / miércoles / viernes",
-    "saturday-schedule": "Rutina del sábado",
-    "photo-cards": "Biblioteca de fotos",
-  };
-  return isEs(lang) ? es[group] : en[group];
+  return tailoredLibraryDimensionLabel(group, isEs(lang) ? "es" : "en");
 }
 
 export function menuFocusModeLabel(lang: CardLanguageCode): string {

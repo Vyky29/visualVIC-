@@ -507,13 +507,21 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Mixed Day",
     es: "Día mixto",
   },
-  "ikram-day-centre": {
-    en: "Ikram · Day centre (avatar)",
-    es: "Ikram · centro de día (avatar)",
+  "ikram-mon-wed-fri-avatar": {
+    en: "Ikram · Mon / Wed / Fri (avatar)",
+    es: "Ikram · lunes / miércoles / viernes (avatar)",
   },
-  "ikram-day-centre-items": {
-    en: "Ikram · Day centre (items)",
-    es: "Ikram · centro de día (objetos)",
+  "ikram-mon-wed-fri-items": {
+    en: "Ikram · Mon / Wed / Fri (items)",
+    es: "Ikram · lunes / miércoles / viernes (objetos)",
+  },
+  "ikram-tuesday-avatar": {
+    en: "Ikram · Tuesday (avatar)",
+    es: "Ikram · martes (avatar)",
+  },
+  "ikram-tuesday-items": {
+    en: "Ikram · Tuesday (items)",
+    es: "Ikram · martes (objetos)",
   },
   "serine-day-centre": {
     en: "Serine Physical Activity (avatar)",
@@ -531,13 +539,21 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Ayaan Physical Activity (items)",
     es: "Ayaan · actividad física (objetos)",
   },
-  "emmanuel-day-centre": {
-    en: "Emmanuel · Day centre (avatar)",
-    es: "Emmanuel · centro de día (avatar)",
+  "emmanuel-monday-avatar": {
+    en: "Emmanuel · Monday (avatar)",
+    es: "Emmanuel · lunes (avatar)",
   },
-  "emmanuel-day-centre-items": {
-    en: "Emmanuel · Day centre (items)",
-    es: "Emmanuel · centro de día (objetos)",
+  "emmanuel-wednesday-avatar": {
+    en: "Emmanuel · Wednesday (avatar)",
+    es: "Emmanuel · miércoles (avatar)",
+  },
+  "emmanuel-friday-avatar": {
+    en: "Emmanuel · Friday (avatar)",
+    es: "Emmanuel · viernes (avatar)",
+  },
+  "emmanuel-weekday-items": {
+    en: "Emmanuel · Mon / Wed / Fri (items)",
+    es: "Emmanuel · lunes / miércoles / viernes (objetos)",
   },
   "emmanuel-gym-avatar": {
     en: "Emmanuel · Gym (avatar)",
@@ -551,13 +567,21 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Cyrus · Day centre (avatar)",
     es: "Cyrus · centro de día (avatar)",
   },
-  "fadi-day-centre": {
-    en: "Fadi · Day centre (avatar)",
-    es: "Fadi · centro de día (avatar)",
+  "fadi-mon-wed-fri-avatar": {
+    en: "Fadi · Mon / Wed / Fri (avatar)",
+    es: "Fadi · lunes / miércoles / viernes (avatar)",
   },
-  "fadi-day-centre-items": {
-    en: "Fadi · Day centre (items)",
-    es: "Fadi · centro de día (objetos)",
+  "fadi-mon-wed-fri-items": {
+    en: "Fadi · Mon / Wed / Fri (items)",
+    es: "Fadi · lunes / miércoles / viernes (objetos)",
+  },
+  "fadi-tue-thu-avatar": {
+    en: "Fadi · Tue / Thu (avatar)",
+    es: "Fadi · martes / jueves (avatar)",
+  },
+  "fadi-tue-thu-items": {
+    en: "Fadi · Tue / Thu (items)",
+    es: "Fadi · martes / jueves (objetos)",
   },
   "vassims-car": {
     en: "vassim's car",

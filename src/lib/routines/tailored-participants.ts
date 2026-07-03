@@ -25,17 +25,29 @@ export const TAILORED_PARTICIPANT_STOCK_ROUTINE_IDS: Record<
   TailoredParticipantId,
   readonly TailoredStockRoutineId[]
 > = {
-  ikram: ["ikram-day-centre", "ikram-day-centre-items"],
+  ikram: [
+    "ikram-mon-wed-fri-avatar",
+    "ikram-mon-wed-fri-items",
+    "ikram-tuesday-avatar",
+    "ikram-tuesday-items",
+  ],
   serine: ["serine-day-centre", "serine-gym-equipment-3d"],
   ayaan: ["ayaan-day-centre", "ayaan-gym-equipment-3d"],
   emmanuel: [
-    "emmanuel-day-centre",
-    "emmanuel-day-centre-items",
+    "emmanuel-monday-avatar",
+    "emmanuel-wednesday-avatar",
+    "emmanuel-friday-avatar",
+    "emmanuel-weekday-items",
     "emmanuel-gym-avatar",
     "emmanuel-gym-equipment-3d",
   ],
   cyrus: ["cyrus-day-centre"],
-  fadi: ["fadi-day-centre", "fadi-day-centre-items"],
+  fadi: [
+    "fadi-mon-wed-fri-avatar",
+    "fadi-mon-wed-fri-items",
+    "fadi-tue-thu-avatar",
+    "fadi-tue-thu-items",
+  ],
   timi: ["timi-day-centre", "timi-day-centre-items"],
 };
 
@@ -65,12 +77,12 @@ function detectTailoredStockIdFromSteps(
     .map((s) => `${s.imageUrl ?? ""} ${s.generatedPixto?.illustrationUrl ?? ""}`)
     .join(" ")
     .toLowerCase();
-  if (haystack.includes("/ikram")) return "ikram-day-centre";
+  if (haystack.includes("/ikram")) return "ikram-mon-wed-fri-avatar";
   if (haystack.includes("/serine")) return "serine-day-centre";
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
-  if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
+  if (haystack.includes("/emmanuel")) return "emmanuel-monday-avatar";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
-  if (haystack.includes("/fadi")) return "fadi-day-centre";
+  if (haystack.includes("/fadi")) return "fadi-mon-wed-fri-avatar";
   if (haystack.includes("/timi")) return "timi-day-centre";
   return undefined;
 }

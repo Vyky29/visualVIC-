@@ -25,19 +25,25 @@ import {
 
 /** Tailored stock routine ids on Home. */
 export const TAILORED_STOCK_ROUTINE_IDS = [
-  "ikram-day-centre",
-  "ikram-day-centre-items",
+  "ikram-mon-wed-fri-avatar",
+  "ikram-mon-wed-fri-items",
+  "ikram-tuesday-avatar",
+  "ikram-tuesday-items",
   "serine-day-centre",
   "serine-gym-equipment-3d",
   "ayaan-day-centre",
   "ayaan-gym-equipment-3d",
-  "emmanuel-day-centre",
-  "emmanuel-day-centre-items",
+  "emmanuel-monday-avatar",
+  "emmanuel-wednesday-avatar",
+  "emmanuel-friday-avatar",
+  "emmanuel-weekday-items",
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
-  "fadi-day-centre",
-  "fadi-day-centre-items",
+  "fadi-mon-wed-fri-avatar",
+  "fadi-mon-wed-fri-items",
+  "fadi-tue-thu-avatar",
+  "fadi-tue-thu-items",
   "timi-day-centre",
   "timi-day-centre-items",
 ] as const;
@@ -49,9 +55,11 @@ export function tailoredScheduleCloseUpPreviewUrl(
   routineId: string,
 ): string | undefined {
   switch (routineId as TailoredStockRoutineId) {
-    case "ikram-day-centre":
+    case "ikram-mon-wed-fri-avatar":
+    case "ikram-tuesday-avatar":
       return dayCentreIkramTailoredHomeAvatarUrl();
-    case "ikram-day-centre-items":
+    case "ikram-mon-wed-fri-items":
+    case "ikram-tuesday-items":
       return undefined;
     case "serine-day-centre":
       return dayCentreSerineTailoredHomeAvatarUrl();
@@ -61,9 +69,11 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreAyaanTailoredHomeAvatarUrl();
     case "ayaan-gym-equipment-3d":
       return undefined;
-    case "emmanuel-day-centre":
+    case "emmanuel-monday-avatar":
+    case "emmanuel-wednesday-avatar":
+    case "emmanuel-friday-avatar":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
-    case "emmanuel-day-centre-items":
+    case "emmanuel-weekday-items":
       return undefined;
     case "emmanuel-gym-avatar":
       return dayCentreEmmanuelTailoredHomeAvatarUrl();
@@ -71,9 +81,11 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return undefined;
     case "cyrus-day-centre":
       return dayCentreCyrusTailoredHomeAvatarUrl();
-    case "fadi-day-centre":
+    case "fadi-mon-wed-fri-avatar":
+    case "fadi-tue-thu-avatar":
       return dayCentreFadiTailoredHomeAvatarUrl();
-    case "fadi-day-centre-items":
+    case "fadi-mon-wed-fri-items":
+    case "fadi-tue-thu-items":
       return undefined;
     case "timi-day-centre":
       return dayCentreTimiTailoredHomeAvatarUrl();
@@ -89,9 +101,12 @@ export function tailoredScheduleActionPreviewUrl(
   routineId: string,
 ): string | undefined {
   switch (routineId as TailoredStockRoutineId) {
-    case "ikram-day-centre":
-      return dayCentreIkramSceneUrl("music");
-    case "ikram-day-centre-items":
+    case "ikram-mon-wed-fri-avatar":
+      return dayCentreIkramSceneUrl("swimming");
+    case "ikram-tuesday-avatar":
+      return dayCentreIkramSceneUrl("park");
+    case "ikram-mon-wed-fri-items":
+    case "ikram-tuesday-items":
       return undefined;
     case "serine-day-centre":
       return dayCentreSerineSceneUrl("row-machine");
@@ -101,9 +116,13 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreAyaanSceneUrl("therapy-ball");
     case "ayaan-gym-equipment-3d":
       return undefined;
-    case "emmanuel-day-centre":
-      return dayCentreEmmanuelSceneUrl("gym-with-michelle");
-    case "emmanuel-day-centre-items":
+    case "emmanuel-monday-avatar":
+      return dayCentreEmmanuelSceneUrl("football");
+    case "emmanuel-wednesday-avatar":
+      return dayCentreEmmanuelSceneUrl("basketball");
+    case "emmanuel-friday-avatar":
+      return dayCentreEmmanuelSceneUrl("tennis");
+    case "emmanuel-weekday-items":
       return undefined;
     case "emmanuel-gym-avatar":
       return dayCentreEmmanuelSceneUrl("cross-trainer");
@@ -111,9 +130,12 @@ export function tailoredScheduleActionPreviewUrl(
       return undefined;
     case "cyrus-day-centre":
       return dayCentreCyrusSceneUrl("table-work");
-    case "fadi-day-centre":
+    case "fadi-mon-wed-fri-avatar":
+      return dayCentreFadiSceneUrl("swimming");
+    case "fadi-tue-thu-avatar":
       return dayCentreFadiSceneUrl("vassims-car");
-    case "fadi-day-centre-items":
+    case "fadi-mon-wed-fri-items":
+    case "fadi-tue-thu-items":
       return physical3dImageUrl("vassims-car");
     case "timi-day-centre":
       return dayCentreTimiImageUrl("timi-motor-skills");
@@ -135,12 +157,12 @@ function detectTailoredStockIdFromSteps(
     .map((s) => `${s.imageUrl ?? ""} ${s.generatedPixto?.illustrationUrl ?? ""}`)
     .join(" ")
     .toLowerCase();
-  if (haystack.includes("/ikram")) return "ikram-day-centre";
+  if (haystack.includes("/ikram")) return "ikram-mon-wed-fri-avatar";
   if (haystack.includes("/serine")) return "serine-day-centre";
   if (haystack.includes("/ayaan")) return "ayaan-day-centre";
-  if (haystack.includes("/emmanuel")) return "emmanuel-day-centre";
+  if (haystack.includes("/emmanuel")) return "emmanuel-monday-avatar";
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
-  if (haystack.includes("/fadi")) return "fadi-day-centre";
+  if (haystack.includes("/fadi")) return "fadi-mon-wed-fri-avatar";
   if (haystack.includes("/timi") || haystack.includes("timi-")) return "timi-day-centre";
   return undefined;
 }
