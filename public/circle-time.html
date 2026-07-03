@@ -268,6 +268,127 @@
       touch-action: none;
     }
 
+    /* Day screen — TODAY IS + drag from footer dock */
+    .day-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .day-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 0;
+    }
+
+    .day-today-label {
+      font-size: clamp(2rem, 7vw, 3.75rem);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin: 0 0 1.25rem;
+      color: var(--navy);
+    }
+
+    .day-drop-slot {
+      min-height: clamp(150px, 24vh, 220px);
+      width: min(360px, 88vw);
+      border: 4px dashed var(--orange);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--orange-soft);
+      padding: 1.25rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .day-drop-slot.drag-over {
+      background: rgba(232, 118, 42, 0.35);
+      border-color: var(--navy);
+      border-style: solid;
+    }
+
+    .day-placeholder {
+      color: var(--grey-500);
+      font-weight: 600;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      text-align: center;
+      margin: 0;
+      padding: 0 1rem;
+    }
+
+    .day-dock {
+      flex-shrink: 0;
+      margin-top: 0.5rem;
+      border-top: 3px solid var(--grey-200);
+      padding: 0.75rem;
+      background: var(--grey-100);
+      border-radius: var(--radius);
+      min-height: clamp(120px, 18vh, 155px);
+    }
+
+    .day-dock-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .draggable-day {
+      width: clamp(76px, 11vw, 100px);
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .draggable-day.is-drag-source {
+      opacity: 0.2;
+    }
+
+    .day-letter-icon {
+      width: clamp(56px, 9vw, 72px);
+      height: clamp(56px, 9vw, 72px);
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 800;
+      font-size: clamp(1.1rem, 3.5vw, 1.55rem);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      border: 3px solid var(--white);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+    }
+
+    .day-name-label {
+      font-size: clamp(0.65rem, 2vw, 0.8rem);
+      font-weight: 700;
+      margin: 0.35rem 0 0;
+      color: var(--navy);
+      line-height: 1.15;
+      pointer-events: none;
+    }
+
+    .drag-ghost.draggable-day .day-letter-icon {
+      background: var(--orange);
+    }
+
+    #screen-day .section-header {
+      flex-shrink: 0;
+      margin-bottom: 0.35rem;
+      padding-bottom: 0.5rem;
+    }
+
     .draggable-avatar .avatar-wrap {
       width: clamp(88px, 14vw, 112px);
       height: clamp(88px, 14vw, 112px);
@@ -1210,16 +1331,27 @@
     </section>
     </div>
 
-    <div id="screen-day" class="screen-page scrollable" data-screen="day">
+    <div id="screen-day" class="screen-page" data-screen="day">
     <section id="day" aria-labelledby="day-heading">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">2</span>
         <div>
           <h2 id="day-heading">Today is…</h2>
-          <p>Select the day of the week.</p>
+          <p>Drag the day of the week into the box.</p>
         </div>
       </div>
-      <div class="grid grid-7" id="day-grid" role="group" aria-label="Day of the week"></div>
+      <div class="day-layout">
+        <div class="day-center">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="day-drop-slot" data-drop-zone="day-slot" id="day-slot" aria-label="Selected day">
+            <p class="day-placeholder" id="day-slot-placeholder">Drop the day here</p>
+          </div>
+        </div>
+        <div class="day-dock" data-drop-zone="day-dock" aria-label="Days of the week">
+          <p class="register-dock-label">Drag a day</p>
+          <div class="day-dock-items" id="day-dock"></div>
+        </div>
+      </div>
     </section>
     </div>
 
@@ -1350,6 +1482,16 @@
     ];
 
     const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    const DAY_LETTERS = {
+      Monday: "M",
+      Tuesday: "Tu",
+      Wednesday: "W",
+      Thursday: "Th",
+      Friday: "F",
+      Saturday: "Sa",
+      Sunday: "Su",
+    };
 
     const WEATHER = [
       { id: "sunny", label: "Sunny", icon: "☀️" },
@@ -1650,7 +1792,7 @@
       document.querySelectorAll("[data-drop-zone]").forEach((z) => z.classList.remove("drag-over"));
     }
 
-    function finishDrag(participantId, zoneKey) {
+    function finishAvatarDrop(participantId, zoneKey) {
       if (!zoneKey) return;
       state.location[participantId] = zoneKey;
       if (zoneKey !== "club") state.feelings[participantId] = null;
@@ -1661,10 +1803,20 @@
       renderSummary();
     }
 
+    function finishDayDrop(zoneKey, dayName) {
+      if (zoneKey === "day-slot") {
+        state.day = dayName;
+      } else if (zoneKey === "day-dock" && state.day === dayName) {
+        state.day = null;
+      }
+      renderDay();
+      renderSummary();
+    }
+
     function endDrag(e) {
       if (!dragState || e.pointerId !== dragState.pointerId) return;
 
-      const { id, sourceEl, ghost, moved } = dragState;
+      const { sourceEl, ghost, moved } = dragState;
       try {
         sourceEl?.releasePointerCapture(e.pointerId);
       } catch {
@@ -1678,7 +1830,13 @@
       if (moved) {
         const zone = findDropZone(e.clientX, e.clientY);
         const zoneKey = zone?.dataset?.dropZone;
-        if (zoneKey) finishDrag(id, zoneKey);
+        if (dragState.type === "day") {
+          if (zoneKey === "day-slot" || zoneKey === "day-dock") {
+            finishDayDrop(zoneKey, dragState.dayName);
+          }
+        } else if (zoneKey) {
+          finishAvatarDrop(dragState.id, zoneKey);
+        }
       }
 
       dragState = null;
@@ -1713,9 +1871,9 @@
       highlightDropZone(findDropZone(e.clientX, e.clientY));
     }
 
-    function setupRegisterDragSystem() {
-      if (setupRegisterDragSystem.done) return;
-      setupRegisterDragSystem.done = true;
+    function setupDragSystem() {
+      if (setupDragSystem.done) return;
+      setupDragSystem.done = true;
       document.addEventListener("pointermove", onDragPointerMove, { passive: false });
       document.addEventListener("pointerup", endDrag);
       document.addEventListener("pointercancel", endDrag);
@@ -1728,7 +1886,31 @@
       if (!id) return;
 
       dragState = {
+        type: "avatar",
         id,
+        sourceEl: chip,
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        ghost: null,
+        offsetX: 0,
+        offsetY: 0,
+      };
+
+      chip.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }
+
+    function startDayDrag(e) {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+      const chip = e.currentTarget;
+      const dayName = chip.dataset.dayName;
+      if (!dayName) return;
+
+      dragState = {
+        type: "day",
+        dayName,
         sourceEl: chip,
         pointerId: e.pointerId,
         startX: e.clientX,
@@ -1860,14 +2042,14 @@
     }
 
     function initRegisterDragDrop() {
-      setupRegisterDragSystem();
+      setupDragSystem();
       document.querySelectorAll(".draggable-avatar").forEach((chip) => {
         chip.onpointerdown = startAvatarDrag;
         chip.onkeydown = (e) => {
           const id = chip.dataset.participantId;
-          if (e.key === "h" || e.key === "H") finishDrag(id, "home");
-          else if (e.key === "c" || e.key === "C") finishDrag(id, "club");
-          else if (e.key === "d" || e.key === "D") finishDrag(id, "dock");
+          if (e.key === "h" || e.key === "H") finishAvatarDrop(id, "home");
+          else if (e.key === "c" || e.key === "C") finishAvatarDrop(id, "club");
+          else if (e.key === "d" || e.key === "D") finishAvatarDrop(id, "dock");
         };
       });
     }
@@ -1876,23 +2058,60 @@
        RENDER: Day & Weather
        ============================================================ */
 
+    function createDayChip(day) {
+      const chip = el("div", {
+        className: "draggable-day",
+        role: "button",
+        tabindex: "0",
+        "aria-label": `Drag ${day} to TODAY IS box`,
+        "data-day-name": day,
+      });
+      chip.appendChild(el("div", {
+        className: "day-letter-icon",
+        textContent: DAY_LETTERS[day] || day.charAt(0),
+        "aria-hidden": "true",
+      }));
+      chip.appendChild(el("p", { className: "day-name-label", textContent: day }));
+      return chip;
+    }
+
     function renderDay() {
-      const grid = document.getElementById("day-grid");
-      grid.innerHTML = "";
+      const slot = document.getElementById("day-slot");
+      const dock = document.getElementById("day-dock");
+      const placeholder = document.getElementById("day-slot-placeholder");
+      if (!slot || !dock) return;
+
+      dock.innerHTML = "";
+      slot.querySelectorAll(".draggable-day").forEach((n) => n.remove());
+
+      if (state.day) {
+        placeholder.classList.add("hidden");
+        slot.appendChild(createDayChip(state.day));
+      } else {
+        placeholder.classList.remove("hidden");
+      }
+
       DAYS.forEach((day) => {
-        const card = el("button", {
-          type: "button",
-          className: `choice-card${state.day === day ? " selected" : ""}`,
-          "aria-label": day,
-          "aria-pressed": state.day === day ? "true" : "false",
-        });
-        card.appendChild(el("span", { className: "label", textContent: day }));
-        card.addEventListener("click", () => {
-          state.day = state.day === day ? null : day;
-          renderDay();
-          renderSummary();
-        });
-        grid.appendChild(card);
+        if (day === state.day) return;
+        dock.appendChild(createDayChip(day));
+      });
+
+      initDayDragDrop();
+    }
+
+    function initDayDragDrop() {
+      setupDragSystem();
+      document.querySelectorAll(".draggable-day").forEach((chip) => {
+        chip.onpointerdown = startDayDrag;
+        chip.onkeydown = (e) => {
+          const dayName = chip.dataset.dayName;
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            state.day = state.day === dayName ? null : dayName;
+            renderDay();
+            renderSummary();
+          }
+        };
       });
     }
 
