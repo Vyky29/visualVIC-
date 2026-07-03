@@ -113,6 +113,12 @@
       overflow: hidden;
     }
 
+    #session-app header,
+    #session-app .screen-footer {
+      width: 100%;
+      max-width: none;
+    }
+
     .screens-wrapper {
       flex: 1;
       min-height: 0;
@@ -188,6 +194,18 @@
       grid-template-columns: minmax(72px, 0.55fr) minmax(0, 1fr);
       gap: 0.75rem;
       min-height: 0;
+    }
+
+    #screen-register.screen-page {
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+    }
+
+    #screen-register > section {
+      flex: 1 1 auto;
+      min-height: min(100%, auto);
     }
 
     #screen-register .section-header {
@@ -283,7 +301,11 @@
       padding: 0.85rem;
       background: var(--grey-100);
       border-radius: var(--radius);
-      min-height: clamp(170px, 34vh, 280px);
+      min-height: clamp(140px, 26vh, 240px);
+      max-height: min(48vh, 420px);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
     }
 
     .register-dock-label {
@@ -292,6 +314,7 @@
       color: var(--grey-500);
       margin: 0 0 0.65rem;
       font-size: 0.95rem;
+      flex-shrink: 0;
     }
 
     .register-dock-avatars {
@@ -299,8 +322,16 @@
       flex-wrap: wrap;
       gap: 1.1rem;
       justify-content: center;
-      min-height: 130px;
+      flex: 1;
+      min-height: 96px;
       align-items: flex-start;
+      align-content: flex-start;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: 0.25rem 0.35rem 0.5rem;
+      touch-action: pan-y;
     }
 
     .draggable-avatar {
@@ -345,6 +376,10 @@
     body.is-dragging {
       overflow: hidden;
       touch-action: none;
+    }
+
+    body.is-dragging #screen-register.screen-page {
+      overflow: hidden;
     }
 
     /* Day screen — TODAY IS + drag from footer dock */
@@ -2353,6 +2388,7 @@
     }
 
     #session-app main.screens-wrapper {
+      width: 100%;
       max-width: none;
       margin: 0;
       padding: 0;
@@ -3533,6 +3569,35 @@
       gap: 1.25rem;
     }
 
+    /* Register — landscape / smart board: zones beside dock, both scroll independently */
+    @media (min-width: 740px) and (orientation: landscape), (min-width: 900px) {
+      #screen-register .register-layout {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0.85rem;
+        min-height: 0;
+      }
+
+      #screen-register .register-zones {
+        flex: 1 1 56%;
+        min-width: 0;
+        min-height: clamp(220px, 52vh, 560px);
+      }
+
+      #screen-register .register-dock {
+        flex: 1 1 40%;
+        margin-top: 0;
+        border-top: none;
+        border-left: 3px solid var(--grey-200);
+        max-height: none;
+        min-height: clamp(220px, 52vh, 560px);
+      }
+
+      #screen-register .register-dock-avatars {
+        max-height: none;
+      }
+    }
+
     html.is-wide-display .draggable-avatar {
       width: clamp(130px, 14vw, 180px);
     }
@@ -3610,7 +3675,7 @@
 
   <main id="main-content" class="screens-wrapper">
 
-    <div id="screen-register" class="screen-page active" data-screen="register">
+    <div id="screen-register" class="screen-page scrollable active" data-screen="register">
     <section id="register" aria-labelledby="register-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">1</span>
