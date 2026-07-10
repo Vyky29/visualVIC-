@@ -45,14 +45,20 @@ import { setFirstThenDemoFocusActive } from "@/lib/experimental/first-then-demo-
 import { readFirstThenSession } from "@/lib/experimental/first-then-session";
 import {
   useFirstThenPlayback,
+  firstThenSlotPlaybackStatus,
   type FirstThenPhase,
+  type FirstThenSlot,
 } from "@/lib/hooks/useFirstThenPlayback";
 import { useFirstThenStepTimer } from "@/lib/hooks/useFirstThenStepTimer";
-import { FirstThenSwipeableSlot } from "@/components/first-then/FirstThenSwipeableSlot";
+import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
+import type { PlaybackStatus } from "@/hooks/useRoutinePlayback";
 
 type FirstThenScheduleTimerForSlot = ReturnType<
   typeof useFirstThenStepTimer
 >["scheduleTimerForSlot"];
+type FirstThenScheduleTimer = NonNullable<
+  ReturnType<FirstThenScheduleTimerForSlot>
+>;
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import {
   bottomNavLabel,
@@ -278,12 +284,16 @@ function MiniDigitalWowCard({
   card,
   slotHeaderLabel,
   readableTitle = false,
+  scheduleTimer,
+  status,
 }: {
   card: GeneratedPixtoCardProps;
   /** Prueba 3 — FIRST / THEN centered in card header (text only). */
   slotHeaderLabel?: string;
   /** Portrait demo — larger title/category for legibility after scale. */
   readableTitle?: boolean;
+  scheduleTimer?: FirstThenScheduleTimer;
+  status?: PlaybackStatus;
 }) {
   const cardUiLang = useCardUiLanguage();
   const { title: displayTitle, category: displayCategory } = useMemo(
@@ -308,12 +318,15 @@ function MiniDigitalWowCard({
       ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
       : { fontSize: "14px", lineHeight: 0.96, letterSpacing: "-0.016em" };
   const categoryFontPx = readableTitle ? `${DIGITAL_WOW_RIBBON_FONT_PX}px` : "11px";
+  const dimmed = status === "finished" || status === "next";
 
   return (
     <article
       className={cn(
-        "relative grid h-full w-full overflow-hidden bg-white",
+        "relative grid h-full w-full overflow-hidden bg-white transition-[opacity,filter]",
         GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS,
+        dimmed && "opacity-70",
+        status === "finished" && "brightness-[0.92] grayscale-[0.35]",
       )}
       style={{
         aspectRatio: `${GENERATED_PIXTO_CARD_SIZE.w} / ${GENERATED_PIXTO_CARD_SIZE.h}`,
@@ -361,7 +374,25 @@ function MiniDigitalWowCard({
             />
           </div>
 
-          {card.iconUrl ? (
+          {scheduleTimer ? (
+            <div
+              className="absolute z-10"
+              style={{
+                right: "5.4%",
+                top: slotHeaderLabel ? "14%" : "3.8%",
+                width: `${(GENERATED_PIXTO_WOW_COMPANY_MARK.w / GENERATED_PIXTO_CARD_SIZE.w) * 100}%`,
+                aspectRatio: "1 / 1",
+              }}
+            >
+              <StepTimerBadge
+                remainingSec={scheduleTimer.remainingSec}
+                totalSec={scheduleTimer.totalSec}
+                finished={scheduleTimer.finished}
+                variant="schedule-pack-mark"
+                categoryColour={card.categoryColour}
+              />
+            </div>
+          ) : card.iconUrl ? (
             <div
               className="absolute rounded-[0.9rem] bg-white"
               style={{
@@ -469,10 +500,14 @@ function FirstThenFocusSpecCard({
   slot,
   card,
   lang,
+  scheduleTimer,
+  status,
 }: {
   slot: "first" | "then";
   card: GeneratedPixtoCardProps;
   lang: ReturnType<typeof useCardUiLanguage>;
+  scheduleTimer?: FirstThenScheduleTimer;
+  status?: PlaybackStatus;
 }) {
   const cardUiLang = useCardUiLanguage();
   const { title: displayTitle, category: displayCategory } = useMemo(
@@ -486,10 +521,15 @@ function FirstThenFocusSpecCard({
     [card.illustrationUrl, card.title, card.category, cardUiLang],
   );
   const slotLabel = firstThenSlotLabel(slot, lang);
+  const dimmed = status === "finished" || status === "next";
 
   return (
     <article
-      className="relative shrink-0 overflow-hidden bg-white shadow-card"
+      className={cn(
+        "relative shrink-0 overflow-hidden bg-white shadow-card transition-[opacity,filter]",
+        dimmed && "opacity-70",
+        status === "finished" && "brightness-[0.92] grayscale-[0.35]",
+      )}
       style={{
         width: FOCUS_LANDSCAPE.cardW,
         height: FOCUS_LANDSCAPE.cardH,
@@ -500,7 +540,25 @@ function FirstThenFocusSpecCard({
       }}
       aria-label={`${slotLabel} — ${displayTitle}`}
     >
-      {card.iconUrl ? (
+      {scheduleTimer ? (
+        <div
+          className="absolute z-10"
+          style={{
+            top: FOCUS_LANDSCAPE.packMarkTop,
+            right: FOCUS_LANDSCAPE.packMarkRight,
+            width: FOCUS_LANDSCAPE.packMarkSize,
+            height: FOCUS_LANDSCAPE.packMarkSize,
+          }}
+        >
+          <StepTimerBadge
+            remainingSec={scheduleTimer.remainingSec}
+            totalSec={scheduleTimer.totalSec}
+            finished={scheduleTimer.finished}
+            variant="schedule-pack-mark"
+            categoryColour={card.categoryColour}
+          />
+        </div>
+      ) : card.iconUrl ? (
         <div
           className="absolute z-10"
           style={{
@@ -781,9 +839,8 @@ function FirstThenFocusLandscapeLayout({
 
       const centerHubPx =
         FOCUS_LANDSCAPE.sidebarW + FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX * 2;
-      const labelReserve = FOCUS_LANDSCAPE.slotLabelH;
       const sx = (W - centerHubPx) / (FOCUS_LANDSCAPE.cardW * 2);
-      const sy = H / (FOCUS_LANDSCAPE.cardH + labelReserve);
+      const sy = H / FOCUS_LANDSCAPE.cardH;
       const next = Math.min(
         sx,
         sy,
@@ -983,6 +1040,59 @@ function FirstThenFocusEntryButton({
   );
 }
 
+function FirstThenTapSwipeShell({
+  enabled,
+  onAdvance,
+  children,
+}: {
+  enabled: boolean;
+  onAdvance: () => void;
+  children: ReactNode;
+}) {
+  const startRef = useRef<{ x: number; y: number } | null>(null);
+  const lastTapRef = useRef(0);
+
+  if (!enabled) return children;
+
+  return (
+    <div
+      className="h-full w-full touch-manipulation"
+      onPointerDown={(e) => {
+        if (e.button !== 0 && e.pointerType === "mouse") return;
+        startRef.current = { x: e.clientX, y: e.clientY };
+      }}
+      onPointerUp={(e) => {
+        const start = startRef.current;
+        startRef.current = null;
+        if (!start) return;
+        const dx = e.clientX - start.x;
+        const dy = e.clientY - start.y;
+        if (dx > 72 && Math.abs(dy) < 90) {
+          onAdvance();
+          return;
+        }
+        if (dy < -64 && Math.abs(dx) < 90) {
+          onAdvance();
+          return;
+        }
+        if (Math.hypot(dx, dy) > 18) return;
+        const now = Date.now();
+        if (now - lastTapRef.current < 340) {
+          lastTapRef.current = 0;
+          onAdvance();
+          return;
+        }
+        lastTapRef.current = now;
+      }}
+      onPointerCancel={() => {
+        startRef.current = null;
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function FirstThenPortraitCardScaled({
   card,
   scale,
@@ -1003,14 +1113,10 @@ function FirstThenPortraitCardScaled({
   enterAnimation?: boolean;
   enterDelayMs?: number;
   interactive?: {
-    slot: "first" | "then";
+    slot: FirstThenSlot;
     phase: FirstThenPhase;
     onAdvance: () => void;
-    scheduleTimer?: {
-      remainingSec: number;
-      totalSec: number;
-      finished?: boolean;
-    };
+    scheduleTimer?: FirstThenScheduleTimer;
   };
 }) {
   const rawW = GENERATED_PIXTO_CARD_SIZE.w * scale;
@@ -1023,6 +1129,10 @@ function FirstThenPortraitCardScaled({
   const slotW = GENERATED_PIXTO_CARD_SIZE.w * renderScale;
   const slotH = GENERATED_PIXTO_CARD_SIZE.h * renderScale;
   const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+  const status = interactive
+    ? firstThenSlotPlaybackStatus(interactive.slot, interactive.phase)
+    : undefined;
+  const canAdvance = status === "now";
 
   return (
     <div
@@ -1045,41 +1155,20 @@ function FirstThenPortraitCardScaled({
           transform: `scale(${renderScale})`,
         }}
       >
-        {interactive ? (
-          <div className="relative h-full w-full">
-            {slotHeaderLabel ? (
-              <div
-                className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center"
-                style={{ height: "9%" }}
-              >
-                <span
-                  className="font-extrabold lowercase"
-                  style={{
-                    color: card.categoryColour,
-                    fontSize: DIGITAL_WOW_RIBBON_FONT_PX * 0.72,
-                    lineHeight: 1,
-                  }}
-                >
-                  {slotHeaderLabel}
-                </span>
-              </div>
-            ) : null}
-            <FirstThenSwipeableSlot
-              slot={interactive.slot}
-              card={card}
-              phase={interactive.phase}
-              onAdvance={interactive.onAdvance}
-              presentation="hero"
-              scheduleTimer={interactive.scheduleTimer}
-            />
-          </div>
-        ) : (
+        <FirstThenTapSwipeShell
+          enabled={Boolean(interactive && canAdvance)}
+          onAdvance={() => interactive?.onAdvance()}
+        >
           <MiniDigitalWowCard
             card={card}
             slotHeaderLabel={slotHeaderLabel}
             readableTitle={readableTitle}
+            scheduleTimer={
+              canAdvance ? interactive?.scheduleTimer : undefined
+            }
+            status={status}
           />
-        )}
+        </FirstThenTapSwipeShell>
       </div>
     </div>
   );
@@ -1094,22 +1183,19 @@ function FirstThenFocusCardScaled({
   scheduleTimer,
   lang,
 }: {
-  slot: "first" | "then";
+  slot: FirstThenSlot;
   card: GeneratedPixtoCardProps;
   scale: number;
   phase: FirstThenPhase;
   onAdvance: () => void;
-  scheduleTimer?: {
-    remainingSec: number;
-    totalSec: number;
-    finished?: boolean;
-  };
+  scheduleTimer?: FirstThenScheduleTimer;
   lang: ReturnType<typeof useCardUiLanguage>;
 }) {
   const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
-  const labelH = FOCUS_LANDSCAPE.slotLabelH;
   const slotW = FOCUS_LANDSCAPE.cardW * scale;
-  const slotH = (FOCUS_LANDSCAPE.cardH + labelH) * scale;
+  const slotH = FOCUS_LANDSCAPE.cardH * scale;
+  const status = firstThenSlotPlaybackStatus(slot, phase);
+  const canAdvance = status === "now";
 
   return (
     <div
@@ -1117,34 +1203,22 @@ function FirstThenFocusCardScaled({
       style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
     >
       <div
-        className="absolute left-0 top-0 flex origin-top-left flex-col items-center"
+        className="absolute left-0 top-0 origin-top-left"
         style={{
           width: FOCUS_LANDSCAPE.cardW,
-          height: FOCUS_LANDSCAPE.cardH + labelH,
+          height: FOCUS_LANDSCAPE.cardH,
           transform: `scale(${scale})`,
         }}
       >
-        <span
-          className="mb-1 shrink-0 font-extrabold lowercase"
-          style={{
-            color: card.categoryColour,
-            fontSize: FOCUS_LANDSCAPE.slotLabelFontPx,
-            lineHeight: 1,
-            height: labelH - 4,
-          }}
-        >
-          {firstThenSlotLabel(slot, lang)}
-        </span>
-        <div className="min-h-0 w-full flex-1">
-          <FirstThenSwipeableSlot
+        <FirstThenTapSwipeShell enabled={canAdvance} onAdvance={onAdvance}>
+          <FirstThenFocusSpecCard
             slot={slot}
             card={card}
-            phase={phase}
-            onAdvance={onAdvance}
-            presentation="focus"
-            scheduleTimer={scheduleTimer}
+            lang={lang}
+            scheduleTimer={canAdvance ? scheduleTimer : undefined}
+            status={status}
           />
-        </div>
+        </FirstThenTapSwipeShell>
       </div>
     </div>
   );
@@ -1210,8 +1284,8 @@ function FirstThenPortraitLabeledRow({
         setScale(next);
         return;
       }
-      // Allow growth after first paint (chrome/safe-area settle) within 2% hysteresis.
-      if (next < prev || next > prev * 1.02) {
+      // Keep first measured size; only shrink if the viewport gets narrower/shorter.
+      if (next < prev) {
         stableScaleRef.current = next;
         setScale(next);
       }
@@ -1306,9 +1380,6 @@ function FirstThenPortraitCardCell({
     return () => ro.disconnect();
   }, [bleed, scaleMultiplier]);
 
-  const slotW = GENERATED_PIXTO_CARD_SIZE.w * scale + bleed * 2;
-  const slotH = GENERATED_PIXTO_CARD_SIZE.h * scale + bleed * 2;
-
   return (
     <div
       ref={outerRef}
@@ -1317,43 +1388,18 @@ function FirstThenPortraitCardCell({
         align === "end" ? "justify-end" : "justify-center",
       )}
     >
-      {slotHeaderLabel ? (
-        <FirstThenPortraitCardScaled
-          card={card}
-          scale={scale}
-          slotHeaderLabel={slotHeaderLabel}
-          readableTitle={readableTitle}
-          interactive={{
-            slot,
-            phase,
-            onAdvance,
-            scheduleTimer: scheduleTimerForSlot(slot),
-          }}
-        />
-      ) : (
-        <div
-          className="relative shrink-0"
-          style={{ width: slotW, height: slotH, padding: bleed }}
-        >
-          <div
-            className="absolute left-0 top-0 origin-top-left"
-            style={{
-              width: GENERATED_PIXTO_CARD_SIZE.w,
-              height: GENERATED_PIXTO_CARD_SIZE.h,
-              transform: `scale(${scale})`,
-            }}
-          >
-            <FirstThenSwipeableSlot
-              slot={slot}
-              card={card}
-              phase={phase}
-              onAdvance={onAdvance}
-              presentation="hero"
-              scheduleTimer={scheduleTimerForSlot(slot)}
-            />
-          </div>
-        </div>
-      )}
+      <FirstThenPortraitCardScaled
+        card={card}
+        scale={scale}
+        slotHeaderLabel={slotHeaderLabel}
+        readableTitle={readableTitle}
+        interactive={{
+          slot,
+          phase,
+          onAdvance,
+          scheduleTimer: scheduleTimerForSlot(slot),
+        }}
+      />
     </div>
   );
 }
