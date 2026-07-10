@@ -70,8 +70,8 @@ import {
   firstThenDemoRotateForFocusBody,
   firstThenDemoRotateForFocusTitle,
   firstThenSlotLabel,
+  firstThenFlickUpHint,
   playerKindRoutine,
-  schedulePlayerDoubleTapHint,
   focusModeAllFinishedTitle,
   focusModeOptRestartRoutine,
   schedulePlayerDone,
@@ -812,7 +812,7 @@ function FirstThenFocusLandscapeLayout({
   scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps | null;
   lang: ReturnType<typeof useCardUiLanguage>;
   routineHref: string;
   phase: FirstThenPhase;
@@ -910,7 +910,18 @@ function FirstThenFocusLandscapeLayout({
           categoryAccent={firstCard.categoryColour}
           routineHref={routineHref}
         />
-        {renderFocusCard("then", secondCard)}
+        {secondCard ? (
+          renderFocusCard("then", secondCard)
+        ) : (
+          <div
+            className="relative shrink-0 opacity-35"
+            style={{
+              width: FOCUS_LANDSCAPE.cardW * scale,
+              height: FOCUS_LANDSCAPE.cardH * scale,
+            }}
+            aria-hidden
+          />
+        )}
       </div>
     </div>
   );
@@ -1051,35 +1062,53 @@ function FirstThenTapSwipeShell({
 }) {
   const startRef = useRef<{ x: number; y: number } | null>(null);
   const lastTapRef = useRef(0);
+  const [exiting, setExiting] = useState(false);
+  const exitTimerRef = useRef<number | null>(null);
 
-  if (!enabled) return children;
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current != null) window.clearTimeout(exitTimerRef.current);
+    };
+  }, []);
+
+  const triggerAdvance = () => {
+    if (!enabled || exiting) return;
+    setExiting(true);
+    exitTimerRef.current = window.setTimeout(() => {
+      onAdvance();
+    }, 240);
+  };
+
+  if (!enabled && !exiting) return children;
 
   return (
     <div
-      className="h-full w-full touch-manipulation"
+      className={cn(
+        "h-full w-full touch-manipulation transition-[transform,opacity] duration-200 ease-out will-change-transform",
+        exiting && "-translate-y-[118%] opacity-0",
+      )}
       onPointerDown={(e) => {
+        if (!enabled || exiting) return;
         if (e.button !== 0 && e.pointerType === "mouse") return;
         startRef.current = { x: e.clientX, y: e.clientY };
       }}
       onPointerUp={(e) => {
+        if (!enabled || exiting) return;
         const start = startRef.current;
         startRef.current = null;
         if (!start) return;
         const dx = e.clientX - start.x;
         const dy = e.clientY - start.y;
-        if (dx > 72 && Math.abs(dy) < 90) {
-          onAdvance();
-          return;
-        }
-        if (dy < -64 && Math.abs(dx) < 90) {
-          onAdvance();
+        // Primary: flick up to dismiss FIRST and promote THEN.
+        if (dy < -56 && Math.abs(dx) < 110) {
+          triggerAdvance();
           return;
         }
         if (Math.hypot(dx, dy) > 18) return;
         const now = Date.now();
         if (now - lastTapRef.current < 340) {
           lastTapRef.current = 0;
-          onAdvance();
+          triggerAdvance();
           return;
         }
         lastTapRef.current = now;
@@ -1156,6 +1185,11 @@ function FirstThenPortraitCardScaled({
         }}
       >
         <FirstThenTapSwipeShell
+          key={
+            interactive
+              ? `${interactive.slot}:${card.illustrationUrl}:${interactive.phase}`
+              : card.illustrationUrl
+          }
           enabled={Boolean(interactive && canAdvance)}
           onAdvance={() => interactive?.onAdvance()}
         >
@@ -1210,7 +1244,11 @@ function FirstThenFocusCardScaled({
           transform: `scale(${scale})`,
         }}
       >
-        <FirstThenTapSwipeShell enabled={canAdvance} onAdvance={onAdvance}>
+        <FirstThenTapSwipeShell
+          key={`${slot}:${card.illustrationUrl}:${phase}`}
+          enabled={canAdvance}
+          onAdvance={onAdvance}
+        >
           <FirstThenFocusSpecCard
             slot={slot}
             card={card}
@@ -1464,7 +1502,7 @@ function FirstThenIntroLayout1({
   scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps | null;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
@@ -1500,18 +1538,30 @@ function FirstThenIntroLayout1({
             actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
             scheduleTimerForSlot={scheduleTimerForSlot}
           />
-          <FirstThenPortraitLabeledRow
-            slot="then"
-            label={thenLabel}
-            card={secondCard}
-            categoryColour={secondCard.categoryColour}
-            phase={phase}
-            onAdvance={onAdvance}
-            scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
-            readableTitle
-            actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
-            scheduleTimerForSlot={scheduleTimerForSlot}
-            focusBottomAction={
+          {secondCard ? (
+            <FirstThenPortraitLabeledRow
+              slot="then"
+              label={thenLabel}
+              card={secondCard}
+              categoryColour={secondCard.categoryColour}
+              phase={phase}
+              onAdvance={onAdvance}
+              scaleMultiplier={PORTRAIT_PRUEBA1_CARD_SCALE_FACTOR}
+              readableTitle
+              actionReservePx={FIRST_THEN_FOCUS_ACTION_RESERVE_PX}
+              scheduleTimerForSlot={scheduleTimerForSlot}
+              focusBottomAction={
+                <FirstThenFocusEntryButton
+                  lang={lang}
+                  onFocusMode={onFocusMode}
+                  variant="stacked"
+                  size="compact"
+                  categoryColour={firstCard.categoryColour}
+                />
+              }
+            />
+          ) : (
+            <div className="flex min-h-0 flex-1 items-end justify-end px-2 pb-2">
               <FirstThenFocusEntryButton
                 lang={lang}
                 onFocusMode={onFocusMode}
@@ -1519,10 +1569,10 @@ function FirstThenIntroLayout1({
                 size="compact"
                 categoryColour={firstCard.categoryColour}
               />
-            }
-          />
+            </div>
+          )}
           <p className="px-2 pb-2 text-center text-[11px] leading-snug text-ink-faint">
-            {schedulePlayerDoubleTapHint(lang)}
+            {firstThenFlickUpHint(lang)}
           </p>
         </div>
       )}
@@ -1545,7 +1595,7 @@ function FirstThenIntroLayout2({
   scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps | null;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
@@ -1582,19 +1632,21 @@ function FirstThenIntroLayout2({
                 scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
-            <div className="h-[min(34dvh,260px)] w-full min-h-0">
-              <FirstThenPortraitCardCell
-                slot="then"
-                card={secondCard}
-                phase={phase}
-                onAdvance={onAdvance}
-                scaleMultiplier={0.92}
-                scheduleTimerForSlot={scheduleTimerForSlot}
-              />
-            </div>
+            {secondCard ? (
+              <div className="h-[min(34dvh,260px)] w-full min-h-0">
+                <FirstThenPortraitCardCell
+                  slot="then"
+                  card={secondCard}
+                  phase={phase}
+                  onAdvance={onAdvance}
+                  scaleMultiplier={0.92}
+                  scheduleTimerForSlot={scheduleTimerForSlot}
+                />
+              </div>
+            ) : null}
           </div>
           <p className="mt-3 text-center text-[11px] leading-snug text-ink-faint">
-            {schedulePlayerDoubleTapHint(lang)}
+            {firstThenFlickUpHint(lang)}
           </p>
         </div>
       )}
@@ -1617,7 +1669,7 @@ function FirstThenIntroLayout3({
   scheduleTimerForSlot,
 }: {
   firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps | null;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
@@ -1659,21 +1711,23 @@ function FirstThenIntroLayout3({
                 scheduleTimerForSlot={scheduleTimerForSlot}
               />
             </div>
-            <div className="h-[min(32dvh,272px)] w-full min-h-0">
-              <FirstThenPortraitCardCell
-                slot="then"
-                card={secondCard}
-                phase={phase}
-                onAdvance={onAdvance}
-                scaleMultiplier={0.98}
-                slotHeaderLabel={thenLabel}
-                readableTitle
-                scheduleTimerForSlot={scheduleTimerForSlot}
-              />
-            </div>
+            {secondCard ? (
+              <div className="h-[min(32dvh,272px)] w-full min-h-0">
+                <FirstThenPortraitCardCell
+                  slot="then"
+                  card={secondCard}
+                  phase={phase}
+                  onAdvance={onAdvance}
+                  scaleMultiplier={0.98}
+                  slotHeaderLabel={thenLabel}
+                  readableTitle
+                  scheduleTimerForSlot={scheduleTimerForSlot}
+                />
+              </div>
+            ) : null}
           </div>
           <p className="mt-3 text-center text-[11px] leading-snug text-ink-faint">
-            {schedulePlayerDoubleTapHint(lang)}
+            {firstThenFlickUpHint(lang)}
           </p>
           <FirstThenFocusEntryButton
             lang={lang}
@@ -1702,7 +1756,7 @@ function FirstThenIntroPortraitScreen({
 }: {
   layout: FirstThenDemoLayoutId;
   firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  secondCard: GeneratedPixtoCardProps | null;
   lang: ReturnType<typeof useCardUiLanguage>;
   onFocusMode: () => void;
   backHref?: string;
@@ -1798,22 +1852,32 @@ function FirstThenExperienceClient() {
       onlyFirstThen,
     });
   }, [sessionPayload, packId, fromRoutine, onlyFirstThen]);
-  const { first, second } = useMemo(() => {
-    if (sessionPayload) {
-      return { first: sessionPayload.first, second: sessionPayload.second };
-    }
-    return resolveFirstThenDemoPack(packId, lang);
+  const initialQueue = useMemo(() => {
+    if (sessionPayload?.queue?.length) return sessionPayload.queue;
+    const pack = resolveFirstThenDemoPack(packId, lang);
+    return [pack.first, pack.second];
   }, [sessionPayload, packId, lang]);
+  const playbackResetKey = useMemo(
+    () => initialQueue.map((card) => card.illustrationUrl).join("|"),
+    [initialQueue],
+  );
   const showLandscapeFocus = useFirstThenLandscapeFocus();
   const [showFocusMode, setShowFocusMode] = useState(false);
-  const playbackResetKey = `${packId}:${layout}:${first.illustrationUrl}:${second.illustrationUrl}`;
-  const { phase, completeCurrent, reset, isComplete } =
-    useFirstThenPlayback(playbackResetKey);
+  const {
+    firstCard,
+    secondCard,
+    phase,
+    completeCurrent,
+    reset,
+    isComplete,
+    activeCardKey,
+  } = useFirstThenPlayback(initialQueue, playbackResetKey);
   const { scheduleTimerForSlot } = useFirstThenStepTimer({
-    firstCard: first,
-    secondCard: second,
+    firstCard,
+    secondCard,
     phase,
     isComplete,
+    activeCardKey,
     onAdvance: completeCurrent,
   });
 
@@ -1844,12 +1908,16 @@ function FirstThenExperienceClient() {
     };
   }, [showFocusMode]);
 
+  if (!firstCard && !isComplete) {
+    return null;
+  }
+
   if (!showFocusMode) {
     return (
       <FirstThenIntroPortraitScreen
         layout={layout}
-        firstCard={first}
-        secondCard={second}
+        firstCard={firstCard!}
+        secondCard={secondCard}
         lang={lang}
         backHref={backHref}
         onFocusMode={() => setShowFocusMode(true)}
@@ -1867,8 +1935,8 @@ function FirstThenExperienceClient() {
     <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
       {showLandscapeFocus ? (
         <FirstThenFocusLandscapeLayout
-          firstCard={first}
-          secondCard={second}
+          firstCard={firstCard!}
+          secondCard={secondCard}
           lang={lang}
           routineHref={routineHref}
           phase={phase}

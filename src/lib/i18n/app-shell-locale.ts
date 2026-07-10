@@ -1256,6 +1256,12 @@ export function schedulePlayerDoubleTapHint(lang: CardLanguageCode): string {
     : "Double tap to flip, or swipe right";
 }
 
+export function firstThenFlickUpHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Desliza hacia arriba la tarjeta FIRST para pasar a la siguiente"
+    : "Flick FIRST up to move on — THEN becomes FIRST, next step fills THEN";
+}
+
 export function schedulePlayerDesktopFocusHint(lang: CardLanguageCode): string {
   return isEs(lang)
     ? "Doble clic en la tarjeta, o usa el botón Focus mode abajo"

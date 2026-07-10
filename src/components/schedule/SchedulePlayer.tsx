@@ -13,7 +13,7 @@ import {
   routineSchedulePlayerChrome,
 } from "@/lib/utils/routine-accent";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
-import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
+import { buildFirstThenQueueFromRoutineSteps } from "@/lib/first-then/build-first-then-queue";
 import { cn } from "@/lib/utils/cn";
 import { SCHEDULE_COLUMN_CLASS, APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
@@ -269,17 +269,13 @@ export function SchedulePlayer({
   };
 
   const openFirstThen = () => {
-    if (!nowStep) return;
-    const thenStep = nextStep ?? steps[nowIndex + 1];
-    if (!thenStep) return;
-    const first = routineStepToGeneratedPixtoCard(nowStep);
-    const second = routineStepToGeneratedPixtoCard(thenStep);
-    if (typeof activeTimerSec === "number" && activeTimerSec > 0) {
-      first.timerSec = activeTimerSec;
-    }
+    if (!nowStep || nowIndex < 0) return;
+    const queue = buildFirstThenQueueFromRoutineSteps(steps, nowIndex, {
+      firstTimerSec: activeTimerSec,
+    });
+    if (queue.length < 2) return;
     writeFirstThenSession({
-      first,
-      second,
+      queue,
       routineHref: `/player/${routine.id}`,
     });
     router.push(`/first-then?from=${encodeURIComponent(`/player/${routine.id}`)}`);

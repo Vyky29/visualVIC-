@@ -44,7 +44,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
-import { routineStepToGeneratedPixtoCard } from "@/lib/experimental/routine-step-to-pixto-card";
+import { buildFirstThenQueueFromRoutineSteps } from "@/lib/first-then/build-first-then-queue";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
@@ -298,22 +298,18 @@ export function FocusMode({ routine, exitHref }: Props) {
       : sessionTimerSec ?? savedTimerSec;
 
   const openFirstThen = useCallback(() => {
-    if (!nowStep) return;
-    const thenStep = nextStep ?? steps[nowIndex + 1];
-    if (!thenStep) return;
-    const first = routineStepToGeneratedPixtoCard(nowStep);
-    const second = routineStepToGeneratedPixtoCard(thenStep);
-    if (typeof activeTimerSec === "number" && activeTimerSec > 0) {
-      first.timerSec = activeTimerSec;
-    }
+    if (!nowStep || nowIndex < 0) return;
+    const queue = buildFirstThenQueueFromRoutineSteps(steps, nowIndex, {
+      firstTimerSec: activeTimerSec,
+    });
+    if (queue.length < 2) return;
     writeFirstThenSession({
-      first,
-      second,
+      queue,
       routineHref: exitHref,
     });
     setSheet(null);
     router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
-  }, [nowStep, nextStep, steps, nowIndex, exitHref, router, activeTimerSec]);
+  }, [nowStep, nowIndex, steps, exitHref, router, activeTimerSec]);
 
   const {
     remaining: nowTimerRemaining,

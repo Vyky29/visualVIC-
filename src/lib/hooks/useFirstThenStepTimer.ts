@@ -15,33 +15,32 @@ export function useFirstThenStepTimer({
   secondCard,
   phase,
   isComplete,
+  activeCardKey,
   onAdvance,
 }: {
-  firstCard: GeneratedPixtoCardProps;
-  secondCard: GeneratedPixtoCardProps;
+  firstCard: GeneratedPixtoCardProps | null;
+  secondCard: GeneratedPixtoCardProps | null;
   phase: FirstThenPhase;
   isComplete: boolean;
+  /** Stable key for the current FIRST card (changes when the queue shifts). */
+  activeCardKey: string;
   onAdvance: () => void;
 }) {
+  void secondCard;
   const activeTimerSec =
-    phase === "first"
-      ? firstCard.timerSec
-      : phase === "then"
-        ? secondCard.timerSec
-        : undefined;
-  const stepKey = phase;
-  const active = !isComplete && (phase === "first" || phase === "then");
+    !isComplete && phase === "first" ? firstCard?.timerSec : undefined;
+  const active = Boolean(!isComplete && phase === "first" && firstCard);
 
   const {
     remaining,
     totalSeconds,
     hasTimer,
     finished,
-  } = useStepCountdown(activeTimerSec, stepKey, active);
+  } = useStepCountdown(activeTimerSec, activeCardKey, active);
 
   useAutoAdvanceOnTimerFinish({
     active,
-    stepKey,
+    stepKey: activeCardKey,
     hasTimer,
     finished,
     onAdvance,
