@@ -266,19 +266,6 @@ export function FocusMode({ routine, exitHref }: Props) {
     appendFinishStep: false,
   });
 
-  const openFirstThen = useCallback(() => {
-    if (!nowStep) return;
-    const thenStep = nextStep ?? steps[nowIndex + 1];
-    if (!thenStep) return;
-    writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep),
-      second: routineStepToGeneratedPixtoCard(thenStep),
-      routineHref: exitHref,
-    });
-    setSheet(null);
-    router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
-  }, [nowStep, nextStep, steps, nowIndex, exitHref, router]);
-
   const accentRings = useMemo(() => routineAccentRings(routine), [routine]);
 
   const [sheet, setSheet] = useState<"support" | "options" | null>(null);
@@ -309,6 +296,25 @@ export function FocusMode({ routine, exitHref }: Props) {
     sessionTimerSec === 0
       ? undefined
       : sessionTimerSec ?? savedTimerSec;
+
+  const openFirstThen = useCallback(() => {
+    if (!nowStep) return;
+    const thenStep = nextStep ?? steps[nowIndex + 1];
+    if (!thenStep) return;
+    const first = routineStepToGeneratedPixtoCard(nowStep);
+    const second = routineStepToGeneratedPixtoCard(thenStep);
+    if (typeof activeTimerSec === "number" && activeTimerSec > 0) {
+      first.timerSec = activeTimerSec;
+    }
+    writeFirstThenSession({
+      first,
+      second,
+      routineHref: exitHref,
+    });
+    setSheet(null);
+    router.push(`/first-then?from=${encodeURIComponent(exitHref)}`);
+  }, [nowStep, nextStep, steps, nowIndex, exitHref, router, activeTimerSec]);
+
   const {
     remaining: nowTimerRemaining,
     totalSeconds: nowTimerTotal,

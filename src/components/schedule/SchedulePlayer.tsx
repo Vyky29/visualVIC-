@@ -272,9 +272,14 @@ export function SchedulePlayer({
     if (!nowStep) return;
     const thenStep = nextStep ?? steps[nowIndex + 1];
     if (!thenStep) return;
+    const first = routineStepToGeneratedPixtoCard(nowStep);
+    const second = routineStepToGeneratedPixtoCard(thenStep);
+    if (typeof activeTimerSec === "number" && activeTimerSec > 0) {
+      first.timerSec = activeTimerSec;
+    }
     writeFirstThenSession({
-      first: routineStepToGeneratedPixtoCard(nowStep),
-      second: routineStepToGeneratedPixtoCard(thenStep),
+      first,
+      second,
       routineHref: `/player/${routine.id}`,
     });
     router.push(`/first-then?from=${encodeURIComponent(`/player/${routine.id}`)}`);
