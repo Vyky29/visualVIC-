@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import type { RoutineStep } from "@/lib/types/routine";
 import {
@@ -105,6 +106,37 @@ function flipFaceShellClass(bgClass: string) {
     bgClass,
     "[backface-visibility:hidden]",
     "[-webkit-backface-visibility:hidden]",
+  );
+}
+
+/**
+ * When `useDesignWidth` is set (First & Then), the parent already CSS-scales a
+ * design-size box. Nesting SlotScale would measure the transformed rect and
+ * apply a second scale (~scale²), shrinking cards and timers.
+ */
+function PixtoSlotFrame({
+  variant,
+  useDesignWidth,
+  categoryOutlineBleed = true,
+  children,
+}: {
+  variant: TimelineVariant;
+  useDesignWidth: boolean;
+  categoryOutlineBleed?: boolean;
+  children: ReactNode;
+}) {
+  if (useDesignWidth) return children;
+  if (variant === "focus") {
+    return (
+      <GeneratedPixtoFocusSlotScale categoryOutlineBleed={categoryOutlineBleed}>
+        {children}
+      </GeneratedPixtoFocusSlotScale>
+    );
+  }
+  return (
+    <GeneratedPixtoSlotScale categoryOutlineBleed={categoryOutlineBleed}>
+      {children}
+    </GeneratedPixtoSlotScale>
   );
 }
 
@@ -672,41 +704,27 @@ export function SwipeableStepCard({
                       isFinished && "brightness-[0.9] grayscale",
                     )}
                   >
-                    {variant === "focus" ? (
-                      <GeneratedPixtoFocusSlotScale categoryOutlineBleed={false}>
-                        <GeneratedPixtoCard
-                          illustrationUrl={gp.illustrationUrl}
-                          title={gp.title}
-                          category={gp.category}
-                          categoryColour={gp.categoryColour}
-                          iconUrl={gp.iconUrl}
-                          cardType={gp.cardType}
-                          focusIllustrationScale={gp.focusIllustrationScale}
-                          focusIllustrationUrl={gp.focusIllustrationUrl}
-                          focusPresentation
-                          scheduleTimer={scheduleTimer}
-                          suppressNeutralRing
-                          className="h-full w-full max-w-none"
-                        />
-                      </GeneratedPixtoFocusSlotScale>
-                    ) : (
-                      <GeneratedPixtoSlotScale categoryOutlineBleed={false}>
-                        <GeneratedPixtoCard
-                          illustrationUrl={gp.illustrationUrl}
-                          title={gp.title}
-                          category={gp.category}
-                          categoryColour={gp.categoryColour}
-                          iconUrl={gp.iconUrl}
-                          cardType={gp.cardType}
-                          focusIllustrationScale={gp.focusIllustrationScale}
-                          focusIllustrationUrl={gp.focusIllustrationUrl}
-                          schedulePresentation
-                          scheduleTimer={scheduleTimer}
-                          suppressNeutralRing
-                          className="h-full w-full max-w-none"
-                        />
-                      </GeneratedPixtoSlotScale>
-                    )}
+                    <PixtoSlotFrame
+                      variant={variant}
+                      useDesignWidth={useDesignWidth}
+                      categoryOutlineBleed={false}
+                    >
+                      <GeneratedPixtoCard
+                        illustrationUrl={gp.illustrationUrl}
+                        title={gp.title}
+                        category={gp.category}
+                        categoryColour={gp.categoryColour}
+                        iconUrl={gp.iconUrl}
+                        cardType={gp.cardType}
+                        focusIllustrationScale={gp.focusIllustrationScale}
+                        focusIllustrationUrl={gp.focusIllustrationUrl}
+                        focusPresentation={variant === "focus"}
+                        schedulePresentation={variant !== "focus"}
+                        scheduleTimer={scheduleTimer}
+                        suppressNeutralRing
+                        className="h-full w-full max-w-none"
+                      />
+                    </PixtoSlotFrame>
                   </div>
                 ) : step.imageUrl ? (
                   stepPixtoBundled ? (
@@ -809,23 +827,17 @@ export function SwipeableStepCard({
                 {completionBackImageUrl ? (
                   gp ? (
                     <div className="absolute inset-0 flex min-h-0 min-w-0 items-center justify-center overflow-hidden">
-                      {variant === "focus" ? (
-                        <GeneratedPixtoFocusSlotScale categoryOutlineBleed={false}>
-                          <GeneratedPixtoFlipBackFace
-                            backImageUrl={completionBackImageUrl}
-                            variant="focus"
-                            categoryColour={gp.categoryColour}
-                          />
-                        </GeneratedPixtoFocusSlotScale>
-                      ) : (
-                        <GeneratedPixtoSlotScale categoryOutlineBleed={false}>
-                          <GeneratedPixtoFlipBackFace
-                            backImageUrl={completionBackImageUrl}
-                            variant="schedule"
-                            categoryColour={gp.categoryColour}
-                          />
-                        </GeneratedPixtoSlotScale>
-                      )}
+                      <PixtoSlotFrame
+                        variant={variant}
+                        useDesignWidth={useDesignWidth}
+                        categoryOutlineBleed={false}
+                      >
+                        <GeneratedPixtoFlipBackFace
+                          backImageUrl={completionBackImageUrl}
+                          variant={variant === "focus" ? "focus" : "schedule"}
+                          categoryColour={gp.categoryColour}
+                        />
+                      </PixtoSlotFrame>
                     </div>
                   ) : backPixtoBundled ? (
                     <div className={FLIP_FACE_MEDIA_CLASS}>
@@ -887,42 +899,30 @@ export function SwipeableStepCard({
                   isFinished && "brightness-[0.9] grayscale",
                 )}
               >
-                {variant === "focus" ? (
-                  <GeneratedPixtoFocusSlotScale>
-                    <GeneratedPixtoCard
-                      illustrationUrl={gp.illustrationUrl}
-                      title={gp.title}
-                      category={gp.category}
-                      categoryColour={gp.categoryColour}
-                      iconUrl={gp.iconUrl}
-                      cardType={gp.cardType}
-                      focusIllustrationScale={gp.focusIllustrationScale}
-                      focusIllustrationUrl={gp.focusIllustrationUrl}
-                      focusPresentation
-                      scheduleTimer={scheduleTimer}
-                      suppressNeutralRing
-                      className="h-full w-full max-w-none"
-                    />
-                  </GeneratedPixtoFocusSlotScale>
-                ) : (
-                  <GeneratedPixtoSlotScale>
-                    <GeneratedPixtoCard
-                      illustrationUrl={gp.illustrationUrl}
-                      title={gp.title}
-                      category={gp.category}
-                      categoryColour={gp.categoryColour}
-                      iconUrl={gp.iconUrl}
-                      cardType={gp.cardType}
-                      focusIllustrationScale={gp.focusIllustrationScale}
-                      focusIllustrationUrl={gp.focusIllustrationUrl}
-                      schedulePresentation
-                      scheduleTimer={focusGenerated ? undefined : scheduleTimer}
-                      focusPresentation={focusGenerated}
-                      suppressNeutralRing
-                      className="h-full w-full max-w-none"
-                    />
-                  </GeneratedPixtoSlotScale>
-                )}
+                <PixtoSlotFrame
+                  variant={variant}
+                  useDesignWidth={useDesignWidth}
+                >
+                  <GeneratedPixtoCard
+                    illustrationUrl={gp.illustrationUrl}
+                    title={gp.title}
+                    category={gp.category}
+                    categoryColour={gp.categoryColour}
+                    iconUrl={gp.iconUrl}
+                    cardType={gp.cardType}
+                    focusIllustrationScale={gp.focusIllustrationScale}
+                    focusIllustrationUrl={gp.focusIllustrationUrl}
+                    focusPresentation={variant === "focus" || focusGenerated}
+                    schedulePresentation={variant !== "focus" && !focusGenerated}
+                    scheduleTimer={
+                      variant === "focus" || !focusGenerated
+                        ? scheduleTimer
+                        : undefined
+                    }
+                    suppressNeutralRing
+                    className="h-full w-full max-w-none"
+                  />
+                </PixtoSlotFrame>
               </div>
             ) : variant === "focus" && !step.imageUrl ? (
               <div className="flex min-h-[40dvh] w-full flex-1 items-center justify-center text-cream/35">

@@ -3349,7 +3349,9 @@
       justify-content: center;
       padding: 2rem;
       text-align: center;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .pre-show::before {
@@ -3477,12 +3479,49 @@
     .pre-show-skip:hover { border-color: var(--white); color: var(--white); }
 
     .pre-show-timer {
-      font-size: clamp(3rem, 12vw, 7rem);
+      font-size: clamp(2.5rem, 11vw, 6.5rem);
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.05em;
-      margin: 0;
+      margin: 0.75rem 0 0;
       line-height: 1;
+    }
+
+    .pre-show.is-countdown-running .cs-logo-stage {
+      width: min(180px, 42vw);
+      margin-bottom: 0.65rem;
+    }
+
+    .pre-show.is-countdown-running .pre-show-title {
+      font-size: clamp(1.75rem, 5.5vw, 2.75rem);
+      margin-bottom: 0.25rem;
+    }
+
+    .pre-show.is-countdown-running .pre-show-wait {
+      font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .pre-show.is-countdown-running .pre-show-announcement {
+      margin-top: 1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    @media (max-height: 700px) {
+      .pre-show {
+        justify-content: flex-start;
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+      }
+
+      .pre-show .cs-logo-stage {
+        width: min(160px, 38vw);
+        margin-bottom: 0.5rem;
+      }
+
+      .pre-show-timer {
+        font-size: clamp(2.25rem, 10vw, 4.5rem);
+      }
     }
 
     .pre-show-sub {
@@ -4476,6 +4515,14 @@
       const announceEl = document.getElementById("pre-show-announcement");
       const announceText = document.getElementById("pre-show-announcement-text");
       const startingEl = document.getElementById("pre-show-starting");
+      const preShowRoot = document.getElementById("pre-show");
+
+      if (preShowRoot) {
+        preShowRoot.classList.toggle(
+          "is-countdown-running",
+          preShow.mode === "running" || preShow.mode === "starting",
+        );
+      }
 
       if (preShow.mode === "idle") {
         timerEl.classList.add("hidden");

@@ -781,8 +781,9 @@ function FirstThenFocusLandscapeLayout({
 
       const centerHubPx =
         FOCUS_LANDSCAPE.sidebarW + FOCUS_LANDSCAPE_CARD_GAP_SCREEN_PX * 2;
+      const labelReserve = FOCUS_LANDSCAPE.slotLabelH;
       const sx = (W - centerHubPx) / (FOCUS_LANDSCAPE.cardW * 2);
-      const sy = H / FOCUS_LANDSCAPE.cardH;
+      const sy = H / (FOCUS_LANDSCAPE.cardH + labelReserve);
       const next = Math.min(
         sx,
         sy,
@@ -806,6 +807,7 @@ function FirstThenFocusLandscapeLayout({
       phase={phase}
       onAdvance={onAdvance}
       scheduleTimer={scheduleTimerForSlot(slot)}
+      lang={lang}
     />
   );
 
@@ -1044,14 +1046,33 @@ function FirstThenPortraitCardScaled({
         }}
       >
         {interactive ? (
-          <FirstThenSwipeableSlot
-            slot={interactive.slot}
-            card={card}
-            phase={interactive.phase}
-            onAdvance={interactive.onAdvance}
-            presentation="hero"
-            scheduleTimer={interactive.scheduleTimer}
-          />
+          <div className="relative h-full w-full">
+            {slotHeaderLabel ? (
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-center"
+                style={{ height: "9%" }}
+              >
+                <span
+                  className="font-extrabold lowercase"
+                  style={{
+                    color: card.categoryColour,
+                    fontSize: DIGITAL_WOW_RIBBON_FONT_PX * 0.72,
+                    lineHeight: 1,
+                  }}
+                >
+                  {slotHeaderLabel}
+                </span>
+              </div>
+            ) : null}
+            <FirstThenSwipeableSlot
+              slot={interactive.slot}
+              card={card}
+              phase={interactive.phase}
+              onAdvance={interactive.onAdvance}
+              presentation="hero"
+              scheduleTimer={interactive.scheduleTimer}
+            />
+          </div>
         ) : (
           <MiniDigitalWowCard
             card={card}
@@ -1071,6 +1092,7 @@ function FirstThenFocusCardScaled({
   phase,
   onAdvance,
   scheduleTimer,
+  lang,
 }: {
   slot: "first" | "then";
   card: GeneratedPixtoCardProps;
@@ -1082,10 +1104,12 @@ function FirstThenFocusCardScaled({
     totalSec: number;
     finished?: boolean;
   };
+  lang: ReturnType<typeof useCardUiLanguage>;
 }) {
   const bleed = GENERATED_PIXTO_CATEGORY_OUTLINE_BLEED_PX;
+  const labelH = FOCUS_LANDSCAPE.slotLabelH;
   const slotW = FOCUS_LANDSCAPE.cardW * scale;
-  const slotH = FOCUS_LANDSCAPE.cardH * scale;
+  const slotH = (FOCUS_LANDSCAPE.cardH + labelH) * scale;
 
   return (
     <div
@@ -1093,21 +1117,34 @@ function FirstThenFocusCardScaled({
       style={{ width: slotW + bleed * 2, height: slotH + bleed * 2, padding: bleed }}
     >
       <div
-        className="absolute left-0 top-0 origin-top-left"
+        className="absolute left-0 top-0 flex origin-top-left flex-col items-center"
         style={{
           width: FOCUS_LANDSCAPE.cardW,
-          height: FOCUS_LANDSCAPE.cardH,
+          height: FOCUS_LANDSCAPE.cardH + labelH,
           transform: `scale(${scale})`,
         }}
       >
-        <FirstThenSwipeableSlot
-          slot={slot}
-          card={card}
-          phase={phase}
-          onAdvance={onAdvance}
-          presentation="focus"
-          scheduleTimer={scheduleTimer}
-        />
+        <span
+          className="mb-1 shrink-0 font-extrabold lowercase"
+          style={{
+            color: card.categoryColour,
+            fontSize: FOCUS_LANDSCAPE.slotLabelFontPx,
+            lineHeight: 1,
+            height: labelH - 4,
+          }}
+        >
+          {firstThenSlotLabel(slot, lang)}
+        </span>
+        <div className="min-h-0 w-full flex-1">
+          <FirstThenSwipeableSlot
+            slot={slot}
+            card={card}
+            phase={phase}
+            onAdvance={onAdvance}
+            presentation="focus"
+            scheduleTimer={scheduleTimer}
+          />
+        </div>
       </div>
     </div>
   );
@@ -1173,7 +1210,8 @@ function FirstThenPortraitLabeledRow({
         setScale(next);
         return;
       }
-      if (next < prev) {
+      // Allow growth after first paint (chrome/safe-area settle) within 2% hysteresis.
+      if (next < prev || next > prev * 1.02) {
         stableScaleRef.current = next;
         setScale(next);
       }
@@ -1285,6 +1323,12 @@ function FirstThenPortraitCardCell({
           scale={scale}
           slotHeaderLabel={slotHeaderLabel}
           readableTitle={readableTitle}
+          interactive={{
+            slot,
+            phase,
+            onAdvance,
+            scheduleTimer: scheduleTimerForSlot(slot),
+          }}
         />
       ) : (
         <div
