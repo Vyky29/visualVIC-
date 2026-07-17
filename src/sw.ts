@@ -19,7 +19,8 @@ const pixtoAssetCache: RuntimeCaching = {
       path.startsWith("/cards/") ||
       path.startsWith("/images/") ||
       path.startsWith("/avatars/") ||
-      path.startsWith("/brand/")
+      path.startsWith("/brand/") ||
+      path.startsWith("/assets/")
     );
   },
   handler: new CacheFirst({

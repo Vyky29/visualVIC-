@@ -356,7 +356,8 @@
     .draggable-avatar {
       width: clamp(118px, 20vw, 158px);
       cursor: grab;
-      touch-action: manipulation;
+      /* touch-action none so Android boards never turn the drag into a scroll (pointercancel). */
+      touch-action: none;
       user-select: none;
       -webkit-user-select: none;
       text-align: center;
@@ -3799,7 +3800,7 @@
     </div>
 
     <div id="screen-day" class="screen-page" data-screen="day">
-    <section id="day" aria-labelledby="day-heading">
+    <section id="day" aria-labelledby="day-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">2</span>
         <div>
@@ -3829,7 +3830,7 @@
     </div>
 
     <div id="screen-date" class="screen-page" data-screen="date">
-    <section id="date" aria-labelledby="date-heading">
+    <section id="date" aria-labelledby="date-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">3</span>
         <div>
@@ -3862,7 +3863,7 @@
     </div>
 
     <div id="screen-month" class="screen-page" data-screen="month">
-    <section id="month" aria-labelledby="month-heading">
+    <section id="month" aria-labelledby="month-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">4</span>
         <div>
@@ -3895,7 +3896,7 @@
     </div>
 
     <div id="screen-year" class="screen-page" data-screen="year">
-    <section id="year" aria-labelledby="year-heading">
+    <section id="year" aria-labelledby="year-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">5</span>
         <div>
@@ -3928,7 +3929,7 @@
     </div>
 
     <div id="screen-weather" class="screen-page" data-screen="weather">
-    <section id="weather" aria-labelledby="weather-heading">
+    <section id="weather" aria-labelledby="weather-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">6</span>
         <div>
@@ -3970,7 +3971,7 @@
     </div>
 
     <div id="screen-feelings" class="screen-page" data-screen="feelings">
-    <section id="feelings" aria-labelledby="feelings-heading">
+    <section id="feelings" aria-labelledby="feelings-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">7</span>
         <div>
@@ -3987,7 +3988,7 @@
     </div>
 
     <div id="screen-focus" class="screen-page" data-screen="focus">
-    <section id="focus" aria-labelledby="focus-heading">
+    <section id="focus" aria-labelledby="focus-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">8</span>
         <div>
@@ -4006,7 +4007,7 @@
     </div>
 
     <div id="screen-activities" class="screen-page scrollable" data-screen="activities">
-    <section id="activities" aria-labelledby="activities-heading">
+    <section id="activities" aria-labelledby="activities-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">9</span>
         <div>
@@ -4019,7 +4020,7 @@
     </div>
 
     <div id="screen-agreements" class="screen-page" data-screen="agreements">
-    <section id="agreements" aria-labelledby="agreements-heading">
+    <section id="agreements" aria-labelledby="agreements-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">10</span>
         <div>
@@ -4034,7 +4035,7 @@
     </div>
 
     <div id="screen-turn-taking" class="screen-page" data-screen="turn-taking">
-    <section id="turn-taking" aria-labelledby="turn-heading">
+    <section id="turn-taking" aria-labelledby="turn-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">11</span>
         <div>
@@ -4047,7 +4048,7 @@
     </div>
 
     <div id="screen-finish" class="screen-page" data-screen="finish">
-    <section id="finish" aria-labelledby="finish-heading">
+    <section id="finish" aria-labelledby="finish-heading" tabindex="-1">
       <div class="finish-layout">
         <div class="finish-card-wrap">
           <img
@@ -4065,7 +4066,7 @@
     </div>
 
     <div id="screen-summary" class="screen-page scrollable" data-screen="summary">
-    <section id="summary" aria-labelledby="summary-heading">
+    <section id="summary" aria-labelledby="summary-heading" tabindex="-1">
       <div class="section-header">
         <span class="section-num" aria-hidden="true">13</span>
         <div>
@@ -4200,6 +4201,7 @@
       renderMonth();
       renderYear();
       renderSummary();
+      updateNavButtons();
     }
 
     const WEATHER = [
@@ -4617,6 +4619,7 @@
       state.feelingsOrder = [];
       state.feelingsTurnIndex = 0;
       state.feelingsPageIndex = 0;
+      feelingsLastTurnId = null;
       renderAll();
       showScreen(0);
     }
@@ -4676,12 +4679,24 @@
       if (section) section.focus({ preventScroll: true });
     }
 
+    function isScreenComplete(screenId) {
+      if (screenId === "register") {
+        return REGISTER_PEOPLE.every((p) => (state.location[p.id] || "dock") !== "dock");
+      }
+      return canAdvanceFromScreen(screenId);
+    }
+
     function updateNavButtons() {
       const screenId = SCREEN_IDS[currentScreenIndex];
       const nextBtn = document.getElementById("screen-next");
       nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
       nextBtn.disabled = false;
-      nextBtn.classList.toggle("is-auto-hidden", AUTO_ADVANCE_SCREENS.has(screenId));
+      /* Hide Next only while an auto-advance screen is unfinished; once complete,
+         keep it visible so re-entering an already-solved screen never dead-ends. */
+      nextBtn.classList.toggle(
+        "is-auto-hidden",
+        AUTO_ADVANCE_SCREENS.has(screenId) && !isScreenComplete(screenId),
+      );
     }
 
     function maybeAdvanceFromWeather() {
@@ -4734,6 +4749,8 @@
         }
         if (currentScreenIndex < SCREEN_IDS.length - 1) {
           showScreen(currentScreenIndex + 1);
+        } else {
+          showWaitingScreen();
         }
       });
     }
@@ -4885,6 +4902,7 @@
       renderActivities();
       renderTurnTaking();
       renderSummary();
+      updateNavButtons();
       tryAutoAdvanceRegister();
     }
 
@@ -4924,7 +4942,7 @@
 
     function finishDayDrop(zoneKey, dayName) {
       const slot = document.getElementById("day-slot");
-      if (slotFeedbackActive && zoneKey === "day-slot") return;
+      if (slotFeedbackActive === "correct" && zoneKey === "day-slot") return;
       if (zoneKey === "day-slot") {
         if (dayName !== todayRef.weekday) {
           showSlotFeedback(slot, "wrong", "Not today — check the date under Circle Time");
@@ -4949,7 +4967,7 @@
     function finishDomDrop(zoneKey, num) {
       const slot = document.getElementById("dom-slot");
       const n = Number(num);
-      if (slotFeedbackActive && zoneKey === "dom-slot") return;
+      if (slotFeedbackActive === "correct" && zoneKey === "dom-slot") return;
       if (zoneKey === "dom-slot") {
         if (n !== todayRef.dayOfMonth) {
           showSlotFeedback(slot, "wrong", "Wrong day number — check the date under Circle Time");
@@ -4974,7 +4992,7 @@
     function finishMonthDrop(zoneKey, monthId) {
       const slot = document.getElementById("month-slot");
       const m = Number(monthId);
-      if (slotFeedbackActive && zoneKey === "month-slot") return;
+      if (slotFeedbackActive === "correct" && zoneKey === "month-slot") return;
       if (zoneKey === "month-slot") {
         if (m !== todayRef.month) {
           showSlotFeedback(slot, "wrong", "Wrong month — check the date under Circle Time");
@@ -4999,7 +5017,7 @@
     function finishYearDrop(zoneKey, yearVal) {
       const slot = document.getElementById("year-slot");
       const y = Number(yearVal);
-      if (slotFeedbackActive && zoneKey === "year-slot") return;
+      if (slotFeedbackActive === "correct" && zoneKey === "year-slot") return;
       if (zoneKey === "year-slot") {
         if (y !== todayRef.year) {
           showSlotFeedback(slot, "wrong", "Wrong year — check the date under Circle Time");
@@ -5022,7 +5040,7 @@
     function finishWeatherDrop(zoneKey, weatherId) {
       const slot = document.getElementById("weather-slot");
       const alreadyCorrect = state.weather === weatherId && state.weatherConfirmed;
-      if (slotFeedbackActive && zoneKey === "weather-slot" && !alreadyCorrect) return;
+      if (slotFeedbackActive === "correct" && zoneKey === "weather-slot" && !alreadyCorrect) return;
       if (zoneKey === "weather-slot") {
         const targetId = londonWeather?.id;
         if (!targetId) {
@@ -5119,6 +5137,8 @@
         } catch {
           /* ignore */
         }
+        /* Safety: never allow more than one floating ghost on screen. */
+        document.querySelectorAll(".drag-ghost").forEach((g) => g.remove());
         const rect = dragState.sourceEl.getBoundingClientRect();
         const ghost = dragState.sourceEl.cloneNode(true);
         ghost.classList.add("drag-ghost");
@@ -5149,6 +5169,7 @@
     }
 
     function startAvatarDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const id = chip.dataset.participantId;
@@ -5170,6 +5191,7 @@
     }
 
     function startDayDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const dayName = chip.dataset.dayName;
@@ -5192,6 +5214,7 @@
     }
 
     function startDomDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const value = chip.dataset.domValue;
@@ -5212,6 +5235,7 @@
     }
 
     function startMonthDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const value = chip.dataset.monthId;
@@ -5232,6 +5256,7 @@
     }
 
     function startYearDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const value = chip.dataset.yearValue;
@@ -5252,6 +5277,7 @@
     }
 
     function startActivityDrag(e) {
+      if (dragState) return;
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const chip = e.currentTarget;
       const activityId = chip.dataset.activityId;
@@ -5328,6 +5354,7 @@
     }
 
     const FEELINGS_PAGE_SIZE = 3;
+    let feelingsLastTurnId = null;
 
     function feelingsClubParticipants() {
       return PARTICIPANTS.filter((p) => state.location[p.id] === "club");
@@ -5425,6 +5452,7 @@
       state.feelingsOrder = buildFeelingsDisplayOrder().map((p) => p.id);
       state.feelingsTurnIndex = 0;
       state.feelingsPageIndex = 0;
+      feelingsLastTurnId = null;
       renderFeelings();
       renderSummary();
     }
@@ -5644,7 +5672,8 @@
         clearTimeout(slotFeedbackTimer);
         slotFeedbackTimer = null;
       }
-      slotFeedbackActive = true;
+      /* Store the feedback kind — a wrong answer must not block immediate retries. */
+      slotFeedbackActive = type;
       slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
       const host = slotEl.closest(".slot-feedback-host") || slotEl;
       host.querySelector(".slot-feedback-msg")?.remove();
@@ -6280,6 +6309,7 @@
       setupDragSystem();
       document.querySelectorAll(".draggable-weather").forEach((chip) => {
         chip.onpointerdown = (e) => {
+          if (dragState) return;
           if (e.button !== 0 && e.pointerType === "mouse") return;
           const weatherId = chip.dataset.weatherId;
           if (!weatherId) return;
@@ -6412,10 +6442,16 @@
 
       ensureFeelingsOrder();
       syncFeelingsTurnIndex();
-      syncFeelingsPageForTurn();
+
+      /* Only jump to the turn's page when the turn actually changes, so the
+         Previous / Next pager buttons keep working for browsing other pages. */
+      const turnId = currentFeelingsTurnId();
+      if (turnId !== feelingsLastTurnId) {
+        feelingsLastTurnId = turnId;
+        syncFeelingsPageForTurn();
+      }
       clampFeelingsPageIndex();
 
-      const turnId = currentFeelingsTurnId();
       updateFeelingsTurnBanner(turnId);
 
       const pagePeople = feelingsPeopleOnPage();
@@ -6975,6 +7011,14 @@
     mountClubSensationalLogos();
     document.getElementById("feelings-shuffle-btn").addEventListener("click", reshuffleFeelingsTurn);
     renderAll();
+
+    /* Register the app service worker so logos, avatars and cards keep working
+       when the smart board loses its connection. */
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

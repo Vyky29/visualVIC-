@@ -28,6 +28,9 @@ const withSerwist = withSerwistInit({
     { url: "/dashboard", revision },
     { url: "/player", revision },
     { url: "/~offline", revision },
+    { url: "/circle-time.html", revision },
+    { url: "/assets/clubsensational-logo.webp", revision },
+    { url: "/assets/clubsensational-logo-mark.png", revision },
   ],
 });
 
