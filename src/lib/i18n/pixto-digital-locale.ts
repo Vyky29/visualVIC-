@@ -468,6 +468,14 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Bouldering · On the wall",
     es: "Boulder · en el muro",
   },
+  "dc-bouldering-break": {
+    en: "Bouldering · Break time",
+    es: "Boulder · descanso",
+  },
+  "climbing-break": {
+    en: "Climbing · Break time",
+    es: "Escalada · descanso",
+  },
   "dc-cooking": {
     en: "Cooking · Pizza day",
     es: "Cocina · día pizza",

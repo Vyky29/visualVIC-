@@ -35,6 +35,7 @@ export const DAY_CENTRE_FOLDER_STOCK_ROUTINE_IDS: Record<
     "dc-bouldering",
     "dc-bouldering-prep",
     "dc-bouldering-wall",
+    "dc-bouldering-break",
   ],
   cooking: [
     "dc-cooking",

@@ -10,7 +10,10 @@ export const CLIMBING_BACK_CARD_FILE = "backcard5.png" as const;
 
 /** Every PNG under public/cards/climbing/ except the back card (sorted A–Z). */
 export const CLIMBING_CARD_FILES = [
+  "ball.png",
+  "blocks.png",
   "boulder-wall.png",
+  "break-time.png",
   "carabiner.png",
   "climb-down.png",
   "climb-up.png",
@@ -19,18 +22,23 @@ export const CLIMBING_CARD_FILES = [
   "close-carabiner.png",
   "grab-hold.png",
   "grigri.png",
+  "hard-toys.png",
   "harness.png",
   "helmet.png",
   "hold-rope.png",
   "holds.png",
+  "lego.png",
   "magnesium-bag.png",
   "make-an-eight-knot.png",
   "open-carabiner.png",
+  "play-dough.png",
   "put-climbing-shoes-on.png",
   "put-harness-on.png",
   "put-helmet-on.png",
   "rope.png",
   "rub-your-palms.png",
+  "slinky.png",
+  "snake.png",
   "step-on-hold.png",
 ] as const;
 
@@ -72,4 +80,18 @@ export const CLIMBING_SEQUENCE = [
   { id: "climbing-up", slug: "climb-up", title: "Climb up" },
   { id: "climbing-down", slug: "climb-down", title: "Climb down" },
   { id: "climbing-boulder", slug: "boulder-wall", title: "Boulder wall" },
+] as const;
+
+/**
+ * Break time — toys then sensory items (basename without .png in folder above).
+ */
+export const CLIMBING_BREAK_SEQUENCE = [
+  { id: "climbing-break-time", slug: "break-time", title: "Break time" },
+  { id: "climbing-lego", slug: "lego", title: "Lego" },
+  { id: "climbing-blocks", slug: "blocks", title: "Blocks" },
+  { id: "climbing-hard-toys", slug: "hard-toys", title: "Hard toys" },
+  { id: "climbing-play-dough", slug: "play-dough", title: "Play dough" },
+  { id: "climbing-slinky", slug: "slinky", title: "Slinky" },
+  { id: "climbing-snake", slug: "snake", title: "Snake" },
+  { id: "climbing-ball", slug: "ball", title: "Ball" },
 ] as const;

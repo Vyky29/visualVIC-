@@ -1,4 +1,8 @@
-import { climbingImageUrl, CLIMBING_SEQUENCE } from "@/lib/cards/climbing-cards";
+import {
+  climbingImageUrl,
+  CLIMBING_BREAK_SEQUENCE,
+  CLIMBING_SEQUENCE,
+} from "@/lib/cards/climbing-cards";
 import { DAY_CENTRE_BOULDERING_CLIMB_SLUGS } from "@/lib/cards/day-centre-folder-groups";
 
 export type DayCentreBoulderingStep = {
@@ -51,6 +55,14 @@ export const DAY_CENTRE_BOULDERING_PREP_SEQUENCE: readonly DayCentreBoulderingSt
 /** Bouldering · on the wall. */
 export const DAY_CENTRE_BOULDERING_WALL_SEQUENCE: readonly DayCentreBoulderingStep[] =
   boulderingStepsForSlugs(BOULDERING_WALL_SLUGS);
+
+/** Bouldering · break time (toys & sensory). */
+export const DAY_CENTRE_BOULDERING_BREAK_SEQUENCE: readonly DayCentreBoulderingStep[] =
+  CLIMBING_BREAK_SEQUENCE.map((s) => ({
+    id: `dcb-${s.slug}`,
+    slug: s.slug,
+    title: s.title,
+  }));
 
 export function dayCentreBoulderingImageUrlForStep(
   step: DayCentreBoulderingStep,

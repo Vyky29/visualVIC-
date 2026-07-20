@@ -5,7 +5,7 @@ import {
   brushingTeethImageUrl,
 } from "@/lib/cards/brushing-teeth-cards";
 import { CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-cards";
-import { CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
+import { CLIMBING_BREAK_SEQUENCE, CLIMBING_SEQUENCE, climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
 import { SWIMMING_SEQUENCE, swimmingImageUrl } from "@/lib/cards/swimming-cards";
 import { gettingDressUndressImageUrl } from "@/lib/cards/getting-dress-undress-cards";
@@ -36,6 +36,7 @@ import {
   DAY_CENTRE_MINI_GYM_3D_STRENGTH_GENERATED_CARD_PROPS,
   DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS,
   DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS,
+  DAY_CENTRE_BOULDERING_BREAK_GENERATED_CARD_PROPS,
   DAY_CENTRE_COOKING_PREP_GENERATED_CARD_PROPS,
   DAY_CENTRE_COOKING_BAKE_GENERATED_CARD_PROPS,
   DAY_CENTRE_COMMUNITY_MARKET_GENERATED_CARD_PROPS,
@@ -211,6 +212,18 @@ export const mockRoutines: Routine[] = [
     })),
   },
   {
+    id: "climbing-break",
+    name: "Climbing · Break time",
+    description: "Break toys and sensory items for climbing sessions",
+    tags: ["activity"],
+    homePreviewImageUrl: climbingImageUrl("break-time"),
+    steps: CLIMBING_BREAK_SEQUENCE.map((s) => ({
+      id: s.id,
+      title: s.title,
+      imageUrl: climbingImageUrl(s.slug),
+    })),
+  },
+  {
     id: "swimming-routine",
     name: "Swimming",
     description: "PixtoLearn swimming visual cards — pool visit flow",
@@ -365,6 +378,17 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "dc-bouldering-wall",
       DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "dc-bouldering-break",
+    name: "Bouldering · Break time",
+    description: "Toys and sensory items for the climbing break",
+    tags: ["extra"],
+    homePreviewImageUrl: climbingImageUrl("break-time"),
+    steps: routineStepsFromGeneratedCardProps(
+      "dc-bouldering-break",
+      DAY_CENTRE_BOULDERING_BREAK_GENERATED_CARD_PROPS,
     ),
   },
   {

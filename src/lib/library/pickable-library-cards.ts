@@ -13,6 +13,7 @@ import { CORE_CARD_FILES, CORE_SEQUENCE, coreImageUrl } from "@/lib/cards/core-c
 import { SHOWER_CARD_FILES, SHOWER_SEQUENCE, showerImageUrl } from "@/lib/cards/shower-cards";
 import {
   CLIMBING_CARD_FILES,
+  CLIMBING_BREAK_SEQUENCE,
   CLIMBING_SEQUENCE,
   climbingImageUrl,
 } from "@/lib/cards/climbing-cards";
@@ -353,7 +354,10 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     ...PHYSICAL_3D_LIBRARY_SEQUENCE,
     ...PHYSICAL_3D_GYM_SEQUENCE,
   ]);
-  const climbTitleMap = titleMapFromSequence(CLIMBING_SEQUENCE);
+  const climbTitleMap = titleMapFromSequence([
+    ...CLIMBING_SEQUENCE,
+    ...CLIMBING_BREAK_SEQUENCE,
+  ]);
   const swimTitleMap = titleMapFromSequence(SWIMMING_SEQUENCE);
   const airportTitleMap = titleMapFromSequence(AT_THE_AIRPORT_SEQUENCE);
   const hotelTitleMap = titleMapFromSequence(AT_THE_HOTEL_SEQUENCE);
@@ -408,7 +412,7 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
     imageUrlForSlug: showerImageUrl,
     titleMap: showerTitleMap,
   });
-  for (const s of CLIMBING_SEQUENCE) {
+  for (const s of [...CLIMBING_SEQUENCE, ...CLIMBING_BREAK_SEQUENCE]) {
     out.push({
       pickId: pid("climb", s.slug),
       label: s.title,

@@ -30,6 +30,7 @@ import {
   DAY_CENTRE_BOULDERING_SCHEDULE_SEQUENCE,
   DAY_CENTRE_BOULDERING_PREP_SEQUENCE,
   DAY_CENTRE_BOULDERING_WALL_SEQUENCE,
+  DAY_CENTRE_BOULDERING_BREAK_SEQUENCE,
   dayCentreBoulderingImageUrlForStep,
   type DayCentreBoulderingStep,
 } from "@/lib/cards/day-centre-bouldering-cards";
@@ -379,6 +380,9 @@ export const DAY_CENTRE_BOULDERING_PREP_GENERATED_CARD_PROPS: GeneratedPixtoCard
 
 export const DAY_CENTRE_BOULDERING_WALL_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   boulderingGeneratedCardProps(DAY_CENTRE_BOULDERING_WALL_SEQUENCE);
+
+export const DAY_CENTRE_BOULDERING_BREAK_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  boulderingGeneratedCardProps(DAY_CENTRE_BOULDERING_BREAK_SEQUENCE);
 
 function premiumGeneratedCardProps(
   sequence: readonly DayCentrePremiumPickSpec[],

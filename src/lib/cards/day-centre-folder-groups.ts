@@ -92,6 +92,14 @@ export const DAY_CENTRE_BOULDERING_CLIMB_SLUGS = new Set([
   "climbing-shoes",
   "magnesium-bag",
   "rub-your-palms",
+  "break-time",
+  "lego",
+  "blocks",
+  "hard-toys",
+  "play-dough",
+  "slinky",
+  "snake",
+  "ball",
 ]);
 
 export function dayCentreFolderForSlug(slug: string): DayCentreFolderId {
