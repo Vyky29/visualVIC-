@@ -8,6 +8,7 @@ import type { CardLanguageCode } from "@/lib/preferences/card-language-preferenc
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
 
 const EDGE_FN = "portal-help-voice-speak";
+const APP_VOICE_API = "/api/schedule-voice";
 const MAX_CHARS = 1200;
 
 let activeAudio: HTMLAudioElement | null = null;
@@ -213,7 +214,43 @@ async function playOnVoiceEl(src: string): Promise<boolean> {
   }
 }
 
-async function speakElevenLabs(text: string): Promise<boolean> {
+async function playCloudAudioPayload(json: {
+  ok?: boolean;
+  audioBase64?: string;
+  mime?: string;
+}): Promise<boolean> {
+  if (!json.ok || !json.audioBase64) return false;
+  const blobUrl = base64ToBlobUrl(json.audioBase64, json.mime || "audio/mpeg");
+  try {
+    window.speechSynthesis?.cancel();
+  } catch {
+    /* ignore */
+  }
+  return playOnVoiceEl(blobUrl);
+}
+
+/** App API — works for everyone (no staff login). */
+async function speakViaAppApi(text: string): Promise<boolean> {
+  try {
+    const res = await fetch(APP_VOICE_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text.slice(0, MAX_CHARS) }),
+    });
+    if (!res.ok) return false;
+    const json = (await res.json()) as {
+      ok?: boolean;
+      audioBase64?: string;
+      mime?: string;
+    };
+    return playCloudAudioPayload(json);
+  } catch {
+    return false;
+  }
+}
+
+/** Portal edge — only when a staff Supabase session exists (legacy / fallback). */
+async function speakViaPortalEdge(text: string): Promise<boolean> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !anon) return false;
@@ -237,23 +274,20 @@ async function speakElevenLabs(text: string): Promise<boolean> {
       audioBase64?: string;
       mime?: string;
     };
-    if (!json.ok || !json.audioBase64) return false;
-
-    const blobUrl = base64ToBlobUrl(json.audioBase64, json.mime || "audio/mpeg");
-    try {
-      window.speechSynthesis?.cancel();
-    } catch {
-      /* ignore */
-    }
-    return playOnVoiceEl(blobUrl);
+    return playCloudAudioPayload(json);
   } catch {
     return false;
   }
 }
 
+async function speakCloudTts(text: string): Promise<boolean> {
+  if (await speakViaAppApi(text)) return true;
+  return speakViaPortalEdge(text);
+}
+
 /**
  * Speak a phrase. Starts browser TTS immediately (gesture-safe), then upgrades
- * to ElevenLabs when a staff session can fetch audio.
+ * to ElevenLabs via /api/schedule-voice (no staff login required).
  */
 export async function speakSchedulePhrase(
   text: string,
@@ -265,10 +299,8 @@ export async function speakSchedulePhrase(
   unlockScheduleVoice();
   // CRITICAL: sync TTS before any await — iOS blocks speak() after the gesture ends.
   speakBrowserImmediate(trimmed, lang);
-  const ok = await speakElevenLabs(trimmed);
+  const ok = await speakCloudTts(trimmed);
   if (!ok) {
-    // ElevenLabs unavailable — browser utterance should already be speaking.
-    // Re-kick browser if it never started (some WebViews need a second try).
     if (!window.speechSynthesis?.speaking && !window.speechSynthesis?.pending) {
       speakBrowserImmediate(trimmed, lang);
     }
