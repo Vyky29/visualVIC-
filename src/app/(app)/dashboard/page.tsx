@@ -47,12 +47,15 @@ import {
   dashboardSchedulePlayerTitle,
   dashboardStepsWord,
   dashboardTailoredSchedulesSectionTitle,
+  libraryPackSectionTitle,
   profileAddAvatarHint,
   profileDisplayNamePlaceholder,
 } from "@/lib/i18n/app-shell-locale";
 import { dayCentrePackMarkUrl, dayCentreHubRoomImageUrl } from "@/lib/cards/day-centre-shared";
 import { tailoredSchedulesPackMarkUrl } from "@/lib/cards/tailored-schedules-shared";
 import { isDayCentreTailoredPackIconUrl } from "@/lib/cards/day-centre-shared";
+import { coreImageUrl } from "@/lib/cards/core-cards";
+import { climbingImageUrl } from "@/lib/cards/climbing-cards";
 import { firstThenDemoPackPreviewUrl } from "@/lib/experimental/first-then-demo-packs";
 import {
   resolveFeaturedRoutineHomePreviewUrl,
@@ -104,6 +107,26 @@ const HOME_EXTRA_PACK_GROUPS = [
     logoUrl: tailoredSchedulesPackMarkUrl,
     title: dashboardTailoredSchedulesSectionTitle,
     extraTileCount: 1,
+  },
+] as const;
+
+/** Home folders for climbing coaches (Alex / Andres) — Core + Climbing only. */
+const CORE_CLIMB_HOME_FOLDERS = [
+  {
+    key: "home::core-climb-core",
+    stockIds: new Set(["core-everyday"]),
+    includeCustom: false,
+    ringClass: "ring-accent/70",
+    logoUrl: () => coreImageUrl("wash-hands"),
+    sectionId: "core" as const,
+  },
+  {
+    key: "home::core-climb-climb",
+    stockIds: new Set(["climbing-routine", "climbing-break"]),
+    includeCustom: true,
+    ringClass: "ring-[#d4a53a]/85",
+    logoUrl: () => climbingImageUrl("climbing-wall"),
+    sectionId: "climb" as const,
   },
 ] as const;
 
@@ -555,7 +578,8 @@ export default function DashboardPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
   const prefersFineHover = usePrefersFineHover();
-  const { isRestricted, canAccessTailoredParticipant } = useStaffAccess();
+  const { isRestricted, isCoreClimbOnly, canAccessTailoredParticipant } =
+    useStaffAccess();
   const primary = mockRoutines[0];
   /** Same set as Schedule Player index — includes locally saved custom routines first. */
   const dashboardRoutines = useMemo(() => {
@@ -582,8 +606,9 @@ export default function DashboardPage() {
     return out;
   }, [dashboardRoutines]);
   const extraPackGroups = useMemo(
-    () =>
-      HOME_EXTRA_PACK_GROUPS.map((group) => ({
+    () => {
+      if (isCoreClimbOnly) return [];
+      return HOME_EXTRA_PACK_GROUPS.map((group) => ({
         ...group,
         routines: dashboardRoutines.filter(
           (r) => isStockPackRoutine(r) && group.routineIds.has(r.id),
@@ -603,9 +628,35 @@ export default function DashboardPage() {
             }),
           };
         })
-        .filter((group) => group.routines.length > 0 || group.extraTileCount > 0),
-    [dashboardRoutines, isRestricted, canAccessTailoredParticipant],
+        .filter((group) => group.routines.length > 0 || group.extraTileCount > 0);
+    },
+    [
+      dashboardRoutines,
+      isRestricted,
+      isCoreClimbOnly,
+      canAccessTailoredParticipant,
+    ],
   );
+
+  const coreClimbHomeFolders = useMemo(() => {
+    if (!isCoreClimbOnly) return [];
+    return CORE_CLIMB_HOME_FOLDERS.map((folder) => {
+      const stock = dashboardRoutines.filter(
+        (r) => isStockPackRoutine(r) && folder.stockIds.has(r.id),
+      );
+      const custom = folder.includeCustom
+        ? customRoutines.filter(
+            (r) =>
+              r.id.startsWith("custom-") ||
+              (r.tags ?? []).includes("custom"),
+          )
+        : [];
+      return {
+        ...folder,
+        routines: [...stock, ...custom],
+      };
+    }).filter((folder) => folder.routines.length > 0);
+  }, [customRoutines, dashboardRoutines, isCoreClimbOnly]);
   const [openCategoryKeys, setOpenCategoryKeys] = useState<Set<string>>(
     () => new Set(),
   );
@@ -831,6 +882,80 @@ export default function DashboardPage() {
           </div>
             </>
           ) : null}
+
+          {coreClimbHomeFolders.map((folder) => {
+            const accordionKey = folder.key;
+            const open = isAccordionOpen(accordionKey);
+            const routineCount = folder.routines.length;
+
+            return (
+              <div
+                key={accordionKey}
+                className="overflow-hidden rounded-2xl border border-ink/8 bg-cream/40"
+                onMouseEnter={() => {
+                  if (prefersFineHover) setHoverPeekKey(accordionKey);
+                }}
+                onMouseLeave={() => {
+                  if (prefersFineHover) setHoverPeekKey(null);
+                }}
+              >
+                <div className="flex min-h-[56px] w-full min-w-0 items-stretch border-b border-ink/6 bg-canvas-muted sm:min-h-[58px]">
+                  <button
+                    type="button"
+                    onClick={() => openAccordion(accordionKey)}
+                    className="flex min-h-[56px] min-w-0 flex-1 items-center gap-2 px-2 py-2 text-left transition hover:bg-canvas-muted/90 sm:min-h-[58px] sm:gap-3 sm:px-4 sm:py-2.5"
+                  >
+                    <span
+                      className={cn(
+                        "relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/95 bg-white shadow-sm ring-[2px] ring-offset-[1.5px] ring-offset-canvas-muted sm:h-11 sm:w-11",
+                        folder.ringClass,
+                      )}
+                    >
+                      <Image
+                        src={folder.logoUrl()}
+                        alt=""
+                        fill
+                        className="object-contain p-1.5"
+                        sizes="44px"
+                        unoptimized
+                      />
+                    </span>
+                    <span className="min-w-0 flex-1 break-words text-[12px] font-semibold uppercase leading-snug tracking-[0.1em] text-ink line-clamp-2 [overflow-wrap:anywhere] sm:text-[13px] sm:tracking-[0.12em]">
+                      {libraryPackSectionTitle(folder.sectionId, cardUiLang)}
+                    </span>
+                    <span className="shrink-0 self-center whitespace-nowrap text-[10px] font-medium tabular-nums tracking-wide text-ink-faint sm:text-[11px]">
+                      {dashboardRoutineCountLabel(routineCount, cardUiLang)}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordionCorner(accordionKey)}
+                    className="flex w-12 shrink-0 items-center justify-center border-l border-ink/8 text-[14px] text-ink-subtle transition hover:bg-ink/[0.04] active:bg-ink/[0.06] sm:w-14 sm:text-[15px]"
+                    aria-label={accordionOpenCloseAria(open, cardUiLang)}
+                  >
+                    <span aria-hidden>{open ? "▾" : "▸"}</span>
+                  </button>
+                </div>
+                <div
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-300 ease-out",
+                    open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                  )}
+                >
+                  <div className="min-h-0 overflow-hidden">
+                    <div className="grid grid-cols-2 gap-3 px-2 pb-3 pt-2 tablet:grid-cols-3 tablet:gap-4 [grid-auto-rows:1fr] sm:px-3 sm:pb-4 sm:pt-3">
+                      {folder.routines.map((routine) => (
+                        <DashboardRoutineTile
+                          key={routine.id}
+                          routine={routine}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
           {extraPackGroups.map((group) => {
             const accordionKey = group.key;

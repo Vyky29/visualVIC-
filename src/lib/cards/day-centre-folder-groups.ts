@@ -100,6 +100,8 @@ export const DAY_CENTRE_BOULDERING_CLIMB_SLUGS = new Set([
   "slinky",
   "snake",
   "ball",
+  "back-to-wall",
+  "back-to-boulder",
 ]);
 
 export function dayCentreFolderForSlug(slug: string): DayCentreFolderId {

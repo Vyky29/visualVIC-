@@ -1,5 +1,6 @@
 import type { Routine } from "@/lib/types/routine";
 import {
+  isCoreClimbPlannerUsername,
   isPlannerElevatedRole,
   type ParticipantSlug,
   type PortalAppRole,
@@ -17,6 +18,14 @@ export function isRestrictedStaffAccess(
 ): boolean {
   if (!access) return false;
   return !isPlannerElevatedRole(access.appRole);
+}
+
+/** Alex / Andres — Home + Library limited to Core and Climbing. */
+export function isCoreClimbOnlyStaffAccess(
+  access: StaffPlannerAccess | null | undefined,
+): boolean {
+  if (!access || isPlannerElevatedRole(access.appRole)) return false;
+  return isCoreClimbPlannerUsername(access.profile.username);
 }
 
 export function staffCanAccessTailoredParticipant(
@@ -49,6 +58,16 @@ export function staffMayOpenRoutine(
   routine: Routine,
 ): boolean {
   if (!isRestrictedStaffAccess(access)) return true;
+
+  if (isCoreClimbOnlyStaffAccess(access)) {
+    if (routine.id === "core-everyday") return true;
+    if (routine.id.startsWith("climbing-")) return true;
+    // Device-saved routines built from Core / Climbing library cards.
+    if (routine.id.startsWith("custom-") || routine.tags?.includes("custom")) {
+      return true;
+    }
+    return false;
+  }
 
   const participant = detectTailoredParticipantFromRoutine(routine);
   if (participant) {

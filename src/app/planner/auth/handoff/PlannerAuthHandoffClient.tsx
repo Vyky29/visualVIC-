@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { MobileScreen } from "@/components/layout/MobileScreen";
 import { createBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import { parsePlannerHandoffHash } from "@/lib/staff/planner-portal-handoff";
+import { markStaffPortalSession } from "@/lib/staff/staff-portal-session";
 import {
   plannerHandoffFailed,
   plannerHandoffSigningIn,
@@ -19,7 +20,8 @@ function PlannerAuthHandoffInner() {
   const lang = useCardUiLanguage();
   const [error, setError] = useState<string | null>(null);
 
-  const returnTo = searchParams.get("return") ?? "/planner";
+  /** Portal Plan opens Home; Library still available for building routines. */
+  const returnTo = searchParams.get("return") ?? "/dashboard";
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -35,7 +37,8 @@ function PlannerAuthHandoffInner() {
         const { data } = await supabase!.auth.getSession();
         if (cancelled) return;
         if (data.session) {
-          router.replace(returnTo.startsWith("/") ? returnTo : "/planner");
+          markStaffPortalSession();
+          router.replace(returnTo.startsWith("/") ? returnTo : "/dashboard");
           return;
         }
         router.replace(
@@ -54,7 +57,8 @@ function PlannerAuthHandoffInner() {
         return;
       }
 
-      router.replace(returnTo.startsWith("/") ? returnTo : "/planner");
+      markStaffPortalSession();
+      router.replace(returnTo.startsWith("/") ? returnTo : "/dashboard");
     }
 
     void run();

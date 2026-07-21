@@ -19,6 +19,7 @@ import {
   saveOfflineStaffAccess,
 } from "@/lib/offline/offline-staff-access-cache";
 import {
+  isCoreClimbOnlyStaffAccess,
   isRestrictedStaffAccess,
   staffAllowedLibrarySections,
   staffCanAccessTailoredParticipant,
@@ -34,6 +35,8 @@ type StaffAccessContextValue = {
   status: "loading" | "none" | "ready";
   access: StaffPlannerAccess | null;
   isRestricted: boolean;
+  /** Alex / Andres — Core + Climbing only. */
+  isCoreClimbOnly: boolean;
   allowedLibrarySections: ReadonlySet<PlannerLibrarySectionId> | undefined;
   canAccessTailoredParticipant: (participantId: TailoredParticipantId) => boolean;
   mayOpenRoutine: (routine: Routine) => boolean;
@@ -124,10 +127,13 @@ export function StaffAccessProvider({ children }: { children: ReactNode }) {
   const value = useMemo<StaffAccessContextValue>(() => {
     const staffUiActive =
       portalSession && isRestrictedStaffAccess(access);
+    const coreClimbOnly =
+      staffUiActive && isCoreClimbOnlyStaffAccess(access);
     return {
       status,
       access,
       isRestricted: staffUiActive,
+      isCoreClimbOnly: coreClimbOnly,
       allowedLibrarySections: staffUiActive
         ? staffAllowedLibrarySections(access)
         : undefined,
@@ -154,6 +160,7 @@ export function useStaffAccess(): StaffAccessContextValue {
       status: "none",
       access: null,
       isRestricted: false,
+      isCoreClimbOnly: false,
       allowedLibrarySections: undefined,
       canAccessTailoredParticipant: () => true,
       mayOpenRoutine: () => true,

@@ -63,7 +63,11 @@ export async function fetchStaffPlannerAccess(
       .filter((s): s is ParticipantSlug => s !== null);
   }
 
-  const allowedSections = resolvePlannerLibrarySections(appRole, participantSlugs);
+  const allowedSections = resolvePlannerLibrarySections(
+    appRole,
+    participantSlugs,
+    profile.username,
+  );
 
   return {
     ok: true,

@@ -44,6 +44,22 @@ export const PLANNER_STAFF_DAY_CENTRE_SECTIONS: readonly PlannerLibrarySectionId
   ...DAY_CENTRE_LIBRARY_SECTION_IDS,
 ];
 
+/** Climbing coaches (Portal usernames) — Core + Climbing library only. */
+export const PLANNER_STAFF_CORE_CLIMB_USERNAMES = new Set([
+  "alex",
+  "andres",
+]);
+
+export const PLANNER_STAFF_CORE_CLIMB_SECTIONS: readonly PlannerLibrarySectionId[] =
+  ["core", "climb"];
+
+export function isCoreClimbPlannerUsername(
+  username: string | null | undefined,
+): boolean {
+  const u = username?.trim().toLowerCase();
+  return !!u && PLANNER_STAFF_CORE_CLIMB_USERNAMES.has(u);
+}
+
 export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "bt",
   "shower",
@@ -126,9 +142,14 @@ export function participantSlugToLibrarySection(
 export function resolvePlannerLibrarySections(
   appRole: PortalAppRole,
   participantSlugs: readonly ParticipantSlug[],
+  username?: string | null,
 ): ReadonlySet<PlannerLibrarySectionId> | null {
   if (isPlannerElevatedRole(appRole)) {
     return null;
+  }
+
+  if (isCoreClimbPlannerUsername(username)) {
+    return new Set(PLANNER_STAFF_CORE_CLIMB_SECTIONS);
   }
 
   const tailored = participantSlugs.map((slug) => PARTICIPANT_TO_SECTION[slug]);

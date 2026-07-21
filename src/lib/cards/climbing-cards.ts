@@ -10,6 +10,8 @@ export const CLIMBING_BACK_CARD_FILE = "backcard5.png" as const;
 
 /** Every PNG under public/cards/climbing/ except the back card (sorted A–Z). */
 export const CLIMBING_CARD_FILES = [
+  "back-to-boulder.png",
+  "back-to-wall.png",
   "ball.png",
   "blocks.png",
   "boulder-wall.png",
@@ -94,4 +96,10 @@ export const CLIMBING_BREAK_SEQUENCE = [
   { id: "climbing-slinky", slug: "slinky", title: "Slinky" },
   { id: "climbing-snake", slug: "snake", title: "Snake" },
   { id: "climbing-ball", slug: "ball", title: "Ball" },
+  { id: "climbing-back-to-wall", slug: "back-to-wall", title: "Back to wall" },
+  {
+    id: "climbing-back-to-boulder",
+    slug: "back-to-boulder",
+    title: "Back to boulder",
+  },
 ] as const;

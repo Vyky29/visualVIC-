@@ -17,6 +17,7 @@ import {
   plannerSupabaseMissing,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { markStaffPortalSession } from "@/lib/staff/staff-portal-session";
 
 const STAFF_PORTAL_URL =
   process.env.NEXT_PUBLIC_STAFF_PORTAL_URL ?? "https://portalvic.vercel.app";
@@ -30,7 +31,7 @@ function PlannerLoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const returnTo = searchParams.get("return") ?? "/planner";
+  const returnTo = searchParams.get("return") ?? "/dashboard";
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -40,7 +41,8 @@ function PlannerLoginForm() {
     let cancelled = false;
     void supabase.auth.getSession().then(({ data }) => {
       if (cancelled || !data.session) return;
-      router.replace(returnTo.startsWith("/") ? returnTo : "/planner");
+      markStaffPortalSession();
+      router.replace(returnTo.startsWith("/") ? returnTo : "/dashboard");
     });
     return () => {
       cancelled = true;
@@ -75,7 +77,8 @@ function PlannerLoginForm() {
       return;
     }
 
-    router.replace(returnTo.startsWith("/") ? returnTo : "/planner");
+    markStaffPortalSession();
+    router.replace(returnTo.startsWith("/") ? returnTo : "/dashboard");
   }
 
   return (
