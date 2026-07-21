@@ -302,44 +302,64 @@ async function playBeepsViaHtmlAudio(): Promise<void> {
 }
 
 /** Short rising alarm before auto-advance. Always attempts sound (not gated by voice). */
-export async function playTimerAlarm(): Promise<void> {
+export async function playTimerAlarm(options?: {
+  /** HTMLAudio beeps can block iOS TTS afterward — skip when we will speak next. */
+  allowHtmlFallback?: boolean;
+}): Promise<void> {
   if (typeof window === "undefined") return;
+  const allowHtml = options?.allowHtmlFallback !== false;
   resumeAudioContext();
   unlockScheduleVoice();
-  try {
-    const Ctx = getAudioContextCtor();
-    if (Ctx) {
-      audioCtx ??= new Ctx();
+
+  const tryWebBeeps = async (): Promise<boolean> => {
+    try {
+      const Ctx = getAudioContextCtor();
+      if (!Ctx) return false;
+      if (!audioCtx || audioCtx.state === "closed") {
+        audioCtx = new Ctx();
+      }
       if (audioCtx.state === "suspended") {
         await audioCtx.resume().catch(() => {});
       }
-      if (audioCtx.state === "running") {
-        const playBeep = (freq: number, start: number, dur: number) => {
-          const osc = audioCtx!.createOscillator();
-          const gain = audioCtx!.createGain();
-          osc.type = "sine";
-          osc.frequency.value = freq;
-          gain.gain.setValueAtTime(0.0001, start);
-          gain.gain.exponentialRampToValueAtTime(0.22, start + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-          osc.connect(gain);
-          gain.connect(audioCtx!.destination);
-          osc.start(start);
-          osc.stop(start + dur + 0.02);
-        };
-
-        const t0 = audioCtx.currentTime;
-        playBeep(880, t0, 0.18);
-        playBeep(1175, t0 + 0.22, 0.22);
-        playBeep(1319, t0 + 0.48, 0.28);
-        await new Promise((r) => setTimeout(r, 820));
-        return;
+      if (audioCtx.state !== "running") {
+        try {
+          await audioCtx.close();
+        } catch {
+          /* ignore */
+        }
+        audioCtx = new Ctx();
+        await audioCtx.resume().catch(() => {});
       }
+      if (audioCtx.state !== "running") return false;
+
+      const playBeep = (freq: number, start: number, dur: number) => {
+        const osc = audioCtx!.createOscillator();
+        const gain = audioCtx!.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.22, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx!.destination);
+        osc.start(start);
+        osc.stop(start + dur + 0.02);
+      };
+
+      const t0 = audioCtx.currentTime;
+      playBeep(880, t0, 0.18);
+      playBeep(1175, t0 + 0.22, 0.22);
+      playBeep(1319, t0 + 0.48, 0.28);
+      await new Promise((r) => setTimeout(r, 820));
+      return true;
+    } catch {
+      return false;
     }
-  } catch {
-    /* fall through */
-  }
-  await playBeepsViaHtmlAudio();
+  };
+
+  const ok = await tryWebBeeps();
+  if (ok) return;
+  if (allowHtml) await playBeepsViaHtmlAudio();
 }
 
 export function buildNowNextScheduleSpeech(

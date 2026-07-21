@@ -255,7 +255,7 @@ export function FocusMode({ routine, exitHref }: Props) {
     voiceEnabled,
     toggleVoice,
     speakActivity,
-    advanceWithAlarm,
+    advanceWithAlarmAndSpeak,
     unlockVoice,
   } = useScheduleVoice(lang);
   const {
@@ -345,7 +345,10 @@ export function FocusMode({ routine, exitHref }: Props) {
     stepKey: nowStep?.id ?? "none",
     hasTimer: nowHasTimer,
     finished: nowTimerFinished,
-    onAdvance: () => advanceWithAlarm(completeCurrent),
+    onAdvance: () => {
+      const nextTitle = speakableRoutineStepTitle(nextStep, lang);
+      advanceWithAlarmAndSpeak(nextTitle || undefined, completeCurrent);
+    },
   });
 
   useEffect(() => {

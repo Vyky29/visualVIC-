@@ -3,6 +3,9 @@ import type { CardLanguageCode } from "@/lib/preferences/card-language-preferenc
 import { resolveDigitalPixtoStrings } from "@/lib/i18n/pixto-digital-locale";
 import type { GeneratedPixtoRoutineStepData } from "@/lib/types/routine";
 
+/**
+ * Same string as the white title ribbon on Schedule / Focus cards.
+ */
 export function speakableRoutineStepTitle(
   step: RoutineStep | null | undefined,
   lang: CardLanguageCode,
@@ -10,12 +13,14 @@ export function speakableRoutineStepTitle(
   if (!step) return "";
   const gp = step.generatedPixto;
   if (gp?.illustrationUrl) {
-    return resolveDigitalPixtoStrings(
+    const resolved = resolveDigitalPixtoStrings(
       gp.illustrationUrl,
-      gp.title || step.title,
+      gp.title || step.title || "",
       gp.category || "",
       lang,
     ).title;
+    const t = resolved.trim() || gp.title?.trim() || step.title?.trim() || "";
+    return t;
   }
   return step.title?.trim() || "";
 }
@@ -28,10 +33,11 @@ export function speakableGeneratedCardTitle(
   lang: CardLanguageCode,
 ): string {
   if (!card) return "";
-  return resolveDigitalPixtoStrings(
+  const resolved = resolveDigitalPixtoStrings(
     card.illustrationUrl,
     card.title,
     card.category,
     lang,
   ).title;
+  return resolved.trim() || card.title?.trim() || "";
 }

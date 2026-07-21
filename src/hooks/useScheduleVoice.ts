@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   readStoredScheduleVoiceEnabled,
   SCHEDULE_VOICE_CHANGE_EVENT,
@@ -18,6 +18,8 @@ import type { CardLanguageCode } from "@/lib/preferences/card-language-preferenc
 
 export function useScheduleVoice(lang: CardLanguageCode) {
   const [enabled, setEnabled] = useState(false);
+  /** Skip the next auto step-speak (Focus effect) after timer already spoke. */
+  const suppressStepSpeakRef = useRef(false);
 
   useEffect(() => {
     setEnabled(readStoredScheduleVoiceEnabled());
@@ -44,6 +46,10 @@ export function useScheduleVoice(lang: CardLanguageCode) {
   const speakIfEnabled = useCallback(
     async (text: string) => {
       if (!readStoredScheduleVoiceEnabled()) return;
+      if (suppressStepSpeakRef.current) {
+        suppressStepSpeakRef.current = false;
+        return;
+      }
       const t = text.trim();
       if (!t) return;
       await speakSchedulePhrase(t, lang);
@@ -81,12 +87,15 @@ export function useScheduleVoice(lang: CardLanguageCode) {
   const advanceWithAlarmAndSpeak = useCallback(
     (nextTitle: string | undefined, advance: () => void) => {
       void (async () => {
-        // Timer chime always — voice toggle only gates spoken titles.
-        await playTimerAlarm();
+        const voiceOn = readStoredScheduleVoiceEnabled();
+        const ribbon = nextTitle?.trim() || "";
+        // Avoid HTMLAudio beeps when we need TTS right after (iOS).
+        await playTimerAlarm({ allowHtmlFallback: !voiceOn });
         advance();
-        if (readStoredScheduleVoiceEnabled() && nextTitle?.trim()) {
-          await speakSchedulePhrase(nextTitle.trim(), lang);
-        }
+        if (!voiceOn || !ribbon) return;
+        suppressStepSpeakRef.current = true;
+        await new Promise((r) => setTimeout(r, 120));
+        await speakSchedulePhrase(ribbon, lang);
       })();
     },
     [lang],
@@ -95,7 +104,8 @@ export function useScheduleVoice(lang: CardLanguageCode) {
   /** Alarm only — use when a step-change effect will speak the new title. */
   const advanceWithAlarm = useCallback((advance: () => void) => {
     void (async () => {
-      await playTimerAlarm();
+      const voiceOn = readStoredScheduleVoiceEnabled();
+      await playTimerAlarm({ allowHtmlFallback: !voiceOn });
       advance();
     })();
   }, []);
