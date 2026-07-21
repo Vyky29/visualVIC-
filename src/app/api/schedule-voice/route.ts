@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+/** Same club / Portal help-guide voice (portal-help-voice-speak default). */
 const DEFAULT_VOICE_ID = "3WqHLnw80rOZqJzW9YRB";
 const MAX_CHARS = 1200;
 
@@ -12,11 +13,36 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
+/** Prefer the voice ID currently configured on Portal guide TTS. */
+async function resolveGuideVoiceId(): Promise<string> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (url && anon) {
+    try {
+      const res = await fetch(`${url}/functions/v1/portal-help-voice-speak`, {
+        method: "GET",
+        headers: {
+          apikey: anon,
+          Authorization: `Bearer ${anon}`,
+        },
+        next: { revalidate: 300 },
+      });
+      if (res.ok) {
+        const json = (await res.json()) as { voiceId?: string };
+        const id = String(json.voiceId || "").trim();
+        if (id) return id;
+      }
+    } catch {
+      /* fall through */
+    }
+  }
+  return process.env.ELEVENLABS_VOICE_ID?.trim() || DEFAULT_VOICE_ID;
+}
+
 /** Health: whether server-side ElevenLabs is configured (no staff login required). */
 export async function GET() {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim() || "";
-  const voiceId =
-    process.env.ELEVENLABS_VOICE_ID?.trim() || DEFAULT_VOICE_ID;
+  const voiceId = await resolveGuideVoiceId();
   return NextResponse.json({
     ok: true,
     elevenlabs: Boolean(apiKey),
@@ -26,7 +52,7 @@ export async function GET() {
 
 /**
  * Schedule / Focus TTS for every user (no staff JWT).
- * Secret: ELEVENLABS_API_KEY on the visualVIC server (Vercel / .env.local).
+ * Uses the same ElevenLabs voice as the Portal help guide.
  */
 export async function POST(req: Request) {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim() || "";
@@ -57,8 +83,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const voiceId =
-    process.env.ELEVENLABS_VOICE_ID?.trim() || DEFAULT_VOICE_ID;
+  const voiceId = await resolveGuideVoiceId();
   const modelId =
     process.env.ELEVENLABS_MODEL_ID?.trim() || "eleven_multilingual_v2";
 
@@ -109,5 +134,6 @@ export async function POST(req: Request) {
     ok: true,
     audioBase64: bytesToBase64(buf),
     mime: "audio/mpeg",
+    voiceId,
   });
 }
