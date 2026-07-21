@@ -13,7 +13,8 @@
     "lint": "next lint",
     "icons:generate": "node scripts/generate-app-icons.mjs",
     "review:catalog": "node scripts/generate-card-review-catalog.mjs",
-    "push:main": "git push origin main"
+    "push:main": "git push origin main",
+    "smoke:voice": "node scripts/smoke-schedule-voice.mjs"
   },
   "dependencies": {
     "@serwist/next": "^9.5.11",
