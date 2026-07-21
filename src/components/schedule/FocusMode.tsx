@@ -29,6 +29,7 @@ import {
   focusModeOptExpandedCards,
   focusModeOptExitFocus,
   focusModeOptFirstThen,
+  focusModeOptHowFocusWorks,
   focusModeOptMarkFinished,
   focusModeOptRestartRoutine,
   focusModeReturnScheduleAria,
@@ -40,9 +41,15 @@ import {
   schedulePlayerCloseCta,
   schedulePlayerDone,
   schedulePlayerVoiceToggleAria,
+  focusModeOptTimerHint,
+  routineTimerStepLabel,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
+import {
+  readStoredFocusGestureGuideSeen,
+  writeStoredFocusGestureGuideSeen,
+} from "@/lib/preferences/focus-gesture-guide-preference";
 import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { writeFirstThenSession } from "@/lib/experimental/first-then-session";
 import { buildFirstThenQueueFromRoutineSteps } from "@/lib/first-then/build-first-then-queue";
@@ -51,12 +58,9 @@ import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
 import { useScheduleVoice } from "@/hooks/useScheduleVoice";
 import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
+import { FocusGestureGuide } from "@/components/schedule/FocusGestureGuide";
 import { speakableRoutineStepTitle } from "@/lib/voice/speakable-titles";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
-import {
-  focusModeOptTimerHint,
-  routineTimerStepLabel,
-} from "@/lib/i18n/app-shell-locale";
 
 type Props = {
   routine: Routine;
@@ -280,8 +284,25 @@ export function FocusMode({ routine, exitHref }: Props) {
 
   const [sheet, setSheet] = useState<"support" | "options" | null>(null);
   const [sessionTimerSec, setSessionTimerSec] = useState<number | undefined>();
+  const [showGestureGuide, setShowGestureGuide] = useState(false);
 
   const exit = useCallback(() => router.push(exitHref), [router, exitHref]);
+
+  useEffect(() => {
+    if (!readStoredFocusGestureGuideSeen()) {
+      setShowGestureGuide(true);
+    }
+  }, []);
+
+  const dismissGestureGuide = useCallback(() => {
+    writeStoredFocusGestureGuideSeen(true);
+    setShowGestureGuide(false);
+  }, []);
+
+  const openGestureGuide = useCallback(() => {
+    setSheet(null);
+    setShowGestureGuide(true);
+  }, []);
 
   const tl = useTapZone(goPrevious);
   const tr = useTapZone(skipCurrent);
@@ -719,6 +740,11 @@ export function FocusMode({ routine, exitHref }: Props) {
             toggleExpandedCards,
             "opt-expanded-cards",
           )}
+          {sheetRow(
+            focusModeOptHowFocusWorks(lang),
+            openGestureGuide,
+            "opt-gesture-guide",
+          )}
           {sheetRow(focusModeOptBackSchedule(lang), () => {
             setSheet(null);
             exit();
@@ -738,6 +764,10 @@ export function FocusMode({ routine, exitHref }: Props) {
           }, "opt-exit")}
         </div>
       </Sheet>
+
+      {showGestureGuide ? (
+        <FocusGestureGuide lang={lang} onDismiss={dismissGestureGuide} />
+      ) : null}
     </div>
   );
 }

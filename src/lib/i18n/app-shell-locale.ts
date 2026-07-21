@@ -1373,6 +1373,40 @@ export function focusModeAriaOptions(lang: CardLanguageCode): string {
   return isEs(lang) ? "Opciones" : "Options";
 }
 
+export function focusGestureGuideTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cómo funciona Focus" : "How Focus works";
+}
+
+export function focusGestureGuidePrevious(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Anterior" : "Previous";
+}
+
+export function focusGestureGuideSkip(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Saltar" : "Skip";
+}
+
+export function focusGestureGuideCenter(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Desliza o toca dos veces para terminar el paso"
+    : "Swipe or double-tap to finish the step";
+}
+
+export function focusGestureGuideSupport(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Apoyo" : "Support";
+}
+
+export function focusGestureGuideOptions(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Opciones" : "Options";
+}
+
+export function focusGestureGuideGotIt(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Entendido" : "Got it";
+}
+
+export function focusModeOptHowFocusWorks(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cómo funciona Focus" : "How Focus works";
+}
+
 export function focusModeSheetSupportTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Apoyo" : "Support";
 }
