@@ -27,13 +27,18 @@ export function StepTimerBadge({
   const lang = useCardUiLanguage();
   const progress =
     totalSec > 0 ? Math.min(1, Math.max(0, remainingSec / totalSec)) : 0;
-  const radius = 22;
-  const circumference = 2 * Math.PI * radius;
-  const dashOffset = circumference * (1 - progress);
 
   const isFocus = variant === "focus";
   const isPackMark = variant === "schedule-pack-mark";
   const ringColour = categoryColour ?? (isFocus ? "#f5f0e8" : "#6b9080");
+
+  // Pack-mark fills the logo slot; use a tighter ring so digits can grow.
+  const radius = isPackMark ? 40 : 22;
+  const view = isPackMark ? 100 : 52;
+  const center = view / 2;
+  const stroke = isPackMark ? 7 : 3;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference * (1 - progress);
 
   return (
     <div
@@ -64,11 +69,11 @@ export function StepTimerBadge({
             : { duration: 0.2 }
         }
         className={cn(
-          "relative flex items-center justify-center rounded-2xl shadow-soft ring-1 backdrop-blur-sm",
+          "relative flex items-center justify-center",
           isPackMark
-            ? "aspect-square h-full w-full rounded-[22%] bg-white/95 ring-ink/10"
+            ? "h-full w-full bg-transparent shadow-none ring-0"
             : cn(
-                "rounded-full",
+                "rounded-full shadow-soft ring-1 backdrop-blur-sm",
                 "h-[3.75rem] w-[3.75rem] tablet:h-[4.25rem] tablet:w-[4.25rem]",
                 isFocus
                   ? "bg-black/55 text-cream ring-white/20"
@@ -78,26 +83,30 @@ export function StepTimerBadge({
       >
         <svg
           className="absolute inset-0 h-full w-full -rotate-90"
-          viewBox="0 0 52 52"
+          viewBox={`0 0 ${view} ${view}`}
           aria-hidden
         >
           <circle
-            cx="26"
-            cy="26"
+            cx={center}
+            cy={center}
             r={radius}
             fill="none"
-            stroke={isFocus ? "rgba(255,255,255,0.15)" : "rgba(28,36,32,0.1)"}
-            strokeWidth="3"
+            stroke={
+              isFocus && !isPackMark
+                ? "rgba(255,255,255,0.15)"
+                : "rgba(28,36,32,0.14)"
+            }
+            strokeWidth={stroke}
           />
           <circle
-            cx="26"
-            cy="26"
+            cx={center}
+            cy={center}
             r={radius}
             fill="none"
             stroke={ringColour}
-            strokeOpacity={isFocus ? 0.85 : 1}
+            strokeOpacity={isFocus && !isPackMark ? 0.85 : 1}
             className="transition-[stroke-dashoffset] duration-1000 ease-linear"
-            strokeWidth="3"
+            strokeWidth={stroke}
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={dashOffset}
@@ -105,11 +114,11 @@ export function StepTimerBadge({
         </svg>
         <span
           className={cn(
-            "relative tabular-nums tracking-tight text-ink",
+            "relative z-[1] tabular-nums tracking-tight text-ink",
             isPackMark
               ? totalSec >= 600
-                ? "text-[9px] font-bold sm:text-[10px]"
-                : "text-[10px] font-bold sm:text-[11px]"
+                ? "text-[15px] font-bold leading-none sm:text-[17px]"
+                : "text-[18px] font-bold leading-none sm:text-[20px]"
               : totalSec >= 600
                 ? "text-[15px] font-bold"
                 : "text-[17px] font-bold",
