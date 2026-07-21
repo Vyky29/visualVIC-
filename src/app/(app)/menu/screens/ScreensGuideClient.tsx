@@ -2,10 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
-import { FocusGestureDiagram } from "@/components/schedule/FocusGestureDiagram";
+import {
+  FocusOptionsExplainList,
+  ScreensGuidePhonePreview,
+} from "@/components/menu/ScreensGuidePreviews";
 import { Card } from "@/components/ui/Card";
 import {
   screensGuideBlurb,
+  screensGuideOptionsHeading,
+  screensGuideOptionsIntro,
   screensGuideScreenBody,
   screensGuideScreenTitle,
   screensGuideSelectHint,
@@ -70,14 +75,35 @@ export function ScreensGuideClient() {
           </ul>
         </section>
 
-        <Card className="space-y-4">
-          <h2 className="text-[17px] font-semibold leading-snug text-ink">
-            {screensGuideScreenTitle(selected, lang)}
-          </h2>
-          <p className="text-[14px] leading-relaxed text-ink-subtle whitespace-pre-line">
-            {body}
-          </p>
-          {selected === "focus" ? <FocusGestureDiagram lang={lang} /> : null}
+        <Card className="overflow-hidden p-4 sm:p-5">
+          <div className="flex flex-col gap-5 tablet:flex-row tablet:items-start tablet:gap-6">
+            <div className="shrink-0 tablet:w-[240px]">
+              <ScreensGuidePhonePreview screen={selected} lang={lang} />
+            </div>
+
+            <div className="min-w-0 flex-1 space-y-4">
+              <div className="space-y-2">
+                <h2 className="text-[17px] font-semibold leading-snug text-ink">
+                  {screensGuideScreenTitle(selected, lang)}
+                </h2>
+                <p className="text-[14px] leading-relaxed text-ink-subtle">
+                  {body}
+                </p>
+              </div>
+
+              {selected === "focus" ? (
+                <div className="space-y-2 rounded-2xl bg-canvas-muted/50 p-3 ring-1 ring-ink/[0.06] sm:p-4">
+                  <h3 className="text-[14px] font-semibold text-ink">
+                    {screensGuideOptionsHeading(lang)}
+                  </h3>
+                  <p className="text-[12px] leading-snug text-ink-subtle">
+                    {screensGuideOptionsIntro(lang)}
+                  </p>
+                  <FocusOptionsExplainList lang={lang} />
+                </div>
+              ) : null}
+            </div>
+          </div>
         </Card>
       </div>
     </div>

@@ -1464,16 +1464,17 @@ export function screensGuideScreenBody(
   if (!isEs(lang)) {
     const en: Record<ScreensGuideKey, string> = {
       home: "Folders and quick entry for the people and spaces you work with. Open a folder to reach schedules and cards.",
-      library: "Browse visual cards by topic or participant. Tap a card to preview it; use cards when building or running routines.",
+      library:
+        "Browse visual cards by topic or participant. Tap a card to preview it; use cards when building or running routines.",
       schedule:
-        "Vertical list of steps for a routine. Scroll the day, see Now and Next, start Focus, or turn voice on to hear activity names.",
+        "Vertical list of steps for a routine. Scroll the day, see Now and Next, then open Focus when you need one big card.",
       focus:
-        "One big card, fullscreen. Corner taps are invisible — use the diagram below. Center: swipe or double-tap to finish the step.",
+        "One big card, fullscreen. Corners are invisible taps — see the phone. On the right: what Options actually opens.",
       firstThen:
-        "Two cards side by side: what happens first, then what comes next. Useful for short, clear transitions.",
+        "Two cards: what happens first, then what comes next. Clear short transitions.",
       saved:
-        "Routines you starred on this device. Open one to play it again without searching the library.",
-      menu: "Links to planner tools, demos, and this screens guide. Language and other prefs live in the header where available.",
+        "Routines you starred on this device. Open one to play it again without searching.",
+      menu: "Tools, demos, and this screens guide. Start here when you need help.",
     };
     return en[key];
   }
@@ -1482,16 +1483,46 @@ export function screensGuideScreenBody(
     library:
       "Explora tarjetas visuales por tema o participante. Toca una tarjeta para verla; úsalas al montar o reproducir rutinas.",
     schedule:
-      "Lista vertical de pasos de una rutina. Recorre el día, mira Ahora y Siguiente, entra en Focus o activa la voz para oír los nombres.",
+      "Lista vertical de pasos. Mira Ahora y Siguiente, y entra en Focus cuando quieras una sola tarjeta grande.",
     focus:
-      "Una tarjeta grande a pantalla completa. Los toques de las esquinas no se ven: usa el diagrama de abajo. Centro: desliza o toca dos veces para terminar el paso.",
+      "Una tarjeta grande a pantalla completa. Las esquinas son toques invisibles — míralas en el móvil. A la derecha: qué abre Opciones de verdad.",
     firstThen:
-      "Dos tarjetas juntas: qué pasa primero y qué viene después. Sirve para transiciones cortas y claras.",
+      "Dos tarjetas: qué pasa primero y qué viene después. Transiciones cortas y claras.",
     saved:
-      "Rutinas que marcaste en este dispositivo. Ábrelas para reproducirlas sin buscar en la biblioteca.",
-    menu: "Enlaces a herramientas del planner, demos y esta guía de pantallas. El idioma y otras preferencias están en la cabecera cuando aplica.",
+      "Rutinas que marcaste en este dispositivo. Ábrelas para reproducirlas sin buscar.",
+    menu: "Herramientas, demos y esta guía. Empieza aquí cuando necesites ayuda.",
   };
   return es[key];
+}
+
+export function screensGuideOptionsHeading(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Dentro de Opciones" : "Inside Options";
+}
+
+export function screensGuideOptionsIntro(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Esquina inferior derecha. Esto es lo que puedes hacer:"
+    : "Bottom-right corner. Here’s what you can do:";
+}
+
+export function screensGuideFolderCore(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Core" : "Core";
+}
+
+export function screensGuideFolderClimb(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Escalada" : "Climbing";
+}
+
+export function screensGuidePreviewFirst(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Primero" : "First";
+}
+
+export function screensGuidePreviewThen(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Después" : "Then";
+}
+
+export function screensGuideSavedStarHint(lang: CardLanguageCode): string {
+  return isEs(lang) ? "En este dispositivo" : "On this device";
 }
 
 export function focusModeSheetSupportTitle(lang: CardLanguageCode): string {
