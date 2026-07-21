@@ -373,6 +373,11 @@ export function SwipeableStepCard({
         ) {
           lastTouchTapRef.current = null;
           clearSingleTapSpeakTimer();
+          try {
+            window.speechSynthesis?.cancel();
+          } catch {
+            /* ignore */
+          }
           if (doubleTapCompletes) {
             void runSwipeCompleteFeedback();
           } else {
@@ -381,14 +386,9 @@ export function SwipeableStepCard({
           return;
         }
         lastTouchTapRef.current = { time: t, x, y };
-        clearSingleTapSpeakTimer();
-        if (onSingleTapSpeak) {
-          singleTapSpeakTimerRef.current = window.setTimeout(() => {
-            singleTapSpeakTimerRef.current = null;
-            lastTouchTapRef.current = null;
-            onSingleTapSpeak();
-          }, DOUBLE_TAP_MS + 40);
-        }
+        // Speak on the FIRST tap immediately (iOS needs the gesture call stack).
+        // Double-tap cancels speech and completes instead.
+        onSingleTapSpeak?.();
       }
     },
     [

@@ -1,6 +1,6 @@
 /**
- * Schedule / Focus voice — same ElevenLabs edge function as Portal guide,
- * with browser speechSynthesis fallback when unsigned or offline.
+ * Schedule / Focus voice — ElevenLabs when staff JWT works, browser TTS otherwise.
+ * iOS: must start browser TTS in the same call stack as the tap (no await before speak).
  */
 
 import { createBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -11,6 +11,8 @@ const EDGE_FN = "portal-help-voice-speak";
 const MAX_CHARS = 1200;
 
 let activeAudio: HTMLAudioElement | null = null;
+/** One unlocked element — new Audio() after a gesture often cannot play on iOS. */
+let voiceEl: HTMLAudioElement | null = null;
 let blobUrls: string[] = [];
 let audioUnlocked = false;
 let audioCtx: AudioContext | null = null;
@@ -38,17 +40,20 @@ function base64ToBlobUrl(base64: string, mime = "audio/mpeg"): string {
   return url;
 }
 
-function ensureAudioEl(): HTMLAudioElement | null {
+function ensureVoiceEl(): HTMLAudioElement | null {
   if (typeof Audio === "undefined") return null;
-  const el = new Audio();
-  el.setAttribute("playsinline", "");
-  el.setAttribute("webkit-playsinline", "true");
-  try {
-    (el as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
-  } catch {
-    /* ignore */
+  if (!voiceEl) {
+    voiceEl = new Audio();
+    voiceEl.setAttribute("playsinline", "");
+    voiceEl.setAttribute("webkit-playsinline", "true");
+    try {
+      (voiceEl as HTMLAudioElement & { playsInline?: boolean }).playsInline = true;
+    } catch {
+      /* ignore */
+    }
+    voiceEl.preload = "auto";
   }
-  return el;
+  return voiceEl;
 }
 
 function getAudioContextCtor(): typeof AudioContext | null {
@@ -74,46 +79,51 @@ function resumeAudioContext() {
   }
 }
 
-/** Call from a user gesture (toggle / first tap) so iOS allows later playback. */
+/** Call from a user gesture so iOS allows later playback. */
 export function unlockScheduleVoice(): void {
   if (typeof window === "undefined") return;
   resumeAudioContext();
-  if (audioUnlocked) {
-    // Re-resume on every gesture — iOS often re-suspends after idle.
-    return;
-  }
-  const el = ensureAudioEl();
-  if (!el) {
-    audioUnlocked = true;
-    return;
-  }
-  try {
-    el.muted = true;
-    el.src = SILENT_WAV;
-    const p = el.play();
-    const finish = () => {
-      try {
-        el.pause();
-        el.currentTime = 0;
-        el.muted = false;
-      } catch {
-        /* ignore */
-      }
-      audioUnlocked = true;
-    };
-    if (p && typeof p.then === "function") {
-      void p.then(finish).catch(() => {
+  const el = ensureVoiceEl();
+  if (el && !audioUnlocked) {
+    try {
+      el.muted = true;
+      el.src = SILENT_WAV;
+      const p = el.play();
+      const finish = () => {
         try {
+          el.pause();
+          el.currentTime = 0;
           el.muted = false;
         } catch {
           /* ignore */
         }
-      });
-    } else {
-      finish();
+        audioUnlocked = true;
+      };
+      if (p && typeof p.then === "function") {
+        void p.then(finish).catch(() => {
+          try {
+            el.muted = false;
+          } catch {
+            /* ignore */
+          }
+        });
+      } else {
+        finish();
+      }
+    } catch {
+      audioUnlocked = true;
+    }
+  }
+  // Warm speechSynthesis inside the gesture (Portal pattern).
+  try {
+    if (window.speechSynthesis) {
+      const warm = new SpeechSynthesisUtterance(" ");
+      warm.volume = 0.01;
+      window.speechSynthesis.speak(warm);
+      window.speechSynthesis.cancel();
     }
   } catch {
-    audioUnlocked = true;
+    /* ignore */
   }
 }
 
@@ -122,6 +132,13 @@ export function stopScheduleVoice(): void {
     if (activeAudio) {
       activeAudio.pause();
       activeAudio = null;
+    }
+  } catch {
+    /* ignore */
+  }
+  try {
+    if (voiceEl) {
+      voiceEl.pause();
     }
   } catch {
     /* ignore */
@@ -148,46 +165,42 @@ async function authToken(): Promise<string | null> {
   }
 }
 
-async function waitForSpeechVoices(): Promise<void> {
-  if (typeof window === "undefined" || !window.speechSynthesis) return;
-  const existing = window.speechSynthesis.getVoices();
-  if (existing.length > 0) return;
-  await new Promise<void>((resolve) => {
-    const done = () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", done);
-      resolve();
-    };
-    window.speechSynthesis.addEventListener("voiceschanged", done);
-    window.setTimeout(done, 600);
-  });
+/**
+ * Start browser TTS in the current call stack (required on iOS after a tap).
+ * Do not await anything before calling this from a gesture handler.
+ */
+function speakBrowserImmediate(text: string, lang: CardLanguageCode): boolean {
+  if (typeof window === "undefined" || !window.speechSynthesis) return false;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const ui = effectiveDigitalUiLang(lang);
+    u.lang = ui === "es" ? "es-ES" : "en-GB";
+    u.rate = 0.92;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length) {
+      const want = ui === "es" ? "es" : "en";
+      const match = voices.find((v) => v.lang?.toLowerCase().startsWith(want));
+      if (match) u.voice = match;
+    }
+    window.speechSynthesis.speak(u);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-function speakBrowser(text: string, lang: CardLanguageCode): Promise<void> {
-  return (async () => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    await waitForSpeechVoices();
-    await new Promise<void>((resolve) => {
-      try {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = effectiveDigitalUiLang(lang) === "es" ? "es-ES" : "en-GB";
-        u.rate = 0.92;
-        u.onend = () => resolve();
-        u.onerror = () => resolve();
-        window.speechSynthesis.speak(u);
-      } catch {
-        resolve();
-      }
-    });
-  })();
-}
-
-async function playHtmlAudio(src: string): Promise<boolean> {
-  const el = ensureAudioEl();
+async function playOnVoiceEl(src: string): Promise<boolean> {
+  const el = ensureVoiceEl();
   if (!el) return false;
   activeAudio = el;
-  el.src = src;
+  try {
+    el.pause();
+  } catch {
+    /* ignore */
+  }
   el.muted = false;
+  el.src = src;
   try {
     await el.play();
     await new Promise<void>((resolve) => {
@@ -227,15 +240,21 @@ async function speakElevenLabs(text: string): Promise<boolean> {
     if (!json.ok || !json.audioBase64) return false;
 
     const blobUrl = base64ToBlobUrl(json.audioBase64, json.mime || "audio/mpeg");
-    const played = await playHtmlAudio(blobUrl);
-    // Autoplay blocked → fall through to browser TTS.
-    return played;
+    try {
+      window.speechSynthesis?.cancel();
+    } catch {
+      /* ignore */
+    }
+    return playOnVoiceEl(blobUrl);
   } catch {
     return false;
   }
 }
 
-/** Speak one phrase (ElevenLabs when staff session available, else browser TTS). */
+/**
+ * Speak a phrase. Starts browser TTS immediately (gesture-safe), then upgrades
+ * to ElevenLabs when a staff session can fetch audio.
+ */
 export async function speakSchedulePhrase(
   text: string,
   lang: CardLanguageCode,
@@ -244,11 +263,18 @@ export async function speakSchedulePhrase(
   if (!trimmed || typeof window === "undefined") return;
   stopScheduleVoice();
   unlockScheduleVoice();
+  // CRITICAL: sync TTS before any await — iOS blocks speak() after the gesture ends.
+  speakBrowserImmediate(trimmed, lang);
   const ok = await speakElevenLabs(trimmed);
-  if (!ok) await speakBrowser(trimmed, lang);
+  if (!ok) {
+    // ElevenLabs unavailable — browser utterance should already be speaking.
+    // Re-kick browser if it never started (some WebViews need a second try).
+    if (!window.speechSynthesis?.speaking && !window.speechSynthesis?.pending) {
+      speakBrowserImmediate(trimmed, lang);
+    }
+  }
 }
 
-/** Tiny PCM beep as data-URI WAV (HTMLAudio fallback when Web Audio is blocked). */
 function beepWavDataUrl(freq: number, durationMs: number): string {
   const sampleRate = 22050;
   const n = Math.max(1, Math.floor((sampleRate * durationMs) / 1000));
@@ -296,14 +322,13 @@ async function playBeepsViaHtmlAudio(): Promise<void> {
     { freq: 1319, ms: 220 },
   ];
   for (const tone of tones) {
-    const ok = await playHtmlAudio(beepWavDataUrl(tone.freq, tone.ms));
+    const ok = await playOnVoiceEl(beepWavDataUrl(tone.freq, tone.ms));
     if (!ok) break;
   }
 }
 
-/** Short rising alarm before auto-advance. Always attempts sound (not gated by voice). */
+/** Short rising alarm before auto-advance. */
 export async function playTimerAlarm(options?: {
-  /** HTMLAudio beeps can block iOS TTS afterward — skip when we will speak next. */
   allowHtmlFallback?: boolean;
 }): Promise<void> {
   if (typeof window === "undefined") return;

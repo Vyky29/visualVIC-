@@ -74,16 +74,14 @@ export function useScheduleVoice(lang: CardLanguageCode) {
     [speakIfEnabled],
   );
 
-  /** Tap-driven speak — always unlocks and speaks (iOS needs a gesture). */
-  const speakNow = useCallback(
-    async (title: string) => {
-      unlockScheduleVoice();
-      const t = title.trim();
-      if (!t) return;
-      await speakSchedulePhrase(t, lang);
-    },
-    [lang],
-  );
+  /** Tap-driven speak — sync TTS first (iOS), then optional ElevenLabs upgrade. */
+  const speakNow = useCallback((title: string) => {
+    unlockScheduleVoice();
+    const t = title.trim();
+    if (!t) return;
+    // Fire-and-forget; speakSchedulePhrase starts browser TTS synchronously.
+    void speakSchedulePhrase(t, lang);
+  }, [lang]);
 
   const speakFirstThen = useCallback(
     async (firstTitle: string, thenTitle: string) => {
