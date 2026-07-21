@@ -81,9 +81,8 @@ export function useScheduleVoice(lang: CardLanguageCode) {
   const advanceWithAlarmAndSpeak = useCallback(
     (nextTitle: string | undefined, advance: () => void) => {
       void (async () => {
-        if (readStoredScheduleVoiceEnabled()) {
-          await playTimerAlarm();
-        }
+        // Timer chime always — voice toggle only gates spoken titles.
+        await playTimerAlarm();
         advance();
         if (readStoredScheduleVoiceEnabled() && nextTitle?.trim()) {
           await speakSchedulePhrase(nextTitle.trim(), lang);
@@ -96,9 +95,7 @@ export function useScheduleVoice(lang: CardLanguageCode) {
   /** Alarm only — use when a step-change effect will speak the new title. */
   const advanceWithAlarm = useCallback((advance: () => void) => {
     void (async () => {
-      if (readStoredScheduleVoiceEnabled()) {
-        await playTimerAlarm();
-      }
+      await playTimerAlarm();
       advance();
     })();
   }, []);
@@ -113,6 +110,7 @@ export function useScheduleVoice(lang: CardLanguageCode) {
     speakFirstThen,
     advanceWithAlarmAndSpeak,
     advanceWithAlarm,
+    unlockVoice: unlockScheduleVoice,
     stopVoice: stopScheduleVoice,
   };
 }

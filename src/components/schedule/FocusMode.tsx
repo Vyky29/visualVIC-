@@ -256,6 +256,7 @@ export function FocusMode({ routine, exitHref }: Props) {
     toggleVoice,
     speakActivity,
     advanceWithAlarm,
+    unlockVoice,
   } = useScheduleVoice(lang);
   const {
     steps,
@@ -281,10 +282,19 @@ export function FocusMode({ routine, exitHref }: Props) {
 
   const exit = useCallback(() => router.push(exitHref), [router, exitHref]);
 
+  const openSupport = useCallback(() => {
+    unlockVoice();
+    setSheet("support");
+  }, [unlockVoice]);
+  const openOptions = useCallback(() => {
+    unlockVoice();
+    setSheet("options");
+  }, [unlockVoice]);
+
   const tl = useTapZone(goPrevious);
   const tr = useTapZone(skipCurrent);
-  const bl = useTapZone(() => setSheet("support"));
-  const br = useTapZone(() => setSheet("options"));
+  const bl = useTapZone(openSupport);
+  const br = useTapZone(openOptions);
 
   /** Safe-area only — avoids extra gutters so the flashcard can use the screen. */
   const pad = cn(
@@ -640,7 +650,7 @@ export function FocusMode({ routine, exitHref }: Props) {
           </button>
           <button
             type="button"
-            onClick={() => setSheet("options")}
+            onClick={openOptions}
             className="rounded-xl bg-canvas-muted px-3 py-2 text-[13px] font-medium text-ink transition hover:bg-canvas"
           >
             {focusModeAriaOptions(lang)}
@@ -708,7 +718,10 @@ export function FocusMode({ routine, exitHref }: Props) {
                   ? undefined
                   : sessionTimerSec ?? savedTimerSec
               }
-              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
+              onChange={(sec) => {
+                unlockVoice();
+                setSessionTimerSec(sec ?? 0);
+              }}
             />
           </div>
           {sheetToggleRow(

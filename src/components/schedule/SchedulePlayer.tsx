@@ -229,6 +229,7 @@ export function SchedulePlayer({
     toggleVoice,
     speakScheduleOverview,
     advanceWithAlarmAndSpeak,
+    unlockVoice,
   } = useScheduleVoice(cardUiLang);
 
   const remainingTitles = useMemo(() => {
@@ -385,7 +386,10 @@ export function SchedulePlayer({
             type="button"
             variant="secondary"
             className="min-h-touch min-w-0 flex-1 gap-2 px-3"
-            onClick={() => setShowTimerPanel((v) => !v)}
+            onClick={() => {
+              unlockVoice();
+              setShowTimerPanel((v) => !v);
+            }}
             aria-pressed={showTimerPanel || nowHasTimer}
           >
             <span aria-hidden>⏱</span>
@@ -427,7 +431,10 @@ export function SchedulePlayer({
                   ? undefined
                   : sessionTimerSec ?? savedTimerSec
               }
-              onChange={(sec) => setSessionTimerSec(sec ?? 0)}
+              onChange={(sec) => {
+                unlockVoice();
+                setSessionTimerSec(sec ?? 0);
+              }}
             />
           </div>
         ) : null}
