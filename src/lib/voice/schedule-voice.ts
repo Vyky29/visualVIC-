@@ -94,6 +94,7 @@ export function unlockScheduleVoice(): void {
         try {
           el.pause();
           el.currentTime = 0;
+          el.src = "";
           el.muted = false;
         } catch {
           /* ignore */
@@ -114,17 +115,6 @@ export function unlockScheduleVoice(): void {
     } catch {
       audioUnlocked = true;
     }
-  }
-  // Warm speechSynthesis inside the gesture (Portal pattern).
-  try {
-    if (window.speechSynthesis) {
-      const warm = new SpeechSynthesisUtterance(" ");
-      warm.volume = 0.01;
-      window.speechSynthesis.speak(warm);
-      window.speechSynthesis.cancel();
-    }
-  } catch {
-    /* ignore */
   }
 }
 
@@ -286,8 +276,8 @@ async function speakCloudTts(text: string): Promise<boolean> {
 }
 
 /**
- * Speak a phrase. Starts browser TTS immediately (gesture-safe), then upgrades
- * to ElevenLabs via /api/schedule-voice (no staff login required).
+ * Speak a phrase via ElevenLabs (/api/schedule-voice). Browser TTS only if cloud fails.
+ * Do not start both — that caused double voice + a glitchy “recorder” sound on cancel.
  */
 export async function speakSchedulePhrase(
   text: string,
@@ -297,13 +287,9 @@ export async function speakSchedulePhrase(
   if (!trimmed || typeof window === "undefined") return;
   stopScheduleVoice();
   unlockScheduleVoice();
-  // CRITICAL: sync TTS before any await — iOS blocks speak() after the gesture ends.
-  speakBrowserImmediate(trimmed, lang);
   const ok = await speakCloudTts(trimmed);
   if (!ok) {
-    if (!window.speechSynthesis?.speaking && !window.speechSynthesis?.pending) {
-      speakBrowserImmediate(trimmed, lang);
-    }
+    speakBrowserImmediate(trimmed, lang);
   }
 }
 
