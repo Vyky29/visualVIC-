@@ -71,6 +71,7 @@ const STOCK_PACK_IDS = new Set<string>([
   "emmanuel-gym-avatar",
   "emmanuel-gym-equipment-3d",
   "cyrus-day-centre",
+  "tinashe-day-centre",
   "fadi-mon-wed-fri-avatar",
   "fadi-mon-wed-fri-items",
   "fadi-tue-thu-avatar",
@@ -546,6 +547,9 @@ export function stepCardVisualTone(step: RoutineStep): RoutineVisualTone {
   if (includesAny(haystack, ["/day centre/timi", "/timi/", "timi-"])) {
     return "tailored";
   }
+  if (includesAny(haystack, ["/day centre/tinashe", "/tinashe/", "tinashe-"])) {
+    return "tailored";
+  }
   if (includesAny(haystack, ["/day centre/ikram", "/ikram/", "/day centre/serine", "/serine/"])) {
     return "tailored";
   }
@@ -677,6 +681,7 @@ export function routineVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "tinashe-day-centre") return "tailored";
   if (id.startsWith("fadi-") && id.endsWith("-avatar")) return "tailored";
   if (id.startsWith("fadi-") && id.endsWith("-items")) return "daycentre";
   if (id === "timi-day-centre") return "tailored";
@@ -741,6 +746,7 @@ export function routinePlaybackVisualTone(r: Routine): RoutineVisualTone {
   if (id === "emmanuel-gym-avatar") return "ayaan";
   if (id === "emmanuel-gym-equipment-3d") return "physical";
   if (id === "cyrus-day-centre") return "tailored";
+  if (id === "tinashe-day-centre") return "tailored";
   if (id.startsWith("fadi-") && id.endsWith("-avatar")) return "tailored";
   if (id.startsWith("fadi-") && id.endsWith("-items")) return "daycentre";
   if (id === "timi-day-centre") return "tailored";

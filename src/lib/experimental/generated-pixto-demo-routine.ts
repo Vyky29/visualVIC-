@@ -132,6 +132,18 @@ import {
   type DayCentreCyrusStep,
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
+  DAY_CENTRE_TINASHE_LIBRARY_SEQUENCE,
+  DAY_CENTRE_TINASHE_SCHEDULE_SEQUENCE,
+  DAY_CENTRE_TINASHE_CARD_CATEGORY_LABEL,
+  DAY_CENTRE_TINASHE_CATEGORY_COLOUR,
+  dayCentreTinasheFocusImageUrlForStep,
+  dayCentreTinasheImageUrlForStep,
+  dayCentreTinasheScheduleFocusImageUrlForStep,
+  dayCentreTinasheScheduleImageUrlForStep,
+  dayCentreTinashePackMarkUrl,
+  type DayCentreTinasheStep,
+} from "@/lib/cards/day-centre-tinashe-cards";
+import {
   DAY_CENTRE_TIMI_LIBRARY_SEQUENCE,
   DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE,
   DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE,
@@ -738,6 +750,39 @@ function cyrusScheduleGeneratedCardProps(step: DayCentreCyrusStep) {
 export const DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
   DAY_CENTRE_CYRUS_SCHEDULE_SEQUENCE.map((s) =>
     cyrusScheduleGeneratedCardProps(s),
+  );
+
+function tinasheGeneratedCardProps(step: DayCentreTinasheStep) {
+  const focusIllustrationUrl = dayCentreTinasheFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreTinasheImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_TINASHE_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_TINASHE_CATEGORY_COLOUR,
+    iconUrl: dayCentreTinashePackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_TINASHE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_TINASHE_LIBRARY_SEQUENCE.map((s) => tinasheGeneratedCardProps(s));
+
+function tinasheScheduleGeneratedCardProps(step: DayCentreTinasheStep) {
+  const focusIllustrationUrl =
+    dayCentreTinasheScheduleFocusImageUrlForStep(step);
+  return {
+    illustrationUrl: dayCentreTinasheScheduleImageUrlForStep(step),
+    title: lc(step.title),
+    category: lc(DAY_CENTRE_TINASHE_CARD_CATEGORY_LABEL),
+    categoryColour: DAY_CENTRE_TINASHE_CATEGORY_COLOUR,
+    iconUrl: dayCentreTinashePackMarkUrl(),
+    ...(focusIllustrationUrl ? { focusIllustrationUrl } : {}),
+  };
+}
+
+export const DAY_CENTRE_TINASHE_SCHEDULE_GENERATED_CARD_PROPS: GeneratedPixtoCardProps[] =
+  DAY_CENTRE_TINASHE_SCHEDULE_SEQUENCE.map((s) =>
+    tinasheScheduleGeneratedCardProps(s),
   );
 
 function timiGeneratedCardProps(step: DayCentreTimiStep) {

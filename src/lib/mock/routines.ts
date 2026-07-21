@@ -59,6 +59,7 @@ import {
   DAY_CENTRE_EMMANUEL_GYM_AVATAR_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_GYM_ITEMS_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_SCHEDULE_GENERATED_CARD_PROPS,
+  DAY_CENTRE_TINASHE_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_MON_WED_FRI_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_TUE_THU_SCHEDULE_GENERATED_CARD_PROPS,
@@ -93,6 +94,7 @@ import {
   DAY_CENTRE_EMMANUEL_WEEKDAY_ITEMS_ROUTINE_NAME,
 } from "@/lib/cards/day-centre-emmanuel-cards";
 import { DAY_CENTRE_CYRUS_ROUTINE_NAME } from "@/lib/cards/day-centre-cyrus-cards";
+import { DAY_CENTRE_TINASHE_ROUTINE_NAME } from "@/lib/cards/day-centre-tinashe-cards";
 import {
   DAY_CENTRE_FADI_MON_WED_FRI_AVATAR_ROUTINE_NAME,
   DAY_CENTRE_FADI_MON_WED_FRI_ITEMS_ROUTINE_NAME,
@@ -778,6 +780,18 @@ export const mockRoutines: Routine[] = [
     steps: routineStepsFromGeneratedCardProps(
       "timi-day-centre-items",
       DAY_CENTRE_TIMI_ITEMS_SCHEDULE_GENERATED_CARD_PROPS,
+    ),
+  },
+  {
+    id: "tinashe-day-centre",
+    name: DAY_CENTRE_TINASHE_ROUTINE_NAME,
+    description:
+      "Tinashe's day-centre routine — snack, iPad, trampoline, climbing, basketball and home",
+    tags: ["extra"],
+    homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("tinashe-day-centre"),
+    steps: routineStepsFromGeneratedCardProps(
+      "tinashe-day-centre",
+      DAY_CENTRE_TINASHE_SCHEDULE_GENERATED_CARD_PROPS,
     ),
   },
 ];

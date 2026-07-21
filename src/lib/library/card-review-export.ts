@@ -119,6 +119,7 @@ const SECTION_ORDER_BY_CATEGORY: Record<
     "dccyrus",
     "dcfadi",
     "dctimi",
+    "dctinashe",
   ],
   activity: ["climb", "swim", "physical"],
 };

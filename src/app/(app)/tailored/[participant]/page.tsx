@@ -15,5 +15,6 @@ export function generateStaticParams() {
     { participant: "cyrus" },
     { participant: "fadi" },
     { participant: "timi" },
+    { participant: "tinashe" },
   ];
 }

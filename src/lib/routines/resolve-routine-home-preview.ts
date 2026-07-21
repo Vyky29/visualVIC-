@@ -14,6 +14,7 @@ import {
   dayCentreSerineTailoredHomeAvatarUrl,
   dayCentreTimiTailoredHomeAvatarUrl,
   dayCentreTimiImageUrl,
+  dayCentreTinasheTailoredHomeAvatarUrl,
   dayCentreGeneralImageUrl,
 } from "@/lib/cards/day-centre-shared";
 import { physical3dImageUrl } from "@/lib/cards/physical-cards";
@@ -47,6 +48,7 @@ export const TAILORED_STOCK_ROUTINE_IDS = [
   "fadi-tue-thu-items",
   "timi-day-centre",
   "timi-day-centre-items",
+  "tinashe-day-centre",
 ] as const;
 
 export type TailoredStockRoutineId = (typeof TAILORED_STOCK_ROUTINE_IDS)[number];
@@ -92,6 +94,8 @@ export function tailoredScheduleCloseUpPreviewUrl(
       return dayCentreTimiTailoredHomeAvatarUrl();
     case "timi-day-centre-items":
       return undefined;
+    case "tinashe-day-centre":
+      return dayCentreTinasheTailoredHomeAvatarUrl();
     default:
       return undefined;
   }
@@ -142,6 +146,8 @@ export function tailoredScheduleActionPreviewUrl(
       return dayCentreTimiImageUrl("timi-motor-skills");
     case "timi-day-centre-items":
       return dayCentreGeneralImageUrl("sensory-room");
+    case "tinashe-day-centre":
+      return dayCentreGeneralImageUrl("trampoline");
     default:
       return undefined;
   }
@@ -165,6 +171,7 @@ function detectTailoredStockIdFromSteps(
   if (haystack.includes("/cyrus")) return "cyrus-day-centre";
   if (haystack.includes("/fadi")) return "fadi-mon-wed-fri-avatar";
   if (haystack.includes("/timi") || haystack.includes("timi-")) return "timi-day-centre";
+  if (haystack.includes("/tinashe")) return "tinashe-day-centre";
   return undefined;
 }
 

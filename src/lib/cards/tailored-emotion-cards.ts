@@ -11,6 +11,7 @@ import {
   DAY_CENTRE_IKRAM_DIR,
   DAY_CENTRE_SERINE_DIR,
   DAY_CENTRE_TIMI_DIR,
+  DAY_CENTRE_TINASHE_DIR,
   dayCentreFadiEmotionUrl,
   dayCentreIkramTailoredHomeAvatarUrl,
 } from "@/lib/cards/day-centre-shared";
@@ -36,6 +37,7 @@ const PARTICIPANT_EMOTION_DIR: Record<TailoredParticipantId, string> = {
   cyrus: `${DAY_CENTRE_CYRUS_DIR}/emotions`,
   fadi: `${DAY_CENTRE_FADI_DIR}/emotions`,
   timi: `${DAY_CENTRE_TIMI_DIR}/emotions`,
+  tinashe: `${DAY_CENTRE_TINASHE_DIR}/emotions`,
 };
 
 /** Scene fallback when emotion PNG not yet on disk (Fadi happy ships in scenes/). */

@@ -18,6 +18,7 @@ export const DAY_CENTRE_FADI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/fadi` as const;
 export const DAY_CENTRE_TIMI_DIR = `${DAY_CENTRE_PUBLIC_DIR}/timi` as const;
 export const DAY_CENTRE_TIMI_ITEMS_DIR =
   `${DAY_CENTRE_TIMI_DIR}/items` as const;
+export const DAY_CENTRE_TINASHE_DIR = `${DAY_CENTRE_PUBLIC_DIR}/tinashe` as const;
 
 /** Red ribbon — Day Centre (distinct from hotel burgundy #8C1E2E). */
 export const DAY_CENTRE_CATEGORY_COLOUR = "#E53935" as const;
@@ -244,6 +245,32 @@ export function dayCentreCyrusScene2dUrl(slug: string): string {
 
 export function dayCentreCyrusScene2dFocusUrl(slug: string): string {
   return `${DAY_CENTRE_CYRUS_DIR}/scenes-2d/${slug}-focus.png`;
+}
+
+export function dayCentreTinashePackMarkUrl(): string {
+  return tailoredSchedulesPackMarkUrl();
+}
+
+export function dayCentreTinasheAvatarUrl(): string {
+  return "/avatars/tinashe-cartoon.png";
+}
+
+/** Home · Tailored schedules — 2D face portrait. */
+export function dayCentreTinasheTailoredHomeAvatarUrl(): string {
+  return "/avatars/tinashe-cartoon-2d.png";
+}
+
+/** Library pack accordion — 3D face close-up, fill icon square. */
+export function dayCentreTinasheLibraryPackIconUrl(): string {
+  return dayCentreTinasheAvatarUrl();
+}
+
+export function dayCentreTinasheSceneUrl(slug: string): string {
+  return `${DAY_CENTRE_TINASHE_DIR}/scenes/${slug}.png`;
+}
+
+export function dayCentreTinasheSceneFocusUrl(slug: string): string {
+  return `${DAY_CENTRE_TINASHE_DIR}/scenes/${slug}-focus.png`;
 }
 
 export function dayCentreTimiPackMarkUrl(): string {

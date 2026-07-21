@@ -37,6 +37,9 @@ function inferTailoredColourFromStep(step: RoutineStep): string | undefined {
   if (haystack.includes("/timi")) {
     return "#C8741C";
   }
+  if (haystack.includes("/tinashe")) {
+    return "#5E35B1";
+  }
   if (
     haystack.includes("/ikram") ||
     haystack.includes("/serine") ||
@@ -73,6 +76,9 @@ export function resolveCategoryBackCardUrl(
       return tailoredSchedulesBackCardUrl();
     }
     if (path.includes("/timi")) {
+      return tailoredSchedulesBackCardUrl();
+    }
+    if (path.includes("/tinashe")) {
       return tailoredSchedulesBackCardUrl();
     }
     if (path.includes("/ikram") || path.includes("/serine")) {

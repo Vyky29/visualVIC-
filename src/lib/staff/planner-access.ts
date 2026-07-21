@@ -13,7 +13,8 @@ export type ParticipantSlug =
   | "emmanuel"
   | "cyrus"
   | "fadi"
-  | "timi";
+  | "timi"
+  | "tinashe";
 
 export type PlannerLibrarySectionId =
   | "bt"
@@ -36,6 +37,7 @@ export type PlannerLibrarySectionId =
   | "dccyrus"
   | "dcfadi"
   | "dctimi"
+  | "dctinashe"
   | "physical";
 
 export const PLANNER_STAFF_DAY_CENTRE_SECTIONS: readonly PlannerLibrarySectionId[] = [
@@ -79,6 +81,7 @@ export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
   "dccyrus",
   "dcfadi",
   "dctimi",
+  "dctinashe",
   "climb",
   "swim",
   "physical",
@@ -95,6 +98,7 @@ const PARTICIPANT_TO_SECTION: Record<
   cyrus: "dccyrus",
   fadi: "dcfadi",
   timi: "dctimi",
+  tinashe: "dctinashe",
 };
 
 export type StaffProfileRow = {
@@ -126,7 +130,8 @@ export function parseParticipantSlug(raw: string): ParticipantSlug | null {
     s === "emmanuel" ||
     s === "cyrus" ||
     s === "fadi" ||
-    s === "timi"
+    s === "timi" ||
+    s === "tinashe"
   ) {
     return s;
   }

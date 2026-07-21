@@ -66,7 +66,8 @@ export function participantLibrarySectionId(
   | "dcemmanuel"
   | "dccyrus"
   | "dcfadi"
-  | "dctimi" {
+  | "dctimi"
+  | "dctinashe" {
   switch (participantId) {
     case "ikram":
       return "dcikram";
@@ -82,6 +83,8 @@ export function participantLibrarySectionId(
       return "dcfadi";
     case "timi":
       return "dctimi";
+    case "tinashe":
+      return "dctinashe";
   }
 }
 

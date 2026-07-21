@@ -576,6 +576,10 @@ const STOCK_ROUTINE_LABEL: Record<string, { en: string; es: string }> = {
     en: "Cyrus · Day centre (avatar)",
     es: "Cyrus · centro de día (avatar)",
   },
+  "tinashe-day-centre": {
+    en: "Tinashe · Day centre (avatar)",
+    es: "Tinashe · centro de día (avatar)",
+  },
   "fadi-mon-wed-fri-avatar": {
     en: "Fadi · Mon / Wed / Fri (avatar)",
     es: "Fadi · lunes / miércoles / viernes (avatar)",
@@ -650,7 +654,8 @@ export function libraryTailoredParticipantFolderLabel(
     | "emmanuel"
     | "cyrus"
     | "fadi"
-    | "timi",
+    | "timi"
+    | "tinashe",
   language: CardLanguageCode,
 ): string {
   const ui = effectiveDigitalUiLang(language);
@@ -667,7 +672,9 @@ export function libraryTailoredParticipantFolderLabel(
               ? "Cyrus"
               : participant === "fadi"
                 ? "Fadi"
-                : "Timi";
+                : participant === "timi"
+                  ? "Timi"
+                  : "Tinashe";
   if (ui === "es") return `Carpeta de ${name}`;
   return `${name}'s Folder`;
 }
@@ -720,6 +727,10 @@ export function libraryDayCentreFadiLabel(language: CardLanguageCode): string {
 
 export function libraryDayCentreTimiLabel(language: CardLanguageCode): string {
   return libraryTailoredParticipantFolderLabel("timi", language);
+}
+
+export function libraryDayCentreTinasheLabel(language: CardLanguageCode): string {
+  return libraryTailoredParticipantFolderLabel("tinashe", language);
 }
 
 export function stockRoutineDisplayName(

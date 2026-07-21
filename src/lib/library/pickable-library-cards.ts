@@ -64,6 +64,11 @@ import {
   dayCentreCyrusImageUrlForStep,
 } from "@/lib/cards/day-centre-cyrus-cards";
 import {
+  DAY_CENTRE_TINASHE_LIBRARY_SEQUENCE,
+  DAY_CENTRE_TINASHE_CATEGORY_COLOUR,
+  dayCentreTinasheImageUrlForStep,
+} from "@/lib/cards/day-centre-tinashe-cards";
+import {
   DAY_CENTRE_FADI_LIBRARY_SEQUENCE,
   DAY_CENTRE_FADI_ITEMS_LIBRARY_SEQUENCE,
   DAY_CENTRE_FADI_CATEGORY_COLOUR,
@@ -128,6 +133,7 @@ import {
   DAY_CENTRE_EMMANUEL_GENERATED_CARD_PROPS,
   DAY_CENTRE_EMMANUEL_ICON_GENERATED_CARD_PROPS,
   DAY_CENTRE_CYRUS_GENERATED_CARD_PROPS,
+  DAY_CENTRE_TINASHE_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_GENERATED_CARD_PROPS,
   DAY_CENTRE_FADI_ITEMS_LIBRARY_GENERATED_CARD_PROPS,
   DAY_CENTRE_TIMI_GENERATED_CARD_PROPS,
@@ -179,6 +185,10 @@ const PARTICIPANT_EMOTION_PACK: Record<
     colour: DAY_CENTRE_FADI_CATEGORY_COLOUR,
     iconUrl: dayCentreFadiPackMarkUrl(),
   },
+  tinashe: {
+    colour: DAY_CENTRE_TINASHE_CATEGORY_COLOUR,
+    iconUrl: dayCentreFadiPackMarkUrl(),
+  },
 };
 
 const PARTICIPANT_PICK_NS: Record<TailoredParticipantId, PickablePackId> = {
@@ -189,6 +199,7 @@ const PARTICIPANT_PICK_NS: Record<TailoredParticipantId, PickablePackId> = {
   cyrus: "dccyrus",
   fadi: "dcfadi",
   timi: "dctimi",
+  tinashe: "dctinashe",
 };
 
 /** Namespace prefix in `pickId` (before `::`). */
@@ -211,6 +222,7 @@ export type PickablePackId =
   | "dccyrus"
   | "dcfadi"
   | "dctimi"
+  | "dctinashe"
   | "mg2d"
   | "mg3d"
   | "phy2d"
@@ -238,6 +250,7 @@ export function pickablePackFromPickId(pickId: string): PickablePackId | null {
     ns === "dccyrus" ||
     ns === "dcfadi" ||
     ns === "dctimi" ||
+    ns === "dctinashe" ||
     ns === "mg2d" ||
     ns === "mg3d" ||
     ns === "phy2d" ||
@@ -749,6 +762,27 @@ export function buildPickableLibraryCards(): PickableLibraryCard[] {
       pickId: pid("dccyrus", s.slug),
       label: s.title,
       imageUrl: dayCentreCyrusImageUrlForStep(s),
+      category: "home",
+      generatedPixto: gp
+        ? {
+            illustrationUrl: gp.illustrationUrl,
+            title: gp.title,
+            category: gp.category,
+            categoryColour: gp.categoryColour,
+            iconUrl: gp.iconUrl,
+            cardType: gp.cardType,
+            focusIllustrationUrl: gp.focusIllustrationUrl,
+          }
+        : undefined,
+    });
+  });
+
+  DAY_CENTRE_TINASHE_LIBRARY_SEQUENCE.forEach((s, i) => {
+    const gp = DAY_CENTRE_TINASHE_GENERATED_CARD_PROPS[i];
+    out.push({
+      pickId: pid("dctinashe", s.slug),
+      label: s.title,
+      imageUrl: dayCentreTinasheImageUrlForStep(s),
       category: "home",
       generatedPixto: gp
         ? {
