@@ -1316,8 +1316,8 @@ export function schedulePlayerDoneCountLabel(
 
 export function schedulePlayerDoubleTapHint(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Doble toque para girar, o desliza a la derecha"
-    : "Double tap to flip, or swipe right";
+    ? "Toca para oír el nombre · doble toque o desliza para terminar"
+    : "Tap to hear the name · double-tap or swipe to finish";
 }
 
 export function firstThenFlickUpHint(lang: CardLanguageCode): string {
@@ -1328,8 +1328,8 @@ export function firstThenFlickUpHint(lang: CardLanguageCode): string {
 
 export function schedulePlayerDesktopFocusHint(lang: CardLanguageCode): string {
   return isEs(lang)
-    ? "Doble clic en la tarjeta, o usa el botón Focus mode abajo"
-    : "Double-click the card, or use Focus mode below";
+    ? "Clic para oír el nombre · doble clic o Focus mode abajo"
+    : "Click to hear the name · double-click, or Focus mode below";
 }
 
 export function schedulePlayerRoutineCompleteTitle(lang: CardLanguageCode): string {
@@ -1416,6 +1416,10 @@ export function focusModeReturnScheduleAria(lang: CardLanguageCode): string {
 
 export function focusModeAriaPreviousStep(lang: CardLanguageCode): string {
   return isEs(lang) ? "Paso anterior" : "Previous step";
+}
+
+export function focusModeAriaSpeakTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Oír el nombre de la actividad" : "Hear the activity name";
 }
 
 export function focusModeAriaSkipNext(lang: CardLanguageCode): string {

@@ -56,6 +56,11 @@ type Props = {
   onDoubleTapOpenFocus?: () => void;
   /** Double-tap (touch / pen) on the card face triggers the same flip-and-advance as swipe. */
   doubleTapCompletes?: boolean;
+  /**
+   * Single tap on the card face (after the double-tap window) — speak ribbon title.
+   * Fired from a real gesture so iOS allows audio.
+   */
+  onSingleTapSpeak?: () => void;
   /** Category back card shown during swipe-to-complete flip (Schedule hero / focus). */
   completionBackImageUrl?: string;
   /**
@@ -152,6 +157,7 @@ export function SwipeableStepCard({
   variant = "hero",
   onDoubleTapOpenFocus,
   doubleTapCompletes = false,
+  onSingleTapSpeak,
   completionBackImageUrl,
   accentRings = DEFAULT_ROUTINE_ACCENT_RINGS,
   scheduleTimer,
@@ -188,6 +194,7 @@ export function SwipeableStepCard({
   const lastTouchTapRef = useRef<{ time: number; x: number; y: number } | null>(
     null,
   );
+  const singleTapSpeakTimerRef = useRef<number | null>(null);
   const dragLockRef = useRef(false);
   const completionLockRef = useRef(false);
   const gestureRef = useRef<{
@@ -204,13 +211,26 @@ export function SwipeableStepCard({
     void flipControls.set({ rotateY: 0 });
     void controls.set({ opacity: 1, x: 0, y: 0, scale: 1 });
     setCompletionAnimating(false);
+    if (singleTapSpeakTimerRef.current != null) {
+      window.clearTimeout(singleTapSpeakTimerRef.current);
+      singleTapSpeakTimerRef.current = null;
+    }
+    lastTouchTapRef.current = null;
   }, [step.id, controls, flipControls]);
+
+  const clearSingleTapSpeakTimer = useCallback(() => {
+    if (singleTapSpeakTimerRef.current != null) {
+      window.clearTimeout(singleTapSpeakTimerRef.current);
+      singleTapSpeakTimerRef.current = null;
+    }
+  }, []);
 
   const handleDragStart = useCallback(() => {
     dragLockRef.current = true;
     gestureRef.current = null;
     lastTouchTapRef.current = null;
-  }, []);
+    clearSingleTapSpeakTimer();
+  }, [clearSingleTapSpeakTimer]);
 
   const clearDragLock = useCallback(() => {
     window.setTimeout(() => {
@@ -270,7 +290,9 @@ export function SwipeableStepCard({
   ]);
 
   const doubleTapEnabled =
-    (Boolean(onDoubleTapOpenFocus) || doubleTapCompletes) &&
+    (Boolean(onDoubleTapOpenFocus) ||
+      doubleTapCompletes ||
+      Boolean(onSingleTapSpeak)) &&
     (variant === "hero" || variant === "focus") &&
     status === "now" &&
     !completionAnimating &&
@@ -311,14 +333,19 @@ export function SwipeableStepCard({
   const focusImagePointerUp = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (!doubleTapEnabled) return;
+
       if (e.pointerType === "mouse") {
         gestureRef.current = null;
+        if (!dragLockRef.current) {
+          onSingleTapSpeak?.();
+        }
         return;
       }
 
       if (dragLockRef.current) {
         releaseGestureCapture(e.currentTarget, e.pointerId);
         gestureRef.current = null;
+        clearSingleTapSpeakTimer();
         return;
       }
 
@@ -331,6 +358,7 @@ export function SwipeableStepCard({
         gestureRef.current = null;
         if (g.maxSlop > TAP_CANCEL_SLOP) {
           lastTouchTapRef.current = null;
+          clearSingleTapSpeakTimer();
           return;
         }
 
@@ -344,6 +372,7 @@ export function SwipeableStepCard({
           Math.hypot(x - prev.x, y - prev.y) <= TAP_PAIR_MAX_DIST
         ) {
           lastTouchTapRef.current = null;
+          clearSingleTapSpeakTimer();
           if (doubleTapCompletes) {
             void runSwipeCompleteFeedback();
           } else {
@@ -352,14 +381,24 @@ export function SwipeableStepCard({
           return;
         }
         lastTouchTapRef.current = { time: t, x, y };
+        clearSingleTapSpeakTimer();
+        if (onSingleTapSpeak) {
+          singleTapSpeakTimerRef.current = window.setTimeout(() => {
+            singleTapSpeakTimerRef.current = null;
+            lastTouchTapRef.current = null;
+            onSingleTapSpeak();
+          }, DOUBLE_TAP_MS + 40);
+        }
       }
     },
     [
       doubleTapEnabled,
       doubleTapCompletes,
       onDoubleTapOpenFocus,
+      onSingleTapSpeak,
       runSwipeCompleteFeedback,
       releaseGestureCapture,
+      clearSingleTapSpeakTimer,
     ],
   );
 
@@ -368,8 +407,9 @@ export function SwipeableStepCard({
       releaseGestureCapture(e.currentTarget, e.pointerId);
       gestureRef.current = null;
       lastTouchTapRef.current = null;
+      clearSingleTapSpeakTimer();
     },
-    [releaseGestureCapture],
+    [releaseGestureCapture, clearSingleTapSpeakTimer],
   );
 
   const handleDragEnd = useCallback(

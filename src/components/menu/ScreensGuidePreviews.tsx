@@ -9,6 +9,7 @@ import {
   focusGestureGuidePrevious,
   focusGestureGuideSkip,
   focusGestureGuideSupport,
+  focusModeAriaSpeakTitle,
   focusModeOptBackSchedule,
   focusModeOptExitFocus,
   focusModeOptExpandedCards,
@@ -118,6 +119,10 @@ function FocusPhonePreview({ lang }: { lang: CardLanguageCode }) {
         <ZoneChip
           label={focusGestureGuidePrevious(lang)}
           className="left-1.5 top-5"
+        />
+        <ZoneChip
+          label={focusModeAriaSpeakTitle(lang)}
+          className="left-1/2 top-5 max-w-[36%] -translate-x-1/2"
         />
         <ZoneChip
           label={focusGestureGuideSkip(lang)}

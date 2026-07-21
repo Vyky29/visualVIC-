@@ -22,6 +22,7 @@ import {
   focusModeAriaOptions,
   focusModeAriaPreviousStep,
   focusModeAriaSkipNext,
+  focusModeAriaSpeakTitle,
   focusModeAriaSupportTools,
   focusModeNothingLeftBody,
   focusModeNothingLeftTitle,
@@ -255,6 +256,7 @@ export function FocusMode({ routine, exitHref }: Props) {
     voiceEnabled,
     toggleVoice,
     speakActivity,
+    speakNow,
     advanceWithAlarmAndSpeak,
     unlockVoice,
   } = useScheduleVoice(lang);
@@ -291,7 +293,14 @@ export function FocusMode({ routine, exitHref }: Props) {
     setSheet("options");
   }, [unlockVoice]);
 
+  const speakCurrentRibbon = useCallback(() => {
+    if (!nowStep) return;
+    const title = speakableRoutineStepTitle(nowStep, lang);
+    if (title) void speakNow(title);
+  }, [nowStep, lang, speakNow]);
+
   const tl = useTapZone(goPrevious);
+  const tm = useTapZone(speakCurrentRibbon);
   const tr = useTapZone(skipCurrent);
   const bl = useTapZone(openSupport);
   const br = useTapZone(openOptions);
@@ -478,6 +487,7 @@ export function FocusMode({ routine, exitHref }: Props) {
                     variant="focus"
                     onSwipeComplete={completeCurrent}
                     doubleTapCompletes
+                    onSingleTapSpeak={speakCurrentRibbon}
                     completionBackImageUrl={nowStepBackCardUrl}
                     accentRings={accentRings}
                     scheduleTimer={
@@ -551,7 +561,7 @@ export function FocusMode({ routine, exitHref }: Props) {
             role="button"
             tabIndex={0}
             aria-label={focusModeAriaPreviousStep(lang)}
-            className="pointer-events-auto relative flex flex-1 touch-manipulation select-none outline-none focus:outline-none"
+            className="pointer-events-auto relative flex flex-[0.9] touch-manipulation select-none outline-none focus:outline-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={tl.onPointerDown}
             onPointerMove={tl.onPointerMove}
@@ -567,8 +577,25 @@ export function FocusMode({ routine, exitHref }: Props) {
           <div
             role="button"
             tabIndex={0}
+            aria-label={focusModeAriaSpeakTitle(lang)}
+            className="pointer-events-auto relative flex flex-[1.2] touch-manipulation select-none outline-none focus:outline-none"
+            onContextMenu={(e) => e.preventDefault()}
+            onPointerDown={tm.onPointerDown}
+            onPointerMove={tm.onPointerMove}
+            onPointerUp={tm.onPointerUp}
+            onPointerCancel={tm.onPointerCancel}
+          >
+            {showZoneDebug ? (
+              <span className="pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 rounded bg-ink/40 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wide text-cream/90">
+                Top Mid
+              </span>
+            ) : null}
+          </div>
+          <div
+            role="button"
+            tabIndex={0}
             aria-label={focusModeAriaSkipNext(lang)}
-            className="pointer-events-auto relative flex flex-1 touch-manipulation select-none outline-none focus:outline-none"
+            className="pointer-events-auto relative flex flex-[0.9] touch-manipulation select-none outline-none focus:outline-none"
             onContextMenu={(e) => e.preventDefault()}
             onPointerDown={tr.onPointerDown}
             onPointerMove={tr.onPointerMove}

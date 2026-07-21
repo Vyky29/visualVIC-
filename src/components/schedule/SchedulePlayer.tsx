@@ -261,6 +261,7 @@ export function SchedulePlayer({
     voiceEnabled,
     toggleVoice,
     speakScheduleOverview,
+    speakNow,
     advanceWithAlarmAndSpeak,
     unlockVoice,
   } = useScheduleVoice(cardUiLang);
@@ -295,6 +296,12 @@ export function SchedulePlayer({
     nowStep?.id ?? "none",
     Boolean(nowStep && !isComplete),
   );
+
+  const speakCurrentRibbon = useCallback(() => {
+    if (!nowStep) return;
+    const title = speakableRoutineStepTitle(nowStep, cardUiLang);
+    if (title) void speakNow(title);
+  }, [nowStep, cardUiLang, speakNow]);
 
   const onTimerAdvance = useCallback(() => {
     const nextTitle = speakableRoutineStepTitle(nextStep, cardUiLang);
@@ -512,6 +519,7 @@ export function SchedulePlayer({
                 variant="hero"
                 onSwipeComplete={() => completeCurrent()}
                 doubleTapCompletes
+                onSingleTapSpeak={speakCurrentRibbon}
                 completionBackImageUrl={resolveCategoryBackCardUrlForStep(nowStep)}
                 accentRings={accentRings}
                 scheduleTimer={
