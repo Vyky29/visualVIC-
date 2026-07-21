@@ -52,14 +52,26 @@ export function ScheduleVoiceToggle({
   ariaLabel,
   className,
   size = "default",
+  label,
+  stacked,
 }: {
   enabled: boolean;
   onToggle: () => void;
   ariaLabel: string;
   className?: string;
   size?: "default" | "compact";
+  /** Visible label under/beside the icon (toolbar). */
+  label?: string;
+  /** Phone: icon above label. Tablet+: row. */
+  stacked?: boolean;
 }) {
   const compact = size === "compact";
+  const iconClass = stacked
+    ? "h-5 w-5 tablet:h-[18px] tablet:w-[18px]"
+    : compact
+      ? "h-4 w-4"
+      : "h-[18px] w-[18px]";
+
   return (
     <button
       type="button"
@@ -72,15 +84,30 @@ export function ScheduleVoiceToggle({
         enabled
           ? "border-sage/40 bg-sage/15 text-sage"
           : "border-ink/10 bg-canvas-muted text-ink-subtle hover:bg-canvas",
-        compact ? "h-9 w-9" : "h-11 w-11 min-h-touch",
+        stacked
+          ? "min-h-[3.25rem] min-w-0 flex-1 flex-col gap-0.5 px-1 py-1.5 tablet:min-h-touch tablet:flex-row tablet:gap-2 tablet:px-3 tablet:py-2"
+          : compact
+            ? "h-9 w-9"
+            : "h-11 w-11 min-h-touch",
         className,
       )}
     >
       {enabled ? (
-        <SpeakerOnIcon className={compact ? "h-4 w-4" : "h-[18px] w-[18px]"} />
+        <SpeakerOnIcon className={iconClass} />
       ) : (
-        <SpeakerOffIcon className={compact ? "h-4 w-4" : "h-[18px] w-[18px]"} />
+        <SpeakerOffIcon className={iconClass} />
       )}
+      {label ? (
+        <span
+          className={cn(
+            stacked
+              ? "max-w-full truncate text-center text-[9px] font-semibold leading-tight tracking-tight tablet:text-[13px] tablet:font-medium"
+              : "sr-only",
+          )}
+        >
+          {label}
+        </span>
+      ) : null}
     </button>
   );
 }

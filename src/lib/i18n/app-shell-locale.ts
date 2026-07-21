@@ -992,6 +992,48 @@ export function schedulePlayerAddCardButton(lang: CardLanguageCode): string {
   return isEs(lang) ? "Añadir" : "Add";
 }
 
+export function schedulePlayerToolbarFocus(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Focus" : "Focus";
+}
+
+export function schedulePlayerToolbarAudio(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Audio" : "Audio";
+}
+
+export function schedulePlayerToolbarTimer(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Timer" : "Timer";
+}
+
+export function schedulePlayerToolbarReset(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Reset" : "Reset";
+}
+
+export function schedulePlayerToolbarClose(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Cerrar" : "Close";
+}
+
+export function scheduleInsertPickTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "¿Dónde añadir?" : "Where to add?";
+}
+
+export function scheduleInsertPickHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Elige el sitio en la rutina. Después podrás buscar la tarjeta."
+    : "Pick a place in the routine. Then you can search for the card.";
+}
+
+export function scheduleInsertAtStartLabel(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Al principio" : "At the start";
+}
+
+export function scheduleInsertAfterLabel(
+  lang: CardLanguageCode,
+  stepTitle: string,
+): string {
+  const t = stepTitle.trim() || "—";
+  return isEs(lang) ? `Después de «${t}»` : `After “${t}”`;
+}
+
 export function scheduleCardSearchTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Añadir tarjeta" : "Add card";
 }

@@ -20,19 +20,20 @@ import { stockRoutineDisplayName } from "@/lib/i18n/pixto-digital-locale";
 import {
   dashboardFirstThenCardEyebrow,
   dashboardSchedulePlayerTitle,
-  schedulePlayerCloseCta,
   schedulePlayerCompletedLabel,
   schedulePlayerDone,
   schedulePlayerDoneCountLabel,
   schedulePlayerDoubleTapHint,
   schedulePlayerDesktopFocusHint,
-  schedulePlayerFocusModeCta,
   schedulePlayerVoiceToggleAria,
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
-  schedulePlayerResetCta,
-  schedulePlayerTimerButton,
   schedulePlayerAddCardButton,
+  schedulePlayerToolbarFocus,
+  schedulePlayerToolbarAudio,
+  schedulePlayerToolbarTimer,
+  schedulePlayerToolbarReset,
+  schedulePlayerToolbarClose,
   routineTimerStepLabel,
   focusModeOptTimerHint,
   schedulePlayerRoutineCompleteBody,
@@ -46,6 +47,8 @@ import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
 import { useScheduleVoice } from "@/hooks/useScheduleVoice";
 import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
+import { ScheduleToolbarAction } from "@/components/schedule/ScheduleToolbarAction";
+import { ScheduleInsertSlotPicker } from "@/components/schedule/ScheduleInsertSlotPicker";
 import { speakableRoutineStepTitle } from "@/lib/voice/speakable-titles";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import { ScheduleCardSearchPanel } from "@/components/schedule/ScheduleCardSearchPanel";
@@ -74,7 +77,7 @@ type Props = {
 
 function FocusButtonIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M3.75 12c1.8-3.62 4.93-5.43 8.25-5.43S18.45 8.38 20.25 12c-1.8 3.62-4.93 5.43-8.25 5.43S5.55 15.62 3.75 12Z"
         stroke="currentColor"
@@ -88,18 +91,46 @@ function FocusButtonIcon() {
 
 function ResetButtonIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
-        d="M8.1 8.35h7.15M7.4 11.8h5.9M8.1 15.25h4.4"
+        d="M7.2 8.4A6.4 6.4 0 1 1 5.6 12"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
       />
       <path
-        d="M14.9 4.75h-5.8a3.35 3.35 0 0 0-3.35 3.35v7.8a3.35 3.35 0 0 0 3.35 3.35h5.8a3.35 3.35 0 0 0 3.35-3.35V8.1l-3.35-3.35Z"
+        d="M7.2 5.2v3.4H10.6"
         stroke="currentColor"
         strokeWidth="1.8"
+        strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function TimerButtonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="13" r="7.25" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 13V9.5M9.5 4.5h5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function AddButtonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 6.5v11M6.5 12h11"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -107,7 +138,7 @@ function ResetButtonIcon() {
 
 function CloseButtonIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-[18px] w-[18px]" aria-hidden>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M7 7 17 17M17 7 7 17"
         stroke="currentColor"
@@ -134,13 +165,13 @@ function pickToRoutineStep(card: PickableLibraryCard, index: number): RoutineSte
   };
 }
 
-function insertStepAfterIndex(
+function insertStepAtIndex(
   steps: readonly RoutineStep[],
   index: number,
   newStep: RoutineStep,
 ): RoutineStep[] {
   const next = [...steps];
-  next.splice(Math.max(0, index + 1), 0, newStep);
+  next.splice(Math.max(0, Math.min(index, next.length)), 0, newStep);
   return next;
 }
 
@@ -153,6 +184,8 @@ export function SchedulePlayer({
   const { routines: customRoutines, replaceRoutine } = useCustomRoutines();
   const [stepsOverride, setStepsOverride] = useState<RoutineStep[] | null>(null);
   const [showCardSearch, setShowCardSearch] = useState(false);
+  const [showInsertPicker, setShowInsertPicker] = useState(false);
+  const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const stored = loadScheduleStepsOverride(routine.id);
@@ -281,14 +314,35 @@ export function SchedulePlayer({
     setShowTimerPanel(false);
   }, [nowStep?.id]);
 
+  const closeAddFlow = useCallback(() => {
+    setShowInsertPicker(false);
+    setShowCardSearch(false);
+    setInsertAtIndex(null);
+  }, []);
+
+  const openAddFlow = useCallback(() => {
+    setShowCardSearch(false);
+    setInsertAtIndex(null);
+    setShowInsertPicker(true);
+  }, []);
+
+  const onPickInsertSlot = useCallback((insertAt: number) => {
+    setInsertAtIndex(insertAt);
+    setShowInsertPicker(false);
+    setShowCardSearch(true);
+  }, []);
+
   const addCardToSchedule = useCallback(
     (card: PickableLibraryCard) => {
-      if (nowIndex < 0) return;
-      const newStep = pickToRoutineStep(card, nowIndex + 1);
-      const nextSteps = insertStepAfterIndex(baseSteps, nowIndex, newStep);
+      const at =
+        insertAtIndex ??
+        (nowIndex >= 0 ? nowIndex + 1 : baseSteps.length);
+      const newStep = pickToRoutineStep(card, at);
+      const nextSteps = insertStepAtIndex(baseSteps, at, newStep);
       persistScheduleSteps(nextSteps);
+      closeAddFlow();
     },
-    [baseSteps, nowIndex, persistScheduleSteps],
+    [baseSteps, closeAddFlow, insertAtIndex, nowIndex, persistScheduleSteps],
   );
 
   const openFocus = () => {
@@ -314,9 +368,15 @@ export function SchedulePlayer({
 
   return (
     <div className={cn("flex flex-col gap-6 px-5 pb-10 pt-1", APP_SHELL_TABLET_INSET_CLASS)}>
+      <ScheduleInsertSlotPicker
+        open={showInsertPicker}
+        steps={baseSteps}
+        onClose={closeAddFlow}
+        onPickSlot={onPickInsertSlot}
+      />
       <ScheduleCardSearchPanel
         open={showCardSearch}
-        onClose={() => setShowCardSearch(false)}
+        onClose={closeAddFlow}
         onPick={addCardToSchedule}
       />
       <header className="space-y-3">
@@ -353,68 +413,47 @@ export function SchedulePlayer({
       </header>
 
       <div className="flex flex-col gap-3">
-        <div className="flex items-stretch gap-2">
+        <div className="flex items-stretch gap-1.5 sm:gap-2">
           {nowStep && !isComplete ? (
-            <Button
-              type="button"
-              variant="secondary"
-              className={cn(
-                scheduleChrome.focusCta,
-                "min-w-0 flex-[1.45] gap-2.5 px-4 w-auto",
-              )}
+            <ScheduleToolbarAction
+              icon={<FocusButtonIcon />}
+              label={schedulePlayerToolbarFocus(cardUiLang)}
               onClick={openFocus}
-            >
-              <FocusButtonIcon />
-              <span className="truncate">{schedulePlayerFocusModeCta(cardUiLang)}</span>
-            </Button>
+              emphasize
+            />
           ) : null}
           <ScheduleVoiceToggle
             enabled={voiceEnabled}
             onToggle={toggleVoice}
             ariaLabel={schedulePlayerVoiceToggleAria(cardUiLang)}
+            label={schedulePlayerToolbarAudio(cardUiLang)}
+            stacked
           />
-          <Button
-            type="button"
-            variant="secondary"
-            className="min-h-touch min-w-0 flex-[1.05] gap-2 px-4"
+          <ScheduleToolbarAction
+            icon={<ResetButtonIcon />}
+            label={schedulePlayerToolbarReset(cardUiLang)}
             onClick={reset}
-          >
-            <ResetButtonIcon />
-            <span>{schedulePlayerResetCta(cardUiLang)}</span>
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
+          />
+          <ScheduleToolbarAction
+            icon={<TimerButtonIcon />}
+            label={schedulePlayerToolbarTimer(cardUiLang)}
             onClick={() => {
               unlockVoice();
               setShowTimerPanel((v) => !v);
             }}
-            aria-pressed={showTimerPanel || nowHasTimer}
-          >
-            <span aria-hidden>⏱</span>
-            <span className="truncate">{schedulePlayerTimerButton(cardUiLang)}</span>
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            className="min-h-touch min-w-0 flex-1 gap-2 px-3"
-            onClick={() => setShowCardSearch(true)}
-          >
-            <span aria-hidden>+</span>
-            <span className="truncate">{schedulePlayerAddCardButton(cardUiLang)}</span>
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="min-h-touch shrink-0 gap-2 px-4"
+            pressed={showTimerPanel || nowHasTimer}
+          />
+          <ScheduleToolbarAction
+            icon={<AddButtonIcon />}
+            label={schedulePlayerAddCardButton(cardUiLang)}
+            onClick={openAddFlow}
+          />
+          <ScheduleToolbarAction
+            icon={<CloseButtonIcon />}
+            label={schedulePlayerToolbarClose(cardUiLang)}
             onClick={() => router.push(backHref)}
-          >
-            <span className="text-[#C84C57]">
-              <CloseButtonIcon />
-            </span>
-            <span>{schedulePlayerCloseCta(cardUiLang)}</span>
-          </Button>
+            danger
+          />
         </div>
 
         {showTimerPanel && nowStep && !isComplete ? (
