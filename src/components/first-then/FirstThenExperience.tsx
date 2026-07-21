@@ -51,6 +51,9 @@ import {
 } from "@/lib/hooks/useFirstThenPlayback";
 import { useFirstThenStepTimer } from "@/lib/hooks/useFirstThenStepTimer";
 import { StepTimerBadge } from "@/components/schedule/StepTimerBadge";
+import { useScheduleVoice } from "@/hooks/useScheduleVoice";
+import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
+import { speakableGeneratedCardTitle } from "@/lib/voice/speakable-titles";
 import type { PlaybackStatus } from "@/hooks/useRoutinePlayback";
 
 type FirstThenScheduleTimerForSlot = ReturnType<
@@ -75,6 +78,7 @@ import {
   focusModeAllFinishedTitle,
   focusModeOptRestartRoutine,
   schedulePlayerDone,
+  schedulePlayerVoiceToggleAria,
   shellBackAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
@@ -1872,13 +1876,28 @@ function FirstThenExperienceClient() {
     isComplete,
     activeCardKey,
   } = useFirstThenPlayback(initialQueue, playbackResetKey);
+  const {
+    voiceEnabled,
+    toggleVoice,
+    speakFirstThen,
+    advanceWithAlarmAndSpeak,
+  } = useScheduleVoice(lang);
+
+  const onTimerAdvance = () => {
+    const nextTitle =
+      phase === "first"
+        ? speakableGeneratedCardTitle(secondCard, lang)
+        : undefined;
+    advanceWithAlarmAndSpeak(nextTitle, completeCurrent);
+  };
+
   const { scheduleTimerForSlot } = useFirstThenStepTimer({
     firstCard,
     secondCard,
     phase,
     isComplete,
     activeCardKey,
-    onAdvance: completeCurrent,
+    onAdvance: onTimerAdvance,
   });
 
   const backHref = fromRoutine?.trim() || routineHref;
@@ -1886,6 +1905,16 @@ function FirstThenExperienceClient() {
   useEffect(() => {
     setShowFocusMode(false);
   }, [packId, layout]);
+
+  useEffect(() => {
+    if (!voiceEnabled || isComplete || !firstCard) return;
+    void speakFirstThen(
+      speakableGeneratedCardTitle(firstCard, lang),
+      speakableGeneratedCardTitle(secondCard, lang),
+    );
+    // Announce the pair when voice turns on or the queue changes — not on every slot advance.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional
+  }, [voiceEnabled, playbackResetKey, isComplete]);
 
   useEffect(() => {
     setFirstThenDemoFocusActive(showFocusMode);
@@ -1912,27 +1941,43 @@ function FirstThenExperienceClient() {
     return null;
   }
 
+  const voiceToggle = (
+    <div className="pointer-events-auto fixed right-[max(0.75rem,env(safe-area-inset-right))] top-[max(0.75rem,env(safe-area-inset-top))] z-[80]">
+      <ScheduleVoiceToggle
+        enabled={voiceEnabled}
+        onToggle={toggleVoice}
+        ariaLabel={schedulePlayerVoiceToggleAria(lang)}
+        size="compact"
+        className="bg-white/95 shadow-soft"
+      />
+    </div>
+  );
+
   if (!showFocusMode) {
     return (
-      <FirstThenIntroPortraitScreen
-        layout={layout}
-        firstCard={firstCard!}
-        secondCard={secondCard}
-        lang={lang}
-        backHref={backHref}
-        onFocusMode={() => setShowFocusMode(true)}
-        phase={phase}
-        onAdvance={completeCurrent}
-        isComplete={isComplete}
-        onRestart={reset}
-        routineHref={routineHref}
-        scheduleTimerForSlot={scheduleTimerForSlot}
-      />
+      <>
+        {voiceToggle}
+        <FirstThenIntroPortraitScreen
+          layout={layout}
+          firstCard={firstCard!}
+          secondCard={secondCard}
+          lang={lang}
+          backHref={backHref}
+          onFocusMode={() => setShowFocusMode(true)}
+          phase={phase}
+          onAdvance={completeCurrent}
+          isComplete={isComplete}
+          onRestart={reset}
+          routineHref={routineHref}
+          scheduleTimerForSlot={scheduleTimerForSlot}
+        />
+      </>
     );
   }
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden overscroll-none bg-black touch-manipulation text-cream">
+      {voiceToggle}
       {showLandscapeFocus ? (
         <FirstThenFocusLandscapeLayout
           firstCard={firstCard!}

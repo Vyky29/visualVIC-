@@ -39,6 +39,7 @@ import {
   focusModeSupportSimplified,
   schedulePlayerCloseCta,
   schedulePlayerDone,
+  schedulePlayerVoiceToggleAria,
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { useFocusExpandedCards } from "@/lib/preferences/use-focus-expanded-cards";
@@ -48,6 +49,9 @@ import { buildFirstThenQueueFromRoutineSteps } from "@/lib/first-then/build-firs
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
+import { useScheduleVoice } from "@/hooks/useScheduleVoice";
+import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
+import { speakableRoutineStepTitle } from "@/lib/voice/speakable-titles";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import {
   focusModeOptTimerHint,
@@ -250,6 +254,12 @@ export function FocusMode({ routine, exitHref }: Props) {
   const { enabled: expandedCards, toggle: toggleExpandedCards } =
     useFocusExpandedCards();
   const {
+    voiceEnabled,
+    toggleVoice,
+    speakActivity,
+    advanceWithAlarm,
+  } = useScheduleVoice(lang);
+  const {
     steps,
     nowStep,
     nextStep,
@@ -327,12 +337,19 @@ export function FocusMode({ routine, exitHref }: Props) {
     stepKey: nowStep?.id ?? "none",
     hasTimer: nowHasTimer,
     finished: nowTimerFinished,
-    onAdvance: completeCurrent,
+    onAdvance: () => advanceWithAlarm(completeCurrent),
   });
 
   useEffect(() => {
     setSessionTimerSec(undefined);
   }, [nowStep?.id]);
+
+  useEffect(() => {
+    if (!voiceEnabled || isComplete || !nowStep) return;
+    const title = speakableRoutineStepTitle(nowStep, lang);
+    if (!title) return;
+    void speakActivity(title);
+  }, [voiceEnabled, nowStep?.id, isComplete, lang, nowStep, speakActivity]);
 
   useEffect(() => {
     if (!prefersFineHover) return;
@@ -596,6 +613,12 @@ export function FocusMode({ routine, exitHref }: Props) {
 
       {prefersFineHover && !isComplete && nowStep ? (
         <div className="pointer-events-auto absolute bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-[65] flex w-[min(100%,22rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-2 rounded-2xl bg-white/95 px-3 py-2.5 shadow-soft ring-1 ring-ink/10">
+          <ScheduleVoiceToggle
+            enabled={voiceEnabled}
+            onToggle={toggleVoice}
+            ariaLabel={schedulePlayerVoiceToggleAria(lang)}
+            size="compact"
+          />
           <button
             type="button"
             onClick={goPrevious}
@@ -642,7 +665,14 @@ export function FocusMode({ routine, exitHref }: Props) {
         <div className="flex flex-col gap-2">
           {[
             [focusModeSupportCalmCard(lang), () => setSheet(null)],
-            [focusModeSupportRepeatInstruction(lang), () => setSheet(null)],
+            [
+              focusModeSupportRepeatInstruction(lang),
+              () => {
+                const title = speakableRoutineStepTitle(nowStep, lang);
+                if (title) void speakActivity(title);
+                setSheet(null);
+              },
+            ],
             [focusModeSupportSimplified(lang), () => setSheet(null)],
           ].map(([label, fn]) =>
             sheetRow(label as string, fn as () => void, label as string),
@@ -656,6 +686,17 @@ export function FocusMode({ routine, exitHref }: Props) {
         onClose={() => setSheet(null)}
       >
         <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-canvas-muted/60 px-3 py-2.5 ring-1 ring-ink/[0.07]">
+            <span className="text-[13px] font-medium text-ink">
+              {schedulePlayerVoiceToggleAria(lang)}
+            </span>
+            <ScheduleVoiceToggle
+              enabled={voiceEnabled}
+              onToggle={toggleVoice}
+              ariaLabel={schedulePlayerVoiceToggleAria(lang)}
+              size="compact"
+            />
+          </div>
           <div className="space-y-2 rounded-xl bg-canvas-muted/60 px-3 py-3 ring-1 ring-ink/[0.07]">
             <p className="text-[13px] font-medium text-ink">
               {routineTimerStepLabel(lang)}

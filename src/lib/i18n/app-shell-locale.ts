@@ -1225,6 +1225,10 @@ export function schedulePlayerFocusModeCta(lang: CardLanguageCode): string {
   return isEs(lang) ? "Modo Enfoque" : "Focus Mode";
 }
 
+export function schedulePlayerVoiceToggleAria(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Activar o silenciar la voz" : "Toggle schedule voice";
+}
+
 export function schedulePlayerResetCta(lang: CardLanguageCode): string {
   return isEs(lang) ? "Reiniciar" : "Reset";
 }

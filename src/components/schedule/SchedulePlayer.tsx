@@ -27,6 +27,7 @@ import {
   schedulePlayerDoubleTapHint,
   schedulePlayerDesktopFocusHint,
   schedulePlayerFocusModeCta,
+  schedulePlayerVoiceToggleAria,
   schedulePlayerNextLabel,
   schedulePlayerNowLabel,
   schedulePlayerResetCta,
@@ -43,6 +44,9 @@ import { usePrefersFineHover } from "@/lib/hooks/usePrefersFineHover";
 import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
+import { useScheduleVoice } from "@/hooks/useScheduleVoice";
+import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
+import { speakableRoutineStepTitle } from "@/lib/voice/speakable-titles";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
 import { ScheduleCardSearchPanel } from "@/components/schedule/ScheduleCardSearchPanel";
 import type { PickableLibraryCard } from "@/lib/library/pickable-library-cards";
@@ -220,6 +224,27 @@ export function SchedulePlayer({
   const prefersFinePointer = usePrefersFineHover();
   const [showTimerPanel, setShowTimerPanel] = useState(false);
   const [sessionTimerSec, setSessionTimerSec] = useState<number | undefined>();
+  const {
+    voiceEnabled,
+    toggleVoice,
+    speakScheduleOverview,
+    advanceWithAlarmAndSpeak,
+  } = useScheduleVoice(cardUiLang);
+
+  const remainingTitles = useMemo(() => {
+    if (isComplete || nowIndex < 0) return [] as string[];
+    return steps
+      .slice(nowIndex)
+      .map((s) => speakableRoutineStepTitle(s, cardUiLang))
+      .filter(Boolean);
+  }, [cardUiLang, isComplete, nowIndex, steps]);
+
+  useEffect(() => {
+    if (!voiceEnabled || remainingTitles.length === 0) return;
+    void speakScheduleOverview(remainingTitles);
+    // Speak overview when voice turns on or routine id changes — not on every step.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional
+  }, [voiceEnabled, routine.id]);
 
   const savedTimerSec = nowStep ? resolveStepTimerSec(nowStep) : undefined;
   const activeTimerSec =
@@ -237,12 +262,17 @@ export function SchedulePlayer({
     Boolean(nowStep && !isComplete),
   );
 
+  const onTimerAdvance = useCallback(() => {
+    const nextTitle = speakableRoutineStepTitle(nextStep, cardUiLang);
+    advanceWithAlarmAndSpeak(nextTitle || undefined, completeCurrent);
+  }, [advanceWithAlarmAndSpeak, cardUiLang, completeCurrent, nextStep]);
+
   useAutoAdvanceOnTimerFinish({
     active: Boolean(nowStep && !isComplete),
     stepKey: nowStep?.id ?? "none",
     hasTimer: nowHasTimer,
     finished: nowTimerFinished,
-    onAdvance: completeCurrent,
+    onAdvance: onTimerAdvance,
   });
 
   useEffect(() => {
@@ -337,6 +367,11 @@ export function SchedulePlayer({
               <span className="truncate">{schedulePlayerFocusModeCta(cardUiLang)}</span>
             </Button>
           ) : null}
+          <ScheduleVoiceToggle
+            enabled={voiceEnabled}
+            onToggle={toggleVoice}
+            ariaLabel={schedulePlayerVoiceToggleAria(cardUiLang)}
+          />
           <Button
             type="button"
             variant="secondary"
