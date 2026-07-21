@@ -339,6 +339,7 @@ export type ShellHeaderKey =
   | "planner"
   | "schedulePlayer"
   | "menu"
+  | "screensGuide"
   | "savedLibrary"
   | "routineTemplates"
   | "routineBuilder"
@@ -357,6 +358,7 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
       planner: "Planner",
       schedulePlayer: "Schedule Player",
       menu: "Menu",
+      screensGuide: "App screens",
       savedLibrary: "Saved library",
       routineTemplates: "Routine templates",
       routineBuilder: "Routine builder",
@@ -375,6 +377,7 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
     planner: "Planner",
     schedulePlayer: "Reproductor de rutina",
     menu: "Menú",
+    screensGuide: "Pantallas de la app",
     savedLibrary: "Guardados",
     routineTemplates: "Plantillas de rutina",
     routineBuilder: "Editor de rutinas",
@@ -388,16 +391,23 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
   return es[key];
 }
 
-export type MenuSectionKey = "routines" | "prototype";
+export type MenuSectionKey = "routines" | "prototype" | "help";
 
 export function menuSectionTitle(key: MenuSectionKey, lang: CardLanguageCode): string {
-  return isEs(lang)
-    ? key === "routines"
-      ? "Rutinas"
-      : "Flujos de prototipo"
-    : key === "routines"
-      ? "Routines"
-      : "Prototype flows";
+  if (!isEs(lang)) {
+    const en: Record<MenuSectionKey, string> = {
+      routines: "Routines",
+      prototype: "Prototype flows",
+      help: "Help",
+    };
+    return en[key];
+  }
+  const es: Record<MenuSectionKey, string> = {
+    routines: "Rutinas",
+    prototype: "Flujos de prototipo",
+    help: "Ayuda",
+  };
+  return es[key];
 }
 
 export type MenuLinkKey =
@@ -409,7 +419,8 @@ export type MenuLinkKey =
   | "generatedCardDemo"
   | "welcome"
   | "auth"
-  | "profile";
+  | "profile"
+  | "screensGuide";
 
 export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string {
   if (!isEs(lang)) {
@@ -423,6 +434,7 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
       welcome: "Welcome",
       auth: "Sign in / Sign up",
       profile: "Profile setup",
+      screensGuide: "App screens guide",
     };
     return en[key];
   }
@@ -436,6 +448,7 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
     welcome: "Bienvenida",
     auth: "Entrar / Registro",
     profile: "Configurar perfil",
+    screensGuide: "Guía de pantallas",
   };
   return es[key];
 }
@@ -452,6 +465,7 @@ export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
       welcome: "Entry screen",
       auth: "UI only · no backend",
       profile: "Name & avatar preview",
+      screensGuide: "What each screen does · Focus touch zones",
     };
     return en[key];
   }
@@ -465,6 +479,7 @@ export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
     welcome: "Pantalla de entrada",
     auth: "Solo interfaz · sin servidor",
     profile: "Nombre y vista del avatar",
+    screensGuide: "Qué hace cada pantalla · zonas táctiles de Focus",
   };
   return es[key];
 }
@@ -1373,10 +1388,6 @@ export function focusModeAriaOptions(lang: CardLanguageCode): string {
   return isEs(lang) ? "Opciones" : "Options";
 }
 
-export function focusGestureGuideTitle(lang: CardLanguageCode): string {
-  return isEs(lang) ? "Cómo funciona Focus" : "How Focus works";
-}
-
 export function focusGestureGuidePrevious(lang: CardLanguageCode): string {
   return isEs(lang) ? "Anterior" : "Previous";
 }
@@ -1399,12 +1410,88 @@ export function focusGestureGuideOptions(lang: CardLanguageCode): string {
   return isEs(lang) ? "Opciones" : "Options";
 }
 
-export function focusGestureGuideGotIt(lang: CardLanguageCode): string {
-  return isEs(lang) ? "Entendido" : "Got it";
+export type ScreensGuideKey =
+  | "home"
+  | "library"
+  | "schedule"
+  | "focus"
+  | "firstThen"
+  | "saved"
+  | "menu";
+
+export function screensGuideBlurb(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Elige una pantalla para ver qué hace y cómo se usa. Nada se abre solo: esto es solo una guía."
+    : "Pick a screen to see what it does and how to use it. Nothing pops up on its own — this is a guide only.";
 }
 
-export function focusModeOptHowFocusWorks(lang: CardLanguageCode): string {
-  return isEs(lang) ? "Cómo funciona Focus" : "How Focus works";
+export function screensGuideSelectHint(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Tipos de pantalla" : "Screen types";
+}
+
+export function screensGuideScreenTitle(
+  key: ScreensGuideKey,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    const en: Record<ScreensGuideKey, string> = {
+      home: "Home",
+      library: "Library",
+      schedule: "Schedule",
+      focus: "Focus",
+      firstThen: "First & Then",
+      saved: "Saved",
+      menu: "Menu",
+    };
+    return en[key];
+  }
+  const es: Record<ScreensGuideKey, string> = {
+    home: "Inicio",
+    library: "Biblioteca",
+    schedule: "Rutina",
+    focus: "Focus",
+    firstThen: "Primero / Después",
+    saved: "Guardados",
+    menu: "Menú",
+  };
+  return es[key];
+}
+
+export function screensGuideScreenBody(
+  key: ScreensGuideKey,
+  lang: CardLanguageCode,
+): string {
+  if (!isEs(lang)) {
+    const en: Record<ScreensGuideKey, string> = {
+      home: "Folders and quick entry for the people and spaces you work with. Open a folder to reach schedules and cards.",
+      library: "Browse visual cards by topic or participant. Tap a card to preview it; use cards when building or running routines.",
+      schedule:
+        "Vertical list of steps for a routine. Scroll the day, see Now and Next, start Focus, or turn voice on to hear activity names.",
+      focus:
+        "One big card, fullscreen. Corner taps are invisible — use the diagram below. Center: swipe or double-tap to finish the step.",
+      firstThen:
+        "Two cards side by side: what happens first, then what comes next. Useful for short, clear transitions.",
+      saved:
+        "Routines you starred on this device. Open one to play it again without searching the library.",
+      menu: "Links to planner tools, demos, and this screens guide. Language and other prefs live in the header where available.",
+    };
+    return en[key];
+  }
+  const es: Record<ScreensGuideKey, string> = {
+    home: "Carpetas y acceso rápido a las personas y espacios con los que trabajas. Abre una carpeta para llegar a rutinas y tarjetas.",
+    library:
+      "Explora tarjetas visuales por tema o participante. Toca una tarjeta para verla; úsalas al montar o reproducir rutinas.",
+    schedule:
+      "Lista vertical de pasos de una rutina. Recorre el día, mira Ahora y Siguiente, entra en Focus o activa la voz para oír los nombres.",
+    focus:
+      "Una tarjeta grande a pantalla completa. Los toques de las esquinas no se ven: usa el diagrama de abajo. Centro: desliza o toca dos veces para terminar el paso.",
+    firstThen:
+      "Dos tarjetas juntas: qué pasa primero y qué viene después. Sirve para transiciones cortas y claras.",
+    saved:
+      "Rutinas que marcaste en este dispositivo. Ábrelas para reproducirlas sin buscar en la biblioteca.",
+    menu: "Enlaces a herramientas del planner, demos y esta guía de pantallas. El idioma y otras preferencias están en la cabecera cuando aplica.",
+  };
+  return es[key];
 }
 
 export function focusModeSheetSupportTitle(lang: CardLanguageCode): string {

@@ -63,6 +63,26 @@ export function MenuPageClient() {
 
         <section className="space-y-3">
           <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+            {menuSectionTitle("help", lang)}
+          </h2>
+          <ul className="flex flex-col gap-2 tablet:grid tablet:grid-cols-2 tablet:gap-3">
+            <li>
+              <Link href="/menu/screens">
+                <Card className="transition hover:shadow-soft">
+                  <p className="line-clamp-2 break-words text-[16px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                    {menuLinkLabel("screensGuide", lang)}
+                  </p>
+                  <p className="mt-1 line-clamp-3 break-words text-[13px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+                    {menuLinkHint("screensGuide", lang)}
+                  </p>
+                </Card>
+              </Link>
+            </li>
+          </ul>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
             {menuSectionTitle("routines", lang)}
           </h2>
           <ul className="flex flex-col gap-2 tablet:grid tablet:grid-cols-2 tablet:gap-3">
