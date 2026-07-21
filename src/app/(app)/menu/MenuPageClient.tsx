@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
 import { Card } from "@/components/ui/Card";
+import { ScheduleVoiceGenderPicker } from "@/components/schedule/ScheduleVoiceGenderPicker";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
 import {
   bottomNavLabel,
@@ -60,6 +61,15 @@ export function MenuPageClient() {
         <p className="break-words px-1 text-[14px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
           {menuIntroBlurb(lang)}
         </p>
+
+        <section className="space-y-3">
+          <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">
+            {menuSectionTitle("voice", lang)}
+          </h2>
+          <Card>
+            <ScheduleVoiceGenderPicker />
+          </Card>
+        </section>
 
         <section className="space-y-3">
           <h2 className="break-words px-1 text-[13px] font-semibold uppercase leading-snug tracking-[0.18em] text-ink-faint [overflow-wrap:anywhere] line-clamp-2">

@@ -53,6 +53,7 @@ import { resolveStepTimerSec } from "@/lib/routines/resolve-step-timer";
 import { useStepCountdown } from "@/hooks/useStepCountdown";
 import { useAutoAdvanceOnTimerFinish } from "@/lib/hooks/useAutoAdvanceOnTimerFinish";
 import { useScheduleVoice } from "@/hooks/useScheduleVoice";
+import { ScheduleVoiceGenderPicker } from "@/components/schedule/ScheduleVoiceGenderPicker";
 import { ScheduleVoiceToggle } from "@/components/schedule/ScheduleVoiceToggle";
 import { speakableRoutineStepTitle } from "@/lib/voice/speakable-titles";
 import { TimerPresetPicker } from "@/components/schedule/TimerPresetPicker";
@@ -734,6 +735,9 @@ export function FocusMode({ routine, exitHref }: Props) {
               ariaLabel={schedulePlayerVoiceToggleAria(lang)}
               size="compact"
             />
+          </div>
+          <div className="rounded-xl bg-canvas-muted/60 px-3 py-3 ring-1 ring-ink/[0.07]">
+            <ScheduleVoiceGenderPicker />
           </div>
           <div className="space-y-2 rounded-xl bg-canvas-muted/60 px-3 py-3 ring-1 ring-ink/[0.07]">
             <p className="text-[13px] font-medium text-ink">

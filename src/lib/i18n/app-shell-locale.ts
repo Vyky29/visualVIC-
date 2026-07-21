@@ -391,7 +391,7 @@ export function shellHeaderTitle(key: ShellHeaderKey, lang: CardLanguageCode): s
   return es[key];
 }
 
-export type MenuSectionKey = "routines" | "prototype" | "help";
+export type MenuSectionKey = "routines" | "prototype" | "help" | "voice";
 
 export function menuSectionTitle(key: MenuSectionKey, lang: CardLanguageCode): string {
   if (!isEs(lang)) {
@@ -399,6 +399,7 @@ export function menuSectionTitle(key: MenuSectionKey, lang: CardLanguageCode): s
       routines: "Routines",
       prototype: "Prototype flows",
       help: "Help",
+      voice: "Voice",
     };
     return en[key];
   }
@@ -406,6 +407,7 @@ export function menuSectionTitle(key: MenuSectionKey, lang: CardLanguageCode): s
     routines: "Rutinas",
     prototype: "Flujos de prototipo",
     help: "Ayuda",
+    voice: "Voz",
   };
   return es[key];
 }
@@ -1284,6 +1286,24 @@ export function schedulePlayerFocusModeCta(lang: CardLanguageCode): string {
 
 export function schedulePlayerVoiceToggleAria(lang: CardLanguageCode): string {
   return isEs(lang) ? "Activar o silenciar la voz" : "Toggle schedule voice";
+}
+
+export function scheduleVoiceGenderTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Voz al hablar" : "Speaking voice";
+}
+
+export function scheduleVoiceGenderHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Elige voz femenina o masculina. Usa el idioma de la app (EN/ES)."
+    : "Choose a female or male voice. Uses the app language (EN/ES).";
+}
+
+export function scheduleVoiceGenderFemale(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Femenina" : "Female";
+}
+
+export function scheduleVoiceGenderMale(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Masculina" : "Male";
 }
 
 export function schedulePlayerResetCta(lang: CardLanguageCode): string {

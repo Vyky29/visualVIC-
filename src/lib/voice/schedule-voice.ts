@@ -6,6 +6,11 @@
 import { createBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 import { effectiveDigitalUiLang } from "@/lib/preferences/card-language-preference";
+import {
+  readStoredScheduleVoiceGender,
+  type ScheduleVoiceGender,
+} from "@/lib/preferences/schedule-voice-gender-preference";
+import { scheduleVoiceLangFromUi } from "@/lib/voice/schedule-voice-catalog";
 
 const EDGE_FN = "portal-help-voice-speak";
 const APP_VOICE_API = "/api/schedule-voice";
@@ -220,12 +225,20 @@ async function playCloudAudioPayload(json: {
 }
 
 /** App API — works for everyone (no staff login). */
-async function speakViaAppApi(text: string): Promise<boolean> {
+async function speakViaAppApi(
+  text: string,
+  lang: CardLanguageCode,
+  gender: ScheduleVoiceGender,
+): Promise<boolean> {
   try {
     const res = await fetch(APP_VOICE_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text.slice(0, MAX_CHARS) }),
+      body: JSON.stringify({
+        text: text.slice(0, MAX_CHARS),
+        lang: scheduleVoiceLangFromUi(lang),
+        gender,
+      }),
     });
     if (!res.ok) return false;
     const json = (await res.json()) as {
@@ -270,14 +283,17 @@ async function speakViaPortalEdge(text: string): Promise<boolean> {
   }
 }
 
-async function speakCloudTts(text: string): Promise<boolean> {
-  if (await speakViaAppApi(text)) return true;
+async function speakCloudTts(
+  text: string,
+  lang: CardLanguageCode,
+): Promise<boolean> {
+  const gender = readStoredScheduleVoiceGender();
+  if (await speakViaAppApi(text, lang, gender)) return true;
   return speakViaPortalEdge(text);
 }
 
 /**
  * Speak a phrase via ElevenLabs (/api/schedule-voice). Browser TTS only if cloud fails.
- * Do not start both — that caused double voice + a glitchy “recorder” sound on cancel.
  */
 export async function speakSchedulePhrase(
   text: string,
@@ -287,7 +303,7 @@ export async function speakSchedulePhrase(
   if (!trimmed || typeof window === "undefined") return;
   stopScheduleVoice();
   unlockScheduleVoice();
-  const ok = await speakCloudTts(trimmed);
+  const ok = await speakCloudTts(trimmed, lang);
   if (!ok) {
     speakBrowserImmediate(trimmed, lang);
   }

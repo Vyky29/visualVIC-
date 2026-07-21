@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
+import type { ScheduleVoiceGender } from "@/lib/preferences/schedule-voice-gender-preference";
+import {
+  resolveScheduleVoiceId,
+  type ScheduleVoiceLang,
+} from "@/lib/voice/schedule-voice-catalog";
 
-/** Same club / Portal help-guide voice (portal-help-voice-speak default). */
-const DEFAULT_VOICE_ID = "3WqHLnw80rOZqJzW9YRB";
 const MAX_CHARS = 1200;
 
 function bytesToBase64(bytes: Uint8Array): string {
@@ -13,46 +16,37 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-/** Prefer the voice ID currently configured on Portal guide TTS. */
-async function resolveGuideVoiceId(): Promise<string> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (url && anon) {
-    try {
-      const res = await fetch(`${url}/functions/v1/portal-help-voice-speak`, {
-        method: "GET",
-        headers: {
-          apikey: anon,
-          Authorization: `Bearer ${anon}`,
-        },
-        next: { revalidate: 300 },
-      });
-      if (res.ok) {
-        const json = (await res.json()) as { voiceId?: string };
-        const id = String(json.voiceId || "").trim();
-        if (id) return id;
-      }
-    } catch {
-      /* fall through */
-    }
-  }
-  return process.env.ELEVENLABS_VOICE_ID?.trim() || DEFAULT_VOICE_ID;
+function parseLang(v: unknown): ScheduleVoiceLang {
+  return v === "es" ? "es" : "en";
 }
 
-/** Health: whether server-side ElevenLabs is configured (no staff login required). */
+function parseGender(v: unknown): ScheduleVoiceGender {
+  return v === "male" ? "male" : "female";
+}
+
+/** Health + which voice slots are configured. */
 export async function GET() {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim() || "";
-  const voiceId = await resolveGuideVoiceId();
+  const voices = {
+    en: {
+      female: resolveScheduleVoiceId({ lang: "en", gender: "female" }),
+      male: resolveScheduleVoiceId({ lang: "en", gender: "male" }),
+    },
+    es: {
+      female: resolveScheduleVoiceId({ lang: "es", gender: "female" }),
+      male: resolveScheduleVoiceId({ lang: "es", gender: "male" }),
+    },
+  };
   return NextResponse.json({
     ok: true,
     elevenlabs: Boolean(apiKey),
-    voiceId,
+    voices,
   });
 }
 
 /**
- * Schedule / Focus TTS for every user (no staff JWT).
- * Uses the same ElevenLabs voice as the Portal help guide.
+ * Schedule / Focus TTS — no staff login.
+ * Body: { text, lang?: "en"|"es", gender?: "female"|"male" }
  */
 export async function POST(req: Request) {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim() || "";
@@ -63,7 +57,7 @@ export async function POST(req: Request) {
     );
   }
 
-  let payload: { text?: unknown };
+  let payload: { text?: unknown; lang?: unknown; gender?: unknown };
   try {
     payload = await req.json();
   } catch {
@@ -83,7 +77,9 @@ export async function POST(req: Request) {
     );
   }
 
-  const voiceId = await resolveGuideVoiceId();
+  const lang = parseLang(payload.lang);
+  const gender = parseGender(payload.gender);
+  const voiceId = resolveScheduleVoiceId({ lang, gender });
   const modelId =
     process.env.ELEVENLABS_MODEL_ID?.trim() || "eleven_multilingual_v2";
 
@@ -135,5 +131,7 @@ export async function POST(req: Request) {
     audioBase64: bytesToBase64(buf),
     mime: "audio/mpeg",
     voiceId,
+    lang,
+    gender,
   });
 }
