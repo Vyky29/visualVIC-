@@ -763,25 +763,18 @@
       background: linear-gradient(145deg, var(--day-color, var(--navy)), color-mix(in srgb, var(--day-color, var(--navy)) 72%, #0f172a));
       color: var(--white);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.05rem;
       margin: 0 auto;
       border: 3px solid var(--white);
       box-shadow: var(--shadow);
       pointer-events: none;
     }
 
-    .day-chip-icon {
-      font-size: clamp(1rem, 3vw, 1.35rem);
-      line-height: 1;
-    }
-
     .day-chip-letter {
       font-weight: 800;
-      font-size: clamp(0.72rem, 2vw, 0.88rem);
-      letter-spacing: 0.03em;
+      font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+      letter-spacing: 0.02em;
       line-height: 1;
     }
 
@@ -4343,7 +4336,7 @@
         <span class="section-num" aria-hidden="true">2</span>
         <div>
           <h2 id="day-heading">Today is…</h2>
-          <p>Drag the correct weekday (Mon–Fri) into the box. It must match the date under Circle Time.</p>
+          <p>Drag the correct weekday into the box. It must match the date under Circle Time.</p>
         </div>
       </div>
       <div class="day-layout">
@@ -4691,11 +4684,13 @@
     const WEEKDAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     const WEEKDAYS = [
-      { name: "Monday", letter: "M", color: "#2563eb", icon: "📚" },
-      { name: "Tuesday", letter: "Tu", color: "#7c3aed", icon: "✏️" },
-      { name: "Wednesday", letter: "W", color: "#16a34a", icon: "🐪" },
-      { name: "Thursday", letter: "Th", color: "#ca8a04", icon: "⚡" },
-      { name: "Friday", letter: "F", color: "#e8762a", icon: "🎉" },
+      { name: "Monday", letter: "Mon", color: "#2563eb" },
+      { name: "Tuesday", letter: "Tue", color: "#7c3aed" },
+      { name: "Wednesday", letter: "Wed", color: "#16a34a" },
+      { name: "Thursday", letter: "Thu", color: "#ca8a04" },
+      { name: "Friday", letter: "Fri", color: "#e8762a" },
+      { name: "Saturday", letter: "Sat", color: "#0891b2" },
+      { name: "Sunday", letter: "Sun", color: "#db2777" },
     ];
 
     const MONTHS = [
