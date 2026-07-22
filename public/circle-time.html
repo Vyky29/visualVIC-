@@ -3492,27 +3492,17 @@
 
     .agreements-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: clamp(0.65rem, 1.6vw, 1.1rem);
-      width: min(1180px, 96vw);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(0.85rem, 2vw, 1.35rem);
+      width: min(920px, 96vw);
       margin: 0 auto;
       align-items: stretch;
-    }
-
-    @media (max-width: 960px) {
-      .agreements-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 560px) {
-      .agreements-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      flex: 1 1 auto;
+      min-height: 0;
     }
 
     .agreement-card {
-      padding: clamp(0.75rem, 1.8vw, 1.1rem);
+      padding: clamp(1rem, 2.2vw, 1.45rem);
       background: var(--white);
       border-radius: var(--radius);
       border: 2px solid var(--grey-200);
@@ -3520,15 +3510,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      gap: clamp(0.55rem, 1.2vw, 0.75rem);
+      justify-content: center;
+      gap: clamp(0.65rem, 1.4vw, 0.95rem);
       text-align: center;
-      min-height: clamp(190px, 26vh, 260px);
+      min-height: clamp(220px, 34vh, 340px);
     }
 
     .agreement-illustration {
-      width: clamp(110px, 14vw, 150px);
-      height: clamp(110px, 14vw, 150px);
+      width: clamp(150px, 20vw, 210px);
+      height: clamp(150px, 20vw, 210px);
       border-radius: 14px;
       background: linear-gradient(180deg, #ffffff 0%, #eef3f8 55%, #dde6ef 100%);
       border: 2px solid rgba(27, 58, 92, 0.1);
@@ -3553,10 +3543,10 @@
     .agreement-text {
       margin: 0;
       font-weight: 800;
-      font-size: clamp(0.88rem, 1.85vw, 1.05rem);
+      font-size: clamp(1.05rem, 2.3vw, 1.35rem);
       color: var(--navy);
       line-height: 1.28;
-      max-width: 12ch;
+      max-width: 16ch;
     }
 
     /* Turn-taking */
@@ -5155,30 +5145,10 @@
 
     const AGREEMENTS = [
       { id: "listen", text: "We listen to each other", image: "/cards/core/listen.png" },
-      { id: "turns", text: "We take turns" },
       { id: "help", text: "We ask for help when needed", image: "/cards/core/help.png" },
       { id: "space", text: "We respect personal space", image: `${DC_GENERAL}/agreement-personal-space.png` },
       { id: "break", text: "We can ask for a break", image: `${DC_GENERAL}/agreement-break.png` },
     ];
-
-    const AGREEMENT_3D_SVG = {
-      turns: `<svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <radialGradient id="turns-ball" cx="35%" cy="30%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8945a"/></radialGradient>
-          <linearGradient id="turns-arrow" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
-          <filter id="turns-soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#1e3a5f" flood-opacity="0.16"/></filter>
-        </defs>
-        <ellipse cx="50" cy="82" rx="34" ry="5" fill="#cbd5e1" opacity="0.45"/>
-        <g filter="url(#turns-soft)">
-          <rect x="22" y="62" width="14" height="5" rx="2.5" fill="#475569"/>
-          <rect x="64" y="62" width="14" height="5" rx="2.5" fill="#475569"/>
-          <circle cx="29" cy="54" r="9" fill="url(#turns-ball)"/>
-          <circle cx="71" cy="54" r="9" fill="url(#turns-ball)"/>
-        </g>
-        <path d="M71 54 A22 22 0 1 1 29 54" fill="none" stroke="url(#turns-arrow)" stroke-width="5.5" stroke-linecap="round"/>
-        <polygon points="74,36 68,44 80,44" fill="#1d4ed8"/>
-      </svg>`,
-    };
 
     function buildAgreementIcon3D(agreement, label) {
       const wrap = el("div", {
@@ -5193,10 +5163,7 @@
           decoding: "async",
           draggable: "false",
         }));
-        return wrap;
       }
-      const id = typeof agreement === "string" ? agreement : agreement?.id;
-      wrap.innerHTML = AGREEMENT_3D_SVG[id] || AGREEMENT_3D_SVG.turns;
       return wrap;
     }
 
