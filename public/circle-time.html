@@ -620,11 +620,12 @@
 
     /* Day screen — TODAY IS + drag from footer dock */
     .day-layout {
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       min-height: 0;
       overflow: hidden;
+      gap: 0.35rem;
     }
 
     .day-center {
@@ -634,16 +635,17 @@
       flex-wrap: nowrap;
       align-items: center;
       justify-content: center;
-      padding: 0.4rem 0.75rem 0.5rem;
+      padding: 0.35rem 0.65rem 0.35rem;
       min-height: 0;
+      max-height: 100%;
       overflow: hidden;
-      gap: clamp(0.65rem, 2vw, 1.25rem);
+      gap: clamp(0.55rem, 1.8vw, 1.1rem);
     }
 
     .calendar-ref-board-host {
-      flex: 0 0 auto;
-      width: min(38vw, 280px);
-      max-width: 280px;
+      flex: 0 1 auto;
+      width: min(34vw, 260px);
+      max-width: 260px;
       max-height: 100%;
       align-self: center;
       display: flex;
@@ -921,32 +923,39 @@
     }
 
     .day-dock {
-      flex-shrink: 0;
+      flex: 0 0 auto;
       position: relative;
       z-index: 4;
-      margin-top: 0.35rem;
+      margin-top: 0;
       border-top: 3px solid var(--grey-200);
-      padding: 0.85rem;
+      padding: 0.55rem 0.65rem 0.65rem;
       background: var(--grey-100);
       border-radius: var(--radius);
-      min-height: clamp(150px, 22vh, 190px);
+      min-height: 0;
+      max-height: min(42vh, 280px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .day-dock-items {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.55rem 0.65rem;
       justify-content: center;
       align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
     }
 
     .draggable-day {
-      width: clamp(96px, 14vw, 124px);
+      width: clamp(72px, 9vw, 104px);
       touch-action: none;
       user-select: none;
       cursor: grab;
       text-align: center;
       flex-shrink: 0;
+      min-width: 0;
     }
 
     .draggable-day.is-drag-source {
@@ -954,13 +963,14 @@
     }
 
     .day-letter-icon {
-      width: clamp(72px, 11vw, 92px);
-      height: clamp(72px, 11vw, 92px);
+      width: min(100%, clamp(56px, 8vw, 84px));
+      height: min(100%, clamp(56px, 8vw, 84px));
+      aspect-ratio: 1;
       border-radius: 50%;
       background: var(--day-color, var(--navy));
       color: var(--white);
       font-weight: 800;
-      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-size: clamp(1.1rem, 3.2vw, 1.6rem);
       display: grid;
       place-items: center;
       margin: 0 auto;
@@ -970,8 +980,9 @@
     }
 
     .day-chip-face {
-      width: clamp(72px, 11vw, 92px);
-      height: clamp(72px, 11vw, 92px);
+      width: min(100%, clamp(56px, 8vw, 84px));
+      height: auto;
+      aspect-ratio: 1;
       border-radius: 50%;
       background: linear-gradient(145deg, var(--day-color, var(--navy)), color-mix(in srgb, var(--day-color, var(--navy)) 72%, #0f172a));
       color: var(--white);
@@ -1026,11 +1037,12 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: clamp(0.75rem, 2.5vw, 1.35rem);
-      flex-wrap: nowrap;
+      gap: clamp(0.55rem, 2vw, 1.15rem);
+      flex-wrap: wrap;
       width: 100%;
       max-width: min(680px, 98vw);
       margin-top: 0.15rem;
+      min-width: 0;
     }
 
     .date-stack-side {
@@ -1101,8 +1113,9 @@
     }
 
     .month-chip-face {
-      width: clamp(58px, 9vw, 76px);
-      height: clamp(58px, 9vw, 76px);
+      width: min(100%, clamp(52px, 7.5vw, 72px));
+      height: auto;
+      aspect-ratio: 1;
       border-radius: 16px;
       background: linear-gradient(
         155deg,
@@ -1139,31 +1152,47 @@
     .dock-grid-6 {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: clamp(0.45rem, 1.5vw, 0.7rem);
-      max-width: min(680px, 96vw);
+      gap: clamp(0.4rem, 1.2vw, 0.65rem);
+      max-width: min(780px, 100%);
+      width: 100%;
       margin: 0 auto;
       justify-items: center;
+    }
+
+    .dock-grid-6 .draggable-month {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
 
     .dock-grid-dom {
       display: grid;
       grid-template-columns: repeat(16, minmax(0, 1fr));
       grid-template-rows: repeat(2, auto);
-      gap: clamp(0.35rem, 1.1vw, 0.55rem);
-      max-width: min(980px, 98vw);
+      gap: clamp(0.25rem, 0.8vw, 0.45rem);
+      width: 100%;
+      max-width: min(1100px, 100%);
       margin: 0 auto;
-      justify-items: center;
+      justify-items: stretch;
       align-items: center;
     }
 
     .dock-grid-dom .draggable-date-num {
-      width: auto;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .dock-grid-dom .date-num-icon {
-      width: clamp(52px, 5.2vw, 68px);
-      height: clamp(52px, 5.2vw, 68px);
-      font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+      width: 100%;
+      max-width: min(100%, 58px);
+      height: auto;
+      aspect-ratio: 1;
+      font-size: clamp(0.9rem, 2.1vw, 1.3rem);
+      box-shadow: 0 2px 6px rgba(27, 58, 92, 0.18);
     }
 
     .date-part-slot {
@@ -2631,11 +2660,13 @@
       background: var(--grey-100);
       border-radius: var(--radius);
       min-height: 0;
-      max-height: none;
+      max-height: min(28vh, 180px);
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
+      position: relative;
+      z-index: 3;
     }
 
     .activity-dock-items {
@@ -4483,7 +4514,16 @@
       .agreement-card,
       .turn-youtube-panel {
         min-height: 0 !important;
-        max-height: none;
+      }
+
+      .day-dock {
+        max-height: min(40vh, 260px);
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .activity-dock {
+        max-height: min(26vh, 160px);
       }
 
       .plan-columns {
