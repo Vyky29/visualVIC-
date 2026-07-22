@@ -610,7 +610,6 @@ function FirstThenFocusSpecCard({
           <div
             className="relative mx-auto flex h-full w-full min-h-[120px] max-h-full min-w-0 items-end justify-center overflow-hidden"
             style={{
-              border: `${FOCUS_LANDSCAPE.illustBorder}px solid ${FOCUS_LANDSCAPE.illustBorderColor}`,
               borderRadius: 6,
               maxHeight: `${GENERATED_PIXTO_FOCUS_ILLUSTRATION_RENDER_BOX_H}px`,
             }}

@@ -117,8 +117,9 @@ export const GENERATED_PIXTO_FOCUS_FIXED_ZONE = {
   footerH: 56,
   footerPadX: 16,
   footerTitleMaxFontPx: 22,
-  illustBorder: 2,
-  illustBorderColor: "#2cc55e",
+  /** Diagnostic sizing guide — keep 0 in production so Focus stays clean. */
+  illustBorder: 0,
+  illustBorderColor: "transparent",
   packMarkSize: 44,
   packMarkTop: 20,
   packMarkRight: 24,
