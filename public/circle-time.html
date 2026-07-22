@@ -453,17 +453,18 @@
     .register-dock-avatars {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem 0.55rem;
-      justify-content: center;
+      gap: 0.55rem 0.65rem;
+      justify-content: space-evenly;
       flex: 1;
       min-height: 96px;
-      align-items: flex-start;
-      align-content: flex-start;
+      align-items: center;
+      /* Spread rows through the full dock height (no empty band under photos). */
+      align-content: space-evenly;
       overflow-x: hidden;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
-      padding: 0.25rem 0.35rem 0.5rem;
+      padding: 0.35rem 0.4rem 0.55rem;
       touch-action: pan-y;
     }
 
@@ -3985,6 +3986,14 @@
         max-height: none;
         flex: 1 1 auto;
         min-height: 0;
+        display: grid;
+        /* Fewer columns → more rows, so faces fill the tall dock. */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+        align-content: stretch;
+        align-items: center;
+        justify-items: center;
+        gap: 0.45rem 0.35rem;
       }
     }
 
@@ -4025,6 +4034,13 @@
       max-height: none;
       flex: 1 1 auto;
       min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
+      align-content: stretch;
+      align-items: center;
+      justify-items: center;
+      gap: 0.45rem 0.35rem;
     }
 
     html.is-wide-display .draggable-avatar {
@@ -4051,7 +4067,7 @@
 
     html.is-interactive-whiteboard .register-dock-avatars {
       overflow-y: hidden;
-      gap: 0.4rem 0.5rem;
+      gap: 0.55rem 0.45rem;
     }
 
 
