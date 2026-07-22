@@ -6746,11 +6746,14 @@
     }
 
     function buildMonthCalendarGrid(year, monthIndex, dayOfMonth) {
+      const weekdayMeta = getWeekdayMeta(todayRef.weekday);
+      const todayColor = weekdayMeta?.color || "#16a34a";
       const grid = el("div", {
         className: "calendar-ref-month-grid",
         role: "grid",
         "aria-label": `${MONTHS[monthIndex]?.name || ""} ${year}`,
       });
+      grid.style.setProperty("--today-weekday-color", todayColor);
 
       WEEKDAYS.forEach((w) => {
         grid.appendChild(el("p", {
@@ -6775,12 +6778,14 @@
 
       for (let day = 1; day <= daysInMonth; day += 1) {
         const isToday = day === dayOfMonth;
-        grid.appendChild(el("p", {
+        const cell = el("p", {
           className: `calendar-ref-day${isToday ? " is-today" : ""}`,
           textContent: String(day),
           role: "gridcell",
           "aria-current": isToday ? "date" : null,
-        }));
+        });
+        if (isToday) cell.style.background = todayColor;
+        grid.appendChild(cell);
       }
 
       return grid;
