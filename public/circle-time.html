@@ -769,9 +769,9 @@
 
     .calendar-ref-day.is-today {
       color: #fff;
-      background: #dc2626;
+      background: var(--today-weekday-color, #16a34a);
       font-weight: 800;
-      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--today-weekday-color, #16a34a) 40%, transparent);
     }
 
     @media (max-width: 700px) {
