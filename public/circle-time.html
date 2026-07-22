@@ -436,11 +436,21 @@
     }
 
     .drop-zone-club .zone-icon-club {
-      width: clamp(56px, 11vw, 88px);
-      height: clamp(56px, 11vw, 88px);
+      width: clamp(72px, 14vw, 120px);
+      height: clamp(72px, 14vw, 120px);
       object-fit: contain;
       border-radius: 50%;
       background: var(--white);
+    }
+
+    .drop-zone-home .zone-icon {
+      width: clamp(88px, 16vw, 140px);
+      height: clamp(88px, 16vw, 140px);
+    }
+
+    .drop-zone-home .zone-label {
+      font-size: clamp(1.15rem, 3.2vw, 1.65rem);
+      font-weight: 800;
     }
 
     .register-dock-spacer {
@@ -4298,11 +4308,10 @@
               <img
                 class="zone-icon zone-icon-club"
                 src="/assets/clubsensational-logo.webp"
-                alt=""
+                alt="ClubSENsational"
                 decoding="async"
                 draggable="false"
               />
-              <p class="zone-label">ClubSENsational</p>
             </div>
             <div class="zone-club-stage">
               <img
