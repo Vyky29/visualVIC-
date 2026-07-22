@@ -5,58 +5,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
   <meta name="theme-color" content="#1b3a5c" />
   <script>
-    /* Android / smart-board: sync real viewport size and fix narrow layout width without blocking scroll. */
+    /**
+     * Interactive whiteboards (Android board OS / Promethean / ViewSonic / etc.) —
+     * NOT phones. Boards often report a phone-narrow CSS viewport on a huge panel.
+     * Sync real size, mark the page as a board, and keep session chrome filling the panel.
+     */
     (function syncCircleTimeViewport() {
       function readSizes() {
         var vv = window.visualViewport;
         var iw = Math.round(vv && vv.width ? vv.width : (window.innerWidth || document.documentElement.clientWidth || 0));
         var ih = Math.round(vv && vv.height ? vv.height : (window.innerHeight || document.documentElement.clientHeight || 0));
-        var sw = window.screen && (window.screen.availWidth || window.screen.width) || 0;
-        var sh = window.screen && (window.screen.availHeight || window.screen.height) || 0;
-        var physicalW = Math.max(sw, sh);
-        var physicalH = Math.min(sw, sh);
-        return { iw: iw, ih: ih, sw: sw, sh: sh, physicalW: physicalW, physicalH: physicalH };
+        var sw = Math.round((window.screen && (window.screen.availWidth || window.screen.width)) || 0);
+        var sh = Math.round((window.screen && (window.screen.availHeight || window.screen.height)) || 0);
+        var physicalMax = Math.max(sw, sh, iw, ih);
+        var physicalMin = Math.min(
+          sw || physicalMax,
+          sh || physicalMax,
+          iw || physicalMax,
+          ih || physicalMax
+        );
+        return {
+          iw: iw,
+          ih: ih,
+          sw: sw,
+          sh: sh,
+          physicalMax: physicalMax,
+          physicalMin: physicalMin,
+          physicalW: Math.max(sw, sh),
+          physicalH: Math.min(sw || sh, sh || sw),
+        };
+      }
+
+      function isPhoneHandset(sizes) {
+        /* True phones only — never treat large interactive boards as phones. */
+        if (sizes.physicalMax >= 1024) return false;
+        if (sizes.physicalMax >= 900 && sizes.physicalMin >= 500) return false;
+        try {
+          if (window.matchMedia("(pointer: fine) and (hover: hover)").matches && sizes.iw >= 900) {
+            return false;
+          }
+        } catch (_) {}
+        try {
+          if (window.matchMedia("(orientation: portrait) and (max-width: 600px)").matches) {
+            return true;
+          }
+        } catch (_) {}
+        return sizes.physicalMax > 0 && sizes.physicalMax <= 700;
+      }
+
+      function isInteractiveWhiteboard(sizes) {
+        if (isPhoneHandset(sizes)) return false;
+        /* Large physical panel */
+        if (sizes.physicalMax >= 1280) return true;
+        if (sizes.physicalMax >= 1024 && sizes.physicalMin >= 560) return true;
+        /* Classic board quirk: CSS width is phone-narrow, screen is wall-sized */
+        if (sizes.physicalW >= 1024 && sizes.iw > 0 && sizes.iw < sizes.physicalW * 0.78) {
+          return true;
+        }
+        /* Touch landscape tablet / board shell */
+        try {
+          if (
+            window.matchMedia("(pointer: coarse)").matches &&
+            (sizes.iw >= 900 || sizes.physicalMax >= 900) &&
+            sizes.iw >= sizes.ih
+          ) {
+            return true;
+          }
+        } catch (_) {}
+        if (sizes.iw >= 900 && sizes.iw >= sizes.ih) return true;
+        return false;
       }
 
       function apply() {
         var sizes = readSizes();
         var meta = document.querySelector('meta[name="viewport"]');
         if (!meta) return;
+        var root = document.documentElement;
+        var board = isInteractiveWhiteboard(sizes);
+        var phone = isPhoneHandset(sizes);
 
-        document.documentElement.style.setProperty("--layout-w", sizes.iw + "px");
-        document.documentElement.style.setProperty("--layout-h", sizes.ih + "px");
-        document.documentElement.style.setProperty("--app-h", sizes.ih + "px");
+        var layoutW = sizes.iw;
+        var layoutH = sizes.ih;
 
-        if (sizes.physicalW >= 740 || sizes.iw >= 740) {
-          document.documentElement.classList.add("is-wide-display");
-        }
-
-        /* Wide panel with a phone-width layout viewport — scale to fit instead of clipping. */
-        if (sizes.physicalW >= 1024 && sizes.iw < sizes.physicalW * 0.72) {
-          var scale = Math.max(0.25, Math.min(1, sizes.iw / sizes.physicalW));
+        /*
+         * Board browsers sometimes lock layout width to ~360–800px on a 1920px panel.
+         * Expand the layout viewport to the physical panel so flex fill / one-screen works.
+         */
+        if (board && sizes.physicalW >= 1024 && sizes.iw > 0 && sizes.iw < sizes.physicalW * 0.78) {
+          layoutW = sizes.physicalW;
+          layoutH = sizes.physicalH || sizes.ih;
+          var scale = Math.max(0.35, Math.min(1, sizes.iw / sizes.physicalW));
           var scaleStr = scale.toFixed(4);
           meta.setAttribute(
             "content",
-            "width=" + sizes.physicalW + ", initial-scale=" + scaleStr + ", minimum-scale=" + scaleStr + ", maximum-scale=" + scaleStr + ", user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
+            "width=" + sizes.physicalW +
+              ", initial-scale=" + scaleStr +
+              ", minimum-scale=" + scaleStr +
+              ", maximum-scale=" + scaleStr +
+              ", user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
           );
-          return;
-        }
-
-        meta.setAttribute(
-          "content",
-          "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content"
-        );
-
-        if (sizes.ih > 0 && sizes.iw > 0 && (sizes.iw >= 740 || sizes.ih < 820 || sizes.iw > sizes.ih)) {
-          document.documentElement.classList.add("is-board-candidate");
         } else {
-          document.documentElement.classList.remove("is-board-candidate");
+          meta.setAttribute(
+            "content",
+            "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content"
+          );
         }
+
+        root.style.setProperty("--layout-w", layoutW + "px");
+        root.style.setProperty("--layout-h", layoutH + "px");
+        root.style.setProperty("--app-h", (sizes.ih || layoutH) + "px");
+
+        root.classList.toggle("is-interactive-whiteboard", board);
+        root.classList.toggle("is-board-candidate", board);
+        root.classList.toggle("is-wide-display", board || sizes.iw >= 740 || sizes.physicalMax >= 1024);
+        root.classList.toggle("is-phone-handset", phone);
+        root.dataset.circleTimeSurface = board ? "whiteboard" : phone ? "phone" : "desktop";
 
         if (typeof window.__circleTimeOnViewport === "function") {
           try { window.__circleTimeOnViewport(); } catch (_) {}
         }
       }
+
+      window.__circleTimeIsInteractiveWhiteboard = function () {
+        return isInteractiveWhiteboard(readSizes());
+      };
 
       apply();
       document.addEventListener("DOMContentLoaded", apply);
@@ -165,6 +237,24 @@
         overflow-y: hidden;
         touch-action: none;
       }
+    }
+
+    /* Android interactive whiteboard OS (Promethean, ViewBoard, etc.) — not phones */
+    html.is-interactive-whiteboard .screens-wrapper {
+      overflow-y: hidden;
+      touch-action: none;
+    }
+
+    html.is-interactive-whiteboard #session-app {
+      height: var(--app-h, 100dvh);
+      max-height: var(--app-h, 100dvh);
+    }
+
+    html.is-interactive-whiteboard .screen-page.active,
+    html.is-interactive-whiteboard .screen-page.active > section,
+    html.is-interactive-whiteboard .register-layout {
+      height: 100%;
+      min-height: 0;
     }
 
     .screen-page {
@@ -3683,7 +3773,7 @@
       gap: 1.25rem;
     }
 
-    /* Register — landscape / smart board: zones + dock fill the full session height */
+    /* Register — landscape panel: zones + dock fill full height */
     @media (min-width: 740px) and (orientation: landscape), (min-width: 900px) {
       #screen-register .register-layout {
         flex-direction: row;
@@ -3723,6 +3813,44 @@
         flex: 1 1 auto;
         min-height: 0;
       }
+    }
+
+    /* Same fill rules when detected as interactive whiteboard OS (even if UA is odd) */
+    html.is-interactive-whiteboard #screen-register .register-layout {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0.85rem;
+      min-height: 0;
+      height: 100%;
+      flex: 1 1 auto;
+    }
+
+    html.is-interactive-whiteboard #screen-register .register-zones {
+      flex: 1 1 56%;
+      min-width: 0;
+      min-height: 0;
+      align-self: stretch;
+    }
+
+    html.is-interactive-whiteboard #screen-register .drop-zone {
+      height: 100%;
+      min-height: 0;
+    }
+
+    html.is-interactive-whiteboard #screen-register .register-dock {
+      flex: 1 1 36%;
+      margin-top: 0;
+      border-top: none;
+      border-left: 3px solid var(--grey-200);
+      max-height: none;
+      min-height: 0;
+      align-self: stretch;
+    }
+
+    html.is-interactive-whiteboard #screen-register .register-dock-avatars {
+      max-height: none;
+      flex: 1 1 auto;
+      min-height: 0;
     }
 
     html.is-wide-display .draggable-avatar {
@@ -4610,6 +4738,15 @@
     }
 
     function circleTimeShouldAutoFit() {
+      /* Phones: no forced board fit. Interactive whiteboards / wide panels: yes. */
+      if (document.documentElement.classList.contains("is-phone-handset")) return false;
+      if (document.documentElement.classList.contains("is-interactive-whiteboard")) return true;
+      if (document.documentElement.classList.contains("is-board-candidate")) return true;
+      if (typeof window.__circleTimeIsInteractiveWhiteboard === "function") {
+        try {
+          if (window.__circleTimeIsInteractiveWhiteboard()) return true;
+        } catch (_) {}
+      }
       try {
         if (window.matchMedia("(orientation: portrait) and (max-width: 600px)").matches) {
           return false;
@@ -4618,10 +4755,8 @@
       const w = window.innerWidth || 0;
       const h = window.innerHeight || 0;
       if (document.documentElement.classList.contains("is-wide-display")) return true;
-      if (document.documentElement.classList.contains("is-board-candidate")) return true;
-      if (w >= 740) return true;
-      if (h > 0 && w > h) return true;
-      if (h > 0 && h < 820) return true;
+      if (w >= 900) return true;
+      if (h > 0 && w > h && w >= 740) return true;
       return false;
     }
 
@@ -7265,7 +7400,7 @@
     });
 
     /* Register the app service worker so logos, avatars and cards keep working
-       when the smart board loses its connection. */
+       when the interactive whiteboard loses its connection. */
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
