@@ -379,8 +379,17 @@
     .drop-zone-club {
       position: relative;
       overflow: hidden;
-      background: #1a2433;
-      border-color: rgba(255, 255, 255, 0.35);
+      background: var(--white);
+    }
+
+    .drop-zone-club .zone-club-stage {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: 100%;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--white);
     }
 
     .drop-zone-club .zone-club-bg {
@@ -396,47 +405,48 @@
       transition: opacity 0.35s ease;
     }
 
-    /* After the first avatar lands, fade the room so faces stay clear on top. */
+    /* After the first avatar lands, fade toward white so faces stay clear. */
     .drop-zone-club.has-avatars .zone-club-bg {
-      opacity: 0.28;
+      opacity: 0.22;
     }
 
     .drop-zone-club.drag-over {
       border-color: var(--orange);
-      background: #1a2433;
+      background: var(--orange-soft);
     }
 
     .drop-zone-club.drag-over .zone-club-bg {
-      opacity: 0.85;
+      opacity: 0.7;
     }
 
     .drop-zone-club.has-avatars.drag-over .zone-club-bg {
-      opacity: 0.22;
+      opacity: 0.18;
     }
 
-    .drop-zone-club .zone-header,
-    .drop-zone-club .zone-avatars {
+    .drop-zone-club .zone-header {
       position: relative;
       z-index: 1;
     }
 
-    .drop-zone-club .zone-header {
-      width: 100%;
-      margin-bottom: 0.45rem;
-      padding: 0.35rem 0.5rem;
-      border-radius: var(--radius-sm);
-      background: rgba(12, 22, 38, 0.55);
-      backdrop-filter: blur(2px);
-    }
-
-    .drop-zone-club .zone-label {
-      color: #fff;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-      font-size: clamp(0.9rem, 2.2vw, 1.15rem);
-    }
-
     .drop-zone-club .zone-avatars {
+      position: relative;
+      z-index: 1;
+      height: 100%;
       align-content: space-evenly;
+    }
+
+    .drop-zone-club .zone-icon-club {
+      width: clamp(56px, 11vw, 88px);
+      height: clamp(56px, 11vw, 88px);
+      object-fit: contain;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .register-dock-spacer {
+      visibility: hidden;
+      pointer-events: none;
+      min-height: 1px;
     }
 
     .zone-header {
@@ -4277,18 +4287,27 @@
         </div>
         <div class="register-zones">
           <div class="drop-zone drop-zone-club" data-drop-zone="club" aria-label="ClubSENsational drop zone">
-            <img
-              class="zone-club-bg"
-              src="/cards/day%20centre/general/hub-room.png"
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-              draggable="false"
-            />
             <div class="zone-header">
+              <img
+                class="zone-icon zone-icon-club"
+                src="/assets/clubsensational-logo.webp"
+                alt=""
+                decoding="async"
+                draggable="false"
+              />
               <p class="zone-label">ClubSENsational</p>
             </div>
-            <div class="zone-avatars" id="zone-club"></div>
+            <div class="zone-club-stage">
+              <img
+                class="zone-club-bg"
+                src="/cards/day%20centre/hub-room-2-photo.png"
+                alt=""
+                aria-hidden="true"
+                decoding="async"
+                draggable="false"
+              />
+              <div class="zone-avatars" id="zone-club"></div>
+            </div>
           </div>
           <div class="drop-zone drop-zone-home" data-drop-zone="home" aria-label="Home drop zone">
             <div class="zone-header">
@@ -6427,8 +6446,25 @@
         if (container) container.appendChild(createDraggableAvatar(p));
       });
 
-      REGISTER_PEOPLE.filter((p) => (state.location[p.id] || "dock") === "dock").forEach((p) => {
-        zones.dock.appendChild(createDraggableAvatar(p));
+      const dockPeople = REGISTER_PEOPLE.filter(
+        (p) => (state.location[p.id] || "dock") === "dock",
+      );
+      const michelleOnDock = dockPeople.find((p) => p.id === "michelle");
+      const restOnDock = dockPeople.filter((p) => p.id !== "michelle");
+      if (michelleOnDock && zones.dock) {
+        /* Michelle alone on row 1, centered in column 2 of 3. */
+        zones.dock.appendChild(el("div", {
+          className: "register-dock-spacer",
+          "aria-hidden": "true",
+        }));
+        zones.dock.appendChild(createDraggableAvatar(michelleOnDock));
+        zones.dock.appendChild(el("div", {
+          className: "register-dock-spacer",
+          "aria-hidden": "true",
+        }));
+      }
+      restOnDock.forEach((p) => {
+        if (zones.dock) zones.dock.appendChild(createDraggableAvatar(p));
       });
 
       const clubZone = document.querySelector(".drop-zone-club");
