@@ -6532,12 +6532,9 @@
         style: `--day-color:${meta?.color || "var(--navy)"}`,
       });
       const face = el("div", { className: "day-chip-face" });
-      if (meta?.icon) {
-        face.appendChild(el("span", { className: "day-chip-icon", textContent: meta.icon, "aria-hidden": "true" }));
-      }
       face.appendChild(el("span", {
         className: "day-chip-letter",
-        textContent: meta?.letter || day.charAt(0),
+        textContent: meta?.letter || day.slice(0, 3),
         "aria-hidden": "true",
       }));
       chip.appendChild(face);
