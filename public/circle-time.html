@@ -1790,6 +1790,18 @@
       width: 100%;
     }
 
+    .feelings-row-page.feelings-count-1 {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: min(420px, 100%);
+      margin-inline: auto;
+    }
+
+    .feelings-row-page.feelings-count-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: min(860px, 100%);
+      margin-inline: auto;
+    }
+
     @media (max-width: 720px) {
       .feelings-row-page {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -7296,7 +7308,7 @@
 
       const pagePeople = feelingsPeopleOnPage();
       const pageRow = el("div", {
-        className: "feelings-row feelings-row-page",
+        className: `feelings-row feelings-row-page feelings-count-${pagePeople.length}`,
         "aria-label": `Feelings page ${state.feelingsPageIndex + 1} of ${feelingsPageCount()}`,
       });
       pagePeople.forEach((p) => {
