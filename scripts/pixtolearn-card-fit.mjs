@@ -99,11 +99,14 @@ export async function fitIllustrationToCard(src, dest, opts = {}) {
     return;
   }
 
-  const meta = await img.metadata();
-  const scale = Math.min(maxW / meta.width, maxH / meta.height);
-  const w = Math.round(meta.width * scale);
-  const h = Math.round(meta.height * scale);
-  const resized = await img.resize(w, h).png().toBuffer();
+  // Materialize trim first — sharp metadata() ignores pending trim, and
+  // resize(w,h) then defaults to cover, which crops tops (e.g. faces).
+  const trimmedBuf = await img.png().toBuffer();
+  const meta = await sharp(trimmedBuf).metadata();
+  const resized = await sharp(trimmedBuf)
+    .resize(maxW, maxH, { fit: "inside", withoutEnlargement: false })
+    .png()
+    .toBuffer();
 
   await sharp({
     create: { width, height, channels: 3, background },
