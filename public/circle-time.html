@@ -2806,7 +2806,19 @@
     }
 
     .plan-col-activities .activity-assigned .activity-name-label {
-      display: none;
+      display: block;
+      flex-shrink: 0;
+      margin: 0.2rem 0 0;
+      padding: 0 0.15rem;
+      font-size: clamp(0.58rem, 1.35vw, 0.78rem);
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      color: var(--navy);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
     }
 
     .plan-col-empty {
