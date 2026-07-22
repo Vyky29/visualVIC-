@@ -906,34 +906,31 @@
     }
 
     .month-chip-face {
-      width: clamp(52px, 8.5vw, 68px);
-      height: clamp(58px, 9.5vw, 76px);
-      border-radius: 14px;
-      background: linear-gradient(155deg, var(--chip-color, var(--navy)), color-mix(in srgb, var(--chip-color, var(--navy)) 68%, #0f172a));
+      width: clamp(58px, 9vw, 76px);
+      height: clamp(58px, 9vw, 76px);
+      border-radius: 16px;
+      background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--chip-color, var(--navy)) 82%, #ffffff),
+        var(--chip-color, var(--navy))
+      );
       color: var(--white);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.12rem;
       margin: 0 auto;
-      border: 2px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 4px 14px rgba(27, 58, 92, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 3px 12px rgba(27, 58, 92, 0.14);
       pointer-events: none;
-    }
-
-    .month-chip-icon {
-      font-size: clamp(1.05rem, 2.8vw, 1.4rem);
-      line-height: 1;
     }
 
     .month-chip-abbr {
       font-weight: 800;
-      font-size: clamp(0.62rem, 1.7vw, 0.76rem);
-      letter-spacing: 0.05em;
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       line-height: 1;
-      opacity: 0.95;
+      text-shadow: 0 1px 1px rgba(27, 58, 92, 0.18);
     }
 
     .month-theme-icon {
@@ -4713,18 +4710,18 @@
     ];
 
     const MONTHS = [
-      { id: 0, name: "January", short: "Jan", color: "#2563eb", icon: "❄️" },
-      { id: 1, name: "February", short: "Feb", color: "#db2777", icon: "💝" },
-      { id: 2, name: "March", short: "Mar", color: "#16a34a", icon: "🌱" },
-      { id: 3, name: "April", short: "Apr", color: "#7c3aed", icon: "🌧️" },
-      { id: 4, name: "May", short: "May", color: "#e8762a", icon: "🌸" },
-      { id: 5, name: "June", short: "Jun", color: "#ca8a04", icon: "☀️" },
-      { id: 6, name: "July", short: "Jul", color: "#dc2626", icon: "🏖️" },
-      { id: 7, name: "August", short: "Aug", color: "#e8762a", icon: "🌻" },
-      { id: 8, name: "September", short: "Sep", color: "#16a34a", icon: "🍂" },
-      { id: 9, name: "October", short: "Oct", color: "#ca8a04", icon: "🎃" },
-      { id: 10, name: "November", short: "Nov", color: "#7c3aed", icon: "🍁" },
-      { id: 11, name: "December", short: "Dec", color: "#2563eb", icon: "🎄" },
+      { id: 0, name: "January", short: "Jan", color: "#7aa2e8" },
+      { id: 1, name: "February", short: "Feb", color: "#e08ab8" },
+      { id: 2, name: "March", short: "Mar", color: "#6bbf8a" },
+      { id: 3, name: "April", short: "Apr", color: "#a78bdb" },
+      { id: 4, name: "May", short: "May", color: "#e9a06e" },
+      { id: 5, name: "June", short: "Jun", color: "#d4b45c" },
+      { id: 6, name: "July", short: "Jul", color: "#e07a7a" },
+      { id: 7, name: "August", short: "Aug", color: "#e29b6a" },
+      { id: 8, name: "September", short: "Sep", color: "#7aad7a" },
+      { id: 9, name: "October", short: "Oct", color: "#d4a35c" },
+      { id: 10, name: "November", short: "Nov", color: "#9b8bc9" },
+      { id: 11, name: "December", short: "Dec", color: "#6f95d8" },
     ];
 
     const YEAR_OPTIONS = [
@@ -6616,7 +6613,6 @@
         style: `--chip-color:${month.color}`,
       });
       const face = el("div", { className: "month-chip-face" });
-      face.appendChild(el("span", { className: "month-chip-icon", textContent: month.icon, "aria-hidden": "true" }));
       face.appendChild(el("span", { className: "month-chip-abbr", textContent: month.short, "aria-hidden": "true" }));
       chip.appendChild(face);
       chip.appendChild(el("p", { className: "day-name-label", textContent: month.name }));
