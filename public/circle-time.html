@@ -1645,9 +1645,17 @@
       width: 16px;
     }
 
-    .drag-ghost.draggable-day .day-chip-face,
+    /* Keep each weekday's own colour while dragging (do not force orange). */
+    .drag-ghost.draggable-day .day-chip-face {
+      background: linear-gradient(
+        145deg,
+        var(--day-color, var(--navy)),
+        color-mix(in srgb, var(--day-color, var(--navy)) 72%, #0f172a)
+      );
+    }
+
     .drag-ghost.draggable-day .day-letter-icon {
-      background: var(--orange);
+      background: var(--day-color, var(--navy));
     }
 
     /* Weather screen — drag like day */
