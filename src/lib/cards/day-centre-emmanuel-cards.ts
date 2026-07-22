@@ -110,8 +110,8 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dce-gym",
       slug: "gym",
       title: "Gym",
-      items: { type: "emmanuel-scene", slug: "gym-with-michelle" },
-      avatar: { type: "emmanuel-scene", slug: "gym-with-michelle" },
+      items: { type: "emmanuel-scene", slug: "cross-trainer" },
+      avatar: { type: "emmanuel-scene", slug: "cross-trainer" },
     },
     {
       id: "dce-swimming",
@@ -330,7 +330,7 @@ export const DAY_CENTRE_EMMANUEL_ICON_SEQUENCE: readonly TailoredItems3dStep[] =
     },
     {
       id: "dcei-gym",
-      slug: "gym-with-michelle",
+      slug: "cross-trainer",
       title: "Gym",
       library: "emmanuel-scene",
     },
@@ -362,8 +362,8 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
     { id: "dce-badminton", slug: "badminton", title: "Badminton" },
     { id: "dce-tennis", slug: "tennis", title: "Tennis" },
     {
-      id: "dce-gym-with-michelle",
-      slug: "gym-with-michelle",
+      id: "dce-gym-cross-trainer",
+      slug: "cross-trainer",
       title: "Gym",
     },
     { id: "dce-packed-lunch", slug: "packed-lunch", title: "Packed lunch" },
