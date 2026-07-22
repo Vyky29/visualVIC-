@@ -2287,6 +2287,52 @@
       color: var(--navy);
     }
 
+    .feeling-strategy-emotions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .feeling-strategy-emotion-btn {
+      border: 2px solid var(--grey-200);
+      border-radius: 12px;
+      background: var(--grey-50);
+      padding: 0.45rem 0.35rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      min-height: 3.4rem;
+      font-family: inherit;
+      color: var(--navy);
+      touch-action: manipulation;
+    }
+
+    .feeling-strategy-emotion-btn .emotion-face {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    .feeling-strategy-emotion-btn .emotion-face svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .feeling-strategy-emotion-btn span:last-child {
+      font-size: clamp(0.62rem, 1.5vw, 0.75rem);
+      font-weight: 800;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .feeling-strategy-emotion-btn.is-active {
+      border-color: var(--strategy-color, var(--orange));
+      background: color-mix(in srgb, var(--strategy-color, var(--orange)) 16%, #fff);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--strategy-color, var(--orange)) 35%, transparent);
+    }
+
     .feeling-strategy-steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
@@ -4813,6 +4859,7 @@
         </div>
       </div>
       <p class="feeling-strategy-who" id="feeling-strategy-who" hidden></p>
+      <div class="feeling-strategy-emotions" id="feeling-strategy-emotions" role="group" aria-label="Change emotion"></div>
       <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
       <div class="feeling-strategy-actions">
         <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
@@ -4983,7 +5030,7 @@
         lead: "Let's help your body feel calm.",
         steps: [
           { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
-          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
+          { label: "Sensory toys", image: "/cards/climbing/hard-toys.png" },
           { label: "Massage gun", image: `${DC_GENERAL}/strategy-massage-gun.png` },
           { label: "Head massager", image: `${DC_GENERAL}/strategy-head-massager.png` },
           { label: "Listen to music", image: `${DC_GENERAL}/music.png` },
@@ -4993,7 +5040,7 @@
         lead: "Let's help your body feel safe.",
         steps: [
           { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
-          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
+          { label: "Sensory toys", image: "/cards/climbing/hard-toys.png" },
           { label: "Massage gun", image: `${DC_GENERAL}/strategy-massage-gun.png` },
           { label: "Head massager", image: `${DC_GENERAL}/strategy-head-massager.png` },
           { label: "Go to sensory room", image: `${DC_GENERAL}/sensory-room.png` },
@@ -5004,7 +5051,7 @@
         steps: [
           { label: "Rest on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
           { label: "Drink water", image: `${DC_GENERAL}/drink.png` },
-          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
+          { label: "Sensory toys", image: "/cards/climbing/hard-toys.png" },
         ],
       },
     };
@@ -7362,9 +7409,12 @@
        ============================================================ */
 
 
+    let feelingStrategyPersonId = null;
+
     function closeFeelingStrategyPopup() {
       const overlay = document.getElementById("feeling-strategy-overlay");
       if (overlay) overlay.hidden = true;
+      feelingStrategyPersonId = null;
     }
 
     function showFeelingStrategyPopup(person, emotionId) {
@@ -7376,8 +7426,11 @@
       const title = document.getElementById("feeling-strategy-title");
       const lead = document.getElementById("feeling-strategy-lead");
       const who = document.getElementById("feeling-strategy-who");
+      const emotionsHost = document.getElementById("feeling-strategy-emotions");
       const stepsHost = document.getElementById("feeling-strategy-steps");
       if (!strategy || !overlay || !dialog || !stepsHost) return;
+
+      feelingStrategyPersonId = person?.id || null;
 
       const color = (feeling && feeling.color) || "#e8762a";
       dialog.style.setProperty("--strategy-color", color);
@@ -7390,6 +7443,32 @@
       if (who) {
         who.hidden = true;
         who.textContent = "";
+      }
+
+      if (emotionsHost) {
+        emotionsHost.innerHTML = "";
+        FEELINGS.forEach((f) => {
+          const btn = el("button", {
+            type: "button",
+            className: `feeling-strategy-emotion-btn${f.id === emotionId ? " is-active" : ""}`,
+            "aria-label": `Change to ${f.label}`,
+            "aria-pressed": f.id === emotionId ? "true" : "false",
+          });
+          const faceEl = el("span", { className: "emotion-face", "aria-hidden": "true" });
+          faceEl.style.color = f.color;
+          faceEl.innerHTML = EMOTION_SVGS[f.id] || "";
+          btn.appendChild(faceEl);
+          btn.appendChild(el("span", { textContent: f.label }));
+          btn.addEventListener("click", () => {
+            if (!feelingStrategyPersonId || f.id === emotionId) return;
+            state.feelings[feelingStrategyPersonId] = f.id;
+            renderFeelings();
+            renderSummary();
+            const nextPerson = getPerson(feelingStrategyPersonId);
+            showFeelingStrategyPopup(nextPerson, f.id);
+          });
+          emotionsHost.appendChild(btn);
+        });
       }
 
       stepsHost.innerHTML = "";
@@ -7414,7 +7493,6 @@
       overlay.hidden = false;
       const ok = document.getElementById("feeling-strategy-ok");
       if (ok) {
-        /* Re-bind every open so whiteboard touch always closes (cached listeners can miss). */
         ok.onclick = function (e) {
           e.preventDefault();
           e.stopPropagation();
@@ -7436,6 +7514,7 @@
       const isStaff = person.role === "staff";
       const isTurn = person.id === turnId;
       const isDone = state.feelings[person.id] != null;
+      const canEditFeeling = isTurn || isDone;
       const card = el("div", {
         className: `feelings-card${isStaff ? " is-staff" : ""}${isTurn ? " is-turn" : ""}${isDone ? " is-done" : ""}`,
       });
@@ -7460,7 +7539,7 @@
           "data-emotion": f.id,
           "aria-label": `${person.name} feels ${f.label}`,
           "aria-pressed": selected ? "true" : "false",
-          disabled: !isTurn,
+          disabled: !canEditFeeling,
         });
         const face = el("span", {
           className: "emotion-face",
@@ -7471,7 +7550,8 @@
         btn.appendChild(face);
         btn.appendChild(el("span", { className: "emotion-label", textContent: f.label }));
         btn.addEventListener("click", () => {
-          if (person.id !== currentFeelingsTurnId()) return;
+          if (!canEditFeeling) return;
+          const alreadyHad = state.feelings[person.id] != null;
           if (selected) {
             state.feelings[person.id] = null;
             renderFeelings();
@@ -7479,8 +7559,10 @@
             return;
           }
           state.feelings[person.id] = f.id;
-          state.feelingsTurnIndex += 1;
-          syncFeelingsTurnIndex();
+          if (!alreadyHad && person.id === currentFeelingsTurnId()) {
+            state.feelingsTurnIndex += 1;
+            syncFeelingsTurnIndex();
+          }
           renderFeelings();
           renderSummary();
           showFeelingStrategyPopup(person, f.id);
