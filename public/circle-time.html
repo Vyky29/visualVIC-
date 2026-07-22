@@ -699,6 +699,7 @@
 
     .day-drop-slot {
       position: relative;
+      overflow: visible;
       min-height: clamp(150px, 24vh, 220px);
       width: min(360px, 88vw);
       border: 4px dashed var(--orange);
@@ -974,6 +975,7 @@
 
     .date-part-slot {
       position: relative;
+      overflow: visible;
       min-height: clamp(120px, 18vh, 160px);
       min-width: clamp(100px, 16vw, 130px);
       border: 4px dashed var(--orange);
@@ -1011,11 +1013,11 @@
     }
 
     .slot-feedback-msg {
-      position: relative;
-      left: auto;
-      bottom: auto;
-      transform: none;
-      margin: 0.55rem auto 0;
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 0.45rem);
+      transform: translateX(-50%);
+      margin: 0;
       font-weight: 800;
       font-size: clamp(0.88rem, 2.4vw, 1.05rem);
       white-space: nowrap;
@@ -6416,8 +6418,9 @@
       }
       if (slotEl) {
         slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
-        const host = slotEl.closest(".slot-feedback-host") || slotEl;
-        host.querySelector(".slot-feedback-msg")?.remove();
+        slotEl.querySelector(".slot-feedback-msg")?.remove();
+        const host = slotEl.closest(".slot-feedback-host");
+        host?.querySelector(".slot-feedback-msg")?.remove();
       }
       slotFeedbackActive = false;
     }
@@ -6432,11 +6435,10 @@
         const slot = document.getElementById(id);
         if (slot) {
           slot.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
-          const host = slot.closest(".slot-feedback-host") || slot;
-          host.querySelector(".slot-feedback-msg")?.remove();
+          slot.querySelector(".slot-feedback-msg")?.remove();
         }
       });
-      document.querySelectorAll(".slot-feedback-host .slot-feedback-msg").forEach((n) => n.remove());
+      document.querySelectorAll(".slot-feedback-msg").forEach((n) => n.remove());
       const registerLayout = document.querySelector(".register-layout");
       if (registerLayout) {
         registerLayout.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
@@ -6456,14 +6458,16 @@
       /* Store the feedback kind — a wrong answer must not block immediate retries. */
       slotFeedbackActive = type;
       slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
-      const host = slotEl.closest(".slot-feedback-host") || slotEl;
-      host.querySelector(".slot-feedback-msg")?.remove();
+      slotEl.querySelector(".slot-feedback-msg")?.remove();
+      const host = slotEl.closest(".slot-feedback-host");
+      host?.querySelector(".slot-feedback-msg")?.remove();
       slotEl.classList.add(`slot-feedback-${type}`);
-      host.appendChild(el("p", { className: "slot-feedback-msg", textContent: message }));
+      /* Anchor under the active slot so Correct! is centered on that box. */
+      slotEl.appendChild(el("p", { className: "slot-feedback-msg", textContent: message }));
       slotFeedbackTimer = setTimeout(() => {
         slotFeedbackActive = false;
         slotEl.classList.remove("slot-feedback-correct", "slot-feedback-wrong");
-        host.querySelector(".slot-feedback-msg")?.remove();
+        slotEl.querySelector(".slot-feedback-msg")?.remove();
         slotFeedbackTimer = null;
         onDone?.();
       }, SLOT_FEEDBACK_MS[type] || 3500);
