@@ -678,7 +678,7 @@ export const mockRoutines: Routine[] = [
     id: "emmanuel-gym-avatar",
     name: DAY_CENTRE_EMMANUEL_GYM_AVATAR_ROUTINE_NAME,
     description:
-      "Gym with Emmanuel — cross trainer, gym with Michelle, basketball, finished and swimming (3D avatar)",
+      "Gym with Emmanuel — shoulder press, gym with Michelle, basketball, finished and swimming (avatar)",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("emmanuel-gym-avatar"),
     steps: routineStepsFromGeneratedCardProps(

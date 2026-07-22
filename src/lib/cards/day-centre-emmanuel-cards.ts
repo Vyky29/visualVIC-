@@ -379,9 +379,9 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
 export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   [
     {
-      id: "dceg-cross-trainer",
-      slug: "cross-trainer",
-      title: "Cross trainer",
+      id: "dceg-shoulder-press",
+      slug: "shoulder-press",
+      title: "Shoulder press",
     },
     {
       id: "dceg-gym-with-michelle",

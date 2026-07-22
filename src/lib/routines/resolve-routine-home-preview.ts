@@ -130,7 +130,7 @@ export function tailoredScheduleActionPreviewUrl(
     case "emmanuel-weekday-items":
       return undefined;
     case "emmanuel-gym-avatar":
-      return dayCentreEmmanuelSceneUrl("cross-trainer");
+      return dayCentreEmmanuelSceneUrl("shoulder-press");
     case "emmanuel-gym-equipment-3d":
       return undefined;
     case "cyrus-day-centre":

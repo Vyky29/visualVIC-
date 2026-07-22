@@ -226,6 +226,7 @@ const DIGITAL_SLUG_TITLE: Record<string, { en: string; es: string }> = {
     es: "lanzar balón en BOSU",
   },
   "cross-trainer": { en: "cross trainer", es: "elíptica" },
+  "shoulder-press": { en: "shoulder press", es: "press de hombros" },
   "gym-with-michelle": {
     en: "gym with Michelle",
     es: "gimnasio con Michelle",
