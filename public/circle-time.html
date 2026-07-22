@@ -4944,6 +4944,7 @@
     /**
      * YouTube music for turn-taking — edit embedUrl / watchUrl for your favourites.
      * embedUrl loads inside the Circle Time screen (no new window).
+     * Favourite songs resolve per person via FAVOURITE_MUSIC_BY_PERSON.
      */
     const MUSIC_YOUTUBE_OPTIONS = [
       {
@@ -4961,8 +4962,8 @@
       {
         id: "favourite",
         label: "Favourite songs",
-        embedUrl: "https://www.youtube-nocookie.com/embed/videoseries?list=PL8F43D702EA1CD734&rel=0",
-        watchUrl: "https://www.youtube.com/playlist?list=PL8F43D702EA1CD734",
+        embedUrl: null,
+        watchUrl: null,
       },
       {
         id: "none",
@@ -4971,6 +4972,29 @@
         watchUrl: null,
       },
     ];
+
+    const FAVOURITE_MUSIC_BY_PERSON = {
+      emmanuel: {
+        artist: "Britney Spears",
+        embedUrl: "https://www.youtube-nocookie.com/embed/C-u5WLJ9Yk4?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=C-u5WLJ9Yk4",
+      },
+      victor: {
+        artist: "Chronixx",
+        embedUrl: "https://www.youtube-nocookie.com/embed/LfeIfiiBTfY?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=LfeIfiiBTfY",
+      },
+      ikram: {
+        artist: "Pink Pony Club",
+        embedUrl: "https://www.youtube-nocookie.com/embed/GR3Liudev18?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=GR3Liudev18",
+      },
+      michelle: {
+        artist: "Finley Quaye",
+        embedUrl: "https://www.youtube-nocookie.com/embed/1-ORJddr0QY?rel=0",
+        watchUrl: "https://www.youtube.com/watch?v=1-ORJddr0QY",
+      },
+    };
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
@@ -6252,8 +6276,29 @@
       state.turnSelectedMusicId = null;
     }
 
-    function getMusicYoutubeOption(id) {
-      return MUSIC_YOUTUBE_OPTIONS.find((opt) => opt.id === id);
+    function getMusicYoutubeOption(id, personId) {
+      const base = MUSIC_YOUTUBE_OPTIONS.find((opt) => opt.id === id);
+      if (!base) return null;
+      if (base.id !== "favourite") return base;
+      const fav = personId ? FAVOURITE_MUSIC_BY_PERSON[personId] : null;
+      if (!fav) {
+        return {
+          ...base,
+          label: "Favourite songs",
+          embedUrl: null,
+          watchUrl: null,
+        };
+      }
+      return {
+        ...base,
+        label: `Favourite: ${fav.artist}`,
+        embedUrl: fav.embedUrl,
+        watchUrl: fav.watchUrl,
+      };
+    }
+
+    function musicOptionsForPerson(personId) {
+      return MUSIC_YOUTUBE_OPTIONS.map((opt) => getMusicYoutubeOption(opt.id, personId));
     }
 
     function ensureTurnMusicState(currentPerson) {
@@ -6271,7 +6316,7 @@
     function completeCurrentTurnWithMusic() {
       const current = currentTurnPerson();
       if (!current || !state.turnSelectedMusicId) return;
-      const option = getMusicYoutubeOption(state.turnSelectedMusicId);
+      const option = getMusicYoutubeOption(state.turnSelectedMusicId, current.id);
       state.turnCompleted.push({
         id: current.id,
         music: option?.label || state.turnSelectedMusicId,
@@ -6290,16 +6335,19 @@
       return `${embedUrl}${join}autoplay=1`;
     }
 
-    function buildTurnYoutubePanel(selectedMusicId) {
+    function buildTurnYoutubePanel(selectedMusicId, personId) {
       const panel = el("div", {
         className: "turn-youtube-panel",
         "aria-label": "YouTube music player",
       });
-      const option = selectedMusicId ? getMusicYoutubeOption(selectedMusicId) : null;
+      const option = selectedMusicId ? getMusicYoutubeOption(selectedMusicId, personId) : null;
 
       if (!option || !option.embedUrl) {
+        let hint = "Tap a YouTube option below to open music here.";
+        if (option?.id === "none") hint = "No music today — tap Next person when ready.";
+        else if (option?.id === "favourite") hint = "No favourite song linked for this person yet.";
         const placeholder = el("div", { className: "turn-youtube-placeholder" });
-        placeholder.innerHTML = `${YOUTUBE_PLAY_ICON}<span>${option?.id === "none" ? "No music today — tap Next person when ready." : "Tap a YouTube option below to open music here."}</span>`;
+        placeholder.innerHTML = `${YOUTUBE_PLAY_ICON}<span>${hint}</span>`;
         panel.appendChild(placeholder);
         return panel;
       }
