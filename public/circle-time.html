@@ -316,6 +316,23 @@
       pointer-events: none;
     }
 
+    #screen-next.is-ready-pulse {
+      animation: next-ready-pulse 0.85s ease-in-out infinite;
+      box-shadow: 0 0 0 5px rgba(232, 118, 42, 0.45), 0 0 28px rgba(232, 118, 42, 0.55);
+      transform: scale(1.06);
+    }
+
+    @keyframes next-ready-pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(232, 118, 42, 0.4), 0 0 18px rgba(232, 118, 42, 0.4);
+        filter: brightness(1);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(232, 118, 42, 0.55), 0 0 32px rgba(232, 118, 42, 0.65);
+        filter: brightness(1.12);
+      }
+    }
+
     /* Register — drag to Home / ClubSENsational */
     .register-layout {
       position: relative;
@@ -5434,6 +5451,33 @@
       nextBtn.disabled = false;
       /* Always show Next/Done — sessions often skip unfinished steps. */
       nextBtn.classList.remove("is-auto-hidden");
+      if (SCREEN_IDS[currentScreenIndex] !== "register") {
+        nextBtn.classList.remove("is-ready-pulse");
+      }
+    }
+
+    function pulseNextButton(on) {
+      const nextBtn = document.getElementById("screen-next");
+      if (nextBtn) nextBtn.classList.toggle("is-ready-pulse", !!on);
+    }
+
+    function scheduleQuietAutoAdvance(screenId) {
+      const idx = SCREEN_IDS.indexOf(screenId);
+      if (idx < 0 || idx >= SCREEN_IDS.length - 1) return;
+      let advanced = false;
+      const doAdvance = () => {
+        if (advanced) return;
+        advanced = true;
+        if (pendingAdvanceTimer) {
+          clearTimeout(pendingAdvanceTimer);
+          pendingAdvanceTimer = null;
+        }
+        pulseNextButton(false);
+        showScreen(idx + 1);
+      };
+      pulseNextButton(true);
+      if (pendingAdvanceTimer) clearTimeout(pendingAdvanceTimer);
+      pendingAdvanceTimer = setTimeout(doAdvance, SLOT_FEEDBACK_MS.correct);
     }
 
     function maybeAdvanceFromWeather() {
