@@ -624,32 +624,42 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
+      overflow: hidden;
     }
 
     .day-center {
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: row;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: center;
-      justify-content: center;
-      padding: 0.55rem 0.85rem 0.85rem;
+      justify-content: flex-start;
+      padding: 0.4rem 0.75rem 0.5rem;
       min-height: 0;
-      gap: clamp(0.75rem, 2.5vw, 1.5rem);
+      overflow: hidden;
+      gap: clamp(0.65rem, 2vw, 1.25rem);
     }
 
     .calendar-ref-board-host {
-      flex: 0 1 auto;
-      width: min(100%, 340px);
-      align-self: center;
+      flex: 0 0 auto;
+      width: min(38vw, 280px);
+      max-width: 280px;
+      max-height: 100%;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      z-index: 1;
     }
 
     .calendar-ref-board {
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      padding: clamp(0.55rem, 1.4vw, 0.75rem) clamp(0.55rem, 1.4vw, 0.8rem);
+      gap: 0.28rem;
+      width: 100%;
+      max-height: 100%;
+      padding: clamp(0.4rem, 1.1vw, 0.6rem) clamp(0.4rem, 1.1vw, 0.65rem);
       border-radius: 14px;
       background:
         linear-gradient(180deg, rgba(255, 252, 245, 0.96), rgba(245, 236, 220, 0.98)),
@@ -662,6 +672,7 @@
       box-shadow:
         0 10px 28px rgba(27, 58, 92, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      overflow: hidden;
     }
 
     .calendar-ref-pin {
@@ -721,6 +732,14 @@
       line-height: 1.1;
     }
 
+    .calendar-ref-month-year .calendar-ref-month-name {
+      color: var(--calendar-month-color, var(--navy));
+    }
+
+    .calendar-ref-month-year .calendar-ref-year-num {
+      color: var(--calendar-year-color, var(--navy));
+    }
+
     .calendar-ref-season-label {
       margin: 0;
       font-weight: 700;
@@ -732,22 +751,24 @@
     .calendar-ref-month-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 0.15rem;
-      padding: 0.2rem;
+      gap: 0.12rem;
+      padding: 0.15rem;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid rgba(139, 110, 60, 0.22);
+      min-height: 0;
+      flex: 1 1 auto;
     }
 
     .calendar-ref-dow {
       margin: 0;
       text-align: center;
-      font-size: clamp(0.55rem, 1.3vw, 0.68rem);
+      font-size: clamp(0.5rem, 1.2vw, 0.65rem);
       font-weight: 800;
       letter-spacing: 0.02em;
       color: #8a6a3d;
       line-height: 1.2;
-      padding: 0.1rem 0;
+      padding: 0.05rem 0;
     }
 
     .calendar-ref-day {
@@ -756,11 +777,12 @@
       display: grid;
       place-items: center;
       border-radius: 7px;
-      font-size: clamp(0.72rem, 1.7vw, 0.92rem);
+      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
       font-weight: 700;
       color: var(--navy);
       line-height: 1;
       background: transparent;
+      box-sizing: border-box;
     }
 
     .calendar-ref-day.is-empty {
@@ -774,13 +796,26 @@
       box-shadow: 0 2px 8px color-mix(in srgb, var(--today-highlight-color, #1b3a5c) 40%, transparent);
     }
 
+    .calendar-ref-day.is-today.is-ring {
+      color: var(--navy);
+      background: transparent;
+      border: 2.5px solid #1b3a5c;
+      border-radius: 50%;
+      box-shadow: none;
+      font-weight: 800;
+    }
+
     @media (max-width: 700px) {
       .day-center {
         flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
       }
 
       .calendar-ref-board-host {
-        width: min(100%, 300px);
+        width: min(100%, 260px);
+        max-height: 42%;
+        align-self: center;
       }
     }
 
@@ -803,10 +838,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex: 1 1 220px;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
       width: min(100%, 580px);
       max-width: min(580px, 96vw);
-      gap: clamp(0.75rem, 2vh, 1rem);
+      gap: clamp(0.55rem, 1.5vh, 0.85rem);
+      overflow: hidden;
     }
 
     .today-center-body {
@@ -878,7 +916,9 @@
 
     .day-dock {
       flex-shrink: 0;
-      margin-top: 0.5rem;
+      position: relative;
+      z-index: 4;
+      margin-top: 0.35rem;
       border-top: 3px solid var(--grey-200);
       padding: 0.85rem;
       background: var(--grey-100);
@@ -6745,24 +6785,32 @@
       return seasons.winter;
     }
 
-    function getCalendarHighlightColor(screenId) {
+    function getCalendarHighlightStyle(screenId) {
       if (screenId === "day") {
-        return getWeekdayMeta(todayRef.weekday)?.color || "#1b3a5c";
+        return {
+          mode: "fill",
+          color: getWeekdayMeta(todayRef.weekday)?.color || "#1b3a5c",
+        };
       }
       if (screenId === "date") {
-        return "#1b3a5c";
+        return { mode: "fill", color: "#1b3a5c" };
       }
       if (screenId === "month") {
-        return getMonthMeta(todayRef.month)?.color || "#1b3a5c";
+        /* Number is secondary — soft blue ring only. */
+        return { mode: "ring", color: "#1b3a5c" };
       }
       if (screenId === "year") {
-        return YEAR_OPTIONS.find((y) => y.value === todayRef.year)?.color || "#1b3a5c";
+        return {
+          mode: "fill",
+          color: YEAR_OPTIONS.find((y) => y.value === todayRef.year)?.color || "#1b3a5c",
+        };
       }
-      return "#1b3a5c";
+      return { mode: "fill", color: "#1b3a5c" };
     }
 
-    function buildMonthCalendarGrid(year, monthIndex, dayOfMonth, highlightColor) {
-      const todayColor = highlightColor || "#1b3a5c";
+    function buildMonthCalendarGrid(year, monthIndex, dayOfMonth, highlightStyle) {
+      const mode = highlightStyle?.mode || "fill";
+      const todayColor = highlightStyle?.color || "#1b3a5c";
       const grid = el("div", {
         className: "calendar-ref-month-grid",
         role: "grid",
@@ -6794,12 +6842,12 @@
       for (let day = 1; day <= daysInMonth; day += 1) {
         const isToday = day === dayOfMonth;
         const cell = el("p", {
-          className: `calendar-ref-day${isToday ? " is-today" : ""}`,
+          className: `calendar-ref-day${isToday ? " is-today" : ""}${isToday && mode === "ring" ? " is-ring" : ""}`,
           textContent: String(day),
           role: "gridcell",
           "aria-current": isToday ? "date" : null,
         });
-        if (isToday) cell.style.background = todayColor;
+        if (isToday && mode === "fill") cell.style.background = todayColor;
         grid.appendChild(cell);
       }
 
@@ -6808,11 +6856,20 @@
 
     function buildCalendarRefBoard(screenId) {
       const season = getSeasonMeta(todayRef.month);
-      const highlightColor = getCalendarHighlightColor(screenId);
+      const monthMeta = getMonthMeta(todayRef.month);
+      const yearMeta = YEAR_OPTIONS.find((y) => y.value === todayRef.year);
+      const highlightStyle = getCalendarHighlightStyle(screenId);
       const board = el("aside", {
         className: "calendar-ref-board",
         "aria-label": `Pinned board: ${season.label}, ${todayRef.weekday} ${todayRef.dayOfMonth} ${todayRef.monthName} ${todayRef.year}`,
       });
+      const monthColor = monthMeta?.color || "#1b3a5c";
+      const yearColor = yearMeta?.color || monthColor;
+      /* On month screen, month+year header matches the month chip. On year screen, match year chip. */
+      const headerMonthColor = screenId === "year" ? yearColor : monthColor;
+      const headerYearColor = screenId === "month" ? monthColor : (screenId === "year" ? yearColor : yearColor);
+      board.style.setProperty("--calendar-month-color", headerMonthColor);
+      board.style.setProperty("--calendar-year-color", headerYearColor);
       board.appendChild(el("span", { className: "calendar-ref-pin", "aria-hidden": "true" }));
       board.appendChild(el("p", { className: "calendar-ref-title", textContent: "Look here — match this" }));
 
@@ -6824,10 +6881,19 @@
         draggable: "false",
       }));
       const headingText = el("div", { className: "calendar-ref-heading-text" });
-      headingText.appendChild(el("p", {
-        className: "calendar-ref-month-year",
-        textContent: `${todayRef.monthName} ${todayRef.year}`,
+      const monthYear = el("p", { className: "calendar-ref-month-year" });
+      monthYear.appendChild(el("span", {
+        className: "calendar-ref-month-name",
+        textContent: todayRef.monthName,
+        style: `color:${headerMonthColor}`,
       }));
+      monthYear.appendChild(document.createTextNode(" "));
+      monthYear.appendChild(el("span", {
+        className: "calendar-ref-year-num",
+        textContent: String(todayRef.year),
+        style: `color:${headerYearColor}`,
+      }));
+      headingText.appendChild(monthYear);
       headingText.appendChild(el("p", {
         className: "calendar-ref-season-label",
         textContent: season.label,
@@ -6838,7 +6904,7 @@
         todayRef.year,
         todayRef.month,
         todayRef.dayOfMonth,
-        highlightColor,
+        highlightStyle,
       ));
       return board;
     }
