@@ -3288,10 +3288,12 @@
       overflow: hidden;
     }
 
-    .agreement-illustration svg {
+    .agreement-illustration svg,
+    .agreement-illustration img {
       width: 88%;
       height: 88%;
       display: block;
+      object-fit: contain;
     }
 
     .agreement-text {
@@ -4893,33 +4895,14 @@
     }
 
     const AGREEMENTS = [
-      { id: "listen", text: "We listen to each other" },
+      { id: "listen", text: "We listen to each other", image: "/cards/core/listen.png" },
       { id: "turns", text: "We take turns" },
-      { id: "help", text: "We ask for help when needed" },
-      { id: "space", text: "We respect personal space" },
-      { id: "break", text: "We can ask for a break" },
+      { id: "help", text: "We ask for help when needed", image: "/cards/core/help.png" },
+      { id: "space", text: "We respect personal space", image: `${DC_GENERAL}/agreement-personal-space.png` },
+      { id: "break", text: "We can ask for a break", image: `${DC_GENERAL}/agreement-break.png` },
     ];
 
     const AGREEMENT_3D_SVG = {
-      listen: `<svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <radialGradient id="listen-head" cx="38%" cy="32%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8a574"/></radialGradient>
-          <linearGradient id="listen-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5b9fd4"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
-          <filter id="listen-soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#1e3a5f" flood-opacity="0.18"/></filter>
-        </defs>
-        <ellipse cx="50" cy="82" rx="34" ry="5" fill="#cbd5e1" opacity="0.45"/>
-        <ellipse cx="50" cy="48" rx="14" ry="10" fill="#bfdbfe" opacity="0.55"/>
-        <g filter="url(#listen-soft)">
-          <path d="M18 58 Q18 44 28 38 L32 58 Z" fill="url(#listen-body)"/>
-          <path d="M82 58 Q82 44 72 38 L68 58 Z" fill="url(#listen-body)"/>
-          <circle cx="28" cy="34" r="10" fill="url(#listen-head)"/>
-          <circle cx="72" cy="34" r="10" fill="url(#listen-head)"/>
-        </g>
-        <path d="M14 22 Q28 8 42 18" fill="none" stroke="#3b82f6" stroke-width="2.8" stroke-linecap="round"/>
-        <path d="M86 22 Q72 8 58 18" fill="none" stroke="#3b82f6" stroke-width="2.8" stroke-linecap="round"/>
-        <path d="M22 16 Q28 10 34 14" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-        <path d="M78 16 Q72 10 66 14" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-      </svg>`,
       turns: `<svg viewBox="0 0 100 100" aria-hidden="true">
         <defs>
           <radialGradient id="turns-ball" cx="35%" cy="30%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8945a"/></radialGradient>
@@ -4936,68 +4919,25 @@
         <path d="M71 54 A22 22 0 1 1 29 54" fill="none" stroke="url(#turns-arrow)" stroke-width="5.5" stroke-linecap="round"/>
         <polygon points="74,36 68,44 80,44" fill="#1d4ed8"/>
       </svg>`,
-      help: `<svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <radialGradient id="help-head" cx="38%" cy="32%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8a574"/></radialGradient>
-          <linearGradient id="help-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6ee7a8"/><stop offset="100%" stop-color="#16a34a"/></linearGradient>
-          <radialGradient id="help-badge" cx="35%" cy="30%"><stop offset="0%" stop-color="#fdba74"/><stop offset="100%" stop-color="#ea580c"/></radialGradient>
-          <filter id="help-soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#1e3a5f" flood-opacity="0.16"/></filter>
-        </defs>
-        <ellipse cx="50" cy="82" rx="34" ry="5" fill="#cbd5e1" opacity="0.45"/>
-        <g filter="url(#help-soft)">
-          <rect x="38" y="48" width="24" height="22" rx="9" fill="url(#help-body)"/>
-          <circle cx="50" cy="36" r="11" fill="url(#help-head)"/>
-          <path d="M38 50 L28 34" stroke="#fcd9b6" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M62 50 L72 34" stroke="#fcd9b6" stroke-width="4.5" stroke-linecap="round"/>
-        </g>
-        <path d="M50 18 L50 26 M50 18 L46 22 M50 18 L54 22" stroke="#f97316" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="74" cy="38" r="9" fill="url(#help-badge)"/>
-        <path d="M74 34v8M70 38h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>`,
-      space: `<svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <radialGradient id="space-head" cx="38%" cy="32%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8945a"/></radialGradient>
-          <linearGradient id="space-base" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
-          <filter id="space-soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#1e3a5f" flood-opacity="0.16"/></filter>
-        </defs>
-        <ellipse cx="50" cy="82" rx="34" ry="5" fill="#cbd5e1" opacity="0.45"/>
-        <g filter="url(#space-soft)">
-          <rect x="14" y="56" width="18" height="14" rx="5" fill="url(#space-base)"/>
-          <rect x="68" y="56" width="18" height="14" rx="5" fill="url(#space-base)"/>
-          <circle cx="23" cy="46" r="9.5" fill="url(#space-head)"/>
-          <circle cx="77" cy="46" r="9.5" fill="url(#space-head)"/>
-        </g>
-        <line x1="50" y1="32" x2="50" y2="72" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/>
-        <path d="M12 62h14M74 62h14" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
-      </svg>`,
-      break: `<svg viewBox="0 0 100 100" aria-hidden="true">
-        <defs>
-          <radialGradient id="break-head" cx="38%" cy="32%"><stop offset="0%" stop-color="#ffd9b8"/><stop offset="100%" stop-color="#e8945a"/></radialGradient>
-          <linearGradient id="break-seat" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#cbd5e1"/><stop offset="100%" stop-color="#64748b"/></linearGradient>
-          <linearGradient id="break-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdba74"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
-          <filter id="break-soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#1e3a5f" flood-opacity="0.16"/></filter>
-        </defs>
-        <ellipse cx="50" cy="82" rx="34" ry="5" fill="#cbd5e1" opacity="0.45"/>
-        <g filter="url(#break-soft)">
-          <rect x="24" y="58" width="52" height="14" rx="7" fill="url(#break-seat)"/>
-          <rect x="28" y="52" width="44" height="8" rx="4" fill="#94a3b8"/>
-          <rect x="42" y="44" width="16" height="12" rx="5" fill="url(#break-body)"/>
-          <circle cx="50" cy="34" r="11" fill="url(#break-head)"/>
-        </g>
-        <circle cx="50" cy="16" r="10" fill="rgba(255,255,255,0.85)" stroke="#fbbf24" stroke-width="1.5"/>
-        <rect x="44" y="11" width="3.5" height="10" rx="1" fill="#ea580c"/>
-        <rect x="52.5" y="11" width="3.5" height="10" rx="1" fill="#ea580c"/>
-        <path d="M62 12 Q68 18 62 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-      </svg>`,
     };
 
-    function buildAgreementIcon3D(agreementId, label) {
+    function buildAgreementIcon3D(agreement, label) {
       const wrap = el("div", {
         className: "agreement-illustration",
         role: "img",
         "aria-label": label,
       });
-      wrap.innerHTML = AGREEMENT_3D_SVG[agreementId] || AGREEMENT_3D_SVG.listen;
+      if (agreement && agreement.image) {
+        wrap.appendChild(el("img", {
+          src: agreement.image,
+          alt: "",
+          decoding: "async",
+          draggable: "false",
+        }));
+        return wrap;
+      }
+      const id = typeof agreement === "string" ? agreement : agreement?.id;
+      wrap.innerHTML = AGREEMENT_3D_SVG[id] || AGREEMENT_3D_SVG.turns;
       return wrap;
     }
 
@@ -7583,7 +7523,7 @@
       grid.innerHTML = "";
       AGREEMENTS.forEach((a) => {
         const card = el("div", { className: "agreement-card" });
-        card.appendChild(buildAgreementIcon3D(a.id, a.text));
+        card.appendChild(buildAgreementIcon3D(a, a.text));
         card.appendChild(el("p", { className: "agreement-text", textContent: a.text }));
         grid.appendChild(card);
       });
