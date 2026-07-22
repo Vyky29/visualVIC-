@@ -38,29 +38,28 @@ async function publish(style, src, outDir) {
     fs.copyFileSync(src, rawLocal);
   }
 
+  // Portrait PECS cards: contain (never cover) so landscape/stretched raws
+  // are not cropped into a tall skinny subject.
   await fitIllustrationToCard(src, path.join(outDir, `${slug}.png`), {
-    fit: "cover-padded",
-    minPad: 0,
+    fit: "contain",
+    minPad: 28,
     trim: true,
     trimThreshold: 18,
-    position: "centre",
   });
   await fitIllustrationToCard(src, path.join(outDir, `${slug}-focus.png`), {
-    fit: "cover-padded",
-    minPad: 0,
+    fit: "contain",
+    minPad: 28,
     trim: true,
     trimThreshold: 18,
-    position: "centre",
     height: FOCUS_H,
   });
 
   if (style === "3d") {
     await fitIllustrationToCard(src, path.join(emmanuelDir, `${slug}.png`), {
-      fit: "cover-padded",
-      minPad: 0,
+      fit: "contain",
+      minPad: 28,
       trim: true,
       trimThreshold: 18,
-      position: "centre",
     });
   }
 
