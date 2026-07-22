@@ -2,6 +2,13 @@ import type { GeneratedPixtoCardProps } from "@/components/experimental/Generate
 import { HOTEL_GENERATED_CARD_PROPS } from "@/lib/experimental/generated-pixto-demo-routine";
 import type { CardLanguageCode } from "@/lib/preferences/card-language-preference";
 import {
+  EMMANUEL_FIRST_THEN_PACK_IDS,
+  isEmmanuelFirstThenPackId,
+  normalizeEmmanuelFirstThenPackId,
+  resolveEmmanuelFirstThenPack,
+  type EmmanuelFirstThenPackId,
+} from "@/lib/routines/emmanuel-first-then-packs";
+import {
   IKRAM_FIRST_THEN_PACK_IDS,
   isIkramFirstThenPackId,
   normalizeIkramFirstThenPackId,
@@ -9,7 +16,10 @@ import {
   type IkramFirstThenPackId,
 } from "@/lib/routines/ikram-first-then-packs";
 
-export type FirstThenDemoPackId = "hotel" | IkramFirstThenPackId;
+export type FirstThenDemoPackId =
+  | "hotel"
+  | IkramFirstThenPackId
+  | EmmanuelFirstThenPackId;
 
 export type FirstThenDemoLayoutId = "1" | "2" | "3";
 
@@ -33,6 +43,8 @@ export function parseFirstThenDemoPackId(
   if (raw === "hotel") return "hotel";
   const ikram = normalizeIkramFirstThenPackId(raw);
   if (ikram) return ikram;
+  const emmanuel = normalizeEmmanuelFirstThenPackId(raw);
+  if (emmanuel) return emmanuel;
   return "ikram-cab-home";
 }
 
@@ -48,15 +60,20 @@ export function resolveFirstThenDemoPack(
     };
   }
 
+  if (isEmmanuelFirstThenPackId(packId)) {
+    const { first, second } = resolveEmmanuelFirstThenPack(packId, lang);
+    return { id: packId, first, second };
+  }
+
   const { first, second } = resolveIkramFirstThenPack(packId, lang);
   return { id: packId, first, second };
 }
 
 /** Player route to return to after Focus (schedule context). */
 export function firstThenDemoPackRoutineHref(packId: FirstThenDemoPackId): string {
-  return isIkramFirstThenPackId(packId)
-    ? "/tailored/ikram"
-    : "/player/at-the-hotel";
+  if (isIkramFirstThenPackId(packId)) return "/tailored/ikram";
+  if (isEmmanuelFirstThenPackId(packId)) return "/tailored/emmanuel";
+  return "/player/at-the-hotel";
 }
 
 /**
@@ -82,6 +99,7 @@ export function resolveFirstThenDemoRoutineHref(
       return from;
     }
     if (isIkramFirstThenPackId(packId)) return "/tailored/ikram";
+    if (isEmmanuelFirstThenPackId(packId)) return "/tailored/emmanuel";
     return "/dashboard";
   }
   const from = options?.from?.trim();
@@ -100,4 +118,9 @@ export function firstThenDemoPackPreviewUrl(packId: FirstThenDemoPackId): string
   return resolveFirstThenDemoPack(packId, "en").second.illustrationUrl;
 }
 
-export { IKRAM_FIRST_THEN_PACK_IDS, type IkramFirstThenPackId };
+export {
+  IKRAM_FIRST_THEN_PACK_IDS,
+  type IkramFirstThenPackId,
+  EMMANUEL_FIRST_THEN_PACK_IDS,
+  type EmmanuelFirstThenPackId,
+};

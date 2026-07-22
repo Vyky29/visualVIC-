@@ -31,6 +31,12 @@ import {
   ikramFirstThenPackHref,
   ikramFirstThenPackPreviewUrl,
 } from "@/lib/routines/ikram-first-then-packs";
+import {
+  EMMANUEL_FIRST_THEN_PACKS,
+  emmanuelFirstThenPackDisplayTitle,
+  emmanuelFirstThenPackHref,
+  emmanuelFirstThenPackPreviewUrl,
+} from "@/lib/routines/emmanuel-first-then-packs";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { cn } from "@/lib/utils/cn";
@@ -117,8 +123,22 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
   }
 
   const participantName = tailoredParticipantDisplayName(participantId);
-  const ikramFirstThenPacks =
-    participantId === "ikram" ? IKRAM_FIRST_THEN_PACKS : [];
+  const firstThenPacks =
+    participantId === "ikram"
+      ? IKRAM_FIRST_THEN_PACKS.map((pack) => ({
+          id: pack.id,
+          href: ikramFirstThenPackHref(pack.id),
+          previewUrl: ikramFirstThenPackPreviewUrl(pack.id),
+          title: ikramFirstThenPackDisplayTitle(pack.id, cardUiLang),
+        }))
+      : participantId === "emmanuel"
+        ? EMMANUEL_FIRST_THEN_PACKS.map((pack) => ({
+            id: pack.id,
+            href: emmanuelFirstThenPackHref(pack.id),
+            previewUrl: emmanuelFirstThenPackPreviewUrl(pack.id),
+            title: emmanuelFirstThenPackDisplayTitle(pack.id, cardUiLang),
+          }))
+        : [];
 
   return (
     <div>
@@ -142,8 +162,8 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
           </Button>
         </div>
         <ul className="flex flex-col gap-3">
-          {ikramFirstThenPacks.map((pack) => {
-            const previewUrl = ikramFirstThenPackPreviewUrl(pack.id);
+          {firstThenPacks.map((pack) => {
+            const previewUrl = pack.previewUrl;
             const previewPixto =
               Boolean(previewUrl) &&
               (isPixtoLearnBundledCardUrl(previewUrl) ||
@@ -158,11 +178,13 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
                   omitInsetRing
                   className={cn(
                     "overflow-hidden p-0 shadow-card transition-shadow duration-200",
-                    "border-[#E05C9A]/24 bg-[#fde8f4]/95 text-[#E05C9A]",
+                    participantId === "emmanuel"
+                      ? "border-[#1E4A73]/24 bg-[#e8eef5]/95 text-[#1E4A73]"
+                      : "border-[#E05C9A]/24 bg-[#fde8f4]/95 text-[#E05C9A]",
                   )}
                 >
                   <Link
-                    href={ikramFirstThenPackHref(pack.id)}
+                    href={pack.href}
                     className="flex gap-4 p-4 transition hover:bg-white/60"
                   >
                     <div
@@ -199,12 +221,14 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
                         {playerKindFirstThen(cardUiLang)}
                       </p>
                       <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                        {ikramFirstThenPackDisplayTitle(pack.id, cardUiLang)}
+                        {pack.title}
                       </p>
                       <span
                         className={cn(
                           "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
-                          STEP_CHIP_CLASS.tailored,
+                          participantId === "emmanuel"
+                            ? STEP_CHIP_CLASS.ayaan
+                            : STEP_CHIP_CLASS.tailored,
                         )}
                       >
                         2 {dashboardStepsWord(cardUiLang)}

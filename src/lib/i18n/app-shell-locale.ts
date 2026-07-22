@@ -220,6 +220,18 @@ export function ikramFirstThenPackTitle(
   return isEs(lang) ? "Taxi → Casa con Muchie" : "Cab → Home with Muchie";
 }
 
+export function emmanuelFirstThenPackTitle(
+  packId: "emmanuel-word-search-circle-time",
+  lang: CardLanguageCode,
+): string {
+  if (packId === "emmanuel-word-search-circle-time") {
+    return isEs(lang)
+      ? "Sopa de letras → Tiempo de círculo"
+      : "Word search → Circle time";
+  }
+  return packId;
+}
+
 export function playerKindFirstThen(lang: CardLanguageCode): string {
   return isEs(lang) ? "Primero / Después" : "First & Then";
 }
