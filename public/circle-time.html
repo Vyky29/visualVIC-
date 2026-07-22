@@ -618,42 +618,122 @@
       overflow: hidden;
     }
 
-    /* Day screen — TODAY IS + drag from footer dock */
+    /* Date screens — left-to-right like register: options | TODAY IS | calendar */
     .day-layout {
       flex: 1 1 auto;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      align-items: stretch;
       min-height: 0;
       overflow: hidden;
-      gap: 0.4rem;
+      gap: clamp(0.55rem, 1.5vw, 0.9rem);
     }
 
-    .day-center {
-      flex: 1 1 auto;
+    .day-dock {
+      flex: 0 0 clamp(168px, 24vw, 280px);
+      max-width: min(300px, 34vw);
+      position: relative;
+      z-index: 3;
+      margin: 0;
+      border: none;
+      border-right: 3px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 0.55rem 0.5rem 0.65rem;
+      background: var(--grey-100);
+      min-height: 0;
+      max-height: none;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .day-dock .register-dock-label {
+      flex-shrink: 0;
+      margin-bottom: 0.4rem;
+    }
+
+    .day-dock-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.4rem;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+      align-content: flex-start;
+    }
+
+    #screen-day .day-dock-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem 0.35rem;
+      justify-items: center;
+    }
+
+    .day-layout .dock-grid-dom {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: none;
+      gap: 0.3rem 0.25rem;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      justify-items: stretch;
+    }
+
+    .day-layout .dock-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem 0.35rem;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      justify-items: center;
+    }
+
+    #screen-year .day-dock-items {
+      display: flex;
+      flex-direction: column;
       flex-wrap: nowrap;
       align-items: center;
-      justify-content: center;
-      padding: 0.45rem 0.85rem;
-      min-height: 0;
-      overflow-x: auto;
-      overflow-y: auto;
-      gap: clamp(0.75rem, 2.2vw, 1.35rem);
-      -webkit-overflow-scrolling: touch;
+      gap: 0.55rem;
     }
 
-    .calendar-ref-board-host {
+    .day-layout .today-center-wrap {
+      flex: 1 1 auto;
+      order: 0;
+      min-width: 0;
+      width: auto;
+      max-width: none;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(0.45rem, 1.4vh, 0.75rem);
+      overflow: visible;
+      position: relative;
+      z-index: 2;
+      padding: 0.25rem 0.35rem;
+    }
+
+    .day-layout .calendar-ref-board-host {
       flex: 0 0 auto;
       order: 0;
-      width: min(220px, 30vw);
-      max-width: 220px;
-      max-height: min(58vh, 360px);
+      width: min(220px, 26vw);
+      max-width: 230px;
+      max-height: min(70vh, 420px);
       align-self: center;
       display: flex;
       align-items: center;
       overflow: visible;
       z-index: 1;
+      margin-left: auto;
     }
 
     .calendar-ref-board {
@@ -677,6 +757,11 @@
         0 10px 28px rgba(27, 58, 92, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
       overflow: visible;
+    }
+
+    /* Legacy .day-center unused — keep harmless if referenced */
+    .day-center {
+      display: contents;
     }
 
     .calendar-ref-pin {
@@ -814,26 +899,21 @@
       font-weight: 800;
     }
 
-    /* Calendar always on the left; TODAY IS on the right — all date screens */
-    #screen-day .day-center,
-    #screen-date .day-center,
-    #screen-month .day-center,
-    #screen-year .day-center {
+    /* Calendar on the far right; options left; TODAY IS center */
+    #screen-day .day-layout,
+    #screen-date .day-layout,
+    #screen-month .day-layout,
+    #screen-year .day-layout {
       flex-direction: row;
       flex-wrap: nowrap;
-      justify-content: center;
-      align-items: center;
     }
 
     #screen-day .calendar-ref-board-host,
     #screen-date .calendar-ref-board-host,
     #screen-month .calendar-ref-board-host,
     #screen-year .calendar-ref-board-host {
-      order: 0;
-      flex: 0 0 auto;
-      width: min(210px, 28vw);
-      max-width: 210px;
-      max-height: min(55vh, 340px);
+      order: 2;
+      margin-left: auto;
     }
 
     #screen-day .today-center-wrap,
@@ -843,8 +923,25 @@
       order: 1;
       flex: 1 1 auto;
       min-width: 0;
-      width: auto;
-      max-width: min(560px, calc(100% - 230px));
+      max-width: none;
+    }
+
+    #screen-day .day-dock .draggable-day {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    #screen-day .day-dock .day-chip-face,
+    #screen-day .day-dock .day-letter-icon {
+      width: min(100%, clamp(48px, 7vw, 72px));
+    }
+
+    #screen-month .day-dock .draggable-month {
+      width: 100%;
+    }
+
+    #screen-year .day-dock .draggable-year {
+      width: min(100%, 120px);
     }
 
     .day-today-label,
@@ -973,32 +1070,8 @@
       padding: 0 1rem;
     }
 
-    .day-dock {
-      flex: 0 0 auto;
-      position: relative;
-      z-index: 4;
-      margin-top: 0;
-      border-top: 3px solid var(--grey-200);
-      padding: 0.65rem 0.75rem 0.75rem;
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      min-height: 0;
-      max-height: none;
-      overflow: visible;
-    }
-
-    .day-dock-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.55rem 0.65rem;
-      justify-content: center;
-      align-items: flex-start;
-      width: 100%;
-      max-width: 100%;
-    }
-
     .draggable-day {
-      width: clamp(72px, 9vw, 104px);
+      width: clamp(64px, 8vw, 96px);
       touch-action: none;
       user-select: none;
       cursor: grab;
@@ -1201,11 +1274,11 @@
 
     .dock-grid-6 {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: clamp(0.4rem, 1.2vw, 0.65rem);
-      max-width: min(780px, 100%);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem 0.35rem;
+      max-width: 100%;
       width: 100%;
-      margin: 0 auto;
+      margin: 0;
       justify-items: center;
     }
 
@@ -1217,12 +1290,11 @@
 
     .dock-grid-dom {
       display: grid;
-      grid-template-columns: repeat(16, minmax(0, 1fr));
-      grid-template-rows: repeat(2, auto);
-      gap: clamp(0.25rem, 0.8vw, 0.45rem);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.3rem 0.25rem;
       width: 100%;
-      max-width: min(1100px, 100%);
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 0;
       justify-items: stretch;
       align-items: center;
     }
@@ -4577,7 +4649,8 @@
 
       .day-dock {
         max-height: none;
-        overflow: visible;
+        overflow-x: hidden;
+        overflow-y: auto;
       }
 
       .activity-dock {
@@ -4756,27 +4829,25 @@
         <span class="section-num" aria-hidden="true">2</span>
         <div>
           <h2 id="day-heading">Today is…</h2>
-          <p>Drag the correct weekday into the box. Match the pinned board.</p>
+          <p>Drag the correct weekday from the left into the box. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
-        <div class="day-center">
-          <div class="calendar-ref-board-host" data-calendar-board></div>
-          <div class="today-center-wrap">
-            <p class="day-today-label" aria-hidden="true">TODAY IS</p>
-            <div class="today-center-body">
-              <div class="slot-feedback-host">
-                <div class="day-drop-slot" data-drop-zone="day-slot" id="day-slot" aria-label="Selected day">
-                  <p class="day-placeholder" id="day-slot-placeholder">Drop the day here</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="day-dock" data-drop-zone="day-dock" aria-label="Days of the week">
           <p class="register-dock-label">Drag a day</p>
           <div class="day-dock-items" id="day-dock"></div>
         </div>
+        <div class="today-center-wrap">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="today-center-body">
+            <div class="slot-feedback-host">
+              <div class="day-drop-slot" data-drop-zone="day-slot" id="day-slot" aria-label="Selected day">
+                <p class="day-placeholder" id="day-slot-placeholder">Drop the day here</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="calendar-ref-board-host" data-calendar-board></div>
       </div>
     </section>
     </div>
@@ -4787,30 +4858,28 @@
         <span class="section-num" aria-hidden="true">3</span>
         <div>
           <h2 id="date-heading">Day of the month</h2>
-          <p>Drag the correct day number. Match the pinned board.</p>
+          <p>Drag the correct day number from the left. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
-        <div class="day-center">
-          <div class="calendar-ref-board-host" data-calendar-board></div>
-          <div class="today-center-wrap">
-            <p class="day-today-label" aria-hidden="true">TODAY IS</p>
-            <div class="today-center-body">
-              <div class="slot-feedback-host">
-                <div class="date-build-row">
-                  <div class="date-stack date-stack-side" id="date-dom-stack"></div>
-                  <div class="date-part-slot" data-drop-zone="dom-slot" id="dom-slot" aria-label="Day of month">
-                    <p class="date-part-placeholder" id="dom-slot-placeholder">Drop day number</p>
-                  </div>
+        <div class="day-dock" data-drop-zone="dom-dock" aria-label="Day numbers">
+          <p class="register-dock-label">Drag a day number</p>
+          <div class="day-dock-items dock-grid-dom" id="dom-dock"></div>
+        </div>
+        <div class="today-center-wrap">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="today-center-body">
+            <div class="slot-feedback-host">
+              <div class="date-build-row">
+                <div class="date-stack date-stack-side" id="date-dom-stack"></div>
+                <div class="date-part-slot" data-drop-zone="dom-slot" id="dom-slot" aria-label="Day of month">
+                  <p class="date-part-placeholder" id="dom-slot-placeholder">Drop day number</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="day-dock" data-drop-zone="dom-dock" aria-label="Day numbers">
-          <p class="register-dock-label">Drag a day number</p>
-          <div class="day-dock-items dock-grid-dom" id="dom-dock"></div>
-        </div>
+        <div class="calendar-ref-board-host" data-calendar-board></div>
       </div>
     </section>
     </div>
@@ -4821,30 +4890,28 @@
         <span class="section-num" aria-hidden="true">4</span>
         <div>
           <h2 id="month-heading">Month</h2>
-          <p>Drag the correct month. Match the pinned board.</p>
+          <p>Drag the correct month from the left. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
-        <div class="day-center">
-          <div class="calendar-ref-board-host" data-calendar-board></div>
-          <div class="today-center-wrap">
-            <p class="day-today-label" aria-hidden="true">TODAY IS</p>
-            <div class="today-center-body">
-              <div class="slot-feedback-host">
-                <div class="date-build-row">
-                  <div class="date-stack date-stack-side" id="date-month-stack"></div>
-                  <div class="date-part-slot" data-drop-zone="month-slot" id="month-slot" aria-label="Month">
-                    <p class="date-part-placeholder" id="month-slot-placeholder">Drop month</p>
-                  </div>
+        <div class="day-dock" data-drop-zone="month-dock" aria-label="Months">
+          <p class="register-dock-label">Drag a month</p>
+          <div class="day-dock-items dock-grid-6" id="month-dock"></div>
+        </div>
+        <div class="today-center-wrap">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="today-center-body">
+            <div class="slot-feedback-host">
+              <div class="date-build-row">
+                <div class="date-stack date-stack-side" id="date-month-stack"></div>
+                <div class="date-part-slot" data-drop-zone="month-slot" id="month-slot" aria-label="Month">
+                  <p class="date-part-placeholder" id="month-slot-placeholder">Drop month</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="day-dock" data-drop-zone="month-dock" aria-label="Months">
-          <p class="register-dock-label">Drag a month</p>
-          <div class="day-dock-items dock-grid-6" id="month-dock"></div>
-        </div>
+        <div class="calendar-ref-board-host" data-calendar-board></div>
       </div>
     </section>
     </div>
@@ -4855,30 +4922,28 @@
         <span class="section-num" aria-hidden="true">5</span>
         <div>
           <h2 id="year-heading">Year</h2>
-          <p>Drag the correct year. Match the pinned board.</p>
+          <p>Drag the correct year from the left. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
-        <div class="day-center">
-          <div class="calendar-ref-board-host" data-calendar-board></div>
-          <div class="today-center-wrap">
-            <p class="day-today-label" aria-hidden="true">TODAY IS</p>
-            <div class="today-center-body">
-              <div class="slot-feedback-host">
-                <div class="date-build-row">
-                  <div class="date-stack date-stack-side" id="date-year-stack"></div>
-                  <div class="date-part-slot" data-drop-zone="year-slot" id="year-slot" aria-label="Year">
-                    <p class="date-part-placeholder" id="year-slot-placeholder">Drop year</p>
-                  </div>
+        <div class="day-dock" data-drop-zone="year-dock" aria-label="Years">
+          <p class="register-dock-label">Drag a year</p>
+          <div class="day-dock-items" id="year-dock"></div>
+        </div>
+        <div class="today-center-wrap">
+          <p class="day-today-label" aria-hidden="true">TODAY IS</p>
+          <div class="today-center-body">
+            <div class="slot-feedback-host">
+              <div class="date-build-row">
+                <div class="date-stack date-stack-side" id="date-year-stack"></div>
+                <div class="date-part-slot" data-drop-zone="year-slot" id="year-slot" aria-label="Year">
+                  <p class="date-part-placeholder" id="year-slot-placeholder">Drop year</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="day-dock" data-drop-zone="year-dock" aria-label="Years">
-          <p class="register-dock-label">Drag a year</p>
-          <div class="day-dock-items" id="year-dock"></div>
-        </div>
+        <div class="calendar-ref-board-host" data-calendar-board></div>
       </div>
     </section>
     </div>
