@@ -2593,6 +2593,25 @@
       gap: 0.45rem;
       text-align: center;
       min-height: 0;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      width: 100%;
+      touch-action: manipulation;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.12s;
+    }
+
+    .feeling-strategy-step:hover,
+    .feeling-strategy-step:focus-visible {
+      border-color: color-mix(in srgb, var(--strategy-color, var(--orange)) 55%, var(--grey-200));
+      outline: none;
+    }
+
+    .feeling-strategy-step.is-selected {
+      border-color: var(--strategy-color, var(--orange));
+      background: color-mix(in srgb, var(--strategy-color, var(--orange)) 14%, var(--white));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--strategy-color, var(--orange)) 28%, transparent);
+      transform: translateY(-1px);
     }
 
     .feeling-strategy-visual {
@@ -5018,7 +5037,7 @@
         <span class="section-num" aria-hidden="true">7</span>
         <div>
           <h2 id="feelings-heading">Feelings Check-In</h2>
-          <p>Three people per page in turn order. Use Previous / Next if your group is larger — no scrolling needed.</p>
+          <p>Pick a colour for how your body feels — every colour is OK. Then choose what helps right now.</p>
         </div>
       </div>
       <div class="feelings-controls">
@@ -5149,7 +5168,7 @@
       <div class="feeling-strategy-emotions" id="feeling-strategy-emotions" role="group" aria-label="Change emotion"></div>
       <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
       <div class="feeling-strategy-actions">
-        <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
+        <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Done</button>
       </div>
     </div>
   </div>
@@ -5305,40 +5324,48 @@
       cuddle: `<svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 92s-28-18-28-40c0-12 10-20 20-20 6 0 8 4 8 4s2-4 8-4c10 0 20 8 20 20 0 22-28 40-28 40z" fill="#fb7185"/><circle cx="46" cy="46" r="7" fill="#fda4af"/><circle cx="74" cy="46" r="7" fill="#fda4af"/></svg>`,
     };
 
+    /* Same question for every colour: naming is only the door; choosing help is the point.
+       No “well done for Happy” / “fix Withdrawn” hierarchy. */
+    const FEELING_HELP_LEAD = "What helps you right now?";
+
     const FEELING_STRATEGIES = {
       Happy: {
-        lead: "Ready to learn and have fun!",
+        lead: FEELING_HELP_LEAD,
         steps: [
-          { label: "High five!", image: `${DC_GENERAL}/strategy-high-five.png` },
-          { label: "Well done", image: "/cards/core/welldone.png" },
+          { label: "Drink water", image: "/cards/core/drink.png" },
+          { label: "Listen to music", image: `${DC_GENERAL}/music.png` },
+          { label: "High five", image: `${DC_GENERAL}/strategy-high-five.png` },
+          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
         ],
       },
       Anxious: {
-        lead: "Let's help your body feel calm.",
+        lead: FEELING_HELP_LEAD,
         steps: [
-          { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
+          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
+          { label: "Bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
           { label: "Sensory toys", image: `${DC_GENERAL}/sensory-toys.png` },
-          { label: "Massage gun", image: `${DC_GENERAL}/strategy-massage-gun.png` },
-          { label: "Head massager", image: `${DC_GENERAL}/strategy-head-massager.png` },
           { label: "Listen to music", image: `${DC_GENERAL}/music.png` },
+          { label: "Drink water", image: "/cards/core/drink.png" },
         ],
       },
       "Out of control": {
-        lead: "Let's help your body feel safe.",
+        lead: FEELING_HELP_LEAD,
         steps: [
-          { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
+          { label: "Bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
+          { label: "Sensory room", image: `${DC_GENERAL}/sensory-room.png` },
           { label: "Sensory toys", image: `${DC_GENERAL}/sensory-toys.png` },
-          { label: "Massage gun", image: `${DC_GENERAL}/strategy-massage-gun.png` },
-          { label: "Head massager", image: `${DC_GENERAL}/strategy-head-massager.png` },
-          { label: "Go to sensory room", image: `${DC_GENERAL}/sensory-room.png` },
+          { label: "Breathe", image: `${DC_GENERAL}/strategy-breathe.png` },
+          { label: "Ask for help", image: "/cards/core/help.png" },
         ],
       },
       Withdrawn: {
-        lead: "It's OK to take it slow.",
+        lead: FEELING_HELP_LEAD,
         steps: [
-          { label: "Rest on bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
+          { label: "Bean bag", image: `${DC_GENERAL}/bean-bag-orange.png` },
           { label: "Drink water", image: "/cards/core/drink.png" },
           { label: "Sensory toys", image: `${DC_GENERAL}/sensory-toys.png` },
+          { label: "Listen to music", image: `${DC_GENERAL}/music.png` },
+          { label: "Ask for help", image: "/cards/core/help.png" },
         ],
       },
     };
@@ -6120,6 +6147,7 @@
       weather: null,
       weatherConfirmed: false,
       feelings: {},
+      feelingHelps: {},
       feelingsOrder: [],
       feelingsTurnIndex: 0,
       feelingsPageIndex: 0,
@@ -7829,6 +7857,9 @@
       if (!strategy || !overlay || !dialog || !stepsHost) return;
 
       feelingStrategyPersonId = person?.id || null;
+      const selectedHelp = feelingStrategyPersonId
+        ? state.feelingHelps[feelingStrategyPersonId]
+        : null;
 
       const color = (feeling && feeling.color) || "#e8762a";
       dialog.style.setProperty("--strategy-color", color);
@@ -7837,7 +7868,7 @@
         face.innerHTML = EMOTION_SVGS[emotionId] || "";
       }
       if (title) title.textContent = (feeling && feeling.label) || emotionId;
-      if (lead) lead.textContent = strategy.lead || "";
+      if (lead) lead.textContent = strategy.lead || FEELING_HELP_LEAD;
       if (who) {
         who.hidden = true;
         who.textContent = "";
@@ -7845,6 +7876,7 @@
 
       if (emotionsHost) {
         emotionsHost.innerHTML = "";
+        emotionsHost.setAttribute("aria-label", "Feelings — every colour is OK");
         FEELINGS.forEach((f) => {
           const btn = el("button", {
             type: "button",
@@ -7860,6 +7892,7 @@
           btn.addEventListener("click", () => {
             if (!feelingStrategyPersonId || f.id === emotionId) return;
             state.feelings[feelingStrategyPersonId] = f.id;
+            delete state.feelingHelps[feelingStrategyPersonId];
             renderFeelings();
             renderSummary();
             const nextPerson = getPerson(feelingStrategyPersonId);
@@ -7871,7 +7904,12 @@
 
       stepsHost.innerHTML = "";
       (strategy.steps || []).forEach((step) => {
-        const card = el("div", { className: "feeling-strategy-step" });
+        const card = el("button", {
+          type: "button",
+          className: `feeling-strategy-step${selectedHelp === step.label ? " is-selected" : ""}`,
+          "aria-pressed": selectedHelp === step.label ? "true" : "false",
+          "aria-label": `Choose help: ${step.label}`,
+        });
         const visual = el("div", { className: "feeling-strategy-visual", "aria-hidden": "true" });
         if (step.image) {
           visual.appendChild(el("img", {
@@ -7885,6 +7923,15 @@
         }
         card.appendChild(visual);
         card.appendChild(el("p", { className: "feeling-strategy-step-label", textContent: step.label }));
+        card.addEventListener("click", () => {
+          if (!feelingStrategyPersonId) return;
+          state.feelingHelps[feelingStrategyPersonId] = step.label;
+          stepsHost.querySelectorAll(".feeling-strategy-step").forEach((node) => {
+            const on = node === card;
+            node.classList.toggle("is-selected", on);
+            node.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+        });
         stepsHost.appendChild(card);
       });
 
