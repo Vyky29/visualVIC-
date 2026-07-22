@@ -4548,8 +4548,6 @@
       "activities", "agreements", "turn-taking", "finish", "summary",
     ];
 
-    const AUTO_ADVANCE_SCREENS = new Set(["register", "day", "date", "month", "year"]);
-
     const SLOT_FEEDBACK_MS = { correct: 2000, wrong: 4000 };
 
     let pendingAdvanceTimer = null;
@@ -5300,24 +5298,12 @@
       scheduleCircleTimeFit();
     }
 
-    function isScreenComplete(screenId) {
-      if (screenId === "register") {
-        return REGISTER_PEOPLE.every((p) => (state.location[p.id] || "dock") !== "dock");
-      }
-      return canAdvanceFromScreen(screenId);
-    }
-
     function updateNavButtons() {
-      const screenId = SCREEN_IDS[currentScreenIndex];
       const nextBtn = document.getElementById("screen-next");
       nextBtn.textContent = currentScreenIndex === SCREEN_IDS.length - 1 ? "Done" : "Next";
       nextBtn.disabled = false;
-      /* Hide Next only while an auto-advance screen is unfinished; once complete,
-         keep it visible so re-entering an already-solved screen never dead-ends. */
-      nextBtn.classList.toggle(
-        "is-auto-hidden",
-        AUTO_ADVANCE_SCREENS.has(screenId) && !isScreenComplete(screenId),
-      );
+      /* Always show Next/Done — sessions often skip unfinished steps. */
+      nextBtn.classList.remove("is-auto-hidden");
     }
 
     function maybeAdvanceFromWeather() {
@@ -5364,10 +5350,7 @@
           state.weatherConfirmed = true;
           updateNavButtons();
         }
-        if (!canAdvanceFromScreen(screenId)) {
-          showToast(advanceHint(screenId));
-          return;
-        }
+        /* Allow skipping unfinished screens — not every step will be completed. */
         if (currentScreenIndex < SCREEN_IDS.length - 1) {
           showScreen(currentScreenIndex + 1);
         } else {
@@ -6930,28 +6913,6 @@
           };
         };
       });
-    }
-
-    function canAdvanceFromScreen(screenId) {
-      switch (screenId) {
-        case "day": return state.day === todayRef.weekday;
-        case "date": return state.dayOfMonth === todayRef.dayOfMonth;
-        case "month": return state.month === todayRef.month;
-        case "year": return state.year === todayRef.year;
-        case "weather": return state.weather != null && state.weatherConfirmed;
-        default: return true;
-      }
-    }
-
-    function advanceHint(screenId) {
-      const hints = {
-        day: "Choose the correct weekday first",
-        date: "Choose the correct day number",
-        month: "Choose the correct month",
-        year: "Choose the correct year",
-        weather: "Match the live London weather window — top right",
-      };
-      return hints[screenId] || "Complete this screen first";
     }
 
     /* ============================================================
