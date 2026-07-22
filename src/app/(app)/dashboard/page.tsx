@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { TranslatedHeader } from "@/components/navigation/TranslatedHeader";
+import { StaffPortalReturnButton } from "@/components/staff/StaffPortalReturnButton";
 import { GENERATED_PIXTO_CARD_CORNER_RADIUS_CLASS } from "@/lib/constants/generated-pixto-card-sizes";
 import { mockRoutines } from "@/lib/mock/routines";
 import { mockTemplates } from "@/lib/mock/templates";
@@ -578,7 +579,7 @@ export default function DashboardPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
   const prefersFineHover = usePrefersFineHover();
-  const { isRestricted, isCoreClimbOnly, canAccessTailoredParticipant } =
+  const { isRestricted, isCoreClimbOnly, canAccessTailoredParticipant, fromStaffPortal } =
     useStaffAccess();
   const primary = mockRoutines[0];
   /** Same set as Schedule Player index — includes locally saved custom routines first. */
@@ -691,7 +692,14 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <TranslatedHeader titleKey="home" />
+      <TranslatedHeader
+        titleKey="home"
+        rightSlot={
+          fromStaffPortal || isRestricted ? (
+            <StaffPortalReturnButton compact className="!px-2" />
+          ) : undefined
+        }
+      />
       <div className={cn("space-y-8 px-4 pb-8 pt-4", APP_SHELL_TABLET_INSET_CLASS)}>
         <div className="flex justify-center px-2">
           <Link

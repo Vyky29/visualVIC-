@@ -601,6 +601,17 @@ export function plannerLoginPortalLink(lang: CardLanguageCode): string {
   return isEs(lang) ? "Abrir portal staff" : "Open staff portal";
 }
 
+/** Persistent control to leave Planner / Plan and return to Portal Vic. */
+export function plannerBackToPortal(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Portal staff" : "Staff portal";
+}
+
+export function plannerBackToPortalAria(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Volver al portal staff"
+    : "Back to staff portal";
+}
+
 export function plannerAccessDenied(lang: CardLanguageCode): string {
   return isEs(lang)
     ? "No tienes acceso al planner. Contacta con un administrador."

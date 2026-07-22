@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
-import { bottomNavLabel, type BottomNavKey } from "@/lib/i18n/app-shell-locale";
+import {
+  bottomNavLabel,
+  plannerBackToPortal,
+  plannerBackToPortalAria,
+  type BottomNavKey,
+} from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
+import { returnToStaffPortal } from "@/lib/staff/staff-portal-url";
 import { cn } from "@/lib/utils/cn";
 import { shellClassForPathname } from "@/lib/constants/app-shell-layout";
 
@@ -54,8 +60,9 @@ function isActive(pathname: string, item: NavItem): boolean {
 export function BottomNav() {
   const pathname = usePathname();
   const lang = useCardUiLanguage();
-  const { isRestricted } = useStaffAccess();
+  const { isRestricted, fromStaffPortal } = useStaffAccess();
   const shellClass = shellClassForPathname(pathname);
+  const showPortalReturn = fromStaffPortal || isRestricted;
 
   const visibleItems = isRestricted
     ? items.filter((item) => item.labelKey === "home" || item.labelKey === "library")
@@ -89,6 +96,21 @@ export function BottomNav() {
             </span>
           </Link>
         ))}
+        {showPortalReturn ? (
+          <button
+            type="button"
+            onClick={() => returnToStaffPortal()}
+            aria-label={plannerBackToPortalAria(lang)}
+            className="flex min-h-[2.75rem] min-w-0 max-w-[20%] flex-1 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 text-[8.5px] font-medium leading-tight text-ink-faint transition-colors active:opacity-90 active:text-ink sm:text-[9px] [@media(hover:hover)_and_(pointer:fine)]:hover:text-ink-subtle"
+          >
+            <span className="text-[15px] leading-none sm:text-[16px]" aria-hidden>
+              ←
+            </span>
+            <span className="line-clamp-2 w-full min-w-0 max-w-full break-words text-center hyphens-auto">
+              {plannerBackToPortal(lang)}
+            </span>
+          </button>
+        ) : null}
       </div>
     </nav>
   );

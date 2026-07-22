@@ -7,6 +7,7 @@ import {
   LibraryPageClient,
   type LibrarySectionId,
 } from "@/app/(app)/library/LibraryPageClient";
+import { StaffPortalReturnButton } from "@/components/staff/StaffPortalReturnButton";
 import { Button } from "@/components/ui/Button";
 import { createBrowserSupabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import {
@@ -102,9 +103,12 @@ export function PlannerPageClient() {
       <div className="space-y-4 px-6 py-10 text-center">
         <p className="text-[15px] text-ink">{plannerAccessDenied(lang)}</p>
         <p className="text-[13px] text-ink-faint">{gate.reason}</p>
-        <Button type="button" variant="secondary" onClick={() => void signOut()}>
-          {plannerSignOut(lang)}
-        </Button>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <StaffPortalReturnButton />
+          <Button type="button" variant="secondary" onClick={() => void signOut()}>
+            {plannerSignOut(lang)}
+          </Button>
+        </div>
       </div>
     );
   }
@@ -116,7 +120,7 @@ export function PlannerPageClient() {
 
   return (
     <div>
-      <div className="flex items-center justify-end gap-2 px-4 pt-2">
+      <div className="flex flex-wrap items-center justify-end gap-2 px-4 pt-2">
         <span className="truncate text-[12px] text-ink-faint">
           {gate.access.profile.full_name ?? gate.access.profile.username ?? ""}
         </span>

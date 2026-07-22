@@ -18,9 +18,9 @@ import {
 } from "@/lib/i18n/app-shell-locale";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { markStaffPortalSession } from "@/lib/staff/staff-portal-session";
+import { STAFF_PORTAL_ORIGIN } from "@/lib/staff/staff-portal-url";
 
-const STAFF_PORTAL_URL =
-  process.env.NEXT_PUBLIC_STAFF_PORTAL_URL ?? "https://portalvic.vercel.app";
+const STAFF_PORTAL_LOGIN_URL = `${STAFF_PORTAL_ORIGIN}/login.html`;
 
 function PlannerLoginForm() {
   const router = useRouter();
@@ -124,7 +124,7 @@ function PlannerLoginForm() {
       </form>
       <p className="text-center text-[13px]">
         <Link
-          href={`${STAFF_PORTAL_URL}/login.html`}
+          href={STAFF_PORTAL_LOGIN_URL}
           className="font-medium text-sage underline-offset-4 hover:underline"
           target="_blank"
           rel="noopener noreferrer"

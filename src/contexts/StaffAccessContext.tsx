@@ -34,6 +34,8 @@ import type { PlannerLibrarySectionId } from "@/lib/staff/planner-access";
 type StaffAccessContextValue = {
   status: "loading" | "none" | "ready";
   access: StaffPlannerAccess | null;
+  /** Entered via Portal Vic Plan / handoff (sessionStorage flag). */
+  fromStaffPortal: boolean;
   isRestricted: boolean;
   /** Alex / Andres — Core + Climbing only. */
   isCoreClimbOnly: boolean;
@@ -132,6 +134,7 @@ export function StaffAccessProvider({ children }: { children: ReactNode }) {
     return {
       status,
       access,
+      fromStaffPortal: portalSession,
       isRestricted: staffUiActive,
       isCoreClimbOnly: coreClimbOnly,
       allowedLibrarySections: staffUiActive
@@ -159,6 +162,7 @@ export function useStaffAccess(): StaffAccessContextValue {
     return {
       status: "none",
       access: null,
+      fromStaffPortal: false,
       isRestricted: false,
       isCoreClimbOnly: false,
       allowedLibrarySections: undefined,
