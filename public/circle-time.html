@@ -3908,13 +3908,19 @@
     }
 
     .turn-youtube-open-link {
+      position: absolute;
+      bottom: 0.55rem;
+      right: 0.65rem;
+      z-index: 2;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      margin-top: 0.15rem;
-      font-size: clamp(0.82rem, 1.8vw, 0.92rem);
+      background: rgba(15, 23, 42, 0.82);
+      color: #fff;
+      padding: 0.35rem 0.55rem;
+      border-radius: var(--radius-sm);
+      font-size: clamp(0.78rem, 1.6vw, 0.88rem);
       font-weight: 800;
-      color: var(--orange);
       text-decoration: none;
     }
 
@@ -3932,12 +3938,13 @@
     }
 
     .turn-music-options .btn {
-      font-size: clamp(0.84rem, 1.85vw, 0.98rem);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
       font-weight: 800;
-      padding: clamp(0.5rem, 1.3vw, 0.65rem) clamp(0.8rem, 1.8vw, 1rem);
+      padding: clamp(0.65rem, 1.5vw, 0.85rem) clamp(1rem, 2.4vw, 1.35rem);
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
+      max-width: min(100%, 560px);
     }
 
     .turn-music-options .btn.is-active {
@@ -3948,16 +3955,21 @@
 
     .turn-music-options .btn-youtube-mark {
       display: inline-flex;
-      width: 1.15rem;
-      height: 1.15rem;
-      border-radius: 0.2rem;
+      width: 1.35rem;
+      height: 1.35rem;
+      border-radius: 0.25rem;
       background: #ef4444;
       color: #fff;
-      font-size: 0.62rem;
+      font-size: 0.7rem;
       font-weight: 900;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+    }
+
+    .turn-music-options .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     .turn-music-actions {
@@ -5123,7 +5135,7 @@
         <span class="section-num" aria-hidden="true">11</span>
         <div>
           <h2 id="turn-heading">Choosing Music &amp; Turn-Taking</h2>
-          <p>Pick a YouTube option below — it opens here on screen. When they have chosen, tap Next person.</p>
+          <p>One YouTube song per person — tap Play to open it here. Then tap Next person.</p>
         </div>
       </div>
       <div id="turn-taking-content" class="turn-layout"></div>
@@ -5451,58 +5463,26 @@
     }
 
     /**
-     * YouTube music for turn-taking — edit embedUrl / watchUrl for your favourites.
-     * embedUrl loads inside the Circle Time screen (no new window).
-     * Favourite songs resolve per person via FAVOURITE_MUSIC_BY_PERSON.
+     * One YouTube song per person for turn-taking.
+     * Edit embedUrl / watchUrl here to change someone's linked track.
      */
-    const MUSIC_YOUTUBE_OPTIONS = [
-      {
-        id: "calm",
-        label: "Calm music",
-        embedUrl: "https://www.youtube-nocookie.com/embed/jfKfPfyJRdk?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=jfKfPfyJRdk",
-      },
-      {
-        id: "movement",
-        label: "Movement song",
-        embedUrl: "https://www.youtube-nocookie.com/embed/MDEJH9uHQiM?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=MDEJH9uHQiM",
-      },
-      {
-        id: "favourite",
-        label: "Favourite songs",
-        embedUrl: null,
-        watchUrl: null,
-      },
-      {
-        id: "none",
-        label: "No music today",
-        embedUrl: null,
-        watchUrl: null,
-      },
-    ];
+    function ytUrls(videoId) {
+      return {
+        embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?rel=0`,
+        watchUrl: `https://www.youtube.com/watch?v=${videoId}`,
+      };
+    }
 
     const FAVOURITE_MUSIC_BY_PERSON = {
-      emmanuel: {
-        artist: "Britney Spears",
-        embedUrl: "https://www.youtube-nocookie.com/embed/C-u5WLJ9Yk4?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=C-u5WLJ9Yk4",
-      },
-      victor: {
-        artist: "Chronixx",
-        embedUrl: "https://www.youtube-nocookie.com/embed/LfeIfiiBTfY?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=LfeIfiiBTfY",
-      },
-      ikram: {
-        artist: "Pink Pony Club",
-        embedUrl: "https://www.youtube-nocookie.com/embed/GR3Liudev18?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=GR3Liudev18",
-      },
-      michelle: {
-        artist: "Finley Quaye",
-        embedUrl: "https://www.youtube-nocookie.com/embed/1-ORJddr0QY?rel=0",
-        watchUrl: "https://www.youtube.com/watch?v=1-ORJddr0QY",
-      },
+      emmanuel: { artist: "Britney Spears", title: "…Baby One More Time", ...ytUrls("C-u5WLJ9Yk4") },
+      victor: { artist: "Chronixx", title: "Here Comes Trouble", ...ytUrls("LfeIfiiBTfY") },
+      ikram: { artist: "Chappell Roan", title: "Pink Pony Club", ...ytUrls("GR3Liudev18") },
+      michelle: { artist: "Finley Quaye", title: "Sunday Shining", ...ytUrls("1-ORJddr0QY") },
+      luliya: { artist: "Kato feat. Jon", title: "Turn The Lights Off", ...ytUrls("FxDMMeWK1ZE") },
+      roberto: { artist: "Justin Bieber", title: "Baby", ...ytUrls("kffacxfA7G4") },
+      youssef: { artist: "Beyoncé", title: "Halo", ...ytUrls("bnVUHWCynig") },
+      fadi: { artist: "FISHER", title: "Losing It", ...ytUrls("u31thuMehjM") },
+      timi: { artist: "Bob Marley", title: "Three Little Birds", ...ytUrls("HNBCVM4KbUM") },
     };
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
@@ -6851,29 +6831,13 @@
       state.turnSelectedMusicId = null;
     }
 
-    function getMusicYoutubeOption(id, personId) {
-      const base = MUSIC_YOUTUBE_OPTIONS.find((opt) => opt.id === id);
-      if (!base) return null;
-      if (base.id !== "favourite") return base;
-      const fav = personId ? FAVOURITE_MUSIC_BY_PERSON[personId] : null;
-      if (!fav) {
-        return {
-          ...base,
-          label: "Favourite songs",
-          embedUrl: null,
-          watchUrl: null,
-        };
-      }
-      return {
-        ...base,
-        label: `Favourite: ${fav.artist}`,
-        embedUrl: fav.embedUrl,
-        watchUrl: fav.watchUrl,
-      };
+    function getPersonFavouriteMusic(personId) {
+      return personId ? FAVOURITE_MUSIC_BY_PERSON[personId] || null : null;
     }
 
-    function musicOptionsForPerson(personId) {
-      return MUSIC_YOUTUBE_OPTIONS.map((opt) => getMusicYoutubeOption(opt.id, personId));
+    function favouriteMusicLabel(fav) {
+      if (!fav) return "YouTube song";
+      return fav.title ? `${fav.artist} — ${fav.title}` : fav.artist;
     }
 
     function ensureTurnMusicState(currentPerson) {
@@ -6891,10 +6855,13 @@
     function completeCurrentTurnWithMusic() {
       const current = currentTurnPerson();
       if (!current || !state.turnSelectedMusicId) return;
-      const option = getMusicYoutubeOption(state.turnSelectedMusicId, current.id);
+      const fav = getPersonFavouriteMusic(current.id);
+      const musicLabel = state.turnSelectedMusicId === "none" || !fav
+        ? "No music"
+        : favouriteMusicLabel(fav);
       state.turnCompleted.push({
         id: current.id,
-        music: option?.label || state.turnSelectedMusicId,
+        music: musicLabel,
         youtubeId: state.turnSelectedMusicId,
       });
       state.turnIndex += 1;
@@ -6915,12 +6882,13 @@
         className: "turn-youtube-panel",
         "aria-label": "YouTube music player",
       });
-      const option = selectedMusicId ? getMusicYoutubeOption(selectedMusicId, personId) : null;
+      const fav = getPersonFavouriteMusic(personId);
+      const playing = selectedMusicId === "favourite" && fav?.embedUrl;
 
-      if (!option || !option.embedUrl) {
-        let hint = "Tap a YouTube option below to open music here.";
-        if (option?.id === "none") hint = "No music today — tap Next person when ready.";
-        else if (option?.id === "favourite") hint = "No favourite song linked for this person yet.";
+      if (!playing) {
+        let hint = fav
+          ? `Tap Play YouTube to open ${favouriteMusicLabel(fav)} here.`
+          : "No YouTube song linked for this person yet.";
         const placeholder = el("div", { className: "turn-youtube-placeholder" });
         placeholder.innerHTML = `${YOUTUBE_PLAY_ICON}<span>${hint}</span>`;
         panel.appendChild(placeholder);
@@ -6928,29 +6896,22 @@
       }
 
       const iframe = el("iframe", {
-        src: youtubeEmbedSrc(option.embedUrl),
-        title: `${option.label} on YouTube`,
+        src: youtubeEmbedSrc(fav.embedUrl),
+        title: `${favouriteMusicLabel(fav)} on YouTube`,
         allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
         allowFullscreen: "true",
         referrerPolicy: "strict-origin-when-cross-origin",
       });
       panel.appendChild(iframe);
 
-      if (option.watchUrl) {
+      if (fav.watchUrl) {
         const link = el("a", {
           className: "turn-youtube-open-link",
-          href: option.watchUrl,
+          href: fav.watchUrl,
           target: "_blank",
           rel: "noopener noreferrer",
           textContent: "Open on YouTube (backup)",
         });
-        link.style.position = "absolute";
-        link.style.bottom = "0.55rem";
-        link.style.right = "0.65rem";
-        link.style.zIndex = "2";
-        link.style.background = "rgba(15, 23, 42, 0.82)";
-        link.style.padding = "0.35rem 0.55rem";
-        link.style.borderRadius = "var(--radius-sm)";
         panel.appendChild(link);
       }
 
@@ -8461,8 +8422,8 @@
         hero.appendChild(el("p", {
           className: "turn-hero-hint",
           textContent: current.role === "staff"
-            ? "Staff turn — pick a YouTube option, then tap Next person."
-            : "Pick a YouTube option below, listen together here, then tap Next person.",
+            ? "Staff turn — tap Play YouTube for their song, then Next person."
+            : "Tap Play YouTube for their song, listen together, then Next person.",
         }));
       }
       container.appendChild(hero);
@@ -8470,6 +8431,10 @@
       if (!allDone) {
         ensureTurnMusicState(current);
         const selectedMusicId = state.turnSelectedMusicId;
+        const fav = getPersonFavouriteMusic(current.id);
+        const songLabel = favouriteMusicLabel(fav);
+        const canPlay = Boolean(fav?.embedUrl);
+        const canAdvance = Boolean(selectedMusicId) || !canPlay;
 
         const musicStage = el("div", { className: "turn-music-stage" });
         musicStage.appendChild(buildTurnYoutubePanel(selectedMusicId, current.id));
@@ -8477,24 +8442,29 @@
         const musicOpts = el("div", {
           className: "turn-music-options",
           role: "group",
-          "aria-label": `YouTube music for ${current.name}`,
+          "aria-label": `YouTube song for ${current.name}`,
         });
-        musicOptionsForPerson(current.id).forEach((opt) => {
-          const btn = el("button", {
-            type: "button",
-            className: `btn btn-sm${selectedMusicId === opt.id ? " is-active" : ""}`,
-            "aria-label": `Open ${opt.label} on YouTube for ${current.name}`,
-            "aria-pressed": selectedMusicId === opt.id ? "true" : "false",
-          });
-          const mark = el("span", { className: "btn-youtube-mark", textContent: "▶", "aria-hidden": "true" });
-          btn.appendChild(mark);
-          btn.appendChild(document.createTextNode(opt.label));
+        const btn = el("button", {
+          type: "button",
+          className: `btn btn-sm${selectedMusicId === "favourite" ? " is-active" : ""}`,
+          "aria-label": canPlay
+            ? `Play ${songLabel} on YouTube for ${current.name}`
+            : `No YouTube song linked for ${current.name}`,
+          "aria-pressed": selectedMusicId === "favourite" ? "true" : "false",
+          disabled: canPlay ? undefined : "disabled",
+        });
+        const mark = el("span", { className: "btn-youtube-mark", textContent: "▶", "aria-hidden": "true" });
+        btn.appendChild(mark);
+        btn.appendChild(document.createTextNode(
+          canPlay ? `Play YouTube: ${songLabel}` : "No song linked yet"
+        ));
+        if (canPlay) {
           btn.addEventListener("click", () => {
-            state.turnSelectedMusicId = opt.id;
+            state.turnSelectedMusicId = "favourite";
             renderTurnTaking();
           });
-          musicOpts.appendChild(btn);
-        });
+        }
+        musicOpts.appendChild(btn);
         musicStage.appendChild(musicOpts);
 
         const musicActions = el("div", { className: "turn-music-actions" });
@@ -8503,9 +8473,12 @@
           className: "btn btn-primary",
           textContent: "Next person",
           "aria-label": `Finish ${current.name}'s music choice and go to next turn`,
-          disabled: !selectedMusicId,
+          disabled: canAdvance ? undefined : "disabled",
         });
-        nextBtn.addEventListener("click", completeCurrentTurnWithMusic);
+        nextBtn.addEventListener("click", () => {
+          if (!canPlay) state.turnSelectedMusicId = "none";
+          completeCurrentTurnWithMusic();
+        });
         musicActions.appendChild(nextBtn);
         musicStage.appendChild(musicActions);
 
