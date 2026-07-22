@@ -35,6 +35,9 @@ import {
   dashboardFeaturedStepsHint,
   dashboardFirstThenCardEyebrow,
   dashboardFirstThenCardTitle,
+  dashboardCircleTimeEyebrow,
+  dashboardCircleTimeTitle,
+  dashboardCircleTimeHint,
   dashboardFirstThenMuchieHomeHint,
   dashboardFirstThenMuchieHomeTitle,
   dashboardNoPreview,
@@ -1123,6 +1126,37 @@ export default function DashboardPage() {
               </div>
             );
           })}
+        </section>
+
+        <section className="space-y-3">
+          <a href="/circle-time.html" className="group block">
+            <Card className="flex items-center gap-4 overflow-hidden border border-[#E53935]/20 bg-[#ffebee]/90 p-3 transition hover:shadow-soft">
+              <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-2xl bg-white ring-2 ring-[#E53935]/35 ring-offset-2 ring-offset-[#ffebee]">
+                <Image
+                  src={dayCentreHubRoomImageUrl()}
+                  alt=""
+                  fill
+                  unoptimized
+                  className="object-cover object-center"
+                  sizes="72px"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E53935]">
+                  {dashboardCircleTimeEyebrow(cardUiLang)}
+                </p>
+                <p className="mt-0.5 text-[18px] font-semibold leading-snug text-ink">
+                  {dashboardCircleTimeTitle(cardUiLang)}
+                </p>
+                <p className="mt-0.5 text-[13px] leading-snug text-ink-subtle">
+                  {dashboardCircleTimeHint(cardUiLang)}
+                </p>
+              </div>
+              <span className="self-center text-ink-faint" aria-hidden>
+                →
+              </span>
+            </Card>
+          </a>
         </section>
 
         {!isRestricted ? (

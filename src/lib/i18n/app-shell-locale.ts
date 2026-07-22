@@ -186,6 +186,20 @@ export function dashboardFirstThenCardTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Solo dos pasos" : "Two steps only";
 }
 
+export function dashboardCircleTimeEyebrow(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Day centre" : "Day centre";
+}
+
+export function dashboardCircleTimeTitle(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Circle Time" : "Circle Time";
+}
+
+export function dashboardCircleTimeHint(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Pizarra · registro, día y actividades"
+    : "Whiteboard · register, day and activities";
+}
+
 export function dashboardFirstThenMuchieHomeTitle(lang: CardLanguageCode): string {
   return isEs(lang) ? "Casa con Muchie" : "Home with Muchie";
 }
@@ -431,6 +445,7 @@ export type MenuLinkKey =
   | "firstThen"
   | "firstThenDemo"
   | "generatedCardDemo"
+  | "circleTime"
   | "welcome"
   | "auth"
   | "profile"
@@ -445,6 +460,7 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
       firstThen: "First & Then",
       firstThenDemo: "First & Then demo",
       generatedCardDemo: "Generated card demo",
+      circleTime: "Circle Time",
       welcome: "Welcome",
       auth: "Sign in / Sign up",
       profile: "Profile setup",
@@ -458,8 +474,9 @@ export function menuLinkLabel(key: MenuLinkKey, lang: CardLanguageCode): string 
     routineBuilder: "Editor de rutinas",
     firstThen: "Primero / Después",
     firstThenDemo: "Demo Primero / Después",
-    generatedCardDemo: "Demo tarjeta generada",
-    welcome: "Bienvenida",
+      generatedCardDemo: "Demo tarjeta generada",
+      circleTime: "Circle Time",
+      welcome: "Bienvenida",
     auth: "Entrar / Registro",
     profile: "Configurar perfil",
     screensGuide: "Guía de pantallas",
@@ -476,6 +493,7 @@ export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
       firstThen: "Two-card strip",
       firstThenDemo: "Landscape digital wow study",
       generatedCardDemo: "Card geometry, title bands, Focus preview",
+      circleTime: "Day centre whiteboard session",
       welcome: "Entry screen",
       auth: "UI only · no backend",
       profile: "Name & avatar preview",
@@ -489,8 +507,9 @@ export function menuLinkHint(key: MenuLinkKey, lang: CardLanguageCode): string {
     routineBuilder: "Pasos y títulos de prueba",
     firstThen: "Tira de dos tarjetas",
     firstThenDemo: "Estudio digital apaisado",
-    generatedCardDemo: "Geometría de tarjeta, títulos, vista Enfoque",
-    welcome: "Pantalla de entrada",
+      generatedCardDemo: "Geometría de tarjeta, títulos, vista Enfoque",
+      circleTime: "Sesión de pizarra del day centre",
+      welcome: "Pantalla de entrada",
     auth: "Solo interfaz · sin servidor",
     profile: "Nombre y vista del avatar",
     screensGuide: "Qué hace cada pantalla · zonas táctiles de Focus",
