@@ -632,8 +632,139 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: 0.65rem 1rem 1rem;
       min-height: 0;
+      gap: clamp(0.55rem, 1.5vh, 0.9rem);
+    }
+
+    .calendar-ref-board-host {
+      flex-shrink: 0;
+      width: min(100%, 720px);
+    }
+
+    .calendar-ref-board {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding: clamp(0.65rem, 1.6vw, 0.9rem) clamp(0.75rem, 2vw, 1.1rem);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 245, 0.96), rgba(245, 236, 220, 0.98)),
+        repeating-linear-gradient(
+          -12deg,
+          rgba(120, 90, 50, 0.04) 0 2px,
+          transparent 2px 8px
+        );
+      border: 3px solid #c4a574;
+      box-shadow:
+        0 10px 28px rgba(27, 58, 92, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .calendar-ref-pin {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fecaca, #dc2626 55%, #7f1d1d);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.28);
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      z-index: 2;
+    }
+
+    .calendar-ref-title {
+      margin: 0.15rem 0 0;
+      text-align: center;
+      font-size: clamp(0.72rem, 1.7vw, 0.85rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8a6a3d;
+    }
+
+    .calendar-ref-body {
+      display: grid;
+      grid-template-columns: minmax(96px, 0.9fr) minmax(0, 1.4fr);
+      gap: clamp(0.55rem, 1.5vw, 0.85rem);
+      align-items: stretch;
+    }
+
+    .calendar-ref-season {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0.4rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 2px dashed rgba(139, 110, 60, 0.35);
+    }
+
+    .calendar-ref-season img {
+      width: clamp(72px, 12vw, 110px);
+      height: clamp(72px, 12vw, 110px);
+      object-fit: contain;
+      display: block;
+    }
+
+    .calendar-ref-season-label {
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+      color: var(--navy);
+      line-height: 1.1;
+    }
+
+    .calendar-ref-date {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      align-content: center;
+    }
+
+    .calendar-ref-chip {
+      margin: 0;
+      padding: 0.4rem 0.55rem;
+      border-radius: 10px;
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.15;
+      box-shadow: 0 3px 10px rgba(27, 58, 92, 0.18);
+    }
+
+    .calendar-ref-chip.is-weekday {
+      grid-column: 1 / -1;
+      font-size: clamp(1rem, 2.6vw, 1.25rem);
+      background: linear-gradient(145deg, #2563eb, #1e3a8a);
+    }
+
+    .calendar-ref-chip.is-dom {
+      font-size: clamp(1.35rem, 3.4vw, 1.85rem);
+      background: linear-gradient(145deg, #e8762a, #c2410c);
+    }
+
+    .calendar-ref-chip.is-month {
+      font-size: clamp(0.95rem, 2.3vw, 1.15rem);
+      background: linear-gradient(145deg, #16a34a, #166534);
+    }
+
+    .calendar-ref-chip.is-year {
+      grid-column: 1 / -1;
+      font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+      background: linear-gradient(145deg, #7c3aed, #5b21b6);
+    }
+
+    @media (max-width: 560px) {
+      .calendar-ref-body {
+        grid-template-columns: 1fr;
+      }
     }
 
     .day-today-label,
@@ -4379,11 +4510,12 @@
         <span class="section-num" aria-hidden="true">2</span>
         <div>
           <h2 id="day-heading">Today is…</h2>
-          <p>Drag the correct weekday into the box. It must match the date under Circle Time.</p>
+          <p>Drag the correct weekday into the box. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
         <div class="day-center">
+          <div class="calendar-ref-board-host" data-calendar-board></div>
           <div class="today-center-wrap">
             <p class="day-today-label" aria-hidden="true">TODAY IS</p>
             <div class="today-center-body">
@@ -4409,11 +4541,12 @@
         <span class="section-num" aria-hidden="true">3</span>
         <div>
           <h2 id="date-heading">Day of the month</h2>
-          <p>Drag the correct day number. It must match the date under Circle Time.</p>
+          <p>Drag the correct day number. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
         <div class="day-center">
+          <div class="calendar-ref-board-host" data-calendar-board></div>
           <div class="today-center-wrap">
             <p class="day-today-label" aria-hidden="true">TODAY IS</p>
             <div class="today-center-body">
@@ -4442,11 +4575,12 @@
         <span class="section-num" aria-hidden="true">4</span>
         <div>
           <h2 id="month-heading">Month</h2>
-          <p>Drag the correct month. It must match the date under Circle Time.</p>
+          <p>Drag the correct month. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
         <div class="day-center">
+          <div class="calendar-ref-board-host" data-calendar-board></div>
           <div class="today-center-wrap">
             <p class="day-today-label" aria-hidden="true">TODAY IS</p>
             <div class="today-center-body">
@@ -4475,11 +4609,12 @@
         <span class="section-num" aria-hidden="true">5</span>
         <div>
           <h2 id="year-heading">Year</h2>
-          <p>Drag the correct year. It must match the date under Circle Time.</p>
+          <p>Drag the correct year. Match the pinned board.</p>
         </div>
       </div>
       <div class="day-layout">
         <div class="day-center">
+          <div class="calendar-ref-board-host" data-calendar-board></div>
           <div class="today-center-wrap">
             <p class="day-today-label" aria-hidden="true">TODAY IS</p>
             <div class="today-center-body">
@@ -5726,7 +5861,7 @@
       if (slotFeedbackActive === "correct" && zoneKey === "day-slot") return;
       if (zoneKey === "day-slot") {
         if (dayName !== todayRef.weekday) {
-          showSlotFeedback(slot, "wrong", "Not today — check the date under Circle Time");
+          showSlotFeedback(slot, "wrong", "Not today — match the pinned board");
           return;
         }
         if (state.day === dayName) {
@@ -5751,7 +5886,7 @@
       if (slotFeedbackActive === "correct" && zoneKey === "dom-slot") return;
       if (zoneKey === "dom-slot") {
         if (n !== todayRef.dayOfMonth) {
-          showSlotFeedback(slot, "wrong", "Wrong day number — check the date under Circle Time");
+          showSlotFeedback(slot, "wrong", "Wrong day number — match the pinned board");
           return;
         }
         if (state.dayOfMonth === n) {
@@ -5776,7 +5911,7 @@
       if (slotFeedbackActive === "correct" && zoneKey === "month-slot") return;
       if (zoneKey === "month-slot") {
         if (m !== todayRef.month) {
-          showSlotFeedback(slot, "wrong", "Wrong month — check the date under Circle Time");
+          showSlotFeedback(slot, "wrong", "Wrong month — match the pinned board");
           return;
         }
         if (state.month === m) {
@@ -5801,7 +5936,7 @@
       if (slotFeedbackActive === "correct" && zoneKey === "year-slot") return;
       if (zoneKey === "year-slot") {
         if (y !== todayRef.year) {
-          showSlotFeedback(slot, "wrong", "Wrong year — check the date under Circle Time");
+          showSlotFeedback(slot, "wrong", "Wrong year — match the pinned board");
           return;
         }
         if (state.year === y) {
@@ -6502,6 +6637,88 @@
       showScreen(idx + 1);
     }
 
+    function getSeasonMeta(monthIndex) {
+      const seasons = {
+        spring: {
+          id: "spring",
+          label: "Spring",
+          image: `${DC_GENERAL}/season-spring.png`,
+        },
+        summer: {
+          id: "summer",
+          label: "Summer",
+          image: `${DC_GENERAL}/season-summer.png`,
+        },
+        autumn: {
+          id: "autumn",
+          label: "Autumn",
+          image: `${DC_GENERAL}/season-autumn.png`,
+        },
+        winter: {
+          id: "winter",
+          label: "Winter",
+          image: `${DC_GENERAL}/season-winter.png`,
+        },
+      };
+      if (monthIndex >= 2 && monthIndex <= 4) return seasons.spring;
+      if (monthIndex >= 5 && monthIndex <= 7) return seasons.summer;
+      if (monthIndex >= 8 && monthIndex <= 10) return seasons.autumn;
+      return seasons.winter;
+    }
+
+    function buildCalendarRefBoard() {
+      const season = getSeasonMeta(todayRef.month);
+      const board = el("aside", {
+        className: "calendar-ref-board",
+        "aria-label": `Pinned board: ${season.label}, ${todayRef.weekday} ${todayRef.dayOfMonth} ${todayRef.monthName} ${todayRef.year}`,
+      });
+      board.appendChild(el("span", { className: "calendar-ref-pin", "aria-hidden": "true" }));
+      board.appendChild(el("p", { className: "calendar-ref-title", textContent: "Look here — match this" }));
+
+      const body = el("div", { className: "calendar-ref-body" });
+      const seasonBox = el("div", { className: "calendar-ref-season" });
+      seasonBox.appendChild(el("img", {
+        src: season.image,
+        alt: "",
+        decoding: "async",
+        draggable: "false",
+      }));
+      seasonBox.appendChild(el("p", {
+        className: "calendar-ref-season-label",
+        textContent: season.label,
+      }));
+
+      const dateBox = el("div", { className: "calendar-ref-date" });
+      dateBox.appendChild(el("p", {
+        className: "calendar-ref-chip is-weekday",
+        textContent: todayRef.weekday,
+      }));
+      dateBox.appendChild(el("p", {
+        className: "calendar-ref-chip is-dom",
+        textContent: String(todayRef.dayOfMonth),
+      }));
+      dateBox.appendChild(el("p", {
+        className: "calendar-ref-chip is-month",
+        textContent: todayRef.monthName,
+      }));
+      dateBox.appendChild(el("p", {
+        className: "calendar-ref-chip is-year",
+        textContent: String(todayRef.year),
+      }));
+
+      body.appendChild(seasonBox);
+      body.appendChild(dateBox);
+      board.appendChild(body);
+      return board;
+    }
+
+    function renderCalendarRefBoards() {
+      document.querySelectorAll("[data-calendar-board]").forEach((host) => {
+        host.innerHTML = "";
+        host.appendChild(buildCalendarRefBoard());
+      });
+    }
+
     function updateHeaderDate() {
       const now = new Date();
       document.getElementById("header-date").textContent = now.toLocaleDateString("en-GB", {
@@ -6510,6 +6727,7 @@
         month: "long",
         year: "numeric",
       });
+      renderCalendarRefBoards();
     }
 
     /* ============================================================
