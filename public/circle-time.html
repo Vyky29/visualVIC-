@@ -6191,6 +6191,7 @@
       state.location[personId] = zoneKey;
       if (zoneKey !== "club") {
         state.feelings[personId] = null;
+        delete state.feelingHelps[personId];
         if (person?.role === "participant") {
           state.participantActivities[personId] = [];
         }
@@ -6634,6 +6635,7 @@
         state.location[s.id] = "dock";
         state.feelings[s.id] = null;
       });
+      state.feelingHelps = {};
       state.feelingsOrder = [];
       state.feelingsTurnIndex = 0;
       state.feelingsPageIndex = 0;
@@ -7999,6 +8001,7 @@
           const alreadyHad = state.feelings[person.id] != null;
           if (selected) {
             state.feelings[person.id] = null;
+            delete state.feelingHelps[person.id];
             renderFeelings();
             renderSummary();
             return;
