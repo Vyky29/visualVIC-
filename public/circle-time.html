@@ -1915,7 +1915,7 @@
       background: rgba(37, 99, 235, 0.1);
     }
 
-    .emotion-btn[data-emotion="Happy/Excited"].selected {
+    .emotion-btn[data-emotion="Happy"].selected {
       border-color: #16a34a;
       background: rgba(22, 163, 74, 0.1);
     }
@@ -1973,6 +1973,152 @@
     html.is-interactive-whiteboard .emotion-label,
     html.is-wide-display .emotion-label {
       font-size: clamp(0.95rem, 1.7vw, 1.2rem);
+    }
+
+
+    /* Feeling strategy popup (Zones of Regulation) */
+    .feeling-strategy-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(0.75rem, 3vw, 1.5rem);
+      background: rgba(18, 40, 64, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    .feeling-strategy-overlay[hidden] {
+      display: none !important;
+    }
+
+    .feeling-strategy-dialog {
+      width: min(920px, 96vw);
+      max-height: min(92dvh, 860px);
+      overflow: auto;
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: 0 18px 48px rgba(18, 40, 64, 0.28);
+      border: 4px solid var(--strategy-color, var(--orange));
+      padding: clamp(1rem, 2.5vw, 1.6rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .feeling-strategy-head {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .feeling-strategy-emotion-face {
+      width: clamp(56px, 8vw, 76px);
+      height: clamp(56px, 8vw, 76px);
+      color: var(--strategy-color, var(--navy));
+      flex-shrink: 0;
+    }
+
+    .feeling-strategy-emotion-face svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .feeling-strategy-title {
+      margin: 0;
+      font-size: clamp(1.35rem, 3.2vw, 1.9rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+
+    .feeling-strategy-lead {
+      margin: 0.15rem 0 0;
+      font-size: clamp(1rem, 2.3vw, 1.25rem);
+      font-weight: 700;
+      color: var(--strategy-color, var(--orange));
+      line-height: 1.25;
+    }
+
+    .feeling-strategy-who {
+      margin: 0;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--grey-700);
+    }
+
+    .feeling-strategy-who strong {
+      color: var(--navy);
+    }
+
+    .feeling-strategy-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+      gap: clamp(0.55rem, 1.5vw, 0.85rem);
+      margin: 0.25rem 0 0;
+    }
+
+    .feeling-strategy-step {
+      border: 2px solid var(--grey-200);
+      border-radius: 14px;
+      background: var(--grey-50);
+      padding: 0.75rem 0.65rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      text-align: center;
+      min-height: 0;
+    }
+
+    .feeling-strategy-visual {
+      width: clamp(72px, 12vw, 110px);
+      height: clamp(72px, 12vw, 110px);
+      border-radius: 14px;
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(27, 58, 92, 0.08);
+    }
+
+    .feeling-strategy-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .feeling-strategy-visual svg {
+      width: 78%;
+      height: 78%;
+      display: block;
+    }
+
+    .feeling-strategy-step-label {
+      margin: 0;
+      font-size: clamp(0.9rem, 1.9vw, 1.1rem);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .feeling-strategy-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.35rem;
+    }
+
+    .feeling-strategy-actions .btn {
+      min-width: min(100%, 240px);
+      min-height: 52px;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    html.is-interactive-whiteboard .feeling-strategy-dialog {
+      width: min(1100px, 96vw);
     }
 
     #screen-feelings .section-header {
@@ -4475,27 +4621,73 @@
 
     const EMOTION_SVGS = {
       Withdrawn: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 15.5Q12 12.7 16 15.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
-      "Happy/Excited": '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 14Q12 17.2 16 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
+      Happy: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 14Q12 17.2 16 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
       Anxious: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M8 8.5l2 1.5M16 8.5l-2 1.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.5 14.5h7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M17.2 6.3c.9.6.8 1.8 0 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>',
       "Out of control": '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><path d="M8 8.5l3 2M16 8.5l-3 2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M9 15h6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>',
     };
 
     const FEELINGS = [
       { id: "Withdrawn", label: "Withdrawn", color: "#2563eb" },
-      { id: "Happy/Excited", label: "Happy / Excited", color: "#16a34a" },
+      { id: "Happy", label: "Happy", color: "#16a34a" },
       { id: "Anxious", label: "Anxious", color: "#ca8a04" },
       { id: "Out of control", label: "Out of control", color: "#dc2626" },
     ];
 
     const DC_GENERAL = "/cards/day%20centre/general";
 
+    const STRATEGY_VISUAL_SVGS = {
+      "high-five": `<svg viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="108" rx="34" ry="5" fill="#cbd5e1" opacity=".4"/><path d="M28 78c0-18 10-30 22-34l4 30" fill="#f0b27a"/><path d="M92 78c0-18-10-30-22-34l-4 30" fill="#e39b5f"/><path d="M38 52l8-22c2-5 8-7 12-4l6 10 6-10c4-3 10-1 12 4l8 22" fill="#ffd7b0" stroke="#d0894e" stroke-width="2"/><circle cx="48" cy="40" r="3" fill="#c2410c" opacity=".25"/><circle cx="72" cy="40" r="3" fill="#c2410c" opacity=".25"/></svg>`,
+      breathe: `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="62" r="28" fill="#bfdbfe" opacity=".55"/><circle cx="60" cy="62" r="18" fill="#93c5fd" opacity=".8"/><circle cx="60" cy="62" r="9" fill="#3b82f6"/><path d="M60 18v14M60 92v14M18 62h14M88 62h14M32 32l10 10M78 78l10 10M88 32l-10 10M42 78l-10 10" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/></svg>`,
+      squeeze: `<svg viewBox="0 0 120 120" aria-hidden="true"><ellipse cx="60" cy="104" rx="30" ry="5" fill="#cbd5e1" opacity=".4"/><path d="M34 70c0-20 12-34 26-34s26 14 26 34v8H34z" fill="#fbbf24"/><circle cx="48" cy="58" r="5" fill="#fff7ed"/><circle cx="72" cy="58" r="5" fill="#fff7ed"/><path d="M44 78c6 8 26 8 32 0" stroke="#b45309" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M28 54c-8 4-10 14-4 20M92 54c8 4 10 14 4 20" stroke="#ea580c" stroke-width="4" stroke-linecap="round" fill="none"/></svg>`,
+      learn: `<svg viewBox="0 0 120 120" aria-hidden="true"><rect x="22" y="30" width="76" height="58" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/><path d="M34 48h52M34 62h40M34 76h46" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round"/><circle cx="86" cy="84" r="14" fill="#16a34a"/><path d="M80 84l4 4 8-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      quiet: `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="58" r="30" fill="#dbeafe"/><path d="M48 50h8v20h-8zM64 44h8v32h-8z" fill="#2563eb" opacity=".35"/><path d="M42 78c8 10 28 10 36 0" stroke="#1e40af" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M78 34l16-10M84 46l18-2M82 58l16 8" stroke="#64748b" stroke-width="3" stroke-linecap="round" opacity=".55"/></svg>`,
+      cuddle: `<svg viewBox="0 0 120 120" aria-hidden="true"><path d="M60 92s-28-18-28-40c0-12 10-20 20-20 6 0 8 4 8 4s2-4 8-4c10 0 20 8 20 20 0 22-28 40-28 40z" fill="#fb7185"/><circle cx="46" cy="46" r="7" fill="#fda4af"/><circle cx="74" cy="46" r="7" fill="#fda4af"/></svg>`,
+    };
+
+    const FEELING_STRATEGIES = {
+      Happy: {
+        lead: "Ready to learn and have fun!",
+        steps: [
+          { label: "High five!", visual: "high-five" },
+          { label: "Ready to learn", visual: "learn" },
+        ],
+      },
+      Anxious: {
+        lead: "Let's help your body feel calm.",
+        steps: [
+          { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
+          { label: "Breathe", visual: "breathe" },
+          { label: "Ask for a squeeze", visual: "squeeze" },
+          { label: "Listen to music", image: `${DC_GENERAL}/music.png` },
+        ],
+      },
+      "Out of control": {
+        lead: "Let's help your body feel safe.",
+        steps: [
+          { label: "Relax on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
+          { label: "Breathe", visual: "breathe" },
+          { label: "Ask for a squeeze", visual: "squeeze" },
+          { label: "Go to sensory room", image: `${DC_GENERAL}/sensory-room.png` },
+        ],
+      },
+      Withdrawn: {
+        lead: "It's OK to take it slow.",
+        steps: [
+          { label: "Rest on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
+          { label: "Quiet time", visual: "quiet" },
+          { label: "Ask for a cuddle", visual: "cuddle" },
+        ],
+      },
+    };
+
+
     const DAY_PLAN_ACTIVITIES = [
       { id: "swimming", name: "Swimming", image: `${DC_GENERAL}/swimming-pool.png` },
-      { id: "gym", name: "Gym", image: `${DC_GENERAL}/exercise-machine.png` },
+      { id: "gym", name: "Gym", image: "/images/library-3d-gym/air-bike.png" },
       { id: "walk", name: "Walk", image: `${DC_GENERAL}/walk.png` },
       { id: "cafe", name: "Cafe", image: `${DC_GENERAL}/cafe.png` },
       { id: "word-search", name: "Word search", image: "/cards/day%20centre/emmanuel/icons/word-search.png" },
-      { id: "sports", name: "Sports", image: "/cards/day%20centre/emmanuel/scenes-2d/basketball.png" },
+      { id: "sports", name: "Sports", image: "/cards/day%20centre/emmanuel/icons/sports.png" },
       { id: "bean-bag", name: "Bean bag", image: `${DC_GENERAL}/bean-bag.png` },
       { id: "sensory-room", name: "Sensory room", image: `${DC_GENERAL}/sensory-room.png` },
       { id: "park", name: "Park", image: `${DC_GENERAL}/park-and-swing.png` },
@@ -6764,6 +6956,64 @@
        RENDER: Feelings
        ============================================================ */
 
+
+    function closeFeelingStrategyPopup() {
+      const overlay = document.getElementById("feeling-strategy-overlay");
+      if (overlay) overlay.hidden = true;
+    }
+
+    function showFeelingStrategyPopup(person, emotionId) {
+      const strategy = FEELING_STRATEGIES[emotionId];
+      const feeling = FEELINGS.find((f) => f.id === emotionId);
+      const overlay = document.getElementById("feeling-strategy-overlay");
+      const dialog = document.getElementById("feeling-strategy-dialog");
+      const face = document.getElementById("feeling-strategy-face");
+      const title = document.getElementById("feeling-strategy-title");
+      const lead = document.getElementById("feeling-strategy-lead");
+      const who = document.getElementById("feeling-strategy-who");
+      const stepsHost = document.getElementById("feeling-strategy-steps");
+      if (!strategy || !overlay || !dialog || !stepsHost) return;
+
+      const color = (feeling && feeling.color) || "#e8762a";
+      dialog.style.setProperty("--strategy-color", color);
+      if (face) {
+        face.style.color = color;
+        face.innerHTML = EMOTION_SVGS[emotionId] || "";
+      }
+      if (title) title.textContent = (feeling && feeling.label) || emotionId;
+      if (lead) lead.textContent = strategy.lead || "";
+      if (who) {
+        who.innerHTML = person
+          ? `<strong>${person.name}</strong> — try this strategy`
+          : "Try this strategy";
+      }
+
+      stepsHost.innerHTML = "";
+      (strategy.steps || []).forEach((step) => {
+        const card = el("div", { className: "feeling-strategy-step" });
+        const visual = el("div", { className: "feeling-strategy-visual", "aria-hidden": "true" });
+        if (step.image) {
+          visual.appendChild(el("img", {
+            src: step.image,
+            alt: "",
+            decoding: "async",
+            draggable: "false",
+          }));
+        } else if (step.visual && STRATEGY_VISUAL_SVGS[step.visual]) {
+          visual.innerHTML = STRATEGY_VISUAL_SVGS[step.visual];
+        }
+        card.appendChild(visual);
+        card.appendChild(el("p", { className: "feeling-strategy-step-label", textContent: step.label }));
+        stepsHost.appendChild(card);
+      });
+
+      overlay.hidden = false;
+      const ok = document.getElementById("feeling-strategy-ok");
+      if (ok) {
+        ok.focus({ preventScroll: true });
+      }
+    }
+
     function buildFeelingsCard(person, turnId) {
       const isStaff = person.role === "staff";
       const isTurn = person.id === turnId;
@@ -6804,13 +7054,18 @@
         btn.appendChild(el("span", { className: "emotion-label", textContent: f.label }));
         btn.addEventListener("click", () => {
           if (person.id !== currentFeelingsTurnId()) return;
-          state.feelings[person.id] = selected ? null : f.id;
-          if (!selected) {
-            state.feelingsTurnIndex += 1;
-            syncFeelingsTurnIndex();
+          if (selected) {
+            state.feelings[person.id] = null;
+            renderFeelings();
+            renderSummary();
+            return;
           }
+          state.feelings[person.id] = f.id;
+          state.feelingsTurnIndex += 1;
+          syncFeelingsTurnIndex();
           renderFeelings();
           renderSummary();
+          showFeelingStrategyPopup(person, f.id);
         });
         feelingsRow.appendChild(btn);
       });
@@ -7414,6 +7669,19 @@
     });
 
     mountClubSensationalLogos();
+    (function bindFeelingStrategyPopup() {
+      const overlay = document.getElementById("feeling-strategy-overlay");
+      const ok = document.getElementById("feeling-strategy-ok");
+      if (ok) ok.addEventListener("click", closeFeelingStrategyPopup);
+      if (overlay) {
+        overlay.addEventListener("click", function (e) {
+          if (e.target === overlay) closeFeelingStrategyPopup();
+        });
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeFeelingStrategyPopup();
+      });
+    })();
     initState();
     updateHeaderDate();
     initPreShow();
@@ -7433,5 +7701,23 @@
       });
     }
   </script>
+
+  <div id="feeling-strategy-overlay" class="feeling-strategy-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="feeling-strategy-title">
+    <div class="feeling-strategy-dialog" id="feeling-strategy-dialog">
+      <div class="feeling-strategy-head">
+        <span class="feeling-strategy-emotion-face" id="feeling-strategy-face" aria-hidden="true"></span>
+        <div>
+          <h2 class="feeling-strategy-title" id="feeling-strategy-title">Strategy</h2>
+          <p class="feeling-strategy-lead" id="feeling-strategy-lead"></p>
+        </div>
+      </div>
+      <p class="feeling-strategy-who" id="feeling-strategy-who"></p>
+      <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
+      <div class="feeling-strategy-actions">
+        <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
