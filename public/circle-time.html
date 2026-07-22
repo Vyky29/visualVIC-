@@ -625,32 +625,34 @@
       flex-direction: column;
       min-height: 0;
       overflow: hidden;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
 
     .day-center {
       flex: 1 1 auto;
       display: flex;
       flex-direction: row;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       align-items: center;
+      align-content: center;
       justify-content: center;
-      padding: 0.35rem 0.65rem 0.35rem;
+      padding: 0.4rem 0.75rem;
       min-height: 0;
-      max-height: 100%;
-      overflow: hidden;
-      gap: clamp(0.55rem, 1.8vw, 1.1rem);
+      overflow-x: auto;
+      overflow-y: auto;
+      gap: clamp(0.65rem, 2vw, 1.15rem);
+      -webkit-overflow-scrolling: touch;
     }
 
     .calendar-ref-board-host {
-      flex: 0 1 auto;
-      width: min(34vw, 260px);
-      max-width: 260px;
-      max-height: 100%;
+      flex: 0 0 auto;
+      width: min(230px, 88vw);
+      max-width: 230px;
+      max-height: min(52vh, 340px);
       align-self: center;
       display: flex;
       align-items: center;
-      overflow: hidden;
+      overflow: visible;
       z-index: 1;
     }
 
@@ -674,7 +676,7 @@
       box-shadow:
         0 10px 28px rgba(27, 58, 92, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
-      overflow: hidden;
+      overflow: visible;
     }
 
     .calendar-ref-pin {
@@ -812,18 +814,38 @@
       font-weight: 800;
     }
 
-    @media (max-width: 700px) {
-      .day-center {
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-      }
+    /* Date / month / year: stack calendar above TODAY IS so chips + drop slot never clip */
+    #screen-date .day-center,
+    #screen-month .day-center,
+    #screen-year .day-center {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.55rem;
+    }
 
-      .calendar-ref-board-host {
-        width: min(100%, 260px);
-        max-height: 42%;
-        align-self: center;
-      }
+    #screen-date .calendar-ref-board-host,
+    #screen-month .calendar-ref-board-host,
+    #screen-year .calendar-ref-board-host {
+      width: min(210px, 70vw);
+      max-width: 210px;
+      max-height: min(36vh, 260px);
+      flex: 0 0 auto;
+    }
+
+    #screen-date .today-center-wrap,
+    #screen-month .today-center-wrap,
+    #screen-year .today-center-wrap {
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: min(720px, 100%);
+      min-width: 0;
+    }
+
+    #screen-day .day-center {
+      flex-direction: row;
+      flex-wrap: wrap;
     }
 
     .day-today-label,
@@ -846,13 +868,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex: 0 1 auto;
-      min-width: 0;
+      flex: 1 1 300px;
+      min-width: min(100%, 260px);
       min-height: 0;
-      width: min(100%, 420px);
-      max-width: min(420px, 90vw);
-      gap: clamp(0.55rem, 1.5vh, 0.85rem);
-      overflow: hidden;
+      width: min(100%, 560px);
+      max-width: 100%;
+      gap: clamp(0.45rem, 1.4vh, 0.75rem);
+      overflow: visible;
     }
 
     .today-center-body {
@@ -928,14 +950,12 @@
       z-index: 4;
       margin-top: 0;
       border-top: 3px solid var(--grey-200);
-      padding: 0.55rem 0.65rem 0.65rem;
+      padding: 0.65rem 0.75rem 0.75rem;
       background: var(--grey-100);
       border-radius: var(--radius);
       min-height: 0;
-      max-height: min(42vh, 280px);
-      overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      max-height: none;
+      overflow: visible;
     }
 
     .day-dock-items {
@@ -1037,24 +1057,25 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: clamp(0.55rem, 2vw, 1.15rem);
+      gap: clamp(0.45rem, 1.6vw, 0.9rem);
       flex-wrap: wrap;
       width: 100%;
-      max-width: min(680px, 98vw);
+      max-width: 100%;
       margin-top: 0.15rem;
       min-width: 0;
     }
 
     .date-stack-side {
+      display: flex;
       flex-direction: row;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       margin-bottom: 0;
       min-height: auto;
-      flex-shrink: 0;
+      flex: 0 1 auto;
       min-width: 0;
-      gap: clamp(0.4rem, 1.4vw, 0.65rem);
+      gap: clamp(0.35rem, 1.2vw, 0.55rem);
     }
 
     .date-stack-side .date-stack-sep {
@@ -1198,18 +1219,19 @@
     .date-part-slot {
       position: relative;
       overflow: visible;
-      min-height: clamp(120px, 18vh, 160px);
-      min-width: clamp(100px, 16vw, 130px);
+      min-height: clamp(96px, 14vh, 140px);
+      min-width: min(140px, 100%);
+      width: min(200px, 100%);
       border: 4px dashed var(--orange);
       border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--orange-soft);
-      padding: 1.25rem;
+      padding: 0.85rem 1rem;
       transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
-      flex: 1;
-      max-width: min(280px, 55vw);
+      flex: 0 1 auto;
+      max-width: min(220px, 100%);
     }
 
     .date-part-slot.slot-feedback-correct,
@@ -4517,9 +4539,8 @@
       }
 
       .day-dock {
-        max-height: min(40vh, 260px);
-        overflow-x: hidden;
-        overflow-y: auto;
+        max-height: none;
+        overflow: visible;
       }
 
       .activity-dock {
