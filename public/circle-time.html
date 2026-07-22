@@ -2050,13 +2050,15 @@
     .feeling-strategy-overlay {
       position: fixed;
       inset: 0;
-      z-index: 80;
+      z-index: 600;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: clamp(0.75rem, 3vw, 1.5rem);
       background: rgba(18, 40, 64, 0.55);
       backdrop-filter: blur(2px);
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
     .feeling-strategy-overlay[hidden] {
@@ -2113,6 +2115,7 @@
     }
 
     .feeling-strategy-who {
+      display: none;
       margin: 0;
       font-size: clamp(0.95rem, 2vw, 1.1rem);
       color: var(--grey-700);
@@ -2185,6 +2188,10 @@
       min-height: 52px;
       font-size: 1.1rem;
       font-weight: 800;
+      position: relative;
+      z-index: 2;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
     html.is-interactive-whiteboard .feeling-strategy-dialog {
@@ -4625,7 +4632,7 @@
           <p class="feeling-strategy-lead" id="feeling-strategy-lead"></p>
         </div>
       </div>
-      <p class="feeling-strategy-who" id="feeling-strategy-who"></p>
+      <p class="feeling-strategy-who" id="feeling-strategy-who" hidden></p>
       <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
       <div class="feeling-strategy-actions">
         <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
@@ -4786,8 +4793,8 @@
       Happy: {
         lead: "Ready to learn and have fun!",
         steps: [
-          { label: "High five!", visual: "high-five" },
-          { label: "Ready to learn", visual: "learn" },
+          { label: "High five!", image: `${DC_GENERAL}/strategy-high-five.png` },
+          { label: "Ready to learn", image: `${DC_GENERAL}/strategy-ready-to-learn.png` },
         ],
       },
       Anxious: {
@@ -7090,9 +7097,8 @@
       if (title) title.textContent = (feeling && feeling.label) || emotionId;
       if (lead) lead.textContent = strategy.lead || "";
       if (who) {
-        who.innerHTML = person
-          ? `<strong>${person.name}</strong> — try this strategy`
-          : "Try this strategy";
+        who.hidden = true;
+        who.textContent = "";
       }
 
       stepsHost.innerHTML = "";
@@ -7117,7 +7123,21 @@
       overlay.hidden = false;
       const ok = document.getElementById("feeling-strategy-ok");
       if (ok) {
-        ok.focus({ preventScroll: true });
+        /* Re-bind every open so whiteboard touch always closes (cached listeners can miss). */
+        ok.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeFeelingStrategyPopup();
+        };
+        ok.onpointerup = function (e) {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          e.preventDefault();
+          e.stopPropagation();
+          closeFeelingStrategyPopup();
+        };
+        try {
+          ok.focus({ preventScroll: true });
+        } catch (_) { /* ignore */ }
       }
     }
 
@@ -7779,10 +7799,26 @@
     (function bindFeelingStrategyPopup() {
       const overlay = document.getElementById("feeling-strategy-overlay");
       const ok = document.getElementById("feeling-strategy-ok");
-      if (ok) ok.addEventListener("click", closeFeelingStrategyPopup);
+      function dismiss(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        closeFeelingStrategyPopup();
+      }
+      if (ok) {
+        ok.addEventListener("click", dismiss);
+        ok.addEventListener("pointerup", function (e) {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          dismiss(e);
+        });
+      }
       if (overlay) {
         overlay.addEventListener("click", function (e) {
-          if (e.target === overlay) closeFeelingStrategyPopup();
+          if (e.target === overlay) dismiss(e);
+        });
+        overlay.addEventListener("pointerup", function (e) {
+          if (e.target === overlay) dismiss(e);
         });
       }
       document.addEventListener("keydown", function (e) {
