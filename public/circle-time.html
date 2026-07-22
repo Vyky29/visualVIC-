@@ -330,7 +330,8 @@
     .register-zones {
       flex: 1;
       display: grid;
-      grid-template-columns: minmax(72px, 0.55fr) minmax(0, 1fr);
+      /* Club (wide, middle) then Home (narrow, right) */
+      grid-template-columns: minmax(0, 1fr) minmax(72px, 0.55fr);
       gap: 0.75rem;
       min-height: 0;
     }
@@ -353,7 +354,7 @@
 
     @media (max-width: 520px) {
       .register-zones {
-        grid-template-columns: minmax(64px, 0.5fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(64px, 0.5fr);
       }
     }
 
@@ -375,9 +376,67 @@
       background: var(--grey-50);
     }
 
+    .drop-zone-club {
+      position: relative;
+      overflow: hidden;
+      background: #1a2433;
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .drop-zone-club .zone-club-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    /* After the first avatar lands, fade the room so faces stay clear on top. */
+    .drop-zone-club.has-avatars .zone-club-bg {
+      opacity: 0.28;
+    }
+
     .drop-zone-club.drag-over {
       border-color: var(--orange);
-      background: var(--orange-soft);
+      background: #1a2433;
+    }
+
+    .drop-zone-club.drag-over .zone-club-bg {
+      opacity: 0.85;
+    }
+
+    .drop-zone-club.has-avatars.drag-over .zone-club-bg {
+      opacity: 0.22;
+    }
+
+    .drop-zone-club .zone-header,
+    .drop-zone-club .zone-avatars {
+      position: relative;
+      z-index: 1;
+    }
+
+    .drop-zone-club .zone-header {
+      width: 100%;
+      margin-bottom: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: rgba(12, 22, 38, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    .drop-zone-club .zone-label {
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+      font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+    }
+
+    .drop-zone-club .zone-avatars {
+      align-content: space-evenly;
     }
 
     .zone-header {
@@ -3942,7 +4001,7 @@
     }
 
     html.is-wide-display .register-zones {
-      grid-template-columns: minmax(120px, 0.42fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(120px, 0.42fr);
       gap: 1.25rem;
     }
 
@@ -4208,7 +4267,7 @@
         <span class="section-num" aria-hidden="true">1</span>
         <div>
           <h2 id="register-heading">Who is here today?</h2>
-          <p>Everyone starts on the left. Drag your avatar to <strong>Home</strong> or <strong>ClubSENsational</strong>.</p>
+          <p>Everyone starts on the left. Drag your avatar to <strong>ClubSENsational</strong> or <strong>Home</strong>.</p>
         </div>
       </div>
       <div class="register-layout">
@@ -4217,19 +4276,26 @@
           <div class="register-dock-avatars" id="register-dock"></div>
         </div>
         <div class="register-zones">
+          <div class="drop-zone drop-zone-club" data-drop-zone="club" aria-label="ClubSENsational drop zone">
+            <img
+              class="zone-club-bg"
+              src="/cards/day%20centre/general/hub-room.png"
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+              draggable="false"
+            />
+            <div class="zone-header">
+              <p class="zone-label">ClubSENsational</p>
+            </div>
+            <div class="zone-avatars" id="zone-club"></div>
+          </div>
           <div class="drop-zone drop-zone-home" data-drop-zone="home" aria-label="Home drop zone">
             <div class="zone-header">
               <img class="zone-icon" src="/cards/day%20centre/general/home.png" alt="" />
               <p class="zone-label">Home</p>
             </div>
             <div class="zone-avatars" id="zone-home"></div>
-          </div>
-          <div class="drop-zone drop-zone-club" data-drop-zone="club" aria-label="ClubSENsational drop zone">
-            <div class="zone-header">
-              <img class="zone-icon" src="/cards/day%20centre/general/hub-room.png" alt="" />
-              <p class="zone-label">ClubSENsational</p>
-            </div>
-            <div class="zone-avatars" id="zone-club"></div>
           </div>
         </div>
       </div>
@@ -6347,6 +6413,14 @@
       REGISTER_PEOPLE.filter((p) => (state.location[p.id] || "dock") === "dock").forEach((p) => {
         zones.dock.appendChild(createDraggableAvatar(p));
       });
+
+      const clubZone = document.querySelector(".drop-zone-club");
+      if (clubZone) {
+        const hasClubAvatars = REGISTER_PEOPLE.some(
+          (p) => (state.location[p.id] || "dock") === "club",
+        );
+        clubZone.classList.toggle("has-avatars", hasClubAvatars);
+      }
 
       initRegisterDragDrop();
     }
