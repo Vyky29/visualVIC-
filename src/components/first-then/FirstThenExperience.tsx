@@ -115,8 +115,6 @@ const FOCUS_LANDSCAPE = {
   footerH: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerH,
   footerPadX: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerPadX,
   footerTitleMaxFontPx: GENERATED_PIXTO_FOCUS_FIXED_ZONE.footerTitleMaxFontPx,
-  illustBorder: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorder,
-  illustBorderColor: GENERATED_PIXTO_FOCUS_FIXED_ZONE.illustBorderColor,
   packMarkSize: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkSize,
   packMarkTop: 14,
   packMarkRight: GENERATED_PIXTO_FOCUS_FIXED_ZONE.packMarkRight,
