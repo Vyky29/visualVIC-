@@ -5688,9 +5688,12 @@
       if (SCREEN_IDS[currentScreenIndex] !== "register") return;
       if (slotFeedbackActive) return;
       const allPlaced = REGISTER_PEOPLE.every((p) => (state.location[p.id] || "dock") !== "dock");
-      if (!allPlaced) return;
-      const layout = document.querySelector(".register-layout");
-      scheduleAutoAdvance("register", layout, "Everyone placed!");
+      if (!allPlaced) {
+        pulseNextButton(false);
+        return;
+      }
+      /* No green banner — just light up Next and move on. */
+      scheduleQuietAutoAdvance("register");
     }
 
     function finishActivityDrop(zoneKey) {
