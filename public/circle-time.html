@@ -46,6 +46,16 @@
           "content",
           "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content"
         );
+
+        if (sizes.ih > 0 && sizes.iw > 0 && (sizes.iw >= 740 || sizes.ih < 820 || sizes.iw > sizes.ih)) {
+          document.documentElement.classList.add("is-board-candidate");
+        } else {
+          document.documentElement.classList.remove("is-board-candidate");
+        }
+
+        if (typeof window.__circleTimeOnViewport === "function") {
+          try { window.__circleTimeOnViewport(); } catch (_) {}
+        }
       }
 
       apply();
@@ -1860,7 +1870,7 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 136px), 1fr));
       grid-auto-rows: minmax(0, 1fr);
       gap: 0.65rem;
-      min-height: clamp(340px, 62vh, calc(100dvh - 240px));
+      min-height: 0;
       height: 100%;
       align-items: stretch;
       align-content: stretch;
@@ -3671,7 +3681,7 @@
       #screen-register .register-zones {
         flex: 1 1 56%;
         min-width: 0;
-        min-height: clamp(220px, 52vh, 560px);
+        min-height: 0;
       }
 
       #screen-register .register-dock {
@@ -3680,7 +3690,7 @@
         border-top: none;
         border-left: 3px solid var(--grey-200);
         max-height: none;
-        min-height: clamp(220px, 52vh, 560px);
+        min-height: 0;
       }
 
       #screen-register .register-dock-avatars {
@@ -3701,6 +3711,74 @@
       height: clamp(120px, 12vw, 160px);
     }
 
+
+    /* Board / landscape: compress session chrome so content can fill one screen */
+    @media (min-width: 740px) and (orientation: landscape), (min-width: 900px) {
+      .screen-page.active > section,
+      #screen-register.active > section,
+      #screen-feelings.active > section {
+        min-height: 0;
+      }
+
+      .zone-avatars,
+      .register-dock,
+      .day-dock,
+      .day-drop-slot,
+      .activity-dock,
+      .plan-empty,
+      .agreement-card,
+      .turn-youtube-panel {
+        min-height: 0 !important;
+        max-height: none;
+      }
+
+      .plan-columns {
+        overflow-y: hidden;
+      }
+
+      html.is-wide-display .screen-page,
+      html.is-wide-display .screen-page.scrollable {
+        padding: 0.45rem 1rem 0.55rem;
+      }
+
+      html.is-wide-display .screen-footer {
+        padding: 0.55rem 1.25rem;
+      }
+    }
+
+    /* Auto scale-to-fit active session page into the visible board height */
+    html.is-board-fit .screens-wrapper {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    html.is-board-fit .screen-page.active {
+      touch-action: none;
+      transform-origin: top center;
+      will-change: transform;
+    }
+
+    html.is-board-fit .screen-page.active > section {
+      min-height: 0;
+    }
+
+    html.is-board-fit .pre-show {
+      overflow: hidden;
+    }
+
+    .cs-logo-fallback {
+      width: min(280px, 70vw);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .header-logo-wrap .cs-logo-fallback {
+      width: auto;
+      height: clamp(44px, 7vh, 64px);
+      margin: 0;
+    }
+
     @media (max-width: 480px) {
       main { padding: 1rem; }
       section { padding: 1rem; }
@@ -3714,7 +3792,7 @@
   <!-- Pre-show waiting screen (cinema style) -->
   <div id="pre-show" class="pre-show" role="region" aria-label="Waiting for Circle Time">
     <div class="pre-show-inner">
-      <div id="pre-show-logo-slot" class="pre-show-logo-slot"></div>
+      <div id="pre-show-logo-slot" class="pre-show-logo-slot"><img class="cs-logo-fallback pre-show-logo" src="/assets/clubsensational-logo.webp" alt="clubSENsational" width="280" height="280" decoding="async" /></div>
       <h1 class="pre-show-title" id="pre-show-title">Circle Time</h1>
       <p class="pre-show-wait" id="pre-show-wait">Sit down and wait</p>
 
@@ -3749,7 +3827,7 @@
   <header>
     <div class="header-inner">
       <div class="header-logo-wrap">
-        <div id="header-logo-slot"></div>
+        <div id="header-logo-slot"><img class="cs-logo-fallback" src="/assets/clubsensational-logo.webp" alt="clubSENsational" width="108" height="64" decoding="async" /></div>
       </div>
       <div class="header-center">
         <h1>Circle Time</h1>
@@ -4391,9 +4469,33 @@
 
     const YOUTUBE_PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 16.5v-9l6 4.5-6 4.5zm12-4.5c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>';
 
-    const CLUBSENSATIONAL_LOGO_SRC = "/assets/clubsensational-logo-mark.png";
+    const CLUBSENSATIONAL_LOGO_MARK = "/assets/clubsensational-logo-mark.png";
+    const CLUBSENSATIONAL_LOGO_FALLBACK = "/assets/clubsensational-logo.webp";
 
     let csOrbitFilterSeq = 0;
+
+    function circleTimeAssetUrl(path) {
+      try {
+        return new URL(path, window.location.href).href;
+      } catch (_) {
+        return path;
+      }
+    }
+
+    function attachLogoImgFallback(img) {
+      if (!img || img.getAttribute("data-cs-fallback-bound") === "1") return;
+      img.setAttribute("data-cs-fallback-bound", "1");
+      img.addEventListener("error", function onLogoError() {
+        const tried = img.getAttribute("data-cs-fallback-step") || "0";
+        if (tried === "0") {
+          img.setAttribute("data-cs-fallback-step", "1");
+          img.src = circleTimeAssetUrl(CLUBSENSATIONAL_LOGO_FALLBACK);
+          return;
+        }
+        img.removeEventListener("error", onLogoError);
+        img.style.visibility = "hidden";
+      });
+    }
 
     function buildClubSensationalOrbitSvg() {
       const filterId = `cs-orb-soft-${csOrbitFilterSeq += 1}`;
@@ -4447,15 +4549,17 @@
       });
       stage.appendChild(buildClubSensationalOrbitSvg());
       const disc = el("div", { className: "cs-logo-disc" });
-      disc.appendChild(el("img", {
+      const img = el("img", {
         className: "cs-logo-original",
-        src: CLUBSENSATIONAL_LOGO_SRC,
+        src: circleTimeAssetUrl(CLUBSENSATIONAL_LOGO_MARK),
         alt: "",
         width: "200",
         height: "200",
         decoding: "async",
         draggable: "false",
-      }));
+      });
+      attachLogoImgFallback(img);
+      disc.appendChild(img);
       stage.appendChild(disc);
       return stage;
     }
@@ -4463,9 +4567,120 @@
     function mountClubSensationalLogos() {
       const preSlot = document.getElementById("pre-show-logo-slot");
       const headerSlot = document.getElementById("header-logo-slot");
-      if (preSlot) preSlot.appendChild(buildClubSensationalLogoMark(false));
-      if (headerSlot) headerSlot.appendChild(buildClubSensationalLogoMark(true));
+      function fill(slot, compact) {
+        if (!slot) return;
+        slot.querySelectorAll(".cs-logo-stage, .cs-logo-fallback").forEach(function (node) {
+          node.remove();
+        });
+        slot.appendChild(buildClubSensationalLogoMark(compact));
+      }
+      try {
+        fill(preSlot, false);
+        fill(headerSlot, true);
+      } catch (err) {
+        console.warn("[circle-time] logo mount", err);
+      }
+      document.querySelectorAll("img.zone-icon[src*='clubsensational']").forEach(attachLogoImgFallback);
     }
+
+    function circleTimeShouldAutoFit() {
+      try {
+        if (window.matchMedia("(orientation: portrait) and (max-width: 600px)").matches) {
+          return false;
+        }
+      } catch (_) {}
+      const w = window.innerWidth || 0;
+      const h = window.innerHeight || 0;
+      if (document.documentElement.classList.contains("is-wide-display")) return true;
+      if (document.documentElement.classList.contains("is-board-candidate")) return true;
+      if (w >= 740) return true;
+      if (h > 0 && w > h) return true;
+      if (h > 0 && h < 820) return true;
+      return false;
+    }
+
+    function clearCircleTimeFitStyles(page) {
+      if (!page) return;
+      page.style.transform = "";
+      page.style.width = "";
+      page.style.marginBottom = "";
+      page.style.transformOrigin = "";
+    }
+
+    function fitPreShowToViewport() {
+      const pre = document.getElementById("pre-show");
+      const inner = pre && pre.querySelector(".pre-show-inner");
+      if (!pre || !inner || pre.classList.contains("hidden")) return;
+      if (!circleTimeShouldAutoFit()) {
+        clearCircleTimeFitStyles(inner);
+        pre.style.overflowY = "";
+        return;
+      }
+      clearCircleTimeFitStyles(inner);
+      const avail = pre.clientHeight || window.innerHeight || 0;
+      const needed = inner.scrollHeight || 0;
+      if (!avail || !needed || needed <= avail + 4) {
+        pre.style.overflowY = "hidden";
+        return;
+      }
+      const scale = Math.max(0.55, Math.min(1, avail / needed));
+      inner.style.transformOrigin = "top center";
+      inner.style.transform = "scale(" + scale + ")";
+      inner.style.width = (100 / scale) + "%";
+      inner.style.marginBottom = (needed * (scale - 1)) + "px";
+      pre.style.overflowY = "hidden";
+    }
+
+    function fitActiveSessionScreen() {
+      const app = document.getElementById("session-app");
+      const wrapper = document.querySelector("#session-app .screens-wrapper");
+      const page = document.querySelector("#session-app .screen-page.active");
+      const root = document.documentElement;
+
+      document.querySelectorAll(".screen-page").forEach(clearCircleTimeFitStyles);
+      root.classList.remove("is-board-fit");
+      root.style.setProperty("--session-fit-scale", "1");
+      if (wrapper) wrapper.style.overflowY = "";
+
+      fitPreShowToViewport();
+
+      if (!app || !wrapper || !page) return;
+      if (app.classList.contains("hidden")) return;
+      if (!circleTimeShouldAutoFit()) return;
+
+      void wrapper.offsetHeight;
+      const avail = wrapper.clientHeight;
+      if (avail < 60) return;
+
+      const needed = page.scrollHeight;
+      if (!needed) return;
+
+      if (needed <= avail + 2) {
+        wrapper.style.overflowY = "hidden";
+        root.classList.add("is-board-fit");
+        return;
+      }
+
+      const scale = Math.max(0.55, Math.min(1, avail / needed));
+      root.classList.add("is-board-fit");
+      root.style.setProperty("--session-fit-scale", String(scale));
+      page.style.transformOrigin = "top center";
+      page.style.transform = "scale(" + scale + ")";
+      page.style.width = (100 / scale) + "%";
+      page.style.marginBottom = (needed * (scale - 1)) + "px";
+      wrapper.style.overflowY = "hidden";
+    }
+
+    let fitRaf = 0;
+    function scheduleCircleTimeFit() {
+      if (fitRaf) cancelAnimationFrame(fitRaf);
+      fitRaf = requestAnimationFrame(function () {
+        fitRaf = 0;
+        fitActiveSessionScreen();
+      });
+    }
+
+    window.__circleTimeOnViewport = scheduleCircleTimeFit;
 
     /* Pre-show countdown — announcements at 3, 2, 1 minutes (or fewer if shorter countdown) */
     const COUNTDOWN_OPTIONS = [3, 2, 1];
@@ -4677,6 +4892,7 @@
       if (activeId === "feelings") ensureFeelingsOrder();
       const section = document.getElementById(activeId);
       if (section) section.focus({ preventScroll: true });
+      scheduleCircleTimeFit();
     }
 
     function isScreenComplete(screenId) {
@@ -6986,6 +7202,7 @@
       renderAgreements();
       renderTurnTaking();
       renderSummary();
+      scheduleCircleTimeFit();
     }
 
     document.getElementById("copy-summary").addEventListener("click", async () => {
@@ -7004,13 +7221,17 @@
       }
     });
 
+    mountClubSensationalLogos();
     initState();
     updateHeaderDate();
     initPreShow();
     initScreenNav();
-    mountClubSensationalLogos();
     document.getElementById("feelings-shuffle-btn").addEventListener("click", reshuffleFeelingsTurn);
     renderAll();
+    scheduleCircleTimeFit();
+    window.addEventListener("orientationchange", function () {
+      setTimeout(scheduleCircleTimeFit, 280);
+    });
 
     /* Register the app service worker so logos, avatars and cards keep working
        when the smart board loses its connection. */
