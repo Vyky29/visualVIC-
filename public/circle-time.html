@@ -1602,52 +1602,44 @@
       to { background-position: -200% 0; }
     }
 
-    .weather-chip-scene {
+    .weather-chip-face {
       position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: clamp(68px, 10vh, 92px);
-      border-radius: 14px;
+      width: min(100%, clamp(64px, 9vw, 88px));
+      aspect-ratio: 1;
+      border-radius: 16px;
       margin: 0 auto;
-      overflow: hidden;
-      border: 2px solid color-mix(in srgb, var(--navy) 18%, transparent);
-      box-shadow: 0 3px 0 rgba(27, 58, 92, 0.1), 0 8px 18px rgba(27, 58, 92, 0.12);
+      display: grid;
+      place-items: center;
+      background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--chip-color, var(--navy)) 78%, #ffffff),
+        var(--chip-color, var(--navy))
+      );
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 3px 12px rgba(27, 58, 92, 0.14);
       pointer-events: none;
-      background: #94a3b8;
+      overflow: hidden;
     }
 
-    .weather-chip-scene .weather-scene {
-      position: absolute;
-      inset: 0;
+    .weather-chip-face svg {
+      width: 62%;
+      height: 62%;
+      display: block;
+      filter: drop-shadow(0 2px 3px rgba(15, 23, 42, 0.18));
     }
 
-    .weather-chip-scene .weather-fx {
-      inset: 0;
+    .london-forecast-scene .weather-chip-face {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      border-radius: var(--radius-sm);
+      border: none;
+      box-shadow: none;
     }
 
-    .weather-chip-scene .weather-fx-raindrop {
-      width: 1px;
-      height: 8px;
-    }
-
-    .weather-chip-scene .weather-fx-snowflake svg {
-      width: 7px;
-      height: 7px;
-    }
-
-    .weather-chip-scene .weather-fx-sun-wrap {
-      top: 6%;
-      right: 8%;
-      width: 34px;
-      height: 34px;
-    }
-
-    .weather-chip-scene .weather-fx-cloud svg {
-      width: 40px;
-    }
-
-    .weather-chip-scene .weather-fx-lightning {
-      width: 16px;
+    .london-forecast-scene .weather-chip-face svg {
+      width: 48%;
+      height: 48%;
     }
 
     /* Keep each weekday's own colour while dragging (do not force orange). */
@@ -1808,13 +1800,13 @@
       100% { transform: translateY(115%) translateX(18px) rotate(360deg); opacity: 0.5; }
     }
 
-    /* Sunny glow */
+    /* Sunny glow — keep fully inside the frame */
     .weather-fx-sun-wrap {
       position: absolute;
-      top: -6%;
-      right: 2%;
-      width: clamp(72px, 16vw, 110px);
-      height: clamp(72px, 16vw, 110px);
+      top: 10%;
+      right: 10%;
+      width: clamp(56px, 12vw, 88px);
+      height: clamp(56px, 12vw, 88px);
       animation: wx-sun-pulse 3s ease-in-out infinite;
     }
 
@@ -1976,7 +1968,6 @@
       .weather-effects *,
       .weather-effects::before,
       .weather-effects::after,
-      .weather-chip-scene *,
       .london-forecast-scene * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
@@ -2068,11 +2059,11 @@
     }
 
     .weather-drop-slot .draggable-weather {
-      width: min(200px, 70%);
+      width: min(160px, 55%);
     }
 
-    .weather-drop-slot .weather-chip-scene {
-      height: clamp(100px, 16vh, 140px);
+    .weather-drop-slot .weather-chip-face {
+      width: min(100%, clamp(96px, 16vw, 128px));
     }
 
     .draggable-weather.is-drag-source {
@@ -2088,9 +2079,9 @@
       pointer-events: none;
     }
 
-    .drag-ghost.draggable-weather .weather-chip-scene {
+    .drag-ghost.draggable-weather .weather-chip-face {
+      box-shadow: 0 0 0 3px var(--orange-soft), 0 6px 16px rgba(27, 58, 92, 0.2);
       border-color: var(--orange);
-      box-shadow: 0 0 0 3px var(--orange-soft);
     }
 
     #screen-weather .section-header {
@@ -5320,14 +5311,25 @@
     }
 
     const WEATHER = [
-      { id: "sunny", label: "Sunny", icon: "☀️" },
-      { id: "cloudy", label: "Cloudy", icon: "☁️" },
-      { id: "rainy", label: "Rainy", icon: "🌧️" },
-      { id: "windy", label: "Windy", icon: "💨" },
-      { id: "cold", label: "Cold", icon: "❄️" },
-      { id: "hot", label: "Hot", icon: "🌡️" },
-      { id: "stormy", label: "Stormy", icon: "⛈️" },
+      { id: "sunny", label: "Sunny", color: "#0ea5e9" },
+      { id: "cloudy", label: "Cloudy", color: "#64748b" },
+      { id: "rainy", label: "Rainy", color: "#2563eb" },
+      { id: "windy", label: "Windy", color: "#0891b2" },
+      { id: "cold", label: "Cold", color: "#38bdf8" },
+      { id: "hot", label: "Hot", color: "#ea580c" },
+      { id: "stormy", label: "Stormy", color: "#1e293b" },
     ];
+
+    /* Bold tile icons — same idea as month chips, not mini landscape scenes */
+    const WEATHER_ICON_SVG = {
+      sunny: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="12" fill="#fde047"/><g stroke="#fde047" stroke-width="4" stroke-linecap="round"><line x1="32" y1="6" x2="32" y2="14"/><line x1="32" y1="50" x2="32" y2="58"/><line x1="6" y1="32" x2="14" y2="32"/><line x1="50" y1="32" x2="58" y2="32"/><line x1="12" y1="12" x2="18" y2="18"/><line x1="46" y1="46" x2="52" y2="52"/><line x1="52" y1="12" x2="46" y2="18"/><line x1="18" y1="46" x2="12" y2="52"/></g></svg>',
+      cloudy: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="26" cy="36" rx="14" ry="10" fill="#f8fafc"/><ellipse cx="40" cy="32" rx="16" ry="12" fill="#e2e8f0"/><ellipse cx="48" cy="38" rx="11" ry="8" fill="#cbd5e1"/></svg>',
+      rainy: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="26" rx="16" ry="10" fill="#e2e8f0"/><ellipse cx="40" cy="30" rx="12" ry="8" fill="#cbd5e1"/><line x1="22" y1="40" x2="18" y2="54" stroke="#93c5fd" stroke-width="3.5" stroke-linecap="round"/><line x1="32" y1="40" x2="28" y2="56" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round"/><line x1="42" y1="40" x2="38" y2="54" stroke="#93c5fd" stroke-width="3.5" stroke-linecap="round"/></svg>',
+      windy: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 24h28a7 7 0 1 0 0-4" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/><path d="M14 36h24a5 5 0 1 1 0 4" fill="none" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round"/><path d="M12 48h18a4 4 0 0 0 0-8" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/></svg>',
+      cold: '<svg viewBox="0 0 64 64" aria-hidden="true"><g stroke="#f0f9ff" stroke-width="3.2" stroke-linecap="round" fill="none"><path d="M32 8v48M32 8l-5 6M32 8l5 6M32 56l-5-6M32 56l5-6"/><path d="M10 32h44M10 32l6-5M10 32l6 5M54 32l-6-5M54 32l-6 5"/><path d="M16 16l32 32M16 48l32-32"/></g><circle cx="32" cy="32" r="5" fill="#e0f2fe"/></svg>',
+      hot: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="28" y="12" width="8" height="28" rx="4" fill="#fecaca"/><circle cx="32" cy="46" r="11" fill="#f97316"/><circle cx="32" cy="46" r="6" fill="#ef4444"/><rect x="30" y="8" width="4" height="8" rx="2" fill="#fee2e2"/></svg>',
+      stormy: '<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="24" rx="18" ry="11" fill="#94a3b8"/><ellipse cx="40" cy="28" rx="13" ry="9" fill="#64748b"/><path d="M34 36l-9 14h7l-4 12 16-18h-7l5-8z" fill="#fde047"/></svg>',
+    };
 
     const EMOTION_SVGS = {
       Withdrawn: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/><circle cx="9" cy="10" r="1.25" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.25" fill="currentColor" stroke="none"/><path d="M8 15.5Q12 12.7 16 15.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/></svg>',
@@ -7600,7 +7602,12 @@
       box.classList.remove("loading");
       if (sceneEl) {
         sceneEl.innerHTML = "";
-        sceneEl.appendChild(buildWeatherScene(londonWeather.id, "forecast"));
+        const face = el("div", {
+          className: "weather-chip-face",
+          style: `--chip-color:${(WEATHER.find((x) => x.id === londonWeather.id) || WEATHER[1]).color}`,
+        });
+        face.innerHTML = WEATHER_ICON_SVG[londonWeather.id] || WEATHER_ICON_SVG.cloudy;
+        sceneEl.appendChild(face);
       }
       if (descEl) {
         const target = londonWeather.label;
@@ -7662,13 +7669,14 @@
         tabindex: "0",
         "aria-label": `Drag ${w.label} weather to match London`,
         "data-weather-id": w.id,
+        style: `--chip-color:${w.color}`,
       });
-      const sceneBox = el("div", {
-        className: `weather-chip-scene weather-chip-${w.id}`,
+      const face = el("div", {
+        className: "weather-chip-face",
         "aria-hidden": "true",
       });
-      sceneBox.appendChild(buildWeatherScene(w.id, "chip"));
-      chip.appendChild(sceneBox);
+      face.innerHTML = WEATHER_ICON_SVG[w.id] || WEATHER_ICON_SVG.cloudy;
+      chip.appendChild(face);
       chip.appendChild(el("p", { className: "weather-name-label", textContent: w.label }));
       return chip;
     }
