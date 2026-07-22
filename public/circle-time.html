@@ -769,9 +769,9 @@
 
     .calendar-ref-day.is-today {
       color: #fff;
-      background: var(--today-weekday-color, #16a34a);
+      background: var(--today-highlight-color, #1b3a5c);
       font-weight: 800;
-      box-shadow: 0 2px 8px color-mix(in srgb, var(--today-weekday-color, #16a34a) 40%, transparent);
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--today-highlight-color, #1b3a5c) 40%, transparent);
     }
 
     @media (max-width: 700px) {
@@ -6745,15 +6745,30 @@
       return seasons.winter;
     }
 
-    function buildMonthCalendarGrid(year, monthIndex, dayOfMonth) {
-      const weekdayMeta = getWeekdayMeta(todayRef.weekday);
-      const todayColor = weekdayMeta?.color || "#16a34a";
+    function getCalendarHighlightColor(screenId) {
+      if (screenId === "day") {
+        return getWeekdayMeta(todayRef.weekday)?.color || "#1b3a5c";
+      }
+      if (screenId === "date") {
+        return "#1b3a5c";
+      }
+      if (screenId === "month") {
+        return getMonthMeta(todayRef.month)?.color || "#1b3a5c";
+      }
+      if (screenId === "year") {
+        return YEAR_OPTIONS.find((y) => y.value === todayRef.year)?.color || "#1b3a5c";
+      }
+      return "#1b3a5c";
+    }
+
+    function buildMonthCalendarGrid(year, monthIndex, dayOfMonth, highlightColor) {
+      const todayColor = highlightColor || "#1b3a5c";
       const grid = el("div", {
         className: "calendar-ref-month-grid",
         role: "grid",
         "aria-label": `${MONTHS[monthIndex]?.name || ""} ${year}`,
       });
-      grid.style.setProperty("--today-weekday-color", todayColor);
+      grid.style.setProperty("--today-highlight-color", todayColor);
 
       WEEKDAYS.forEach((w) => {
         grid.appendChild(el("p", {
@@ -6791,8 +6806,9 @@
       return grid;
     }
 
-    function buildCalendarRefBoard() {
+    function buildCalendarRefBoard(screenId) {
       const season = getSeasonMeta(todayRef.month);
+      const highlightColor = getCalendarHighlightColor(screenId);
       const board = el("aside", {
         className: "calendar-ref-board",
         "aria-label": `Pinned board: ${season.label}, ${todayRef.weekday} ${todayRef.dayOfMonth} ${todayRef.monthName} ${todayRef.year}`,
@@ -6818,14 +6834,20 @@
       }));
       heading.appendChild(headingText);
       board.appendChild(heading);
-      board.appendChild(buildMonthCalendarGrid(todayRef.year, todayRef.month, todayRef.dayOfMonth));
+      board.appendChild(buildMonthCalendarGrid(
+        todayRef.year,
+        todayRef.month,
+        todayRef.dayOfMonth,
+        highlightColor,
+      ));
       return board;
     }
 
     function renderCalendarRefBoards() {
       document.querySelectorAll("[data-calendar-board]").forEach((host) => {
+        const screenId = host.closest("[data-screen]")?.getAttribute("data-screen") || "";
         host.innerHTML = "";
-        host.appendChild(buildCalendarRefBoard());
+        host.appendChild(buildCalendarRefBoard(screenId));
       });
     }
 
