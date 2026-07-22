@@ -7673,14 +7673,14 @@
         const selectedMusicId = state.turnSelectedMusicId;
 
         const musicStage = el("div", { className: "turn-music-stage" });
-        musicStage.appendChild(buildTurnYoutubePanel(selectedMusicId));
+        musicStage.appendChild(buildTurnYoutubePanel(selectedMusicId, current.id));
 
         const musicOpts = el("div", {
           className: "turn-music-options",
           role: "group",
           "aria-label": `YouTube music for ${current.name}`,
         });
-        MUSIC_YOUTUBE_OPTIONS.forEach((opt) => {
+        musicOptionsForPerson(current.id).forEach((opt) => {
           const btn = el("button", {
             type: "button",
             className: `btn btn-sm${selectedMusicId === opt.id ? " is-active" : ""}`,
