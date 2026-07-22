@@ -103,9 +103,16 @@ export function BottomNav() {
             aria-label={plannerBackToPortalAria(lang)}
             className="flex min-h-[2.75rem] min-w-0 max-w-[20%] flex-1 touch-manipulation flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 text-[8.5px] font-medium leading-tight text-ink-faint transition-colors active:opacity-90 active:text-ink sm:text-[9px] [@media(hover:hover)_and_(pointer:fine)]:hover:text-ink-subtle"
           >
-            <span className="text-[15px] leading-none sm:text-[16px]" aria-hidden>
-              ←
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/clubsensational-logo-mark.png"
+              alt=""
+              width={18}
+              height={18}
+              className="h-[18px] w-[18px] object-contain"
+              decoding="async"
+              aria-hidden
+            />
             <span className="line-clamp-2 w-full min-w-0 max-w-full break-words text-center hyphens-auto">
               {plannerBackToPortal(lang)}
             </span>
