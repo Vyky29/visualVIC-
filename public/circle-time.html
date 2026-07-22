@@ -4134,6 +4134,33 @@
 
     .pre-show-skip:hover { border-color: var(--white); color: var(--white); }
 
+    .pre-show-resume {
+      margin-top: 1.5rem;
+      border-color: var(--orange);
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .pre-show-resume:hover {
+      border-color: #ffb070;
+      color: #ffb070;
+    }
+
+    .pre-show-resume.hidden,
+    .pre-show-cancel-countdown.hidden {
+      display: none;
+    }
+
+    .pre-show-cancel-countdown {
+      margin-top: 1rem;
+    }
+
+    #skip-to-session.is-restart {
+      margin-top: 0.75rem;
+      opacity: 0.85;
+      font-size: 0.88rem;
+    }
+
     .pre-show-timer {
       font-size: clamp(2.5rem, 11vw, 6.5rem);
       font-weight: 700;
@@ -4530,7 +4557,10 @@
           <button type="button" class="countdown-start-btn" data-countdown="2" aria-label="Start 2 minute countdown">2 min</button>
           <button type="button" class="countdown-start-btn" data-countdown="1" aria-label="Start 1 minute countdown">1 min</button>
         </div>
-        <button type="button" class="pre-show-skip" id="skip-to-session" aria-label="Skip countdown and open register">
+        <button type="button" class="pre-show-skip pre-show-resume hidden" id="resume-session" aria-label="Return to the current Circle Time screen">
+          Back to Circle Time
+        </button>
+        <button type="button" class="pre-show-skip" id="skip-to-session" aria-label="Start Circle Time from the beginning">
           Start Circle Time now
         </button>
         <button type="button" class="pre-show-skip" id="toggle-fullscreen" aria-label="Toggle full screen" style="margin-top:0.75rem;">
@@ -4545,6 +4575,9 @@
         <p class="announce-wait">Sit down and wait</p>
       </div>
       <p class="pre-show-starting hidden" id="pre-show-starting">Circle Time is starting now</p>
+      <button type="button" class="pre-show-skip pre-show-cancel-countdown hidden" id="cancel-countdown" aria-label="Cancel countdown">
+        Cancel
+      </button>
     </div>
   </div>
 
@@ -5465,6 +5498,7 @@
       totalSeconds: 0,
       intervalId: null,
       selectedMinutes: DEFAULT_COUNTDOWN_MINUTES,
+      sessionStarted: false,
     };
 
     function formatCountdown(seconds) {
@@ -5492,6 +5526,30 @@
       return active;
     }
 
+    function updateResumeControls() {
+      const resumeBtn = document.getElementById("resume-session");
+      const startBtn = document.getElementById("skip-to-session");
+      const cancelBtn = document.getElementById("cancel-countdown");
+      if (resumeBtn) {
+        resumeBtn.classList.toggle("hidden", !preShow.sessionStarted || preShow.mode !== "idle");
+      }
+      if (startBtn) {
+        startBtn.classList.toggle("is-restart", preShow.sessionStarted);
+        startBtn.textContent = preShow.sessionStarted ? "Start over from beginning" : "Start Circle Time now";
+        startBtn.setAttribute(
+          "aria-label",
+          preShow.sessionStarted
+            ? "Discard progress and start Circle Time from the beginning"
+            : "Start Circle Time from the beginning",
+        );
+      }
+      if (cancelBtn) {
+        const showCancel = preShow.mode === "running" || preShow.mode === "starting";
+        cancelBtn.classList.toggle("hidden", !showCancel);
+        cancelBtn.textContent = preShow.sessionStarted ? "Back to Circle Time" : "Cancel countdown";
+      }
+    }
+
     function updatePreShowDisplay() {
       const timerEl = document.getElementById("pre-show-timer");
       const subEl = document.getElementById("pre-show-sub");
@@ -5517,6 +5575,7 @@
         announceEl.classList.add("hidden");
         startingEl.classList.add("hidden");
         waitEl.textContent = WAIT_MESSAGE;
+        updateResumeControls();
         return;
       }
 
@@ -5527,6 +5586,7 @@
         pickerEl.classList.add("hidden");
         announceEl.classList.add("hidden");
         startingEl.classList.remove("hidden");
+        updateResumeControls();
         return;
       }
 
@@ -5557,6 +5617,15 @@
       } else {
         announceEl.classList.add("hidden");
       }
+      updateResumeControls();
+    }
+
+    function stopCountdownTimer() {
+      if (preShow.intervalId) {
+        clearInterval(preShow.intervalId);
+        preShow.intervalId = null;
+      }
+      preShow.endTime = null;
     }
 
     function tickCountdown() {
@@ -5564,11 +5633,14 @@
       updatePreShowDisplay();
 
       if (remaining <= 0) {
-        clearInterval(preShow.intervalId);
-        preShow.intervalId = null;
+        stopCountdownTimer();
         preShow.mode = "starting";
         updatePreShowDisplay();
-        setTimeout(beginSession, 2000);
+        setTimeout(() => {
+          if (preShow.mode !== "starting") return;
+          if (preShow.sessionStarted) resumeSession();
+          else beginSession();
+        }, 2000);
       }
     }
 
@@ -5578,13 +5650,28 @@
       preShow.endTime = Date.now() + preShow.totalSeconds * 1000;
       preShow.mode = "running";
 
-      if (preShow.intervalId) clearInterval(preShow.intervalId);
+      stopCountdownTimer();
       updatePreShowDisplay();
       preShow.intervalId = setInterval(tickCountdown, 250);
     }
 
-    function beginSession() {
+    function resumeSession() {
+      stopCountdownTimer();
       preShow.mode = "done";
+      document.getElementById("pre-show").classList.add("hidden");
+      document.getElementById("pre-show-staff").classList.add("hidden");
+      document.getElementById("session-app").classList.remove("hidden");
+      document.querySelector(".skip-link").href = `#${SCREEN_IDS[currentScreenIndex] || "register"}`;
+      todayRef = getTodayReference();
+      updateHeaderDate();
+      showScreen(currentScreenIndex);
+      if (typeof scheduleCircleTimeFit === "function") scheduleCircleTimeFit();
+    }
+
+    function beginSession() {
+      stopCountdownTimer();
+      preShow.mode = "done";
+      preShow.sessionStarted = true;
       document.getElementById("pre-show").classList.add("hidden");
       document.getElementById("pre-show-staff").classList.add("hidden");
       document.getElementById("session-app").classList.remove("hidden");
@@ -5605,6 +5692,16 @@
       feelingsLastTurnId = null;
       renderAll();
       showScreen(0);
+    }
+
+    function cancelCountdownOrResume() {
+      stopCountdownTimer();
+      if (preShow.sessionStarted) {
+        resumeSession();
+        return;
+      }
+      preShow.mode = "idle";
+      updatePreShowDisplay();
     }
 
     /* ============================================================
@@ -5752,10 +5849,7 @@
     }
 
     function showWaitingScreen() {
-      if (preShow.intervalId) {
-        clearInterval(preShow.intervalId);
-        preShow.intervalId = null;
-      }
+      stopCountdownTimer();
       preShow.mode = "idle";
       preShow.endTime = null;
       document.getElementById("pre-show").classList.remove("hidden");
@@ -5802,6 +5896,8 @@
       });
 
       document.getElementById("skip-to-session").addEventListener("click", beginSession);
+      document.getElementById("resume-session").addEventListener("click", resumeSession);
+      document.getElementById("cancel-countdown").addEventListener("click", cancelCountdownOrResume);
 
       document.getElementById("back-to-waiting").addEventListener("click", showWaitingScreen);
 
