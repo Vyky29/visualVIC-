@@ -151,11 +151,20 @@
       flex: 1;
       min-height: 0;
       position: relative;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
       touch-action: pan-y;
+    }
+
+    @media (min-width: 740px) and (orientation: landscape), (min-width: 900px) {
+      .screens-wrapper {
+        overflow-y: hidden;
+        touch-action: none;
+      }
     }
 
     .screen-page {
@@ -175,14 +184,17 @@
     .screen-page.active {
       display: flex;
       flex-direction: column;
-      overflow: visible;
+      height: 100%;
+      min-height: 100%;
+      max-height: 100%;
+      overflow: hidden;
       touch-action: pan-y;
     }
 
     .screen-page.active > section {
       flex: 1 1 auto;
-      min-height: min-content;
-      height: auto;
+      min-height: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
       box-shadow: none;
@@ -217,11 +229,12 @@
     /* Register — drag to Home / ClubSENsational */
     .register-layout {
       position: relative;
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       gap: 0;
       min-height: 0;
+      height: 100%;
     }
 
     .register-zones {
@@ -234,7 +247,8 @@
 
     #screen-register.active > section {
       flex: 1 1 auto;
-      min-height: min-content;
+      min-height: 0;
+      height: 100%;
     }
 
     #screen-register .section-header {
@@ -300,15 +314,15 @@
     }
 
     .zone-avatars {
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-wrap: wrap;
       gap: 0.45rem;
       align-content: flex-start;
       justify-content: center;
       width: 100%;
-      min-height: clamp(96px, 14vh, 128px);
-      max-height: 100%;
+      min-height: 0;
+      max-height: none;
       overflow-y: auto;
       padding: 0.35rem;
       border-radius: var(--radius-sm);
@@ -324,14 +338,14 @@
     }
 
     .register-dock {
-      flex-shrink: 0;
+      flex: 0 0 auto;
       margin-top: 0.5rem;
       border-top: 3px solid var(--grey-200);
       padding: 0.85rem;
       background: var(--grey-100);
       border-radius: var(--radius);
-      min-height: clamp(140px, 26vh, 240px);
-      max-height: min(48vh, 420px);
+      min-height: clamp(120px, 18vh, 200px);
+      max-height: min(42vh, 360px);
       display: flex;
       flex-direction: column;
       min-width: 0;
@@ -3669,32 +3683,45 @@
       gap: 1.25rem;
     }
 
-    /* Register — landscape / smart board: zones beside dock, both scroll independently */
+    /* Register — landscape / smart board: zones + dock fill the full session height */
     @media (min-width: 740px) and (orientation: landscape), (min-width: 900px) {
       #screen-register .register-layout {
         flex-direction: row;
         align-items: stretch;
         gap: 0.85rem;
         min-height: 0;
+        height: 100%;
+        flex: 1 1 auto;
       }
 
       #screen-register .register-zones {
         flex: 1 1 56%;
         min-width: 0;
         min-height: 0;
+        height: auto;
+        align-self: stretch;
+      }
+
+      #screen-register .drop-zone {
+        height: 100%;
+        min-height: 0;
       }
 
       #screen-register .register-dock {
-        flex: 1 1 40%;
+        flex: 1 1 36%;
         margin-top: 0;
         border-top: none;
         border-left: 3px solid var(--grey-200);
         max-height: none;
         min-height: 0;
+        height: auto;
+        align-self: stretch;
       }
 
       #screen-register .register-dock-avatars {
         max-height: none;
+        flex: 1 1 auto;
+        min-height: 0;
       }
     }
 
@@ -4645,17 +4672,23 @@
 
       if (!app || !wrapper || !page) return;
       if (app.classList.contains("hidden")) return;
+
+      /* Always stretch the active page to the wrapper — kills the empty gap in fullscreen. */
+      page.style.height = "100%";
+      page.style.minHeight = "100%";
+      page.style.maxHeight = "100%";
+      wrapper.style.overflowY = "hidden";
+
       if (!circleTimeShouldAutoFit()) return;
 
       void wrapper.offsetHeight;
       const avail = wrapper.clientHeight;
       if (avail < 60) return;
 
-      const needed = page.scrollHeight;
-      if (!needed) return;
-
-      if (needed <= avail + 2) {
-        wrapper.style.overflowY = "hidden";
+      /* Measure natural content after stretch; only scale down if it still overflows. */
+      const section = page.querySelector(":scope > section");
+      const needed = Math.max(page.scrollHeight, section ? section.scrollHeight : 0);
+      if (!needed || needed <= avail + 4) {
         root.classList.add("is-board-fit");
         return;
       }
@@ -4667,7 +4700,6 @@
       page.style.transform = "scale(" + scale + ")";
       page.style.width = (100 / scale) + "%";
       page.style.marginBottom = (needed * (scale - 1)) + "px";
-      wrapper.style.overflowY = "hidden";
     }
 
     let fitRaf = 0;
