@@ -117,8 +117,8 @@ export const DAY_CENTRE_EMMANUEL_DAILY_SEQUENCE: readonly EmmanuelDailyStep[] =
       id: "dce-swimming",
       slug: "swimming",
       title: "Swimming",
-      items: { type: "general", slug: "swimming-pool" },
-      avatar: { type: "general", slug: "swimming-pool" },
+      items: { type: "emmanuel-scene", slug: "swimming" },
+      avatar: { type: "emmanuel-scene", slug: "swimming" },
     },
     {
       id: "dce-shower",
@@ -379,9 +379,9 @@ export const DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep
 export const DAY_CENTRE_EMMANUEL_GYM_AVATAR_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   [
     {
-      id: "dceg-shoulder-press",
-      slug: "shoulder-press",
-      title: "Shoulder press",
+      id: "dceg-cross-trainer",
+      slug: "cross-trainer",
+      title: "Cross trainer",
     },
     {
       id: "dceg-gym-with-michelle",
@@ -455,19 +455,21 @@ export const DAY_CENTRE_EMMANUEL_SEQUENCE: readonly DayCentreEmmanuelStep[] =
 export const DAY_CENTRE_EMMANUEL_LIBRARY_SEQUENCE: readonly DayCentreEmmanuelStep[] =
   DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE;
 
-const EMMANUEL_AVATAR_SCENE_SLUGS = new Set(
-  DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) => s.slug),
-);
-
 /** Avatar library cards that reuse icon art (no dedicated scene PNG). */
 const EMMANUEL_AVATAR_ICON_FALLBACK_SLUGS = new Set(["commenting"]);
 
 /** Gym / terminal steps — general day-centre illustrations (no Emmanuel scene PNG). */
 const EMMANUEL_GENERAL_ART_SLUGS: Readonly<Record<string, string>> = {
   finished: "finished",
-  swimming: "swimming-pool",
   home: "home",
 };
+
+const EMMANUEL_AVATAR_SCENE_SLUGS = new Set([
+  ...DAY_CENTRE_EMMANUEL_AVATAR_SEQUENCE.map((s) => s.slug),
+  "cross-trainer",
+  "swimming",
+  "shoulder-press",
+]);
 
 export function emmanuelDailyArtImageUrl(source: EmmanuelDailyArtSource): string {
   switch (source.type) {
