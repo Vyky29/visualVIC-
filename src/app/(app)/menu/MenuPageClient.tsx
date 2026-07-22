@@ -22,8 +22,7 @@ import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 import { APP_SHELL_TABLET_INSET_CLASS } from "@/lib/constants/app-shell-layout";
 import { cn } from "@/lib/utils/cn";
 
-const ROUTINE_LINKS: { href: string; key: MenuLinkKey; external?: boolean }[] = [
-  { href: "/circle-time.html", key: "circleTime", external: true },
+const ROUTINE_LINKS: { href: string; key: MenuLinkKey }[] = [
   { href: "/planner", key: "planner" },
   { href: "/player", key: "schedulePlayer" },
   { href: "/builder", key: "routineBuilder" },
@@ -99,29 +98,16 @@ export function MenuPageClient() {
           <ul className="flex flex-col gap-2 tablet:grid tablet:grid-cols-2 tablet:gap-3">
             {ROUTINE_LINKS.map((link) => (
               <li key={link.href}>
-                {link.external ? (
-                  <a href={link.href}>
-                    <Card className="transition hover:shadow-soft">
-                      <p className="line-clamp-2 break-words text-[16px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                        {menuLinkLabel(link.key, lang)}
-                      </p>
-                      <p className="mt-1 line-clamp-3 break-words text-[13px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
-                        {menuLinkHint(link.key, lang)}
-                      </p>
-                    </Card>
-                  </a>
-                ) : (
-                  <Link href={link.href}>
-                    <Card className="transition hover:shadow-soft">
-                      <p className="line-clamp-2 break-words text-[16px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
-                        {menuLinkLabel(link.key, lang)}
-                      </p>
-                      <p className="mt-1 line-clamp-3 break-words text-[13px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
-                        {menuLinkHint(link.key, lang)}
-                      </p>
-                    </Card>
-                  </Link>
-                )}
+                <Link href={link.href}>
+                  <Card className="transition hover:shadow-soft">
+                    <p className="line-clamp-2 break-words text-[16px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                      {menuLinkLabel(link.key, lang)}
+                    </p>
+                    <p className="mt-1 line-clamp-3 break-words text-[13px] leading-relaxed text-ink-subtle [overflow-wrap:anywhere]">
+                      {menuLinkHint(link.key, lang)}
+                    </p>
+                  </Card>
+                </Link>
               </li>
             ))}
           </ul>
