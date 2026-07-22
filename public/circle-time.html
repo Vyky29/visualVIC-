@@ -4597,6 +4597,23 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <div id="feeling-strategy-overlay" class="feeling-strategy-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="feeling-strategy-title">
+    <div class="feeling-strategy-dialog" id="feeling-strategy-dialog">
+      <div class="feeling-strategy-head">
+        <span class="feeling-strategy-emotion-face" id="feeling-strategy-face" aria-hidden="true"></span>
+        <div>
+          <h2 class="feeling-strategy-title" id="feeling-strategy-title">Strategy</h2>
+          <p class="feeling-strategy-lead" id="feeling-strategy-lead"></p>
+        </div>
+      </div>
+      <p class="feeling-strategy-who" id="feeling-strategy-who"></p>
+      <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
+      <div class="feeling-strategy-actions">
+        <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* ============================================================
        EDITABLE CONFIG — participants, avatars & activities
@@ -4775,8 +4792,8 @@
         lead: "It's OK to take it slow.",
         steps: [
           { label: "Rest on bean bag", image: `${DC_GENERAL}/bean-bag.png` },
-          { label: "Quiet time", visual: "quiet" },
-          { label: "Ask for a cuddle", visual: "cuddle" },
+          { label: "Drink water", image: `${DC_GENERAL}/drink.png` },
+          { label: "Breathe", visual: "breathe" },
         ],
       },
     };
@@ -7754,23 +7771,6 @@
       });
     }
   </script>
-
-  <div id="feeling-strategy-overlay" class="feeling-strategy-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="feeling-strategy-title">
-    <div class="feeling-strategy-dialog" id="feeling-strategy-dialog">
-      <div class="feeling-strategy-head">
-        <span class="feeling-strategy-emotion-face" id="feeling-strategy-face" aria-hidden="true"></span>
-        <div>
-          <h2 class="feeling-strategy-title" id="feeling-strategy-title">Strategy</h2>
-          <p class="feeling-strategy-lead" id="feeling-strategy-lead"></p>
-        </div>
-      </div>
-      <p class="feeling-strategy-who" id="feeling-strategy-who"></p>
-      <div class="feeling-strategy-steps" id="feeling-strategy-steps"></div>
-      <div class="feeling-strategy-actions">
-        <button type="button" class="btn btn-primary" id="feeling-strategy-ok">Got it</button>
-      </div>
-    </div>
-  </div>
 
 </body>
 </html>
