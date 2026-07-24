@@ -320,7 +320,8 @@ function MiniDigitalWowCard({
       ? { fontSize: "19px", lineHeight: 0.92, letterSpacing: "-0.018em" }
       : { fontSize: "14px", lineHeight: 0.96, letterSpacing: "-0.016em" };
   const categoryFontPx = readableTitle ? `${DIGITAL_WOW_RIBBON_FONT_PX}px` : "11px";
-  const dimmed = status === "finished" || status === "next";
+  // First/Then: keep both cards full brightness; only dim completed cards.
+  const dimmed = status === "finished";
 
   return (
     <article
@@ -523,7 +524,8 @@ function FirstThenFocusSpecCard({
     [card.illustrationUrl, card.title, card.category, cardUiLang],
   );
   const slotLabel = firstThenSlotLabel(slot, lang);
-  const dimmed = status === "finished" || status === "next";
+  // First/Then: keep both cards full brightness; only dim completed cards.
+  const dimmed = status === "finished";
 
   return (
     <article
