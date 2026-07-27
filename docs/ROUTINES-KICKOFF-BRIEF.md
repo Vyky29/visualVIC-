@@ -32,6 +32,7 @@ Uses `staff_profiles.app_role` (lowercase): `staff` | `lead` | `admin` | `ceo`.
 | Role | Planner library |
 |------|-----------------|
 | `ceo`, `admin` | Full library |
+| Full-access usernames (e.g. Michelle) | Full library (same as ceo/admin) |
 | `lead`, `staff` | Universal packs + tailored packs listed in `staff_participant_access` |
 
 Inactive profiles (`is_active = false`) → no access.
@@ -42,7 +43,7 @@ Inactive profiles (`is_active = false`) → no access.
 |--------|----------|------------------------|
 | Luliya | staff | ikram, emmanuel |
 | Youssef | staff | ikram, emmanuel |
-| Michelle | lead | ikram, emmanuel |
+| Michelle | lead | *(full access via username override)* |
 | Sandra | staff | serine, ayaan |
 | Victor, Raul, Javi | ceo | *(none — full access)* |
 

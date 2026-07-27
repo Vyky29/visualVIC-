@@ -4,7 +4,7 @@ import type { TailoredParticipantId } from "@/lib/routines/tailored-participants
 import { isValidRoutine } from "@/lib/routines/validate-routine";
 import type { Routine } from "@/lib/types/routine";
 import type { StaffPlannerAccess } from "@/lib/staff/fetch-staff-planner-access";
-import { isPlannerElevatedRole } from "@/lib/staff/planner-access";
+import { hasFullPlannerAccess } from "@/lib/staff/planner-access";
 
 type SharedRoutineRow = {
   routine_json: unknown;
@@ -22,7 +22,7 @@ export async function fetchParticipantSharedRoutines(
 ): Promise<Routine[]> {
   let query = supabase.from("participant_shared_routines").select("routine_json");
 
-  if (!isPlannerElevatedRole(access.appRole)) {
+  if (!hasFullPlannerAccess(access.appRole, access.profile.username)) {
     if (access.participantSlugs.length === 0) return [];
     query = query.in("participant_slug", access.participantSlugs);
   }
@@ -78,7 +78,7 @@ export async function migrateLocalParticipantRoutinesToShared(
     if (!participantId) continue;
 
     const canWrite =
-      isPlannerElevatedRole(access.appRole) ||
+      hasFullPlannerAccess(access.appRole, access.profile.username) ||
       access.participantSlugs.includes(participantId);
     if (!canWrite) continue;
 

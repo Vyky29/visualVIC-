@@ -52,6 +52,9 @@ export const PLANNER_STAFF_CORE_CLIMB_USERNAMES = new Set([
   "andres",
 ]);
 
+/** Staff with full Planner / library access regardless of app_role assignments. */
+export const PLANNER_FULL_ACCESS_USERNAMES = new Set(["michelle"]);
+
 export const PLANNER_STAFF_CORE_CLIMB_SECTIONS: readonly PlannerLibrarySectionId[] =
   ["core", "climb"];
 
@@ -60,6 +63,13 @@ export function isCoreClimbPlannerUsername(
 ): boolean {
   const u = username?.trim().toLowerCase();
   return !!u && PLANNER_STAFF_CORE_CLIMB_USERNAMES.has(u);
+}
+
+export function isFullAccessPlannerUsername(
+  username: string | null | undefined,
+): boolean {
+  const u = username?.trim().toLowerCase();
+  return !!u && PLANNER_FULL_ACCESS_USERNAMES.has(u);
 }
 
 export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [
@@ -121,6 +131,14 @@ export function isPlannerElevatedRole(role: PortalAppRole): boolean {
   return role === "ceo" || role === "admin";
 }
 
+/** Full library + all tailored packs (ceo/admin, or named full-access staff). */
+export function hasFullPlannerAccess(
+  appRole: PortalAppRole,
+  username?: string | null,
+): boolean {
+  return isPlannerElevatedRole(appRole) || isFullAccessPlannerUsername(username);
+}
+
 export function parseParticipantSlug(raw: string): ParticipantSlug | null {
   const s = raw.trim().toLowerCase();
   if (
@@ -149,7 +167,7 @@ export function resolvePlannerLibrarySections(
   participantSlugs: readonly ParticipantSlug[],
   username?: string | null,
 ): ReadonlySet<PlannerLibrarySectionId> | null {
-  if (isPlannerElevatedRole(appRole)) {
+  if (hasFullPlannerAccess(appRole, username)) {
     return null;
   }
 
@@ -171,7 +189,8 @@ export function staffCanAccessParticipantSlug(
   appRole: PortalAppRole,
   participantSlugs: readonly ParticipantSlug[],
   slug: ParticipantSlug,
+  username?: string | null,
 ): boolean {
-  if (isPlannerElevatedRole(appRole)) return true;
+  if (hasFullPlannerAccess(appRole, username)) return true;
   return participantSlugs.includes(slug);
 }

@@ -1,9 +1,8 @@
 import type { Routine } from "@/lib/types/routine";
 import {
+  hasFullPlannerAccess,
   isCoreClimbPlannerUsername,
-  isPlannerElevatedRole,
   type ParticipantSlug,
-  type PortalAppRole,
   type PlannerLibrarySectionId,
   staffCanAccessParticipantSlug,
 } from "@/lib/staff/planner-access";
@@ -17,14 +16,16 @@ export function isRestrictedStaffAccess(
   access: StaffPlannerAccess | null | undefined,
 ): boolean {
   if (!access) return false;
-  return !isPlannerElevatedRole(access.appRole);
+  return !hasFullPlannerAccess(access.appRole, access.profile.username);
 }
 
 /** Alex / Andres — Home + Library limited to Core and Climbing. */
 export function isCoreClimbOnlyStaffAccess(
   access: StaffPlannerAccess | null | undefined,
 ): boolean {
-  if (!access || isPlannerElevatedRole(access.appRole)) return false;
+  if (!access || hasFullPlannerAccess(access.appRole, access.profile.username)) {
+    return false;
+  }
   return isCoreClimbPlannerUsername(access.profile.username);
 }
 
@@ -37,13 +38,19 @@ export function staffCanAccessTailoredParticipant(
     access.appRole,
     access.participantSlugs,
     participantId,
+    access.profile.username,
   );
 }
 
 export function staffAllowedLibrarySections(
   access: StaffPlannerAccess | null | undefined,
 ): ReadonlySet<PlannerLibrarySectionId> | undefined {
-  if (!access || isPlannerElevatedRole(access.appRole)) return undefined;
+  if (
+    !access ||
+    hasFullPlannerAccess(access.appRole, access.profile.username)
+  ) {
+    return undefined;
+  }
   return access.allowedSections ?? undefined;
 }
 
@@ -91,6 +98,7 @@ export function filterParticipantSlugsForStaff(
       access!.appRole,
       access!.participantSlugs,
       slug,
+      access!.profile.username,
     ),
   );
 }
