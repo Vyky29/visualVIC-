@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -20,6 +21,7 @@ import {
   plannerSignOut,
   plannerSupabaseMissing,
 } from "@/lib/i18n/app-shell-locale";
+import { staffDashboardAvatarUrl } from "@/lib/staff/staff-dashboard-avatar";
 import { useCardUiLanguage } from "@/lib/preferences/use-card-ui-language";
 
 type GateState =
@@ -117,13 +119,29 @@ export function PlannerPageClient() {
     | ReadonlySet<LibrarySectionId>
     | null
     | undefined;
+  const staffAvatarUrl = staffDashboardAvatarUrl(gate.access.profile.username);
+  const staffLabel =
+    gate.access.profile.full_name?.trim() ||
+    gate.access.profile.username?.trim() ||
+    "";
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-end gap-2 px-4 pt-2">
-        <span className="truncate text-[12px] text-ink-faint">
-          {gate.access.profile.full_name ?? gate.access.profile.username ?? ""}
-        </span>
+        <div className="flex min-w-0 items-center gap-2">
+          {staffAvatarUrl ? (
+            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg border border-ink/10 bg-white">
+              <Image
+                src={staffAvatarUrl}
+                alt=""
+                fill
+                className="object-cover object-center"
+                unoptimized
+              />
+            </div>
+          ) : null}
+          <span className="truncate text-[12px] text-ink-faint">{staffLabel}</span>
+        </div>
         <Button
           type="button"
           variant="ghost"

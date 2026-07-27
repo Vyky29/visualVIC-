@@ -17,6 +17,7 @@ import {
 } from "@/lib/utils/visual-card-url";
 import { useCustomRoutines } from "@/contexts/CustomRoutinesContext";
 import { useStaffAccess } from "@/contexts/StaffAccessContext";
+import { staffDashboardAvatarUrl } from "@/lib/staff/staff-dashboard-avatar";
 import { useProfile } from "@/contexts/ProfileContext";
 import type { Routine } from "@/lib/types/routine";
 import { cn } from "@/lib/utils/cn";
@@ -579,8 +580,25 @@ export default function DashboardPage() {
   const { routines: customRoutines, hydrated: customHydrated } =
     useCustomRoutines();
   const prefersFineHover = usePrefersFineHover();
-  const { isRestricted, isCoreClimbOnly, canAccessTailoredParticipant, fromStaffPortal } =
-    useStaffAccess();
+  const {
+    isRestricted,
+    isCoreClimbOnly,
+    canAccessTailoredParticipant,
+    fromStaffPortal,
+    access: staffAccess,
+    status: staffStatus,
+  } = useStaffAccess();
+  const staffAvatarUrl =
+    staffStatus === "ready"
+      ? staffDashboardAvatarUrl(staffAccess?.profile.username)
+      : null;
+  const staffDisplayName =
+    staffStatus === "ready"
+      ? staffAccess?.profile.full_name?.trim() ||
+        staffAccess?.profile.username?.trim() ||
+        null
+      : null;
+  const showStaffProfile = Boolean(staffAvatarUrl || staffDisplayName);
   const primary = mockRoutines[0];
   /** Same set as Schedule Player index — includes locally saved custom routines first. */
   const dashboardRoutines = useMemo(() => {
@@ -702,37 +720,61 @@ export default function DashboardPage() {
       />
       <div className={cn("space-y-8 px-4 pb-8 pt-4", APP_SHELL_TABLET_INSET_CLASS)}>
         <div className="flex justify-center px-2">
-          <Link
-            href="/onboarding/profile"
-            className="flex w-fit max-w-[min(18rem,calc(100vw-2rem))] flex-col items-center gap-2 rounded-2xl py-1 text-center outline-none transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-          >
-            <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-soft ring-1 ring-ink/[0.04]">
-              {profile?.avatarUrl ? (
-                <div
-                  className="relative h-full w-full"
-                  style={{
-                    transform: `scale(${frameScale})`,
-                    transformOrigin: "center center",
-                  }}
-                >
+          {showStaffProfile ? (
+            <div className="flex w-fit max-w-[min(18rem,calc(100vw-2rem))] flex-col items-center gap-2 rounded-2xl py-1 text-center">
+              <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-soft ring-1 ring-ink/[0.04]">
+                {staffAvatarUrl ? (
                   <Image
-                    src={profile.avatarUrl}
+                    src={staffAvatarUrl}
                     alt=""
                     fill
-                    className="object-cover"
+                    className="object-cover object-center"
                     unoptimized
+                    priority
                   />
-                </div>
-              ) : (
-                <div className="flex h-full items-center justify-center px-1 text-[11px] font-medium leading-snug text-ink-faint">
-                  {profileAddAvatarHint(cardUiLang)}
-                </div>
-              )}
+                ) : (
+                  <div className="flex h-full items-center justify-center px-1 text-[11px] font-medium leading-snug text-ink-faint">
+                    {staffDisplayName?.slice(0, 1)?.toUpperCase() ?? "?"}
+                  </div>
+                )}
+              </div>
+              <p className="w-full min-w-0 max-w-[16rem] truncate px-1 text-center text-[17px] font-semibold leading-snug text-ink">
+                {staffDisplayName ?? profileDisplayNamePlaceholder(cardUiLang)}
+              </p>
             </div>
-            <p className="w-full min-w-0 max-w-[16rem] truncate px-1 text-center text-[17px] font-semibold leading-snug text-ink">
-              {profile?.displayName ?? profileDisplayNamePlaceholder(cardUiLang)}
-            </p>
-          </Link>
+          ) : (
+            <Link
+              href="/onboarding/profile"
+              className="flex w-fit max-w-[min(18rem,calc(100vw-2rem))] flex-col items-center gap-2 rounded-2xl py-1 text-center outline-none transition hover:opacity-95 focus-visible:ring-2 focus-visible:ring-sage/45 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            >
+              <div className="relative h-[4.75rem] w-[4.75rem] shrink-0 overflow-hidden rounded-2xl border border-ink/10 bg-white shadow-soft ring-1 ring-ink/[0.04]">
+                {profile?.avatarUrl ? (
+                  <div
+                    className="relative h-full w-full"
+                    style={{
+                      transform: `scale(${frameScale})`,
+                      transformOrigin: "center center",
+                    }}
+                  >
+                    <Image
+                      src={profile.avatarUrl}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-full items-center justify-center px-1 text-[11px] font-medium leading-snug text-ink-faint">
+                    {profileAddAvatarHint(cardUiLang)}
+                  </div>
+                )}
+              </div>
+              <p className="w-full min-w-0 max-w-[16rem] truncate px-1 text-center text-[17px] font-semibold leading-snug text-ink">
+                {profile?.displayName ?? profileDisplayNamePlaceholder(cardUiLang)}
+              </p>
+            </Link>
+          )}
         </div>
 
         {!isRestricted ? (
