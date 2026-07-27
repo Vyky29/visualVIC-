@@ -103,6 +103,12 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
     title: "Swimming",
     source: "timi-scene",
   },
+  {
+    id: "dct-lunch",
+    slug: "lunch",
+    title: "Lunch",
+    source: "timi-scene",
+  },
 ] as const;
 
 /** Avatar routine — Timi appears in personalised photos where available. */
@@ -134,7 +140,12 @@ export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiSte
       source: "swimming",
     },
     { id: "dcts-hub-room", slug: "hub-room", title: "Hub room" },
-    { id: "dcts-snack", slug: "snack", title: "Snack" },
+    {
+      id: "dcts-lunch",
+      slug: "lunch",
+      title: "Lunch",
+      source: "timi-scene",
+    },
     {
       id: "dcts-puzzles",
       slug: "timi-puzzle-2",
@@ -180,7 +191,12 @@ export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep
       source: "swimming",
     },
     { id: "dctsi-hub-room", slug: "hub-room", title: "Hub room" },
-    { id: "dctsi-snack", slug: "snack", title: "Snack" },
+    {
+      id: "dctsi-lunch",
+      slug: "timi-lunch",
+      title: "Lunch",
+      source: "timi-photo",
+    },
     {
       id: "dctsi-puzzles",
       slug: "timi-puzzle-2",

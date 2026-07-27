@@ -762,7 +762,7 @@ export const mockRoutines: Routine[] = [
     id: "timi-day-centre",
     name: DAY_CENTRE_TIMI_AVATAR_ROUTINE_NAME,
     description:
-      "Timi's day-centre routine — sensory room, motor skills, shower, swimming, changing room, hub room, snack, puzzles and home",
+      "Timi's day-centre routine — sensory room, motor skills, shower, swimming, changing room, hub room, lunch, puzzles and home",
     tags: ["extra"],
     homePreviewImageUrl: tailoredScheduleCloseUpPreviewUrl("timi-day-centre"),
     steps: routineStepsFromGeneratedCardProps(
@@ -774,7 +774,7 @@ export const mockRoutines: Routine[] = [
     id: "timi-day-centre-items",
     name: DAY_CENTRE_TIMI_ITEMS_ROUTINE_NAME,
     description:
-      "Timi's day-centre routine — sensory room, motor skills, shower, swimming, changing room, hub room, snack, puzzles, Timi's Car and home (items)",
+      "Timi's day-centre routine — sensory room, motor skills, shower, swimming, changing room, hub room, lunch, puzzles, Timi's Car and home (items)",
     tags: ["extra"],
     homePreviewImageUrl: dayCentreGeneralImageUrl("sensory-room"),
     steps: routineStepsFromGeneratedCardProps(
