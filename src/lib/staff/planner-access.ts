@@ -55,6 +55,16 @@ export const PLANNER_STAFF_CORE_CLIMB_USERNAMES = new Set([
 /** Staff with full Planner / library access regardless of app_role assignments. */
 export const PLANNER_FULL_ACCESS_USERNAMES = new Set(["michelle"]);
 
+/**
+ * Extra tailored packs by Portal username (merged with `staff_participant_access`).
+ * Use when DB seeds lag or the table check constraint still lacks newer slugs.
+ */
+export const PLANNER_USERNAME_PARTICIPANT_SLUGS: Readonly<
+  Record<string, readonly ParticipantSlug[]>
+> = {
+  roberto: ["fadi", "emmanuel"],
+};
+
 export const PLANNER_STAFF_CORE_CLIMB_SECTIONS: readonly PlannerLibrarySectionId[] =
   ["core", "climb"];
 
@@ -70,6 +80,26 @@ export function isFullAccessPlannerUsername(
 ): boolean {
   const u = username?.trim().toLowerCase();
   return !!u && PLANNER_FULL_ACCESS_USERNAMES.has(u);
+}
+
+/** Extra participant packs assigned by username (in addition to DB rows). */
+export function plannerParticipantSlugsForUsername(
+  username: string | null | undefined,
+): readonly ParticipantSlug[] {
+  const u = username?.trim().toLowerCase();
+  if (!u) return [];
+  return PLANNER_USERNAME_PARTICIPANT_SLUGS[u] ?? [];
+}
+
+export function mergePlannerParticipantSlugs(
+  fromDb: readonly ParticipantSlug[],
+  username?: string | null,
+): ParticipantSlug[] {
+  const merged = new Set<ParticipantSlug>(fromDb);
+  for (const slug of plannerParticipantSlugsForUsername(username)) {
+    merged.add(slug);
+  }
+  return [...merged];
 }
 
 export const PLANNER_FULL_SECTIONS: readonly PlannerLibrarySectionId[] = [

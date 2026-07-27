@@ -44,6 +44,7 @@ Inactive profiles (`is_active = false`) → no access.
 | Luliya | staff | ikram, emmanuel |
 | Youssef | staff | ikram, emmanuel |
 | Michelle | lead | *(full access via username override)* |
+| Roberto | staff | fadi, emmanuel *(also via username override)* |
 | Sandra | staff | serine, ayaan |
 | Victor, Raul, Javi | ceo | *(none — full access)* |
 

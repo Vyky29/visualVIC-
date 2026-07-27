@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  mergePlannerParticipantSlugs,
   normalizePortalAppRole,
   parseParticipantSlug,
   resolvePlannerLibrarySections,
@@ -58,9 +59,10 @@ export async function fetchStaffPlannerAccess(
       return { ok: false, reason: "db_error" };
     }
 
-    participantSlugs = (rows ?? [])
+    const fromDb = (rows ?? [])
       .map((r) => parseParticipantSlug(String(r.participant_slug ?? "")))
       .filter((s): s is ParticipantSlug => s !== null);
+    participantSlugs = mergePlannerParticipantSlugs(fromDb, profile.username);
   }
 
   const allowedSections = resolvePlannerLibrarySections(
