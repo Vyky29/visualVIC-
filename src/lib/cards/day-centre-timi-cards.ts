@@ -97,6 +97,12 @@ export const DAY_CENTRE_TIMI_LIBRARY_SEQUENCE: readonly DayCentreTimiStep[] = [
     title: "Shower",
     source: "timi-scene",
   },
+  {
+    id: "dct-swimming",
+    slug: "swimming",
+    title: "Swimming",
+    source: "timi-scene",
+  },
 ] as const;
 
 /** Avatar routine — Timi appears in personalised photos where available. */
@@ -110,12 +116,6 @@ export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiSte
       source: "timi-photo",
     },
     {
-      id: "dcts-changing-room",
-      slug: "changing-room",
-      title: "Changing room",
-      source: "swimming",
-    },
-    {
       id: "dcts-shower",
       slug: "timi-shower",
       title: "Shower",
@@ -123,8 +123,14 @@ export const DAY_CENTRE_TIMI_AVATAR_SCHEDULE_SEQUENCE: readonly DayCentreTimiSte
     },
     {
       id: "dcts-swimming",
-      slug: "swimming-pool",
+      slug: "swimming",
       title: "Swimming",
+      source: "timi-scene",
+    },
+    {
+      id: "dcts-changing-room",
+      slug: "changing-room",
+      title: "Changing room",
       source: "swimming",
     },
     { id: "dcts-hub-room", slug: "hub-room", title: "Hub room" },
@@ -156,16 +162,21 @@ export const DAY_CENTRE_TIMI_ITEMS_SCHEDULE_SEQUENCE: readonly DayCentreTimiStep
       source: "timi-photo",
     },
     {
+      id: "dctsi-shower",
+      slug: "timi-shower",
+      title: "Shower",
+      source: "timi-photo",
+    },
+    {
+      id: "dctsi-swimming",
+      slug: "swimming",
+      title: "Swimming",
+      source: "timi-scene",
+    },
+    {
       id: "dctsi-changing-room",
       slug: "changing-room",
       title: "Changing room",
-      source: "swimming",
-    },
-    { id: "dctsi-shower", slug: "shower", title: "Shower", source: "shower" },
-    {
-      id: "dctsi-swimming",
-      slug: "swimming-pool",
-      title: "Swimming",
       source: "swimming",
     },
     { id: "dctsi-hub-room", slug: "hub-room", title: "Hub room" },
