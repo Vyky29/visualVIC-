@@ -19,12 +19,24 @@ import {
   tailoredAddScheduleButton,
   tailoredEditScheduleButton,
   tailoredParticipantSchedulesIntro,
+  tailoredSummerSocialStoryKind,
+  tailoredSummerSocialStoryLabel,
 } from "@/lib/i18n/app-shell-locale";
 import {
   canEditTailoredParticipantSchedule,
   tailoredParticipantEditScheduleHref,
   tailoredParticipantLibraryHref,
 } from "@/lib/routines/tailored-routine-meta";
+import {
+  summerSocialStoryKidSlugForParticipant,
+  summerSocialStoryPortalUrl,
+} from "@/lib/staff/staff-portal-url";
+import {
+  dayCentreEmmanuelTailoredHomeAvatarUrl,
+  dayCentreFadiTailoredHomeAvatarUrl,
+  dayCentreIkramTailoredHomeAvatarUrl,
+  dayCentreTimiTailoredHomeAvatarUrl,
+} from "@/lib/cards/day-centre-shared";
 import {
   IKRAM_FIRST_THEN_PACKS,
   ikramFirstThenPackDisplayTitle,
@@ -76,6 +88,24 @@ const STEP_CHIP_CLASS: Record<RoutineVisualTone, string> = {
   custom: "border-ink/12 bg-canvas-muted text-ink-subtle",
   default: "border-sage/18 bg-sage-mist/70 text-sage",
 };
+
+
+function summerSocialStoryPreviewUrl(
+  participantId: Parameters<typeof summerSocialStoryKidSlugForParticipant>[0],
+): string {
+  switch (participantId) {
+    case "emmanuel":
+      return dayCentreEmmanuelTailoredHomeAvatarUrl();
+    case "timi":
+      return dayCentreTimiTailoredHomeAvatarUrl();
+    case "ikram":
+      return dayCentreIkramTailoredHomeAvatarUrl();
+    case "fadi":
+      return dayCentreFadiTailoredHomeAvatarUrl();
+    default:
+      return "";
+  }
+}
 
 type Props = { params: Promise<{ participant: string }> };
 
@@ -140,6 +170,15 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
           }))
         : [];
 
+  const summerStorySlug =
+    summerSocialStoryKidSlugForParticipant(participantId);
+  const summerStoryUrl = summerStorySlug
+    ? summerSocialStoryPortalUrl(summerStorySlug)
+    : null;
+  const summerStoryPreview = summerStoryUrl
+    ? summerSocialStoryPreviewUrl(participantId)
+    : "";
+
   return (
     <div>
       <Header
@@ -162,6 +201,56 @@ export function TailoredParticipantSchedulesClient({ params }: Props) {
           </Button>
         </div>
         <ul className="flex flex-col gap-3">
+          {summerStoryUrl ? (
+            <li className="group">
+              <Card
+                omitInsetRing
+                className={cn(
+                  "overflow-hidden p-0 shadow-card transition-shadow duration-200",
+                  "border-[#E53935]/24 bg-[#ffebee]/95 text-[#E53935]",
+                )}
+              >
+                <a
+                  href={summerStoryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex gap-4 p-4 transition hover:bg-white/60"
+                >
+                  <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden bg-canvas-muted">
+                    {summerStoryPreview ? (
+                      <Image
+                        src={summerStoryPreview}
+                        alt=""
+                        fill
+                        unoptimized
+                        className="object-cover object-center"
+                        sizes="72px"
+                      />
+                    ) : null}
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col justify-center gap-1">
+                    <p className="line-clamp-2 min-w-0 break-words text-[11px] font-semibold uppercase leading-snug tracking-[0.14em] text-ink-faint [overflow-wrap:anywhere]">
+                      {tailoredSummerSocialStoryKind(cardUiLang)}
+                    </p>
+                    <p className="line-clamp-2 min-w-0 break-words text-[17px] font-semibold leading-snug text-ink [overflow-wrap:anywhere]">
+                      {tailoredSummerSocialStoryLabel(cardUiLang)}
+                    </p>
+                    <span
+                      className={cn(
+                        "inline-flex w-fit max-w-full min-w-0 items-center rounded-full border px-2.5 py-1 text-[12px] font-medium leading-snug [overflow-wrap:anywhere]",
+                        STEP_CHIP_CLASS.daycentre,
+                      )}
+                    >
+                      Portal
+                    </span>
+                  </div>
+                  <span className="self-center text-ink-faint" aria-hidden>
+                    →
+                  </span>
+                </a>
+              </Card>
+            </li>
+          ) : null}
           {firstThenPacks.map((pack) => {
             const previewUrl = pack.previewUrl;
             const previewPixto =

@@ -1148,6 +1148,16 @@ export function tailoredEditScheduleButton(lang: CardLanguageCode): string {
   return isEs(lang) ? "Editar" : "Edit";
 }
 
+export function tailoredSummerSocialStoryKind(lang: CardLanguageCode): string {
+  return isEs(lang) ? "Historia social" : "Social story";
+}
+
+export function tailoredSummerSocialStoryLabel(lang: CardLanguageCode): string {
+  return isEs(lang)
+    ? "Historia social · vacaciones de verano"
+    : "Summer holidays social story";
+}
+
 export function tailoredPickCardsHint(
   participantName: string,
   lang: CardLanguageCode,
